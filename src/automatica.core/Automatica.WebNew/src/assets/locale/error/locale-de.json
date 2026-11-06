@@ -5,6 +5,15 @@
         "DOCKER_NOT_RUN_BY_SUPERVISOR": "Docker Image kann nicht automatisch upgedated werden. Hierzu müsste der Container über den Supervisor gestartet werden.",
         "SERVER_NOT_AVAILABLE": "Server ist nicht verfügbar. Bitte versuche es später erneut!",
         "INVALID_CREDENTIALS": "Ungültige Zugangsdaten!",
-        "LOGIN_FAILED": "Die Anmeldung ist fehlgeschlagen!"
+        "LOGIN_FAILED": "Die Anmeldung ist fehlgeschlagen!",
+        "TOO_MANY_LOGIN_ATTEMPTS": "Zu viele fehlgeschlagene Anmeldungen, bitte warte ein paar Minuten und versuche es erneut.",
+        "PASSWORD_CHANGE_FAILED": "Das Passwort konnte nicht geändert werden!",
+        "WRONG_PASSWORD": "Das aktuelle Passwort ist falsch!",
+        "PASSWORD_UNCHANGED": "Das neue Passwort muss sich vom aktuellen unterscheiden.",
+        "PASSWORD_TOO_SHORT": "Das Passwort braucht mindestens 8 Zeichen.",
+        "PASSWORD_TOO_LONG": "Das Passwort ist zu lang.",
+        "PASSWORD_EQUALS_USERNAME": "Das Passwort darf nicht der Benutzername sein.",
+        "PASSWORD_TOO_WEAK": "Das Passwort ist zu schwach, bitte wähle ein anderes.",
+        "PASSWORDS_DO_NOT_MATCH": "Die Passwörter stimmen nicht überein."
     }
 }

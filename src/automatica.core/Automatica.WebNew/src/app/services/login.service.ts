@@ -26,6 +26,18 @@ export class LoginService extends BaseService {
     }, false);
   }
 
+  /**
+   * Changes the password of the signed in user. The token of the login is sent (also the one of a user who must change the
+   * password, which allows nothing else), the answer is the user with a new token.
+   */
+  async changePassword(token: string, oldPassword: string, newPassword: string) {
+    localStorage.setItem("jwt", token);
+    return await super.post<User>("account/password", {
+      OldPassword: oldPassword,
+      NewPassword: newPassword
+    });
+  }
+
   logout() {
     localStorage.removeItem("automatica.user");
     localStorage.removeItem("jwt");

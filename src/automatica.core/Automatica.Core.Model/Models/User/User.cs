@@ -32,6 +32,18 @@ namespace Automatica.Core.Model.Models.User
 
         public string Token { get; set; }
 
+        /// <summary>
+        /// The user must set a new password before anything else (new installation, default password, reset by an administrator).
+        /// While set, the token of the user has no roles.
+        /// </summary>
+        public bool MustChangePassword { get; set; }
+
+        /// <summary>
+        /// Changes with every password change, tokens with another stamp are rejected
+        /// </summary>
+        [JsonIgnore]
+        public string SecurityStamp { get; set; }
+
 
         public List<User2Group> InverseThis2UserGroups { get; set; }
         public List<User2Role> InverseThis2Roles { get; set; }

@@ -1288,6 +1288,8 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.Salt).IsRequired().HasMaxLength(1024);
                 entity.Property(e => e.Password).IsRequired().HasMaxLength(1024);
+                entity.Property(e => e.MustChangePassword).IsRequired().HasDefaultValue(false);
+                entity.Property(e => e.SecurityStamp).HasMaxLength(64);
 
                 entity.Ignore(e => e.TypeInfo);
                 entity.Ignore(e => e.PasswordConfirm);

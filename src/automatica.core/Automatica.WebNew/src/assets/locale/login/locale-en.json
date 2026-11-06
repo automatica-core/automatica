@@ -8,6 +8,11 @@
         "SAVE": "Remember user name",
         "FOUND_SERVERS": "Servers found",
         "SEARCHING_SERVERS": "Searching the network for servers...",
-        "DEMO": "Demo login"
+        "DEMO": "Demo login",
+        "MUST_CHANGE_PASSWORD": "Please set a new password before you continue.",
+        "NEW_PASSWORD": "New password",
+        "NEW_PASSWORD_CONFIRM": "Repeat the new password",
+        "CHANGE_PASSWORD": "Change password",
+        "CANCEL": "Cancel"
     }
 }

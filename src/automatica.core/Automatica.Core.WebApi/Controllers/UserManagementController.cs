@@ -362,6 +362,11 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 return BadRequest("Password and password confirmation do not match");
             }
+            var passwordError = GetPasswordPolicyError(user);
+            if (passwordError != null)
+            {
+                return BadRequest(passwordError);
+            }
 
             var error = CheckUsers(new[] { user });
             if (error != null)
@@ -436,6 +441,12 @@ namespace Automatica.Core.WebApi.Controllers
             return !String.IsNullOrEmpty(user.Password) && user.Password != user.PasswordConfirm;
         }
 
+        /// <returns>null if no new password is set or it fulfills the password policy</returns>
+        private static string GetPasswordPolicyError(User user)
+        {
+            return String.IsNullOrEmpty(user.Password) ? null : PasswordPolicy.Validate(user.Password, user.UserName);
+        }
+
         private async Task SaveUserInternal(User user)
         {
             // everything that is derived from the posted object is computed once: the execution strategy runs the
@@ -444,6 +455,7 @@ namespace Automatica.Core.WebApi.Controllers
             var groupIds = (user.InverseThis2UserGroups ?? new List<User2Group>()).Select(o => o.This2UserGroup).Distinct().ToList();
             var roleIds = (user.InverseThis2Roles ?? new List<User2Role>()).Select(o => o.This2Role).Distinct().ToList();
             var newPassword = user.Password;
+            var mustChangePassword = user.MustChangePassword;
             var newSalt = UserHelper.GenerateNewSalt();
             var newPasswordHash = !String.IsNullOrEmpty(newPassword)
                 // checked by the caller: Password == PasswordConfirm
@@ -482,6 +494,10 @@ namespace Automatica.Core.WebApi.Controllers
                     {
                         target.Password = newPasswordHash;
                         target.Salt = newSalt;
+                        // revokes the tokens issued with the old password
+                        target.SecurityStamp = UserHelper.NewSecurityStamp();
+                        // an administrator may require the user to choose an own password
+                        target.MustChangePassword = mustChangePassword;
                     }
 
                     if (existing == null)
@@ -575,6 +591,11 @@ namespace Automatica.Core.WebApi.Controllers
             if (users.Any(HasPasswordMismatch))
             {
                 return BadRequest("Password and password confirmation do not match");
+            }
+            var policyError = users.Select(GetPasswordPolicyError).FirstOrDefault(a => a != null);
+            if (policyError != null)
+            {
+                return BadRequest(policyError);
             }
 
             // an empty list is treated as "nothing to delete"

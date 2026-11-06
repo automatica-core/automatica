@@ -5,6 +5,15 @@
         "DOCKER_NOT_RUN_BY_SUPERVISOR": "Docker image cannot be automatically updated! This can only be done when hosted by our supervisor!",
         "SERVER_NOT_AVAILABLE": "The server is not available at the moment, please try again later!",
         "INVALID_CREDENTIALS": "Invalid credentials!",
-        "LOGIN_FAILED": "The login failed!"
+        "LOGIN_FAILED": "The login failed!",
+        "TOO_MANY_LOGIN_ATTEMPTS": "Too many failed logins, please wait a few minutes and try again.",
+        "PASSWORD_CHANGE_FAILED": "The password could not be changed!",
+        "WRONG_PASSWORD": "The current password is wrong!",
+        "PASSWORD_UNCHANGED": "The new password must be different from the current one.",
+        "PASSWORD_TOO_SHORT": "The password needs at least 8 characters.",
+        "PASSWORD_TOO_LONG": "The password is too long.",
+        "PASSWORD_EQUALS_USERNAME": "The password must not be the user name.",
+        "PASSWORD_TOO_WEAK": "The password is too weak, please choose another one.",
+        "PASSWORDS_DO_NOT_MATCH": "The passwords do not match."
     }
 }

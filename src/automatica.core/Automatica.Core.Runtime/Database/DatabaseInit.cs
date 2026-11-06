@@ -12,6 +12,7 @@ using Automatica.Core.Internals.Areas;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
@@ -557,8 +558,10 @@ namespace Automatica.Core.Runtime.Database
 
             if (!context.Users.Any())
             {
-                AddInitUserManagementData(context);
+                AddInitUserManagementData(context, config);
             }
+
+            EnsureSecurityStamps(context);
 
             context.SaveChanges();
             config.Reload();
@@ -844,8 +847,45 @@ namespace Automatica.Core.Runtime.Database
             }
         }
 
-        private static void AddInitUserManagementData(AutomaticaContext context)
+        /// <summary>
+        /// Initial administrator password for automated setups (demo, tests). Without it a random password is generated
+        /// and printed once to the console and the log.
+        /// </summary>
+        public const string InitialAdminPasswordEnv = "AUTOMATICA_INITIAL_ADMIN_PASSWORD";
+
+        /// <summary>
+        /// Users without a security stamp (created before it existed) get one. Their old tokens carry no stamp and are
+        /// rejected, so every user signs in once again after this update.
+        /// </summary>
+        private static void EnsureSecurityStamps(AutomaticaContext context)
         {
+            foreach (var user in context.Users.Where(a => a.SecurityStamp == null || a.SecurityStamp == "").ToList())
+            {
+                user.SecurityStamp = UserHelper.NewSecurityStamp();
+            }
+        }
+
+        private static void AddInitUserManagementData(AutomaticaContext context, IConfiguration config)
+        {
+            // no well known default passwords: a random one (or the configured one), it must be changed at the first login
+            var configuredPassword = Environment.GetEnvironmentVariable(InitialAdminPasswordEnv) ?? config?["server:initial_admin_password"];
+            var adminPassword = string.IsNullOrEmpty(configuredPassword) ? UserHelper.GenerateRandomPassword() : configuredPassword;
+            var visuPassword = UserHelper.GenerateRandomPassword();
+
+            if (string.IsNullOrEmpty(configuredPassword))
+            {
+                var message = $"{Environment.NewLine}" +
+                              $"=================================================================={Environment.NewLine}" +
+                              $" Automatica.Core first start: initial administrator account{Environment.NewLine}" +
+                              $"   user:     sa{Environment.NewLine}" +
+                              $"   password: {adminPassword}{Environment.NewLine}" +
+                              $" The password must be changed at the first login. It is shown only once.{Environment.NewLine}" +
+                              $" The 'visu' user got a random password, set one in the user management.{Environment.NewLine}" +
+                              $"==================================================================";
+                Console.WriteLine(message);
+                Automatica.Core.Logging.SystemLogger.Instance.LogWarning(message);
+            }
+
             var salt = UserHelper.GenerateNewSalt();
             var saUser = new User
             {
@@ -853,7 +893,9 @@ namespace Automatica.Core.Runtime.Database
                 FirstName = "admin",
                 LastName = "admin",
                 Salt = salt,
-                Password = UserHelper.CreatePasswordHash("sa", salt),
+                Password = UserHelper.CreatePasswordHash(adminPassword, salt),
+                MustChangePassword = true,
+                SecurityStamp = UserHelper.NewSecurityStamp(),
                 ObjId = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 ModifiedAt = DateTimeOffset.Now
@@ -923,7 +965,9 @@ namespace Automatica.Core.Runtime.Database
                 FirstName = "Visu",
                 LastName = "Visu",
                 Salt = salt,
-                Password = UserHelper.CreatePasswordHash("visu", salt),
+                Password = UserHelper.CreatePasswordHash(visuPassword, salt),
+                MustChangePassword = true,
+                SecurityStamp = UserHelper.NewSecurityStamp(),
                 ObjId = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 ModifiedAt = DateTimeOffset.Now

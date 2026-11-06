@@ -44,6 +44,12 @@ export class User extends BaseModel implements IPropertyModel, IUser {
     @JsonProperty()
     Token: string;
 
+    /**
+     * Set in the login response: the password must be changed before the token can be used (initial or default password)
+     */
+    @JsonProperty()
+    MustChangePassword: boolean;
+
     public typeInfo(): string {
         return "User";
     }
