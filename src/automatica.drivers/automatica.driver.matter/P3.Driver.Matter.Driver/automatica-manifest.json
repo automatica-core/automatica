@@ -1,0 +1,39 @@
+{
+  "Automatica": {
+    "manifest-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "plugin-version": {
+      "Minor": 0,
+      "Major": 1,
+      "Build": 0,
+      "Revision": 0
+    },
+    "PluginGuid": "adc2a071-1e81-45b0-a84a-4478eda8ff05",
+    "Name": "P3.Driver.Matter",
+    "ComponentName": "matter-bridge",
+    "Type": "driver",
+    "Output": "P3.Driver.Matter.Driver.dll",
+    "Resources": [],
+    "Dependencies": [
+      "P3.Driver.Matter.dll",
+      "BouncyCastle.Cryptography.dll",
+      "Makaretu.Dns.Multicast.New.dll",
+      "Makaretu.Dns.dll",
+      "Common.Logging.dll",
+      "Common.Logging.Core.dll"
+    ],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.matter",
+    "MinCoreServerVersion": {
+      "Minor": 1,
+      "Major": 8,
+      "Build": 0,
+      "Revision": 1907
+    },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

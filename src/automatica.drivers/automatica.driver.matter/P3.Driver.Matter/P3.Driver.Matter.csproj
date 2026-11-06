@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Version>1.0.0.0</Version>
+    <RootNamespace>P3.Driver.Matter</RootNamespace>
+    <Description>Matter (CSA) bridge device stack written in C#: TLV, PASE/CASE, MRP, interaction model and the clusters a bridge needs.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\TestCerts\*.pem" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
+    <PackageReference Include="Makaretu.Dns.Multicast.New" Version="0.38.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.Matter.Tests" />
+  </ItemGroup>
+
+</Project>

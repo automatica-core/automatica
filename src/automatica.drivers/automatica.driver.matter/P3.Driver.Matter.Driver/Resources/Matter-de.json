@@ -1,0 +1,35 @@
+{
+  "MATTER_BRIDGE": {
+    "NAME": "Matter Bridge",
+    "DESCRIPTION": "Stellt Automatica Controls (Schalter, Dimmer, Jalousien) für Matter Controller wie Apple Home, Google Home, Amazon Alexa, SmartThings oder Home Assistant bereit",
+    "PAIRING": "Kopplung",
+    "PAIRING_CODE": {
+      "NAME": "Kopplungscode",
+      "DESCRIPTION": "Manueller Kopplungscode für die Matter Controller App"
+    },
+    "QR_CODE": {
+      "NAME": "QR-Code Inhalt",
+      "DESCRIPTION": "Inhalt des Matter QR-Codes (MT:...), kann mit jedem QR-Code Generator dargestellt werden"
+    },
+    "COMMISSIONED": {
+      "NAME": "Gekoppelt",
+      "DESCRIPTION": "Wahr, sobald mindestens ein Matter Controller (Fabric) gekoppelt ist"
+    },
+    "FABRICS": {
+      "NAME": "Gekoppelte Controller",
+      "DESCRIPTION": "Anzahl der Matter Fabrics, in denen die Bridge Mitglied ist"
+    },
+    "OPEN_COMMISSIONING_WINDOW": {
+      "NAME": "Kopplung erlauben (15 min)",
+      "DESCRIPTION": "Öffnet das Kopplungsfenster für 15 Minuten, damit ein weiterer Controller mit dem Kopplungscode gekoppelt werden kann"
+    },
+    "RESET_PAIRINGS": {
+      "NAME": "Alle Kopplungen entfernen",
+      "DESCRIPTION": "Entfernt die Bridge aus allen Matter Controllern und macht sie wieder koppelbar"
+    },
+    "STATE": {
+      "NAME": "Matter Zustand",
+      "DESCRIPTION": "Interner persistenter Zustand des Matter Knotens"
+    }
+  }
+}

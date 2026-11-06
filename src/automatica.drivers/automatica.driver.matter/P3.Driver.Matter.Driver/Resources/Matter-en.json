@@ -1,0 +1,35 @@
+{
+  "MATTER_BRIDGE": {
+    "NAME": "Matter Bridge",
+    "DESCRIPTION": "Exposes Automatica controls (switches, dimmers, blinds) to Matter controllers such as Apple Home, Google Home, Amazon Alexa, SmartThings or Home Assistant",
+    "PAIRING": "Pairing",
+    "PAIRING_CODE": {
+      "NAME": "Pairing code",
+      "DESCRIPTION": "Manual pairing code to enter in the Matter controller app"
+    },
+    "QR_CODE": {
+      "NAME": "QR code payload",
+      "DESCRIPTION": "Content of the Matter QR code (MT:...), can be rendered by any QR code generator"
+    },
+    "COMMISSIONED": {
+      "NAME": "Paired",
+      "DESCRIPTION": "True when at least one Matter controller (fabric) is paired"
+    },
+    "FABRICS": {
+      "NAME": "Paired controllers",
+      "DESCRIPTION": "Number of Matter fabrics the bridge belongs to"
+    },
+    "OPEN_COMMISSIONING_WINDOW": {
+      "NAME": "Allow pairing (15 min)",
+      "DESCRIPTION": "Opens the commissioning window for 15 minutes so that another controller can be paired with the pairing code"
+    },
+    "RESET_PAIRINGS": {
+      "NAME": "Remove all pairings",
+      "DESCRIPTION": "Removes the bridge from all Matter controllers and makes it pairable again"
+    },
+    "STATE": {
+      "NAME": "Matter state",
+      "DESCRIPTION": "Internal persistent state of the Matter node"
+    }
+  }
+}

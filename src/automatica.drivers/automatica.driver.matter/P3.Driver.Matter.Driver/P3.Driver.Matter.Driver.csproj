@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>1.0.0.0</Version>
+    <AutomaticaCoreVersion>8.1.0.1907</AutomaticaCoreVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\Matter-de.json" />
+    <None Remove="Resources\Matter-en.json" />
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Matter-de.json" />
+    <EmbeddedResource Include="Resources\Matter-en.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="$(AutomaticaCoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.Matter\P3.Driver.Matter.csproj" />
+  </ItemGroup>
+
+</Project>
