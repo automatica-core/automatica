@@ -38,6 +38,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+    <!-- pinned above the version of the scaffolding packages: GHSA-g4vj-cjjj-v7hg -->
+    <PackageReference Include="NuGet.Packaging" Version="6.12.5" />
+    <PackageReference Include="NuGet.Protocol" Version="6.12.5" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.12" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
