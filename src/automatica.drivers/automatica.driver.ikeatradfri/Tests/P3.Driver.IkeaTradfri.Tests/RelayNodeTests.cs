@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Moq;
 using P3.Driver.IkeaTradfriDriverFactory;
@@ -27,7 +28,9 @@ namespace P3.Driver.IkeaTradfri.Tests
             Assert.NotNull(relayNode);
 
             relayNode.WriteTimeout = 100;
-            await relayNode.WriteValue(new DispatchableMock(), true);
+            // the write queue is only processed once the node is started
+            await relayNode.Start();
+            await relayNode.WriteValue(new DispatchableMock(), new DispatchValue(relayNode.Id, DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.Write));
 
             Assert.False(relayNode.LastWriteState);
 
@@ -49,7 +52,15 @@ namespace P3.Driver.IkeaTradfri.Tests
             Assert.NotNull(relayNode);
 
             relayNode.WriteTimeout = 100;
-            await relayNode.WriteValue(new DispatchableMock(), true);
+            // the write queue is only processed once the node is started
+            await relayNode.Start();
+            await relayNode.WriteValue(new DispatchableMock(), new DispatchValue(relayNode.Id, DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.Write));
+
+            // WriteValue only enqueues, the write itself runs on the driver's write queue
+            for (var i = 0; i < 100 && !relayNode.LastWriteState; i++)
+            {
+                await Task.Delay(20);
+            }
 
             Assert.True(relayNode.LastWriteState);
 
@@ -71,7 +82,9 @@ namespace P3.Driver.IkeaTradfri.Tests
             Assert.NotNull(relayNode);
 
             relayNode.WriteTimeout = 100;
-            await relayNode.WriteValue(new DispatchableMock(), true);
+            // the write queue is only processed once the node is started
+            await relayNode.Start();
+            await relayNode.WriteValue(new DispatchableMock(), new DispatchValue(relayNode.Id, DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.Write));
 
             Assert.False(relayNode.LastWriteState);
 

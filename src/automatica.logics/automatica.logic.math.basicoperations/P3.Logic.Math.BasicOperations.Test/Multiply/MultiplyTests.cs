@@ -15,7 +15,7 @@ namespace P3.Logic.Math.BasicOperations.Tests.Multiply
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(MultiplyLogicFactory.RuleInput2), Dispatchable, 2)[0].ValueInteger == 200);
 
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(MultiplyLogicFactory.RuleInput1), Dispatchable, null)[0].ValueInteger == 200);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(MultiplyLogicFactory.RuleInput1), Dispatchable, (object)null)[0].ValueInteger == 200);
 
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(MultiplyLogicFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == MultiplyLogicFactory.RuleOutput);
         }

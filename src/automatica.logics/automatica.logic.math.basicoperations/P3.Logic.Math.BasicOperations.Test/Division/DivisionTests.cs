@@ -15,7 +15,7 @@ namespace P3.Logic.Math.BasicOperations.Tests.Division
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(DivisionLogicFactory.RuleInput2), Dispatchable, 2)[0].ValueInteger == 50);
 
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(DivisionLogicFactory.RuleInput1), Dispatchable, null)[0].ValueInteger == 50);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(DivisionLogicFactory.RuleInput1), Dispatchable, (object)null)[0].ValueInteger == 50);
 
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(DivisionLogicFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == DivisionLogicFactory.RuleOutput);
         }

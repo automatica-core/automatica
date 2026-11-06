@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace P3.Driver.Automatica.Remote
@@ -13,10 +14,15 @@ namespace P3.Driver.Automatica.Remote
             _driver = driver;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = default)
         {
-            _driver.WriteValue(this, value);
-            return base.WriteValue(source, value);
+            // the remote server echoes the new value back through the subscription
+            return _driver.SendValue(this, value, token);
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = default)
+        {
+            return Task.FromResult(false);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

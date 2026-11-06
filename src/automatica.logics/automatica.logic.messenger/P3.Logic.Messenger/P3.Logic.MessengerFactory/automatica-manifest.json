@@ -22,9 +22,9 @@
     "ProjectPage": "https://github.com/automatica-core/automatica.logic.messenger",
     "MinCoreServerVersion": {
       "Minor": 0,
-      "Major": 8,
-      "Build": 1,
-      "Revision": 1868
+      "Major": 10,
+      "Build": 0,
+      "Revision": 2049
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": []

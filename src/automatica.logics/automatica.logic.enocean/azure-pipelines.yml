@@ -7,6 +7,9 @@ pool:
 
 variables:
   - group: automatica.core.8
+  # buildx would push the per-arch tags as manifest lists, which breaks 'docker manifest create'
+  - name: BUILDX_NO_DEFAULT_ATTESTATIONS
+    value: '1'
 
 steps:
 - task: UseDotNet@2

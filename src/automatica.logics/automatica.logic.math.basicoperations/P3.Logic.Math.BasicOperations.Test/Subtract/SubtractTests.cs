@@ -15,7 +15,7 @@ namespace P3.Logic.Math.BasicOperations.Tests.Subtract
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(SubtractLogicFactory.RuleInput1), Dispatchable, 0)[0].ValueInteger == -10);
 
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(SubtractLogicFactory.RuleInput1), Dispatchable, null)[0].ValueInteger == -10);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(SubtractLogicFactory.RuleInput1), Dispatchable, (object)null)[0].ValueInteger == -10);
 
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(SubtractLogicFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == SubtractLogicFactory.RuleOutput);
         }

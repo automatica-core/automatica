@@ -21,10 +21,10 @@
     "Dependencies": [],
     "ProjectPage": "https://github.com/automatica-core/automatica.logic.operations",
     "MinCoreServerVersion": {
-      "Minor": 1,
-      "Major": 8,
+      "Minor": 0,
+      "Major": 10,
       "Build": 0,
-      "Revision": 1794
+      "Revision": 2049
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": []

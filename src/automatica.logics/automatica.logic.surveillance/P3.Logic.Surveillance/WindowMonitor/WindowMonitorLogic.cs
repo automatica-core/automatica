@@ -84,7 +84,8 @@ namespace P3.Logic.Surveillance.WindowMonitor
 
             // TODO: Notify only if a state changes???
 
-            Context.Notify.NotifyValueChanged(Context.RuleInstance.RuleInterfaceInstance.First(), GetDataForVisu());
+            var visuInterface = Context.RuleInstance.RuleInterfaceInstance.First();
+            Context.Notify.NotifyValueChanged(visuInterface, new DispatchValue(visuInterface.ObjId, DispatchableType.RuleInstance, GetDataForVisu(), DateTime.Now, DispatchValueSource.Read));
 
             return new List<ILogicOutputChanged>();
         }

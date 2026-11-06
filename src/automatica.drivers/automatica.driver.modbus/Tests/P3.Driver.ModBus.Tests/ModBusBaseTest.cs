@@ -50,7 +50,7 @@ namespace P3.Driver.ModBus.Tests
             driverNode.InverseThis2ParentNodeInstanceNavigation.Add(device);
             device.InverseThis2ParentNodeInstanceNavigation.Add(attributeNode);
 
-            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance);
+            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance, TimeProvider.System);
             var driver = modbusDriverFactory.CreateDriver(driverContext) as ModBusMasterDriver;
             await driver.Configure();
 
@@ -91,7 +91,7 @@ namespace P3.Driver.ModBus.Tests
             driverNode.InverseThis2ParentNodeInstanceNavigation.Add(device);
             device.InverseThis2ParentNodeInstanceNavigation.Add(attributeNode);
 
-            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance);
+            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance, TimeProvider.System);
             var driver = modbusTcpSlaveDriverFactory.CreateDriver(driverContext);
             await driver.Init();
             await driver.Configure();

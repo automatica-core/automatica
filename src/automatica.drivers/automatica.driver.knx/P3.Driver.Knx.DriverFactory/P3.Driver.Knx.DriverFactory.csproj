@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>4AC5C115-5709-475D-97CB-2ECFC1F3636D</ProjectGuid>
@@ -21,10 +21,10 @@
     <EmbeddedResource Include="Resources\Knx-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="8.1.0.1907" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.1.0.1907" />
-    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1907" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.1.0.1907" />
+    <PackageReference Include="Automatica.Core.EF" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Base" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Driver" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
     <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
   </ItemGroup>
   <ItemGroup>

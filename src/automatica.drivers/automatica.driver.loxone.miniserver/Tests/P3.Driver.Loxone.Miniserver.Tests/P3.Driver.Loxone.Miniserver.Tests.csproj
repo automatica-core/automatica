@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>8ED6C460-B0E9-464D-A1F7-007D21557641</ProjectGuid>
@@ -29,9 +29,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.EF" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Base" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
   <ItemGroup>

@@ -22,9 +22,9 @@
     "ProjectPage": "https://github.com/automatica-core/automatica.logic.sonos",
     "MinCoreServerVersion": {
       "Minor": 0,
-      "Major": 8,
+      "Major": 10,
       "Build": 0,
-      "Revision": 1663
+      "Revision": 2049
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": []

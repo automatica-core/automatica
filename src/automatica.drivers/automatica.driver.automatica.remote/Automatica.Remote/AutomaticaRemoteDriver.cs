@@ -60,17 +60,27 @@ namespace P3.Driver.Automatica.Remote
             return base.Start(token);
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        internal Task SendValue(IDispatchable source, object value, CancellationToken token = default)
         {
-            _hubConnection?.SendCoreAsync("SetValue", new [] {source.Id, value});
-            return base.WriteValue(source, value);
+            return _hubConnection?.SendCoreAsync("SetValue", new [] {source.Id, value}, token) ?? Task.CompletedTask;
+        }
+
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = default)
+        {
+            return SendValue(this, value, token);
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = default)
+        {
+            // values arrive through the SignalR subscription
+            return Task.FromResult(false);
         }
 
         private void ValueDispatched(DispatchableType type, Guid nodeId, object value)
         {
             if (_nodeMap.ContainsKey(nodeId))
             {
-                _nodeMap[nodeId].DispatchValue(value);
+                _nodeMap[nodeId].DispatchRead(value);
             }
         }
 
