@@ -226,7 +226,8 @@ namespace Automatica.Core.Logging
                 return;
             }
 
-            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception!)}";
+            // request urls of the framework logs carry the SignalR access token
+            var msg = $"{_logNameFacility.ToLower()}: {LogRedaction.Redact(formatter.Invoke(state, exception!))}";
             _logger.Write(level, exception, msg);
         }
 
