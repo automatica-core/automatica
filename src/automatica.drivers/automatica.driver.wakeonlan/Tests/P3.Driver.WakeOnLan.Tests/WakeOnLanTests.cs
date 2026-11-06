@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -43,8 +43,52 @@ namespace P3.Driver.WakeOnLan.Tests
             await Task.Delay(200);
 
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, con.Id);
-            Assert.Equal("AABBCCDDEEFF", value.Value);
+            Assert.Equal(true, value.Value);
 
+        }
+
+        [Fact]
+        public async Task Test_WakeOnLanValueFalse()
+        {
+            var driver = await CreateDriver<WakeOnLanDriver>(WakeOnLanDriverFactory.BusId, WakeOnLanDriverFactory.ValueId);
+
+            var prop = driver.Children[0].DriverContext.NodeInstance.PropertyInstance.SingleOrDefault(a => a.This2PropertyTemplate == WakeOnLanDriverFactory.MacId);
+            Assert.NotNull(prop);
+            prop.Value = "AABBCCDDEEFF";
+
+            await driver.Init();
+            var con = driver.Children[0] as WakeOnLan;
+            Assert.NotNull(con);
+
+            await ((DriverBase)con).WriteValue(DispatchableMock.Instance, new DispatchValue(con.Id, DispatchableType.NodeInstance, false, DateTime.Now, DispatchValueSource.Read));
+
+            await Task.Delay(200);
+
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, con.Id);
+            Assert.Equal(false, value.Value);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        [InlineData(1, true)]
+        [InlineData(0, false)]
+        [InlineData(1.0, true)]
+        [InlineData("true", true)]
+        [InlineData("False", false)]
+        [InlineData("1", true)]
+        [InlineData("0", false)]
+        public void Test_ConvertToBool(object input, bool expected)
+        {
+            Assert.True(WakeOnLan.TryConvertToBool(input, out var result));
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Test_ConvertToBoolInvalid()
+        {
+            Assert.False(WakeOnLan.TryConvertToBool("AABBCCDDEEFF", out _));
+            Assert.False(WakeOnLan.TryConvertToBool(null, out _));
         }
 
         [Fact]

@@ -15,6 +15,8 @@ namespace P3.Driver.WakeOnLan
 {
     public class WakeOnLan : DriverNoneAttributeBase
     {
+        internal const int WakeOnLanPort = 9;
+
         public WakeOnLan(IDriverContext ctx) : base(ctx)
         {
         }
@@ -22,15 +24,54 @@ namespace P3.Driver.WakeOnLan
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var mac = GetPropertyValueString("mac");
-            if (!String.IsNullOrEmpty(mac))
+            if (String.IsNullOrEmpty(mac))
+            {
+                return;
+            }
+
+            if (!TryConvertToBool(value, out var wake))
+            {
+                DriverContext.Logger.LogWarning($"Could not convert {value} to bool, ignore value");
+                return;
+            }
+
+            // the node is a boolean trigger, only a true value wakes up the device
+            if (wake)
             {
                 DriverContext.Logger.LogDebug($"Try to wake up {mac}");
                 if (!WakeUp(DriverContext.Logger, mac, DriverContext))
                 {
                     DriverContext.Logger.LogError($"Could not wake up {mac}");
                 }
+            }
 
-                await writeContext.DispatchValue(mac, token);
+            await writeContext.DispatchValue(wake, token);
+        }
+
+        internal static bool TryConvertToBool(object value, out bool result)
+        {
+            switch (value)
+            {
+                case bool b:
+                    result = b;
+                    return true;
+                case null:
+                    result = false;
+                    return false;
+                case string s when Int64.TryParse(s, out var l):
+                    result = l != 0;
+                    return true;
+            }
+
+            try
+            {
+                result = Convert.ToBoolean(value);
+                return true;
+            }
+            catch (Exception)
+            {
+                result = false;
+                return false;
             }
         }
 
@@ -87,12 +128,12 @@ namespace P3.Driver.WakeOnLan
             var packet = BuildWakeUpPacket(macAddress);
             if (packet.Length > 0)
             {
-                // WOL packet is sent over UDP 255.255.255.0:40000.
+                // WOL packet is sent as UDP broadcast to the discard port 9.
+                // EnableBroadcast must be set before sending to the broadcast address, otherwise Linux rejects it with EACCES.
                 using var client = new UdpClient();
-                client.Client.Connect(IPAddress.Broadcast, 40000);
                 client.EnableBroadcast = true;
                 // Submit
-                int result = client.Client.Send(packet);
+                int result = client.Send(packet, packet.Length, new IPEndPoint(IPAddress.Broadcast, WakeOnLanPort));
                 logger.LogHexOut(packet);
                 if (result > 0)
                 {
