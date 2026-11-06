@@ -29,8 +29,11 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            await driver.WriteValue(_uuid, value);
-            await writeContext.DispatchValue(value, token);
+            // only reflect the value if the miniserver accepted it, a failed write must not look like a successful one
+            if (await driver.WriteValue(_uuid, value))
+            {
+                await writeContext.DispatchValue(value, token);
+            }
         }
 
         public override Task<bool> Start(CancellationToken token = default)

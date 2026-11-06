@@ -197,7 +197,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         private void _miniserver_OnConnectionClosed(object sender, EventArgs e)
         {
-            _connected = true;
+            _connected = false;
             _connectionNode?.StateChanged(_connected);
         }
 

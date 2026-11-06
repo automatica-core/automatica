@@ -14,6 +14,7 @@ using P3.Driver.Loxone.Miniserver.Driver.EventArgs;
 using PureWebSockets;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
@@ -101,17 +102,20 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         public Task<LoxoneApiResponse<WriteValueResponse>> WriteValue(string uuid, object value)
         {
-            var uriParam = "";
+            return webApi.GetRequest<WriteValueResponse>($"/jdev/sps/io/{uuid}/{FormatValue(value)}");
+        }
 
-            if(value is bool vBool)
+        /// <summary>
+        /// Formats a value for the /jdev/sps/io command, the miniserver expects "." as decimal separator regardless of the server culture.
+        /// </summary>
+        internal static string FormatValue(object value)
+        {
+            if (value is bool vBool)
             {
-                uriParam = vBool ? "on" : "off";
-            } else
-            {
-                uriParam = value.ToString();
+                return vBool ? "on" : "off";
             }
 
-            return webApi.GetRequest<WriteValueResponse>($"/jdev/sps/io/{uuid}/{uriParam}");
+            return Convert.ToString(value, CultureInfo.InvariantCulture);
         }
 
         public async Task<bool> Connect()
@@ -133,6 +137,12 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                     _logger.LogInformation("Could not connect to miniserver...");
                     return false;
                 }
+                lock (_lock)
+                {
+                    // never parse leftovers of a previous connection as the start of the new stream
+                    _buffer.Clear();
+                }
+
                 _keepAliveTimer.Start();
                 var connect = await _webSocket.ConnectAsync();
 
@@ -161,6 +171,11 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         private void _webSocket_OnData(object sender, byte[] data)
         {
+            ProcessData(data);
+        }
+
+        internal void ProcessData(byte[] data)
+        {
             lock (_lock)
             {
                 if(data == null)
@@ -175,56 +190,52 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         private void TryReadData()
         {
-            if(_buffer.Count <= 0)
+            // a single data frame can contain several messages, process all complete ones
+            while (_buffer.Count > 0)
             {
-                return;
-            }
-           // Console.WriteLine(Utility.Utils.ByteArrayToString(_buffer.ToArray()));
-            if (_buffer[0] == 0x03 )//check for header 
-            {
-                if (_buffer.Count >= 8)
+                // Console.WriteLine(Utility.Utils.ByteArrayToString(_buffer.ToArray()));
+                if (_buffer[0] != 0x03) //check for header
                 {
-                    var infoByte = _buffer[1];
-                    if (Automatica.Core.Driver.Utility.Utils.IsBitSet(infoByte, 7))
-                    {
-                        _buffer.Clear();
-                        return;
-                    }
-                    var dataBuf = _buffer.ToArray().AsSpan();
-                    var headerData = dataBuf.Slice(0, 8);
-                    var header = new Header(headerData);
+                    return;
+                }
 
-                    if (header.Identifier == HeaderIdentifier.TextMessage)
-                    {
-                        //will not be transmitted as OnData 
-                        var nextData = dataBuf.Slice(8, _buffer.Count -8);
+                if (_buffer.Count < 8)
+                {
+                    return;
+                }
 
-                        _buffer.Clear();
-                        _buffer.AddRange(nextData.ToArray());
-                        return;
-                    }
+                var dataBuf = _buffer.ToArray().AsSpan();
+                var header = new Header(dataBuf.Slice(0, 8));
 
-                    if (_buffer.Count >= header.DataLength + 8)
-                    {
-                        //get my data array out of the buffer
-                        var dataBuffer = dataBuf.Slice(8, (int)header.DataLength);
+                // estimated header (bit 7 of the info byte = byte 2), the exact header follows with the data
+                if (Automatica.Core.Driver.Utility.Utils.IsBitSet(header.Info, 7))
+                {
+                    _buffer.RemoveRange(0, 8);
+                    continue;
+                }
 
-                        //get the next data out of the buffer
-                        var nextData = dataBuf.Slice((int)header.DataLength + 8, _buffer.Count - ((int)header.DataLength + 8));
-                        var msg = BinaryMessage.GenerateBinaryMessage(header, dataBuffer);
+                if (header.Identifier == HeaderIdentifier.TextMessage)
+                {
+                    //will not be transmitted as OnData 
+                    _buffer.RemoveRange(0, 8);
+                    continue;
+                }
 
-                        //clear the buffer
-                        _buffer.Clear();
+                if (_buffer.Count < header.DataLength + 8)
+                {
+                    return;
+                }
 
-                        //fill the next data in the buffer
-                        _buffer.AddRange(nextData.ToArray());
+                //get my data array out of the buffer
+                var dataBuffer = dataBuf.Slice(8, (int)header.DataLength);
+                var msg = BinaryMessage.GenerateBinaryMessage(header, dataBuffer);
 
-                        if (msg != null)
-                        {
-                            OnMessage?.Invoke(this, new OnEventTableMessageEventArgs(msg));
-                        }
+                //remove the message from the buffer, the next data stays
+                _buffer.RemoveRange(0, (int)header.DataLength + 8);
 
-                    }
+                if (msg != null)
+                {
+                    OnMessage?.Invoke(this, new OnEventTableMessageEventArgs(msg));
                 }
             }
         }

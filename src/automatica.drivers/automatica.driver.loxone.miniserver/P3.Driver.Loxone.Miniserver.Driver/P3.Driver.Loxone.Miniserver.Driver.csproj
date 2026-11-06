@@ -12,4 +12,7 @@
     <PackageReference Include="PureWebSockets" Version="4.0.0" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.Loxone.Miniserver.Tests" />
+  </ItemGroup>
 </Project>

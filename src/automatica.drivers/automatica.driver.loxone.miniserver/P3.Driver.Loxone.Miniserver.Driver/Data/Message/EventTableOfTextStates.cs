@@ -34,7 +34,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.Message
 
 
                 var uuidIcon = data.Slice(pos + 16, 16);
-                var lUuidIcon = new LoxoneUuid(uuid);
+                var lUuidIcon = new LoxoneUuid(uuidIcon);
 
                 var textLength = BitConverter.ToUInt32(data.Slice(pos + 32, 4));
 
