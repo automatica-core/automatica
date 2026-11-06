@@ -13,6 +13,9 @@ import com.getcapacitor.Plugin;
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    // app-local plugins have to be registered before the bridge starts
+    registerPlugin(ServerDiscoveryPlugin.class);
+
     super.onCreate(savedInstanceState);
 
     this.bridge.getWebView().setWebViewClient(new BridgeWebViewClient(this.bridge) {

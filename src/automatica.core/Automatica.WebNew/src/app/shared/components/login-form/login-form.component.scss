@@ -13,3 +13,39 @@
     margin-right: auto;
     width: 100%;
   }
+
+.discovered-title,
+.discovered-searching {
+    color: #8393A3;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.discovered-server {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    border: 1px solid #515159;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+
+    &.selected {
+        border-color: #457987;
+        background: rgba(69, 121, 135, .25);
+    }
+}
+
+.discovered-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.discovered-address {
+    color: #8393A3;
+    font-size: 13px;
+    flex-shrink: 0;
+}

@@ -146,6 +146,8 @@ namespace Automatica.Core
             services.AddSingleton<DiscoveryService>();
             // same instance as hosted service, otherwise PublishDevice() never runs and webapi/discovery throws
             services.AddHostedService(sp => sp.GetRequiredService<DiscoveryService>());
+            // mDNS/Bonjour announcement for the mobile app's server discovery
+            services.AddHostedService<MdnsAdvertiser>();
             services.AddAutomaticaCoreService(Configuration, false);
             services.AddCoreLogger(Configuration);
             services.AddAutomaticaMcp();

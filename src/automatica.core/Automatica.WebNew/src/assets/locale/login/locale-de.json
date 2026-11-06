@@ -6,6 +6,8 @@
         "PASSWORD": "Passwort",
         "SERVER_IP": "Server Adresse",
         "SAVE": "Logindaten speichern",
+        "FOUND_SERVERS": "Gefundene Server",
+        "SEARCHING_SERVERS": "Suche Server im Netzwerk...",
         "DEMO": "Demo Login"
     }
 }

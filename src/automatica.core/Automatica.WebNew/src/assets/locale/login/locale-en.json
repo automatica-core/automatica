@@ -6,6 +6,8 @@
         "PASSWORD": "Password",
         "SERVER_IP": "Server address",
         "SAVE": "Save login",
+        "FOUND_SERVERS": "Servers found",
+        "SEARCHING_SERVERS": "Searching the network for servers...",
         "DEMO": "Demo login"
     }
 }

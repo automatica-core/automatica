@@ -7,6 +7,7 @@
     <ProjectGuid>14F0A52F-4A52-456E-B3A6-D157ED90ED78</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Makaretu.Dns.Multicast.New" Version="0.38.0" />
     <PackageReference Include="Rssdp.NetStd" Version="4.0.4" />
   </ItemGroup>
   <ItemGroup>

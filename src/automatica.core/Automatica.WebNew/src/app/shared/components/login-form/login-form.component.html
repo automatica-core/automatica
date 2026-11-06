@@ -13,6 +13,20 @@
             </dx-validator>
           </dx-text-box>
         </div>
+
+        @if (discoveredServers.length > 0) {
+          <div class="dx-field discovered">
+            <div class="discovered-title">{{ 'LOGIN.FOUND_SERVERS' | translateAsync }}</div>
+            @for (server of discoveredServers; track server.url) {
+              <div class="discovered-server" [class.selected]="server.url === serverIp" (click)="selectServer(server)">
+                <span class="discovered-name">{{ server.name }}</span>
+                <span class="discovered-address">{{ server.host }}:{{ server.port }}</span>
+              </div>
+            }
+          </div>
+        } @else if (searchingServers) {
+          <div class="dx-field discovered-searching">{{ 'LOGIN.SEARCHING_SERVERS' | translateAsync }}</div>
+        }
       }
 
       <div class="dx-field">
