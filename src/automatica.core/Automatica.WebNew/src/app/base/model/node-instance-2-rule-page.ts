@@ -121,10 +121,11 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, 
 
     public static createFromNodeInstance(nodeInstance: NodeInstance, rulePage: RulePage) {
         const nd = new NodeInstance2RulePage();
-        nd.NodeInstance = nodeInstance;
+        // the NodeInstance setter builds the ports from ObjId, so the id comes first
+        nd.ObjId = Guid.MakeNew().ToString();
         nd.This2NodeInstance = nodeInstance.ObjId;
         nd.This2RulePage = rulePage.ObjId;
-        nd.ObjId = Guid.MakeNew().ToString();
+        nd.NodeInstance = nodeInstance;
         nd.afterFromJson();
         return nd;
     }

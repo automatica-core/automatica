@@ -13,4 +13,8 @@
 		<PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="P3.Driver.VkingBms.Tests" />
+	</ItemGroup>
+
 </Project>

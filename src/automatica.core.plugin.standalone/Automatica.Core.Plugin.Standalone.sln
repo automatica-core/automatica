@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Plugin.Standalone", "src/Automatica.Core.Plugin.Standalone/Automatica.Core.Plugin.Standalone.csproj", "{1AC2DC2E-7089-4424-82F5-C6BFF2646B81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Plugin.Standalone.Tests", "tests/Automatica.Core.Plugin.Standalone.Tests/Automatica.Core.Plugin.Standalone.Tests.csproj", "{C243F70E-01A9-4932-8A72-CFFCCE329017}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1AC2DC2E-7089-4424-82F5-C6BFF2646B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AC2DC2E-7089-4424-82F5-C6BFF2646B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AC2DC2E-7089-4424-82F5-C6BFF2646B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C243F70E-01A9-4932-8A72-CFFCCE329017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C243F70E-01A9-4932-8A72-CFFCCE329017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C243F70E-01A9-4932-8A72-CFFCCE329017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C243F70E-01A9-4932-8A72-CFFCCE329017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

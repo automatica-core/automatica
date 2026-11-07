@@ -35,4 +35,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.Blockchain.Ticker.Tests" />
+  </ItemGroup>
 </Project>

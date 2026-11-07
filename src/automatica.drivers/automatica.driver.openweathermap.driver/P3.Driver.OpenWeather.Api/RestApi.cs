@@ -6,7 +6,7 @@ internal static class RestApi
 {
     internal static async Task<HttpResponseMessage> GetAsync(string url)
     {
-        HttpResponseMessage response = await client.GetAsync(url);
+        HttpResponseMessage response = await Client.GetAsync(url);
         try { response.EnsureSuccessStatusCode(); }
         catch (HttpRequestException)
         {
@@ -36,5 +36,6 @@ internal static class RestApi
     internal static async Task<string> GetWebpageStringAsync(string url) => await (await GetAsync(url)).Content.ReadAsStringAsync();
     internal static async Task<Stream> GetWebpageStreamAsync(string url) => await (await GetAsync(url)).Content.ReadAsStreamAsync();
 
-    private static readonly HttpClient client = new HttpClient();
+    // internal settable for tests (fake HttpMessageHandler), production keeps the single shared instance
+    internal static HttpClient Client { get; set; } = new HttpClient();
 }

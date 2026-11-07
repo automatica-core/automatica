@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("NrjSolutions.Shelly.Net")]
 [assembly: AssemblyDescription("")]
@@ -11,3 +12,5 @@
 
 [assembly: AssemblyVersion("0.0.0.1")]
 [assembly: AssemblyFileVersion("0.0.0.1")]
+
+[assembly: InternalsVisibleTo("Automatica.Driver.Shelly.Unit.Tests")]

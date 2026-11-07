@@ -34,4 +34,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.OpenWeatherMap.Tests" />
+  </ItemGroup>
 </Project>

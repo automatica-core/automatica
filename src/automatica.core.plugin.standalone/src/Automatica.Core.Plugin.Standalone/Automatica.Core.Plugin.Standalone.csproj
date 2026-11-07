@@ -29,4 +29,7 @@
 	<PackageReference Include="NetStandardUtils" Version="1.0.0" />
     <PackageReference Include="System.IO.Ports" Version="10.0.14" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Automatica.Core.Plugin.Standalone.Tests" />
+  </ItemGroup>
 </Project>

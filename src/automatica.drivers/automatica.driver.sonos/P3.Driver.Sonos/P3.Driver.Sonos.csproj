@@ -10,4 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.Sonos.Upnp\P3.Driver.Sonos.Upnp.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.Sonos.Tests" />
+  </ItemGroup>
 </Project>

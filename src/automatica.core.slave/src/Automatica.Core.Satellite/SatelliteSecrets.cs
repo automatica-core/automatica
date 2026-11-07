@@ -16,10 +16,19 @@ namespace Automatica.Core.Satellite
         public const string JwtKeyFileName = "jwt-signing.key";
         public const string CertificateFileName = "satellite-certificate.pfx";
 
+        /// <summary>
+        /// For tests: a temp directory instead of the directory of the entry assembly
+        /// </summary>
+        internal static string ConfigDirectoryOverride { get; set; }
+
         public static string ConfigDirectory
         {
             get
             {
+                if (ConfigDirectoryOverride != null)
+                {
+                    return ConfigDirectoryOverride;
+                }
                 var configDir = new FileInfo(Assembly.GetEntryAssembly()!.Location).DirectoryName!;
                 var sub = Path.Combine(configDir, "config");
                 return Directory.Exists(sub) ? sub : configDir;

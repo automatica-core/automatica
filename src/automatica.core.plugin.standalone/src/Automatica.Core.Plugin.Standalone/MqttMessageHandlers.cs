@@ -27,6 +27,11 @@ namespace Automatica.Core.Plugin.Standalone
         public ILogger Logger { get; }
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
+        /// <summary>
+        /// For tests: the re-init message ends the process, which would end the test host
+        /// </summary>
+        internal static Action<int> ExitProcess = Environment.Exit;
+
         public MqttMessageHandlers(ILogger logger, MqttConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
@@ -112,7 +117,7 @@ namespace Automatica.Core.Plugin.Standalone
             else if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.SLAVE_TOPIC}/{_connection.NodeId}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}")
             {
                 Logger.LogDebug($"Received re-init event...");
-                Environment.Exit(0);
+                ExitProcess(0);
             }
             else if (_connection.DriverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/#"))
             {

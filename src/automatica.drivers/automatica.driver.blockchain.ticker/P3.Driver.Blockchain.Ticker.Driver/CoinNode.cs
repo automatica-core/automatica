@@ -15,7 +15,8 @@ namespace P3.Driver.Blockchain.Ticker.Driver
     internal abstract class CoinNode(IDriverContext driverContext) : DriverNoneAttributeBase(driverContext)
     {
         // one client for all coin nodes and driver instances, so reloads don't leak sockets
-        protected static readonly HttpClient SharedClient = new HttpClient(new SocketsHttpHandler
+        // internal settable for tests (fake HttpMessageHandler)
+        internal static HttpClient SharedClient { get; set; } = new HttpClient(new SocketsHttpHandler
         {
             PooledConnectionLifetime = TimeSpan.FromMinutes(5)
         })
