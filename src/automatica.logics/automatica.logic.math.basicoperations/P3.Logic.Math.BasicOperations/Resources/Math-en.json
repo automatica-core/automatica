@@ -92,6 +92,133 @@
       "OUTPUT": {
         "DESCRIPTION": "Output value"
       }
+    },
+    "MINMAX": {
+      "NAME": "Min/Max/Average",
+      "DESCRIPTION": "Smallest, largest and average value of the inputs that have a value",
+      "INPUT": {
+        "DESCRIPTION": "Input value, unlinked inputs are ignored"
+      },
+      "MIN": {
+        "DESCRIPTION": "Smallest input value"
+      },
+      "MAX": {
+        "DESCRIPTION": "Largest input value"
+      },
+      "AVERAGE": {
+        "DESCRIPTION": "Average of the input values"
+      }
+    },
+    "COUNTER": {
+      "NAME": "Up/down counter",
+      "DESCRIPTION": "Counts pulses up and down",
+      "UP": {
+        "DESCRIPTION": "1 adds the step"
+      },
+      "DOWN": {
+        "DESCRIPTION": "1 subtracts the step"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 sets the count to 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Current count"
+      },
+      "REACHED": {
+        "DESCRIPTION": "1 while the count is at or above the limit"
+      },
+      "STEP": {
+        "NAME": "Step",
+        "DESCRIPTION": "Value added or subtracted per pulse"
+      },
+      "LIMIT": {
+        "NAME": "Limit",
+        "DESCRIPTION": "Count from which Q is 1, 0 = not used"
+      }
+    },
+    "FORMULA": {
+      "NAME": "Formula",
+      "DESCRIPTION": "Calculates a formula over I1 to I4",
+      "INPUT": {
+        "DESCRIPTION": "Variable of the formula, 0 without a value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Result of the formula"
+      },
+      "PARAM": {
+        "NAME": "Formula",
+        "DESCRIPTION": "e.g. (I1 + I2) / 2 or if(I1 > 25, 100, 0). Operators + - * / % ^, comparisons < <= > >= == != (1 or 0), && || !, functions abs, sign, min, max, round(x, digits), floor, ceil, sqrt, pow, exp, ln, log, sin, cos, tan, clamp(x, min, max), if(condition, then, else), constants pi and e. Decimal separator is the dot"
+      }
+    },
+    "SCALER": {
+      "NAME": "Scaler",
+      "DESCRIPTION": "Converts a value linearly from one range to another, e.g. 0-10 V to 0-100 %",
+      "INPUT": {
+        "DESCRIPTION": "Value to convert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Converted value"
+      },
+      "IN_MIN": {
+        "NAME": "Input min",
+        "DESCRIPTION": "Input value that maps to output min"
+      },
+      "IN_MAX": {
+        "NAME": "Input max",
+        "DESCRIPTION": "Input value that maps to output max"
+      },
+      "OUT_MIN": {
+        "NAME": "Output min",
+        "DESCRIPTION": "Output value at input min"
+      },
+      "OUT_MAX": {
+        "NAME": "Output max",
+        "DESCRIPTION": "Output value at input max"
+      },
+      "LIMIT": {
+        "NAME": "Limit",
+        "DESCRIPTION": "Keeps the output inside the output range"
+      }
+    },
+    "PID": {
+      "NAME": "PID controller",
+      "DESCRIPTION": "Controls an actual value to a setpoint, e.g. a heating valve. Calculated once per cycle; Kd = 0 gives a PI controller, a negative Kp reverses the direction (cooling)",
+      "ACTUAL": {
+        "DESCRIPTION": "Actual value, e.g. room temperature"
+      },
+      "SETPOINT": {
+        "DESCRIPTION": "Setpoint"
+      },
+      "ENABLE": {
+        "DESCRIPTION": "0 sets the output to min and clears the integral, unlinked = enabled"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Manipulated value between min and max"
+      },
+      "KP": {
+        "NAME": "Kp",
+        "DESCRIPTION": "Proportional gain"
+      },
+      "KI": {
+        "NAME": "Ki",
+        "DESCRIPTION": "Integral gain per second"
+      },
+      "KD": {
+        "NAME": "Kd",
+        "DESCRIPTION": "Derivative gain in seconds"
+      },
+      "CYCLE": {
+        "NAME": "Cycle [s]",
+        "DESCRIPTION": "Time between two calculations"
+      },
+      "MIN": {
+        "NAME": "Output min",
+        "DESCRIPTION": "Lowest output value"
+      },
+      "MAX": {
+        "NAME": "Output max",
+        "DESCRIPTION": "Highest output value"
+      }
     }
   }
 }

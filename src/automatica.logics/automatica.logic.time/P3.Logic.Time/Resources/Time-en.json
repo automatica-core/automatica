@@ -61,6 +61,51 @@
     "TRIGGER_ONLY_IF_TRUE": {
       "NAME": "Trigger only if true",
       "DESCRIPTION": ""
+    },
+    "PULSE_GENERATOR": {
+      "NAME": "Pulse generator",
+      "DESCRIPTION": "While enabled the output alternates between 1 for the on time and 0 for the off time",
+      "ENABLE": {
+        "DESCRIPTION": "1 starts, 0 stops and sends 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Pulse output"
+      },
+      "ON": {
+        "NAME": "On time [s]",
+        "DESCRIPTION": "Duration of the 1 phase, at least 0.1 s"
+      },
+      "OFF": {
+        "NAME": "Off time [s]",
+        "DESCRIPTION": "Duration of the 0 phase, at least 0.1 s"
+      }
+    },
+    "CLICK_DETECTION": {
+      "NAME": "Click detection",
+      "DESCRIPTION": "Tells single, double and triple clicks and a long press of a push button apart. The button must send 1 on press and 0 on release",
+      "INPUT": {
+        "DESCRIPTION": "Push button"
+      },
+      "SINGLE": {
+        "DESCRIPTION": "Pulse after a single click (one click window late)"
+      },
+      "DOUBLE": {
+        "DESCRIPTION": "Pulse after a double click"
+      },
+      "TRIPLE": {
+        "DESCRIPTION": "Pulse after a triple click"
+      },
+      "LONG": {
+        "DESCRIPTION": "1 from the long press time until the button is released"
+      },
+      "CLICK_WINDOW": {
+        "NAME": "Click window [ms]",
+        "DESCRIPTION": "Maximum time between two clicks of a double or triple click"
+      },
+      "LONG_PRESS": {
+        "NAME": "Long press [ms]",
+        "DESCRIPTION": "Hold time for a long press, 0 = off (for buttons that send no release)"
+      }
     }
   }
 }

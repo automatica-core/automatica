@@ -79,6 +79,24 @@
       "OUTPUT": {
         "DESCRIPTION": "1 if I1 differs from I2, otherwise 0"
       }
+    },
+    "THRESHOLD": {
+      "NAME": "Threshold switch",
+      "DESCRIPTION": "Switches with hysteresis between an on and an off threshold. ON above OFF: on from V >= ON (e.g. fan). ON below OFF: on from V <= ON (e.g. heating)",
+      "INPUT": {
+        "DESCRIPTION": "Monitored value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Switch state, unchanged between the thresholds"
+      },
+      "ON": {
+        "NAME": "ON threshold",
+        "DESCRIPTION": "The output switches on when this value is reached"
+      },
+      "OFF": {
+        "NAME": "OFF threshold",
+        "DESCRIPTION": "The output switches off when this value is reached"
+      }
     }
   }
 }

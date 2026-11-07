@@ -61,6 +61,51 @@
     "TRIGGER_ONLY_IF_TRUE": {
       "NAME": "Trigger wenn Wert Wahr",
       "DESCRIPTION": ""
+    },
+    "PULSE_GENERATOR": {
+      "NAME": "Taktgeber",
+      "DESCRIPTION": "Solange freigegeben, wechselt der Ausgang zwischen 1 für die Einschaltzeit und 0 für die Ausschaltzeit",
+      "ENABLE": {
+        "DESCRIPTION": "1 startet, 0 stoppt und sendet 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Taktausgang"
+      },
+      "ON": {
+        "NAME": "Einschaltzeit [s]",
+        "DESCRIPTION": "Dauer der 1-Phase, mindestens 0,1 s"
+      },
+      "OFF": {
+        "NAME": "Ausschaltzeit [s]",
+        "DESCRIPTION": "Dauer der 0-Phase, mindestens 0,1 s"
+      }
+    },
+    "CLICK_DETECTION": {
+      "NAME": "Klickerkennung",
+      "DESCRIPTION": "Unterscheidet Einfach-, Doppel- und Dreifachklick und langen Tastendruck eines Tasters. Der Taster muss beim Drücken 1 und beim Loslassen 0 senden",
+      "INPUT": {
+        "DESCRIPTION": "Taster"
+      },
+      "SINGLE": {
+        "DESCRIPTION": "Impuls nach einem Einfachklick (ein Klickfenster verzögert)"
+      },
+      "DOUBLE": {
+        "DESCRIPTION": "Impuls nach einem Doppelklick"
+      },
+      "TRIPLE": {
+        "DESCRIPTION": "Impuls nach einem Dreifachklick"
+      },
+      "LONG": {
+        "DESCRIPTION": "1 ab der Langdruckzeit, bis der Taster losgelassen wird"
+      },
+      "CLICK_WINDOW": {
+        "NAME": "Klickfenster [ms]",
+        "DESCRIPTION": "Maximale Zeit zwischen zwei Klicks eines Doppel- oder Dreifachklicks"
+      },
+      "LONG_PRESS": {
+        "NAME": "Langer Druck [ms]",
+        "DESCRIPTION": "Haltezeit für einen langen Tastendruck, 0 = aus (für Taster ohne Loslass-Telegramm)"
+      }
     }
   }
 }

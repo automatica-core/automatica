@@ -4,4 +4,11 @@
 
 Automatica.Core.Time rules. 
 
-... more to come ...
+## Blocks
+
+| Block | What it does |
+|---|---|
+| Delayed on, Delayed off, Monoflop | Delays and pulses |
+| Timer, Advanced timer | Switching times and calendar entries |
+| Pulse generator | While EN = 1 the output alternates between the on and off time |
+| Click detection | Single, double and triple click and long press of a push button (1 on press, 0 on release) |
