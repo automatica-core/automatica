@@ -1,6 +1,7 @@
 ﻿using Automatica.Core.Base.IO;
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Tests.Automation;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
 using Xunit;
@@ -20,9 +21,8 @@ namespace Automatica.Core.Tests.Dispatcher
 
             await driverMock.WriteValue(driverMock2, new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.User));
 
-            await Task.Delay(500);
-
-            Assert.True(driverMock.WriteReceived);
+            // the write is queued and done by the driver's write task: a fixed delay was too short on a busy build agent
+            await AutomationTestHelper.Eventually(() => driverMock.WriteReceived, "the write reaches the driver");
         }
 
         [Fact]
@@ -37,9 +37,8 @@ namespace Automatica.Core.Tests.Dispatcher
             });
 
             await DispatcherMock.Instance.DispatchValue(driverMock, true, DispatchValueSource.Read);
-            await Task.Delay(200);
 
-            Assert.True(((DriverNodeMock)driverMock2.Children[0]).WriteReceived);
+            await AutomationTestHelper.Eventually(() => ((DriverNodeMock)driverMock2.Children[0]).WriteReceived, "the dispatched value is written to the target");
         }
 
         [Fact]
