@@ -1,60 +1,165 @@
-<div class="content-block panel-height">
-  <div class="dx-card wide-card" style="padding: 20px">
-    @if (update) {
-      <p translate>SYSTEM.UPDATE_AVAILABLE</p>
-      <span>
-        <div>
-          <p>{{ 'COMMON.VERSION' | translateAsync }}: {{ update.version }}</p>
-        </div>
-        <br />
-        <div>
-          <div>
-            @if (fileMax) {
-              <div class="progress-info">
-                {{ 'COMMON.DOWNLOADING' | translateAsync }} {{downloadValue}}/{{downloadMaxValue}}
-              </div>
-            }
-            @if (fileMax) {
-              <dx-progress-bar [min]="0" [max]="fileMax" [statusFormat]="format"
-              [value]="fileCurrent"></dx-progress-bar>
-            }
-          </div>
-          @if (!alreadyDownloaded && !fileMax) {
-            <dx-button text="{{ 'COMMON.DOWNLOAD' | translateAsync }}"
-              (onClick)="downloadClick($event)">
-            </dx-button>
-          }
-        </div>
-        @if (alreadyDownloaded) {
-          <dx-button text="{{ 'COMMON.INSTALL' | translateAsync }}"
-            (onClick)="installClick($event)">
-          </dx-button>
-        }
-      </span>
-    }
-
-    @if (!update) {
-      <p translate>SYSTEM.NO_UPDATE_AVAILABLE</p>
-      @if (updateError) {
-        <span style="color: red">
-          {{updateError}}
-        </span>
-      }
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'SYSTEM.NAME' | translateAsync }}</h1>
+    @if (serverVersion) {
+      <span class="sub">{{ 'UI.SYSTEM.SERVER_VERSION' | translateAsync }} <span class="mono">{{ serverVersion }}</span></span>
     }
   </div>
 
-  <div class="dx-card wide-card" style="padding: 20px">
+  <!-- license problems, one sentence each -->
+  @if (licenseErrors.length > 0) {
+    <section class="problems" [attr.aria-label]="'UI.SYSTEM.LICENSE_PROBLEMS' | translateAsync">
+      <h2 class="section-title">{{ 'UI.SYSTEM.LICENSE_PROBLEMS' | translateAsync }}</h2>
+      @for (e of licenseErrors; track $index) {
+        <div class="alert" role="alert">
+          <b>{{ e.titleKey ? (e.titleKey | translateAsync) : e.message }}</b>
+          <span>
+            @if (e.textKey) {
+              {{ e.textKey | translateAsync: { date: licenseInfo?.expiration ? formatDate(licenseInfo.expiration) : '' } }}
+            } @else {
+              {{ e.howToResolve }}
+            }
+          </span>
+          @if ($last) {
+            <div class="alert-actions">
+              <dx-button stylingMode="outlined" icon="upload" [text]="'UI.SYSTEM.UPLOAD_LICENSE' | translateAsync" routerLink="/admin/license"></dx-button>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
 
-    <p translate>SYSTEM.LICENSE</p>
-    @if (license) {
-      <dx-text-area [height]="500" [readOnly]="true" [value]="license"></dx-text-area>
-    }
-    @if (!license) {
-      <p translate>SYSTEM.NO_LICENSE_FOUND</p>
-    }
+  <div class="sys-grid">
+    <!-- server update -->
+    <section class="panel card" [attr.aria-label]="'UI.SYSTEM.UPDATE_TITLE' | translateAsync">
+      <div class="card-head">
+        <h2 class="section-title">{{ 'UI.SYSTEM.UPDATE_TITLE' | translateAsync }}</h2>
+        @if (updateChecked) {
+          @if (update) {
+            <span class="pill warn">{{ 'SYSTEM.UPDATE_AVAILABLE' | translateAsync }}</span>
+          } @else if (updateError) {
+            <span class="pill bad">{{ 'UI.SYSTEM.UPDATE_CHECK_FAILED' | translateAsync }}</span>
+          } @else {
+            <span class="pill ok">{{ 'UI.SYSTEM.UP_TO_DATE' | translateAsync }}</span>
+          }
+        }
+      </div>
 
-    <ng-container>
-      <dx-text-area [height]="500" [readOnly]="true" [value]="licenseErrors"></dx-text-area>
-    </ng-container>
+      <dl class="kv">
+        <dt>{{ 'UI.SYSTEM.INSTALLED_VERSION' | translateAsync }}</dt>
+        <dd class="mono">{{ serverVersion || '–' }}</dd>
+        @if (update) {
+          <dt>{{ 'UI.SYSTEM.NEW_VERSION' | translateAsync }}</dt>
+          <dd class="mono">{{ updateVersion }}</dd>
+        }
+      </dl>
+
+      @if (update) {
+        @if (fileMax && !alreadyDownloaded) {
+          <div class="progress-row">
+            <dx-progress-bar [min]="0" [max]="100" [value]="downloadPercent" [showStatus]="false"></dx-progress-bar>
+            <span class="mono progress-text">{{ downloadValue }} / {{ downloadMaxValue }}</span>
+          </div>
+        }
+        <div class="actions">
+          @if (!alreadyDownloaded && !fileMax) {
+            <dx-button type="default" icon="download" [text]="'UI.SYSTEM.DOWNLOAD_UPDATE' | translateAsync" (onClick)="downloadClick($event)"></dx-button>
+          }
+          @if (alreadyDownloaded) {
+            <dx-button type="default" icon="upload" [disabled]="installing" [text]="'UI.SYSTEM.INSTALL_UPDATE' | translateAsync" (onClick)="installClick($event)"></dx-button>
+            <span class="hint">{{ 'UI.SYSTEM.INSTALL_HINT' | translateAsync }}</span>
+          }
+        </div>
+      } @else if (updateError) {
+        <div class="alert warn" role="status">
+          <b>{{ 'UI.SYSTEM.UPDATE_CHECK_FAILED' | translateAsync }}</b>
+          <span>{{ 'UI.SYSTEM.UPDATE_CHECK_FAILED_FIX' | translateAsync }}</span>
+          <span class="mono detail">{{ updateError }}</span>
+        </div>
+      }
+      @if (errorText) {
+        <div class="alert" role="alert">
+          <b>{{ 'UI.SYSTEM.UPDATE_FAILED' | translateAsync }}</b>
+          <span class="mono detail">{{ errorText }}</span>
+        </div>
+      }
+    </section>
+
+    <!-- license -->
+    <section class="panel card" [attr.aria-label]="'SYSTEM.LICENSE' | translateAsync">
+      <div class="card-head">
+        <h2 class="section-title">
+          @if (licenseInfo?.type) {
+            {{ 'UI.SYSTEM.LICENSE_PLAN' | translateAsync: { plan: licenseInfo.type } }}
+          } @else {
+            {{ 'SYSTEM.LICENSE' | translateAsync }}
+          }
+        </h2>
+        @if (licenseLoaded) {
+          @switch (licenseState) {
+            @case ('ok') { <span class="pill ok">{{ 'UI.SYSTEM.LICENSE_VALID' | translateAsync }}</span> }
+            @case ('expired') { <span class="pill bad">{{ 'UI.SYSTEM.LICENSE_EXPIRED' | translateAsync }}</span> }
+            @case ('invalid') { <span class="pill bad">{{ 'UI.SYSTEM.LICENSE_INVALID' | translateAsync }}</span> }
+            @case ('none') { <span class="pill warn">{{ 'UI.SYSTEM.LICENSE_NONE' | translateAsync }}</span> }
+          }
+        }
+      </div>
+
+      @if (licenseInfo) {
+        <dl class="kv">
+          <dt>{{ 'UI.SYSTEM.CUSTOMER' | translateAsync }}</dt>
+          <dd>
+            {{ licenseInfo.customerName || '–' }}
+            @if (licenseInfo.customerEmail) {
+              <span class="muted mono"> · {{ licenseInfo.customerEmail }}</span>
+            }
+          </dd>
+          <dt>{{ 'UI.SYSTEM.VALID_UNTIL' | translateAsync }}</dt>
+          <dd [class.bad-text]="licenseInfo.isExpired">{{ licenseInfo.expiration ? formatDate(licenseInfo.expiration) : ('UI.SYSTEM.UNLIMITED' | translateAsync) }}</dd>
+          @if (licenseInfo.maxDatapoints !== undefined) {
+            <dt>{{ 'UI.SYSTEM.FEATURE_DATAPOINTS' | translateAsync }}</dt>
+            <dd>{{ 'UI.SYSTEM.LIMIT_MAX' | translateAsync: { max: formatNumber(licenseInfo.maxDatapoints) } }}</dd>
+          }
+          @if (licenseInfo.maxUsers !== undefined) {
+            <dt>{{ 'UI.SYSTEM.FEATURE_USERS' | translateAsync }}</dt>
+            <dd>
+              @if (userCount !== undefined) {
+                {{ 'UI.SYSTEM.USAGE_OF' | translateAsync: { used: formatNumber(userCount), max: formatNumber(licenseInfo.maxUsers) } }}
+              } @else {
+                {{ 'UI.SYSTEM.LIMIT_MAX' | translateAsync: { max: formatNumber(licenseInfo.maxUsers) } }}
+              }
+            </dd>
+          }
+          @for (f of licenseInfo.features; track f.key) {
+            @if (f.key.toLowerCase() !== 'maxdatapoints' && f.key.toLowerCase() !== 'maxusers') {
+              <dt>{{ f.labelKey ? (f.labelKey | translateAsync) : f.key }}</dt>
+              <dd>
+                @if (f.enabled === true) { {{ 'UI.SYSTEM.INCLUDED' | translateAsync }} }
+                @else if (f.enabled === false) { <span class="muted">{{ 'UI.SYSTEM.NOT_INCLUDED' | translateAsync }}</span> }
+                @else { {{ f.value }} }
+              </dd>
+            }
+          }
+          @if (licenseInfo.id) {
+            <dt>{{ 'UI.SYSTEM.LICENSE_ID' | translateAsync }}</dt>
+            <dd class="mono small">{{ licenseInfo.id }}</dd>
+          }
+        </dl>
+      } @else if (licenseLoaded) {
+        <div class="empty-state compact">
+          <fa-icon class="icon" [icon]="['fas', 'id-card']"></fa-icon>
+          <b>{{ 'SYSTEM.NO_LICENSE_FOUND' | translateAsync }}</b>
+          <span>{{ 'UI.SYSTEM.NO_LICENSE_HINT' | translateAsync }}</span>
+        </div>
+      }
+
+      @if (licenseLoaded) {
+        <div class="actions">
+          <a class="link" routerLink="/admin/license">{{ 'UI.SYSTEM.REPLACE_LICENSE' | translateAsync }}</a>
+        </div>
+      }
+    </section>
+
   </div>
 </div>

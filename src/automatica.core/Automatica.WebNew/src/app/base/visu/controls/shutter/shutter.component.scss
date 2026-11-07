@@ -1,3 +1,73 @@
 :host {
     display: block;
+    height: 100%;
+}
+
+.shutter-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+// position bar: how far the shutter is down
+.shutter-position {
+    flex: 1;
+    min-width: 0;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+
+    i {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent);
+        transition: width 0.2s;
+    }
+}
+
+.shutter-btn {
+    appearance: none;
+    flex: none;
+    width: 34px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:active:not(:disabled) {
+        background: var(--accent-soft);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shutter-position i {
+        transition: none;
+    }
 }

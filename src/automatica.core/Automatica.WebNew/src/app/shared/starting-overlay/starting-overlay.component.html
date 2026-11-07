@@ -1,13 +1,16 @@
-<dx-popup [showTitle]="false" [dragEnabled]="false" [hideOnOutsideClick]="false"
-  [(visible)]="popupVisible">
+<dx-popup [showTitle]="false" [dragEnabled]="false" [hideOnOutsideClick]="false" [fullScreen]="true" [shading]="false"
+  [wrapperAttr]="{ class: 'starting-overlay-wrapper' }" [(visible)]="popupVisible">
   <div *dxTemplate="let data of 'content'">
-    <div class="starting-spinner server-loading">
-      <div class="rectangle1"></div>
-      <div class="rectangle2"></div>
-      <div class="rectangle3"></div>
-      <div class="rectangle4"></div>
-      <div class="rectangle5"></div>
+    <div class="starting" role="status" aria-live="polite">
+      <div class="starting-spinner" aria-hidden="true">
+        <div class="rectangle1"></div>
+        <div class="rectangle2"></div>
+        <div class="rectangle3"></div>
+        <div class="rectangle4"></div>
+        <div class="rectangle5"></div>
+      </div>
+      <h1 class="title">{{ 'COMMON.CONNECTING_TO_SERVER' | translateAsync }}</h1>
+      <p class="hint">{{ 'UI.STARTING.HINT' | translateAsync }}</p>
     </div>
-    <h1 class="text-pos" translate>COMMON.CONNECTING_TO_SERVER</h1>
   </div>
 </dx-popup>

@@ -1,0 +1,345 @@
+// List rows, toolbars and notices shared by the admin list and system pages
+// (plugins, users, user groups, satellites, home, system, license, logs, telegram monitor).
+// Only tokens from src/tokens.scss.
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+
+    .grow {
+        flex: 1 1 220px;
+        min-width: 0;
+    }
+}
+
+// segmented filter (Alle / Treiber / Logik)
+.seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+
+    button {
+        font: inherit;
+        font-size: var(--text-sm);
+        min-height: 32px;
+        padding: 0 var(--space-3);
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--fg);
+        }
+
+        &.on {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        .count {
+            font-family: var(--font-data);
+            font-size: var(--text-xs);
+            margin-left: var(--space-1);
+        }
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    min-height: 0;
+}
+
+.li {
+    // rows keep their height inside the scrolling flex list
+    flex: none;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    min-height: 56px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-sm);
+    text-align: left;
+    width: 100%;
+
+    &:first-child {
+        border-top: 0;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: var(--surface-2);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+    }
+
+    &.selected,
+    &.selected:hover {
+        background: var(--accent-soft);
+    }
+
+    .ico {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-sm);
+        background: var(--surface-2);
+        color: var(--muted);
+        display: grid;
+        place-items: center;
+        font-size: var(--text-sm);
+        font-weight: 600;
+    }
+
+    .nm {
+        display: grid;
+        min-width: 0;
+        gap: 2px;
+
+        b {
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        span {
+            font-size: var(--text-xs);
+            color: var(--muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .err {
+            color: var(--bad);
+            white-space: normal;
+        }
+    }
+
+    .act {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--space-2);
+        min-width: 0;
+    }
+
+    @media (max-width: 599.98px) {
+        grid-template-columns: 36px minmax(0, 1fr) auto;
+        padding: var(--space-2) var(--space-3);
+
+        .act {
+            grid-column: 2 / -1;
+            justify-content: flex-start;
+        }
+
+        .act:empty {
+            display: none;
+        }
+    }
+}
+
+// two-pane list + editor (users, groups, satellites)
+.split {
+    display: grid;
+    grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+    gap: var(--space-4);
+    flex: 1;
+    min-height: 0;
+
+    > .panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    @media (max-width: 899.98px) {
+        grid-template-columns: minmax(0, 1fr);
+
+        // narrow: either the list or the editor
+        &.has-selection > .list-pane,
+        &:not(.has-selection) > .editor-pane {
+            display: none;
+        }
+    }
+}
+
+.pane-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+    min-width: 0;
+
+    h2 {
+        margin: 0;
+        font-size: var(--text-md);
+        font-weight: 600;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .titles {
+        display: grid;
+        min-width: 0;
+        flex: 1 1 0;
+    }
+
+    .back {
+        display: none;
+
+        @media (max-width: 899.98px) {
+            display: inline-flex;
+        }
+    }
+}
+
+.pane-body {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+.empty-state .icon fa-icon,
+.empty-state fa-icon.icon {
+    color: var(--muted);
+}
+
+// notice with a title, a sentence and an optional action
+.alert {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--bad) 40%, var(--line));
+    background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+    font-size: var(--text-sm);
+    line-height: 1.45;
+
+    b {
+        color: var(--bad);
+    }
+
+    &.warn {
+        border-color: color-mix(in srgb, var(--warn) 40%, var(--line));
+        background: color-mix(in srgb, var(--warn) 8%, var(--surface));
+
+        b {
+            color: var(--warn);
+        }
+    }
+
+    &.ok {
+        border-color: color-mix(in srgb, var(--ok) 40%, var(--line));
+        background: color-mix(in srgb, var(--ok) 8%, var(--surface));
+
+        b {
+            color: var(--ok);
+        }
+    }
+
+    .alert-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin-top: var(--space-1);
+    }
+}
+
+// key / value list
+.kv {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+    font-size: var(--text-sm);
+
+    dt {
+        color: var(--muted);
+    }
+
+    dd {
+        margin: 0;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.section-title {
+    margin: 0;
+    font-size: var(--text-md);
+    font-weight: 600;
+}
+
+a.link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// small create dialog (users, groups, satellites)
+.create-form {
+    display: grid;
+    gap: var(--space-3);
+
+    label {
+        display: grid;
+        gap: var(--space-1);
+
+        > span {
+            font-size: var(--text-sm);
+            color: var(--muted);
+        }
+    }
+
+    .hint {
+        margin: 0;
+        font-size: var(--text-xs);
+        color: var(--muted);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-2);
+        margin-top: var(--space-2);
+    }
+}

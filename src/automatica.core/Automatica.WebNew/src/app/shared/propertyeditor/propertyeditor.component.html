@@ -1,22 +1,54 @@
-<div class="property-editor" style="height: 100%">
+<div class="inspector">
+  @if (item) {
+    <header class="insp-head">
+      <div class="insp-title">
+        @if (itemState) {
+          <span class="status-dot" [ngClass]="itemState.tone"></span>
+        }
+        <span class="insp-name" [attr.title]="itemName">{{ itemName }}</span>
+        @if (itemState) {
+          <span class="pill" [ngClass]="itemState.tone">{{ itemState.label | translateAsync }}</span>
+        }
+      </div>
+      <div class="insp-sub">
+        @if (itemType) {
+          <span>{{ itemType }}</span>
+        }
+        @if (itemPath) {
+          <span class="mono" [attr.title]="itemPath">{{ itemPath }}</span>
+        }
+      </div>
+    </header>
+  } @else {
+    <div class="empty-state">
+      <fa-icon icon="hand-pointer" class="icon"></fa-icon>
+      <b>{{ "UI.CONFIG.EMPTY_TITLE" | translateAsync }}</b>
+      <span>{{ "UI.CONFIG.EMPTY_TEXT" | translateAsync }}</span>
+    </div>
+  }
+
+  <div class="insp-body" [hidden]="!item">
   <dx-data-grid #dataTable [twoWayBindingEnabled]="false" id="gridContainer" [dataSource]="Properties"
-    [allowColumnReordering]="false" [height]="'100%'" (onFocusedCellChanging)="onFocusedCellChanging($event)">
-
-
+    [allowColumnReordering]="false" [height]="'100%'" (onFocusedCellChanging)="onFocusedCellChanging($event)"
+    [showColumnHeaders]="false" [showRowLines]="false" [showBorders]="false" [showColumnLines]="false"
+    [hoverStateEnabled]="true" [wordWrapEnabled]="true">
 
     <dxi-column dataField="PropertyTemplate.GroupOrder" [calculateGroupValue]="groupName"
-    caption="{{ 'COMMON.GROUP' | translateAsync }}" [groupIndex]="0" [allowSorting]="false"></dxi-column>
-    <dxi-column caption="{{ 'COMMON.NAME' | translateAsync }}" [allowEditing]="false"
-    [calculateCellValue]="translateName" [allowSorting]="false"></dxi-column>
+      caption="{{ 'COMMON.GROUP' | translateAsync }}" [groupIndex]="0" [allowSorting]="false"
+      groupCellTemplate="groupTemplate"></dxi-column>
+    <dxi-column caption="{{ 'COMMON.NAME' | translateAsync }}" [allowEditing]="false" width="40%"
+      cssClass="insp-label" [calculateCellValue]="translateName" [allowSorting]="false"></dxi-column>
     <dxi-column [showEditorAlways]="true" caption="{{ 'COMMON.VALUE' | translateAsync }}" dataField="Value"
       editCellTemplate="editTemplate" [allowSorting]="false">
     </dxi-column>
+
+    <div *dxTemplate="let group of 'groupTemplate'" class="insp-group">{{ group.value }}</div>
 
     <dxo-selection mode="none"></dxo-selection>
     <dxo-search-panel [visible]="false"></dxo-search-panel>
     <dxo-group-panel [visible]="false"></dxo-group-panel>
     <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [pageSize]="32"> </dxo-paging>
+    <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-scrolling [useNative]="false"></dxo-scrolling>
 
     <dxo-editing mode="cell" [allowUpdating]="true">
@@ -295,6 +327,13 @@
     }
   </div>
 </dx-data-grid>
+  </div>
+
+  @if (item) {
+    <footer class="insp-foot">
+      <fa-icon icon="cloud-arrow-up"></fa-icon>{{ "UI.CONFIG.AUTOSAVE" | translateAsync }}
+    </footer>
+  }
 </div>
 
 @if (controlsPopupVisible) {

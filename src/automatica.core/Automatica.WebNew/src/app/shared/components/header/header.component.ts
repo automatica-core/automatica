@@ -1,17 +1,12 @@
-import { Component, NgModule, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, NgModule, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, ElementRef, HostListener } from "@angular/core";
 import { CommonModule } from "@angular/common";
-
-import { DxButtonModule } from "devextreme-angular/ui/button";
-import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
-import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
 import { L10nTranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
-import { DxSpeedDialActionModule } from "devextreme-angular";
-
-import config from "devextreme/core/config";
+import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { SettingsService, Language as SettingsLanguage } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
@@ -24,12 +19,6 @@ export enum Language {
     English = 1
 }
 
-config({
-    floatingActionButtonConfig: {
-        icon: "more"
-    }
-});
-
 @Component({
     selector: "app-header",
     templateUrl: "header.component.html",
@@ -37,74 +26,75 @@ config({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-
 export class HeaderComponent implements OnInit, OnDestroy {
-    isWeb: boolean;
-
-    get title() {
-        return this.projectName;
-    }
 
     @Output()
-    menuToggle = new EventEmitter<boolean>();
+    menuToggle = new EventEmitter<void>();
 
     @Input()
     menuToggleEnabled = false;
 
-    time: string = "00:00:00";
-    private readonly narrowScreen = window.matchMedia("(max-width: 599.98px)");
-    ticker: ReturnType<typeof setInterval>;
+    projectName: string;
     version: string;
-
     isAdminAvailable = false;
+    connected = true;
+    menuOpen = false;
+    currentTheme = "dark";
+    userName = "";
+    initials = "";
 
-    private projectName: string;
     private destroyed = false;
-    private themeChangedSub: Subscription;
-
-    public themes = [
-        {
-            name: "Dark",
-            theme: "dark"
-        }, {
-            name: "Light",
-            theme: "light"
-        }
-
-    ]
-
-    public currentTheme = "";
-
-    selectBoxOptions: any;
-
-    logoutButtonOptions: any;
-
+    private subs: Subscription[] = [];
 
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
         public appService: AppService,
         private loginService: LoginService,
         private hubService: HubConnectionService,
+        private dataHub: DataHubService,
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
         private themeService: ThemeService,
         private translate: TranslationConfigService,
-        private deviceService: DeviceService) {
+        private deviceService: DeviceService,
+        private element: ElementRef<HTMLElement>) {
+    }
 
-         this.isWeb = deviceService.isWeb;
-
-        this.logoutButtonOptions = {
-            text: translate.translation.translate("COMMON.LOGOUT"),
-            onClick: () => {
-                this.logout();
-            }
+    @HostListener("document:click", ["$event"])
+    onDocumentClick(event: MouseEvent) {
+        if (this.menuOpen && !this.element.nativeElement.querySelector(".user")?.contains(event.target as Node)) {
+            this.menuOpen = false;
         }
     }
 
-    async ngOnInit() {
+    @HostListener("document:keydown.escape")
+    onEscape() {
+        this.menuOpen = false;
+    }
 
+    async ngOnInit() {
+        this.currentTheme = this.themeService.getCurrentTheme();
+        this.subs.push(this.themeService.themeChanged.subscribe(a => {
+            this.currentTheme = a;
+            this.changeRef.markForCheck();
+        }));
+        this.subs.push(this.dataHub.connectionStateChanged.subscribe(state => {
+            this.connected = !!state;
+            this.changeRef.markForCheck();
+        }));
+
+        const user = this.loginService.getCurrentUser();
+        this.isAdminAvailable = user?.InverseThis2Roles?.some(a => a.This2RoleNavigation?.Key === "administrator") ?? false;
+        const first = user?.FirstName?.trim() ?? "";
+        const last = user?.LastName?.trim() ?? "";
+        this.userName = [first, last].filter(a => a).join(" ") || user?.UserName || "";
+        this.initials = ((first[0] ?? "") + (last[0] ?? "")).toUpperCase() || (user?.UserName?.substring(0, 2).toUpperCase() ?? "?");
 
         await this.hubService.init();
+        if (this.destroyed) {
+            return;
+        }
+        this.connected = this.dataHub.connected;
 
         const projectName = await this.settingsService.getByKey("projectName");
         this.projectName = projectName.Value;
@@ -115,64 +105,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // the translations are loaded by the app initializer, only the server language has to be applied
         await this.translate.applyLanguage(language == Language.German ? SettingsLanguage.German : SettingsLanguage.English);
 
-        var user = this.loginService.getCurrentUser();
-
-        var hasAdminRole = user?.InverseThis2Roles.filter(a => a.This2RoleNavigation.Key == "administrator").length > 0;
-        this.isAdminAvailable = hasAdminRole;
-
-        if (this.destroyed) {
-            // destroyed while awaiting above, don't start the ticker
-            return;
-        }
-
-        this.ticker = setInterval(() => {
-            const date = new Date();
-            // no seconds on phones, the header has no room for them
-            this.time = this.narrowScreen.matches
-                ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-                : date.toLocaleTimeString();
-
-            this.changeRef.detectChanges();
-        }, 1000);
-
-        this.currentTheme = this.themeService.getCurrentTheme();
-
-        this.themeChangedSub = this.themeService.themeChanged.subscribe((a) => {
-            this.currentTheme = a;
-        });
-
-        this.selectBoxOptions = {
-            width: 140,
-            items: this.themes,
-            valueExpr: 'theme',
-            displayExpr: 'name',
-            value: this.currentTheme,
-            onValueChanged: (args) => {
-                this.themeService.applyTheme(args.value);
-            }
-        };
-        if (!this.isWeb) {
+        if (!this.deviceService.isWeb) {
             const appInfo = await App.getInfo();
             this.version = appInfo.version + "." + appInfo.build;
         }
+        this.changeRef.markForCheck();
     }
 
     ngOnDestroy() {
         this.destroyed = true;
-        clearInterval(this.ticker);
-        this.themeChangedSub?.unsubscribe();
+        this.subs.forEach(a => a.unsubscribe());
     }
 
-    toggleMenu = () => {
+    toggleMenu() {
         this.menuToggle.emit();
     }
-    isAdminPage() {
-        if (this.activatedRoute.snapshot.url.length > 0) {
-            return this.activatedRoute.snapshot.url[0].path === "admin";
-        }
-        return false;
+
+    setTheme(theme: string) {
+        this.themeService.applyTheme(theme);
     }
+
+    isAdminPage() {
+        return this.router.url.startsWith("/admin");
+    }
+
     async logout() {
+        this.menuOpen = false;
         await this.hubService.stop();
         await this.loginService.logout();
         this.router.navigate(["/login"]);
@@ -190,11 +148,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 @NgModule({
     imports: [
         CommonModule,
-        DxPopupModule,
-        DxButtonModule,
-        DxToolbarModule,
         L10nTranslationModule,
-        DxSpeedDialActionModule
+        FontAwesomeModule
     ],
     declarations: [HeaderComponent],
     exports: [HeaderComponent]

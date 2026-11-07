@@ -1,10 +1,69 @@
-<div class="content-block">
-    <div class="dx-card wide-card panel-height">
-        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
-        </dx-menu>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'LICENSE.NAME' | translateAsync }}</h1>
+    <span class="sub">{{ 'UI.LICENSE.SUB' | translateAsync }}</span>
+    <span class="spacer"></span>
+    @if (isDirty) {
+      <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+      <dx-button stylingMode="text" [text]="'UI.LICENSE.REVERT' | translateAsync" (onClick)="revert()"></dx-button>
+    }
+    <label class="file-btn">
+      <input type="file" accept=".lic,.xml,.txt,text/xml,text/plain" (change)="onFileSelected($event)" />
+      <fa-icon [icon]="['fas', 'file-arrow-up']"></fa-icon>
+      <span>{{ 'UI.LICENSE.UPLOAD' | translateAsync }}</span>
+    </label>
+    <dx-button type="default" icon="save" [disabled]="!isDirty || isUnreadable" [text]="'COMMON.SAVE' | translateAsync" (onClick)="save()"></dx-button>
+  </div>
 
-        <dx-text-area width="100%" height="100%" [(value)]="license"></dx-text-area>
+  @if (fileError) {
+    <div class="alert" role="alert"><b>{{ 'UI.LICENSE.FILE_ERROR' | translateAsync }}</b><span>{{ fileError }}</span></div>
+  }
 
-    </div>
+  <div class="lic-grid">
+    <section class="panel card" [attr.aria-label]="'UI.LICENSE.PREVIEW' | translateAsync">
+      <span class="eyebrow">{{ 'UI.LICENSE.PREVIEW' | translateAsync }}</span>
+      @if (info) {
+        <div class="card-head">
+          <h2 class="section-title">{{ 'UI.SYSTEM.LICENSE_PLAN' | translateAsync: { plan: info.type || '–' } }}</h2>
+          @if (info.isExpired) {
+            <span class="pill bad">{{ 'UI.SYSTEM.LICENSE_EXPIRED' | translateAsync }}</span>
+          } @else {
+            <span class="pill ok">{{ 'UI.LICENSE.READABLE' | translateAsync }}</span>
+          }
+        </div>
+        <dl class="kv">
+          <dt>{{ 'UI.SYSTEM.CUSTOMER' | translateAsync }}</dt>
+          <dd>{{ info.customerName || '–' }}</dd>
+          <dt>{{ 'UI.SYSTEM.VALID_UNTIL' | translateAsync }}</dt>
+          <dd>{{ info.expiration ? formatDate(info.expiration) : ('UI.SYSTEM.UNLIMITED' | translateAsync) }}</dd>
+          @for (f of info.features; track f.key) {
+            <dt>{{ f.labelKey ? (f.labelKey | translateAsync) : f.key }}</dt>
+            <dd>
+              @if (f.enabled === true) { {{ 'UI.SYSTEM.INCLUDED' | translateAsync }} }
+              @else if (f.enabled === false) { {{ 'UI.SYSTEM.NOT_INCLUDED' | translateAsync }} }
+              @else { {{ f.value }} }
+            </dd>
+          }
+        </dl>
+        <p class="hint">{{ 'UI.LICENSE.CHECK_HINT' | translateAsync }} <a class="link" routerLink="/admin/system">{{ 'SYSTEM.NAME' | translateAsync }}</a></p>
+      } @else if (isUnreadable) {
+        <div class="alert warn" role="status">
+          <b>{{ 'UI.LICENSE.UNREADABLE' | translateAsync }}</b>
+          <span>{{ 'UI.LICENSE.UNREADABLE_FIX' | translateAsync }}</span>
+        </div>
+      } @else if (loaded) {
+        <div class="empty-state compact">
+          <fa-icon class="icon" [icon]="['fas', 'id-card']"></fa-icon>
+          <b>{{ 'SYSTEM.NO_LICENSE_FOUND' | translateAsync }}</b>
+          <span>{{ 'UI.LICENSE.EMPTY_HINT' | translateAsync }}</span>
+        </div>
+      }
+    </section>
+
+    <section class="panel card editor" [attr.aria-label]="'UI.LICENSE.TEXT' | translateAsync">
+      <span class="eyebrow">{{ 'UI.LICENSE.TEXT' | translateAsync }}</span>
+      <dx-text-area class="lic-text" [(value)]="license" valueChangeEvent="input" [height]="360"
+        [placeholder]="'UI.LICENSE.PLACEHOLDER' | translateAsync" [spellcheck]="false"></dx-text-area>
+    </section>
+  </div>
 </div>

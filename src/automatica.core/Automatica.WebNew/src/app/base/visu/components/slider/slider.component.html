@@ -1,1 +1,4 @@
-<dx-slider class="slider" [min]="0" [max]="100" [value]="state" (onValueChanged)="switch($event)"></dx-slider>
+<dx-slider class="visu-brightness" [min]="0" [max]="100" [value]="state" (onValueChanged)="switch($event)">
+  <dxo-tooltip [enabled]="true" [format]="format" showMode="always" position="top"></dxo-tooltip>
+</dx-slider>
+<div class="visu-brightness-scale" aria-hidden="true"><span>0 %</span><span>100 %</span></div>

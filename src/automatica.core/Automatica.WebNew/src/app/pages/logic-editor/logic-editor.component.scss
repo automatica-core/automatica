@@ -1,16 +1,63 @@
-@import "../../../themes/generated/variables.base.scss";
-
-.logic-tab-panel {
-    height: calc(100% - 95px);
-    width: 100%;
+.logic-area {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-.as-split-area {
-    overflow:hidden !important;
+// one tab per logic page, the page list on the left does the same
+.page-tabs {
+    flex: none;
+    display: flex;
+    gap: 2px;
+    padding: var(--space-2) var(--space-2) 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    scrollbar-width: thin;
 }
 
-:host{
-    .dx-tab-selected {
-        background-color: $base-accent !important;
+.page-tab {
+    flex: none;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    padding: 6px 14px 7px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-bottom: -1px;
+
+    &:hover {
+        color: var(--fg);
+        background: var(--surface-2);
+    }
+
+    &.active {
+        color: var(--fg);
+        background: var(--bg);
+        border-color: var(--line);
+        box-shadow: inset 0 2px 0 var(--accent);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+    }
+}
+
+.logic-canvas {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+
+    p3-ruleeditor {
+        position: absolute;
+        inset: 0;
     }
 }

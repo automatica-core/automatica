@@ -1,97 +1,92 @@
-<div [class]="section_cell_class"  [ngClass]="{'section_cell_180': width === 1, 'section_cell_360': width === 2}">
+@let interactive = pressable || hasPopup;
+<div class="tile" [class.tile-wide]="width === 2" [class.section_cell_360]="width === 2" [class.is-on]="active"
+  [class.is-action]="action" [class.is-firing]="firing" [class.is-interactive]="interactive"
+  [class.is-disabled]="pressable && disabled" [class.is-full]="useFullContainer" [class.has-more]="pressable && hasPopup" (contextmenu)="onContextMenu($event)">
 
-  @if (aggregatedValues && aggregatedValues.length >= 3) {
-    <div class="chart">
-      <dx-chart [dataSource]="aggregatedValues" autoHidePointMarkers="true">
-        <dxo-size [height]="chartHeight" [width]="chartWidth">
-        </dxo-size>
-        <dxi-series type="line" valueField="averageValue" name="averageValue" argumentField="timestamp">
-          <dxo-label [visible]="false"></dxo-label>
-          <dxo-grid visible="false" opacity="0"></dxo-grid>
-          <dxo-point hoverMode="none" visible="false" size="0"></dxo-point>
-        </dxi-series>
-        <dxi-value-axis opacity="0">
-          <dxo-label [visible]="false"></dxo-label>
-          <dxo-grid visible="false" opacity="0"></dxo-grid>
-          <dxo-minor-tick visible="false" opacity="0"></dxo-minor-tick>
-          <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
-          <dxo-tick opacity="0"></dxo-tick>
-        </dxi-value-axis>
-        <dxo-legend [visible]="false"></dxo-legend>
-        <dxo-common-pane-settings [visible]="false" opacity="0"></dxo-common-pane-settings>
-        <dxo-argument-axis opacity="0">
-          <dxo-label [visible]="false"></dxo-label>
-          <dxo-grid visible="false" opacity="0"></dxo-grid>
-          <dxo-minor-tick visible="false" opacity="0"></dxo-minor-tick>
-          <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
-          <dxo-tick opacity="0"></dxo-tick>
-        </dxo-argument-axis>
-        <dxo-common-series-settings argumentField="timestamp" type="line" opacity="0">
-          <dxo-label visible="false"></dxo-label>
-          <dxo-point hoverMode="none" visible="false" size="0"></dxo-point>
-          <dxo-grid visible="false" opacity="0"></dxo-grid>
-        </dxo-common-series-settings>
-        <dxo-common-axis-settings opacity="0">
-          <dxo-label visible="false" opacity="0"></dxo-label>
-          <dxo-grid visible="false" opacity="0"></dxo-grid>
-          <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
-        </dxo-common-axis-settings>
-      </dx-chart>
-    </div>
+  @if (interactive && !useFullContainer) {
+    <button type="button" class="tile-hit" [attr.aria-label]="ariaLabel" [attr.aria-pressed]="pressed ?? null"
+      [attr.aria-haspopup]="!pressable && hasPopup ? 'dialog' : null" [attr.aria-disabled]="pressable && disabled ? 'true' : null"
+      (click)="onTileClick($event)" (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)"
+      (pointerup)="cancelLongPress()" (pointerleave)="cancelLongPress()" (pointercancel)="cancelLongPress()"></button>
   }
 
-  <div class="cell_content" (click)="onCellClick($event)">
-    @if (!useFullContainer) {
-      @if (showIcon) {
-        <div class="cell_icon_placeholder">
-          <span [style.color]="iconColor" style="vertical-align: middle;">
-            <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
-          </span>
+  @if (!useFullContainer) {
+    <div class="tile-head" [attr.aria-hidden]="interactive || null">
+      @if (showIcon && icon) {
+        <span class="tile-ico"><fa-icon [icon]="icon"></fa-icon></span>
+      }
+      @if (sparkPath; as spark) {
+        <svg class="tile-spark" viewBox="0 0 120 26" preserveAspectRatio="none" aria-hidden="true">
+          <path class="a" [attr.d]="spark.area"></path>
+          <path class="l" [attr.d]="spark.line"></path>
+        </svg>
+      }
+      @if (state !== undefined && state !== null && state !== '') {
+        <span class="tile-state">{{ state }}</span>
+      }
+    </div>
+
+    <div class="tile-title" [attr.aria-hidden]="interactive || null">
+      @if (showLocation) {
+        <div class="tile-room">{{ location }}</div>
+      }
+      <div class="tile-name">{{ hint }}</div>
+    </div>
+
+    <div class="tile-foot">
+      @if (!valueHidden) {
+        <div [class]="'tile-value ' + valueSize" [attr.aria-hidden]="interactive || null">
+          {{ displayValue }}@if (unit) {<small>{{ unit }}</small>}
         </div>
       }
-      <div class="cell_texts">
-        <div [hidden]="!location" class="cell_text_location cell_text_overflow">{{ location }}</div>
-        <div [hidden]="!hint" class="cell_text_hint cell_text_overflow">{{ hint }}</div>
-        <div [hidden]="valueHidden" class="cell_text_value cell_text_overflow">{{ value }}</div>
-        <div [hidden]="!subValue" class="cell_text_sub cell_text_overflow">{{ subValue }}</div>
-      </div>
-      <div class="cell_controls" (click)="preventDefault($event)">
-        <ng-content select="[control]"></ng-content>
-      </div>
+      @if (action && firing) {
+        <div class="tile-sub is-confirm" aria-hidden="true"><fa-icon icon="check"></fa-icon> {{ 'UI.VISU.TRIGGERED' | translateAsync }}</div>
+      } @else if (subValue) {
+        <div class="tile-sub" [attr.aria-hidden]="interactive || null">{{ subValue }}</div>
+      }
+      @if (hasLevel) {
+        <div class="tile-level" [class.is-accent]="levelTone === 'accent'" aria-hidden="true"><i [style.width.%]="levelWidth"></i></div>
+      }
+      <ng-content select="[control]"></ng-content>
+      @if (pressable && hasPopup) {
+        <button type="button" class="tile-more" [attr.aria-label]="('UI.VISU.DETAILS' | translateAsync) + ': ' + hint"
+          [attr.title]="'UI.VISU.DETAILS' | translateAsync" aria-haspopup="dialog" (click)="openPopup($event)">
+          <fa-icon icon="sliders"></fa-icon>
+        </button>
+      }
+    </div>
+    @if (action) {
+      <span class="sr-only" aria-live="polite">{{ firing ? ('UI.VISU.TRIGGERED' | translateAsync) : '' }}</span>
     }
-    @if (useFullContainer) {
-      <ng-content select="[control_full]"></ng-content>
-    }
-  </div>
+  } @else {
+    <ng-content select="[control_full]"></ng-content>
+  }
 </div>
 
 @if (hasPopup) {
-  <dx-popup [width]="'95%'" [height]="'95%'" [visible]="popupVisible" [showTitle]="true" [hideOnOutsideClick]="false"
-    [showCloseButton]="true" title="" [dragEnabled]="false" (onHiding)="onPopupHidingCall($event)"
+  <dx-popup [width]="'92%'" [maxWidth]="popupLarge ? 1100 : 460" [height]="popupLarge ? '90%' : 'auto'"
+    [visible]="popupVisible" [showTitle]="true" [title]="hint" [hideOnOutsideClick]="true" [showCloseButton]="true"
+    [dragEnabled]="false" [wrapperAttr]="{ class: 'visu-popup' }" (onHiding)="onPopupHidingCall($event)"
     (onShowing)="onPopupShowingCall($event)">
     <div *dxTemplate="let data of 'content'">
       <dx-scroll-view width="100%" height="100%">
-        <div class="overlay">
-          <div class="form">
-            <div class="dx-fieldset">
-              <div class="dx-fieldset-header">{{hint}}</div>
-              <div class="dx-field">
-                <div [hidden]="valueHidden" class="overlay_value cell_text_overflow">{{ value }}</div>
-              </div>
+        <div class="popup-body">
+          <div class="popup-head">
+            @if (showIconInPopup && icon) {
+              <span class="tile-ico" [class.is-on]="active"><fa-icon [icon]="icon"></fa-icon></span>
+            }
+            <div class="popup-head-text">
+              @if (showLocationInPopup && showLocation) {
+                <div class="tile-room">{{ location }}</div>
+              }
+              @if (!valueHidden) {
+                <div class="popup-value">{{ displayValue }}@if (unit) {<small>{{ unit }}</small>}</div>
+              } @else if (state) {
+                <div class="popup-value">{{ state }}</div>
+              }
             </div>
-            @if (showIconInPopup) {
-              <div class="overlay_icon">
-                <span [style.color]="iconColor" style="vertical-align: middle;">
-                  <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
-                </span>
-              </div>
-            }
-            @if (showLocationInPopup) {
-              <div [hidden]="!location"
-              class="overlay_location cell_text_overflow">{{ location }}</div>
-            }
-            <ng-content select="[popup]"></ng-content>
           </div>
+          <ng-content select="[popup]"></ng-content>
         </div>
       </dx-scroll-view>
     </div>

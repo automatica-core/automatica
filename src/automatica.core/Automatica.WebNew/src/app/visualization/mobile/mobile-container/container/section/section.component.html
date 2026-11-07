@@ -1,11 +1,10 @@
-<div class="section_view">
+<section class="section_view" [attr.aria-label]="title | translateAsync">
   <div class="section_header">
-    <div class="section_header_text">{{ title | translateAsync }}
-      <dx-button control icon="refresh" style="margin-left: 10px" height="35px" width="35px" style="border: none; -webkit-box-shadow: none"
-        (onClick)="onRefresh($event)">
-
-      </dx-button>
-    </div>
+    <h2 class="section_title">{{ title | translateAsync }}</h2>
+    <button type="button" class="section_refresh" (click)="onRefresh($event)"
+      [attr.aria-label]="'UI.VISU.REFRESH' | translateAsync" [attr.title]="'UI.VISU.REFRESH' | translateAsync">
+      <fa-icon icon="rotate-right"></fa-icon>
+    </button>
   </div>
 
   <div class="sections_rows">
@@ -13,4 +12,4 @@
       <app-visualization-element [pageGroupType]="pageGroupType" [item]="item"></app-visualization-element>
     }
   </div>
-</div>
+</section>

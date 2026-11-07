@@ -1,6 +1,44 @@
 :host {
-    dx-menu {
-        height: 50px;
-        margin-bottom: 20px;
+    display: block;
+    flex: none;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    padding: 0 var(--space-2);
+    // phones: the actions scroll sideways instead of wrapping or hiding
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+// the page actions as a compact toolbar
+:host ::ng-deep .dx-menu {
+    height: auto;
+    width: max-content;
+
+    .dx-menu-horizontal {
+        height: 44px;
+    }
+
+    .dx-menu-item {
+        border-radius: var(--radius-sm);
+        color: var(--fg);
+    }
+
+    .dx-menu-item .dx-menu-item-content {
+        padding: 6px 12px;
+        font-size: var(--text-sm);
+        font-weight: 600;
+    }
+
+    .dx-menu-item-has-submenu .dx-menu-item-content {
+        padding-right: 26px;
+    }
+
+    .dx-menu-item.dx-state-hover {
+        background: var(--surface-2);
+    }
+
+    .dx-menu-item .dx-icon {
+        color: var(--accent);
     }
 }

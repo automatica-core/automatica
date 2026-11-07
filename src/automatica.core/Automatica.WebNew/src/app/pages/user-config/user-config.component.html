@@ -1,34 +1,95 @@
-<div class="content-block">
-    <div class="dx-card wide-card panel-height">
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'USERS.NAME' | translateAsync }}</h1>
+    @if (loaded) {
+      <span class="sub">{{ 'UI.USERS.COUNT' | translateAsync: { count: users.length } }}</span>
+    }
+  </div>
 
-        <as-split direction="horizontal">
-            <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" [roles]="roles" (onChanged)="onChanged($event)"></p3-propertyeditor>
-            </as-split-area>
-            <as-split-area [size]="70">
-                <div style="padding-bottom: 100px;">
-                    <dx-data-grid #grid [dataSource]="users" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                        (onRowRemoving)="onRowRemoving($event)" (onRowInserting)="onRowInserting($event)"
-                        (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                            <dxo-texts confirmDeleteMessage="{{ 'COMMON.CONFIRM_DELETE' | translateAsync }}"
-                                saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
-                                deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
-                                cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
-                        </dxo-editing>
-                        <dxo-selection mode="single"></dxo-selection>
+  <div class="split" [class.has-selection]="!!selectedNode">
+    <section class="panel list-pane" [attr.aria-label]="'UI.USERS.LIST' | translateAsync">
+      <div class="pane-head">
+        <dx-text-box class="grow" mode="search" valueChangeEvent="input" [(value)]="search"
+          [placeholder]="'UI.USERS.SEARCH' | translateAsync"></dx-text-box>
+        <dx-button type="default" icon="add" [text]="'UI.PAGES.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+      </div>
+      <div class="pane-body list">
+        @for (u of filteredUsers; track u.ObjId) {
+          <button type="button" class="li clickable" [class.selected]="u === selectedNode" (click)="select(u)"
+            [attr.aria-current]="u === selectedNode">
+            <span class="ico" aria-hidden="true">{{ initials(u) }}</span>
+            <span class="nm">
+              <b>{{ fullName(u) || u.UserName }}</b>
+              <span><span class="mono">{{ u.UserName }}</span>@if (groupNames(u)) { · {{ groupNames(u) }} }</span>
+            </span>
+          </button>
+        } @empty {
+          @if (loaded) {
+            <div class="empty-state">
+              <fa-icon class="icon" [icon]="['fas', 'user']"></fa-icon>
+              @if (users.length === 0) {
+                <b>{{ 'UI.USERS.EMPTY' | translateAsync }}</b>
+                <span>{{ 'UI.USERS.EMPTY_HINT' | translateAsync }}</span>
+                <dx-button type="default" icon="add" [text]="'UI.USERS.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+              } @else {
+                <b>{{ 'UI.PAGES.NO_MATCH' | translateAsync }}</b>
+                <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </section>
 
-                        <dxi-column dataField="UserName"
-                            caption="{{ 'COMMON.USERNAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="FirstName"
-                            caption="{{ 'COMMON.FIRSTNAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="LastName"
-                            caption="{{ 'COMMON.LASTNAME' | translateAsync }}"></dxi-column>
-
-                    </dx-data-grid>
-                </div>
-            </as-split-area>
-        </as-split>
-    </div>
+    <section class="panel editor-pane" [attr.aria-label]="'UI.USERS.EDITOR' | translateAsync">
+      @if (selectedNode) {
+        <div class="pane-head">
+          <dx-button class="back" icon="back" stylingMode="text" [hint]="'UI.PAGES.BACK' | translateAsync" (onClick)="closeEditor()"></dx-button>
+          <div class="titles">
+            <span class="eyebrow">{{ 'UI.USERS.ITEM' | translateAsync }}</span>
+            <h2>{{ fullName(selectedNode) || selectedNode.UserName }}</h2>
+          </div>
+          <dx-button icon="trash" stylingMode="outlined" type="danger" [text]="'COMMON.DELETE' | translateAsync"
+            (onClick)="deleteSelected()"></dx-button>
+        </div>
+        <div class="pane-body">
+          <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" [roles]="roles" (onChanged)="onChanged($event)"></p3-propertyeditor>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <fa-icon class="icon" [icon]="['fas', 'user-pen']"></fa-icon>
+          <b>{{ 'UI.USERS.SELECT' | translateAsync }}</b>
+          <span>{{ 'UI.USERS.SELECT_HINT' | translateAsync }}</span>
+        </div>
+      }
+    </section>
+  </div>
 </div>
+
+<dx-popup [(visible)]="createVisible" [showTitle]="true" [title]="'UI.USERS.NEW' | translateAsync" [width]="'min(420px, 92vw)'"
+  [height]="'auto'" [hideOnOutsideClick]="true" [showCloseButton]="true">
+  <div *dxTemplate="let data of 'content'">
+    <form class="create-form" (submit)="$event.preventDefault(); create()">
+      <label>
+        <span>{{ 'COMMON.USERNAME' | translateAsync }}</span>
+        <dx-text-box [(value)]="newUser.UserName" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <label>
+        <span>{{ 'COMMON.FIRSTNAME' | translateAsync }}</span>
+        <dx-text-box [(value)]="newUser.FirstName" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <label>
+        <span>{{ 'COMMON.LASTNAME' | translateAsync }}</span>
+        <dx-text-box [(value)]="newUser.LastName" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <p class="hint">{{ 'UI.USERS.NEW_HINT' | translateAsync }}</p>
+      @if (createError) {
+        <div class="alert" role="alert"><span>{{ createError }}</span></div>
+      }
+      <div class="form-actions">
+        <dx-button stylingMode="text" [text]="'COMMON.CANCEL' | translateAsync" (onClick)="createVisible = false"></dx-button>
+        <dx-button type="default" [text]="'UI.PAGES.CREATE' | translateAsync" (onClick)="create()"></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

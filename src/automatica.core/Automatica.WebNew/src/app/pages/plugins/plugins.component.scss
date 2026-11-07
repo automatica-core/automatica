@@ -1,6 +1,38 @@
+@use "list";
+
 :host {
-    dx-menu {
-        height: 50px;
-        margin-bottom: 20px;
+    display: block;
+    height: 100%;
+    min-height: 0;
+}
+
+.head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.sub-strong {
+    color: var(--warn);
+    font-weight: 600;
+}
+
+.list {
+    flex: 1;
+}
+
+.progress {
+    width: 140px;
+    max-width: 100%;
+}
+
+.more-menu {
+    display: inline-block;
+}
+
+@media (max-width: 599.98px) {
+    .head-actions {
+        width: 100%;
     }
 }

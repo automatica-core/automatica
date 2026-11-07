@@ -1,8 +1,5 @@
-@if (!state) {
-  <dx-button class="switch-button" type="normal" text="{{ 'COMMON.SWITCH.ON' | translateAsync }}" (onClick)="switch($event, true)" [disabled]="disabled"></dx-button>
-}
-
-@if (state) {
-  <dx-button class="switch-button" type="normal" text="{{ 'COMMON.SWITCH.OFF' | translateAsync }}" (onClick)="switch($event, false)" [disabled]="disabled">
-  </dx-button>
-}
+<button type="button" class="switch-button" [class.is-on]="state" [attr.aria-pressed]="!!state" [disabled]="disabled"
+  (click)="switch($event, !state)">
+  <span class="switch-dot" aria-hidden="true"></span>
+  <span>{{ (state ? 'COMMON.SWITCH.OFF' : 'COMMON.SWITCH.ON') | translateAsync }}</span>
+</button>

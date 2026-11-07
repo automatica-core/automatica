@@ -1,58 +1,104 @@
-<div class="content-block">
-  <div class="dx-card wide-card panel-height">
-    <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-      orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
-      (onItemClick)="itemClick($event)" itemTemplate="items">
-      <div *dxTemplate="let item of 'items'">
-        @if (item.color) {
-          <div>
-            <i class="dx-icon {{ item.Icon }}"></i>
-            <span [ngClass]="{'isDirty': _isDirty}">{{item.label}}</span>
-          </div>
-        }
-        @if (!item.color) {
-          <div>
-            <i class="dx-icon {{ item.Icon }}"></i>
-            <span>{{item.label}}</span>
-          </div>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'COMMON.SATELLITES' | translateAsync }}</h1>
+    @if (loaded) {
+      <span class="sub">{{ 'UI.SATELLITES.COUNT' | translateAsync: { online: onlineCount, count: satellites.length } }}</span>
+    }
+    <span class="spacer"></span>
+    @if (isDirty) {
+      <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+    }
+    <dx-button icon="refresh" stylingMode="outlined" [text]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+    <dx-button icon="save" type="default" [disabled]="!isDirty" [text]="'COMMON.SAVE' | translateAsync" (onClick)="save()"></dx-button>
+  </div>
+
+  <div class="split" [class.has-selection]="!!selectedSatellite">
+    <section class="panel list-pane" [attr.aria-label]="'UI.SATELLITES.LIST' | translateAsync">
+      <div class="pane-head">
+        <dx-text-box class="grow" mode="search" valueChangeEvent="input" [(value)]="search"
+          [placeholder]="'UI.SATELLITES.SEARCH' | translateAsync"></dx-text-box>
+        <dx-button type="default" icon="add" [text]="'UI.PAGES.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+      </div>
+      <div class="pane-body list">
+        @for (s of filteredSatellites; track s.ObjId) {
+          <button type="button" class="li clickable" [class.selected]="s === selectedSatellite" (click)="select(s)"
+            [attr.aria-current]="s === selectedSatellite">
+            <span class="ico" aria-hidden="true"><fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon></span>
+            <span class="nm">
+              <b>{{ s.Name }}</b>
+              <span>
+                @if (s.ClientId) {
+                  <span class="mono">{{ s.ClientId }}</span>
+                } @else {
+                  {{ s.Description || ('UI.SATELLITES.NO_CLIENT_ID' | translateAsync) }}
+                }
+              </span>
+            </span>
+            @if (s.Connected) {
+              <span class="pill ok"><span class="status-dot"></span>{{ 'UI.SATELLITES.ONLINE' | translateAsync }}</span>
+            } @else {
+              <span class="pill"><span class="status-dot off"></span>{{ 'UI.SATELLITES.OFFLINE' | translateAsync }}</span>
+            }
+          </button>
+        } @empty {
+          @if (loaded) {
+            <div class="empty-state">
+              <fa-icon class="icon" [icon]="['fas', 'satellite-dish']"></fa-icon>
+              @if (satellites.length === 0) {
+                <b>{{ 'UI.SATELLITES.EMPTY' | translateAsync }}</b>
+                <span>{{ 'UI.SATELLITES.EMPTY_HINT' | translateAsync }}</span>
+                <dx-button type="default" icon="add" [text]="'UI.SATELLITES.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+              } @else {
+                <b>{{ 'UI.PAGES.NO_MATCH' | translateAsync }}</b>
+                <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
+              }
+            </div>
+          }
         }
       </div>
-    </dx-menu>
+    </section>
 
-    <as-split direction="horizontal">
-      <as-split-area [size]="30">
-        <p3-propertyeditor [item]="selectedSatellite"></p3-propertyeditor>
-      </as-split-area>
-      <as-split-area [size]="70">
-        <dx-data-grid [dataSource]="satellites" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-          (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
-          (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
-          (onInitialized)="onInitialized($event)">
-          <dxo-paging [enabled]="false"></dxo-paging>
-          <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-            <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
-              deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
-            cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
-          </dxo-editing>
-          <dxo-selection mode="single"></dxo-selection>
-
-          <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-          <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-          </dxi-column>
-
-          <dxi-column dataField="ClientId" caption="{{ 'COMMON.SATELLITE.CLIENTID' | translateAsync }}">
-          </dxi-column>
-          <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SATELLITE.CLIENTKEY' | translateAsync }}">
-          </dxi-column>
-          <dxi-column dataField="Connected" dataType="string" [allowEditing]="false" caption="{{ 'COMMON.SATELLITE.CONNECTED' | translateAsync }}">
-          </dxi-column>
-
-
-
-        </dx-data-grid>
-      </as-split-area>
-    </as-split>
+    <section class="panel editor-pane" [attr.aria-label]="'UI.SATELLITES.EDITOR' | translateAsync">
+      @if (selectedSatellite) {
+        <div class="pane-head">
+          <dx-button class="back" icon="back" stylingMode="text" [hint]="'UI.PAGES.BACK' | translateAsync" (onClick)="closeEditor()"></dx-button>
+          <div class="titles">
+            <span class="eyebrow">{{ 'UI.SATELLITES.ITEM' | translateAsync }}</span>
+            <h2>{{ selectedSatellite.Name }}</h2>
+          </div>
+          <dx-button icon="trash" stylingMode="outlined" type="danger" [text]="'COMMON.DELETE' | translateAsync"
+            (onClick)="deleteSelected()"></dx-button>
+        </div>
+        <div class="pane-body">
+          <p3-propertyeditor [item]="selectedSatellite" (onChanged)="onChanged($event)"></p3-propertyeditor>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <fa-icon class="icon" [icon]="['fas', 'satellite']"></fa-icon>
+          <b>{{ 'UI.SATELLITES.SELECT' | translateAsync }}</b>
+          <span>{{ 'UI.SATELLITES.SELECT_HINT' | translateAsync }}</span>
+        </div>
+      }
+    </section>
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<dx-popup [(visible)]="createVisible" [showTitle]="true" [title]="'UI.SATELLITES.NEW' | translateAsync" [width]="'min(420px, 92vw)'"
+  [height]="'auto'" [hideOnOutsideClick]="true" [showCloseButton]="true">
+  <div *dxTemplate="let data of 'content'">
+    <form class="create-form" (submit)="$event.preventDefault(); create()">
+      <label>
+        <span>{{ 'COMMON.NAME' | translateAsync }}</span>
+        <dx-text-box [(value)]="newName" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <p class="hint">{{ 'UI.SATELLITES.NEW_HINT' | translateAsync }}</p>
+      @if (createError) {
+        <div class="alert" role="alert"><span>{{ createError }}</span></div>
+      }
+      <div class="form-actions">
+        <dx-button stylingMode="text" [text]="'COMMON.CANCEL' | translateAsync" (onClick)="createVisible = false"></dx-button>
+        <dx-button type="default" [text]="'UI.PAGES.CREATE' | translateAsync" (onClick)="create()"></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

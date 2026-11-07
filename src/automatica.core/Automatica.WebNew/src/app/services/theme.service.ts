@@ -62,27 +62,23 @@ export class ThemeService {
     }
 
     applyTheme(theme?: string) {
-        let themeMarker = "generic.",
-            storageKey = "automaticaTheme";
-        theme = theme || window.localStorage[storageKey] || "dark";
+        const storageKey = "automaticaTheme";
+        theme = theme === "light" || theme === "dark" ? theme : (window.localStorage[storageKey] || "dark");
 
-
-        for (let index in document.styleSheets) {
-            let styleSheet = document.styleSheets[index],
-                href = styleSheet.href;
-            if (href) {
-                let themeMarkerPosition = href.indexOf(themeMarker);
-                if (themeMarkerPosition >= 0) {
-                    let startPosition = themeMarkerPosition + themeMarker.length,
-                        endPosition = href.indexOf(".", startPosition),
-                        fileNamePart = href.substring(startPosition, endPosition);
-                    styleSheet.disabled = fileNamePart != theme;
-                }
+        // the theme bundles are named generic.light / generic.dark (plus the output hash).
+        // The <link> elements are switched, not document.styleSheets: at startup the sheets are not loaded yet,
+        // they would be missing from that list and both themes would stay active.
+        for (const link of Array.from(document.querySelectorAll<HTMLLinkElement>("link[rel=stylesheet]"))) {
+            const match = link.href?.match(/generic[.](light|dark)/);
+            if (match) {
+                link.disabled = match[1] !== theme;
             }
         }
 
         window.localStorage[storageKey] = theme;
-        currentTheme("generic." + theme + ".compact");
+        // our own components read the tokens in tokens.scss, keyed by this attribute
+        document.documentElement.dataset.theme = theme;
+        currentTheme("generic." + theme);
         refreshTheme();
         this.currentTheme = theme;
         this.themeChanged.emit(theme);

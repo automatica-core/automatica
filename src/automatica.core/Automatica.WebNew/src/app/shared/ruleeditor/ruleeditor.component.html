@@ -1,13 +1,115 @@
-<div class="block" id="my-rule-loadingPanel" #loadingPangel>
-        <div class="block" id="ruleEditorWrapper-{{page.ObjId}}">
-                <div id="ruleditor-{{ page.ObjId }}" dnd-droppable [allowDrop]="allowDrop()"
-                        (onDropSuccess)="dropSuccess($event)"
-                        style="height: 400vh; width: 400vw; border:1px solid black; z-index: 10">
-                </div>
+<div #canvas class="canvas" tabindex="0"
+  [class.panning]="drag?.mode === 'pan' && drag?.moved"
+  [class.connecting]="!!pending"
+  [style.background-size]="gridSize"
+  [style.background-position]="gridPosition"
+  dnd-droppable [allowDrop]="allowDrop()" (onDropSuccess)="dropSuccess($event)"
+  (pointerdown)="onCanvasPointerDown($event)" (keydown)="onKeyDown($event)">
+
+  <div class="world" [style.transform]="worldTransform">
+
+    <svg class="wires" width="1" height="1" overflow="visible">
+      @for (wire of wires; track wire.link.ObjId) {
+        <g class="wire" [class.selected]="wire.link === selectedLink" [attr.data-kind]="wire.kind">
+          <path class="wire-hit" [attr.d]="wire.d" (pointerdown)="selectLink($event, wire.link)"></path>
+          <path class="wire-line" [attr.d]="wire.d"></path>
+        </g>
+      }
+      @if (pending) {
+        <path class="wire-pending" [attr.data-kind]="pending.from.kind" [attr.d]="pending.d"></path>
+      }
+    </svg>
+
+    @for (node of nodes; track node.id) {
+      @if (node.type === 'rule') {
+        <div class="node rule" [class.selected]="node === selectedNode"
+          [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.w" [style.height.px]="node.h"
+          (pointerdown)="onNodePointerDown($event, node)">
+          <div class="head" [style.height.px]="headHeight">
+            <div class="title" [title]="title(node)">{{ title(node) }}</div>
+            <div class="sub">{{ subtitle(node) }}</div>
+          </div>
+
+          @for (port of node.inputs; track port.id) {
+            <div class="row in" [style.top.px]="headHeight + bodyPad + port.row * rowHeight" [style.height.px]="rowHeight">
+              <span class="port" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
+                [class.linked]="isLinked(port)" [class.inverted]="inverted(port)" [class.candidate]="isTargetCandidate(port)"
+                [class.hover-target]="pending?.target === port"
+                (pointerdown)="onPortPointerDown($event, port)"></span>
+              <span class="label" [class.inverted]="inverted(port)" [title]="'UI.LOGIC.INVERT_HINT' | translateAsync"
+                (pointerdown)="$event.stopPropagation()" (click)="toggleInvert($event, port)">{{ portLabel(port) }}</span>
+              <span class="value mono">{{ value(port) }}</span>
+            </div>
+          }
+          @for (port of node.outputs; track port.id) {
+            <div class="row out" [style.top.px]="headHeight + bodyPad + port.row * rowHeight" [style.height.px]="rowHeight">
+              <span class="value mono">{{ value(port) }}</span>
+              <span class="label" [class.inverted]="inverted(port)" [title]="'UI.LOGIC.INVERT_HINT' | translateAsync"
+                (pointerdown)="$event.stopPropagation()" (click)="toggleInvert($event, port)">{{ portLabel(port) }}</span>
+              <span class="port" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
+                [class.linked]="isLinked(port)" [class.inverted]="inverted(port)" [class.candidate]="isTargetCandidate(port)"
+                [class.hover-target]="pending?.target === port"
+                (pointerdown)="onPortPointerDown($event, port)"></span>
+            </div>
+          }
         </div>
+      } @else {
+        <div class="node dp" [class.selected]="node === selectedNode"
+          [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.w" [style.height.px]="node.h"
+          [title]="fullName(node)"
+          (pointerdown)="onNodePointerDown($event, node)">
+          @for (port of node.inputs; track port.id) {
+            <span class="port in" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
+              [class.linked]="isLinked(port)" [class.inverted]="inverted(port)" [class.candidate]="isTargetCandidate(port)"
+              [class.hover-target]="pending?.target === port"
+              (pointerdown)="onPortPointerDown($event, port)"></span>
+          }
+          <span class="badge mono" [attr.data-kind]="(node.outputs[0] ?? node.inputs[0])?.kind">{{ node.dataType }}</span>
+          <span class="name" [class.inverted]="node.model.Inverted">{{ title(node) }}</span>
+          @if (node.outputs[0] ?? node.inputs[0]; as port) {
+            <span class="value mono">{{ value(port) }}</span>
+          }
+          @for (port of node.outputs; track port.id) {
+            <span class="port out" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
+              [class.linked]="isLinked(port)" [class.inverted]="inverted(port)" [class.candidate]="isTargetCandidate(port)"
+              [class.hover-target]="pending?.target === port"
+              (pointerdown)="onPortPointerDown($event, port)"></span>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  @if (nodes.length === 0) {
+    <div class="empty">
+      <fa-icon class="icon" icon="diagram-project"></fa-icon>
+      <b>{{ 'UI.LOGIC.EMPTY_TITLE' | translateAsync }}</b>
+      <span>{{ 'UI.LOGIC.EMPTY_TEXT' | translateAsync }}</span>
+    </div>
+  }
+
+  <div class="hud" (pointerdown)="$event.stopPropagation()">
+    <button type="button" (click)="zoomBy(1 / 1.25)" [title]="'UI.LOGIC.ZOOM_OUT' | translateAsync">
+      <fa-icon icon="minus"></fa-icon>
+    </button>
+    <button type="button" class="pct mono" (click)="fitToView()" [title]="'UI.LOGIC.FIT' | translateAsync">{{ zoomPercent }}%</button>
+    <button type="button" (click)="zoomBy(1.25)" [title]="'UI.LOGIC.ZOOM_IN' | translateAsync">
+      <fa-icon icon="plus"></fa-icon>
+    </button>
+    <button type="button" (click)="fitToView()" [title]="'UI.LOGIC.FIT' | translateAsync">
+      <fa-icon icon="expand"></fa-icon>
+    </button>
+  </div>
+
+  @if (minimap; as map) {
+    <svg #mini class="minimap" [attr.viewBox]="map.viewBox" preserveAspectRatio="xMidYMid meet"
+      [attr.aria-label]="'UI.LOGIC.MINIMAP' | translateAsync"
+      (pointerdown)="onMinimapPointer($event, mini)" (pointermove)="onMinimapPointer($event, mini)">
+      @for (node of nodes; track node.id) {
+        <rect [attr.x]="node.x" [attr.y]="node.y" [attr.width]="node.w" [attr.height]="node.h" rx="6"
+          [attr.class]="(node.type === 'rule' ? 'mini-rule' : 'mini-dp') + (node === selectedNode ? ' selected' : '')"></rect>
+      }
+      <rect class="mini-view" [attr.x]="map.view.x" [attr.y]="map.view.y" [attr.width]="map.view.w" [attr.height]="map.view.h"></rect>
+    </svg>
+  }
 </div>
-
-
-<!-- <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: 'my-rule-loadingPanel' }"
-        [visible]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
-</dx-load-panel> -->

@@ -1,6 +1,64 @@
+@use "../plugins/list";
+
 :host {
-    dx-menu {
-        height: 50px;
-        margin-bottom: 20px;
+    display: block;
+    height: 100%;
+    min-height: 0;
+}
+
+.monitor {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    dx-tab-panel {
+        flex: 1;
+        min-height: 0;
     }
+}
+
+.tab-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.tab-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--line);
+    font-size: var(--text-xs);
+    color: var(--muted);
+
+    .spacer {
+        flex: 1;
+    }
+}
+
+.tab-body dx-data-grid {
+    flex: 1;
+    min-height: 0;
+}
+
+.dir {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+:host ::ng-deep .mono-cell {
+    font-family: var(--font-data);
+    font-size: var(--text-xs);
+}
+
+// column headers keep the UI font, only the cells are monospaced
+:host ::ng-deep .dx-header-row .mono-cell {
+    font-family: var(--font-ui);
+    font-size: inherit;
 }

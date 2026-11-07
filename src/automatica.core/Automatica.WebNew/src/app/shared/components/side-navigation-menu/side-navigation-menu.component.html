@@ -1,28 +1,53 @@
-<ng-content></ng-content>
+<nav class="nav" [class.compact]="compactMode">
+  <div class="brand">
+    <fa-icon icon="automatica-logo" class="logo"></fa-icon>
+    @if (!compactMode) {
+      <span class="brand-name">automatica</span>
+    }
+  </div>
 
+  <div class="scroll">
+    @if (items && items.length > 0) {
+      <ng-container *ngTemplateOutlet="list; context: { $implicit: items, depth: 0 }"></ng-container>
+    } @else {
+      <dx-load-indicator height="24" width="24" class="loading"></dx-load-indicator>
+    }
+  </div>
 
-<div class="menu-container">
-  @if (items && items.length > 0) {
-    <dx-scroll-view height="100vh" style="background-color: #363640;">
-      <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
-        (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
-        (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single"
-        keyExpr="path" [style.padding-bottom]="'120px'" [style.background-color]="'#363640'">
-        <div *dxTemplate="let data of 'item'" style="background-color: #363640;">
-          @if (data.seperator) {
-            <span title="{{data.text | translateAsync}}">{{data.text | translateAsync}}</span>
+  <ng-content></ng-content>
+</nav>
+
+<ng-template #list let-items let-depth="depth">
+  @for (item of items; track item.path ?? item.text) {
+    @if (item.group) {
+      <div class="group">
+        @if (compactMode) {
+          <div class="group-rule"></div>
+        } @else {
+          <div class="group-label eyebrow">{{ item.text | translateAsync }}</div>
+        }
+        <ng-container *ngTemplateOutlet="list; context: { $implicit: item.items, depth: depth }"></ng-container>
+      </div>
+    } @else {
+      <a class="item" [class.active]="isActive(item)" [style.--depth]="depth" [attr.href]="item.path ?? null"
+        [attr.title]="item.text | translateAsync" [attr.aria-current]="isActive(item) ? 'page' : null"
+        [attr.aria-expanded]="item.items?.length ? !!item.expanded : null" (click)="onItemClick($event, item)">
+        @if (item.icon) {
+          <fa-icon [icon]="item.icon" [fixedWidth]="true" class="item-icon"></fa-icon>
+        } @else {
+          <span class="item-icon dot"></span>
+        }
+        @if (!compactMode) {
+          <span class="item-text">{{ item.text | translateAsync }}</span>
+          @if (item.items?.length) {
+            <fa-icon icon="chevron-down" class="chevron" [class.open]="item.expanded"
+              (click)="toggle($event, item)"></fa-icon>
           }
-          @if (!data.seperator) {
-            <fa-icon title="{{data.text | translateAsync}}" [fixedWidth]="true" [icon]="data.icon">
-            </fa-icon>
-            <span title="{{data.text | translateAsync}}" class="nav-padding">{{data.text |
-            translateAsync}}</span>
-          }
-        </div>
-      </dx-tree-view>
-    </dx-scroll-view>
+        }
+      </a>
+      @if (item.items?.length && item.expanded && !compactMode) {
+        <ng-container *ngTemplateOutlet="list; context: { $implicit: item.items, depth: depth + 1 }"></ng-container>
+      }
+    }
   }
-  @if (!items || items.length == 0) {
-    <dx-load-indicator height="30" width="30"></dx-load-indicator>
-  }
-</div>
+</ng-template>

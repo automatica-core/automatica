@@ -4,7 +4,6 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { LogHubService } from "src/app/base/communication/hubs/log-hub.service";
-import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { LogsService } from "src/app/services/logs.service";
 import { LogLevel } from "@microsoft/signalr";
 import ArrayStore from "devextreme/data/array_store";
@@ -73,34 +72,6 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   logLevels: { key: number, name: string }[] = [];
   logLevelsDataSource;
 
-  menuItems: CustomMenuItem[] = [];
-  menuStartStop: CustomMenuItem = {
-    id: "start",
-    label: "Start",
-    icon: "fa-start",
-    items: undefined,
-    command: (event) => {
-      if (!this.stop) {
-        this.menuStartStop.label = "Start";
-        this.menuStartStop.icon = "fa-start";
-      }
-      else {
-        this.menuStartStop.label = "Stop";
-        this.menuStartStop.icon = "fa-stop";
-      }
-      this.stop = !this.stop;
-    }
-  }
-
-  menuRefresh: CustomMenuItem = {
-    id: "refres",
-    label: "Refresh",
-    icon: "fa-refreshn",
-    items: undefined,
-    command: (event) => { this.load(); }
-  }
-
-
   private allFacilityName: string = "all_log";
   selectedLogFile: LogFile;
   focusedRowKey: number;
@@ -112,22 +83,17 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     private loggingHub: LogHubService,
     private logsService: LogsService) {
     super(notify, translate, appService);
-    appService.setAppTitle("COMMON.LOGS");
+    appService.setAppTitle("UI.LOGS.TITLE");
 
     const logFacility = { name: this.allFacilityName, logs: [] };
     this.logFacilities.set(this.allFacilityName, logFacility);
     this.logFacilitiesArray.push(logFacility);
+    this.selectedFacility = logFacility;
 
-    this.menuItems.push(this.menuStartStop);
-    this.menuItems.push(this.menuRefresh);
-
-    this.logLevels.push({ key: LogLevel.Trace, name: LogLevel[LogLevel.Trace] });
-    this.logLevels.push({ key: LogLevel.Information, name: LogLevel[LogLevel.Information] });
-    this.logLevels.push({ key: LogLevel.Debug, name: LogLevel[LogLevel.Debug] });
-    this.logLevels.push({ key: LogLevel.Warning, name: LogLevel[LogLevel.Warning] });
-    this.logLevels.push({ key: LogLevel.Error, name: LogLevel[LogLevel.Error] });
-    this.logLevels.push({ key: LogLevel.Critical, name: LogLevel[LogLevel.Critical] });
-    this.logLevels.push({ key: LogLevel.None, name: LogLevel[LogLevel.None] });
+    const levels = [LogLevel.Trace, LogLevel.Debug, LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical, LogLevel.None];
+    for (const level of levels) {
+      this.logLevels.push({ key: level, name: this.levelName(level) });
+    }
 
     this.logLevelsDataSource = new ArrayStore({
       data: this.logLevels,
@@ -137,16 +103,63 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
 
 
-  itemClick($event) {
-    const item: CustomMenuItem = $event.itemData;
+  /** live logging is off until the user starts it */
+  toggleLive() {
+    this.stop = !this.stop;
+  }
 
-    if (item && item.command) {
-      item.command($event);
+  get liveCount(): number {
+    return this.logFacilities.get(this.allFacilityName)?.logs.length ?? 0;
+  }
+
+  facilityLabel(f: LogFacility) {
+    if (f.name === this.allFacilityName) {
+      return this.translate.translate("UI.LOGS.ALL_FACILITIES");
     }
+    return f.name;
+  }
+
+  isAllFacility(f: LogFacility) {
+    return f?.name === this.allFacilityName;
+  }
+
+  clearSelected() {
+    if (this.selectedFacility) {
+      this.selectedFacility.logs.splice(0, this.selectedFacility.logs.length);
+    }
+  }
+
+  levelName(level: number): string {
+    switch (level) {
+      case LogLevel.Trace: return this.translate.translate("UI.LOGS.LEVEL_TRACE");
+      case LogLevel.Debug: return this.translate.translate("UI.LOGS.LEVEL_DEBUG");
+      case LogLevel.Information: return this.translate.translate("UI.LOGS.LEVEL_INFO");
+      case LogLevel.Warning: return this.translate.translate("UI.LOGS.LEVEL_WARNING");
+      case LogLevel.Error: return this.translate.translate("UI.LOGS.LEVEL_ERROR");
+      case LogLevel.Critical: return this.translate.translate("UI.LOGS.LEVEL_CRITICAL");
+      case LogLevel.None: return this.translate.translate("UI.LOGS.LEVEL_NONE");
+    }
+    return String(level);
+  }
+
+  levelTone(level: number): string {
+    switch (level) {
+      case LogLevel.Information: return "accent";
+      case LogLevel.Warning: return "warn";
+      case LogLevel.Error:
+      case LogLevel.Critical: return "bad";
+    }
+    return "";
   }
 
   async ngOnInit() {
     const loadingDone = this.appService.beginLoading();
+    // level names follow the language
+    this.registerObservable(this.translate.onChange(), () => {
+      for (const l of this.logLevels) {
+        l.name = this.levelName(l.key);
+      }
+    });
     try {
       await this.load();
 
@@ -167,7 +180,8 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
           return;
         }
         pushCapped(this.logFacilities.get(facility).logs, { facility: facility, log: log, timestamp: new Date() });
-        pushCapped(this.logFacilities.get(this.allFacilityName).logs, { facility: this.allFacilityName, log: log, timestamp: new Date() });
+        // the combined list keeps the real source so it can be shown next to the message
+        pushCapped(this.logFacilities.get(this.allFacilityName).logs, { facility: facility, log: log, timestamp: new Date() });
       });
 
     } catch (error) {
@@ -235,7 +249,9 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   }
 
   onTabSelectionChanged($event) {
-    this.selectedFacility = $event.addedItems[0];
+    if ($event.addedItems && $event.addedItems.length > 0) {
+      this.selectedFacility = $event.addedItems[0];
+    }
   }
 
   async onSelectionChanged($event) {
@@ -280,8 +296,8 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     }
   }
 
-  logLevelEnumName(data) {
-    return LogLevel[data.logLevel];
+  logLevelEnumName = (data) => {
+    return this.levelName(data.logLevel);
   }
 
   ngOnDestroy(): void {

@@ -1,93 +1,162 @@
-@import "../../../../themes/generated/variables.additional.scss";
-
-.nav-padding {
-    padding: 0 30px;
-}
-
 :host {
     display: block;
     height: 100%;
-    width: 250px !important;
+}
 
-    .dx-treeview {
-        white-space: nowrap;
+.nav {
+    height: 100%;
+    width: var(--nav-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    padding-top: var(--app-safe-top);
+    transition: width .18s ease;
+
+    &.compact {
+        width: var(--nav-width-collapsed);
     }
 }
 
-:host ::ng-deep .dx-treeview {
-    .dx-treeview-node-container {
-        .dx-treeview-node {
-            padding: 0 0;
-            position: relative;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: var(--topbar-height);
+    padding: 0 var(--space-4);
+    flex: none;
 
-            &.dx-state-selected:not(.dx-state-focused)> .dx-treeview-item {
-                background: transparent;
-            }
-
-            &.dx-state-selected > .dx-treeview-item * {
-                color: $base-accent;
-            }
-
-            &:not(.dx-state-focused)>.dx-treeview-item.dx-state-hover {
-                // background-color: lighten($base-bg, 4.00);
-            }
-        }
+    .logo {
+        font-size: 24px;
+        color: var(--accent);
     }
 
-    .dx-rtl {
-        .dx-treeview-toggle-item-visibility {
-            left: 10px;
-            right: auto;
-        }
-    }
-
-    // DevExtreme 24+ renders items as flex rows (gap + 12px 16px padding) and puts a 24px
-    // expander stub in front of every leaf, which shifts the icons out of the collapsed
-    // drawer. Restore the pre-24 geometry: block item, no stub, toggle on the right.
-    .dx-treeview-item {
-        display: block;
-        padding: 13px 8px;
-        gap: 0;
-        min-height: 48px;
-        line-height: 22px;
-    }
-
-    .dx-treeview-expander-icon-stub {
-        display: none;
-    }
-
-    .dx-treeview-item-content {
-        padding: 0 10px;
-    }
-
-    .dx-treeview-toggle-item-visibility {
-        position: absolute;
-        top: 12px;
-        right: 10px;
-        left: auto;
-    }
-
-    .dx-treeview-node[aria-level='1'] {
-        border-bottom: 1px solid $base-border-color;
-        .dx-treeview-item-content span {
-            //padding: 0 13px;
-        }
-    }
-
-    .dx-treeview-node[aria-level='2'] .dx-treeview-item-content {
-        font-weight: 300;
-        padding: 0 20px;
+    .brand-name {
+        font-weight: 700;
+        font-size: var(--text-md);
+        letter-spacing: -0.01em;
     }
 }
 
-:host :host-context(.dx-theme-generic) ::ng-deep.dx-treeview {
-    .dx-treeview-item .dx-icon {
-        width: 26px;
-        height: 26px;
-        padding: 4px;
+.compact .brand {
+    justify-content: center;
+    padding: 0;
+}
+
+.scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    padding: var(--space-2) var(--space-2) var(--space-6);
+    display: grid;
+    align-content: start;
+    gap: 2px;
+}
+
+.loading {
+    margin: var(--space-4) auto;
+}
+
+.group {
+    display: grid;
+    gap: 2px;
+    margin-top: var(--space-3);
+}
+
+.group-label {
+    padding: 0 var(--space-2) var(--space-1);
+}
+
+.group-rule {
+    height: 1px;
+    background: var(--line);
+    margin: 0 var(--space-2) var(--space-2);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 36px;
+    padding: 6px var(--space-2) 6px calc(var(--space-2) + var(--depth, 0) * 14px);
+    border-radius: var(--radius-sm);
+    color: var(--fg);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        background: var(--surface-2);
     }
 
-    .dx-treeview-node-container .dx-treeview-node.dx-state-selected.dx-state-focused > .dx-treeview-item * {
-        color: inherit;
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+    }
+
+    &.active {
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-weight: 600;
+
+        .item-icon {
+            color: var(--accent);
+        }
+    }
+}
+
+.compact .item {
+    justify-content: center;
+    padding: 0;
+    min-height: 40px;
+}
+
+.item-icon {
+    color: var(--muted);
+    width: 18px;
+    flex: none;
+    text-align: center;
+
+    &.dot {
+        height: 18px;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            background: var(--line);
+        }
+    }
+}
+
+.item-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevron {
+    color: var(--muted);
+    font-size: 11px;
+    padding: 6px;
+    margin: -6px;
+    transition: transform .15s ease;
+
+    &.open {
+        transform: rotate(180deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav,
+    .chevron {
+        transition: none;
     }
 }

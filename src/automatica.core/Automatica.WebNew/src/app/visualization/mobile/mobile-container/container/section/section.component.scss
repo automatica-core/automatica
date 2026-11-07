@@ -1,45 +1,77 @@
-
 :host {
+    display: block;
     user-select: none;
     touch-action: pan-y;
     -webkit-user-drag: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .section_view {
     position: relative;
+    margin-bottom: var(--space-6);
 }
 
 .section_header {
-    margin-top: -15px;
-    position: relative;
-    min-height: 15px;
     display: flex;
-    justify-content: flex-start;
-    -webkit-box-pack: end;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 32px;
+    margin-bottom: var(--space-2);
 }
 
-.section_header_text {
-    margin-left: 3px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    color: white;
-    font-size: 14px;
-    letter-spacing: .1em;
+.section_title {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+.section_refresh {
+    appearance: none;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--surface-2);
+        color: var(--fg);
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
 }
 
 .sections_rows {
     // a grid instead of the old -webkit-box: that syntax never wraps, so on WebKit (iOS app)
     // the tiles ran off the right edge of the screen
     display: grid;
-    grid-template-columns: repeat(auto-fill, 180px);
-    gap: 5px;
-    margin-bottom: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: var(--space-3);
 }
 
 @media only screen and (max-width: 599.98px) {
     .sections_rows {
-        // phones: fill the width, at least two columns even on 320px screens
-        grid-template-columns: repeat(auto-fill, minmax(min(140px, calc(50% - 3px)), 1fr));
+        // phones: always two tiles per row, even on 320px screens
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
     }
-} 
+}

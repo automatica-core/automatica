@@ -1,13 +1,10 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
  
-        <as-split direction="horizontal">
-            <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" (onChanged)="onChanged($event)"></p3-propertyeditor>
-            </as-split-area>
-            <as-split-area [size]="70">
-                <div style="padding-bottom: 100px;">
-                    <dx-data-grid [dataSource]="categories" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+        <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
+            <as-split-area [size]="62">
+                <div class="h-100">
+                    <dx-data-grid [dataSource]="categories" height="100%" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
                         (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
                         (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
                         (onInitialized)="onInitialized($event)" (onCellPrepared)="onCellPrepared($event)">
@@ -48,6 +45,9 @@
                         </div>
                     </dx-data-grid>
                 </div>
+            </as-split-area>
+            <as-split-area [size]="38" [minSize]="22">
+                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" (onChanged)="onChanged($event)"></p3-propertyeditor>
             </as-split-area>
         </as-split>
     </div>

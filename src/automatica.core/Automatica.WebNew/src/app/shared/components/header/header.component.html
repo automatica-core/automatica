@@ -1,57 +1,60 @@
-<header>
-  <dx-toolbar>
-    @if (menuToggleEnabled) {
-<dxi-item location="before" widget="dxButton" [options]="{
-                icon: 'menu',
-                stylingMode: 'text',
-                onClick: toggleMenu,
-                elementAttr: { class: 'menu-button' }
-            }">
-      </dxi-item>
+<header class="bar">
+  @if (menuToggleEnabled) {
+    <button type="button" class="icon-btn" (click)="toggleMenu()" [attr.aria-label]="'UI.NAV.OPEN_MENU' | translateAsync">
+      <fa-icon icon="bars"></fa-icon>
+    </button>
+  }
+
+  <div class="titles">
+    <span class="title">{{ appService.title | translateAsync }}</span>
+    @if (projectName) {
+      <span class="project">{{ projectName }}</span>
     }
+  </div>
 
-    <dxi-item location="before">
-    </dxi-item>
+  <span class="spacer"></span>
 
-    @if (title) {
-      <dxi-item location="before">
-        <div *dxTemplate="let data of 'item'">
-          <span class="header-title" translate>{{ title }}</span>
+  <span class="status" [class.down]="!connected" [attr.title]="(connected ? 'UI.HEADER.CONNECTED' : 'UI.HEADER.DISCONNECTED') | translateAsync">
+    <span class="status-dot" [class.bad]="!connected"></span>
+    <span class="status-text">{{ (connected ? "UI.HEADER.CONNECTED" : "UI.HEADER.DISCONNECTED") | translateAsync }}</span>
+  </span>
+
+  @if (isAdminAvailable) {
+    <button type="button" class="switch" (click)="isAdminPage() ? navigateToVisualization() : navigateToAdminPage()">
+      <fa-icon [icon]="isAdminPage() ? 'table-cells-large' : 'sliders'"></fa-icon>
+      <span class="switch-text">{{ (isAdminPage() ? "UI.HEADER.TO_VISU" : "UI.HEADER.TO_ADMIN") | translateAsync }}</span>
+    </button>
+  }
+
+  <div class="user">
+    <button type="button" class="avatar" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen"
+      [attr.aria-label]="'UI.HEADER.USER_MENU' | translateAsync">{{ initials }}</button>
+
+    @if (menuOpen) {
+      <div class="menu" role="menu">
+        <div class="menu-head">
+          <b>{{ userName }}</b>
+          @if (version) {
+            <span class="mono">{{ "UI.HEADER.VERSION" | translateAsync }} {{ version }}</span>
+          }
         </div>
-      </dxi-item>
-    }
-    <dxi-item location="after" widget="dxSelectBox" locateInMenu="auto" [options]="selectBoxOptions"></dxi-item>
 
-    @if (!isWeb) {
-      <dxi-item location="after" widget="dxButton" locateInMenu="auto" [options]="logoutButtonOptions"></dxi-item>
-      @if (version) {
-        <dxi-item location="before">
-          <div *dxTemplate="let data of 'item'">
-            <span class="header-version">{{ version }}</span>
+        <div class="menu-section">
+          <span class="eyebrow">{{ "UI.HEADER.THEME" | translateAsync }}</span>
+          <div class="segmented" role="group">
+            <button type="button" [attr.aria-pressed]="currentTheme === 'light'" (click)="setTheme('light')">
+              <fa-icon icon="sun"></fa-icon>{{ "UI.HEADER.THEME_LIGHT" | translateAsync }}
+            </button>
+            <button type="button" [attr.aria-pressed]="currentTheme === 'dark'" (click)="setTheme('dark')">
+              <fa-icon icon="moon"></fa-icon>{{ "UI.HEADER.THEME_DARK" | translateAsync }}
+            </button>
           </div>
-        </dxi-item>
-      }
-    }
-
-    @if (time) {
-      <dxi-item location="after">
-        <div *dxTemplate="let data of 'item'">
-          <span class="header-time">{{ time }}</span>
         </div>
-      </dxi-item>
-    }
 
-    @if (isWeb) {
-      <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translateAsync }}" [index]="1"
-        [visible]="isAdminAvailable && !isAdminPage()" (onClick)="navigateToAdminPage()">
-      </dx-speed-dial-action>
-      <dx-speed-dial-action icon="home" label="{{ 'VISU.NAME' | translateAsync }}" [index]="1"
-        [visible]="isAdminPage()" (onClick)="navigateToVisualization()">
-      </dx-speed-dial-action>
-      <dx-speed-dial-action icon="export" label="{{ 'COMMON.LOGOUT' | translateAsync }}" [index]="3"
-        [visible]="true" (onClick)="logout()">
-      </dx-speed-dial-action>
+        <button type="button" class="menu-item" role="menuitem" (click)="logout()">
+          <fa-icon icon="right-from-bracket" [fixedWidth]="true"></fa-icon>{{ "UI.HEADER.LOGOUT" | translateAsync }}
+        </button>
+      </div>
     }
-
-  </dx-toolbar>
+  </div>
 </header>

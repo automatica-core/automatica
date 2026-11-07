@@ -4,11 +4,8 @@
       orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
     </dx-menu>
 
-    <as-split direction="horizontal">
-      <as-split-area [size]="30">
-        <p3-propertyeditor #propertyEditor [item]="selectedItem" [areaInstances]="areaInstances" [userGroups]="userGroups"></p3-propertyeditor>
-      </as-split-area>
-      <as-split-area [size]="70">
+    <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
+      <as-split-area [size]="62">
         <dx-tab-panel #tabPanel [dataSource]="pages" height="99%" [selectedIndex]="0" [loop]="false"
           [animationEnabled]="false" [swipeEnabled]="false" (onTitleClick)="onTabClick($event)">
 
@@ -25,6 +22,9 @@
             }
           </div>
         </dx-tab-panel>
+      </as-split-area>
+      <as-split-area [size]="38" [minSize]="22">
+        <p3-propertyeditor #propertyEditor [item]="selectedItem" [areaInstances]="areaInstances" [userGroups]="userGroups"></p3-propertyeditor>
       </as-split-area>
     </as-split>
   </div>

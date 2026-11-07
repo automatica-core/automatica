@@ -1,104 +1,140 @@
-<div class="content-block">
-  <div class="dx-card wide-card panel-height">
-    <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-      orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
-      (onItemClick)="itemClick($event)">
-    </dx-menu>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.LOGS.TITLE' | translateAsync }}</h1>
+    @if (stop) {
+      <span class="pill"><span class="status-dot off"></span>{{ 'UI.LOGS.LIVE_PAUSED' | translateAsync }}</span>
+    } @else {
+      <span class="pill ok"><span class="status-dot"></span>{{ 'UI.LOGS.LIVE_ON' | translateAsync }}</span>
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button [type]="stop ? 'default' : 'normal'" [stylingMode]="stop ? 'contained' : 'outlined'" [icon]="stop ? 'video' : 'stopfilled'"
+        [text]="(stop ? 'UI.LOGS.START_LIVE' : 'UI.LOGS.PAUSE_LIVE') | translateAsync" (onClick)="toggleLive()"></dx-button>
+      <dx-button icon="refresh" stylingMode="outlined" [text]="'UI.LOGS.REFRESH' | translateAsync" (onClick)="load()"></dx-button>
+    </div>
+  </div>
 
-    <as-split direction="horizontal" style="margin-top: 20px; ">
-      <as-split-area [size]="30">
-        <dx-tab-panel class="h-100" itemTitleTemplate="title">
-          <dxi-item title="COMMON.LIVE_LOGS" icon="wave-pulse">
-            <div *dxTemplate>
-              <dx-list #logicPagesList [dataSource]="logFacilitiesArray" [repaintChangesOnly]="true"
-                [selectedItems]="[selectedFacility]" height="90%" selectionMode="single"
-                (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="always"
-                [searchEnabled]="true" pageLoadMode="scrollBottom" searchExpr="name"
-                searchMode="contains">
-                <div *dxTemplate="let page of 'item'">
-                  <span>{{page.name}}</span>
-                </div>
-              </dx-list>
-            </div>
-          </dxi-item>
-          <dxi-item title="COMMON.FILE_LOGS" icon="file">
-            <div *dxTemplate>
-              <div class="grid-container">
-                <dx-scroll-view [showScrollbar]="always">
-                  @if (logFileTree) {
-                    <dx-tree-list id="logFileTree" [dataSource]="logFileTree"
-                      itemsExpr="children" dataStructure="tree" [showRowLines]="true"
-                      [showBorders]="true" [columnAutoWidth]="true" [expandedRowKeys]="[1, 2]"
-                      (onSelectionChanged)="onSelectionChanged($event)" height="100%">
-                      <dxi-column dataField="name" caption="Name"></dxi-column>
-                      <dxo-selection mode="single"></dxo-selection>
-                      <dxo-search-panel [visible]="true"></dxo-search-panel>
-                    </dx-tree-list>
+  <div class="logs-grid">
+    <section class="panel side">
+      <dx-tab-panel class="h-100" itemTitleTemplate="title" [animationEnabled]="false" [swipeEnabled]="false">
+        <dxi-item title="UI.LOGS.TAB_LIVE" icon="wave-pulse">
+          <div *dxTemplate>
+            <dx-list [dataSource]="logFacilitiesArray" [repaintChangesOnly]="true"
+              [selectedItems]="[selectedFacility]" height="100%" selectionMode="single"
+              (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="onHover"
+              [searchEnabled]="true" pageLoadMode="scrollBottom" searchExpr="name"
+              searchMode="contains" [searchEditorOptions]="{ placeholder: ('UI.LOGS.SEARCH_SOURCE' | translateAsync) }">
+              <div *dxTemplate="let f of 'item'">
+                <div class="facility-row">
+                  <span class="facility-name" [class.mono]="!isAllFacility(f)" [title]="f.name">{{ facilityLabel(f) }}</span>
+                  @if (f.logs.length > 0) {
+                    <span class="pill">{{ f.logs.length }}</span>
                   }
-                </dx-scroll-view>
+                </div>
               </div>
-            </div>
-          </dxi-item>
-          <dxi-item title="COMMON.LOGGER_LEVEL" icon="file">
-            <div *dxTemplate>
-              <div class="grid-container">
-
-                <dx-data-grid id="gridContainer" [height]="'100%'" [dataSource]="loggerDataSource"
-                  keyExpr="facility" [showBorders]="true" [allowColumnResizing]="true">
-
-                  <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false"
-                    [allowDeleting]="false" e>
-                  </dxo-editing>
-                  <dxo-filter-row visible="true"></dxo-filter-row>
-
-                  <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc"
-                  caption="Name"></dxi-column>
-                  <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName"
-                  editCellTemplate="logLevelEditor" [width]="100"></dxi-column>
-
-                  <div *dxTemplate="let cellInfo of 'logLevelEditor'">
-                    <dx-select-box [(value)]="cellInfo.value" [dataSource]="logLevelsDataSource"
-                      displayExpr="name" valueExpr="key"
-                      (onValueChanged)="cellInfo.setValue($event.value)"
-                      (onSelectionChanged)="cellInfo.component.updateDimensions()">
-                    </dx-select-box>
-                  </div>
-                </dx-data-grid>
-
-              </div>
-            </div>
-          </dxi-item>
-          <div *dxTemplate=" let item of 'title'">
-            <span title=" {{item.title | translateAsync}}" class="nav-padding">
-              <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true"
-                [icon]="['fas', item.icon]">
-              </fa-icon>
-            {{ item.title | translate }}</span>
-
+            </dx-list>
           </div>
+        </dxi-item>
+        <dxi-item title="UI.LOGS.TAB_FILES" icon="file-lines">
+          <div *dxTemplate>
+            <div class="tab-fill">
+              @if (logFileTree) {
+                <dx-tree-list [dataSource]="logFileTree"
+                  itemsExpr="children" dataStructure="tree" keyExpr="key" [showRowLines]="false"
+                  [showBorders]="false" [columnAutoWidth]="true" [expandedRowKeys]="[0, 1]" [showColumnHeaders]="false"
+                  (onSelectionChanged)="onSelectionChanged($event)" height="100%">
+                  <dxi-column dataField="name" [caption]="'COMMON.NAME' | translateAsync" cellTemplate="fileCell"></dxi-column>
+                  <dxo-selection mode="single"></dxo-selection>
+                  <dxo-search-panel [visible]="true" [placeholder]="'UI.LOGS.SEARCH_FILE' | translateAsync"></dxo-search-panel>
+                  <div *dxTemplate="let c of 'fileCell'">
+                    <span class="file-cell" [class.mono]="c.data.isFile">
+                      <fa-icon [icon]="['fas', c.data.isFile ? 'file-lines' : 'folder']" [fixedWidth]="true"></fa-icon>
+                      {{ c.data.key === 0 ? ('UI.LOGS.FILES_ROOT' | translateAsync) : c.value }}
+                    </span>
+                  </div>
+                </dx-tree-list>
+              }
+              <p class="tab-hint">{{ 'UI.LOGS.FILES_HINT' | translateAsync }}</p>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item title="UI.LOGS.TAB_LEVELS" icon="sliders">
+          <div *dxTemplate>
+            <div class="tab-fill">
+              <dx-data-grid [height]="'100%'" [dataSource]="loggerDataSource"
+                keyExpr="facility" [showBorders]="false" [allowColumnResizing]="true">
 
-        </dx-tab-panel>
-      </as-split-area>
-      <as-split-area [size]="70">
-        <div class="grid-container">
-          @if (selectedFacility && selectedFacility.logs && selectedFacility.logs.length > 0) {
-            <dx-data-grid
-              [dataSource]="selectedFacility.logs" [allowColumnReordering]="true" [allowColumnResizing]="true"
-              [columnAutoWidth]="true" height="100%">
-              <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc"
-              dataField="timestamp" caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
-              <dxi-column sortOrder="desc" dataField="log"
-              caption="{{ 'COMMON.LOG' | translateAsync }}"></dxi-column>
-              <dxo-filter-row [visible]="true"></dxo-filter-row>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>
-              <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
-              <dxo-selection mode="single"></dxo-selection>
-              <dxo-export [enabled]="true" [fileName]="selectedFacility.name"
-              [allowExportSelectedData]="true"></dxo-export>
-            </dx-data-grid>
+                <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false" [allowDeleting]="false">
+                </dxo-editing>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc" cssClass="mono-cell"
+                  [caption]="'UI.LOGS.SOURCE' | translateAsync"></dxi-column>
+                <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName" [caption]="'UI.LOGS.LEVEL' | translateAsync"
+                  cellTemplate="logLevelCell" editCellTemplate="logLevelEditor" [width]="130"></dxi-column>
+
+                <div *dxTemplate="let cellInfo of 'logLevelCell'">
+                  <span class="pill" [ngClass]="levelTone(cellInfo.data.logLevel)">{{ cellInfo.value }}</span>
+                </div>
+                <div *dxTemplate="let cellInfo of 'logLevelEditor'">
+                  <dx-select-box [value]="cellInfo.data.logLevel" [dataSource]="logLevelsDataSource"
+                    displayExpr="name" valueExpr="key"
+                    (onValueChanged)="cellInfo.setValue($event.value)"
+                    (onSelectionChanged)="cellInfo.component.updateDimensions()">
+                  </dx-select-box>
+                </div>
+              </dx-data-grid>
+            </div>
+          </div>
+        </dxi-item>
+        <div *dxTemplate="let item of 'title'">
+          <span class="tab-title" [title]="item.title | translateAsync">
+            <fa-icon [fixedWidth]="true" [icon]="['fas', item.icon]"></fa-icon>
+            <span>{{ item.title | translateAsync }}</span>
+          </span>
+        </div>
+      </dx-tab-panel>
+    </section>
+
+    <section class="panel main">
+      @if (selectedFacility && selectedFacility.logs && selectedFacility.logs.length > 0) {
+        <div class="main-head">
+          <b [class.mono]="!isAllFacility(selectedFacility)" [title]="selectedFacility.name">{{ facilityLabel(selectedFacility) }}</b>
+          <span class="muted">{{ 'UI.LOGS.ENTRIES' | translateAsync: { count: selectedFacility.logs.length } }}</span>
+          <span class="spacer"></span>
+          <dx-button icon="clear" stylingMode="text" [text]="'UI.LOGS.CLEAR' | translateAsync" (onClick)="clearSelected()"></dx-button>
+        </div>
+        <dx-data-grid class="log-grid"
+          [dataSource]="selectedFacility.logs" [allowColumnReordering]="true" [allowColumnResizing]="true"
+          [columnAutoWidth]="false" [wordWrapEnabled]="true" height="100%" [showBorders]="false">
+          <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc" [width]="170" cssClass="mono-cell"
+            dataField="timestamp" [caption]="'COMMON.TIMESTAMP' | translateAsync"></dxi-column>
+          <dxi-column dataField="facility" [width]="240" cssClass="mono-cell muted-cell" [visible]="isAllFacility(selectedFacility)"
+            [caption]="'UI.LOGS.SOURCE' | translateAsync"></dxi-column>
+          <dxi-column dataField="log" [caption]="'UI.LOGS.MESSAGE' | translateAsync"></dxi-column>
+          <dxo-header-filter [visible]="true"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="220" [placeholder]="'UI.LOGS.SEARCH' | translateAsync"></dxo-search-panel>
+          <dxo-selection mode="single"></dxo-selection>
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxo-export [enabled]="true" [fileName]="selectedFacility.name"
+            [allowExportSelectedData]="true"></dxo-export>
+        </dx-data-grid>
+      } @else {
+        <div class="empty-state">
+          <fa-icon class="icon" [icon]="['fas', 'wave-pulse']"></fa-icon>
+          @if (stop) {
+            <b>{{ 'UI.LOGS.EMPTY_PAUSED' | translateAsync }}</b>
+            <span>{{ 'UI.LOGS.EMPTY_PAUSED_HINT' | translateAsync }}</span>
+            <dx-button type="default" icon="video" [text]="'UI.LOGS.START_LIVE' | translateAsync" (onClick)="toggleLive()"></dx-button>
+          } @else {
+            <b>{{ 'UI.LOGS.EMPTY_WAITING' | translateAsync }}</b>
+            <span>{{ 'UI.LOGS.EMPTY_WAITING_HINT' | translateAsync }}</span>
           }
         </div>
-      </as-split-area>
-    </as-split>
+      }
+    </section>
   </div>
 </div>

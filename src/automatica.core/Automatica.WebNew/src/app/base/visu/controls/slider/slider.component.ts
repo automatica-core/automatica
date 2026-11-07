@@ -92,6 +92,39 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
     return `${value}`;
   }
 
+  /** the tile is "on" when the value is above the minimum */
+  public get isOn(): boolean {
+    const v = Number(this.state);
+    return !isNaN(v) && this.state !== null && this.state !== void 0 && v > (this.valueMin ?? 0);
+  }
+
+  public get levelPercent(): number {
+    const v = Number(this.state);
+    const min = this.valueMin ?? 0;
+    const max = this.valueMax ?? 100;
+    if (this.state === null || this.state === void 0 || isNaN(v) || max === min) {
+      return void 0;
+    }
+    return ((v - min) / (max - min)) * 100;
+  }
+
+  public get stateText(): string {
+    if (this.state === null || this.state === void 0) {
+      return void 0;
+    }
+    const v = Number(this.state);
+    return isNaN(v) ? `${this.state}` : new Intl.NumberFormat(void 0, { maximumFractionDigits: 1 }).format(v);
+  }
+
+  /** tapping the tile jumps between minimum and maximum, the exact value is in the details popup */
+  toggle() {
+    if (!this.valueType) {
+      return;
+    }
+    this.state = this.isOn ? (this.valueMin ?? 0) : (this.valueMax ?? 100);
+    this.switch(this.state);
+  }
+
   onRuleInstanceValueChanged(interfaceId, value) {
     if (this.outputType && this.outputType.ObjId === interfaceId) {
       this.state = value;

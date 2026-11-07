@@ -1,11 +1,15 @@
-<app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="shutterIcon" [location]="location"
-  [hasPopup]="false">
+<app-visualization-control [hint]="displayText" [state]="displayValue" [icon]="shutterIcon" [location]="location">
 
-  <ng-container control>
-    <div style="display: inline-block;">
-      <dx-button icon="chevronup" (onClick)="moveUp($event)"></dx-button>
-      <dx-button icon="chevrondown" (onClick)="moveDown($event)"></dx-button>
-    </div>
-  </ng-container>
+  <div control class="shutter-row">
+    <div class="shutter-position" aria-hidden="true"><i [style.width.%]="positionWidth"></i></div>
+    <button type="button" class="shutter-btn" (click)="moveUp($event)" [disabled]="!upInput"
+      [attr.aria-label]="('UI.VISU.SHUTTER_UP' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.SHUTTER_UP' | translateAsync">
+      <fa-icon icon="chevron-up"></fa-icon>
+    </button>
+    <button type="button" class="shutter-btn" (click)="moveDown($event)" [disabled]="!downInput"
+      [attr.aria-label]="('UI.VISU.SHUTTER_DOWN' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.SHUTTER_DOWN' | translateAsync">
+      <fa-icon icon="chevron-down"></fa-icon>
+    </button>
+  </div>
 
 </app-visualization-control>

@@ -1,36 +1,70 @@
-<div class="content-block">
-  <div class="dx-card wide-card panel-height">
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.TELEGRAM.TITLE' | translateAsync }}</h1>
+    @if (loaded) {
+      <span class="sub">{{ 'UI.TELEGRAM.MONITOR_COUNT' | translateAsync: { count: monitorInstances.length } }}</span>
+    }
+  </div>
+
+  <div class="panel monitor">
     @if (monitorInstances && monitorInstances.length > 0) {
       <dx-tab-panel [dataSource]="monitorInstances"
         [(selectedItem)]="selectedMonitorInstance" [loop]="false" [animationEnabled]="false" [swipeEnabled]="false"
         height="100%" (onSelectionChanged)="onTabSelectionChanged($event)">
         <div *dxTemplate="let monitor of 'title'">
-          <span>{{monitor.DisplayName}}</span>
+          <span>{{ monitor.DisplayName }}</span>
         </div>
         <div *dxTemplate="let monitor of 'item'">
-          @if (monitor.Messages && monitor.Messages.length > 0) {
-            <dx-data-grid [dataSource]="monitor.Messages"
-              [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" height="100%">
-              <dxi-column dataType="datetime" sortOrder="desc" dataField="TimeStamp" caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
-              <dxi-column dataField="Direction" caption="{{ 'COMMON.DIRECTION' | translateAsync }}"
-              [calculateCellValue]="calculateDirectionValue"></dxi-column>
-              <dxi-column dataField="SourceAddress" caption="{{ 'COMMON.SOURCE_ADDRESS' | translateAsync }}"></dxi-column>
-              <dxi-column dataField="TargetAddress" caption="{{ 'COMMON.TARGET_ADDRESS' | translateAsync }}"></dxi-column>
-              <dxi-column dataField="Data" caption="{{ 'COMMON.DATA' | translateAsync }}"></dxi-column>
-              <dxi-column dataField="AdditionalMessageString" caption="{{ 'COMMON.ADDITIONAL_DATA' | translateAsync }}"></dxi-column>
-              <dxo-filter-row [visible]="true"></dxo-filter-row>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>
-              <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
-              <dxo-selection mode="single"></dxo-selection>
-              <dxo-export [enabled]="true" [fileName]="monitor.Name" [allowExportSelectedData]="true"></dxo-export>
-            </dx-data-grid>
-          }
+          <div class="tab-body">
+            <div class="tab-head">
+              <span class="pill ok"><span class="status-dot"></span>{{ 'UI.TELEGRAM.LIVE' | translateAsync }}</span>
+              <span>{{ 'UI.TELEGRAM.MESSAGE_COUNT' | translateAsync: { count: monitor.Messages?.length || 0 } }}</span>
+              <span class="spacer"></span>
+              <dx-button icon="clear" stylingMode="text" [disabled]="!monitor.Messages?.length"
+                [text]="'UI.TELEGRAM.CLEAR' | translateAsync" (onClick)="clear(monitor)"></dx-button>
+            </div>
+            @if (monitor.Messages && monitor.Messages.length > 0) {
+              <dx-data-grid [dataSource]="monitor.Messages" [showBorders]="false"
+                [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" height="100%">
+                <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc" dataField="TimeStamp" cssClass="mono-cell"
+                  [caption]="'COMMON.TIMESTAMP' | translateAsync"></dxi-column>
+                <dxi-column dataField="Direction" [caption]="'COMMON.DIRECTION' | translateAsync"
+                  [calculateCellValue]="calculateDirectionValue" cellTemplate="directionCell"></dxi-column>
+                <dxi-column dataField="SourceAddress" cssClass="mono-cell" [caption]="'COMMON.SOURCE_ADDRESS' | translateAsync"></dxi-column>
+                <dxi-column dataField="TargetAddress" cssClass="mono-cell" [caption]="'COMMON.TARGET_ADDRESS' | translateAsync"></dxi-column>
+                <dxi-column dataField="Data" cssClass="mono-cell" [caption]="'COMMON.DATA' | translateAsync"></dxi-column>
+                <dxi-column dataField="AdditionalMessageString" [caption]="'COMMON.ADDITIONAL_DATA' | translateAsync"></dxi-column>
+                <div *dxTemplate="let c of 'directionCell'">
+                  <span class="pill" [class.accent]="c.data.Direction === 0">
+                    <fa-icon [icon]="['fas', c.data.Direction === 0 ? 'arrow-right-to-bracket' : 'arrow-right-from-bracket']"></fa-icon>
+                    {{ c.value }}
+                  </span>
+                </div>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="220" [placeholder]="'UI.TELEGRAM.SEARCH' | translateAsync"></dxo-search-panel>
+                <dxo-selection mode="single"></dxo-selection>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-export [enabled]="true" [fileName]="monitor.Name" [allowExportSelectedData]="true"></dxo-export>
+              </dx-data-grid>
+            } @else {
+              <div class="empty-state">
+                <fa-icon class="icon" [icon]="['fas', 'tower-broadcast']"></fa-icon>
+                <b>{{ 'UI.TELEGRAM.WAITING' | translateAsync }}</b>
+                <span>{{ 'UI.TELEGRAM.WAITING_HINT' | translateAsync }}</span>
+              </div>
+            }
+          </div>
         </div>
       </dx-tab-panel>
-    }
-
-    @if (!monitorInstances || monitorInstances.length == 0) {
-      NO BUSMON FOUND
+    } @else if (loaded) {
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'tower-broadcast']"></fa-icon>
+        <b>{{ 'UI.TELEGRAM.EMPTY' | translateAsync }}</b>
+        <span>{{ 'UI.TELEGRAM.EMPTY_HINT' | translateAsync }}</span>
+        <a class="link" routerLink="/admin/config">{{ 'UI.TELEGRAM.OPEN_CONFIG' | translateAsync }}</a>
+      </div>
     }
   </div>
 </div>

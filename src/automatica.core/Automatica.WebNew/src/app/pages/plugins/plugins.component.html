@@ -1,42 +1,130 @@
-<div class="content-block">
-  <div class="dx-card wide-card panel-height">
-    <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-      orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
-      (onItemClick)="itemClick($event)">
-    </dx-menu>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'PLUGINS.NAME' | translateAsync }}</h1>
+    @if (loaded && !loadError) {
+      <span class="sub">
+        {{ 'UI.PLUGINS.SUMMARY' | translateAsync: { installed: installedCount, total: plugins.length } }}
+        @if (updateCount > 0) {
+          · <b class="sub-strong">{{ 'UI.PLUGINS.UPDATES_COUNT' | translateAsync: { count: updateCount } }}</b>
+        }
+      </span>
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button icon="refresh" stylingMode="outlined" [text]="'UI.PLUGINS.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      @if (updateCount > 0) {
+        <dx-button type="default" icon="download"
+          [text]="'UI.PLUGINS.UPDATE_ALL' | translateAsync: { count: updateCount }" (onClick)="updateAll()"></dx-button>
+      }
+      @if (availableCount > 0) {
+        <dx-menu class="more-menu" [items]="menuItems" itemsExpr="items" displayExpr="label" orientation="horizontal"
+          submenuDirection="leftOrTop" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)"
+          [hint]="'UI.PAGES.MORE_ACTIONS' | translateAsync">
+        </dx-menu>
+      }
+    </div>
+  </div>
 
-    <dx-scroll-view>
-      <div style="padding-bottom: 100px;">
-        <dx-data-grid height="100%" [dataSource]="plugins" keyExpr="objId">
-          <dxo-paging [enabled]="false"></dxo-paging>
-          <dxo-selection mode="single"></dxo-selection>
+  <div class="toolbar">
+    <dx-text-box class="grow" mode="search" valueChangeEvent="input" [(value)]="search"
+      [placeholder]="'UI.PLUGINS.SEARCH' | translateAsync">
+    </dx-text-box>
+    <div class="seg" role="group" [attr.aria-label]="'UI.PLUGINS.FILTER_TYPE' | translateAsync">
+      <button type="button" [class.on]="typeFilter === 'all'" [attr.aria-pressed]="typeFilter === 'all'" (click)="typeFilter = 'all'">
+        {{ 'UI.PLUGINS.TYPE_ALL' | translateAsync }}<span class="count">{{ countOf('all') }}</span>
+      </button>
+      <button type="button" [class.on]="typeFilter === 'driver'" [attr.aria-pressed]="typeFilter === 'driver'" (click)="typeFilter = 'driver'">
+        {{ 'UI.PLUGINS.TYPE_DRIVER' | translateAsync }}<span class="count">{{ countOf('driver') }}</span>
+      </button>
+      <button type="button" [class.on]="typeFilter === 'logic'" [attr.aria-pressed]="typeFilter === 'logic'" (click)="typeFilter = 'logic'">
+        {{ 'UI.PLUGINS.TYPE_LOGIC' | translateAsync }}<span class="count">{{ countOf('logic') }}</span>
+      </button>
+    </div>
+  </div>
 
-          <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-          <dxi-column dataField="version" caption="{{ 'PLUGINS.VERSION' | translateAsync }}"></dxi-column>
-          <dxi-column dataField="type" [groupIndex]="0" caption="{{ 'COMMON.TYPE' | translateAsync }}"></dxi-column>
-          <dxi-column dataField="installedVersion" caption="{{ 'PLUGINS.INSTALLED_VERSION' | translateAsync }}"></dxi-column>
-
-          <dxi-column cellTemplate="cellTemplate" caption="{{ 'PLUGINS.ACTION' | translateAsync }}"></dxi-column>
-          <dxi-column cellTemplate="installTemplate" caption="{{ 'PLUGINS.PROGRESS' | translateAsync }}"></dxi-column>
-
-          <div *dxTemplate="let data of 'installTemplate'" cellTemplate="installTemplate">
-            @if (data.data.downloadMax) {
-              <dx-progress-bar [min]="0" [max]="data.data.downloadMax"
-              [value]="data.data.downloadCurrent"></dx-progress-bar>
-            }
-          </div>
-
-          <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
-            @if (data.data.cloudIsNewer && data.data.isInstalled) {
-              <dx-button text="Update" (onClick)="update($event, data.data)"></dx-button>
-            }
-            @if (!data.data.isInstalled) {
-              <dx-button text="Install" (onClick)="install($event, data.data)"></dx-button>
-            }
-          </div>
-
-        </dx-data-grid>
+  <div class="panel list">
+    @if (loadError) {
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
+        <b>{{ 'UI.PLUGINS.LOAD_FAILED' | translateAsync }}</b>
+        <span>{{ 'UI.PLUGINS.LOAD_FAILED_HINT' | translateAsync }}</span>
+        <span class="mono">{{ loadError }}</span>
+        <dx-button icon="refresh" [text]="'UI.PLUGINS.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
       </div>
-    </dx-scroll-view>
+    } @else {
+      @for (p of visiblePlugins; track p.objId) {
+        <div class="li">
+          <span class="ico" aria-hidden="true">
+            <fa-icon [icon]="['fas', p.isDriver ? 'plug' : 'diagram-project']"></fa-icon>
+          </span>
+          <span class="nm">
+            <b [title]="p.name">{{ p.displayName }}</b>
+            @switch (p.state) {
+              @case ('update') {
+                <span class="mono">{{ p.installedVersion }} → {{ p.version }}</span>
+              }
+              @case ('current') {
+                <span class="mono">{{ p.installedVersion }}</span>
+              }
+              @case ('available') {
+                <span>{{ 'UI.PLUGINS.VERSION_AVAILABLE' | translateAsync: { version: p.version } }}</span>
+              }
+              @case ('working') {
+                <span>
+                  {{ 'UI.PLUGINS.DOWNLOADING' | translateAsync }}
+                  @if (p.downloadMax > 1) {
+                    <span class="mono">{{ p.downloadCurrentFormatted || '0' }} / {{ p.downloadMaxFormatted }}</span>
+                  }
+                </span>
+              }
+              @case ('done') {
+                <span>{{ 'UI.PLUGINS.DONE_HINT' | translateAsync: { version: p.version } }}</span>
+              }
+              @case ('error') {
+                <span class="err">{{ p.error }}</span>
+              }
+            }
+          </span>
+          @switch (p.state) {
+            @case ('update') { <span class="pill warn">{{ 'UI.PLUGINS.STATE_UPDATE' | translateAsync }}</span> }
+            @case ('current') { <span class="pill ok">{{ 'UI.PLUGINS.STATE_CURRENT' | translateAsync }}</span> }
+            @case ('available') { <span class="pill">{{ 'UI.PLUGINS.STATE_AVAILABLE' | translateAsync }}</span> }
+            @case ('working') { <span class="pill accent">{{ 'UI.PLUGINS.STATE_WORKING' | translateAsync }}</span> }
+            @case ('done') { <span class="pill ok">{{ 'UI.PLUGINS.STATE_DONE' | translateAsync }}</span> }
+            @case ('error') { <span class="pill bad">{{ 'UI.PLUGINS.STATE_ERROR' | translateAsync }}</span> }
+          }
+          <span class="act">
+            @switch (p.state) {
+              @case ('update') {
+                <dx-button type="default" [text]="'UI.PLUGINS.ACTION_UPDATE' | translateAsync" (onClick)="runAction(p)"></dx-button>
+              }
+              @case ('available') {
+                <dx-button stylingMode="outlined" [text]="'UI.PLUGINS.ACTION_INSTALL' | translateAsync" (onClick)="runAction(p)"></dx-button>
+              }
+              @case ('working') {
+                <dx-progress-bar class="progress" [min]="0" [max]="100" [value]="p.progressPercent" [showStatus]="false"></dx-progress-bar>
+              }
+              @case ('error') {
+                <dx-button stylingMode="text" [text]="'UI.PLUGINS.ACTION_LOGS' | translateAsync" (onClick)="openLogs()"></dx-button>
+                <dx-button stylingMode="outlined" [text]="'UI.PLUGINS.ACTION_RETRY' | translateAsync" (onClick)="runAction(p)"></dx-button>
+              }
+            }
+          </span>
+        </div>
+      } @empty {
+        @if (loaded) {
+          <div class="empty-state">
+            <fa-icon class="icon" [icon]="['fas', 'puzzle-piece']"></fa-icon>
+            @if (plugins.length === 0) {
+              <b>{{ 'UI.PLUGINS.EMPTY' | translateAsync }}</b>
+              <span>{{ 'UI.PLUGINS.EMPTY_HINT' | translateAsync }}</span>
+            } @else {
+              <b>{{ 'UI.PAGES.NO_MATCH' | translateAsync }}</b>
+              <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
+            }
+          </div>
+        }
+      }
+    }
   </div>
 </div>

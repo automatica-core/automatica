@@ -23,6 +23,7 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
   private _selectedMonitorInstance: TelegramMonitorInstance;
 
   public monitorInstances: TelegramMonitorInstance[] = [];
+  public loaded = false;
 
   constructor(private telegramHub: TelegramHubService,
     notify: NotifyService,
@@ -31,7 +32,7 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
     appService: AppService) {
     super(notify, translate, appService);
 
-    appService.setAppTitle("TELEGRAM_MONITOR.NAME");
+    appService.setAppTitle("UI.TELEGRAM.TITLE");
   }
 
 
@@ -45,7 +46,13 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
 
   async ngOnInit() {
 
-    this.monitorInstances = await this.telegramMonitorService.getMonitorInstances();
+    try {
+      this.monitorInstances = await this.telegramMonitorService.getMonitorInstances() || [];
+    } catch (error) {
+      this.monitorInstances = [];
+      this.handleError(error);
+    }
+    this.loaded = true;
     if (this.monitorInstances.length > 0) {
       this.selectedMonitorInstance = this.monitorInstances[0];
     }
@@ -71,11 +78,17 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
     const item: TelegramMonitorInstance = $event.addedItems[0];
   }
 
-  calculateDirectionValue($event: TelegramMessage) {
+  calculateDirectionValue = ($event: TelegramMessage) => {
     if ($event.Direction === 0) {
-      return "INPUT <<";
+      return this.translate.translate("UI.TELEGRAM.DIRECTION_IN");
     }
-    return "OUTPUT >>";
+    return this.translate.translate("UI.TELEGRAM.DIRECTION_OUT");
+  }
+
+  clear(monitor: TelegramMonitorInstance) {
+    if (monitor?.Messages) {
+      monitor.Messages.splice(0, monitor.Messages.length);
+    }
   }
 
   private getMonitorInstance(id: string) {

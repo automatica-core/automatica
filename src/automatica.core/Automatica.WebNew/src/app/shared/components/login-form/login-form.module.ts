@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { DxButtonModule, DxTextBoxModule, DxValidatorModule, DxValidationGroupModule, DxLoadPanelModule, DxCheckBoxModule } from "devextreme-angular";
 import { L10nTranslationModule } from "angular-l10n";
 import { LoginFormComponent } from "./login-form.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { LoginFormComponent } from "./login-form.component";
         DxValidatorModule,
         DxValidationGroupModule,
         L10nTranslationModule,
-        DxLoadPanelModule
+        DxLoadPanelModule,
+        FontAwesomeModule
     ],
     declarations: [ LoginFormComponent ],
     exports: [ LoginFormComponent ]

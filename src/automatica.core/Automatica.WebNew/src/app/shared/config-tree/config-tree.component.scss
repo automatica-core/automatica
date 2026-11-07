@@ -1,15 +1,86 @@
 :host {
-    height: inherit;
- 
+    display: block;
+    height: 100%;
 }
 
 .config-tree {
-    padding-bottom:100px;
+    height: 100%;
 }
 
-.node-instance-disabled {
-    color: red;
+.tree-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
 }
-.node-instance-error {
-    color: lightcoral;
+
+.tree-icon {
+    color: var(--muted);
+    flex: none;
+
+    &.disabled {
+        color: var(--bad);
+        opacity: .7;
+    }
+}
+
+.tree-invalid {
+    color: var(--warn);
+    flex: none;
+}
+
+.tree-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tree-state {
+    display: inline-flex;
+    gap: var(--space-1);
+    flex: none;
+
+    .pill {
+        cursor: help;
+    }
+}
+
+.pill-help {
+    font-size: 10px;
+    opacity: .8;
+}
+
+:host ::ng-deep {
+    .dx-treelist .dx-treelist-header-panel {
+        padding: var(--space-2) var(--space-2) 0;
+        border-bottom: 0;
+
+        .dx-toolbar,
+        .dx-toolbar-items-container {
+            background: transparent;
+        }
+
+        .dx-toolbar-after {
+            width: 100%;
+            padding: 0;
+        }
+
+        .dx-toolbar-item,
+        .dx-treelist-search-panel {
+            width: 100%;
+            margin: 0;
+        }
+    }
+
+    .dx-treelist .dx-data-row > td {
+        border: 0;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .dx-treelist .dx-data-row > td.tree-value {
+        color: var(--muted);
+        font-size: var(--text-xs);
+    }
 }

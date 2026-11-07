@@ -1,55 +1,39 @@
-<app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true" [width]="1">
+<app-visualization-control [hint]="displayText" [location]="location" [showIcon]="false">
 
-  <ng-container control_full>
+  <div control class="gauge-wrap" [class.is-linear]="type == GaugeType.Linear" role="meter" [attr.aria-valuenow]="value"
+    [attr.aria-valuemin]="scaleStart" [attr.aria-valuemax]="scaleEnd" [attr.aria-label]="displayText">
     @if (type == GaugeType.Circular) {
-      <dx-circular-gauge class="gauge" id="gauge" [value]="value" [subvalues]="[value]">
-        <dxo-size [height]="gaugeSize" [width]="gaugeSize">
-        </dxo-size>
-        <dxo-animation [enabled]="true">
-        </dxo-animation>
-        <dxo-subvalue-indicator [offset]="-5" type="triangleMarker" color="#325862" arrowLength="2"
-          length="10" />
-        <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
+      <dx-circular-gauge class="gauge" [value]="value">
+        <dxo-size [height]="gaugeHeight"></dxo-size>
+        <dxo-animation [enabled]="animate"></dxo-animation>
+        <dxo-value-indicator type="rangeBar" [offset]="0" [size]="8"></dxo-value-indicator>
+        <dxo-geometry [startAngle]="180" [endAngle]="0"></dxo-geometry>
         <dxo-scale [startValue]="scaleStart" [endValue]="scaleEnd" [minorTickInterval]="ticks">
-          <dxo-tick></dxo-tick>
-          <dxo-minor-tick [visible]="true"></dxo-minor-tick>
-          <dxo-label>
-            <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif'></dxo-font>
+          <dxo-tick [visible]="false"></dxo-tick>
+          <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+          <dxo-label [indentFromTick]="4">
+            <dxo-font family="IBM Plex Mono, ui-monospace, Consolas, monospace" [size]="10"></dxo-font>
           </dxo-label>
         </dxo-scale>
-        <dxo-range-container backgroundColor="none">
-        </dxo-range-container>
-        <dxo-title [text]="displayText">
-          <!-- <dxo-subtitle [text]="value"></dxo-subtitle> -->
-          <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif' [weight]="400" [size]="17"
-          color="white"></dxo-font>
-        </dxo-title>
+        <dxo-range-container [offset]="0" [width]="8"></dxo-range-container>
       </dx-circular-gauge>
     }
     @if (type == GaugeType.Linear) {
-      <dx-linear-gauge class="gauge" id="gauge" [value]="value">
-        <dxo-size [height]="gaugeSize" [width]="gaugeSize">
-        </dxo-size>
-        <dxo-value-indicator type="rectangle" color="#325862">
-        </dxo-value-indicator>
+      <dx-linear-gauge class="gauge" [value]="value">
+        <dxo-size [height]="linearHeight"></dxo-size>
+        <dxo-animation [enabled]="animate"></dxo-animation>
+        <dxo-value-indicator type="rangeBar" [offset]="0" [size]="8"></dxo-value-indicator>
         <dxo-scale [startValue]="scaleStart" [endValue]="scaleEnd" [minorTickInterval]="ticks">
-          <dxo-tick></dxo-tick>
+          <dxo-tick [visible]="false"></dxo-tick>
           <dxo-minor-tick [visible]="false"></dxo-minor-tick>
-          <dxo-label>
-            <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif'></dxo-font>
+          <dxo-label [indentFromTick]="-14">
+            <dxo-font family="IBM Plex Mono, ui-monospace, Consolas, monospace" [size]="10"></dxo-font>
           </dxo-label>
         </dxo-scale>
-        <dxo-range-container backgroundColor="none">
-        </dxo-range-container>
-        <dxo-title [text]="displayText">
-          <!-- <dxo-subtitle [text]="value"></dxo-subtitle> -->
-          <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif' [weight]="400" [size]="17"
-          color="white"></dxo-font>
-        </dxo-title>
+        <dxo-range-container [offset]="0" [width]="8"></dxo-range-container>
       </dx-linear-gauge>
     }
-
-  </ng-container>
-
+    <div class="gauge-value" aria-hidden="true">{{ formattedValue }}</div>
+  </div>
 
 </app-visualization-control>

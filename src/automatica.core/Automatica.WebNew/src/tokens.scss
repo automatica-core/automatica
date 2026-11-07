@@ -1,0 +1,193 @@
+// Design tokens: the single source for colors, type and spacing.
+// The DevExtreme themes (src/themes/metadata.*.json) are generated from the same values.
+// ThemeService sets data-theme="light|dark" on <html>, components use only these variables.
+
+:root {
+    --font-ui: "Figtree Variable", "Segoe UI", system-ui, sans-serif;
+    --font-data: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+    // type scale
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-md: 16px;
+    --text-lg: 20px;
+    --text-xl: 26px;
+
+    // 4px spacing scale
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+
+    --nav-width: 232px;
+    --nav-width-collapsed: 60px;
+    --topbar-height: 56px;
+}
+
+:root,
+:root[data-theme="light"] {
+    --bg: #f3f5f5;
+    --surface: #ffffff;
+    --surface-2: #e9eeef;
+    --line: #d3dcde;
+    --fg: #172326;
+    --muted: #5b6b70;
+    --accent: #2f6f7c;
+    --accent-fill: #2f6f7c;
+    --accent-soft: #d6e8ec;
+    --on-accent: #ffffff;
+    --lamp: #e8a317;
+    --lamp-soft: #fbefd2;
+    --on-lamp: #2a1d00;
+    --ok: #2f8a57;
+    --warn: #b7791f;
+    --bad: #c0392b;
+    --shadow: 0 6px 18px rgba(23, 35, 38, 0.08);
+    --grid-dot: #c9d3d6;
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    --bg: #111719;
+    --surface: #182124;
+    --surface-2: #1f2a2e;
+    --line: #2c3a3f;
+    --fg: #e3ebed;
+    --muted: #8fa3a9;
+    --accent: #6fb3c2;
+    --accent-fill: #3a8796;
+    --accent-soft: #1e3a41;
+    --on-accent: #ffffff;
+    --lamp: #f2b53a;
+    --lamp-soft: #3a2f17;
+    --on-lamp: #2a1d00;
+    --ok: #5cc18a;
+    --warn: #e0a64a;
+    --bad: #ef6f62;
+    --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    --grid-dot: #2a383d;
+    color-scheme: dark;
+}
+
+// status pills, shared by lists, the inspector and the system pages
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 18px;
+    padding: 1px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: var(--muted);
+    background: var(--surface-2);
+
+    &.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+    &.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, transparent); }
+    &.bad { color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, transparent); }
+    &.accent { color: var(--accent); background: var(--accent-soft); }
+    &.off { color: var(--muted); background: var(--surface-2); }
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex: none;
+    background: var(--ok);
+
+    &.warn { background: var(--warn); }
+    &.bad { background: var(--bad); }
+    &.off { background: var(--line); }
+    &.accent { background: var(--accent); }
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.mono {
+    font-family: var(--font-data);
+}
+
+// page frame used by every admin page: title row + content
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    min-height: 0;
+    height: 100%;
+
+    @media (max-width: 599.98px) {
+        padding: var(--space-3) var(--space-4);
+    }
+}
+
+.page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+
+    h1 {
+        margin: 0;
+        font-size: var(--text-xl);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+    }
+
+    .sub {
+        color: var(--muted);
+        font-size: var(--text-sm);
+    }
+
+    .spacer {
+        flex: 1;
+    }
+}
+
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    min-width: 0;
+    min-height: 0;
+}
+
+.empty-state {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    height: 100%;
+
+    .icon {
+        font-size: 28px;
+        color: var(--line);
+    }
+
+    b {
+        color: var(--fg);
+        font-size: var(--text-md);
+        font-weight: 600;
+    }
+}

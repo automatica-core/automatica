@@ -43,11 +43,28 @@ export class ToggleNodeComponent extends BaseMobileComponent implements OnInit, 
       return void 0;
     }
 
+    // a plain boolean without state texts reads "Ein" / "Aus"
+    if (typeof this.realValue === "boolean" && this.value === this.realValue) {
+      return this.translate.translate(this.realValue ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");
+    }
+
     return this.value;
+  }
+
+  public get isOn(): boolean {
+    return this.realValue === true || this.realValue === 1 || this.realValue === "true";
   }
 
   onValueChanged($event) {
     this.switch($event.value);
+  }
+
+  /** the whole tile is the switch */
+  toggle() {
+    if (this.readOnly) {
+      return;
+    }
+    this.switch(!this.isOn);
   }
 
   ngOnDestroy(): void {

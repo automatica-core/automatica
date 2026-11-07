@@ -1,23 +1,113 @@
-p3-propertyeditor {
-    height: 100%
-}
-
-.property-editor {
-    padding-bottom:70px;
-}
-
-::ng-deep .dx-datagrid-table {
-    
-    // padding-bottom:20px;
+:host {
+    display: block;
     height: 100%;
 }
 
-::ng-deep .dx-datagrid-table-fixed {
-    
-    // padding-bottom:20px;
+.inspector {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
 }
 
-::ng-deep .dx-row.dx-freespace-row {
-     display: none !important; 
+.insp-head {
+    flex: none;
+    display: grid;
+    gap: 4px;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+}
+
+.insp-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+}
+
+.insp-name {
+    font-size: var(--text-md);
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.insp-sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--muted);
+
+    .mono {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+}
+
+.insp-body {
+    flex: 1;
+    min-height: 0;
+}
+
+.insp-foot {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+}
+
+.insp-group {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+// the property grid reads as a form: section rows, label left, editor right
+:host ::ng-deep .insp-body .dx-datagrid {
+    background: var(--surface);
+
+    .dx-group-row > td {
+        background: var(--surface);
+        border: 0;
+        padding-top: var(--space-4);
+        padding-bottom: var(--space-1);
+    }
+
+    .dx-group-row .dx-datagrid-group-closed,
+    .dx-group-row .dx-datagrid-group-opened {
+        color: var(--muted);
+    }
+
+    .dx-data-row > td {
+        border: 0;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        vertical-align: middle;
+    }
+
+    .dx-data-row > td.insp-label {
+        color: var(--muted);
+        font-size: var(--text-sm);
+        padding-left: var(--space-4);
+    }
+
+    .dx-data-row.dx-state-hover > td {
+        background: transparent;
+    }
+
+    .dx-row.dx-freespace-row {
+        display: none;
+    }
 }

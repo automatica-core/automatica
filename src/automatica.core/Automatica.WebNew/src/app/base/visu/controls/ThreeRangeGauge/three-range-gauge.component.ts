@@ -26,8 +26,17 @@ enum GaugeType {
     standalone: false
 })
 export class ThreeRangeGaugeComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
-  // tiles are 140px high on phones up to 400px wide (base-control), 180px otherwise
-  readonly gaugeSize = window.innerWidth <= 400 ? 120 : 160;
+  // the gauge fits below the tile title: tiles are 148px high, 136px on phones (base-control)
+  readonly gaugeHeight = window.innerWidth < 600 ? 70 : 78;
+  readonly animate = !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  public get formattedValue(): string {
+    if (this.value === void 0 || this.value === null) {
+      return "";
+    }
+    const v = Number(this.value);
+    return isNaN(v) ? `${this.value}` : new Intl.NumberFormat(void 0, { maximumFractionDigits: 1 }).format(v);
+  }
 
   GaugeType = GaugeType;
 

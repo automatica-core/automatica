@@ -25,7 +25,7 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   outputValue: RuleInterfaceInstance;
   outputState: RuleInterfaceInstance;
 
-  displayValue: any = "0%";
+  displayValue: any = "0 %";
 
   public get state(): boolean {
     return this._state;
@@ -78,7 +78,7 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     }
     else if ((this.outputValue && this.outputValue.ObjId == interfaceId) ||
       (this.valueInput && this.valueInput.ObjId == interfaceId)) {
-      this.displayValue = `${Math.round(value)}%`;
+      this.displayValue = `${Math.round(value)} %`;
       this.stateValue = value;
     }
   }
@@ -94,6 +94,11 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
         this.dataHub.setValue(this.stateInput.ObjId, value);
         this.state = value;
       }
+  }
+
+  /** tapping the tile switches the light on or off, the brightness is in the details popup */
+  toggle() {
+    this.switch(!this.state);
   }
 
   sliderUpdate(value) {

@@ -1,10 +1,11 @@
-import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef } from "@angular/core";
-import { DxTreeViewModule, DxTreeViewComponent } from "devextreme-angular/ui/tree-view";
+import { Component, NgModule, Output, Input, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit } from "@angular/core";
 import { L10nTranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
-import { Router } from "@angular/router";
-import { DxLoadIndicatorModule, DxScrollViewModule } from "devextreme-angular";
+import { NavigationEnd, Router } from "@angular/router";
+import { DxLoadIndicatorModule } from "devextreme-angular";
+import { Subscription } from "rxjs";
+import { NavItem } from "src/app/app-navigation";
 
 @Component({
     selector: "app-side-navigation-menu",
@@ -13,123 +14,104 @@ import { DxLoadIndicatorModule, DxScrollViewModule } from "devextreme-angular";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SideNavigationMenuComponent implements OnInit, OnDestroy {
 
-    private _menu: DxTreeViewComponent;
-
-    @ViewChild(DxTreeViewComponent, { static: true })
-    public get menu(): DxTreeViewComponent {
-        return this._menu;
-    }
-    public set menu(v: DxTreeViewComponent) {
-        this._menu = v;
-    }
-
-    @Output()
-    selectedItemChanged = new EventEmitter<string>();
+    private _items: NavItem[];
 
     @Input()
-    menuOpened: boolean = true;
-
-    private _items: any[];
-    @Input()
-    public get items(): any[] {
+    get items(): NavItem[] {
         return this._items;
     }
-    public set items(v: any[]) {
+    set items(v: NavItem[]) {
         this._items = v;
+        this.expandActive();
     }
-
-    _selectedItem: string;
 
     @Input()
-    set selectedItem(value: string) {
-        if (this.menu && this.menu.instance) {
-            this._selectedItem = value;
-            this.menu.instance.selectItem(value);
-        }
-    }
-    get selectedItem(): string {
-        return this._selectedItem;
-    }
+    compactMode = false;
 
-    private _compactMode = false;
-    @Input()
-    get compactMode() {
-        return this._compactMode;
-    }
-    set compactMode(val) {
-        this._compactMode = val;
-        if (val && this.menu && this.menu.instance) {
-            this.menu.instance.collapseAll();
-        }
-    }
+    /** an item was chosen, the layout closes the mobile menu */
+    @Output()
+    navigated = new EventEmitter<NavItem>();
 
+    /** a parent was clicked while compact, the layout opens the menu to show its children */
+    @Output()
+    expandRequested = new EventEmitter<void>();
 
-    constructor(private router: Router) { }
+    private url = "";
+    private routerSub: Subscription;
+
+    constructor(private router: Router, private changeRef: ChangeDetectorRef) { }
 
     ngOnInit() {
-    }
-
-    setInitialItem() {
-        if (!this.items) {
-            return;
-        }
-
-        const uriSplit = this.router.url.split("/");
-        const curItem = uriSplit[uriSplit.length - 1];
-        this.selectedItem = curItem;
-    }
-
-
-    updateSelection(event) {
-        const nodeClass = "dx-treeview-node";
-        const selectedClass = "dx-state-focused";
-        const leafNodeClass = "dx-treeview-node-is-leaf";
-        const element: HTMLElement = event.element;
-
-        const rootNodes = element.querySelectorAll(`.${nodeClass}:not(.${leafNodeClass})`);
-        Array.from(rootNodes).forEach(node => {
-            node.classList.remove(selectedClass);
-        });
-
-        let selectedNode = element.querySelector(`.${nodeClass}.${selectedClass}`);
-        while (selectedNode && selectedNode.parentElement) {
-            if (selectedNode.classList.contains(nodeClass)) {
-                selectedNode.classList.add(selectedClass);
+        this.url = this.router.url.split("?")[0];
+        this.routerSub = this.router.events.subscribe(e => {
+            if (e instanceof NavigationEnd) {
+                this.url = e.urlAfterRedirects.split("?")[0];
+                this.expandActive();
+                this.changeRef.markForCheck();
             }
-
-            selectedNode = selectedNode.parentElement;
-        }
-    }
-
-    onItemClick(event) {
-        this.selectedItemChanged.emit(event);
-        this._selectedItem = event.itemData.path;
-    }
-
-    onMenuInitialized(event) {
-        event.component.option("deferRendering", false);
-
-        setTimeout(() => {
-            if (this.menu && this.menu.instance)
-                this.menu.instance.collapseAll();
-        }, 100);
-    }
-
-
-    ngAfterViewInit() {
-        this.setInitialItem();
-
+        });
+        this.expandActive();
     }
 
     ngOnDestroy() {
+        this.routerSub?.unsubscribe();
+    }
 
+    isActive(item: NavItem) {
+        if (!item.path) {
+            return false;
+        }
+        // the visualization entry in the admin menu leaves the admin, it is never the current page
+        if (item.path === "/visualization") {
+            return false;
+        }
+        // /admin/logic-editor/<page> keeps "Logik" active
+        return this.url === item.path || this.url.startsWith(item.path + "/");
+    }
+
+    onItemClick(event: MouseEvent, item: NavItem) {
+        event.preventDefault();
+
+        if (item.items?.length && this.compactMode) {
+            item.expanded = true;
+            this.expandRequested.emit();
+            return;
+        }
+        if (item.path) {
+            this.router.navigateByUrl(item.path);
+            this.navigated.emit(item);
+        } else if (item.items?.length) {
+            item.expanded = !item.expanded;
+        }
+    }
+
+    toggle(event: MouseEvent, item: NavItem) {
+        event.preventDefault();
+        event.stopPropagation();
+        item.expanded = !item.expanded;
+    }
+
+    /** opens the parents of the current page */
+    private expandActive() {
+        const visit = (items: NavItem[]): boolean => {
+            let found = false;
+            for (const item of items ?? []) {
+                const childActive = visit(item.items);
+                if (childActive && !item.group) {
+                    item.expanded = true;
+                }
+                found = found || childActive || this.isActive(item);
+            }
+            return found;
+        };
+        visit(this._items);
     }
 }
 
 @NgModule({
-    imports: [CommonModule, DxTreeViewModule, L10nTranslationModule, FontAwesomeModule, DxScrollViewModule, DxLoadIndicatorModule],
+    imports: [CommonModule, L10nTranslationModule, FontAwesomeModule, DxLoadIndicatorModule],
     declarations: [SideNavigationMenuComponent],
     exports: [SideNavigationMenuComponent]
 })

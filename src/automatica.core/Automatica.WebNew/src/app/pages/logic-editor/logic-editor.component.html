@@ -9,15 +9,8 @@
       </p3-config-menu>
     }
 
-    <as-split direction="horizontal">
-      <as-split-area [size]="20">
-        <p3-propertyeditor #propertyEditor (validate)="validate($event)" (scan)="scan($event)"
-          (fileUploaded)="fileUploaded($event)" [userGroups]="userGroups" [item]="selectedItem"
-          [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
-          (saveLearnedNodes)="saveLearnedNodes($event)" (unselectItem)="unselectItem()" (onChanged)="onPropertyChanged($event)"
-        [isLoading]="isLoading"></p3-propertyeditor>
-      </as-split-area>
-      <as-split-area [size]="20">
+    <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
+      <as-split-area [size]="22" [minSize]="14">
 
         <dx-tab-panel class="h-100" itemTitleTemplate="title">
           <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
@@ -31,7 +24,7 @@
           <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
             <div *dxTemplate>
               <dx-list #logicPagesList [dataSource]="pagesDataSource" [selectedItems]="[selectedPage]"
-                height="90%" selectionMode="single"
+                height="100%" selectionMode="single"
                 (onSelectionChanged)="onTabSelectionChanged($event)">
                 <div *dxTemplate="let page of 'item'">
                   <span>{{page.Name}}</span>
@@ -49,29 +42,36 @@
         </dx-tab-panel>
 
       </as-split-area>
-      <as-split-area [size]="60">
-        <div class="logic-tab-panel">
-          @for (page of pages; track page) {
-            @if (selectedPage.ObjId == page.ObjId) {
-              <dx-scroll-view #scrollView id="scrollview"
-                [scrollByContent]="false" [scrollByThumb]="false" showScrollbar="always"
-                direction="both" [bounceEnabled]="false" [useNative]="true">
-                <p3-ruleeditor style="display:inline-block"
+      <as-split-area [size]="54" [minSize]="30">
+        <div class="logic-area">
+          @if (pages) {
+            <div class="page-tabs" role="tablist">
+              @for (page of pages; track page.ObjId) {
+                <button type="button" role="tab" class="page-tab" [class.active]="selectedPage?.ObjId == page.ObjId"
+                  [attr.aria-selected]="selectedPage?.ObjId == page.ObjId" (click)="selectLogicPage(page)">
+                  {{ page.Name }}
+                </button>
+              }
+            </div>
+          }
+          <div class="logic-canvas">
+            @for (page of pages; track page.ObjId) {
+              @if (selectedPage?.ObjId == page.ObjId) {
+                <p3-ruleeditor
                   (selectedItemsChanged)="onSelectedItemsChanged($event)"
                   (removeSelectedItem)="removeSelectedItem($event)" [page]="page" id="{{page.ObjId}}"
-                name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
-              </dx-scroll-view>
+                  name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
+              }
             }
-          }
-
+          </div>
         </div>
-        @if (pages) {
-          <dx-tabs width="100%" [showNavButtons]="true" [dataSource]="pagesDataSource"  [(selectedItem)]="selectedPage" itemTemplate="items">
-            <div *dxTemplate="let item of 'items'">
-              {{item.Name}}
-            </div>
-          </dx-tabs>
-        }
+      </as-split-area>
+      <as-split-area [size]="24" [minSize]="18">
+        <p3-propertyeditor #propertyEditor (validate)="validate($event)" (scan)="scan($event)"
+          (fileUploaded)="fileUploaded($event)" [userGroups]="userGroups" [item]="selectedItem"
+          [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
+          (saveLearnedNodes)="saveLearnedNodes($event)" (unselectItem)="unselectItem()" (onChanged)="onPropertyChanged($event)"
+        [isLoading]="isLoading"></p3-propertyeditor>
       </as-split-area>
 
     </as-split>

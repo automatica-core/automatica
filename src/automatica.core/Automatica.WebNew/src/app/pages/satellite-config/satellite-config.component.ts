@@ -4,9 +4,9 @@ import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
-import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
+import { confirm } from "devextreme/ui/dialog";
 
 @Component({
     selector: "app-satellite-config",
@@ -19,24 +19,14 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
   satellites: Satellite[] = [];
   selectedSatellite: Satellite = void 0;
 
+  search = "";
+  loaded = false;
+  /** the list is saved as a whole, adds and deletes wait for "Save" */
+  isDirty = false;
 
-  menuItems: CustomMenuItem[] = [];
-
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
-    icon: "fa-save",
-    items: undefined,
-    command: (event) => { this.save(); }
-  }  
-  
-  menuReload: CustomMenuItem = {
-    id: "reload",
-    label: "Reload",
-    icon: "fa-save",
-    items: undefined,
-    command: (event) => { this.load(); }
-  }
+  createVisible = false;
+  newName = "";
+  createError: string = void 0;
 
   constructor(
     private catService: SatelliteService,
@@ -46,14 +36,6 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
     super(notify, translate, appService);
 
     appService.setAppTitle("COMMON.SATELLITES");
-
-    this.menuItems.push(this.menuSave);
-    this.menuItems.push(this.menuReload);
-
-    this.registerObservable(this.translate.onChange(), () => {
-      this.menuSave.label = translate.translate("COMMON.SAVE");
-    });
-
   }
 
   async ngOnInit() {
@@ -64,24 +46,40 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
     super.baseOnDestroy();
   }
 
+  get onlineCount() {
+    return this.satellites.filter(a => a.Connected).length;
+  }
+
+  get filteredSatellites(): Satellite[] {
+    const q = (this.search || "").trim().toLowerCase();
+    return this.satellites
+      .filter(s => !q || [s.Name, s.Description, s.ClientId].some(v => (v || "").toLowerCase().includes(q)))
+      .sort((a, b) => (a.Name || "").localeCompare(b.Name || ""));
+  }
+
   async load() {
     const loadingDone = this.appService.beginLoading();
 
     try {
+      const selected = this.selectedSatellite?.ObjId;
       this.satellites = await this.catService.getAll();
-
+      this.selectedSatellite = selected ? this.satellites.find(a => a.ObjId === selected) : void 0;
+      this.isDirty = false;
     } catch (error) {
       this.handleError(error);
     } finally {
+      this.loaded = true;
       loadingDone();
     }
   }
+
   async save() {
     const loadingDone = this.appService.beginLoading();
 
     try {
       // only report "saved" once the server confirmed it
       await this.catService.save(this.satellites);
+      this.isDirty = false;
       this.notify.notifySuccess("COMMON.SAVED");
     } catch (error) {
       super.handleError(error);
@@ -90,52 +88,54 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
     }
   }
 
-  colorBoxOnValueChanged($event, cell) {
-    cell.setValue($event.value);
-  }
-  onRowRemoving($event) {
-
+  select(satellite: Satellite) {
+    this.selectedSatellite = satellite;
   }
 
-  itemClick($event) {
-    const item: CustomMenuItem = $event.itemData;
+  closeEditor() {
+    this.selectedSatellite = void 0;
+  }
 
-    if (item && item.command) {
-      item.command($event);
+  onChanged($event) {
+    // edits in the inspector change the object, the list is saved with "Save"
+    this.isDirty = true;
+  }
+
+  async deleteSelected() {
+    const satellite = this.selectedSatellite;
+    if (!satellite) {
+      return;
     }
-  }
-
-  onRowUpdating($event) {
-    const oldData: Satellite = $event.oldData;
-
-    if ($event.newData.DisplayName || $event.newData.DisplayDescription) {
-      $event.newData.DisplayName = this.translate.translate(oldData.Name);
-      $event.newData.DisplayDescription = ""; // oldData.Description;
+    const message = this.translate.translate("UI.SATELLITES.DELETE_CONFIRM", { name: satellite.Name || "" });
+    const ok = await confirm(message, this.translate.translate("UI.SATELLITES.DELETE_TITLE"));
+    if (!ok) {
+      return;
     }
+    this.satellites = this.satellites.filter(a => a !== satellite);
+    this.selectedSatellite = void 0;
+    this.isDirty = true;
   }
 
-  onInitNewRow($event) {
+  openCreate() {
+    this.newName = "";
+    this.createError = void 0;
+    this.createVisible = true;
+  }
+
+  create() {
+    const name = (this.newName || "").trim();
+    if (!name) {
+      this.createError = this.translate.translate("UI.SATELLITES.NAME_REQUIRED");
+      return;
+    }
     const newObject = new Satellite();
     newObject.ObjId = Guid.MakeNew().ToString();
+    newObject.Name = name;
     newObject.addVirtualProperties();
 
-    $event.data = newObject;
-
-  }
-
-  onRowInserting($event) {
-    const newObject = new Satellite();
-    newObject.addVirtualProperties();
-
-    Object.assign(newObject, $event.data);
-    $event.data = newObject;
-  }
-
-  onRowClicked($event) {
-    this.selectedSatellite = $event.data;
-  }
-
-  onInitialized($event) {
-    $event.component.columnOption("command:edit", "width", 150);
+    this.satellites = [...this.satellites, newObject];
+    this.selectedSatellite = newObject;
+    this.isDirty = true;
+    this.createVisible = false;
   }
 }
