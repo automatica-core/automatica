@@ -65,6 +65,17 @@ namespace Automatica.Core.WebApi.Tests.Http
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetAllByCategory)}",
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetAllByArea)}",
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetPage)}",
+            $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.GetBlinds)}",
+        };
+
+        /// <summary>
+        /// Actions for the visualization and the administrators (not for viewers): the auto switch of the shading on the
+        /// blind tiles. They need the roles visu or administrator on top of the viewer policy of their controller.
+        /// </summary>
+        private static readonly HashSet<string> IntendedVisuActions = new()
+        {
+            $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.SetAutomatic)}",
+            $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.Resume)}",
         };
 
         private readonly WebApiHost _host;
@@ -100,6 +111,9 @@ namespace Automatica.Core.WebApi.Tests.Http
         private static bool RequiresAdmin((Type controller, MethodInfo action) a) =>
             Authorize(a).Any(x => x.Policy == Role.AdminRole || (x.Roles ?? "").Split(',').Select(r => r.Trim()).Contains(Role.AdminRole));
 
+        private static IEnumerable<string> Roles(AuthorizeAttribute a) =>
+            (a.Roles ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
         [Fact]
         public void Controllers_AreFound()
         {
@@ -130,6 +144,21 @@ namespace Automatica.Core.WebApi.Tests.Http
         {
             var nonAdmin = AllActions().Where(a => !IsAnonymous(a) && !RequiresAdmin(a)).Select(Name).Distinct().OrderBy(a => a).ToList();
             Assert.Equal(IntendedNonAdminActions.OrderBy(a => a).ToList(), nonAdmin);
+        }
+
+        [Fact]
+        public void VisuActions_AreExactlyTheIntendedOnes()
+        {
+            // an action that lets the visu role in next to the administrators
+            var visu = AllActions().Where(a => Authorize(a).Any(x => Roles(x).Contains(Role.VisuRole))).Select(Name).Distinct().OrderBy(a => a).ToList();
+            Assert.Equal(IntendedVisuActions.OrderBy(a => a).ToList(), visu);
+
+            foreach (var action in AllActions().Where(a => IntendedVisuActions.Contains(Name(a))))
+            {
+                var authorize = Authorize(action);
+                Assert.Contains(authorize, a => a.Policy == Role.ViewerRole);
+                Assert.Contains(authorize, a => Roles(a).OrderBy(r => r).SequenceEqual(new[] { Role.AdminRole, Role.VisuRole }.OrderBy(r => r)));
+            }
         }
 
         [Fact]
@@ -226,7 +255,10 @@ namespace Automatica.Core.WebApi.Tests.Http
             var client = _host.CreateClient(_host.CreateVisuToken());
             var failures = new List<string>();
             var adminEndpoints = Endpoints().Where(a => !a.anonymous && a.authorize.Any(x =>
-                x.Policy == Role.AdminRole || (x.Roles ?? "").Split(',').Select(r => r.Trim()).Contains(Role.AdminRole))).ToList();
+                    x.Policy == Role.AdminRole || (x.Roles ?? "").Split(',').Select(r => r.Trim()).Contains(Role.AdminRole)))
+                // the visu actions let the visu role in on purpose (VisuActions_AreExactlyTheIntendedOnes)
+                .Where(a => !IntendedVisuActions.Contains($"{a.action.ControllerTypeInfo.Name}.{a.action.MethodInfo.Name}"))
+                .ToList();
 
             Assert.NotEmpty(adminEndpoints);
             foreach (var (method, url, _, _, _) in adminEndpoints)

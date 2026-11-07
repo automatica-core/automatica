@@ -63,7 +63,8 @@ namespace Automatica.Core.Mcp
                 .WithTools<DataPointTools>()
                 .WithTools<HistoryTools>()
                 .WithTools<LogicTools>()
-                .WithTools<AutomationTools>();
+                .WithTools<AutomationTools>()
+                .WithTools<ShadingTools>();
 
             return services;
         }

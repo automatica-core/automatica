@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Automations;
+using Automatica.Core.EF.Models.Shading;
 using Automatica.Core.EF.Models.Categories;
 using System;
 using Automatica.Core.EF.Interceptors;
@@ -85,6 +86,10 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<Automation> Automations { get; set; }
         public virtual DbSet<AutomationReference> AutomationReferences { get; set; }
         public virtual DbSet<AutomationRun> AutomationRuns { get; set; }
+
+        public virtual DbSet<ShadingSettings> ShadingSettings { get; set; }
+        public virtual DbSet<ShadingFacade> ShadingFacades { get; set; }
+        public virtual DbSet<ShadingBlind> ShadingBlinds { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -1538,6 +1543,45 @@ namespace Automatica.Core.EF.Models
                     .WithMany().HasForeignKey(d => d.This2Automation)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("Automation2AutomationRun");
+
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<ShadingSettings>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.Definition).IsRequired();
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<ShadingFacade>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.IsEnabled).HasDefaultValue(true);
+                entity.Property(e => e.Definition).IsRequired();
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<ShadingBlind>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.IsEnabled).HasDefaultValue(true);
+                entity.Property(e => e.Definition).IsRequired();
+
+                entity.HasIndex(e => e.This2RuleInstance).IsUnique();
+
+                entity.HasOne(d => d.This2RuleInstanceNavigation)
+                    .WithMany().HasForeignKey(d => d.This2RuleInstance)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("RuleInstance2ShadingBlind");
+
+                entity.HasOne(d => d.This2ShadingFacadeNavigation)
+                    .WithMany().HasForeignKey(d => d.This2ShadingFacade)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("ShadingFacade2ShadingBlind");
 
                 entity.Ignore(e => e.TypeInfo);
             });

@@ -10,6 +10,13 @@
       [attr.aria-label]="('UI.VISU.SHUTTER_DOWN' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.SHUTTER_DOWN' | translateAsync">
       <fa-icon icon="chevron-down"></fa-icon>
     </button>
+    @if (shadingState) {
+      <button type="button" class="shutter-btn shading {{ shadingClass }}" (click)="toggleShading()" [disabled]="shadingBusy"
+        [attr.aria-pressed]="shadingState.automatic" [attr.aria-label]="('UI.VISU.SHADING_AUTO' | translateAsync) + ': ' + displayText"
+        [attr.title]="shadingHint">
+        <fa-icon icon="sun"></fa-icon>
+      </button>
+    }
   </div>
 
 </app-visualization-control>

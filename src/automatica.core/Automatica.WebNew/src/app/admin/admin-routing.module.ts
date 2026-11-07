@@ -18,6 +18,7 @@ import { UsergroupConfigComponent } from "../pages/usergroup-config/usergroup-co
 import { VisualisationEditComponent } from "../pages/visualisation-edit/visualisation-edit.component";
 import { AutomationsListComponent } from "../pages/automations/automations-list/automations-list.component";
 import { AutomationEditorComponent } from "../pages/automations/automation-editor/automation-editor.component";
+import { ShadingPageComponent } from "../pages/shading/shading-page/shading-page.component";
 
 const routes: Routes =[
     {
@@ -44,6 +45,9 @@ const routes: Routes =[
         // "new" creates a rule
         path: "automations/:id",
         component: AutomationEditorComponent
+    }, {
+        path: "shading",
+        component: ShadingPageComponent
     }, {
         path: "visualisation",
         component: VisualisationEditComponent,

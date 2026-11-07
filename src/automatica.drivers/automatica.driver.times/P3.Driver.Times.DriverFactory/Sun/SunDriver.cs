@@ -60,6 +60,14 @@ namespace P3.Driver.Times.DriverFactory.Sun
             {
                 return new SunDriverNode(ctx, (a, b) => IsSunSet(a, b));
             }
+            if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunAzimuthGuid)
+            {
+                return new SunDriverNode(ctx, (a, b) => Azimuth(a));
+            }
+            if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunElevationGuid)
+            {
+                return new SunDriverNode(ctx, (a, b) => Elevation(a));
+            }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.IsDaylight)
             {
                 return new SunDriverNode(ctx, (a, b) =>
@@ -97,6 +105,24 @@ namespace P3.Driver.Times.DriverFactory.Sun
         internal static bool IsDawn(SolarTimes solarTimes, System.DateTime now)
         {
             return now >= solarTimes.Sunrise.Subtract(TwilightDuration) && now < solarTimes.Sunrise;
+        }
+
+        /// <summary>
+        /// Sun azimuth in degrees clockwise from north (90 east, 180 south, 270 west), rounded to 0.1° so the value is
+        /// dispatched about every 30 seconds and not every second
+        /// </summary>
+        internal static double Azimuth(SolarTimes solarTimes)
+        {
+            var azimuth = (double)(decimal)solarTimes.SolarAzimuth % 360;
+            return Math.Round(azimuth < 0 ? azimuth + 360 : azimuth, 1);
+        }
+
+        /// <summary>
+        /// Sun elevation above the horizon in degrees (negative at night), rounded to 0.1°
+        /// </summary>
+        internal static double Elevation(SolarTimes solarTimes)
+        {
+            return Math.Round((double)(decimal)solarTimes.SolarElevation, 1);
         }
 
         internal static bool IsSunRise(SolarTimes solarTimes, System.DateTime now)

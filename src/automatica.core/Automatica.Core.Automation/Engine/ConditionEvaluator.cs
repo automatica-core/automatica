@@ -84,6 +84,15 @@ namespace Automatica.Core.Automation.Engine
                         message = instance == null ? "Control not found" : "Control has no on/off state";
                     }
                     break;
+                case ShadingCondition shading:
+                    var isShading = _environment.IsShading(shading.Control);
+                    value = isShading;
+                    passed = isShading.HasValue && isShading.Value == shading.Shading;
+                    if (!isShading.HasValue)
+                    {
+                        message = "Blind has no automatic shading";
+                    }
+                    break;
                 case TriggeredByCondition triggeredBy:
                     value = context.TriggerId;
                     passed = !string.IsNullOrEmpty(triggeredBy.TriggerId) && string.Equals(triggeredBy.TriggerId, context.TriggerId, StringComparison.Ordinal);
@@ -214,6 +223,7 @@ namespace Automatica.Core.Automation.Engine
                     break;
                 case TimeCondition:
                 case SunCondition:
+                case ShadingCondition:
                     timeBased = true;
                     break;
             }

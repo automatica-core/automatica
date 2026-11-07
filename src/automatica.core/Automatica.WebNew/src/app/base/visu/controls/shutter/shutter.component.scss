@@ -66,6 +66,22 @@
     }
 }
 
+// the automatic shading switch: lit while the automatic is in charge
+.shutter-btn.shading {
+    color: var(--muted);
+
+    &.auto {
+        color: var(--lamp);
+        border-color: color-mix(in srgb, var(--lamp) 50%, var(--line));
+        background: color-mix(in srgb, var(--lamp) 12%, var(--surface-2));
+    }
+
+    &.manual {
+        color: var(--lamp);
+        border-style: dashed;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .shutter-position i {
         transition: none;

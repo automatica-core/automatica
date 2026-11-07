@@ -59,6 +59,17 @@ namespace Automatica.Core.Automation.Engine
         bool HasLocation { get; }
 
         /// <summary>
+        /// Whether the automatic shading is shading the blind right now, null when the blind is not configured for shading
+        /// </summary>
+        bool? IsShading(Guid controlId);
+
+        /// <summary>
+        /// Pauses (false) or resumes (true) the automatic shading of a blind
+        /// </summary>
+        /// <returns>False when the blind is not configured for shading</returns>
+        Task<bool> SetShadingAsync(Guid controlId, bool enabled, CancellationToken token);
+
+        /// <summary>
         /// Local time of <paramref name="sunEvent"/> on <paramref name="date"/>, null when the sun does not rise/set that day
         /// </summary>
         DateTimeOffset? GetSunTime(DateOnly date, SunEvent sunEvent);

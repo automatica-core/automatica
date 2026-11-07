@@ -137,6 +137,7 @@ namespace Automatica.Core.Automation.Actions
                 IfAction ifAction => IfAsync(ifAction, path, step, run),
                 RunAutomationAction runAutomation => RunAutomationAsync(runAutomation, step, run),
                 EnableAutomationAction enable => EnableAutomationAsync(enable, step, run),
+                ShadingAction shading => ShadingAsync(shading, step, run),
                 StopAction stop => throw new StopRunException(string.IsNullOrWhiteSpace(stop.Reason) ? "Stopped by a stop action" : stop.Reason),
                 _ => throw new NotSupportedException($"Action {action.GetType().Name} is not supported")
             };
@@ -224,6 +225,34 @@ namespace Automatica.Core.Automation.Actions
             {
                 throw new InvalidOperationException(string.Join("; ", errors));
             }
+        }
+
+        private async Task ShadingAsync(ShadingAction action, RunStep step, AutomationRunContext run)
+        {
+            var targets = new HashSet<Guid>(action.Controls ?? new List<Guid>());
+            if (action.Area.HasValue || action.Category.HasValue)
+            {
+                foreach (var control in _environment.GetControls(action.Area, action.IncludeSubAreas, action.Category).OfType<IBlind>())
+                {
+                    targets.Add(control.Id);
+                }
+            }
+
+            var done = 0;
+            foreach (var id in targets)
+            {
+                run.Token.ThrowIfCancellationRequested();
+                if (await _environment.SetShadingAsync(id, action.Enable, run.Token).ConfigureAwait(false))
+                {
+                    done++;
+                }
+            }
+
+            run.Update(() =>
+            {
+                step.Value = done;
+                step.Message = done == 0 ? "No blinds with automatic shading" : null;
+            });
         }
 
         /// <returns>What was sent, null when the control does not support the command</returns>

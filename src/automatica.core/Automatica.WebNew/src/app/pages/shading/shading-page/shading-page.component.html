@@ -1,0 +1,838 @@
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.SHADING.TITLE' | translateAsync }}</h1>
+    @if (loaded && settings) {
+      <span class="global">
+        <dx-switch [value]="settings.isEnabled" [hint]="'UI.SHADING.GLOBAL_HINT' | translateAsync"
+          (onValueChanged)="setGlobalEnabled($event.value)"></dx-switch>
+        <span class="sub">{{ (settings.isEnabled ? 'UI.SHADING.GLOBAL_ON' : 'UI.SHADING.GLOBAL_OFF') | translateAsync }}</span>
+      </span>
+      @if (settingsDirty) {
+        <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+      }
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button icon="refresh" stylingMode="text" [hint]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      @if (loaded && !loadError) {
+        @switch (tab) {
+          @case ('facades') {
+            <dx-button type="default" icon="add" [text]="'UI.SHADING.FACADES.ADD' | translateAsync" (onClick)="newFacade()"></dx-button>
+          }
+          @case ('blinds') {
+            <dx-button type="default" icon="add" [text]="'UI.SHADING.BLINDS.ADD' | translateAsync" (onClick)="openAdd()"></dx-button>
+          }
+          @case ('settings') {
+            <dx-button icon="undo" stylingMode="text" [hint]="'UI.SHADING.SETTINGS.RESET' | translateAsync" [disabled]="!settingsDirty"
+              (onClick)="resetSettings()"></dx-button>
+            <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync" [disabled]="savingSettings || !settingsDirty"
+              (onClick)="saveSettings()"></dx-button>
+          }
+        }
+      }
+    </div>
+  </div>
+
+  @if (loadError) {
+    <div class="panel">
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
+        <b>{{ 'UI.SHADING.LOAD_FAILED' | translateAsync }}</b>
+        <span class="mono">{{ loadError }}</span>
+        <dx-button icon="refresh" [text]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      </div>
+    </div>
+  } @else if (loaded && settings) {
+    <div class="seg tabs" role="tablist">
+      <button type="button" role="tab" [class.on]="tab === 'overview'" [attr.aria-selected]="tab === 'overview'" (click)="tab = 'overview'">
+        {{ 'UI.SHADING.TAB.OVERVIEW' | translateAsync }}
+      </button>
+      <button type="button" role="tab" [class.on]="tab === 'facades'" [attr.aria-selected]="tab === 'facades'" (click)="tab = 'facades'">
+        {{ 'UI.SHADING.TAB.FACADES' | translateAsync }} <span class="count">{{ facades.length }}</span>
+      </button>
+      <button type="button" role="tab" [class.on]="tab === 'blinds'" [attr.aria-selected]="tab === 'blinds'" (click)="tab = 'blinds'">
+        {{ 'UI.SHADING.TAB.BLINDS' | translateAsync }} <span class="count">{{ blinds.length }}</span>
+      </button>
+      <button type="button" role="tab" [class.on]="tab === 'settings'" [attr.aria-selected]="tab === 'settings'" (click)="tab = 'settings'">
+        {{ 'UI.SHADING.TAB.SETTINGS' | translateAsync }}
+        @if (settingsProblems.length) { <span class="count bad">{{ settingsProblems.length }}</span> }
+      </button>
+    </div>
+
+    @if (status && !status.hasLocation) {
+      <div class="alert warn">
+        <b>{{ 'UI.SHADING.NO_LOCATION' | translateAsync }}</b>
+        <span>{{ 'UI.SHADING.NO_LOCATION_HINT' | translateAsync }}</span>
+      </div>
+    }
+
+    <!-- ================= overview ================= -->
+    @if (tab === 'overview') {
+      <div class="overview">
+        <div class="panel compass-panel">
+          <shading-compass [sun]="shownSun" [path]="sunPath" [facades]="compassFacades" [selected]="selectedFacade"
+            [label]="'UI.SHADING.OVERVIEW.COMPASS' | translateAsync"></shading-compass>
+          <div class="time">
+            <div class="time-head">
+              <span class="eyebrow">{{ 'UI.SHADING.OVERVIEW.PREVIEW' | translateAsync }}</span>
+              <b class="mono">{{ previewTimeLabel }}</b>
+              <span class="spacer"></span>
+              @if (previewMinutes !== null) {
+                <dx-button stylingMode="text" icon="revert" [text]="'UI.SHADING.OVERVIEW.BACK_TO_NOW' | translateAsync" (onClick)="previewNow()"></dx-button>
+              }
+            </div>
+            <dx-slider [min]="0" [max]="1439" [step]="15" [value]="previewMinutes ?? nowMinutes"
+              [elementAttr]="{ 'aria-label': ('UI.SHADING.OVERVIEW.PREVIEW' | translateAsync) }"
+              (onValueChanged)="$event.event && previewChanged($event.value)"></dx-slider>
+            <span class="hint">{{ 'UI.SHADING.OVERVIEW.PREVIEW_HINT' | translateAsync }}</span>
+          </div>
+          <div class="legend">
+            <span><i class="sw sunny"></i>{{ 'UI.SHADING.OVERVIEW.LEGEND_SUNNY' | translateAsync }}</span>
+            <span><i class="sw lit"></i>{{ 'UI.SHADING.OVERVIEW.LEGEND_LIT' | translateAsync }}</span>
+            <span><i class="sw"></i>{{ 'UI.SHADING.OVERVIEW.LEGEND_SHADE' | translateAsync }}</span>
+          </div>
+        </div>
+
+        <div class="side">
+          <div class="panel">
+            <div class="block">
+              <h3><fa-icon [icon]="['fas', 'sun']"></fa-icon>{{ 'UI.SHADING.OVERVIEW.CONDITIONS' | translateAsync }}
+                @if (preview) { <span class="pill accent">{{ 'UI.SHADING.OVERVIEW.PREVIEW_AT' | translateAsync: { time: previewTimeLabel } }}</span> }
+              </h3>
+              <dl class="kv">
+                <dt>{{ 'UI.SHADING.OVERVIEW.SUN' | translateAsync }}</dt>
+                <dd>
+                  @if (shownSun) {
+                    {{ directionLabel(shownSun.azimuth) }}, {{ 'UI.SHADING.OVERVIEW.ELEVATION' | translateAsync: { value: number(shownSun.elevation, '°') } }}
+                    @if (!preview && status?.sunSource) { <span class="src">{{ sourceLabel(status.sunSource) }}</span> }
+                  } @else {
+                    {{ 'UI.SHADING.OVERVIEW.NO_SUN' | translateAsync }}
+                  }
+                </dd>
+                @if (!preview) {
+                  <dt>{{ 'UI.SHADING.OVERVIEW.WIND' | translateAsync }}</dt>
+                  <dd>
+                    {{ number(status?.wind?.value, 'm/s') }}
+                    @if (status?.windAlarm) { <span class="pill bad">{{ 'UI.SHADING.OVERVIEW.ALARM' | translateAsync }}</span> }
+                  </dd>
+                  <dt>{{ 'UI.SHADING.OVERVIEW.RAIN' | translateAsync }}</dt>
+                  <dd>
+                    @if (status?.rain) { {{ (status.rain.value > 0 ? 'UI.SHADING.OVERVIEW.RAINING' : 'UI.SHADING.OVERVIEW.DRY') | translateAsync }} } @else { – }
+                    @if (status?.rainAlarm) { <span class="pill bad">{{ 'UI.SHADING.OVERVIEW.ALARM' | translateAsync }}</span> }
+                  </dd>
+                  <dt>{{ 'UI.SHADING.OVERVIEW.TEMPERATURE' | translateAsync }}</dt>
+                  <dd>
+                    {{ number(status?.outsideTemperature?.value, '°C') }}
+                    @if (status?.frost) { <span class="pill bad">{{ 'UI.SHADING.OVERVIEW.FROST' | translateAsync }}</span> }
+                  </dd>
+                }
+                <dt>{{ 'UI.SHADING.OVERVIEW.SEASON' | translateAsync }}</dt>
+                <dd>
+                  @if ((preview ?? status)?.winter) {
+                    <span class="pill ok"><fa-icon [icon]="['fas', 'snowflake']"></fa-icon>{{ 'UI.SHADING.OVERVIEW.WINTER' | translateAsync }}</span>
+                  } @else {
+                    {{ (settings.winter?.mode === 'off' ? 'UI.SHADING.OVERVIEW.NO_WINTER_MODE' : 'UI.SHADING.OVERVIEW.SUMMER') | translateAsync }}
+                  }
+                </dd>
+              </dl>
+            </div>
+
+            <div class="block">
+              <h3><fa-icon [icon]="['fas', 'compass']"></fa-icon>{{ 'UI.SHADING.TAB.FACADES' | translateAsync }}</h3>
+              @for (f of facades; track f.objId) {
+                @let st = facadeState(f);
+                <div class="fac-row" (mouseenter)="selectedFacade = f.objId" (mouseleave)="selectedFacade = null">
+                  <span class="arrow" [style.transform]="'rotate(' + (f.azimuth - 45) + 'deg)'" aria-hidden="true">
+                    <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                  </span>
+                  <span class="nm">
+                    <b>{{ f.name }}</b>
+                    <span>{{ directionLabel(f.azimuth) }}</span>
+                  </span>
+                  <span class="val">
+                    <span class="mono">{{ lux(st?.brightness?.value) }}</span>
+                    @if (st?.brightness?.source) { <span class="src">{{ sourceLabel(st.brightness.source) }}</span> }
+                  </span>
+                  <span class="pills">
+                    @if (!f.isEnabled) {
+                      <span class="pill off">{{ 'UI.SHADING.OFF' | translateAsync }}</span>
+                    } @else if (st?.sunOnFacade && st?.sunny) {
+                      <span class="pill warn">{{ 'UI.SHADING.FACADES.SUNNY' | translateAsync }}</span>
+                    } @else if (st?.sunOnFacade) {
+                      <span class="pill accent">{{ 'UI.SHADING.FACADES.SUN_NOT_BRIGHT' | translateAsync }}</span>
+                    } @else {
+                      <span class="pill off">{{ 'UI.SHADING.FACADES.NO_SUN' | translateAsync }}</span>
+                    }
+                  </span>
+                </div>
+              } @empty {
+                <p class="hint">{{ 'UI.SHADING.FACADES.EMPTY_HINT' | translateAsync }}</p>
+              }
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="block">
+              <h3>
+                <fa-icon [icon]="['fad', 'blinds']"></fa-icon>{{ 'UI.SHADING.TAB.BLINDS' | translateAsync }}
+                <span class="spacer"></span>
+                @if (counts.shading) { <span class="pill accent">{{ 'UI.SHADING.OVERVIEW.COUNT_SHADING' | translateAsync: { count: counts.shading } }}</span> }
+                @if (counts.manual) { <span class="pill warn">{{ 'UI.SHADING.OVERVIEW.COUNT_MANUAL' | translateAsync: { count: counts.manual } }}</span> }
+                @if (counts.alarm) { <span class="pill bad">{{ 'UI.SHADING.OVERVIEW.COUNT_ALARM' | translateAsync: { count: counts.alarm } }}</span> }
+              </h3>
+              @for (r of blindRows; track r.blind.controlId) {
+                <div class="blind-row">
+                  <dx-switch class="tog" [value]="!r.blind.isPaused" [disabled]="isToggling(r.blind)"
+                    [hint]="'UI.SHADING.BLINDS.AUTOMATIC' | translateAsync" (onValueChanged)="setAutomatic(r.blind, $event.value)"></dx-switch>
+                  <span class="nm">
+                    <b>{{ r.blind.name }}</b>
+                    <span>{{ r.facadeName || r.direction }}@if (r.facadeName && r.direction) { · {{ r.direction }} }</span>
+                  </span>
+                  <span class="state">
+                    @if (preview) {
+                      @if (r.preview?.shade) {
+                        <span class="pill accent">{{ 'UI.SHADING.OVERVIEW.WOULD_SHADE' | translateAsync: { position: r.preview.targetPosition } }}</span>
+                      } @else {
+                        <span class="pill off">{{ (r.preview?.sunOnWindow ? 'UI.SHADING.OVERVIEW.WOULD_STAY_SUN' : 'UI.SHADING.OVERVIEW.WOULD_STAY') | translateAsync }}</span>
+                      }
+                    } @else if (r.status) {
+                      <span class="pill {{ modeClass(r.status.mode) }}">{{ 'UI.SHADING.MODE.' + r.status.mode.toUpperCase() | translateAsync }}</span>
+                      <span class="why">{{ r.status.reason }}</span>
+                    }
+                  </span>
+                  <span class="pos mono">
+                    @if (r.status) {
+                      {{ r.status.position }} %
+                      @if (r.status.targetPosition !== null && r.status.targetPosition !== undefined && r.status.targetPosition !== r.status.position) {
+                        → {{ r.status.targetPosition }} %
+                      }
+                      @if (r.status.slat !== null && r.status.slat !== undefined) { <span class="slat">∠ {{ r.status.slat }} %</span> }
+                    }
+                  </span>
+                  <span class="act">
+                    @if (r.status?.mode === 'manual') {
+                      <dx-button stylingMode="text" icon="refresh" [text]="'UI.SHADING.BLINDS.RESUME' | translateAsync"
+                        [hint]="'UI.SHADING.BLINDS.RESUME_HINT' | translateAsync" (onClick)="resume(r.blind)"></dx-button>
+                    }
+                  </span>
+                </div>
+              } @empty {
+                <p class="hint">{{ 'UI.SHADING.BLINDS.EMPTY_HINT' | translateAsync }}</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ================= facades ================= -->
+    @if (tab === 'facades') {
+      <div class="panel list">
+        @for (f of facades; track f.objId) {
+          <div class="li clickable" role="button" tabindex="0" (click)="editFacade(f)" (keydown.enter)="editFacade(f)">
+            <span class="ico arrow-ico" aria-hidden="true">
+              <fa-icon [icon]="['fas', 'location-arrow']" [style.transform]="'rotate(' + (f.azimuth - 45) + 'deg)'"></fa-icon>
+            </span>
+            <span class="nm">
+              <b>{{ f.name }}</b>
+              <span>{{ directionLabel(f.azimuth) }} · {{ 'UI.SHADING.FACADES.ACCEPTANCE' | translateAsync: { angle: f.definition.acceptanceAngle } }}</span>
+            </span>
+            <span class="act" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
+              <span class="hint">{{ 'UI.SHADING.FACADES.BLIND_COUNT' | translateAsync: { count: blindCount(f) } }}</span>
+              <dx-switch [value]="f.isEnabled" [hint]="'UI.SHADING.FACADES.ENABLED' | translateAsync" (onValueChanged)="toggleFacade(f, $event.value)"></dx-switch>
+              <dx-button icon="trash" stylingMode="text" [hint]="'UI.SHADING.FACADES.DELETE' | translateAsync" (onClick)="deleteFacade(f)"></dx-button>
+            </span>
+            <span></span>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <fa-icon class="icon" [icon]="['fas', 'compass']"></fa-icon>
+            <b>{{ 'UI.SHADING.FACADES.EMPTY' | translateAsync }}</b>
+            <span>{{ 'UI.SHADING.FACADES.EMPTY_HINT' | translateAsync }}</span>
+            <dx-button type="default" icon="add" [text]="'UI.SHADING.FACADES.ADD' | translateAsync" (onClick)="newFacade()"></dx-button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ================= blinds ================= -->
+    @if (tab === 'blinds') {
+      <div class="panel list">
+        @for (r of blindRows; track r.blind.controlId) {
+          <div class="li clickable" role="button" tabindex="0" (click)="editBlind(r.blind)" (keydown.enter)="editBlind(r.blind)">
+            <span class="ico" aria-hidden="true"><fa-icon [icon]="['fad', r.blind.definition.type === 'venetian' ? 'blinds' : 'blinds-raised']"></fa-icon></span>
+            <span class="nm">
+              <b>{{ r.blind.name }}</b>
+              <span>
+                {{ 'UI.SHADING.BLIND_TYPE.' + r.blind.definition.type.toUpperCase() | translateAsync }}
+                · {{ r.facadeName || ('UI.SHADING.BLINDS.OWN_DIRECTION' | translateAsync) }}
+                @if (r.direction) { · {{ r.direction }} }
+              </span>
+              @if (!r.blind.isLoaded) { <span class="err">{{ 'UI.SHADING.BLINDS.NOT_LOADED' | translateAsync }}</span> }
+            </span>
+            <span class="act" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
+              @if (!r.blind.isEnabled) {
+                <span class="pill off">{{ 'UI.SHADING.OFF' | translateAsync }}</span>
+              } @else if (r.status) {
+                <span class="pill {{ modeClass(r.status.mode) }}">{{ 'UI.SHADING.MODE.' + r.status.mode.toUpperCase() | translateAsync }}</span>
+              }
+              <dx-switch [value]="!r.blind.isPaused" [disabled]="isToggling(r.blind)" [hint]="'UI.SHADING.BLINDS.AUTOMATIC' | translateAsync"
+                (onValueChanged)="setAutomatic(r.blind, $event.value)"></dx-switch>
+              <dx-button icon="trash" stylingMode="text" [hint]="'UI.SHADING.BLINDS.DELETE' | translateAsync" (onClick)="deleteBlind(r.blind)"></dx-button>
+            </span>
+            <span></span>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <fa-icon class="icon" [icon]="['fad', 'blinds']"></fa-icon>
+            <b>{{ 'UI.SHADING.BLINDS.EMPTY' | translateAsync }}</b>
+            <span>{{ 'UI.SHADING.BLINDS.EMPTY_HINT' | translateAsync }}</span>
+            <dx-button type="default" icon="add" [text]="'UI.SHADING.BLINDS.ADD' | translateAsync" (onClick)="openAdd()"></dx-button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ================= settings ================= -->
+    @if (tab === 'settings') {
+      @if (settingsProblems.length) {
+        <ul class="problems">
+          @for (p of settingsProblems; track $index) {
+            <li><span class="mono">{{ p.path }}</span>{{ problemText(p) }}</li>
+          }
+        </ul>
+      }
+      <div class="panel settings">
+        <div class="block">
+          <h3><fa-icon [icon]="['fas', 'sun']"></fa-icon>{{ 'UI.SHADING.SETTINGS.SUN' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.SHADING.SETTINGS.SUN_HINT' | translateAsync }}</p>
+          <div class="two">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.SETTINGS.SUN_AZIMUTH' | translateAsync }}</span>
+              <shading-signal-editor [signal]="settings.sunAzimuth" kind="sun" unit="°"></shading-signal-editor>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.SETTINGS.SUN_ELEVATION' | translateAsync }}</span>
+              <shading-signal-editor [signal]="settings.sunElevation" kind="sun" unit="°"></shading-signal-editor>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3><fa-icon [icon]="['fas', 'cloud-sun']"></fa-icon>{{ 'UI.SHADING.SETTINGS.BRIGHTNESS' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.SHADING.SETTINGS.BRIGHTNESS_HINT' | translateAsync }}</p>
+          <shading-signal-editor [signal]="settings.brightness" kind="brightness" unit="lx"
+            [emptyText]="'UI.SHADING.SETTINGS.BRIGHTNESS_EMPTY' | translateAsync"></shading-signal-editor>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.ON_LUX' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.thresholds.onLux" [min]="1" [step]="1000" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.ON_DELAY' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.thresholds.onDelayMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.OFF_LUX' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.thresholds.offLux" [min]="0" [step]="1000" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.OFF_DELAY' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.thresholds.offDelayMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.THRESHOLDS_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3><fa-icon [icon]="['fas', 'wind']"></fa-icon>{{ 'UI.SHADING.SETTINGS.WEATHER' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.SHADING.SETTINGS.WEATHER_HINT' | translateAsync }}</p>
+          <div class="two">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.SETTINGS.WIND' | translateAsync }}</span>
+              <shading-signal-editor [signal]="settings.wind" kind="measured" unit="m/s"
+                [emptyText]="'UI.SHADING.SETTINGS.WIND_EMPTY' | translateAsync"></shading-signal-editor>
+              <div class="fields">
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.WIND_LIMIT' | translateAsync }}</span>
+                  <dx-number-box [(value)]="settings.windLimit" [min]="0" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+                </div>
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.RELEASE_MINUTES' | translateAsync }}</span>
+                  <dx-number-box [(value)]="settings.windReleaseMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+                </div>
+              </div>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.SETTINGS.RAIN' | translateAsync }}</span>
+              <shading-signal-editor [signal]="settings.rain" kind="measured" unit="0/1"
+                [emptyText]="'UI.SHADING.SETTINGS.RAIN_EMPTY' | translateAsync"></shading-signal-editor>
+              <div class="fields">
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.RELEASE_MINUTES' | translateAsync }}</span>
+                  <dx-number-box [(value)]="settings.rainReleaseMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+                </div>
+              </div>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.SETTINGS.OUTSIDE_TEMPERATURE' | translateAsync }}</span>
+              <shading-signal-editor [signal]="settings.outsideTemperature" kind="measured" unit="°C"
+                [emptyText]="'UI.SHADING.SETTINGS.TEMPERATURE_EMPTY' | translateAsync"></shading-signal-editor>
+              <div class="fields">
+                <div class="fld">
+                  <div class="check-row">
+                    <dx-check-box [value]="hasFrostLimit" [text]="'UI.SHADING.FIELD.FROST' | translateAsync"
+                      (onValueChanged)="setFrostLimit($event.value)"></dx-check-box>
+                  </div>
+                  @if (hasFrostLimit) {
+                    <dx-number-box [(value)]="settings.frostBelow" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+                  }
+                  <span class="hint">{{ 'UI.SHADING.FIELD.FROST_HINT' | translateAsync }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3><fa-icon [icon]="['fas', 'snowflake']"></fa-icon>{{ 'UI.SHADING.SETTINGS.WINTER' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.SHADING.SETTINGS.WINTER_HINT' | translateAsync }}</p>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.WINTER_MODE' | translateAsync }}</span>
+              <dx-select-box [items]="winterModes" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="settings.winter.mode"></dx-select-box>
+            </div>
+            @if (settings.winter.mode === 'temperature') {
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.WINTER_BELOW' | translateAsync }}</span>
+                <dx-number-box [(value)]="settings.winter.below" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+              </div>
+            }
+            @if (settings.winter.mode === 'months') {
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.WINTER_FROM' | translateAsync }}</span>
+                <dx-select-box [items]="months" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="settings.winter.fromMonth"></dx-select-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.WINTER_TO' | translateAsync }}</span>
+                <dx-select-box [items]="months" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="settings.winter.toMonth"></dx-select-box>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="block">
+          <h3><fa-icon [icon]="['fas', 'hand']"></fa-icon>{{ 'UI.SHADING.SETTINGS.BEHAVIOUR' | translateAsync }}</h3>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MANUAL_OVERRIDE' | translateAsync }}</span>
+              <dx-select-box [items]="overrideModes" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="settings.manualOverride"></dx-select-box>
+            </div>
+            @if (settings.manualOverride === 'duration') {
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.MANUAL_MINUTES' | translateAsync }}</span>
+                <dx-number-box [(value)]="settings.manualOverrideMinutes" [min]="1" [step]="15" [showSpinButtons]="true"></dx-number-box>
+              </div>
+            }
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MIN_MOVE_INTERVAL' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.minMoveIntervalMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MIN_POSITION_CHANGE' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.minPositionChange" [min]="0" [max]="100" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MIN_SLAT_CHANGE' | translateAsync }}</span>
+              <dx-number-box [(value)]="settings.minSlatChange" [min]="0" [max]="100" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.MANUAL_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<!-- ================= facade editor ================= -->
+<dx-popup [width]="viewport.narrow() ? '100%' : 720" [height]="viewport.narrow() ? '100%' : '85%'" [showTitle]="true"
+  [title]="(facadeEdit?.objId ? 'UI.SHADING.FACADES.EDIT' : 'UI.SHADING.FACADES.NEW') | translateAsync" [visible]="facadeVisible"
+  [showCloseButton]="true" (onHiding)="facadeVisible = false; selectedFacade = null">
+  <div *dxTemplate="let data of 'content'" class="editor">
+    @if (facadeEdit) {
+      <div class="editor-body">
+        @if (facadeProblems.length) {
+          <ul class="problems">
+            @for (p of facadeProblems; track $index) { <li><span class="mono">{{ p.path }}</span>{{ problemText(p) }}</li> }
+          </ul>
+        }
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.SHADING.FIELD.NAME' | translateAsync }}</span>
+            <dx-text-box [(value)]="facadeEdit.name" valueChangeEvent="input" [placeholder]="'UI.SHADING.FACADES.NAME_PLACEHOLDER' | translateAsync"></dx-text-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.SHADING.FIELD.DIRECTION' | translateAsync }}</span>
+            <dx-select-box [items]="compassItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="facadeEdit.azimuth"
+              [acceptCustomValue]="false" (onValueChanged)="$event.event && (facadeEdit.azimuth = $event.value)"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.SHADING.FIELD.AZIMUTH' | translateAsync }}</span>
+            <dx-number-box [(value)]="facadeEdit.azimuth" [min]="0" [max]="359.9" [step]="1" [showSpinButtons]="true"></dx-number-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.SHADING.FACADES.ENABLED' | translateAsync }}</span>
+            <div class="check-row"><dx-switch [(value)]="facadeEdit.isEnabled"></dx-switch></div>
+          </div>
+          <div class="fld wide">
+            <span class="hint">{{ 'UI.SHADING.FIELD.AZIMUTH_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.FACADES.BRIGHTNESS' | translateAsync }}</span>
+          <shading-signal-editor [signal]="facadeEdit.definition.brightness" kind="brightness" unit="lx"
+            [emptyText]="'UI.SHADING.FACADES.BRIGHTNESS_EMPTY' | translateAsync"></shading-signal-editor>
+          <div class="check-row">
+            <dx-check-box [value]="facadeOwnThresholds" [text]="'UI.SHADING.FACADES.OWN_THRESHOLDS' | translateAsync"
+              (onValueChanged)="setFacadeThresholds($event.value)"></dx-check-box>
+          </div>
+          @if (facadeOwnThresholds && facadeEdit.definition.thresholds) {
+            <div class="fields">
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.ON_LUX' | translateAsync }}</span>
+                <dx-number-box [(value)]="facadeEdit.definition.thresholds.onLux" [min]="1" [step]="1000" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.ON_DELAY' | translateAsync }}</span>
+                <dx-number-box [(value)]="facadeEdit.definition.thresholds.onDelayMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.OFF_LUX' | translateAsync }}</span>
+                <dx-number-box [(value)]="facadeEdit.definition.thresholds.offLux" [min]="0" [step]="1000" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.OFF_DELAY' | translateAsync }}</span>
+                <dx-number-box [(value)]="facadeEdit.definition.thresholds.offDelayMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.FACADES.GEOMETRY' | translateAsync }}</span>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.ACCEPTANCE' | translateAsync }}</span>
+              <dx-number-box [(value)]="facadeEdit.definition.acceptanceAngle" [min]="1" [max]="90" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MIN_ELEVATION' | translateAsync }}</span>
+              <dx-number-box [(value)]="facadeEdit.definition.minElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.MAX_ELEVATION' | translateAsync }}</span>
+              <dx-number-box [(value)]="facadeEdit.definition.maxElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.GEOMETRY_HINT' | translateAsync }}</span>
+            </div>
+            <div class="fld wide">
+              <div class="check-row">
+                <dx-check-box [value]="facadeHasMinTemperature" [text]="'UI.SHADING.FACADES.MIN_TEMPERATURE' | translateAsync"
+                  (onValueChanged)="setFacadeMinTemperature($event.value)"></dx-check-box>
+                @if (facadeHasMinTemperature) {
+                  <dx-number-box class="short" [(value)]="facadeEdit.definition.minOutsideTemperature" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+                  <span class="hint">°C</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-actions">
+        @if (facadeEdit.objId) {
+          <dx-button icon="trash" stylingMode="text" [text]="'UI.SHADING.FACADES.DELETE' | translateAsync" (onClick)="deleteFacade(facadeEdit)"></dx-button>
+        }
+        <span class="spacer"></span>
+        <dx-button [text]="'COMMON.CANCEL' | translateAsync" (onClick)="facadeVisible = false"></dx-button>
+        <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync" [disabled]="!facadeEdit.name?.trim()" (onClick)="saveFacade()"></dx-button>
+      </div>
+    }
+  </div>
+</dx-popup>
+
+<!-- ================= blind editor ================= -->
+<dx-popup [width]="viewport.narrow() ? '100%' : 760" [height]="viewport.narrow() ? '100%' : '90%'" [showTitle]="true"
+  [title]="blindEdit?.name || ''" [visible]="blindVisible" [showCloseButton]="true" (onHiding)="blindVisible = false">
+  <div *dxTemplate="let data of 'content'" class="editor">
+    @if (blindEdit) {
+      @let def = blindEdit.definition;
+      <div class="editor-body">
+        @if (blindProblems.length) {
+          <ul class="problems">
+            @for (p of blindProblems; track $index) { <li><span class="mono">{{ p.path }}</span>{{ problemText(p) }}</li> }
+          </ul>
+        }
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.SHADING.FIELD.BLIND_TYPE' | translateAsync }}</span>
+            <dx-select-box [items]="blindTypes" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="def.type"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.SHADING.BLINDS.ENABLED' | translateAsync }}</span>
+            <div class="check-row"><dx-switch [(value)]="blindEdit.isEnabled"></dx-switch></div>
+          </div>
+          @if (def.type === 'venetian' && !blindEdit.hasSlats) {
+            <div class="fld wide">
+              <span class="hint warn-text">{{ 'UI.SHADING.BLINDS.NO_SLAT_OUTPUT' | translateAsync }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.BLINDS.DIRECTION' | translateAsync }}</span>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.DIRECTION_MODE' | translateAsync }}</span>
+              <dx-select-box [items]="directionItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="blindEdit.direction"
+                (onValueChanged)="setBlindDirection($event.value)"></dx-select-box>
+            </div>
+            @if (blindEdit.direction === 'facade') {
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.FACADE' | translateAsync }}</span>
+                <dx-select-box [items]="facades" valueExpr="objId" displayExpr="name" [(value)]="blindEdit.facade"
+                  [noDataText]="'UI.SHADING.FACADES.EMPTY' | translateAsync"></dx-select-box>
+              </div>
+            } @else {
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.DIRECTION' | translateAsync }}</span>
+                <dx-select-box [items]="compassItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="def.azimuth"
+                  (onValueChanged)="$event.event && (def.azimuth = $event.value)"></dx-select-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.AZIMUTH' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.azimuth" [min]="0" [max]="359.9" [showSpinButtons]="true"></dx-number-box>
+              </div>
+            }
+          </div>
+          <div class="fields overrides">
+            <div class="fld">
+              <dx-check-box [value]="hasOverride('acceptanceAngle')" [text]="'UI.SHADING.FIELD.ACCEPTANCE' | translateAsync"
+                (onValueChanged)="setOverride('acceptanceAngle', $event.value)"></dx-check-box>
+              @if (hasOverride('acceptanceAngle')) {
+                <dx-number-box [(value)]="def.acceptanceAngle" [min]="1" [max]="90" [step]="5" [showSpinButtons]="true"></dx-number-box>
+              }
+            </div>
+            <div class="fld">
+              <dx-check-box [value]="hasOverride('minElevation')" [text]="'UI.SHADING.FIELD.MIN_ELEVATION' | translateAsync"
+                (onValueChanged)="setOverride('minElevation', $event.value)"></dx-check-box>
+              @if (hasOverride('minElevation')) {
+                <dx-number-box [(value)]="def.minElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
+              }
+            </div>
+            <div class="fld">
+              <dx-check-box [value]="hasOverride('maxElevation')" [text]="'UI.SHADING.FIELD.MAX_ELEVATION' | translateAsync"
+                (onValueChanged)="setOverride('maxElevation', $event.value)"></dx-check-box>
+              @if (hasOverride('maxElevation')) {
+                <dx-number-box [(value)]="def.maxElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
+              }
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.BLINDS.OVERRIDE_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.BLINDS.POSITIONS' | translateAsync }}</span>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.SHADE_POSITION' | translateAsync }}</span>
+              <dx-number-box [(value)]="def.shadePosition" [min]="0" [max]="100" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.OPEN_POSITION' | translateAsync }}</span>
+              <dx-number-box [(value)]="def.openPosition" [min]="0" [max]="100" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.TRAVEL_SECONDS' | translateAsync }}</span>
+              <dx-number-box [(value)]="def.travelSeconds" [min]="0" [max]="600" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <div class="check-row">
+                <dx-check-box [(value)]="def.restorePosition" [text]="'UI.SHADING.FIELD.RESTORE' | translateAsync"></dx-check-box>
+              </div>
+              <span class="hint">{{ 'UI.SHADING.FIELD.POSITIONS_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        </div>
+
+        @if (def.type === 'venetian') {
+          <div class="sub">
+            <span class="eyebrow">{{ 'UI.SHADING.BLINDS.SLATS' | translateAsync }}</span>
+            <div class="fields">
+              <div class="fld wide">
+                <div class="check-row">
+                  <dx-check-box [(value)]="def.slats.trackSun" [text]="'UI.SHADING.FIELD.TRACK_SUN' | translateAsync"></dx-check-box>
+                </div>
+                <span class="hint">{{ 'UI.SHADING.FIELD.TRACK_SUN_HINT' | translateAsync }}</span>
+              </div>
+              @if (def.slats.trackSun) {
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.SLAT_WIDTH' | translateAsync }}</span>
+                  <dx-number-box [(value)]="def.slats.width" [min]="1" [showSpinButtons]="true"></dx-number-box>
+                </div>
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.SLAT_SPACING' | translateAsync }}</span>
+                  <dx-number-box [(value)]="def.slats.spacing" [min]="1" [showSpinButtons]="true"></dx-number-box>
+                </div>
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.EXTRA_ANGLE' | translateAsync }}</span>
+                  <dx-number-box [(value)]="def.slats.extraAngle" [min]="0" [max]="45" [showSpinButtons]="true"></dx-number-box>
+                </div>
+              } @else {
+                <div class="fld">
+                  <span class="lbl">{{ 'UI.SHADING.FIELD.FIXED_ANGLE' | translateAsync }}</span>
+                  <dx-number-box [(value)]="def.slats.fixedAngle" [min]="0" [max]="180" [showSpinButtons]="true"></dx-number-box>
+                </div>
+              }
+            </div>
+            <div class="fields">
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.MIN_ANGLE' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.slats.minAngle" [min]="0" [max]="180" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.PERCENT_AT_MIN' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.slats.percentAtMinAngle" [min]="0" [max]="100" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.MAX_ANGLE' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.slats.maxAngle" [min]="0" [max]="180" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.PERCENT_AT_MAX' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.slats.percentAtMaxAngle" [min]="0" [max]="100" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.SLAT_OPEN' | translateAsync }}</span>
+                <dx-number-box [(value)]="def.slats.openPercent" [min]="0" [max]="100" [showSpinButtons]="true"></dx-number-box>
+              </div>
+              <div class="fld wide">
+                <span class="hint">{{ 'UI.SHADING.FIELD.SLAT_MAPPING_HINT' | translateAsync }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.BLINDS.PROTECTION' | translateAsync }}</span>
+          <div class="fields">
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.WIND_PROTECTION' | translateAsync }}</span>
+              <dx-select-box [items]="windProtectionItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="blindWindProtection"></dx-select-box>
+            </div>
+            <div class="fld">
+              <dx-check-box [value]="hasOverride('windLimit')" [text]="'UI.SHADING.FIELD.OWN_WIND_LIMIT' | translateAsync"
+                (onValueChanged)="setOverride('windLimit', $event.value)"></dx-check-box>
+              @if (hasOverride('windLimit')) {
+                <dx-number-box [(value)]="def.windLimit" [min]="0" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+              }
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.RAIN_PROTECTION' | translateAsync }}</span>
+              <div class="check-row"><dx-switch [(value)]="def.rainProtection"></dx-switch></div>
+            </div>
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.DOOR_CONTACT' | translateAsync }}</span>
+              <shading-node-field [(node)]="def.doorContact" [clearable]="true"></shading-node-field>
+              <span class="hint">{{ 'UI.SHADING.FIELD.DOOR_CONTACT_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <span class="eyebrow">{{ 'UI.SHADING.BLINDS.WINTER' | translateAsync }}</span>
+          <div class="fields">
+            <div class="fld wide">
+              <div class="check-row">
+                <dx-check-box [(value)]="def.winterGain" [text]="'UI.SHADING.FIELD.WINTER_GAIN' | translateAsync"></dx-check-box>
+              </div>
+              <span class="hint">{{ 'UI.SHADING.FIELD.WINTER_GAIN_HINT' | translateAsync }}</span>
+            </div>
+            @if (def.winterGain) {
+              <div class="fld wide">
+                <span class="lbl">{{ 'UI.SHADING.FIELD.ROOM_TEMPERATURE' | translateAsync }}</span>
+                <shading-signal-editor [signal]="def.roomTemperature" kind="measured" unit="°C"
+                  [emptyText]="'UI.SHADING.FIELD.ROOM_TEMPERATURE_EMPTY' | translateAsync"></shading-signal-editor>
+              </div>
+              <div class="fld">
+                <dx-check-box [value]="hasOverride('maxRoomTemperature')" [text]="'UI.SHADING.FIELD.MAX_ROOM_TEMPERATURE' | translateAsync"
+                  (onValueChanged)="setOverride('maxRoomTemperature', $event.value)"></dx-check-box>
+                @if (hasOverride('maxRoomTemperature')) {
+                  <dx-number-box [(value)]="def.maxRoomTemperature" [step]="0.5" [showSpinButtons]="true"></dx-number-box>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="editor-actions">
+        @if (!blindEdit.isNew) {
+          <dx-button icon="trash" stylingMode="text" [text]="'UI.SHADING.BLINDS.DELETE' | translateAsync" (onClick)="deleteBlind(blindEdit)"></dx-button>
+        }
+        <span class="spacer"></span>
+        <dx-button [text]="'COMMON.CANCEL' | translateAsync" (onClick)="blindVisible = false"></dx-button>
+        <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync"
+          [disabled]="blindEdit.direction === 'facade' && !blindEdit.facade" (onClick)="saveBlind()"></dx-button>
+      </div>
+    }
+  </div>
+</dx-popup>
+
+<!-- ================= add blind ================= -->
+<dx-popup [width]="viewport.narrow() ? '100%' : 480" [height]="'auto'" [showTitle]="true" [title]="'UI.SHADING.BLINDS.ADD' | translateAsync"
+  [visible]="addVisible" [showCloseButton]="true" (onHiding)="addVisible = false">
+  <div *dxTemplate="let data of 'content'" class="editor">
+    <div class="editor-body">
+      @if (unconfigured.length) {
+        <div class="fld">
+          <span class="lbl">{{ 'UI.SHADING.FIELD.BLIND' | translateAsync }}</span>
+          <dx-select-box [items]="unconfigured" valueExpr="controlId" displayExpr="name" [searchEnabled]="true" [(value)]="addChoice"></dx-select-box>
+          <span class="hint">{{ 'UI.SHADING.BLINDS.ADD_HINT' | translateAsync }}</span>
+        </div>
+      } @else {
+        <p class="hint">{{ 'UI.SHADING.BLINDS.NONE_AVAILABLE' | translateAsync }}</p>
+      }
+    </div>
+    <div class="editor-actions">
+      <span class="spacer"></span>
+      <dx-button [text]="'COMMON.CANCEL' | translateAsync" (onClick)="addVisible = false"></dx-button>
+      <dx-button type="default" [text]="'UI.SHADING.BLINDS.CONTINUE' | translateAsync" [disabled]="!addChoice" (onClick)="startNewBlind()"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- ================= datapoint picker ================= -->
+<dx-popup [width]="viewport.narrow() ? '100%' : '80%'" [height]="viewport.narrow() ? '100%' : '85%'" [showTitle]="true"
+  [title]="'UI.SHADING.PICKER.TITLE' | translateAsync" [visible]="pickerVisible" [showCloseButton]="true" (onHiding)="closePicker(false)">
+  <div *dxTemplate="let data of 'content'" class="picker">
+    <div class="picker-bar">
+      <span class="picker-sel">
+        @if (pickerName) { <b>{{ pickerName }}</b> }
+        @if (pickerProblem) { <span class="hint">{{ pickerProblem }}</span> }
+      </span>
+      <dx-button type="default" [text]="'UI.SHADING.PICKER.USE' | translateAsync" [disabled]="!!pickerProblem" (onClick)="closePicker(true)"></dx-button>
+    </div>
+    <div class="picker-tree">
+      @if (pickerVisible) {
+        <p3-config-tree style="display: block; height: 100%" [useContextMenu]="false" (onNodeSelect)="pickerSelect($event)"></p3-config-tree>
+      }
+    </div>
+  </div>
+</dx-popup>

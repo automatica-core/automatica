@@ -86,6 +86,7 @@ export class AutomationConditionCardComponent {
     readonly compareItems = options("OP", COMPARE_OPERATORS);
     readonly sunItems = options("SUN", SUN_EVENTS);
     readonly onItems = options("VALUE", [true, false], v => v ? "ON" : "OFF");
+    readonly shadingItems = options("SHADING_STATE", [true, false], v => v ? "ON" : "OFF");
 
     constructor(public ctx: AutomationEditorContext) {
     }

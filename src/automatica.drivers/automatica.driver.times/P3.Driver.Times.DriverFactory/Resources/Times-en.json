@@ -36,6 +36,14 @@
       "IS_DAYLIGHT": {
         "NAME": "Daylight",
         "DESCRIPTION": "True between sunrise and sunset"
+      },
+      "AZIMUTH": {
+        "NAME": "Sun azimuth",
+        "DESCRIPTION": "Direction of the sun in degrees (0 north, 90 east, 180 south, 270 west)"
+      },
+      "ELEVATION": {
+        "NAME": "Sun elevation",
+        "DESCRIPTION": "Height of the sun above the horizon in degrees (negative at night)"
       }
     },
     "DATETIME": {

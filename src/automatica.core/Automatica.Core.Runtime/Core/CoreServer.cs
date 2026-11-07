@@ -8,6 +8,7 @@ using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using Automatica.Core.Automation.Engine;
+using Automatica.Core.Shading.Engine;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Runtime.IO;
@@ -75,6 +76,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ITelegramMonitor _telegramMonitor;
         private readonly ILogicEngineDispatcher _logicEngineDispatcher;
         private readonly IAutomationEngine _automationEngine;
+        private readonly IShadingEngine _shadingEngine;
         private RunState _runState;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
@@ -181,6 +183,7 @@ namespace Automatica.Core.Runtime.Core
             
             _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
             _automationEngine = services.GetRequiredService<IAutomationEngine>();
+            _shadingEngine = services.GetRequiredService<IShadingEngine>();
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
@@ -330,6 +333,7 @@ namespace Automatica.Core.Runtime.Core
                     }
 
                     await StartAutomations();
+                    await StartShading();
                 }
                 catch (Exception e)
                 {
@@ -377,6 +381,31 @@ namespace Automatica.Core.Runtime.Core
             {
                 // automations must never keep the server from starting
                 _logger.LogError(e, "Error starting the automations");
+            }
+        }
+
+        private async Task StartShading()
+        {
+            try
+            {
+                await _shadingEngine.StartAsync();
+            }
+            catch (Exception e)
+            {
+                // the shading must never keep the server from starting
+                _logger.LogError(e, "Error starting the automatic shading");
+            }
+        }
+
+        private async Task StopShading()
+        {
+            try
+            {
+                await _shadingEngine.StopAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error stopping the automatic shading");
             }
         }
 
@@ -564,6 +593,7 @@ namespace Automatica.Core.Runtime.Core
             await _remoteServerHandler.Stop();
 
             // automations, links and logics first, otherwise values are still dispatched into the stopped drivers
+            await StopShading();
             await StopAutomations();
             await StopLogicEngine();
 

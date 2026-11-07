@@ -149,6 +149,7 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(SunCondition), "sun")]
     [JsonDerivedType(typeof(ControlCondition), "control")]
     [JsonDerivedType(typeof(TriggeredByCondition), "trigger")]
+    [JsonDerivedType(typeof(ShadingCondition), "shading")]
     public abstract class ConditionDefinition
     {
     }
@@ -230,6 +231,15 @@ namespace Automatica.Core.Automation.Definition
         public string TriggerId { get; set; }
     }
 
+    /// <summary>
+    /// The automatic shading of a blind is (or is not) shading it right now. Checked again every minute.
+    /// </summary>
+    public sealed class ShadingCondition : ConditionDefinition
+    {
+        public Guid Control { get; set; }
+        public bool Shading { get; set; } = true;
+    }
+
     #endregion
 
     #region actions
@@ -245,6 +255,7 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(RunAutomationAction), "runAutomation")]
     [JsonDerivedType(typeof(EnableAutomationAction), "enableAutomation")]
     [JsonDerivedType(typeof(StopAction), "stop")]
+    [JsonDerivedType(typeof(ShadingAction), "shading")]
     public abstract class ActionDefinition
     {
         /// <summary>
@@ -373,6 +384,19 @@ namespace Automatica.Core.Automation.Definition
     public sealed class EnableAutomationAction : ActionDefinition
     {
         public Guid Automation { get; set; }
+        public bool Enable { get; set; } = true;
+    }
+
+    /// <summary>
+    /// Pauses (<see cref="Enable"/> false) or resumes the automatic shading of blinds: the listed controls and/or all
+    /// blinds in the area and/or category. The pause lasts until it is resumed or the server restarts.
+    /// </summary>
+    public sealed class ShadingAction : ActionDefinition
+    {
+        public List<Guid> Controls { get; set; } = new();
+        public Guid? Area { get; set; }
+        public bool IncludeSubAreas { get; set; } = true;
+        public Guid? Category { get; set; }
         public bool Enable { get; set; } = true;
     }
 

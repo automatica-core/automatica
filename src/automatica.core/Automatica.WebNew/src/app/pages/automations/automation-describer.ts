@@ -367,8 +367,24 @@ export class AutomationDescriber {
                 return this.s(condition.on ? "C_CTRL_ON" : "C_CTRL_OFF", { control: this.controlLabel(condition.control) }, html);
             case "trigger":
                 return this.s("C_TRIGGER", { id: condition.triggerId || this.t("VALUE.UNSET") }, html);
+            case "shading":
+                return this.s(condition.shading ? "C_SHADING_ON" : "C_SHADING_OFF", { control: this.controlLabel(condition.control) }, html);
         }
         return this.typeLabel("condition", (condition as any).type ?? "");
+    }
+
+    /** the target text of an area and/or category */
+    private groupTarget(area: string | null | undefined, category: string | null | undefined): string {
+        if (area && category) {
+            return this.t("S.G_AREA_CAT", { area: this.areaLabel(area), category: this.categoryLabel(category) });
+        }
+        if (area) {
+            return this.t("S.G_AREA", { area: this.areaLabel(area) });
+        }
+        if (category) {
+            return this.t("S.G_CAT", { category: this.categoryLabel(category) });
+        }
+        return this.t("S.G_NONE");
     }
 
     controlCommand(command: ControlCommand, control: string, value: number | null | undefined, html: boolean): string {
@@ -398,18 +414,14 @@ export class AutomationDescriber {
             }
             case "control":
                 return this.controlCommand(action.command, this.controlLabel(action.control), action.value, html);
-            case "groupControl": {
-                let target: string;
-                if (action.area && action.category) {
-                    target = this.t("S.G_AREA_CAT", { area: this.areaLabel(action.area), category: this.categoryLabel(action.category) });
-                } else if (action.area) {
-                    target = this.t("S.G_AREA", { area: this.areaLabel(action.area) });
-                } else if (action.category) {
-                    target = this.t("S.G_CAT", { category: this.categoryLabel(action.category) });
-                } else {
-                    target = this.t("S.G_NONE");
+            case "groupControl":
+                return this.controlCommand(action.command, this.groupTarget(action.area, action.category), action.value, html);
+            case "shading": {
+                const targets = (action.controls || []).map(c => this.controlLabel(c));
+                if (action.area || action.category || !targets.length) {
+                    targets.push(this.groupTarget(action.area, action.category));
                 }
-                return this.controlCommand(action.command, target, action.value, html);
+                return this.s(action.enable ? "A_SHADING_ON" : "A_SHADING_OFF", { blinds: targets.join(", ") }, html);
             }
             case "delay":
                 if (action.randomToSeconds !== undefined && action.randomToSeconds !== null && action.randomToSeconds > action.seconds) {

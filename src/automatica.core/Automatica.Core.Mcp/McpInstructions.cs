@@ -17,6 +17,9 @@ namespace Automatica.Core.Mcp
             get_history or write_value. Before writing, check that the data point is writeable and confirm actions with
             a physical effect (lights, heating, blinds, doors) with the user. Timestamps are server local time unless
             they carry an offset.
+
+            Blinds with automatic shading: get_shading_status explains why a blind is up or down (sun, brightness,
+            wind, rain, winter mode, manual moves); preview_shading simulates another time of day.
             """;
     }
 }

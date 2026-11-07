@@ -1,0 +1,114 @@
+<div class="signal" [class.nested]="nested">
+  @for (s of sources; track $index; let i = $index; let first = $first; let last = $last) {
+    <div class="src">
+      <div class="src-head">
+        <span class="prio" [title]="'UI.SHADING.FIELD.PRIORITY' | translateAsync">{{ i + 1 }}</span>
+        <span class="src-type">{{ 'UI.SHADING.SOURCE.' + s.type.toUpperCase() | translateAsync }}</span>
+        <span class="spacer"></span>
+        <dx-button icon="arrowup" stylingMode="text" [disabled]="first" [hint]="'UI.SHADING.FIELD.MOVE_UP' | translateAsync" (onClick)="move(i, -1)"></dx-button>
+        <dx-button icon="arrowdown" stylingMode="text" [disabled]="last" [hint]="'UI.SHADING.FIELD.MOVE_DOWN' | translateAsync" (onClick)="move(i, 1)"></dx-button>
+        <dx-button icon="trash" stylingMode="text" [hint]="'UI.SHADING.FIELD.REMOVE_SOURCE' | translateAsync" (onClick)="remove(i)"></dx-button>
+      </div>
+      @switch (s.type) {
+        @case ('datapoint') {
+          <div class="fields">
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.DATAPOINT' | translateAsync }}</span>
+              <shading-node-field [(node)]="s.node"></shading-node-field>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.FACTOR' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.factor" [showSpinButtons]="false"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.OFFSET' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.offset" [showSpinButtons]="false"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.STALE' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.staleAfterMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.DATAPOINT_HINT' | translateAsync: { unit: unit || '-' } }}</span>
+            </div>
+          </div>
+        }
+        @case ('irradiance') {
+          <div class="fields">
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.DATAPOINT' | translateAsync }}</span>
+              <shading-node-field [(node)]="s.node"></shading-node-field>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.FACTOR' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.factor" [showSpinButtons]="false"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.OFFSET' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.offset" [showSpinButtons]="false"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.STALE' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.staleAfterMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.IRRADIANCE_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        }
+        @case ('pv') {
+          <div class="fields">
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.PV_POWER' | translateAsync }}</span>
+              <shading-node-field [(node)]="s.node"></shading-node-field>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.FACTOR_TO_WATT' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.factor" [min]="0" [showSpinButtons]="false"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.PEAK_POWER' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.peakPower" [min]="1" [step]="100" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.PANEL_AZIMUTH' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.azimuth" [min]="0" [max]="359.9" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.PANEL_TILT' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.tilt" [min]="0" [max]="90" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.PERFORMANCE_RATIO' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.performanceRatio" [min]="0.1" [max]="1" [step]="0.05" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.STALE' | translateAsync }}</span>
+              <dx-number-box [(value)]="s.staleAfterMinutes" [min]="0" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.PV_HINT' | translateAsync }}</span>
+            </div>
+          </div>
+        }
+        @case ('calculated') {
+          <p class="hint">{{ (kind === 'sun' ? 'UI.SHADING.FIELD.CALCULATED_SUN_HINT' : 'UI.SHADING.FIELD.CALCULATED_BRIGHTNESS_HINT') | translateAsync }}</p>
+          @if (kind === 'brightness') {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.CLOUD_COVER' | translateAsync }}</span>
+              <shading-signal-editor [signal]="cloudCover(s)" kind="measured" unit="%" [nested]="true"
+                [emptyText]="'UI.SHADING.FIELD.NO_CLOUD_COVER' | translateAsync"></shading-signal-editor>
+            </div>
+          }
+        }
+      }
+    </div>
+  } @empty {
+    <p class="empty">{{ emptyText || ('UI.SHADING.FIELD.NO_SOURCE' | translateAsync) }}</p>
+  }
+  <div class="add">
+    <dx-drop-down-button icon="add" stylingMode="text" [text]="'UI.SHADING.FIELD.ADD_SOURCE' | translateAsync"
+      [items]="addItems" keyExpr="value" [displayExpr]="ctx.optionText" [dropDownOptions]="{ width: 260 }"
+      (onItemClick)="add($event.itemData.value)"></dx-drop-down-button>
+  </div>
+</div>

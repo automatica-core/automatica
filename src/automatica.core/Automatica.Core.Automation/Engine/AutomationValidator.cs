@@ -117,6 +117,9 @@ namespace Automatica.Core.Automation.Engine
                 case ControlCondition control:
                     SwitchControl(control.Control, path);
                     break;
+                case ShadingCondition shading:
+                    ShadingBlind(shading.Control, path);
+                    break;
                 case TriggeredByCondition triggeredBy when string.IsNullOrWhiteSpace(triggeredBy.TriggerId):
                     Error(path, "valueMissing");
                     break;
@@ -220,6 +223,24 @@ namespace Automatica.Core.Automation.Engine
                     case EnableAutomationAction enable:
                         Automation(enable.Automation, path);
                         break;
+                    case ShadingAction shading:
+                        if ((shading.Controls == null || shading.Controls.Count == 0) && shading.Area == null && shading.Category == null)
+                        {
+                            Error(path, "groupTargetMissing");
+                        }
+                        foreach (var control in shading.Controls ?? new List<Guid>())
+                        {
+                            ShadingBlind(control, path);
+                        }
+                        if (shading.Area != null && !_environment.AreaExists(shading.Area.Value))
+                        {
+                            Error(path, "areaNotFound");
+                        }
+                        if (shading.Category != null && !_environment.CategoryExists(shading.Category.Value))
+                        {
+                            Error(path, "categoryNotFound");
+                        }
+                        break;
                 }
             }
         }
@@ -259,6 +280,23 @@ namespace Automatica.Core.Automation.Engine
             else if (control is not ISwitch)
             {
                 Error(path, "controlNotSupported", control.Name);
+            }
+        }
+
+        private void ShadingBlind(Guid id, string path)
+        {
+            var control = _environment.GetControl(id);
+            if (control == null)
+            {
+                Error(path, "controlNotFound");
+            }
+            else if (control is not IBlind)
+            {
+                Error(path, "controlNotSupported", control.Name);
+            }
+            else if (_environment.IsShading(id) == null)
+            {
+                Warning(path, "shadingNotConfigured", control.Name);
             }
         }
 
@@ -328,6 +366,9 @@ namespace Automatica.Core.Automation.Engine
                 case ControlCondition control:
                     result.Add((control.Control, AutomationReferenceType.Control, role));
                     break;
+                case ShadingCondition shading:
+                    result.Add((shading.Control, AutomationReferenceType.Control, role));
+                    break;
             }
         }
 
@@ -370,6 +411,20 @@ namespace Automatica.Core.Automation.Engine
                         break;
                     case EnableAutomationAction enable:
                         result.Add((enable.Automation, AutomationReferenceType.Automation, AutomationReferenceRole.Action));
+                        break;
+                    case ShadingAction shading:
+                        foreach (var control in shading.Controls ?? new List<Guid>())
+                        {
+                            result.Add((control, AutomationReferenceType.Control, AutomationReferenceRole.Action));
+                        }
+                        if (shading.Area.HasValue)
+                        {
+                            result.Add((shading.Area.Value, AutomationReferenceType.Area, AutomationReferenceRole.Action));
+                        }
+                        if (shading.Category.HasValue)
+                        {
+                            result.Add((shading.Category.Value, AutomationReferenceType.Category, AutomationReferenceRole.Action));
+                        }
                         break;
                 }
             }

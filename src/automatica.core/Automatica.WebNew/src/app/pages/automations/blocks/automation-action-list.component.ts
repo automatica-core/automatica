@@ -80,6 +80,7 @@ export class AutomationActionCardComponent {
     readonly allCommands = options("CMD", CONTROL_COMMANDS);
     readonly severityItems = options("SEVERITY", NOTIFY_SEVERITIES);
     readonly enableItems = options("ENABLE_OPT", [true, false], v => v ? "ON" : "OFF");
+    readonly shadingEnableItems = options("SHADING_OPT", [true, false], v => v ? "ON" : "OFF");
     readonly placeholders = "{automation} {trigger} {trigger.value} {value:<id>}";
 
     private readonly commandsByType: { [type: string]: OptionItem<ControlCommand>[] } = {

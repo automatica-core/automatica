@@ -57,6 +57,8 @@ export function newCondition(type: ConditionType): ConditionDefinition {
             return { type, on: true };
         case "trigger":
             return { type };
+        case "shading":
+            return { type, shading: true };
     }
 }
 
@@ -81,6 +83,8 @@ export function newAction(type: ActionType): ActionDefinition {
             return { ...base, type, skipConditions: false };
         case "enableAutomation":
             return { ...base, type, enable: true };
+        case "shading":
+            return { ...base, type, controls: [], includeSubAreas: true, enable: true };
         case "stop":
             return { ...base, type, reason: "" };
     }
@@ -101,7 +105,8 @@ const CONDITION_ICONS: Record<ConditionType, string> = {
     time: "clock",
     sun: "sun",
     control: "toggle-on",
-    trigger: "bolt"
+    trigger: "bolt",
+    shading: "sun"
 };
 
 const ACTION_ICONS: Record<ActionType, string> = {
@@ -114,6 +119,7 @@ const ACTION_ICONS: Record<ActionType, string> = {
     if: "code-branch",
     runAutomation: "play",
     enableAutomation: "power-off",
+    shading: "sun",
     stop: "hand"
 };
 

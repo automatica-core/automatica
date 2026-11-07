@@ -1,6 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
+import { ShadingService } from "src/app/services/shading.service";
+import { VisuBlindState } from "src/app/base/model/shading/shading";
+
+/** how often the tile asks for the state of the automatic shading */
+const SHADING_REFRESH_MS = 60000;
 
 @Component({
     selector: "visu-shutter",
@@ -29,6 +34,11 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
   displayValue: string;
 
   shutterIcon: any;
+
+  private readonly shading = inject(ShadingService);
+  /** the automatic shading of this blind, undefined when it is not configured (the switch is hidden) */
+  shadingState: VisuBlindState | undefined;
+  shadingBusy = false;
 
   /** 0 = open, 100 = closed */
   public get positionWidth(): number {
@@ -64,6 +74,57 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
     map.forEach((value, key) => {
       this.onRuleInstanceValueChanged(key, value);
     });
+
+    await this.loadShading();
+    this.registerInterval(() => this.loadShading(), SHADING_REFRESH_MS);
+  }
+
+  private async loadShading(maxAgeMs = SHADING_REFRESH_MS / 2) {
+    const id = this.ruleInstance?.ObjId;
+    if (!id) {
+      return;
+    }
+    const states = await this.shading.visuBlinds(maxAgeMs);
+    this.shadingState = states.get(id.toLowerCase());
+  }
+
+  /** "auto" = the automatic is in charge, "manual" = paused by hand until the sun changes, "off" = switched off */
+  get shadingClass(): string {
+    if (!this.shadingState?.automatic) {
+      return "off";
+    }
+    return this.shadingState.mode === "manual" ? "manual" : "auto";
+  }
+
+  get shadingHint(): string {
+    const state = this.shadingState;
+    if (!state) {
+      return "";
+    }
+    const action = this.translate.translate(!state.automatic ? "UI.VISU.SHADING_TURN_ON"
+      : state.mode === "manual" ? "UI.VISU.SHADING_RESUME" : "UI.VISU.SHADING_TURN_OFF");
+    return state.reason ? `${action} (${state.reason})` : action;
+  }
+
+  /** switches the automatic on or off, a manual override is ended (resumed) first */
+  async toggleShading() {
+    const state = this.shadingState;
+    if (!state || this.shadingBusy) {
+      return;
+    }
+    this.shadingBusy = true;
+    try {
+      if (state.automatic && state.mode === "manual") {
+        await this.shading.resumeVisu(state.controlId);
+      } else {
+        await this.shading.setVisuAutomatic(state.controlId, !state.automatic);
+      }
+      await this.loadShading(0);
+    } catch (error) {
+      this.notifyService.notifyError(this.translate.translate("UI.VISU.SHADING_FAILED"));
+    } finally {
+      this.shadingBusy = false;
+    }
   }
 
   private updateIcon() {

@@ -78,9 +78,9 @@ export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | Co
 
 // ---------- conditions ----------
 
-export type ConditionType = "group" | "datapoint" | "time" | "sun" | "control" | "trigger";
+export type ConditionType = "group" | "datapoint" | "time" | "sun" | "control" | "trigger" | "shading";
 /** the leaf types, a group is added with its own button */
-export const CONDITION_TYPES: ConditionType[] = ["datapoint", "time", "sun", "control", "trigger"];
+export const CONDITION_TYPES: ConditionType[] = ["datapoint", "time", "sun", "control", "shading", "trigger"];
 
 export type GroupOperator = "all" | "any" | "not";
 export const GROUP_OPERATORS: GroupOperator[] = ["all", "any", "not"];
@@ -130,12 +130,22 @@ export interface TriggeredByCondition {
     triggerId?: string;
 }
 
-export type ConditionDefinition = ConditionGroup | DatapointCondition | TimeCondition | SunCondition | ControlCondition | TriggeredByCondition;
+/** the automatic shading of a blind is (or is not) shading it right now */
+export interface ShadingCondition {
+    type: "shading";
+    control?: string;
+    shading: boolean;
+}
+
+export type ConditionDefinition = ConditionGroup | DatapointCondition | TimeCondition | SunCondition | ControlCondition | TriggeredByCondition
+    | ShadingCondition;
 
 // ---------- actions ----------
 
-export type ActionType = "setValue" | "control" | "groupControl" | "delay" | "waitUntil" | "notify" | "if" | "runAutomation" | "enableAutomation" | "stop";
-export const ACTION_TYPES: ActionType[] = ["setValue", "control", "groupControl", "delay", "waitUntil", "notify", "if", "runAutomation", "enableAutomation", "stop"];
+export type ActionType = "setValue" | "control" | "groupControl" | "delay" | "waitUntil" | "notify" | "if" | "runAutomation" | "enableAutomation" | "shading"
+    | "stop";
+export const ACTION_TYPES: ActionType[] = ["setValue", "control", "groupControl", "delay", "waitUntil", "notify", "if", "runAutomation", "enableAutomation",
+    "shading", "stop"];
 
 interface ActionBase {
     /** a disabled action is skipped (default true) */
@@ -222,10 +232,20 @@ export interface EnableAutomationAction extends ActionBase {
     enable: boolean;
 }
 
+/** switches the automatic shading of blinds on (resumes) or off (pauses), picked one by one or by area/category */
+export interface ShadingAction extends ActionBase {
+    type: "shading";
+    controls: string[];
+    area?: string | null;
+    includeSubAreas: boolean;
+    category?: string | null;
+    enable: boolean;
+}
+
 export interface StopAction extends ActionBase {
     type: "stop";
     reason?: string;
 }
 
 export type ActionDefinition = SetValueAction | ControlAction | GroupControlAction | DelayAction | WaitUntilAction | NotifyAction
-    | IfAction | RunAutomationAction | EnableAutomationAction | StopAction;
+    | IfAction | RunAutomationAction | EnableAutomationAction | ShadingAction | StopAction;

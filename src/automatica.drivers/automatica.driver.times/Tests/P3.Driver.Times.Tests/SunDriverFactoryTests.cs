@@ -462,5 +462,42 @@ namespace P3.Driver.Times.Tests
             await driver.Stop();
             await Dispatcher.ClearValues();
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task TestAzimuthAndElevation(bool azimuth)
+        {
+            await Dispatcher.ClearValues();
+            var template = azimuth ? SunDriverFactory.SunAzimuthGuid : SunDriverFactory.SunElevationGuid;
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, template);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2024, 06, 21, 13, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var value = Dispatcher.GetValues(DispatchableType.NodeInstance).First().Value.Value;
+            Assert.IsType<double>(value);
+
+            var solarTimes = new SolarTimes(setTime, LatitudeAngle, LongitudeAngle);
+            var expected = azimuth ? SunDriver.Azimuth(solarTimes) : SunDriver.Elevation(solarTimes);
+            Assert.Equal(expected, (double)value, 1);
+
+            if (azimuth)
+            {
+                Assert.InRange((double)value, 0, 360);
+            }
+            else
+            {
+                // midsummer around noon in Austria: the sun is high
+                Assert.InRange((double)value, -90, 90);
+            }
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
     }
 }

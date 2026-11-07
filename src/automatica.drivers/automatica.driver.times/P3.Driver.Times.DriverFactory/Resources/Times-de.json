@@ -36,6 +36,14 @@
       "IS_DAYLIGHT": {
         "NAME":  "Tageslicht",
         "DESCRIPTION": "Wahr zwischen Sonnenaufgang und Sonnenuntergang"
+      },
+      "AZIMUTH": {
+        "NAME": "Sonnenazimut",
+        "DESCRIPTION": "Richtung der Sonne in Grad (0 Nord, 90 Ost, 180 Süd, 270 West)"
+      },
+      "ELEVATION": {
+        "NAME": "Sonnenhöhe",
+        "DESCRIPTION": "Höhe der Sonne über dem Horizont in Grad (nachts negativ)"
       }
     },
     "DATETIME": {

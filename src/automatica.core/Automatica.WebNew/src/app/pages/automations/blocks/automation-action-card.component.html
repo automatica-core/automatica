@@ -212,6 +212,35 @@
           </div>
         </div>
       }
+      @case ('shading') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SHADING_AUTOMATIC' | translateAsync }}</span>
+            <dx-select-box [items]="shadingEnableItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="action.enable"></dx-select-box>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.BLINDS' | translateAsync }}</span>
+            <dx-tag-box [items]="ctx.lookups.blindControls" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [showSelectionControls]="true" applyValueMode="useButtons" [(value)]="action.controls"></dx-tag-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AREA' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.areas" valueExpr="id" displayExpr="path" [searchEnabled]="true"
+              [showClearButton]="true" [(value)]="action.area"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CATEGORY' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.categories" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [showClearButton]="true" [(value)]="action.category"></dx-select-box>
+          </div>
+          <div class="fld wide">
+            <div class="check-row">
+              <dx-check-box [(value)]="action.includeSubAreas" [text]="'UI.AUTOMATIONS.FIELD.INCLUDE_SUB_AREAS' | translateAsync"></dx-check-box>
+            </div>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.SHADING_ACTION_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+      }
       @case ('stop') {
         <div class="fields">
           <div class="fld wide">

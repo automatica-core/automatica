@@ -21,7 +21,8 @@ export const navigation: NavItem[] = [
         items: [
             { text: "UI.NAV.VISUALIZATION", path: "/visualization", icon: "table-cells-large" },
             { text: "UI.NAV.LOGIC", path: "/admin/logic-editor", icon: "diagram-project" },
-            { text: "UI.NAV.AUTOMATIONS", path: "/admin/automations", icon: "bolt" }
+            { text: "UI.NAV.AUTOMATIONS", path: "/admin/automations", icon: "bolt" },
+            { text: "UI.NAV.SHADING", path: "/admin/shading", icon: "sun" }
         ]
     },
     {

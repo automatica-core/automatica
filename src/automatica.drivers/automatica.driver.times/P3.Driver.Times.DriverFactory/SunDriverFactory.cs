@@ -9,7 +9,7 @@ namespace P3.Driver.Times.DriverFactory
     { 
         public static readonly Guid DriverGuidId = new Guid("78a865b6-9d52-449e-b855-255df86c0316");
         public override Guid DriverGuid => DriverGuidId;
-        public override Version DriverVersion => new Version(1, 1, 0, 0);
+        public override Version DriverVersion => new Version(1, 2, 0, 0);
 
         public static readonly Guid SunInterfaceGuid = new Guid("124d1808-3e02-4fcf-a3e9-f13ab9511d12");
 
@@ -21,6 +21,9 @@ namespace P3.Driver.Times.DriverFactory
         public static readonly Guid SunDusk = new Guid("241ae3de-2fc1-4d2e-88df-aeee4da6b19e");
         public static readonly Guid SunDawn = new Guid("25e927d7-bbda-4bae-8d1a-159f0eb34c44");
         public static readonly Guid IsDaylight = new Guid("5993a971-0727-46b1-904a-e7d770a0c29f");
+
+        public static readonly Guid SunAzimuthGuid = new Guid("c3a1f2d4-8b6e-4f0a-9d27-61e5b4c8a903");
+        public static readonly Guid SunElevationGuid = new Guid("7d4e9b12-3f5a-4c86-b0e1-2a9c6d8f4e57");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.times";
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -40,6 +43,9 @@ namespace P3.Driver.Times.DriverFactory
             factory.CreateNodeTemplate(SunIsSetGuid, "TIMES.SUN.IS_SUNSET.NAME", "TIMES.SUN.IS_SUNSET.DESCRIPTION", "is-sunset", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
             factory.CreateNodeTemplate(SunIsRiseGuid, "TIMES.SUN.IS_SUNRISE.NAME", "TIMES.SUN.IS_SUNRISE.DESCRIPTION", "is-sunrise", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
             factory.CreateNodeTemplate(IsDaylight, "TIMES.SUN.IS_DAYLIGHT.NAME", "TIMES.SUN.IS_DAYLIGHT.DESCRIPTION", "is-daylight", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
+
+            factory.CreateNodeTemplate(SunAzimuthGuid, "TIMES.SUN.AZIMUTH.NAME", "TIMES.SUN.AZIMUTH.DESCRIPTION", "azimuth", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
+            factory.CreateNodeTemplate(SunElevationGuid, "TIMES.SUN.ELEVATION.NAME", "TIMES.SUN.ELEVATION.DESCRIPTION", "elevation", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
 
         }
 

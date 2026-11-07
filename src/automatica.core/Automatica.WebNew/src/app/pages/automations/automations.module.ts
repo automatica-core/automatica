@@ -4,7 +4,7 @@ import { L10nTranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
     DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxDropDownButtonModule, DxNumberBoxModule, DxPopupModule, DxSelectBoxModule,
-    DxSwitchModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule
+    DxSwitchModule, DxTagBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule
 } from "devextreme-angular";
 import { SharedModule } from "src/app/shared/shared.module";
 import { AutomationsListComponent } from "./automations-list/automations-list.component";
@@ -51,6 +51,7 @@ import {
         DxPopupModule,
         DxSelectBoxModule,
         DxSwitchModule,
+        DxTagBoxModule,
         DxTemplateModule,
         DxTextAreaModule,
         DxTextBoxModule

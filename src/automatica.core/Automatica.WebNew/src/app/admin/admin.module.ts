@@ -31,6 +31,7 @@ import { ServicesModule } from "../services/services.module";
 import { SharedModule } from "../shared/shared.module";
 import { AdminRoutingModule } from "./admin-routing.module";
 import { AutomationsModule } from "../pages/automations/automations.module";
+import { ShadingModule } from "../pages/shading/shading.module";
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { AutomationsModule } from "../pages/automations/automations.module";
     SharedModule,
     DxSelectBoxModule,
     DxTabsModule,
-    AutomationsModule
+    AutomationsModule,
+    ShadingModule
   ],
   exports: [
     AdminComponent

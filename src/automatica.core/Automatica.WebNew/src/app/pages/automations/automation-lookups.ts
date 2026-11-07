@@ -55,7 +55,11 @@ export class AutomationLookups {
             .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
         this.controlMap = new Map(this.controls.map(c => [c.id, c]));
         this.switchControls = this.controls.filter(c => c.type === "switch" || c.type === "dimmer");
+        this.blindControls = this.controls.filter(c => c.type === "blind");
     }
+
+    /** blinds, for the automatic shading */
+    blindControls: ControlOption[] = [];
 
     /** switches and dimmers, they have an on/off state */
     switchControls: ControlOption[] = [];

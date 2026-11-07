@@ -1553,6 +1553,97 @@ namespace Automatica.Core.EF.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("Automatica.Core.EF.Models.Shading.ShadingBlind", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Definition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsPaused")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("This2RuleInstance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("This2ShadingFacade")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("This2RuleInstance")
+                        .IsUnique();
+
+                    b.HasIndex("This2ShadingFacade");
+
+                    b.ToTable("ShadingBlinds");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Shading.ShadingFacade", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Azimuth")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Definition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.ToTable("ShadingFacades");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Shading.ShadingSettings", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Definition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.ToTable("ShadingSettings");
+                });
+
             modelBuilder.Entity("Automatica.Core.EF.Models.Slave", b =>
                 {
                     b.Property<Guid>("ObjId")
@@ -2592,6 +2683,26 @@ namespace Automatica.Core.EF.Migrations
                         .HasConstraintName("RuleTemplate_DefaultVisuMobileTemplate");
 
                     b.Navigation("This2DefaultMobileVisuTemplateNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Shading.ShadingBlind", b =>
+                {
+                    b.HasOne("Automatica.Core.EF.Models.RuleInstance", "This2RuleInstanceNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2RuleInstance")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("RuleInstance2ShadingBlind");
+
+                    b.HasOne("Automatica.Core.EF.Models.Shading.ShadingFacade", "This2ShadingFacadeNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2ShadingFacade")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("ShadingFacade2ShadingBlind");
+
+                    b.Navigation("This2RuleInstanceNavigation");
+
+                    b.Navigation("This2ShadingFacadeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>

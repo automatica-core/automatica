@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>6.0.0.8395</Version>
+    <Version>6.0.0.8396</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>2958669F-DBA7-4B06-9464-93F5DFF772DC</ProjectGuid>
   </PropertyGroup>

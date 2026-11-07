@@ -12,6 +12,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Notification;
 using Microsoft.Extensions.Logging;
 using Innovative.SolarCalculator;
+using Automatica.Core.Shading.Engine;
 
 namespace Automatica.Core.Automation.Engine
 {
@@ -33,12 +34,13 @@ namespace Automatica.Core.Automation.Engine
         private readonly INotificationManager _notificationManager;
         private readonly IServerCloudApi _cloudApi;
         private readonly IRemanentHandler _remanentHandler;
+        private readonly IShadingEngine _shadingEngine;
         private readonly ILogger<CoreAutomationEnvironment> _logger;
 
         public CoreAutomationEnvironment(IDispatcher dispatcher, IDriverNodesStore driverNodesStore, INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache, ILogicInstanceCache logicInstanceCache, IAreaCache areaCache,
             ICategoryCache categoryCache, IControlCache controlCache, ISettingsCache settingsCache, INotificationManager notificationManager,
-            IServerCloudApi cloudApi, IRemanentHandler remanentHandler, ILogger<CoreAutomationEnvironment> logger)
+            IServerCloudApi cloudApi, IRemanentHandler remanentHandler, IShadingEngine shadingEngine, ILogger<CoreAutomationEnvironment> logger)
         {
             _dispatcher = dispatcher;
             _driverNodesStore = driverNodesStore;
@@ -52,6 +54,7 @@ namespace Automatica.Core.Automation.Engine
             _notificationManager = notificationManager;
             _cloudApi = cloudApi;
             _remanentHandler = remanentHandler;
+            _shadingEngine = shadingEngine;
             _logger = logger;
         }
 
@@ -239,6 +242,16 @@ namespace Automatica.Core.Automation.Engine
             }
 
             return new DateTimeOffset(local, Time.LocalTimeZone.GetUtcOffset(local));
+        }
+
+        public bool? IsShading(Guid controlId)
+        {
+            return _shadingEngine.IsConfigured(controlId) ? _shadingEngine.IsShading(controlId) : null;
+        }
+
+        public Task<bool> SetShadingAsync(Guid controlId, bool enabled, CancellationToken token)
+        {
+            return _shadingEngine.SetAutomaticAsync(controlId, enabled, token);
         }
 
         public Task NotifyAsync(Guid automationId, string subject, string body, NotifySeverity severity, CancellationToken token)

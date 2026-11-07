@@ -75,7 +75,7 @@ describe("SideNavigationMenuComponent", () => {
     create();
 
     expect(links().map(a => a.getAttribute("href"))).toEqual([
-      "/admin/home", "/visualization", "/admin/logic-editor", "/admin/automations", "/admin/config", "/admin/area-config", "/admin/category-config",
+      "/admin/home", "/visualization", "/admin/logic-editor", "/admin/automations", "/admin/shading", "/admin/config", "/admin/area-config", "/admin/category-config",
       "/admin/visualisation", "/admin/telegram-monitor", "/admin/user-config", "/admin/usergroup-config", "/admin/plugins",
       "/admin/satellites", "/admin/logs", "/admin/system"
     ]);

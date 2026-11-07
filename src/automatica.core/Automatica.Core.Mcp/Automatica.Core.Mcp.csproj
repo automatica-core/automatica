@@ -18,5 +18,6 @@
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
     <ProjectReference Include="..\Automatica.Core.HyperSeries\Automatica.Core.HyperSeries.csproj" />
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Shading\Automatica.Core.Shading.csproj" />
   </ItemGroup>
 </Project>

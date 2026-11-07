@@ -1,5 +1,6 @@
 ﻿using System;
 using Automatica.Core.Automation;
+using Automatica.Core.Shading;
 using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.Common;
@@ -130,6 +131,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<INotifyDriver, NotifyDriverHandler>();
                 services.AddSingleton<ILogicEngineDispatcher, LogicEngineDispatcher>();
                 services.AddAutomations();
+                services.AddShading();
 
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 

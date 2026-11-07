@@ -39,6 +39,25 @@ namespace Automatica.Core.Tests.Automation
 
         public bool HasLocation { get; set; } = true;
 
+        /// <summary>
+        /// Blinds with automatic shading: control id → shading right now
+        /// </summary>
+        public ConcurrentDictionary<Guid, bool> Shading { get; } = new();
+        public ConcurrentDictionary<Guid, bool> ShadingEnabled { get; } = new();
+
+        public bool? IsShading(Guid controlId) => Shading.TryGetValue(controlId, out var shading) ? shading : null;
+
+        public Task<bool> SetShadingAsync(Guid controlId, bool enabled, CancellationToken token)
+        {
+            if (!Shading.ContainsKey(controlId))
+            {
+                return Task.FromResult(false);
+            }
+
+            ShadingEnabled[controlId] = enabled;
+            return Task.FromResult(true);
+        }
+
         public Guid AddNode(string name, AutomationValueType type = AutomationValueType.Boolean, bool readable = true, bool writeable = true, object value = null)
         {
             var id = Guid.NewGuid();

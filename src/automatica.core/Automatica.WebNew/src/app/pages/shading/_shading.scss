@@ -1,0 +1,99 @@
+// Shared by the shading page and its editors. Only tokens from src/tokens.scss.
+
+// labelled form fields
+.fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: var(--space-3);
+    align-items: start;
+}
+
+.fld {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+
+    > label,
+    > .lbl {
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+    }
+
+    &.wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.hint {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.check-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    min-height: 36px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+// a titled block of fields inside a panel
+.block {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-top: 1px solid var(--line);
+    min-width: 0;
+
+    &:first-child {
+        border-top: 0;
+    }
+
+    > h3 {
+        margin: 0;
+        font-size: var(--text-md);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+
+        fa-icon {
+            color: var(--muted);
+            font-size: var(--text-sm);
+        }
+    }
+
+    > .hint {
+        margin-top: calc(-1 * var(--space-2));
+    }
+}
+
+.problems {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    list-style: none;
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--bad) 40%, var(--line));
+    background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+    font-size: var(--text-sm);
+
+    li {
+        color: var(--bad);
+    }
+
+    .mono {
+        color: var(--muted);
+        margin-right: var(--space-2);
+    }
+}

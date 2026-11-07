@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Automation\Automatica.Core.Automation.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Shading\Automatica.Core.Shading.csproj" />
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
