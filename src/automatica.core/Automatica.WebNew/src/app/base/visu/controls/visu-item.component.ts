@@ -16,6 +16,7 @@ import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 import { RuleInstance } from "../../model/rule-instance";
 import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
+import { CameraComponent } from "./camera/camera.component";
 import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
@@ -117,6 +118,10 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "shutter": {
         this.component = ShutterComponent;
+        break;
+      }
+      case "camera": {
+        this.component = CameraComponent;
         break;
       }
       

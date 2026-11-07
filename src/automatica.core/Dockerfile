@@ -62,6 +62,15 @@ RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${F
  && rm -rf frp.tgz frp_${FRP_VERSION}_linux_amd64
 RUN ./frp/frpc --version
 
+# go2rtc for the camera live views (Go2RtcProcessHost starts it on 127.0.0.1:1984). Bump deliberately:
+# version plus the sha256 of the asset (the "digest" of the release asset in the GitHub API).
+ARG GO2RTC_VERSION=1.9.15
+ARG GO2RTC_SHA256=20b46c6910734cb05ecefb234066f36868ff19b42ba1418a7a32e13a3e035712
+RUN curl -fsSL -o /opt/go2rtc https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/go2rtc_linux_amd64 \
+ && echo "${GO2RTC_SHA256}  /opt/go2rtc" | sha256sum -c - \
+ && chmod 755 /opt/go2rtc
+RUN /opt/go2rtc -version
+
 
 # Runs as root on purpose. The supervisor starts this container privileged, with the host's
 # docker.sock, /dev and /tmp (RuntimeSupervisor), and the watchdog replaces the files in /app in
@@ -78,6 +87,7 @@ COPY --from=build /app/ ./
 VOLUME /app/plugins
 
 COPY --from=build /app/frp /app/frp
+COPY --from=build /opt/go2rtc /usr/local/bin/go2rtc
 COPY --from=build /app/ ./
 
 RUN mkdir -p /app/automatica/frp

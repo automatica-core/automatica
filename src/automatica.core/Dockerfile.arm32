@@ -63,6 +63,14 @@ RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${F
  && mv frp_${FRP_VERSION}_linux_arm/* frp/ \
  && rm -rf frp.tgz frp_${FRP_VERSION}_linux_arm
 
+# go2rtc for the camera live views (Go2RtcProcessHost starts it on 127.0.0.1:1984). Bump deliberately:
+# version plus the sha256 of the asset (the "digest" of the release asset in the GitHub API).
+ARG GO2RTC_VERSION=1.9.15
+ARG GO2RTC_SHA256=cbffe4075a004e2015fd9d7e324800ab7968b52f49e9ce803361879d5e246028
+RUN curl -fsSL -o /opt/go2rtc https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/go2rtc_linux_arm \
+ && echo "${GO2RTC_SHA256}  /opt/go2rtc" | sha256sum -c - \
+ && chmod 755 /opt/go2rtc
+
 # Runs as root on purpose. The supervisor starts this container privileged, with the host's
 # docker.sock, /dev and /tmp (RuntimeSupervisor), and the watchdog replaces the files in /app in
 # place on updates. With docker.sock inside, a non-root USER would not contain anything, and it
@@ -76,6 +84,7 @@ ENV AUTOMATICA_VERSION=$VERSION
 
 COPY --from=build /app/ ./
 COPY --from=build /app/frp /app/frp
+COPY --from=build /opt/go2rtc /usr/local/bin/go2rtc
 
 COPY ./Automatica.Core/frp/* /app/automatica/frp/
 

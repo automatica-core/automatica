@@ -1,0 +1,17 @@
+{
+  "Automatica": {
+    "manifest-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "plugin-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "PluginGuid": "b3c6156b-7fc5-4ec7-b924-e6e0a0c8b3da",
+    "Name": "P3.Driver.Camera.Driver",
+    "ComponentName": "Camera",
+    "Type": "driver",
+    "Output": "P3.Driver.Camera.Driver.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.camera",
+    "MinCoreServerVersion": { "Minor": 0, "Major": 10, "Build": 0, "Revision": 2049 },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

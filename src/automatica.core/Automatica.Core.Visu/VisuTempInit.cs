@@ -79,6 +79,8 @@ namespace Automatica.Core.Visu
             var shutter = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Shutter);
             factory.CreateVisuMobileTemplate(shutter, "VISU.OBJECT.SHUTTER.NAME", "VISU.OBJECT.SHUTTER.DESCRIPTION",
                 "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            AddCameraControl(factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)
@@ -92,6 +94,31 @@ namespace Automatica.Core.Visu
             
             factory.CreatePropertyTemplate(mediaControl, "radio_list", "radio_list", "radio_list",
                 PropertyTemplateType.DropDown, mediaControl, "COMMON", false, false, "Ö3,s8007;FM4,s8235;OE1,s8514;Antenne Österreich,s310727;Rock Antenne Österreich,s306882; Energy Österreich,s921", "s8007", 0, 0);
+        }
+
+        /// <summary>
+        /// Live view / snapshot of a camera node of the camera driver, streamed by go2rtc through webapi/camera
+        /// </summary>
+        private void AddCameraControl(VisuMobileTemplateFactory factory)
+        {
+            var camera = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Camera);
+            factory.CreateVisuMobileTemplate(camera, "VISU.OBJECT.CAMERA.NAME", "VISU.OBJECT.CAMERA.DESCRIPTION", "camera",
+                "VISU.CATEGORY.COMMON.NAME", 2, 2, true);
+            AddCommonProperty(camera, factory);
+
+            factory.CreatePropertyTemplate(new Guid("fa07339f-117b-46a4-8b12-998312b29d32"), "VISU.APPEARANCE.CAMERA.NODE.NAME", "VISU.APPEARANCE.CAMERA.NODE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, camera, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+            factory.CreatePropertyTemplate(new Guid("6aee8a6a-b7e8-4729-b3a1-545dc36cf0ee"), "VISU.APPEARANCE.CAMERA.STREAM.NAME", "VISU.APPEARANCE.CAMERA.STREAM.DESCRIPTION", "camera_stream",
+                PropertyTemplateType.Enum, camera, "VISU.CATEGORY.APPEARANCE.NAME", true, false,
+                "ENUM(0,VISU.APPEARANCE.CAMERA.STREAM.SUB;1,VISU.APPEARANCE.CAMERA.STREAM.MAIN)", 0, 1, 2);
+            factory.CreatePropertyTemplate(new Guid("0bff7eb5-f120-46c6-b097-9ec99fc26f0a"), "VISU.APPEARANCE.CAMERA.MODE.NAME", "VISU.APPEARANCE.CAMERA.MODE.DESCRIPTION", "camera_mode",
+                PropertyTemplateType.Enum, camera, "VISU.CATEGORY.APPEARANCE.NAME", true, false,
+                "ENUM(0,VISU.APPEARANCE.CAMERA.MODE.LIVE;1,VISU.APPEARANCE.CAMERA.MODE.SNAPSHOT)", 0, 1, 3);
+            factory.CreatePropertyTemplate(new Guid("6c7d2811-46a8-49d1-b2ee-1aadb0bd9ef3"), "VISU.APPEARANCE.CAMERA.REFRESH.NAME", "VISU.APPEARANCE.CAMERA.REFRESH.DESCRIPTION", "camera_refresh",
+                PropertyTemplateType.Integer, camera, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, 10, 1, 4);
+            factory.CreatePropertyTemplate(new Guid("a6357ab8-5a7b-4862-a382-ea1fb3337dcf"), "VISU.APPEARANCE.CAMERA.FIT.NAME", "VISU.APPEARANCE.CAMERA.FIT.DESCRIPTION", "camera_fit",
+                PropertyTemplateType.Enum, camera, "VISU.CATEGORY.APPEARANCE.NAME", true, false,
+                "ENUM(0,VISU.APPEARANCE.CAMERA.FIT.COVER;1,VISU.APPEARANCE.CAMERA.FIT.CONTAIN)", 0, 1, 5);
         }
 
         private void AddClockControl(VisuMobileTemplateFactory factory)

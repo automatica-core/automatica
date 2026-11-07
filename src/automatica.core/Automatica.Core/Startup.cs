@@ -35,6 +35,7 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Authentication;
+using Automatica.Core.WebApi.Camera;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.RateLimiting;
@@ -177,7 +178,7 @@ namespace Automatica.Core
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/signalr")))
+                                (path.StartsWithSegments("/signalr") || CameraController.IsCameraWebSocket(context.HttpContext.Request)))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
@@ -232,6 +233,11 @@ namespace Automatica.Core
                 x.ValueLengthLimit = int.MaxValue;
                 x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
             });
+
+            // camera live view: go2rtc (own process unless server:go2rtc_url is set) relayed by webapi/camera
+            services.AddSingleton(sp => new Go2RtcSettings(sp.GetRequiredService<IConfiguration>()));
+            services.AddSingleton<Go2RtcProxy>();
+            services.AddHostedService<Go2RtcProcessHost>();
 
             services.AddSingleton<DiscoveryService>();
             // same instance as hosted service, otherwise PublishDevice() never runs and webapi/discovery throws
@@ -309,6 +315,8 @@ namespace Automatica.Core
             app.UseSecurityHeaders(Configuration);
 
             app.UseCors("CorsPolicy");
+            // the camera live view relays go2rtc WebSockets from a controller (SignalR brings its own)
+            app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(30) });
             app.UseRouting();
             app.UseRateLimiter();
 

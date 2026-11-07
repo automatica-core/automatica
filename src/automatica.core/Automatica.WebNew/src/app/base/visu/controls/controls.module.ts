@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule, DxPopupModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -23,6 +23,7 @@ import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
+import { CameraComponent } from "./camera/camera.component";
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { ShutterComponent } from "./shutter/shutter.component";
     DxTextBoxModule,
     DxNumberBoxModule,
     DxLinearGaugeModule,
-    DxCircularGaugeModule
+    DxCircularGaugeModule,
+    DxPopupModule
   ],
   declarations: [
     VisuItemComponent,
@@ -67,7 +69,8 @@ import { ShutterComponent } from "./shutter/shutter.component";
     PushComponent,
     GaugeComponent,
     ThreeRangeGaugeComponent,
-    ShutterComponent
+    ShutterComponent,
+    CameraComponent
   ],
   exports: [
     VisuItemComponent

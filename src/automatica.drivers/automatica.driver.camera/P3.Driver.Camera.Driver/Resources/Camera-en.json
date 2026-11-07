@@ -1,0 +1,82 @@
+{
+  "CAMERA": {
+    "NAME": "Cameras",
+    "DESCRIPTION": "IP cameras (RTSP / ONVIF) with live view in the visualization via go2rtc",
+    "CATEGORY": {
+      "GO2RTC": "go2rtc",
+      "STREAMS": "Streams"
+    },
+    "GO2RTC_URL": {
+      "NAME": "go2rtc URL",
+      "DESCRIPTION": "Address of the go2rtc API. The server starts its own go2rtc on http://127.0.0.1:1984 when it is installed; use the address of your go2rtc container otherwise"
+    },
+    "GO2RTC_USERNAME": {
+      "NAME": "go2rtc user",
+      "DESCRIPTION": "User of the go2rtc API, empty if it has no authentication"
+    },
+    "GO2RTC_PASSWORD": {
+      "NAME": "go2rtc password",
+      "DESCRIPTION": "Password of the go2rtc API"
+    },
+    "POLL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": "How often the online state is checked and missing streams are registered in go2rtc again"
+    },
+    "SCAN": {
+      "NAME": "Find ONVIF cameras",
+      "DESCRIPTION": "Searches the local network for ONVIF cameras"
+    },
+    "CAMERA": {
+      "NAME": "Camera",
+      "DESCRIPTION": "An IP camera",
+      "HOST": {
+        "NAME": "Host",
+        "DESCRIPTION": "IP address or host name of the camera"
+      },
+      "ONVIF_PORT": {
+        "NAME": "ONVIF port",
+        "DESCRIPTION": "HTTP port of the ONVIF service (usually 80, some cameras use 8000, 8080 or 2020)"
+      },
+      "USERNAME": {
+        "NAME": "User",
+        "DESCRIPTION": "User of the camera, used for ONVIF and the streams"
+      },
+      "PASSWORD": {
+        "NAME": "Password",
+        "DESCRIPTION": "Password of the camera"
+      },
+      "USE_ONVIF": {
+        "NAME": "Use ONVIF",
+        "DESCRIPTION": "Reads the stream and snapshot URLs that are not set from the camera, and the motion events"
+      },
+      "STREAM_MAIN": {
+        "NAME": "Main stream",
+        "DESCRIPTION": "RTSP URL of the high resolution stream (fullscreen view), e.g. rtsp://192.168.1.20:554/stream1. Empty = from ONVIF. The user and password are added when the URL has none"
+      },
+      "STREAM_SUB": {
+        "NAME": "Sub stream",
+        "DESCRIPTION": "RTSP URL of the low resolution stream (tiles). Empty = from ONVIF, or the main stream"
+      },
+      "SNAPSHOT_URL": {
+        "NAME": "Snapshot URL",
+        "DESCRIPTION": "HTTP URL of a JPEG snapshot, used for the still image mode. Empty = from ONVIF"
+      },
+      "EVENTS": {
+        "NAME": "Motion events",
+        "DESCRIPTION": "Follows the ONVIF events of the camera (motion, person detection)"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": "True while the camera accepts connections"
+      },
+      "MOTION": {
+        "NAME": "Motion",
+        "DESCRIPTION": "True while the camera reports motion"
+      },
+      "PERSON": {
+        "NAME": "Person",
+        "DESCRIPTION": "True while the camera reports a person (if the camera detects persons)"
+      }
+    }
+  }
+}

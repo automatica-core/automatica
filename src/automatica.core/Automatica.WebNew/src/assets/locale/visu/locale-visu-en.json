@@ -74,6 +74,10 @@
             "MEDIA_PLAYER": {
                 "NAME": "Media player",
                 "DESCRIPTION": "Controls playback and volume of a player"
+            },
+            "CAMERA": {
+                "NAME": "Camera",
+                "DESCRIPTION": "Live picture of a camera (camera driver)"
             }
         },
         "CATEGORY": {
@@ -184,6 +188,34 @@
             "SEND_VALUE": {
                 "NAME": "Value to send",
                 "DESCRIPTION":""
+            },
+            "CAMERA": {
+                "NODE": {
+                    "NAME": "Camera",
+                    "DESCRIPTION": "The camera node of the camera driver"
+                },
+                "STREAM": {
+                    "NAME": "Stream",
+                    "DESCRIPTION": "Stream of the tile; the fullscreen view always uses the main stream",
+                    "SUB": "Sub stream (low resolution)",
+                    "MAIN": "Main stream"
+                },
+                "MODE": {
+                    "NAME": "Mode",
+                    "DESCRIPTION": "Live video or a still image that is refreshed",
+                    "LIVE": "Live video",
+                    "SNAPSHOT": "Still image"
+                },
+                "REFRESH": {
+                    "NAME": "Refresh [s]",
+                    "DESCRIPTION": "How often the still image is refreshed"
+                },
+                "FIT": {
+                    "NAME": "Fit",
+                    "DESCRIPTION": "How the picture fills the tile",
+                    "COVER": "Fill (crop)",
+                    "CONTAIN": "Fit (bars)"
+                }
             }
         }
     }

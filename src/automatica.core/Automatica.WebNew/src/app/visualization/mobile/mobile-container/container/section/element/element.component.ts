@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, Input, ChangeDetectionStrategy, HostBinding } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { VisuPageGroupType } from "src/app/base/model/visu-page";
 
@@ -16,6 +16,12 @@ export class ElementComponent implements OnInit {
 
   @Input()
   pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
+
+  /** camera pictures need the room of two tiles */
+  @HostBinding("class.is-wide")
+  get isWide(): boolean {
+    return this.item?.VisuObjectTemplate?.Key === "camera";
+  }
 
   constructor() { }
 

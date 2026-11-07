@@ -1,0 +1,68 @@
+<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false">
+  <div control_full #tile class="camera" [class.is-contain]="fit === 'contain'" role="group" [attr.aria-label]="displayText">
+
+    @if (!cameraId) {
+      <div class="camera-empty">
+        <fa-icon icon="video"></fa-icon>
+        <span>{{ 'UI.VISU.CAMERA_NOT_CONFIGURED' | translateAsync }}</span>
+      </div>
+    } @else if (editMode) {
+      <div class="camera-empty">
+        <fa-icon icon="video"></fa-icon>
+      </div>
+    } @else {
+      @if (isLive) {
+        <video #tileVideo class="camera-media" muted autoplay playsinline disablepictureinpicture
+          [style.object-fit]="fit" aria-hidden="true"></video>
+      } @else if (snapshotUrl) {
+        <img class="camera-media" [src]="snapshotUrl" [style.object-fit]="fit" alt="" />
+      }
+
+      @if (showSpinner) {
+        <div class="camera-status" aria-live="polite">
+          <span class="camera-spinner" aria-hidden="true"></span>
+          <span class="sr-only">{{ 'UI.VISU.CAMERA_CONNECTING' | translateAsync }}</span>
+        </div>
+      } @else if (showError) {
+        <div class="camera-status is-error" aria-live="polite" [attr.title]="stateDetail">
+          <fa-icon icon="video-slash"></fa-icon>
+          <span>{{ 'UI.VISU.CAMERA_OFFLINE' | translateAsync }}</span>
+        </div>
+      }
+    }
+
+    <div class="camera-caption">
+      <div class="camera-title">
+        @if (location) {
+          <div class="tile-room">{{ location }}</div>
+        }
+        <div class="tile-name">{{ displayText }}</div>
+      </div>
+      @if (cameraId && !editMode) {
+        <button type="button" class="camera-expand" (click)="openFullscreen($event)"
+          [attr.aria-label]="('UI.VISU.CAMERA_FULLSCREEN' | translateAsync) + ': ' + displayText"
+          [attr.title]="'UI.VISU.CAMERA_FULLSCREEN' | translateAsync">
+          <fa-icon icon="expand"></fa-icon>
+        </button>
+      }
+    </div>
+  </div>
+</app-visualization-control>
+
+@if (fullscreenVisible) {
+  <dx-popup [width]="'96%'" [height]="'90%'" [maxWidth]="1600" [visible]="true" [showTitle]="true" [title]="displayText"
+    [hideOnOutsideClick]="true" [showCloseButton]="true" [dragEnabled]="false" [wrapperAttr]="{ class: 'visu-popup camera-popup' }"
+    (onShown)="onFullscreenShown($event)" (onHiding)="onFullscreenHiding()">
+    <div *dxTemplate="let data of 'content'" class="camera-fullscreen">
+      <video class="camera-fullscreen-video" muted autoplay playsinline controls disablepictureinpicture></video>
+      @if (fullscreenState === 'connecting') {
+        <div class="camera-status"><span class="camera-spinner" aria-hidden="true"></span></div>
+      } @else if (fullscreenState === 'error' || fullscreenState === 'unsupported') {
+        <div class="camera-status is-error">
+          <fa-icon icon="video-slash"></fa-icon>
+          <span>{{ 'UI.VISU.CAMERA_OFFLINE' | translateAsync }}</span>
+        </div>
+      }
+    </div>
+  </dx-popup>
+}

@@ -7,3 +7,7 @@
     -webkit-user-drag: none;
     -webkit-tap-highlight-color: transparent;
 }
+
+:host(.is-wide) {
+    grid-column: span 2;
+}

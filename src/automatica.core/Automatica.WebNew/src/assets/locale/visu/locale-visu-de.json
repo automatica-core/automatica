@@ -74,6 +74,10 @@
             "MEDIA_PLAYER": {
                 "NAME": "Mediaplayer",
                 "DESCRIPTION": "Steuert Wiedergabe und Lautstärke eines Players"
+            },
+            "CAMERA": {
+                "NAME": "Kamera",
+                "DESCRIPTION": "Live-Bild einer Kamera (Kamera-Treiber)"
             }
         },
         "CATEGORY": {
@@ -184,6 +188,34 @@
             "SEND_VALUE": {
                 "NAME": "Wert senden",
                 "DESCRIPTION":""
+            },
+            "CAMERA": {
+                "NODE": {
+                    "NAME": "Kamera",
+                    "DESCRIPTION": "Der Kamera-Knoten des Kamera-Treibers"
+                },
+                "STREAM": {
+                    "NAME": "Stream",
+                    "DESCRIPTION": "Stream der Kachel; die Vollbildansicht nutzt immer den Hauptstream",
+                    "SUB": "Substream (niedrige Auflösung)",
+                    "MAIN": "Hauptstream"
+                },
+                "MODE": {
+                    "NAME": "Modus",
+                    "DESCRIPTION": "Live-Video oder ein Standbild, das neu geladen wird",
+                    "LIVE": "Live-Video",
+                    "SNAPSHOT": "Standbild"
+                },
+                "REFRESH": {
+                    "NAME": "Aktualisierung [s]",
+                    "DESCRIPTION": "Wie oft das Standbild neu geladen wird"
+                },
+                "FIT": {
+                    "NAME": "Anpassung",
+                    "DESCRIPTION": "Wie das Bild die Kachel füllt",
+                    "COVER": "Füllen (beschneiden)",
+                    "CONTAIN": "Einpassen (Balken)"
+                }
             }
         }
     }

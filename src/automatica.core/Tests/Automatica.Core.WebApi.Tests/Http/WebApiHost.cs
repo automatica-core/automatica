@@ -20,6 +20,7 @@ using Automatica.Core.Runtime;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.WebApi.Authentication;
+using Automatica.Core.WebApi.Camera;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Converter;
 using Automatica.Core.WebApi.Exceptions;
@@ -178,9 +179,10 @@ namespace Automatica.Core.WebApi.Tests.Http
                     {
                         OnMessageReceived = context =>
                         {
-                            // the token in the query string only for the SignalR hubs (WebSockets cannot send headers)
+                            // the token in the query string only for the SignalR hubs and the camera live view (WebSockets cannot send headers)
                             var accessToken = context.Request.Query["access_token"];
-                            if (!string.IsNullOrEmpty(accessToken) && context.HttpContext.Request.Path.StartsWithSegments("/signalr"))
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (context.HttpContext.Request.Path.StartsWithSegments("/signalr") || CameraController.IsCameraWebSocket(context.HttpContext.Request)))
                             {
                                 context.Token = accessToken;
                             }
@@ -229,6 +231,8 @@ namespace Automatica.Core.WebApi.Tests.Http
 
             services.AddControllers(options =>
                 options.Filters.Add(new HttpResponseExceptionFilter(NullLogger.Instance)));
+            services.AddSingleton(sp => new Go2RtcSettings(sp.GetRequiredService<IConfiguration>()));
+            services.AddSingleton<Go2RtcProxy>();
             // --- end of the startup part ---
 
             // runtime parts that need a running server
@@ -284,6 +288,7 @@ namespace Automatica.Core.WebApi.Tests.Http
                 return next(context);
             });
 
+            app.UseWebSockets();
             app.UseRouting();
             app.UseRateLimiter();
             app.UseAuthentication();

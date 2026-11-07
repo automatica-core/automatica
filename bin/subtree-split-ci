@@ -84,6 +84,7 @@ remote automatica.driver.tesla git@github.com:automatica-core/automatica.driver.
 remote automatica.driver.dreame git@github.com:automatica-core/automatica.driver.dreame.git
 remote automatica.driver.mammotion git@github.com:automatica-core/automatica.driver.mammotion.git
 remote automatica.driver.byd git@github.com:automatica-core/automatica.driver.byd.git
+remote automatica.driver.camera git@github.com:automatica-core/automatica.driver.camera.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -138,6 +139,7 @@ split src/automatica.drivers/automatica.driver.tesla automatica.driver.tesla
 split src/automatica.drivers/automatica.driver.dreame automatica.driver.dreame
 split src/automatica.drivers/automatica.driver.mammotion automatica.driver.mammotion
 split src/automatica.drivers/automatica.driver.byd automatica.driver.byd
+split src/automatica.drivers/automatica.driver.camera automatica.driver.camera
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
