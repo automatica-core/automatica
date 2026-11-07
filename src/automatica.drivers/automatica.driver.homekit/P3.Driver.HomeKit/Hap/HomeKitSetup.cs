@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Cryptography;
 
 namespace P3.Driver.HomeKit.Hap
 {
@@ -23,6 +24,23 @@ namespace P3.Driver.HomeKit.Hap
         public static bool IsSetupCodeValid(string code)
         {
             return !InvalidSetupCodes.Contains(code);
+        }
+
+        /// <summary>
+        /// Creates a random setup code in the format XXX-XX-XXX from a CSPRNG
+        /// </summary>
+        public static string GenerateSetupCode()
+        {
+            while (true)
+            {
+                var digits = RandomNumberGenerator.GetInt32(0, 100_000_000).ToString("D8");
+                var code = $"{digits.Substring(0, 3)}-{digits.Substring(3, 2)}-{digits.Substring(5, 3)}";
+
+                if (IsSetupCodeValid(code))
+                {
+                    return code;
+                }
+            }
         }
     }
 }

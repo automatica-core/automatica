@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,13 +16,6 @@ using Xunit;
 
 namespace P3.Driver.HomeKit.UnitTests.Http
 {
-    [CollectionDefinition(Name, DisableParallelization = true)]
-    public class HapStaticsCollection
-    {
-        // HapControllerServer keeps the pairing in static fields
-        public const string Name = "HapStatics";
-    }
-
     public class EncryptedFrameTests
     {
         private static HapSession CreateSession()
@@ -29,6 +24,11 @@ namespace P3.Driver.HomeKit.UnitTests.Http
             RandomNumberGenerator.Fill(key);
             // the same key in both directions so EncryptData produces frames DecryptData can read
             return new HapSession { AccessoryToControllerKey = key, ControllerToAccessoryKey = key };
+        }
+
+        private static HapSession CreateSessionWithKeyOf(HapSession session)
+        {
+            return new HapSession { AccessoryToControllerKey = session.AccessoryToControllerKey, ControllerToAccessoryKey = session.ControllerToAccessoryKey };
         }
 
         private static byte[] Plain(int length)
@@ -84,68 +84,99 @@ namespace P3.Driver.HomeKit.UnitTests.Http
             Assert.Single(remainder);
             Assert.Equal(0, session.InboundBinaryMessageCount);
         }
+
+        [Fact]
+        public void FrameLengthAbove1024_IsInvalid_EvenBeforeTheFrameIsComplete()
+        {
+            var session = CreateSession();
+            var lengthOnly = BitConverter.GetBytes((ushort)(HttpServerConnection.MaxFrameLength + 1));
+
+            Assert.Throws<InvalidDataException>(() => HttpServerConnection.DecryptData(lengthOnly, session, out _));
+            Assert.Equal(0, session.InboundBinaryMessageCount);
+        }
+
+        [Fact]
+        public void TamperedFrame_IsInvalid()
+        {
+            var session = CreateSession();
+            var encrypted = HttpServerConnection.EncryptData(Plain(10), session);
+            encrypted[5] ^= 0xff;
+
+            Assert.Throws<InvalidDataException>(() => HttpServerConnection.DecryptData(encrypted, CreateSessionWithKeyOf(session), out _));
+        }
+
+        [Fact]
+        public void CompleteBufferOverload_RejectsATooShortFrame()
+        {
+            var session = CreateSession();
+            var encrypted = HttpServerConnection.EncryptData(Plain(10), session);
+
+            Assert.Equal(Plain(10), HttpServerConnection.DecryptData(encrypted, CreateSessionWithKeyOf(session)));
+            Assert.Throws<InvalidDataException>(() => HttpServerConnection.DecryptData(encrypted.Take(encrypted.Length - 1).ToArray(), CreateSessionWithKeyOf(session)));
+        }
     }
 
-    [Collection(HapStaticsCollection.Name)]
     public class PairSetupMiddlewareTests
     {
         private const string PairCode = "031-45-154";
+        private const string Ltsk = "3ae86e1ed4720fe49137f19d301d06f0c49e3436770a87a08beeb413dda556ff83e6d70e7064effd0c6df6d19451b1ded53f7e2d0dd86e33d4aa1993f5e9cded";
         private readonly TlvParser _parser = new TlvParser(NullLogger.Instance);
 
-        private Tlv InvokeM1(HapMiddleware middleware, string connectionId)
+        private Tlv InvokePairSetup(HapMiddleware middleware, string connectionId, int state)
         {
             var request = new Tlv();
             request.AddType(Constants.Method, 0);
-            request.AddType(Constants.State, 1);
+            request.AddType(Constants.State, state);
 
             var response = middleware.Invoke(connectionId, "pair-setup", "POST", _parser.Serialize(request), new ConnectionSession());
-            return _parser.Parse(response.Item2);
+            return _parser.Parse(response.Body);
         }
 
         [Fact]
         public void SecondPairSetup_IsBusyWithStateTwo_UntilTheFirstSessionTerminates()
         {
-            HapControllerServer.ClearPairing();
-            var middleware = new HapMiddleware(NullLogger.Instance, PairCode, null);
+            var middleware = new HapMiddleware(NullLogger.Instance, PairCode, null, new HapPairingStore(null, null));
 
-            var first = InvokeM1(middleware, "a");
+            var first = InvokePairSetup(middleware, "a", 1);
             Assert.False(first.HasType(Constants.Error));
             Assert.Equal(2, first.GetTypeAsInt(Constants.State));
 
-            var busy = InvokeM1(middleware, "b");
+            var busy = InvokePairSetup(middleware, "b", 1);
             Assert.Equal((int)ErrorCodes.Busy, busy.GetTypeAsInt(Constants.Error));
             Assert.Equal(2, busy.GetTypeAsInt(Constants.State));
 
             // the connection of the first pair-setup is gone, pairing must be possible again
             middleware.TerminateSession("a");
 
-            var retry = InvokeM1(middleware, "b");
+            var retry = InvokePairSetup(middleware, "b", 1);
             Assert.False(retry.HasType(Constants.Error));
             Assert.Equal(2, retry.GetTypeAsInt(Constants.State));
         }
 
         [Fact]
-        public void PairSetup_WhenAlreadyPaired_IsUnavailable()
+        public void ErrorResponses_CarryTheStateOfTheResponse()
         {
-            var server = new HapControllerServer(NullLogger.Instance, null, 0, "aa", "bb", "FC:22:3D:E3:CE:F2", PairCode);
-            try
-            {
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, null);
+            var paired = new HapPairingStore(null, null);
+            Assert.True(paired.CompletePairSetup(Ltsk, "controller-1", new string('a', 64)));
+            var pairedMiddleware = new HapMiddleware(NullLogger.Instance, PairCode, null, paired);
 
-                var response = InvokeM1(middleware, "a");
+            // M1 => M2, M3 => M4
+            var m2 = InvokePairSetup(pairedMiddleware, "a", 1);
+            Assert.Equal((int)ErrorCodes.Unavailable, m2.GetTypeAsInt(Constants.Error));
+            Assert.Equal(2, m2.GetTypeAsInt(Constants.State));
 
-                Assert.Equal((int)ErrorCodes.Unavailable, response.GetTypeAsInt(Constants.Error));
-                Assert.Equal(2, response.GetTypeAsInt(Constants.State));
-            }
-            finally
-            {
-                server.Stop().GetAwaiter().GetResult();
-                HapControllerServer.ClearPairing();
-            }
+            var m4 = InvokePairSetup(pairedMiddleware, "a", 3);
+            Assert.Equal((int)ErrorCodes.Unavailable, m4.GetTypeAsInt(Constants.Error));
+            Assert.Equal(4, m4.GetTypeAsInt(Constants.State));
+
+            // M5 without a pending setup on the connection => M6
+            var unpairedMiddleware = new HapMiddleware(NullLogger.Instance, PairCode, null, new HapPairingStore(null, null));
+            var m6 = InvokePairSetup(unpairedMiddleware, "a", 5);
+            Assert.Equal((int)ErrorCodes.Unknown, m6.GetTypeAsInt(Constants.Error));
+            Assert.Equal(6, m6.GetTypeAsInt(Constants.State));
         }
     }
 
-    [Collection(HapStaticsCollection.Name)]
     public class CharacteristicSubscriptionTests
     {
         private static Dictionary<string, List<Characteristic>> Subscriptions(HomeKitServer server)
@@ -164,26 +195,19 @@ namespace P3.Driver.HomeKit.UnitTests.Http
         public void EvFalse_Unsubscribes_AndValueWrites_DoNotSubscribe()
         {
             var server = new HomeKitServer(NullLogger.Instance, 0, "test", "", "", "FC:22:3D:E3:CE:F2", "031-45-154", "m", "bridge", 1, "1");
-            try
-            {
-                var accessory = AccessoryFactory.CreateLightBulbAccessory(2, "lamp", "AutomaticaCore", "1", false, 0);
-                server.AddAccessory(accessory);
-                var on = accessory.Services[1].Characteristics.First(a => a.Type == CharacteristicBase.OnType);
-                var session = new HapSession { ClientUsername = "controller" };
+            var accessory = AccessoryFactory.CreateLightBulbAccessory(2, "lamp", "AutomaticaCore", "1", false, 0);
+            server.AddAccessory(accessory);
+            var on = accessory.Services[1].Characteristics.First(a => a.Type == CharacteristicBase.OnType);
+            var session = new HapSession { ClientUsername = "controller" };
 
-                Put(server, session, 2, on.Id, ",\"value\":true");
-                Assert.False(Subscriptions(server).TryGetValue("controller", out var afterWrite) && afterWrite.Contains(on));
+            Put(server, session, 2, on.Id, ",\"value\":true");
+            Assert.False(Subscriptions(server).TryGetValue("controller", out var afterWrite) && afterWrite.Contains(on));
 
-                Put(server, session, 2, on.Id, ",\"ev\":true");
-                Assert.Contains(on, Subscriptions(server)["controller"]);
+            Put(server, session, 2, on.Id, ",\"ev\":true");
+            Assert.Contains(on, Subscriptions(server)["controller"]);
 
-                Put(server, session, 2, on.Id, ",\"ev\":false");
-                Assert.DoesNotContain(on, Subscriptions(server)["controller"]);
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
+            Put(server, session, 2, on.Id, ",\"ev\":false");
+            Assert.DoesNotContain(on, Subscriptions(server)["controller"]);
         }
 
         [Fact]
@@ -196,157 +220,144 @@ namespace P3.Driver.HomeKit.UnitTests.Http
         }
     }
 
-    [Collection(HapStaticsCollection.Name)]
     public class PairingsEndpointTests
     {
         private const string PairCode = "031-45-154";
-        private const string ControllerLtpk = "bb";
-        private static readonly byte[] ControllerId = Encoding.UTF8.GetBytes("controller-1");
+        private const string Ltsk = "3ae86e1ed4720fe49137f19d301d06f0c49e3436770a87a08beeb413dda556ff83e6d70e7064effd0c6df6d19451b1ded53f7e2d0dd86e33d4aa1993f5e9cded";
+        private const string ControllerId = "controller-1";
+        private static readonly string ControllerLtpk = new string('b', 64);
         private readonly TlvParser _parser = new TlvParser(NullLogger.Instance);
 
         private static HomeKitServer CreatePairedServer()
         {
-            return new HomeKitServer(NullLogger.Instance, 0, "test", "aa", ControllerLtpk, "FC:22:3D:E3:CE:F2", PairCode, "m", "bridge", 1, "1");
+            var store = new HapPairingStore(null, null);
+            Assert.True(store.CompletePairSetup(Ltsk, ControllerId, ControllerLtpk));
+
+            // loaded the way the driver persists it: accessory LTSK + serialized controller list
+            return new HomeKitServer(NullLogger.Instance, 0, "test", Ltsk, store.Serialize(), "FC:22:3D:E3:CE:F2", PairCode, "m", "bridge", 1, "1");
+        }
+
+        private static HapMiddleware CreateMiddleware(HomeKitServer server)
+        {
+            return new HapMiddleware(NullLogger.Instance, PairCode, server, server.PairingStore);
         }
 
         private static HapSession Verify(HapMiddleware middleware, string connectionId)
         {
             var session = middleware.GetSession(connectionId);
             session.IsVerified = true;
-            session.ClientIdentifier = ControllerId;
-            session.ClientUsername = "controller-1";
+            session.ControllerId = ControllerId;
+            session.ClientUsername = "636f6e74726f6c6c65722d31";
+            session.IsAdmin = true;
             return session;
         }
 
-        private Tlv Invoke(HapMiddleware middleware, string connectionId, string url, int method, byte[] identifier = null)
+        private HapResponse InvokeRaw(HapMiddleware middleware, string connectionId, string url, int method, string identifier = null)
         {
             var request = new Tlv();
             request.AddType(Constants.State, 1);
             request.AddType(Constants.Method, method);
             if (identifier != null)
             {
-                request.AddType(Constants.Identifier, identifier);
+                request.AddType(Constants.Identifier, Encoding.UTF8.GetBytes(identifier));
             }
 
-            var response = middleware.Invoke(connectionId, url, "POST", _parser.Serialize(request), new ConnectionSession());
-            return _parser.Parse(response.Item2);
+            return middleware.Invoke(connectionId, url, "POST", _parser.Serialize(request), new ConnectionSession());
+        }
+
+        private Tlv Invoke(HapMiddleware middleware, string connectionId, string url, int method, string identifier = null)
+        {
+            return _parser.Parse(InvokeRaw(middleware, connectionId, url, method, identifier).Body);
         }
 
         [Fact]
-        public void RemoveOwnPairing_Unpairs_AndAllowsANewPairSetup()
+        public void RemoveOwnPairing_Unpairs_PersistsTheClearedKeys_AndAllowsANewPairSetup()
         {
             var server = CreatePairedServer();
-            try
-            {
-                var removedEvents = 0;
-                server.PairingRemoved += (s, e) => removedEvents++;
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, server);
-                var session = Verify(middleware, "a");
-                Assert.True(server.AdvertisedAsPaired);
+            var persisted = new List<PairSetupCompleteEventArgs>();
+            server.PairingCompleted += (s, e) => persisted.Add(e); // the driver saves every change to the database
+            var middleware = CreateMiddleware(server);
+            var session = Verify(middleware, "a");
+            Assert.True(server.AdvertisedAsPaired);
 
-                var response = Invoke(middleware, "a", "pairings", 4, ControllerId);
+            var response = Invoke(middleware, "a", "pairings", PairingController.MethodRemovePairing, ControllerId);
 
-                Assert.Equal(2, response.GetTypeAsInt(Constants.State));
-                Assert.False(response.HasType(Constants.Error));
-                Assert.Equal(1, removedEvents); // the driver clears the persisted keys on this event
-                Assert.True(string.IsNullOrEmpty(HapControllerServer.HapControllerLtpk));
-                Assert.True(string.IsNullOrEmpty(HapControllerServer.HapControllerLtsk));
-                Assert.False(server.AdvertisedAsPaired); // => sf=1
-                Assert.True(session.CloseAfterResponse);
+            Assert.Equal(2, response.GetTypeAsInt(Constants.State));
+            Assert.False(response.HasType(Constants.Error));
 
-                var m2 = Invoke(middleware, "b", "pair-setup", 0);
-                Assert.False(m2.HasType(Constants.Error));
-                Assert.Equal(2, m2.GetTypeAsInt(Constants.State));
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
+            var saved = Assert.Single(persisted);
+            Assert.True(string.IsNullOrEmpty(saved.Ltsk));
+            Assert.False(new HapPairingStore(saved.Ltsk, saved.Ltpk).IsPaired); // a restart comes up unpaired
+            Assert.True(string.IsNullOrEmpty(server.PairingStore.AccessoryLtsk));
+            Assert.False(server.AdvertisedAsPaired); // => sf=1
+            Assert.True(session.CloseAfterResponse);
+
+            var m2 = Invoke(middleware, "b", "pair-setup", 0);
+            Assert.False(m2.HasType(Constants.Error));
+            Assert.Equal(2, m2.GetTypeAsInt(Constants.State));
+        }
+
+        [Fact]
+        public void RemovePairing_ClosesTheControllersOtherConnections()
+        {
+            var server = CreatePairedServer();
+            var middleware = CreateMiddleware(server);
+            var current = Verify(middleware, "a");
+            var other = Verify(middleware, "b");
+            other.Client = new TcpClient();
+            var unrelated = middleware.GetSession("c");
+            unrelated.Client = new TcpClient();
+
+            Invoke(middleware, "a", "pairings", PairingController.MethodRemovePairing, ControllerId);
+
+            // the current connection still has to send its response, it closes itself afterwards
+            Assert.True(current.CloseAfterResponse);
+            Assert.False(other.CloseAfterResponse);
+            Assert.Throws<ObjectDisposedException>(() => other.Client.GetStream());
+            Assert.Throws<InvalidOperationException>(() => unrelated.Client.GetStream()); // not connected, but not closed
         }
 
         [Fact]
         public void RemoveUnknownPairing_IsSuccess_AndKeepsThePairing()
         {
             var server = CreatePairedServer();
-            try
-            {
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, server);
-                var session = Verify(middleware, "a");
+            var middleware = CreateMiddleware(server);
+            var session = Verify(middleware, "a");
 
-                var response = Invoke(middleware, "a", "pairings", 4, Encoding.UTF8.GetBytes("other"));
+            var response = Invoke(middleware, "a", "pairings", PairingController.MethodRemovePairing, "other");
 
-                Assert.False(response.HasType(Constants.Error));
-                Assert.Equal(ControllerLtpk, HapControllerServer.HapControllerLtpk);
-                Assert.True(server.AdvertisedAsPaired);
-                Assert.False(session.CloseAfterResponse);
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
+            Assert.False(response.HasType(Constants.Error));
+            Assert.Equal(ControllerLtpk, server.PairingStore.Find(ControllerId).PublicKey);
+            Assert.True(server.AdvertisedAsPaired);
+            Assert.False(session.CloseAfterResponse);
         }
 
         [Fact]
         public void ListPairings_ReturnsTheAdminController()
         {
             var server = CreatePairedServer();
-            try
-            {
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, server);
-                Verify(middleware, "a");
+            var middleware = CreateMiddleware(server);
+            Verify(middleware, "a");
 
-                var response = Invoke(middleware, "a", "pairings", 5);
+            var response = Invoke(middleware, "a", "pairings", PairingController.MethodListPairings);
 
-                Assert.Equal(2, response.GetTypeAsInt(Constants.State));
-                Assert.Equal(ControllerId, response.GetType(Constants.Identifier));
-                Assert.Equal(new byte[] { 0xbb }, response.GetType(Constants.PublicKey));
-                Assert.Equal(1, response.GetTypeAsInt(Constants.Permissions));
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
-        }
-
-        [Fact]
-        public void AddPairing_OnlyForTheSameController()
-        {
-            var server = CreatePairedServer();
-            try
-            {
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, server);
-                Verify(middleware, "a");
-
-                var other = Invoke(middleware, "a", "pairings", 3, Encoding.UTF8.GetBytes("other"));
-                Assert.Equal((int)ErrorCodes.Unavailable, other.GetTypeAsInt(Constants.Error));
-                Assert.Equal(2, other.GetTypeAsInt(Constants.State));
-
-                var same = Invoke(middleware, "a", "pairings", 3, ControllerId);
-                Assert.False(same.HasType(Constants.Error));
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
+            Assert.Equal(2, response.GetTypeAsInt(Constants.State));
+            Assert.Equal(Encoding.UTF8.GetBytes(ControllerId), response.GetType(Constants.Identifier));
+            Assert.Equal(Enumerable.Repeat((byte)0xbb, 32).ToArray(), response.GetType(Constants.PublicKey));
+            Assert.Equal(1, response.GetTypeAsInt(Constants.Permissions));
         }
 
         [Fact]
         public void Pairings_FromAnUnverifiedSession_AreRejected()
         {
             var server = CreatePairedServer();
-            try
-            {
-                var middleware = new HapMiddleware(NullLogger.Instance, PairCode, server);
+            var middleware = CreateMiddleware(server);
 
-                var response = Invoke(middleware, "a", "pairings", 4, ControllerId);
+            var response = InvokeRaw(middleware, "a", "pairings", PairingController.MethodRemovePairing, ControllerId);
 
-                Assert.Equal((int)ErrorCodes.Authentication, response.GetTypeAsInt(Constants.Error));
-                Assert.Equal(ControllerLtpk, HapControllerServer.HapControllerLtpk);
-            }
-            finally
-            {
-                HapControllerServer.ClearPairing();
-            }
+            Assert.Equal(470, response.StatusCode);
+            Assert.NotNull(server.PairingStore.Find(ControllerId));
+            Assert.True(server.AdvertisedAsPaired);
         }
     }
 }

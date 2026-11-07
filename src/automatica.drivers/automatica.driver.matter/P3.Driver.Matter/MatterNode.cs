@@ -258,8 +258,8 @@ namespace P3.Driver.Matter
                 OpenCommissioningWindow();
             }
 
-            _logger.LogInformation("Matter node listening on UDP {Port}, {Fabrics} fabric(s), pairing code {Code}", _transport.Port, CommissionedFabricCount,
-                SetupPayload.FormatManualCode(ManualPairingCode));
+            _logger.LogInformation("Matter node listening on UDP {Port}, {Fabrics} fabric(s)", _transport.Port, CommissionedFabricCount);
+            _logger.LogDebug("Matter pairing code {Code}", SetupPayload.FormatManualCode(ManualPairingCode));
         }
 
         public async ValueTask DisposeAsync()

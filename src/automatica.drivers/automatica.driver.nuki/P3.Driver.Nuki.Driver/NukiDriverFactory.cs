@@ -12,7 +12,7 @@ namespace P3.Driver.Nuki.Driver
 
         public override Guid DriverGuid => new Guid("da739d07-56a6-4cd3-a3dc-ac7c5d2d4fe5");
 
-        public override Version DriverVersion => new Version(1, 0, 0, 1);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.nuki";
 
@@ -44,6 +44,9 @@ namespace P3.Driver.Nuki.Driver
 
             factory.CreatePropertyTemplate(new Guid("2260ec26-9f88-4c90-91f8-072a852c92a3"), "NUKI.ACCESS_TOKEN.NAME", "NUKI.ACCESS_TOKEN.DESCRIPTION", "token",
                 PropertyTemplateType.Password, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 4);
+
+            factory.CreatePropertyTemplate(new Guid("8f3a2b1c-6d4e-4f5a-9b7c-2e1d0c9b8a76"), "NUKI.HASHED_TOKEN.NAME", "NUKI.HASHED_TOKEN.DESCRIPTION", "hashed_token",
+                PropertyTemplateType.Bool, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, true, 1, 5);
 
             CreateSmartLock(factory);
         }

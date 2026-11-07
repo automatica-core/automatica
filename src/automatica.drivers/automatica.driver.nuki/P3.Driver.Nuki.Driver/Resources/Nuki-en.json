@@ -13,6 +13,10 @@
       "NAME": "Port",
       "DESCRIPTION": ""
     },
+    "HASHED_TOKEN": {
+      "NAME": "Hashed token",
+      "DESCRIPTION": "Authenticate with a SHA-256 hash instead of sending the token (bridge firmware 1.13+)"
+    },
     "ACCESS_TOKEN": {
       "NAME": "Access Token",
       "DESCRIPTION": ""

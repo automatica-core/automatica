@@ -73,8 +73,9 @@ namespace P3.Driver.Matter.Driver
             await _bridge.StartAsync(token);
             PublishStatus();
 
-            DriverContext.Logger.LogInformation("Matter bridge started with {Count} device(s), pairing code {Code}, QR {Qr}",
-                _bridge.Devices.Count, SetupPayload.FormatManualCode(_bridge.Node.ManualPairingCode), _bridge.Node.QrCodePayload);
+            // the pairing code is shown in the pairing nodes, keep it out of the regular log
+            DriverContext.Logger.LogInformation("Matter bridge started with {Count} device(s)", _bridge.Devices.Count);
+            DriverContext.Logger.LogDebug("Matter pairing code {Code}, QR {Qr}", SetupPayload.FormatManualCode(_bridge.Node.ManualPairingCode), _bridge.Node.QrCodePayload);
 
             return await base.Start(token);
         }

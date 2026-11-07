@@ -138,6 +138,22 @@ namespace P3.Driver.Loxone.Miniserver.Tests
             Assert.Equal(0, co.Values.ToList()[1].Value.DefaultValue);
         }
 
+        [Theory]
+        // count 2 but only one entry follows
+        [InlineData("79FD79103D028E52FFFF9D8DC10F9810000000000000000002000000770100002805000000000000000000000000F03F0B000000")]
+        // negative count
+        [InlineData("79FD79103D028E52FFFF9D8DC10F981000000000000000000FFFFFFF")]
+        // huge count
+        [InlineData("79FD79103D028E52FFFF9D8DC10F98100000000000000000FFFFFF7F")]
+        // truncated header
+        [InlineData("79FD79103D028E52FFFF9D8DC10F9810000000")]
+        public void TestDaytimerEventTableRejectsInvalidCounts(string data)
+        {
+            var demoData = Automatica.Core.Driver.Utility.Utils.StringToByteArray(data);
+
+            Assert.Throws<ArgumentException>(() => BinaryMessage.GenerateBinaryMessage(HeaderIdentifier.EventTableOfDaytimerStates, demoData, null));
+        }
+
         [Fact]
         public void TestTextStateEventTable()
         {

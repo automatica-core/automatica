@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.Sonos.Upnp.Services.Factories
@@ -9,7 +10,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
     {
         public GetMediaInfoResponse CreateFor(XNamespace actionXNamespace, string xml)
         {
-            var xElement = XElement.Parse(xml);
+            var xElement = SafeXml.ParseElement(xml);
 
             var responseNode = xElement.Descendants(actionXNamespace + "GetMediaInfoResponse").First();
 

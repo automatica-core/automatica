@@ -54,7 +54,7 @@ namespace P3.Driver.HomeKit
             _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, deviceId, configVersion);
             _hapServer = new HapControllerServer(logger, this, hapPort, ltsk, ltpk, deviceId, pairCode);
 
-            _bonjour.AlreadyPaired = !string.IsNullOrEmpty(ltpk);
+            _bonjour.AlreadyPaired = _hapServer.PairingStore.IsPaired;
 
             _hapServer.PairingCompleted += HapServerOnPairingCompleted;
 
@@ -150,31 +150,16 @@ namespace P3.Driver.HomeKit
 
         private void HapServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
+            _bonjour.AlreadyPaired = _hapServer.PairingStore.IsPaired;
             PairingCompleted?.Invoke(sender, e);
-            _bonjour.AlreadyPaired = true;
         }
 
         /// <summary>
-        /// Forgets the controller pairing of the running server (the caller clears the persisted keys), the bridge is advertised as pairable again.
+        /// The paired state announced over mDNS ("sf" TXT record), follows <see cref="HapPairingStore.IsPaired"/>.
         /// </summary>
-        public void ClearPairings()
-        {
-            HapControllerServer.ClearPairing();
-            _bonjour.AlreadyPaired = false;
-        }
-
-        /// <summary>
-        /// Raised when the controller removed its own pairing (Remove Pairing), the owner must clear the persisted keys.
-        /// </summary>
-        public event EventHandler PairingRemoved;
-
         internal bool AdvertisedAsPaired => _bonjour.AlreadyPaired;
 
-        internal void RemovePairing()
-        {
-            ClearPairings();
-            PairingRemoved?.Invoke(this, System.EventArgs.Empty);
-        }
+        internal HapPairingStore PairingStore => _hapServer.PairingStore;
 
         public async Task<bool> Start()
         {
@@ -182,6 +167,22 @@ namespace P3.Driver.HomeKit
             await _hapServer.Start();
            
             return true;
+        }
+
+        public bool IsPaired => _hapServer.PairingStore.IsPaired;
+
+        public static string GenerateSetupCode()
+        {
+            return HomeKitSetup.GenerateSetupCode();
+        }
+
+        /// <summary>
+        /// Removes all controller pairings so the bridge can be paired again. The store raises <see cref="PairingCompleted"/>
+        /// with the cleared state (persisted by the owner) and the bridge is advertised as pairable again.
+        /// </summary>
+        public void ClearPairings()
+        {
+            _hapServer.ClearPairings();
         }
 
         public ulong AddAccessory(Accessory accessory)

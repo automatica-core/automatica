@@ -30,6 +30,7 @@ namespace P3.Driver.Synology.DriverFactory
         private bool _connected;
         private int _port;
         private bool _ignoreSslErrors;
+        private string _certificateThumbprint;
 
         public SynologyDevice(IDriverContext driverContext) : base(driverContext)
         {
@@ -43,6 +44,7 @@ namespace P3.Driver.Synology.DriverFactory
             _useHttps = GetProperty("use_https")!.ValueBool!.Value;
             _ignoreSslErrors = GetProperty("ignore_ssl_errors")!.ValueBool!.Value;
             _password = GetPropertyValueString("password");
+            _certificateThumbprint = GetProperty("certificate_thumbprint")?.ValueString;
 
             _useRemoteConnect = GetProperty("use_remote_connect")!.ValueBool!.Value;
             _remoteConnectDomain = GetPropertyValueString("remote_connect_domain");
@@ -69,12 +71,13 @@ namespace P3.Driver.Synology.DriverFactory
                 {
                     var httpClientHandler = new HttpClientHandler();
 
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None || _ignoreSslErrors;
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                    SynologyCertificateValidator.Validate(cert, sslPolicyErrors, _ignoreSslErrors, _certificateThumbprint);
                 var httpClient = new HttpClient(httpClientHandler);
                 _client = new SynologyClient(_uri, httpClient);
 
                 
-                    if (!String.IsNullOrEmpty(_username) && _password.Length > 0)
+                    if (!String.IsNullOrEmpty(_username) && !String.IsNullOrEmpty(_password))
                         await _client.LoginAsync(_username, _password);
                     _connected = true;
                     _connectedAttribute.DispatchRead(true);

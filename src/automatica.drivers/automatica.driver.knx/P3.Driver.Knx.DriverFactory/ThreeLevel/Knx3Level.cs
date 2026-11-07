@@ -49,8 +49,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 throw new FeatureNotLicensedException(EtsImportFeatureName);
             }
 
-            var file = Path.Combine(Path.GetTempPath(), config.FileName);
-            if (!File.Exists(file))
+            var file = ResolveImportFile(Path.GetTempPath(), config.FileName);
+            if (file == null || !File.Exists(file))
             {
                 throw new FileNotFoundException();
             }
@@ -58,6 +58,41 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             var project = new EtsProjectParser().ParseEtsFile(file, config.Password, GroupAddressStyle.ThreeLevel);
 
             return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance, token);
+        }
+
+        /// <summary>
+        /// The uploaded project must be a file directly in the temp directory. Older servers pass the bare file name,
+        /// newer ones the full path of the upload.
+        /// </summary>
+        /// <returns>the full path, or null if the name points somewhere else</returns>
+        internal static string ResolveImportFile(string tempDirectory, string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName) || fileName.IndexOf('\0') >= 0)
+            {
+                return null;
+            }
+
+            var root = Path.GetFullPath(tempDirectory).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            string candidate;
+            try
+            {
+                candidate = Path.GetFullPath(Path.IsPathRooted(fileName) ? fileName : Path.Combine(root, fileName));
+            }
+            catch (System.Exception e) when (e is System.ArgumentException || e is System.NotSupportedException || e is PathTooLongException)
+            {
+                return null;
+            }
+
+            var directory = Path.GetDirectoryName(candidate);
+            var comparison = System.OperatingSystem.IsWindows() ? System.StringComparison.OrdinalIgnoreCase : System.StringComparison.Ordinal;
+
+            if (directory == null || !string.Equals(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), root, comparison))
+            {
+                return null;
+            }
+
+            return candidate;
         }
     }
 }

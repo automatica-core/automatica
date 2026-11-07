@@ -4,45 +4,111 @@ using P3.Driver.HueBridge.Data;
 using P3.Driver.HueBridge.EventArgs;
 using Automatica.Core.Driver.Utility.Network;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace P3.Driver.HueBridge
 {
     public class HueDriver
     {
+        public const int DefaultPort = 5005;
+        public const int MaxUsers = 32;
+        public static readonly TimeSpan DefaultLinkButtonWindow = TimeSpan.FromMinutes(3);
+
         public event EventHandler<HueSwitchLightEventArgs> SwitchLight;
 
+        /// <summary>
+        /// Raised when the whitelist changed; persist <see cref="GetUserNames"/>
+        /// </summary>
+        public event EventHandler WhiteListChanged;
+
         private IWebHost _host;
+        private readonly object _linkLock = new object();
+        private DateTime _linkButtonOpenUntil = DateTime.MinValue;
 
         internal static HueDiscoveryService HueDiscoveryService { get; private set; }
         internal static HueDriver Instance { get; private set; }
 
         public BridgeConfig BridgeConfig { get; }
 
-        public Dictionary<string, HueUser> WhiteList { get; } = new Dictionary<string, HueUser>();
+        internal ConcurrentDictionary<string, HueUser> WhiteList { get; } = new ConcurrentDictionary<string, HueUser>();
 
         public Guid BridgeId { get; } = Guid.NewGuid();
 
-        public Dictionary<int, HueLight> Lights { get; } = new Dictionary<int, HueLight>();
+        public IDictionary<int, HueLight> Lights { get; } = new ConcurrentDictionary<int, HueLight>();
 
         public static Microsoft.Extensions.Logging.ILogger Logger { get; private set; } = NullLogger.Instance;
 
-        public HueDriver(Microsoft.Extensions.Logging.ILogger logger)
+        public IPAddress BindAddress { get; }
+        public int Port { get; }
+
+        internal Func<DateTime> UtcNow { get; set; } = () => DateTime.UtcNow;
+
+        public HueDriver(Microsoft.Extensions.Logging.ILogger logger) : this(logger, IPAddress.Any, DefaultPort)
+        {
+        }
+
+        public HueDriver(Microsoft.Extensions.Logging.ILogger logger, IPAddress bindAddress, int port)
         {
             Instance = this;
+            BindAddress = bindAddress ?? IPAddress.Any;
+            Port = port is > 0 and <= 65535 ? port : DefaultPort;
             BridgeConfig = new BridgeConfig();
             BridgeConfig.Gateway = NetworkHelper.GetActiveIp();
             BridgeConfig.Netmask = NetworkHelper.GetActiveIpNetmask();
             BridgeConfig.BridgeId = BridgeId.ToString();
             BridgeConfig.Mac = NetworkHelper.GetActiveMacAddress();
-            Logger = logger;
+            BridgeConfig.LinkButtonProvider = () => IsLinkButtonPressed;
+            Logger = logger ?? NullLogger.Instance;
+        }
+
+        /// <summary>
+        /// Opens the "link button" window. Only while it is open, POST /api whitelists a new user.
+        /// </summary>
+        public void PressLinkButton(TimeSpan? duration = null)
+        {
+            DateTime until;
+            lock (_linkLock)
+            {
+                _linkButtonOpenUntil = UtcNow().Add(duration ?? DefaultLinkButtonWindow);
+                until = _linkButtonOpenUntil;
+            }
+
+            Logger.LogInformation($"Hue link button pressed, new users are accepted until {until:u}");
+        }
+
+        public void ReleaseLinkButton()
+        {
+            lock (_linkLock)
+            {
+                _linkButtonOpenUntil = DateTime.MinValue;
+            }
+        }
+
+        public bool IsLinkButtonPressed
+        {
+            get
+            {
+                lock (_linkLock)
+                {
+                    return UtcNow() < _linkButtonOpenUntil;
+                }
+            }
         }
 
         public HueLight SetLightState(int light, HueSwitchLightData state, bool invoke)
         {
-            var hueLight = Lights[light];
+            if (!Lights.TryGetValue(light, out var hueLight))
+            {
+                return null;
+            }
 
             if (state.On.HasValue)
             {
@@ -91,18 +157,85 @@ namespace P3.Driver.HueBridge
             return nextId;
         }
 
-        public void AddUser(HueUser user)
+        /// <summary>
+        /// Loads persisted user names (e.g. from the driver settings)
+        /// </summary>
+        public void LoadUsers(IEnumerable<string> userNames)
         {
-            if(!WhiteList.ContainsKey(user.Id)) { 
-                WhiteList.Add(user.Id, user);
+            if (userNames == null)
+            {
+                return;
             }
+
+            foreach (var name in userNames.Where(IsValidUserName).Take(MaxUsers))
+            {
+                WhiteList.TryAdd(name, new HueUser { Id = name, Created = DateTime.Now, LastUsed = DateTime.Now });
+            }
+        }
+
+        public IReadOnlyList<string> GetUserNames()
+        {
+            return WhiteList.Keys.ToList();
+        }
+
+        internal static bool IsValidUserName(string name)
+        {
+            return !string.IsNullOrWhiteSpace(name) && name.Length >= 10 && name.Length <= 64 &&
+                   name.All(c => char.IsLetterOrDigit(c) || c == '-');
+        }
+
+        /// <summary>
+        /// Creates a new whitelisted user if the link button window is open and the whitelist is not full.
+        /// </summary>
+        internal bool TryCreateUser(out string userName)
+        {
+            userName = null;
+
+            if (!IsLinkButtonPressed)
+            {
+                Logger.LogWarning("Hue user creation rejected, link button not pressed");
+                return false;
+            }
+
+            if (WhiteList.Count >= MaxUsers)
+            {
+                Logger.LogWarning($"Hue user creation rejected, the whitelist is full ({MaxUsers})");
+                return false;
+            }
+
+            userName = Convert.ToHexString(RandomNumberGenerator.GetBytes(16)).ToLowerInvariant();
+            if (!WhiteList.TryAdd(userName, new HueUser { Id = userName, Created = DateTime.Now, LastUsed = DateTime.Now }))
+            {
+                return false;
+            }
+
+            Logger.LogInformation("New Hue user whitelisted");
+            WhiteListChanged?.Invoke(this, System.EventArgs.Empty);
+            return true;
+        }
+
+        internal bool IsAuthorized(string userName)
+        {
+            if (string.IsNullOrEmpty(userName) || !WhiteList.TryGetValue(userName, out var user))
+            {
+                return false;
+            }
+
+            user.LastUsed = DateTime.Now;
+            return true;
+        }
+
+        public void RemoveAllUsers()
+        {
+            WhiteList.Clear();
+            WhiteListChanged?.Invoke(this, System.EventArgs.Empty);
         }
 
         public async Task Start()
         {
-            _host = BuildWebHost(5005);
+            _host = BuildWebHost();
 
-            HueDiscoveryService = new HueDiscoveryService(5005, Logger);
+            HueDiscoveryService = new HueDiscoveryService(Port, Logger);
 
             await HueDiscoveryService.StartAsync();
             await _host.RunAsync();
@@ -121,17 +254,32 @@ namespace P3.Driver.HueBridge
             }
         }
 
-        public IWebHost BuildWebHost(int port)
+        public IWebHost BuildWebHost()
         {
             var args = new string[0];
+            string host;
+            if (BindAddress.Equals(IPAddress.Any))
+            {
+                host = "*";
+            }
+            else if (BindAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+            {
+                host = $"[{BindAddress}]";
+            }
+            else
+            {
+                host = BindAddress.ToString();
+            }
 
+            // the web host must not touch the global (Serilog) logger of the core process
             var webHost = WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging => logging.ClearProviders())
+                .ConfigureServices(services => services.AddSingleton(this))
+                .UseKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024)
                 .UseStartup<HueStartup>()
-                .UseUrls($"http://*:{port}/");
+                .UseUrls($"http://{host}:{Port}/");
 
             return webHost.Build();
         }
-
-  
     }
 }

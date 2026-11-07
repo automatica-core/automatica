@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.Sonos.Upnp.Services.Factories
@@ -22,7 +23,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
             </s:Envelope>
             */
 
-            var xElement = XDocument.Parse(xml);
+            var xElement = SafeXml.ParseDocument(xml);
 
             var responseNode = xElement.Descendants(actionXNamespace + "AddURIToQueueResponse").First();
 

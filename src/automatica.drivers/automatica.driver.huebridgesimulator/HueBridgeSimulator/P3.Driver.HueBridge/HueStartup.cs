@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using P3.Driver.HueBridge.Api;
-using Serilog;
-using Serilog.Filters;
 using System.Reflection;
 
 namespace P3.Driver.HueBridge
@@ -21,13 +19,6 @@ namespace P3.Driver.HueBridge
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .MinimumLevel.Verbose()
-                .Filter.ByExcluding(Matching.FromSource("Microsoft"))
-                .CreateLogger();
-
             services.AddCors();
             services.AddMvc();
 

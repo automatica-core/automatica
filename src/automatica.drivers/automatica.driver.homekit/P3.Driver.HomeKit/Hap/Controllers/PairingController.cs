@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit.Hap.TlvData;
 
@@ -7,23 +10,21 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
     internal sealed class PairingReturn {
         public string ContentType { get; set; }
-        public Tlv TlvData { get; set; }
+        public byte[] Data { get; set; }
 
         /// <summary>
-        /// The stored (only) controller was removed, the caller must clear the pairing and close the controller's sessions after the response.
+        /// Identifiers whose pairing was removed by this request; their connections must be closed.
         /// </summary>
-        public bool PairingRemoved { get; set; }
+        public IList<string> RemovedControllers { get; set; } = new List<string>();
     }
 
-    /// <summary>
-    /// /pairings endpoint. Only a single controller is supported: the one stored by pair-setup, which is an admin.
-    /// </summary>
     internal class PairingController : BaseController
     {
-        private const int MethodAddPairing = 3;
-        private const int MethodRemovePairing = 4;
-        private const int MethodListPairings = 5;
-        private const int PermissionAdmin = 0x01;
+        internal const int MethodAddPairing = 3;
+        internal const int MethodRemovePairing = 4;
+        internal const int MethodListPairings = 5;
+
+        private const byte PermissionAdmin = 0x01;
 
         private readonly ILogger _logger;
 
@@ -32,71 +33,145 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             _logger = logger;
         }
 
-        public PairingReturn Post(Tlv parts, HapSession session)
+        private PairingReturn Result(Tlv tlv)
+        {
+            return new PairingReturn
+            {
+                ContentType = "application/pairing+tlv8",
+                Data = TlvParser.Serialize(tlv)
+            };
+        }
+
+        private PairingReturn Error(ErrorCodes error)
+        {
+            var responseTlv = new Tlv();
+            responseTlv.AddType(Constants.State, 2);
+            responseTlv.AddType(Constants.Error, error);
+            return Result(responseTlv);
+        }
+
+        public PairingReturn Post(Tlv parts, HapSession session, HapPairingStore store)
         {
             var state = parts.GetTypeAsInt(Constants.State);
             var method = parts.GetTypeAsInt(Constants.Method);
 
-            var responseTlv = new Tlv();
-            var ret = new PairingReturn
-            {
-                ContentType = "application/pairing+tlv8",
-                TlvData = responseTlv
-            };
-            responseTlv.AddType(Constants.State, 2);
-
             if (state != 1)
             {
-                _logger.LogWarning($"Returning error busy...");
-                responseTlv.AddType(Constants.Error, ErrorCodes.Busy);
-                return ret;
+                _logger.LogWarning($"Invalid pairings state {state}");
+                return Error(ErrorCodes.Unknown);
             }
 
-            // only a verified session belongs to the stored controller, which is the single (admin) controller
-            var controllerId = session?.ClientIdentifier;
-            var controllerLtpk = HapControllerServer.HapControllerLtpk;
-            if (session == null || !session.IsVerified || controllerId == null || string.IsNullOrEmpty(controllerLtpk))
+            // HAP 5.10 - 5.12: only verified admin controllers may manage pairings
+            if (session == null || !session.IsVerified || !session.IsAdmin)
             {
-                _logger.LogWarning($"Pairings request from a non admin controller");
-                responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
-                return ret;
+                _logger.LogWarning("Pairings request from a non admin controller rejected");
+                return Error(ErrorCodes.Authentication);
             }
 
-            var identifier = parts.HasType(Constants.Identifier) ? parts.GetType(Constants.Identifier) : null;
-
-            if (method == MethodAddPairing)
+            switch (method)
             {
-                _logger.LogDebug("* Add Pairing");
-
-                if (identifier == null || !identifier.SequenceEqual(controllerId))
+                case MethodAddPairing:
                 {
-                    // multiple controllers are not supported
-                    responseTlv.AddType(Constants.Error, ErrorCodes.Unavailable);
+                    _logger.LogDebug("* Add Pairing");
+
+                    if (!parts.HasType(Constants.Identifier) || !parts.HasType(Constants.PublicKey) ||
+                        !parts.HasType(Constants.Permissions))
+                    {
+                        return Error(ErrorCodes.Unknown);
+                    }
+
+                    var identifier = Encoding.UTF8.GetString(parts.GetType(Constants.Identifier));
+                    var publicKey = parts.GetType(Constants.PublicKey);
+                    var permissions = parts.GetType(Constants.Permissions);
+
+                    if (publicKey.Length != 32 || permissions.Length != 1)
+                    {
+                        return Error(ErrorCodes.Unknown);
+                    }
+
+                    var error = store.AddPairing(identifier, ByteArrayToString(publicKey),
+                        (permissions[0] & PermissionAdmin) == PermissionAdmin);
+
+                    if (error.HasValue)
+                    {
+                        return Error(error.Value);
+                    }
+
+                    var responseTlv = new Tlv();
+                    responseTlv.AddType(Constants.State, 2);
+                    return Result(responseTlv);
                 }
-            }
-            else if (method == MethodRemovePairing)
-            {
-                _logger.LogDebug("* Remove Pairing");
+                case MethodRemovePairing:
+                {
+                    _logger.LogDebug("* Remove Pairing");
 
-                // removing an unknown pairing is a success as well (idempotent)
-                ret.PairingRemoved = identifier != null && identifier.SequenceEqual(controllerId);
-            }
-            else if (method == MethodListPairings)
-            {
-                _logger.LogDebug("* List Pairings");
+                    if (!parts.HasType(Constants.Identifier))
+                    {
+                        return Error(ErrorCodes.Unknown);
+                    }
 
-                responseTlv.AddType(Constants.Identifier, controllerId);
-                responseTlv.AddType(Constants.PublicKey, StringToByteArray(controllerLtpk));
-                responseTlv.AddType(Constants.Permissions, PermissionAdmin);
-            }
-            else
-            {
-                _logger.LogWarning($"Unknown pairings method {method}");
-                responseTlv.AddType(Constants.Error, ErrorCodes.Unavailable);
-            }
+                    var identifier = Encoding.UTF8.GetString(parts.GetType(Constants.Identifier));
+                    var removed = store.RemovePairing(identifier);
 
-            return ret;
+                    var responseTlv = new Tlv();
+                    responseTlv.AddType(Constants.State, 2);
+                    var result = Result(responseTlv);
+                    result.RemovedControllers = removed;
+                    return result;
+                }
+                case MethodListPairings:
+                {
+                    _logger.LogDebug("* List Pairings");
+                    return new PairingReturn
+                    {
+                        ContentType = "application/pairing+tlv8",
+                        Data = SerializeList(store.Pairings)
+                    };
+                }
+                default:
+                    _logger.LogWarning($"Unknown pairings method {method}");
+                    return Error(ErrorCodes.Unknown);
+            }
         }
 
+        internal static byte[] SerializeList(IReadOnlyList<HapPairing> pairings)
+        {
+            using (var ms = new MemoryStream())
+            {
+                WriteItem(ms, Constants.State, new byte[] { 2 });
+
+                for (var i = 0; i < pairings.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        WriteItem(ms, Constants.Separator, Array.Empty<byte>());
+                    }
+
+                    var pairing = pairings[i];
+                    WriteItem(ms, Constants.Identifier, Encoding.UTF8.GetBytes(pairing.Identifier ?? string.Empty));
+                    WriteItem(ms, Constants.PublicKey, StringToByteArray(pairing.PublicKey));
+                    WriteItem(ms, Constants.Permissions, new[] { pairing.IsAdmin ? PermissionAdmin : (byte)0 });
+                }
+
+                return ms.ToArray();
+            }
+        }
+
+        private static void WriteItem(Stream stream, Constants type, byte[] value)
+        {
+            if (value.Length == 0)
+            {
+                stream.WriteByte((byte)type);
+                stream.WriteByte(0);
+                return;
+            }
+
+            foreach (var slice in value.Slices(255))
+            {
+                stream.WriteByte((byte)type);
+                stream.WriteByte((byte)slice.Length);
+                stream.Write(slice, 0, slice.Length);
+            }
+        }
     }
 }

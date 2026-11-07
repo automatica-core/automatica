@@ -23,6 +23,7 @@ namespace P3.Driver.Nuki.Driver
 
         private string _bridgeAddress;
         private string _token;
+        private bool _hashedToken = true;
 
         private HttpClient _httpClient = new();
 
@@ -38,6 +39,12 @@ namespace P3.Driver.Nuki.Driver
 
             _bridgeAddress = $"http://{GetPropertyValueString("ip")}:{GetPropertyValueInt("port")}";
             _token = GetPropertyValueString("token");
+            _hashedToken = GetProperty("hashed_token")?.ValueBool ?? true;
+
+            if (!_hashedToken)
+            {
+                _logger.LogWarning("Nuki bridge token is sent in plain text, enable the hashed token if the bridge firmware supports it (1.13+)");
+            }
             return base.Init(token);
         }
 
@@ -85,14 +92,21 @@ namespace P3.Driver.Nuki.Driver
         {
             _logger.LogDebug($"Poll values...");
 
-            var listResponse = await _httpClient.GetAsync($"{_bridgeAddress}/list?token={_token}", token);
+            using var listResponse = await _httpClient.GetAsync($"{_bridgeAddress}/list?{NukiTokenAuth.CreateQuery(_token, _hashedToken)}", token);
 
             var response = await listResponse.Content.ReadAsStringAsync(token);
             _logger.LogDebug($"Response: {response}");
 
             if (!listResponse.IsSuccessStatusCode)
             {
-                _logger.LogError($"Error reading values: {listResponse.StatusCode}");
+                if (listResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized && _hashedToken)
+                {
+                    _logger.LogError("Nuki bridge rejected the hashed token. Check the token and the bridge clock, or disable the hashed token for bridge firmware older than 1.13");
+                }
+                else
+                {
+                    _logger.LogError($"Error reading values: {listResponse.StatusCode}");
+                }
                 return;
             }
 

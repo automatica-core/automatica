@@ -108,7 +108,7 @@ namespace P3.Driver.HomeKitFactory
 
             if (String.IsNullOrEmpty(_pairCodeProperty.ValueString))
             {
-                string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
+                var code = HomeKitServer.GenerateSetupCode();
                 DriverContext.NodeTemplateFactory.SetPropertyValue(_pairCodeProperty.ObjId, code); //save to database
                 pairCode = code;
             }
@@ -131,7 +131,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty);
 
             DriverContext.Logger.LogDebug(
-                $"Start homekit server (LTSK {(String.IsNullOrEmpty(_ltskProperty.ValueString) ? "not set" : "loaded")}) and LTPK {_ltpkProperty.Value}");
+                $"Start homekit server (LTSK {(String.IsNullOrEmpty(_ltskProperty.ValueString) ? "not set" : "loaded")}, pairings {(String.IsNullOrEmpty(_ltpkProperty.ValueString) ? "not set" : "loaded")})");
             _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"),
                 DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
@@ -145,7 +145,6 @@ namespace P3.Driver.HomeKitFactory
             }
 
             _server.PairingCompleted += ServerOnPairingCompleted;
-            _server.PairingRemoved += ServerOnPairingRemoved;
             _server.ValueChanged += ServerOnValueChanged;
 
             await _server.Start();
@@ -319,10 +318,10 @@ namespace P3.Driver.HomeKitFactory
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
                 DriverContext.Logger.LogInformation($"Clear pairings...");
-                ClearPersistedPairing();
-
-                // the running server keeps the keys in memory, it would still verify the old controller and reject a new pair-setup
+                // the running server keeps the pairings in memory, it would still verify the old controllers and reject a new pair-setup;
+                // this also closes all controller connections and resets the failed pair-setup counter (lockout)
                 _server?.ClearPairings();
+                ClearPersistedPairing();
                 DriverContext.Logger.LogInformation($"Clear pairings...done");
             }
             return base.CustomAction(actionName, token);
@@ -335,22 +334,6 @@ namespace P3.Driver.HomeKitFactory
 
             _ltskProperty.Value = String.Empty;
             _ltpkProperty.Value = String.Empty;
-        }
-
-        /// <summary>
-        /// The controller removed its pairing (e.g. the bridge was removed in the Home app), the server already cleared its in-memory keys.
-        /// </summary>
-        private void ServerOnPairingRemoved(object sender, EventArgs e)
-        {
-            try
-            {
-                DriverContext.Logger.LogInformation($"Pairing removed by the controller, clearing persisted pairing...");
-                ClearPersistedPairing();
-            }
-            catch (Exception ex)
-            {
-                DriverContext.Logger.LogError(ex, "Could not clear persisted pairing");
-            }
         }
 
         private async void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
@@ -417,23 +400,30 @@ namespace P3.Driver.HomeKitFactory
             }
         }
 
-        private int CreateRandom(int from, int to)
-        {
-            Random randomNumber = new Random();
-            return randomNumber.Next(from, to);
-        }
-
+        /// <summary>
+        /// Raised by the pairing store on every change: pair-setup, add/remove pairing by a controller (removing the last admin
+        /// clears all pairings and the accessory LTSK, e.g. when the bridge is removed in the Home app), failed pair-setup attempts
+        /// and clear. <see cref="PairSetupCompleteEventArgs.Ltpk"/> is the serialized controller list.
+        /// </summary>
         private void ServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
-            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...");
+            try
+            {
+                DriverContext.Logger.LogInformation($"Saving HomeKit pairings to database...");
 
-            _ltskProperty.Value = e.Ltsk;
-            _ltpkProperty.Value = e.Ltpk;
+                _ltskProperty.Value = e.Ltsk;
+                _ltpkProperty.Value = e.Ltpk;
 
-            DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, e.Ltsk);  //save to database
-            DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, e.Ltpk); //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, e.Ltsk);  //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, e.Ltpk); //save to database
 
-            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...done");
+                DriverContext.Logger.LogInformation($"Saving HomeKit pairings to database...done");
+            }
+            catch (Exception ex)
+            {
+                // raised while a HAP request is handled, a failure must not break the request
+                DriverContext.Logger.LogError(ex, "Could not save HomeKit pairings");
+            }
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
@@ -441,7 +431,6 @@ namespace P3.Driver.HomeKitFactory
             if (_server != null)
             {
                 _server.PairingCompleted -= ServerOnPairingCompleted;
-                _server.PairingRemoved -= ServerOnPairingRemoved;
                 _server.ValueChanged -= ServerOnValueChanged;
                 await _server.Stop();
             }

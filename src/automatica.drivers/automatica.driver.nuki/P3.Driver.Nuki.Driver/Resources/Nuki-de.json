@@ -13,6 +13,10 @@
       "NAME": "Port",
       "DESCRIPTION": ""
     },
+    "HASHED_TOKEN": {
+      "NAME": "Gehashtes Token",
+      "DESCRIPTION": "Mit einem SHA-256-Hash anmelden, statt das Token zu senden (Bridge-Firmware 1.13+)"
+    },
     "ACCESS_TOKEN": {
       "NAME": "Access Token",
       "DESCRIPTION": ""

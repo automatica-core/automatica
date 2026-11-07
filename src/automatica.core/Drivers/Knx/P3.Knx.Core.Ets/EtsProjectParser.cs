@@ -6,9 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Automatica.Core.Base.Common;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace P3.Knx.Core.Ets
 {
@@ -64,26 +65,24 @@ namespace P3.Knx.Core.Ets
 
         private EtsProject ParseEtsFileInternal(String file, string password, GroupAddressStyle? expectedGroupAddressStyle)
         {
+            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
             try
             {
-                using ZipFile s = ZipFile.Read(file);
-              
-                var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
-              
+                var extractor = new EtsZipExtractor();
+                extractor.Extract(file, tmpPath);
 
-                s.ExtractAll(tmpPath);
+                if (Directory.GetFiles(tmpPath).Length == 0 && Directory.GetDirectories(tmpPath).Length == 0)
+                    throw new EtsProjectParserInvalidZipFileException();
 
                 if (IsPasswordProtected(tmpPath))
                 {
                     if (String.IsNullOrEmpty(password))
                         throw new EtsProjectParserPasswordRequiredException();
 
-                    var zipFile = Directory.GetFiles(tmpPath).FirstOrDefault(f => f.EndsWith(".zip"));
+                    var zipFile = Directory.GetFiles(tmpPath, "P-*.zip").First();
                     var fileInfo = new FileInfo(zipFile);
-                    using ZipFile projectZip = ZipFile.Read(fileInfo.FullName);
 
-                    var projectTempDir = Path.Combine(tmpPath, fileInfo.Name.Replace(fileInfo.Extension, ""));
-                    Directory.CreateDirectory(projectTempDir);
+                    var projectTempDir = Path.Combine(tmpPath, Path.GetFileNameWithoutExtension(fileInfo.Name));
 
                     bool ets6 = true;
                     if (ets6)
@@ -96,8 +95,8 @@ namespace P3.Knx.Core.Ets
                         password = Convert.ToBase64String(pbkdf2.GetBytes(32));
                     }
 
-                    projectZip.Password = password;
-                    projectZip.ExtractAll(projectTempDir);
+                    // the inner project archive is AES (ETS6) or ZipCrypto encrypted
+                    extractor.Extract(zipFile, projectTempDir, password);
                 }
 
                 foreach (var dir in Directory.GetDirectories(tmpPath))
@@ -114,18 +113,28 @@ namespace P3.Knx.Core.Ets
                         {
                             ParseManufacturerDirectory(fileInfo);
                         }
-                        else if (IsProjectZipFile(fileInfo, "P-"))
-                        {
-                            
-                        }
                     }
                 }
-
-                Directory.Delete(tmpPath, true);
             }
             catch (ZipException e)
             {
                 throw new EtsProjectParserInvalidZipFileException(e);
+            }
+            finally
+            {
+                try
+                {
+                    if (Directory.Exists(tmpPath))
+                        Directory.Delete(tmpPath, true);
+                }
+                catch (IOException e)
+                {
+                    Logger.LogWarning($"Could not delete temporary ETS directory {tmpPath}: {e.Message}");
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Logger.LogWarning($"Could not delete temporary ETS directory {tmpPath}: {e.Message}");
+                }
             }
 
             if (Context.Projects.Count == 0)
@@ -144,13 +153,6 @@ namespace P3.Knx.Core.Ets
             return project;
         }
 
-        private bool IsProjectZipFile(FileInfo theEntry, String fileNamePrefix)
-        {
-            var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(theEntry.FullName));
-            return theEntry.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
-                   && theEntry.Name.StartsWith(fileNamePrefix, StringComparison.OrdinalIgnoreCase);
-        }
-
         private bool IsXmlFileWithDirectoryPrefix(FileInfo theEntry, String directoryPrefix)
         {
             var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(theEntry.FullName));
@@ -158,6 +160,19 @@ namespace P3.Knx.Core.Ets
                 && theEntry.Name.IndexOf("UserFiles", StringComparison.OrdinalIgnoreCase) == -1
                 && directoryInfo.Name.StartsWith(directoryPrefix, StringComparison.OrdinalIgnoreCase);
         }
+        private static XElement LoadXml(string path)
+        {
+            // ETS project files never contain a DTD
+            var settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+                IgnoreWhitespace = true
+            };
+            using var reader = XmlReader.Create(path, settings);
+            return XElement.Load(reader);
+        }
+
         private bool IsPasswordProtected(string directory)
         {
             var files = Directory.GetFiles(directory, "P-*.zip");
@@ -165,7 +180,7 @@ namespace P3.Knx.Core.Ets
         }
         private void ParseProjectDirectory(FileInfo file)
         {
-            XElement doc = XElement.Load(file.FullName);
+            XElement doc = LoadXml(file.FullName);
             XNamespace ns = doc.GetDefaultNamespace();
 
             foreach(var p in from el in doc.Descendants(ns + "Project") 
@@ -272,7 +287,7 @@ namespace P3.Knx.Core.Ets
         }
         private void ParseManufacturerDirectory(FileInfo file)
         {
-            XElement doc = XElement.Load(file.FullName);
+            XElement doc = LoadXml(file.FullName);
             XNamespace ns = doc.GetDefaultNamespace();
 
             foreach (var comObjectRef in from el in doc.Descendants(ns + "ComObjectRef") 

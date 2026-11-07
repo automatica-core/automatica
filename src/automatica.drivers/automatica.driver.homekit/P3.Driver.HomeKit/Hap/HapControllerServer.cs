@@ -16,10 +16,9 @@ namespace P3.Driver.HomeKit.Hap
         private readonly string _pairCode;
 
         private readonly ILogger _logger;
-        internal static string HapControllerLtsk { get; private set; }
-        internal static string HapControllerLtpk { get; private set; }
-
         private readonly HttpServer _httpServer;
+
+        public HapPairingStore PairingStore { get; }
 
         public event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
 
@@ -27,15 +26,13 @@ namespace P3.Driver.HomeKit.Hap
         {
             HomeKitServer = homeKitServer;
             _logger = logger;
-            HapControllerLtsk = ltsk;
-            HapControllerLtpk = ltpk;
-
             _port = port;
             HapControllerId = controllerId;
             _pairCode = pairCode;
 
-            _httpServer = new HttpServer(logger, homeKitServer, port, pairCode);
-            HapMiddleware.PairingCompleted += PairingCompletedEvent;
+            PairingStore = new HapPairingStore(ltsk, ltpk);
+            _httpServer = new HttpServer(logger, homeKitServer, port, pairCode, PairingStore);
+            PairingStore.Changed += PairingCompletedEvent;
         }
         public async Task<bool> Start()
         {
@@ -45,26 +42,15 @@ namespace P3.Driver.HomeKit.Hap
 
         private void PairingCompletedEvent(object sender, PairSetupCompleteEventArgs e)
         {
-            HapControllerLtsk = e.Ltsk;
-            HapControllerLtpk = e.Ltpk;
-
-            _logger.LogInformation($"LTPK {e.Ltpk}, accessory LTSK generated");
-            
+            _logger.LogInformation($"HomeKit pairings changed, {PairingStore.Pairings.Count} controller(s) paired");
 
             PairingCompleted?.Invoke(this, e);
-        }
-
-
-        internal static void ClearPairing()
-        {
-            HapControllerLtsk = null;
-            HapControllerLtpk = null;
         }
 
         public async Task<bool> Stop()
         {
             await _httpServer.Stop();
-            HapMiddleware.PairingCompleted -= PairingCompletedEvent;
+            PairingStore.Changed -= PairingCompletedEvent;
 
             return true;
         }
@@ -76,6 +62,15 @@ namespace P3.Driver.HomeKit.Hap
                 return false;
             }
             return _httpServer.SendNotification(characteristic, session);
+        }
+
+        /// <summary>
+        /// Removes all pairings and closes all controller connections
+        /// </summary>
+        public void ClearPairings()
+        {
+            PairingStore.Clear();
+            _httpServer.CloseAllConnections();
         }
 
         internal HapSession GetClientSession(string clientUserName)

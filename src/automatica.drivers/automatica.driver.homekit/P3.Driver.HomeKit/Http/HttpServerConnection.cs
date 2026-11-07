@@ -143,11 +143,16 @@ namespace P3.Driver.HomeKit.Http
                             }
 
                             var datLen = content.Length;
+                            if (contentLength < 0 || contentLength > datLen)
+                            {
+                                throw new InvalidDataException("Invalid content-length");
+                            }
+
                             var data = content.AsSpan(datLen - contentLength, contentLength).ToArray();
 
 
                             var result = _middleware.Invoke(session, url, method, data, _session);
-                            var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2, DateTime.Now);
+                            var response = GetHttpResponse("HTTP/1.1", result.ContentType, result.Body, DateTime.Now, result.StatusCode, result.Reason);
 
                             _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
@@ -175,9 +180,9 @@ namespace P3.Driver.HomeKit.Http
 
                             if (_connectionSession.CloseAfterResponse)
                             {
-                                // the pairing was removed: the controller's sessions are no longer valid
-                                _logger.LogInformation("Pairing removed, closing the controller's connections");
-                                _httpServer.CloseControllerConnections(_connectionSession.ClientUsername, this);
+                                // the pairing was removed: HapMiddleware already closed the controller's other connections,
+                                // this one is closed after the response was written with the session keys
+                                _logger.LogInformation("Closing connection, the pairing of the controller was removed");
                                 break;
                             }
                         }
@@ -213,7 +218,7 @@ namespace P3.Driver.HomeKit.Http
             }
         }
 
-        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date)
+        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date, int statusCode = 200, string reason = "OK")
         {
             var response = Array.Empty<byte>();
             var returnChars = new byte[2];
@@ -222,7 +227,7 @@ namespace P3.Driver.HomeKit.Http
 
             var contentLength = $"Content-Length: {data.Length}";
 
-            if (data.Length == 0)
+            if (data.Length == 0 && statusCode == 200)
             {
                 response = response
                     .Concat(Encoding.ASCII.GetBytes($"{header} 204 No Content"))
@@ -230,7 +235,7 @@ namespace P3.Driver.HomeKit.Http
             }
             else
             {
-                response = response.Concat(Encoding.UTF8.GetBytes($"{header} 200 OK")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"{header} {statusCode} {reason}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes(contentLength)).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Content-Type: {contentType}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Date: {date.ToUniversalTime().ToString("r", CultureInfo.InvariantCulture)}")).Concat(returnChars).ToArray();
@@ -284,9 +289,24 @@ namespace P3.Driver.HomeKit.Http
             return resultData;
         }
 
+        /// <summary>
+        /// HAP limits the plaintext of an encrypted frame to 1024 bytes.
+        /// </summary>
+        internal const int MaxFrameLength = 1024;
+
+        /// <summary>
+        /// Decrypts a buffer that must consist of complete frames only, a trailing partial frame is invalid.
+        /// </summary>
         internal static byte[] DecryptData(byte[] content, HapSession session)
         {
-            return DecryptData(content, session, out _);
+            var result = DecryptData(content, session, out var remainder);
+
+            if (remainder.Length > 0)
+            {
+                throw new InvalidDataException("Encrypted frame too short");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -307,6 +327,12 @@ namespace P3.Driver.HomeKit.Http
                 //
                 var twoBytes = new[] { content[offset], content[offset + 1] };
                 var frameLength = BitConverter.ToUInt16(twoBytes, 0);
+
+                // checked as soon as the length is known, a bogus length must not make us buffer up to 64 KiB
+                if (frameLength > MaxFrameLength)
+                {
+                    throw new InvalidDataException("Invalid encrypted frame length");
+                }
 
                 if (content.Length - offset < lengthSize + frameLength + authTagSize)
                 {

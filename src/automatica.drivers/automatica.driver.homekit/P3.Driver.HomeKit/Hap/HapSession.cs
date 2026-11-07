@@ -21,12 +21,13 @@ namespace P3.Driver.HomeKit.Hap
         public string ClientUsername { get; set; }
 
         /// <summary>
-        /// Raw pairing identifier of the verified controller.
+        /// UTF-8 pairing identifier of the verified controller
         /// </summary>
-        public byte[] ClientIdentifier { get; internal set; }
+        public string ControllerId { get; internal set; }
+        public bool IsAdmin { get; internal set; }
 
         /// <summary>
-        /// Set when the controller's pairing was removed, the connection is closed after the response was written.
+        /// Close the connection once the current response was written (e.g. the pairing was removed)
         /// </summary>
         public bool CloseAfterResponse { get; internal set; }
     }

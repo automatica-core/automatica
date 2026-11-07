@@ -289,6 +289,19 @@ namespace P3.Driver.ModBusDriver.Slave
         }
 
         protected abstract bool IgnoreDeviceId { get; }
+
+        /// <summary>
+        /// Rejects all write function codes with "illegal function"
+        /// </summary>
+        protected virtual bool ReadOnly => false;
+
+        private static bool IsWriteFunction(byte functionCode)
+        {
+            return functionCode == (byte)ModBusFunction.WriteMultipleCoils ||
+                   functionCode == (byte)ModBusFunction.WriteMultipleRegisters ||
+                   functionCode == (byte)ModBusFunction.WriteSingleCoil ||
+                   functionCode == (byte)ModBusFunction.WriteSingleRegister;
+        }
         
 
         public Span<byte> GetResponseData(in byte deviceId, in byte functionCode, in ushort startIndex, in ushort length, Span<byte> frame, Span<byte> header) 
@@ -308,6 +321,11 @@ namespace P3.Driver.ModBusDriver.Slave
                     }
 
                     ModBus.Logger.LogHexIn(header.ToArray().Concat(frame.ToArray()).ToArray());
+
+                    if (ReadOnly && IsWriteFunction(functionCode))
+                    {
+                        throw new IllegalFunctionException();
+                    }
 
                     byte[] data;
                     int intDeviceId = deviceId;

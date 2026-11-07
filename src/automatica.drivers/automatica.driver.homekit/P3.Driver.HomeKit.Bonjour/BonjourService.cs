@@ -69,7 +69,7 @@ namespace P3.Driver.HomeKit.Bonjour
             var message = new Message {QR = true};
 
             var txtList = new List<string>();
-            txtList.AddProperty("sf", StatusFlag);
+            txtList.AddProperty("sf", StatusFlag); // status flag: 1 = not paired
             txtList.AddProperty("c#", _configVersion.ToString());
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);

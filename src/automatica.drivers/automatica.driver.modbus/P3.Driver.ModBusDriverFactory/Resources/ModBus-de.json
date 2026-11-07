@@ -6,9 +6,29 @@
       "ID": "Geräte ID"
     },
     "CATEGORY": {
-      "DEVICE": "Gerät"
+      "DEVICE": "Gerät",
+      "SECURITY": "Sicherheit"
     },
     "PROPERTY": {
+      "BIND_ADDRESS": {
+        "DESCRIPTION": "IP-Adresse, auf der der Slave lauscht, 0.0.0.0 = alle Schnittstellen"
+      },
+      "ALLOWED_CLIENTS": {
+        "NAME": "Erlaubte Master",
+        "DESCRIPTION": "Kommagetrennte IP-Adressen oder Netze (z. B. 192.168.1.10, 10.0.0.0/24), die sich verbinden dürfen. Leer = alle"
+      },
+      "MAX_CONNECTIONS": {
+        "NAME": "Max. Verbindungen",
+        "DESCRIPTION": "Maximale Anzahl gleichzeitiger Master-Verbindungen"
+      },
+      "IDLE_TIMEOUT": {
+        "NAME": "Leerlauf-Timeout (s)",
+        "DESCRIPTION": "Verbindungen ohne Anfrage werden nach so vielen Sekunden geschlossen"
+      },
+      "READ_ONLY": {
+        "NAME": "Nur lesen",
+        "DESCRIPTION": "Alle Schreibanfragen der Master ablehnen"
+      },
       "BYTEORDER": "Byte Reihenfolge",
       "TABLE": "Tabelle",
       "REGISTER": "Register",

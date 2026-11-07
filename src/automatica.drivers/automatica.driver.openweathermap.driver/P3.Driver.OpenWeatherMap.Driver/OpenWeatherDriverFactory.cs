@@ -12,7 +12,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         public override Guid DriverGuid => new Guid("5330ccc5-42b6-4e7e-9c9a-3f53b54cdbe7");
 
-        public override Version DriverVersion => new Version(2, 0, 0, 2);
+        public override Version DriverVersion => new Version(2, 1, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.open-weather-map";
 
@@ -39,7 +39,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual), DriverGuid, false, false, true, false, true, NodeDataType.NoAttribute, 1, false);
            
             factory.CreatePropertyTemplate(new Guid("6fa8e102-3727-4196-80c2-ae764a18aaf0"), "OPENWEATHERMAP.APIKEY.NAME", "OPENWEATHERMAP.APIKEY.DESCRIPTION", "api-key",
-                PropertyTemplateType.Text, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 1);
+                PropertyTemplateType.Password, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 1);
 
             factory.CreatePropertyTemplate(new Guid("2638083b-7db9-4a18-9b1f-41c1b1deb15f"), "OPENWEATHERMAP.POLL_INTERVAL.NAME", "OPENWEATHERMAP.POLL_INTERVAL.DESCRIPTION", "poll",
                 PropertyTemplateType.Range, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(TimeSpan.FromMinutes(15).TotalSeconds, TimeSpan.FromHours(2).TotalSeconds), TimeSpan.FromMinutes(15).TotalSeconds, 1, 1);

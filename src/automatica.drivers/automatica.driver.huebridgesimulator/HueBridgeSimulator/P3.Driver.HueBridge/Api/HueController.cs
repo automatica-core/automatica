@@ -1,39 +1,71 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using P3.Driver.HueBridge.Data;
 using Automatica.Core.Driver.Utility.Network;
-using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace P3.Driver.HueBridge.Api
 {
+    internal static class HueErrors
+    {
+        public const int UnauthorizedUser = 1;
+        public const int InvalidJson = 2;
+        public const int ResourceNotAvailable = 3;
+        public const int LinkButtonNotPressed = 101;
+
+        public static string Error(int type, string address, string description)
+        {
+            return JsonConvert.SerializeObject(new[]
+            {
+                new { error = new { type, address, description } }
+            });
+        }
+
+        public static ContentResult Result(int type, string address, string description)
+        {
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = Error(type, address, description),
+                StatusCode = 200
+            };
+        }
+
+        public static ContentResult Unauthorized(string address)
+        {
+            return Result(UnauthorizedUser, address, "unauthorized user");
+        }
+    }
+
     [Route("api")]
     [AllowAnonymous]
     public class HueController : Controller
     {
-        public HueController()
-        {
+        private readonly HueDriver _driver;
 
+        public HueController(HueDriver driver)
+        {
+            _driver = driver;
         }
 
-        private void LoginUser(string g)
-        {
-            var hueUser = new HueUser()
-            {
-                Id = g,
-                Created = DateTime.Now,
-                LastUsed = DateTime.Now
-            };
-            HueDriver.Instance.AddUser(hueUser);
-        }
-
+        /// <summary>
+        /// Creates a user. Only works while the link button window is open (Hue API behaviour).
+        /// </summary>
         [HttpPost]
-        public string Login(string data)
+        public ContentResult Login()
         {
-            var newUser = Guid.NewGuid();
-            LoginUser(newUser.ToString());
-            return $@"[{{""success"":{{""username"":""{newUser}""}}}}]";
+            if (!_driver.TryCreateUser(out var userName))
+            {
+                return HueErrors.Result(HueErrors.LinkButtonNotPressed, "", "link button not pressed");
+            }
+
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = JsonConvert.SerializeObject(new[] { new { success = new { username = userName } } }),
+                StatusCode = 200
+            };
         }
 
         [HttpGet]
@@ -52,118 +84,106 @@ namespace P3.Driver.HueBridge.Api
 
         [HttpGet]
         [Route("{apiKey}/config")]
-        public BridgeConfig Config(string apiKey)
+        public IActionResult Config(string apiKey)
         {
-            LoginUser(apiKey);
-            return HueDriver.Instance.BridgeConfig;
+            if (!_driver.IsAuthorized(apiKey))
+            {
+                return HueErrors.Unauthorized("/config");
+            }
+            return Ok(_driver.BridgeConfig);
         }
 
         [HttpGet]
         [HttpPost]
         [Route("{apiKey}/lights")]
-        public IDictionary<int, HueLight> GetLights(string apiKey)
+        public IActionResult GetLights(string apiKey)
         {
-            LoginUser(apiKey);
-            return HueDriver.Instance.Lights;
+            if (!_driver.IsAuthorized(apiKey))
+            {
+                return HueErrors.Unauthorized("/lights");
+            }
+            return Ok(_driver.Lights);
         }
 
         [HttpGet]
         [HttpPost]
         [Route("{apiKey}/lights/{id}")]
-        public HueLight GetLight(string apiKey, int id)
+        public IActionResult GetLight(string apiKey, int id)
         {
-            LoginUser(apiKey);
-            return HueDriver.Instance.Lights[id];
-        }
+            if (!_driver.IsAuthorized(apiKey))
+            {
+                return HueErrors.Unauthorized($"/lights/{id}");
+            }
 
-       // [HttpPut]
-     //   [Route("{apiKey}/lights/{id}/state")]
-        public HueLight SetLightState([FromRoute]string apiKey, [FromRoute]int id, string data)
-        {
-            LoginUser(apiKey);
-
-            var setLightData = JsonConvert.DeserializeObject<HueSwitchLightData>(data) ?? new HueSwitchLightData();
-
-            return HueDriver.Instance.SetLightState(id, setLightData, true);
+            if (!_driver.Lights.TryGetValue(id, out var light))
+            {
+                return HueErrors.Result(HueErrors.ResourceNotAvailable, $"/lights/{id}", $"resource, /lights/{id}, not available");
+            }
+            return Ok(light);
         }
 
         [HttpGet]
         [Route("{apiKey}/groups/{id}")]
-        public HueGroupData GetGroupData([FromRoute]string apiKey, [FromRoute]int id)
+        public IActionResult GetGroupData([FromRoute]string apiKey, [FromRoute]int id)
         {
-            LoginUser(apiKey);
-            if (id == 0)
+            if (!_driver.IsAuthorized(apiKey))
             {
-                var groupData = new HueGroupData();
-                groupData.Lights = new List<string>();
-                foreach(var n in HueDriver.Instance.Lights.Keys)
-                {
-                    groupData.Lights.Add(n.ToString());
-                }
-
-                groupData.Name = "Group 0";
-                groupData.State = new HueGroupState();
-                groupData.State.AllOn = false; //TODO
-                groupData.State.AnyOn = true; //TODO
-
-                groupData.Action = new HueGroupAction();
-                return groupData;
-            }
-            throw new NotImplementedException();
-        }
-
-       // [HttpPut]
-      //  [Route("{apiKey}/groups/{id}/action")]
-        public string SetGroupsAction([FromRoute]string apiKey, [FromRoute]int id, [FromBody]HueSwitchLightData data)
-        {
-            LoginUser(apiKey);
-            if (id == 0)
-            {
-                HueDriver.Instance.SetAll(data);
-
-                var results = new List<string>();
-                if (data.On.HasValue)
-                {
-                    results.Add($@"{{""success"":{{""/groups/0/action/on"":{data.On.Value.ToString().ToLower()}}}}}");
-                }
-                if (data.Bri.HasValue)
-                {
-                    results.Add($@"{{""success"":{{""/groups/0/action/bri"":{data.Bri.Value}}}}}");
-                }
-                return $"[{string.Join(",", results)}]";
+                return HueErrors.Unauthorized($"/groups/{id}");
             }
 
-            // Only group 0 ("all lights") exists on the simulated bridge.
-            return ResourceNotAvailable($"/groups/{id}");
-        }
+            if (id != 0)
+            {
+                return HueErrors.Result(HueErrors.ResourceNotAvailable, $"/groups/{id}", $"resource, /groups/{id}, not available");
+            }
 
-        internal static string ResourceNotAvailable(string address)
-        {
-            return $@"[{{""error"":{{""type"":3,""address"":""{address}"",""description"":""resource, {address}, not available""}}}}]";
+            var groupData = new HueGroupData();
+            groupData.Lights = new List<string>();
+            foreach (var n in _driver.Lights.Keys)
+            {
+                groupData.Lights.Add(n.ToString());
+            }
+
+            groupData.Name = "Group 0";
+            groupData.State = new HueGroupState();
+            groupData.State.AllOn = false; //TODO
+            groupData.State.AnyOn = true; //TODO
+
+            groupData.Action = new HueGroupAction();
+            return Ok(groupData);
         }
 
         [HttpGet]
         [HttpPost]
         [Route("{apiKey}")]
-        public HueData GetData(string apiKey)
+        public IActionResult GetData(string apiKey)
         {
-            LoginUser(apiKey);
-            return new HueData();
+            if (!_driver.IsAuthorized(apiKey))
+            {
+                return HueErrors.Unauthorized("/");
+            }
+            return Ok(new HueData());
         }
 
         [HttpGet]
         [Route("config")]
-        public string Config()
+        public ContentResult Config()
         {
-            return $@"{{
-                ""name"": ""{HueDriver.Instance.BridgeConfig.Name}"",
-                ""apiversion"": ""{HueDriver.Instance.BridgeConfig.ApiVersion}"",
-                ""swversion"": ""{HueDriver.Instance.BridgeConfig.SwVersion}"",
-                ""mac"": ""{NetworkHelper.GetActiveMacAddress()}"",
-                ""bridgeid"": ""{HueDriver.Instance.BridgeId}"",
-                ""factorynew"": {HueDriver.Instance.BridgeConfig.FactoryNew.ToString().ToLower()},
-                ""modelid"": ""{HueDriver.Instance.BridgeConfig.ModelId}""
-            }}";
+            var config = _driver.BridgeConfig;
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                StatusCode = 200,
+                Content = JsonConvert.SerializeObject(new
+                {
+                    name = config.Name,
+                    apiversion = config.ApiVersion,
+                    swversion = config.SwVersion,
+                    mac = NetworkHelper.GetActiveMacAddress(),
+                    bridgeid = _driver.BridgeId.ToString(),
+                    factorynew = config.FactoryNew,
+                    modelid = config.ModelId
+                })
+            };
         }
     }
 }
