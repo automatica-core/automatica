@@ -27,7 +27,7 @@ namespace Automatica.Core.WebApi.Tests.Settings
 
             cloudUrlSetting.ValueText = "my-new-test-url";
 
-            var savedSettings = await Controller.SaveSettings(settings);
+            var savedSettings = (await Controller.SaveSettings(settings)).Value;
 
             var savedValue = savedSettings.First(a => a.ValueKey == "cloudUrl").ValueText;
             Assert.Equal(cloudUrlSetting.ValueText, savedValue);
