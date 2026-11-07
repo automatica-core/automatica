@@ -1,0 +1,102 @@
+{
+  "BYD": {
+    "NAME": "BYD",
+    "DESCRIPTION": "BYD cars via the BYD app cloud",
+    "USERNAME": {
+      "NAME": "User name",
+      "DESCRIPTION": "E-mail of the BYD app account"
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": ""
+    },
+    "PIN": {
+      "NAME": "Control PIN",
+      "DESCRIPTION": "6-digit remote control PIN of the BYD app, needed for lock, climate and the other commands"
+    },
+    "COUNTRY": {
+      "NAME": "Country",
+      "DESCRIPTION": "Country code of the account, e.g. DE, AT, NL"
+    },
+    "POLL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": "Every poll asks the car for fresh data, keep it long to spare the 12 V battery"
+    },
+    "API_URL": {
+      "NAME": "API URL",
+      "DESCRIPTION": "Server of the BYD app, the default is the European one"
+    },
+    "SCAN": {
+      "NAME": "Find cars",
+      "DESCRIPTION": "Lists the cars of the account"
+    },
+    "VEHICLE": {
+      "NAME": "Car",
+      "DESCRIPTION": "A BYD car",
+      "VIN": {
+        "NAME": "VIN",
+        "DESCRIPTION": "Filled in by the scan"
+      },
+      "CLIMATE_TEMPERATURE": {
+        "NAME": "Climate temperature [°C]",
+        "DESCRIPTION": "Used when the climate is switched on"
+      },
+      "CLIMATE_DURATION": {
+        "NAME": "Climate duration [min]",
+        "DESCRIPTION": "10, 15, 20, 25 or 30"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": ""
+      },
+      "RANGE": {
+        "NAME": "Range [km]",
+        "DESCRIPTION": ""
+      },
+      "ODOMETER": {
+        "NAME": "Odometer [km]",
+        "DESCRIPTION": ""
+      },
+      "CHARGING": {
+        "NAME": "Charging",
+        "DESCRIPTION": ""
+      },
+      "INSIDE_TEMP": {
+        "NAME": "Inside temperature [°C]",
+        "DESCRIPTION": ""
+      },
+      "SPEED": {
+        "NAME": "Speed [km/h]",
+        "DESCRIPTION": ""
+      },
+      "LOCKED": {
+        "NAME": "Locked",
+        "DESCRIPTION": "Write true to lock, false to unlock"
+      },
+      "CLIMATE": {
+        "NAME": "Climate",
+        "DESCRIPTION": "Write true to start, false to stop"
+      },
+      "LATITUDE": {
+        "NAME": "Latitude",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Longitude",
+        "DESCRIPTION": ""
+      },
+      "FLASH_LIGHTS": {
+        "NAME": "Flash lights",
+        "DESCRIPTION": "Write true"
+      },
+      "FIND_CAR": {
+        "NAME": "Find car",
+        "DESCRIPTION": "Write true, flashes and honks"
+      }
+    }
+  }
+}

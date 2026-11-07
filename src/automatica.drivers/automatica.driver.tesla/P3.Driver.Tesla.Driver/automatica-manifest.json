@@ -1,0 +1,17 @@
+{
+  "Automatica": {
+    "manifest-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "plugin-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "PluginGuid": "4cbbac9b-f07f-482e-9416-b9a70a1dc4fd",
+    "Name": "P3.Driver.Tesla.Driver",
+    "ComponentName": "Tesla",
+    "Type": "driver",
+    "Output": "P3.Driver.Tesla.Driver.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.tesla",
+    "MinCoreServerVersion": { "Minor": 0, "Major": 10, "Build": 0, "Revision": 2049 },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

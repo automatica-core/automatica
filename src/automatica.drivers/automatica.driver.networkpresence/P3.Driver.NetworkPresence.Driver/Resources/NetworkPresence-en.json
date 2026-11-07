@@ -1,0 +1,70 @@
+{
+  "NETWORK_PRESENCE": {
+    "NAME": "Network presence",
+    "DESCRIPTION": "Detects who is at home from the phones connected to the local network",
+    "SUBNETS": {
+      "NAME": "Networks",
+      "DESCRIPTION": "Networks to sweep in CIDR notation, comma separated (e.g. 192.168.1.0/24). Empty = the networks of the server's interfaces"
+    },
+    "POLL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": "How often the known phones are probed"
+    },
+    "AWAY_TIMEOUT": {
+      "NAME": "Away after [min]",
+      "DESCRIPTION": "A phone counts as away when it was not seen for this long. Phones in standby drop off the network for minutes, keep it at 10 or more"
+    },
+    "FULL_SCAN": {
+      "NAME": "Full sweep every [min]",
+      "DESCRIPTION": "How often every address of the networks is probed to find phones that got a new address"
+    },
+    "ANYONE_HOME": {
+      "NAME": "Anyone home",
+      "DESCRIPTION": "True while at least one person is home"
+    },
+    "PEOPLE_HOME": {
+      "NAME": "People home",
+      "DESCRIPTION": "Number of persons at home"
+    },
+    "PERSON": {
+      "NAME": "Person",
+      "DESCRIPTION": "A person (user) and the phones that belong to them",
+      "SCAN": {
+        "NAME": "Find phones",
+        "DESCRIPTION": "Lists the devices currently on the network that are not assigned yet. Add a device to assign it to this person"
+      },
+      "HOME": {
+        "NAME": "Home",
+        "DESCRIPTION": "True while one of the person's phones is connected"
+      },
+      "LAST_SEEN": {
+        "NAME": "Last seen",
+        "DESCRIPTION": "When one of the phones was last seen on the network"
+      },
+      "DEVICES_HOME": {
+        "NAME": "Phones connected",
+        "DESCRIPTION": "Number of the person's phones on the network"
+      }
+    },
+    "DEVICE": {
+      "NAME": "Phone",
+      "DESCRIPTION": "A phone or other device, identified by its MAC address",
+      "MAC": {
+        "NAME": "MAC address",
+        "DESCRIPTION": "Wi-Fi MAC address. Phones use a private address per network: take the one shown for your home Wi-Fi, and switch off address rotation"
+      },
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": "True while the device was seen within the away timeout"
+      },
+      "IP": {
+        "NAME": "IP address",
+        "DESCRIPTION": "Last known IP address"
+      },
+      "LAST_SEEN": {
+        "NAME": "Last seen",
+        "DESCRIPTION": "When the device was last seen on the network"
+      }
+    }
+  }
+}

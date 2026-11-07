@@ -1,0 +1,94 @@
+{
+  "DREAME": {
+    "NAME": "Dreame",
+    "DESCRIPTION": "Dreame robot vacuums via the Dreamehome cloud",
+    "REGION": {
+      "NAME": "Region",
+      "DESCRIPTION": "Server region of the Dreamehome account: eu, us, cn, ru, sg, i2"
+    },
+    "USERNAME": {
+      "NAME": "User name",
+      "DESCRIPTION": "E-mail or phone number of the Dreamehome account"
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": ""
+    },
+    "POLL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": ""
+    },
+    "SCAN": {
+      "NAME": "Find vacuums",
+      "DESCRIPTION": "Lists the vacuums of the account"
+    },
+    "VACUUM": {
+      "NAME": "Vacuum",
+      "DESCRIPTION": "A Dreame robot vacuum",
+      "DID": {
+        "NAME": "Device ID",
+        "DESCRIPTION": "Filled in by the scan"
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "1 sweeping, 2 idle, 3 paused, 4 error, 5 returning, 6 charging, 7 mopping, 8 drying, 9 washing, 12 sweeping and mopping, 13 charging completed"
+      },
+      "STATE_TEXT": {
+        "NAME": "State text",
+        "DESCRIPTION": ""
+      },
+      "ERROR": {
+        "NAME": "Error code",
+        "DESCRIPTION": "0 = no error"
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": ""
+      },
+      "CHARGING_STATUS": {
+        "NAME": "Charging status",
+        "DESCRIPTION": "1 charging, 2 not charging, 3 charging completed, 5 returning to charge"
+      },
+      "STATUS": {
+        "NAME": "Task status",
+        "DESCRIPTION": "0 idle, 1 paused, 2 cleaning, 3 back home, 4 part cleaning, 6 charging, 12 error, 18 room cleaning, 19 zone cleaning, 20 spot cleaning"
+      },
+      "CLEANING_TIME": {
+        "NAME": "Cleaning time [min]",
+        "DESCRIPTION": "Of the current or last cleaning"
+      },
+      "CLEANED_AREA": {
+        "NAME": "Cleaned area [m²]",
+        "DESCRIPTION": "Of the current or last cleaning"
+      },
+      "SUCTION_LEVEL": {
+        "NAME": "Suction level",
+        "DESCRIPTION": "0 quiet, 1 standard, 2 strong, 3 turbo"
+      },
+      "WATER_VOLUME": {
+        "NAME": "Water volume",
+        "DESCRIPTION": "1 low, 2 medium, 3 high"
+      },
+      "START": {
+        "NAME": "Start cleaning",
+        "DESCRIPTION": "Write true"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Write true"
+      },
+      "STOP": {
+        "NAME": "Stop",
+        "DESCRIPTION": "Write true"
+      },
+      "RETURN_TO_DOCK": {
+        "NAME": "Return to dock",
+        "DESCRIPTION": "Write true"
+      },
+      "LOCATE": {
+        "NAME": "Locate",
+        "DESCRIPTION": "Write true, the robot plays a sound"
+      }
+    }
+  }
+}
