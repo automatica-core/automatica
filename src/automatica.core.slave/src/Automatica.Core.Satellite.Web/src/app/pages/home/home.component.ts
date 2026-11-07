@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StatusService } from 'src/app/shared/services/statu.service';
 
 @Component({
+  standalone: false,
   templateUrl: 'home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
@@ -9,7 +10,7 @@ import { StatusService } from 'src/app/shared/services/statu.service';
 export class HomeComponent implements OnInit, OnDestroy {
 
   status: any = void 0;
-  interval: NodeJS.Timeout | undefined;
+  interval: ReturnType<typeof setInterval> | undefined;
 
   constructor(private statusService: StatusService) {
 

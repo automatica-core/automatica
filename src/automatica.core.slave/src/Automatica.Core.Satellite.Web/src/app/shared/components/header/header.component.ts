@@ -8,6 +8,7 @@ import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: 'header.component.html',
   styleUrls: ['./header.component.scss']

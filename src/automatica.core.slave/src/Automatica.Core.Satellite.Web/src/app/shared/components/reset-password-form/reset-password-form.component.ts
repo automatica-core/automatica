@@ -9,6 +9,7 @@ import { AuthService } from '../../services';
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
 @Component({
+  standalone: false,
   selector: 'app-reset-password-form',
   templateUrl: './reset-password-form.component.html',
   styleUrls: ['./reset-password-form.component.scss']

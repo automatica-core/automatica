@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   templateUrl: 'profile.component.html',
   styleUrls: [ './profile.component.scss' ]
 })

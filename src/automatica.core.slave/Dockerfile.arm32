@@ -1,11 +1,12 @@
-FROM node:18-alpine as node
+FROM node:24-alpine AS node
 WORKDIR /www
 
 COPY ./src/Automatica.Core.Satellite.Web /www
 RUN rm -rf /www/node_modules
-RUN npm install --global devextreme
-RUN npm install
-RUN npm run build-docker
+RUN npm ci
+# DevExtreme license (optional): docker build --secret id=devexpress_license,src=<DevExpress_License.txt>
+# Without it the bundle gets the TRIAL key (eval banner). Never pass it as a build-arg: those end up in the image history.
+RUN --mount=type=secret,id=devexpress_license,target=/root/.config/DevExpress/DevExpress_License.txt npm run build-docker
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
