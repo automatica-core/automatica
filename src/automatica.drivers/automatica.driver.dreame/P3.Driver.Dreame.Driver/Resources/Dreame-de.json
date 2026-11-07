@@ -1,0 +1,94 @@
+{
+  "DREAME": {
+    "NAME": "Dreame",
+    "DESCRIPTION": "Dreame-Saugroboter über die Dreamehome-Cloud",
+    "REGION": {
+      "NAME": "Region",
+      "DESCRIPTION": "Server-Region des Dreamehome-Kontos: eu, us, cn, ru, sg, i2"
+    },
+    "USERNAME": {
+      "NAME": "Benutzername",
+      "DESCRIPTION": "E-Mail oder Telefonnummer des Dreamehome-Kontos"
+    },
+    "PASSWORD": {
+      "NAME": "Passwort",
+      "DESCRIPTION": ""
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": ""
+    },
+    "SCAN": {
+      "NAME": "Saugroboter suchen",
+      "DESCRIPTION": "Zeigt die Saugroboter des Kontos"
+    },
+    "VACUUM": {
+      "NAME": "Saugroboter",
+      "DESCRIPTION": "Ein Dreame-Saugroboter",
+      "DID": {
+        "NAME": "Geräte-ID",
+        "DESCRIPTION": "Wird von der Suche ausgefüllt"
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "1 saugt, 2 bereit, 3 pausiert, 4 Fehler, 5 kehrt zurück, 6 lädt, 7 wischt, 8 trocknet, 9 wäscht, 12 saugt und wischt, 13 vollgeladen"
+      },
+      "STATE_TEXT": {
+        "NAME": "Zustand (Text)",
+        "DESCRIPTION": ""
+      },
+      "ERROR": {
+        "NAME": "Fehlercode",
+        "DESCRIPTION": "0 = kein Fehler"
+      },
+      "BATTERY": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": ""
+      },
+      "CHARGING_STATUS": {
+        "NAME": "Ladestatus",
+        "DESCRIPTION": "1 lädt, 2 lädt nicht, 3 vollgeladen, 5 fährt zur Station"
+      },
+      "STATUS": {
+        "NAME": "Auftragsstatus",
+        "DESCRIPTION": "0 bereit, 1 pausiert, 2 reinigt, 3 zurück zur Station, 4 Teilreinigung, 6 lädt, 12 Fehler, 18 Raumreinigung, 19 Zonenreinigung, 20 Punktreinigung"
+      },
+      "CLEANING_TIME": {
+        "NAME": "Reinigungsdauer [min]",
+        "DESCRIPTION": "Der aktuellen oder letzten Reinigung"
+      },
+      "CLEANED_AREA": {
+        "NAME": "Gereinigte Fläche [m²]",
+        "DESCRIPTION": "Der aktuellen oder letzten Reinigung"
+      },
+      "SUCTION_LEVEL": {
+        "NAME": "Saugstufe",
+        "DESCRIPTION": "0 leise, 1 standard, 2 stark, 3 turbo"
+      },
+      "WATER_VOLUME": {
+        "NAME": "Wassermenge",
+        "DESCRIPTION": "1 niedrig, 2 mittel, 3 hoch"
+      },
+      "START": {
+        "NAME": "Reinigung starten",
+        "DESCRIPTION": "true schreiben"
+      },
+      "PAUSE": {
+        "NAME": "Pausieren",
+        "DESCRIPTION": "true schreiben"
+      },
+      "STOP": {
+        "NAME": "Stoppen",
+        "DESCRIPTION": "true schreiben"
+      },
+      "RETURN_TO_DOCK": {
+        "NAME": "Zur Station",
+        "DESCRIPTION": "true schreiben"
+      },
+      "LOCATE": {
+        "NAME": "Suchen",
+        "DESCRIPTION": "true schreiben, der Roboter spielt einen Ton"
+      }
+    }
+  }
+}

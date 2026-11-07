@@ -1,0 +1,102 @@
+{
+  "BYD": {
+    "NAME": "BYD",
+    "DESCRIPTION": "BYD-Autos über die BYD-App-Cloud",
+    "USERNAME": {
+      "NAME": "Benutzername",
+      "DESCRIPTION": "E-Mail des BYD-App-Kontos"
+    },
+    "PASSWORD": {
+      "NAME": "Passwort",
+      "DESCRIPTION": ""
+    },
+    "PIN": {
+      "NAME": "Steuerungs-PIN",
+      "DESCRIPTION": "6-stellige Fernsteuerungs-PIN der BYD-App, nötig für Verriegeln, Klima und die anderen Befehle"
+    },
+    "COUNTRY": {
+      "NAME": "Land",
+      "DESCRIPTION": "Ländercode des Kontos, z. B. DE, AT, NL"
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Jede Abfrage holt frische Daten vom Auto, lang lassen, um die 12-V-Batterie zu schonen"
+    },
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "Server der BYD-App, Standard ist der europäische"
+    },
+    "SCAN": {
+      "NAME": "Autos suchen",
+      "DESCRIPTION": "Listet die Autos des Kontos auf"
+    },
+    "VEHICLE": {
+      "NAME": "Auto",
+      "DESCRIPTION": "Ein BYD-Auto",
+      "VIN": {
+        "NAME": "FIN",
+        "DESCRIPTION": "Wird vom Scan ausgefüllt"
+      },
+      "CLIMATE_TEMPERATURE": {
+        "NAME": "Klimatemperatur [°C]",
+        "DESCRIPTION": "Wird beim Einschalten der Klimatisierung verwendet"
+      },
+      "CLIMATE_DURATION": {
+        "NAME": "Klimadauer [min]",
+        "DESCRIPTION": "10, 15, 20, 25 oder 30"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": ""
+      },
+      "RANGE": {
+        "NAME": "Reichweite [km]",
+        "DESCRIPTION": ""
+      },
+      "ODOMETER": {
+        "NAME": "Kilometerstand [km]",
+        "DESCRIPTION": ""
+      },
+      "CHARGING": {
+        "NAME": "Lädt",
+        "DESCRIPTION": ""
+      },
+      "INSIDE_TEMP": {
+        "NAME": "Innentemperatur [°C]",
+        "DESCRIPTION": ""
+      },
+      "SPEED": {
+        "NAME": "Geschwindigkeit [km/h]",
+        "DESCRIPTION": ""
+      },
+      "LOCKED": {
+        "NAME": "Verriegelt",
+        "DESCRIPTION": "true schreiben zum Verriegeln, false zum Entriegeln"
+      },
+      "CLIMATE": {
+        "NAME": "Klimatisierung",
+        "DESCRIPTION": "true schreiben zum Starten, false zum Stoppen"
+      },
+      "LATITUDE": {
+        "NAME": "Breitengrad",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Längengrad",
+        "DESCRIPTION": ""
+      },
+      "FLASH_LIGHTS": {
+        "NAME": "Lichthupe",
+        "DESCRIPTION": "true schreiben"
+      },
+      "FIND_CAR": {
+        "NAME": "Auto finden",
+        "DESCRIPTION": "true schreiben, blinkt und hupt"
+      }
+    }
+  }
+}

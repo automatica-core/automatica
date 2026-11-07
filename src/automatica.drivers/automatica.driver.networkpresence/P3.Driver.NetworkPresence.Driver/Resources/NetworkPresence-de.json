@@ -1,0 +1,70 @@
+{
+  "NETWORK_PRESENCE": {
+    "NAME": "Anwesenheit (Netzwerk)",
+    "DESCRIPTION": "Erkennt anhand der Handys im lokalen Netzwerk, wer zu Hause ist",
+    "SUBNETS": {
+      "NAME": "Netzwerke",
+      "DESCRIPTION": "Zu durchsuchende Netzwerke in CIDR-Schreibweise, durch Komma getrennt (z. B. 192.168.1.0/24). Leer = die Netzwerke der Server-Schnittstellen"
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Wie oft die bekannten Handys abgefragt werden"
+    },
+    "AWAY_TIMEOUT": {
+      "NAME": "Abwesend nach [min]",
+      "DESCRIPTION": "Ein Handy gilt als abwesend, wenn es so lange nicht gesehen wurde. Handys im Standby sind minutenlang nicht im Netz, daher mindestens 10 wählen"
+    },
+    "FULL_SCAN": {
+      "NAME": "Vollständige Suche alle [min]",
+      "DESCRIPTION": "Wie oft alle Adressen der Netzwerke abgefragt werden, um Handys mit neuer Adresse zu finden"
+    },
+    "ANYONE_HOME": {
+      "NAME": "Jemand zu Hause",
+      "DESCRIPTION": "Wahr, solange mindestens eine Person zu Hause ist"
+    },
+    "PEOPLE_HOME": {
+      "NAME": "Personen zu Hause",
+      "DESCRIPTION": "Anzahl der Personen, die zu Hause sind"
+    },
+    "PERSON": {
+      "NAME": "Person",
+      "DESCRIPTION": "Eine Person (Benutzer) und die Handys, die ihr gehören",
+      "SCAN": {
+        "NAME": "Handys suchen",
+        "DESCRIPTION": "Zeigt die Geräte im Netzwerk, die noch niemandem zugeordnet sind. Ein hinzugefügtes Gerät wird dieser Person zugeordnet"
+      },
+      "HOME": {
+        "NAME": "Zu Hause",
+        "DESCRIPTION": "Wahr, solange eines der Handys der Person verbunden ist"
+      },
+      "LAST_SEEN": {
+        "NAME": "Zuletzt gesehen",
+        "DESCRIPTION": "Wann eines der Handys zuletzt im Netzwerk war"
+      },
+      "DEVICES_HOME": {
+        "NAME": "Verbundene Handys",
+        "DESCRIPTION": "Anzahl der Handys der Person im Netzwerk"
+      }
+    },
+    "DEVICE": {
+      "NAME": "Handy",
+      "DESCRIPTION": "Ein Handy oder anderes Gerät, erkannt an seiner MAC-Adresse",
+      "MAC": {
+        "NAME": "MAC-Adresse",
+        "DESCRIPTION": "WLAN-MAC-Adresse. Handys verwenden je Netzwerk eine private Adresse: die für das Heim-WLAN angezeigte eintragen und die Adressrotation ausschalten"
+      },
+      "CONNECTED": {
+        "NAME": "Verbunden",
+        "DESCRIPTION": "Wahr, solange das Gerät innerhalb der Abwesenheitszeit gesehen wurde"
+      },
+      "IP": {
+        "NAME": "IP-Adresse",
+        "DESCRIPTION": "Zuletzt bekannte IP-Adresse"
+      },
+      "LAST_SEEN": {
+        "NAME": "Zuletzt gesehen",
+        "DESCRIPTION": "Wann das Gerät zuletzt im Netzwerk war"
+      }
+    }
+  }
+}

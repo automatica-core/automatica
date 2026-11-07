@@ -14,7 +14,8 @@ namespace Automatica.Core.Base.Localization
     {
         private readonly Dictionary<string, JObject> _localizationStreams = new Dictionary<string, JObject>();
 
-        private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
+        // assembly name -> module version id, never the assembly itself: a plugin can be unloaded and updated without a restart
+        private readonly Dictionary<string, Guid> _loadedAssemblies = new Dictionary<string, Guid>();
         private readonly ILogger _logger;
 
         private readonly string _locale;
@@ -29,6 +30,11 @@ namespace Automatica.Core.Base.Localization
         }
 
         public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
+        {
+            AddLocalization(stream, culture, fileName, false);
+        }
+
+        private void AddLocalization(TextReader stream, CultureInfo culture, string fileName, bool replace)
         {
             if (!_localizationStreams.ContainsKey(culture.TwoLetterISOLanguageName))
             {
@@ -48,6 +54,11 @@ namespace Automatica.Core.Base.Localization
                 {
                     jObject.Add(d);
                 }
+                else if (replace && d is JProperty property)
+                {
+                    // a new version of the plugin
+                    jObject[property.Name] = property.Value;
+                }
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
@@ -57,7 +68,10 @@ namespace Automatica.Core.Base.Localization
         public void LoadFromAssembly(Assembly assembly)
         {
             _logger.LogDebug($"Load localization for {assembly.FullName}");
-            if (_loadedAssemblies.Contains(assembly))
+            var name = assembly.GetName().Name ?? assembly.FullName ?? string.Empty;
+            var moduleVersionId = assembly.ManifestModule.ModuleVersionId;
+            var replace = _loadedAssemblies.TryGetValue(name, out var loadedVersionId);
+            if (replace && loadedVersionId == moduleVersionId)
             {
                 return;
             }
@@ -72,7 +86,7 @@ namespace Automatica.Core.Base.Localization
                         var split = fileName.Split("-");
 
                         var culture = CultureInfo.GetCultureInfo(split[split.Length - 1]);
-                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture, file);
+                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture, file, replace);
                     }
                     catch (Exception e)
                     {
@@ -80,7 +94,7 @@ namespace Automatica.Core.Base.Localization
                     }
                 }
             }
-            _loadedAssemblies.Add(assembly);
+            _loadedAssemblies[name] = moduleVersionId;
         }
 
         public string GetTranslation(string locale, string key)

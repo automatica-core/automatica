@@ -1,0 +1,86 @@
+{
+  "MAMMOTION": {
+    "NAME": "Mammotion",
+    "DESCRIPTION": "Mammotion Mähroboter (Luba, Yuka) über die Mammotion-Cloud",
+    "USERNAME": {
+      "NAME": "Benutzername",
+      "DESCRIPTION": "E-Mail des Mammotion-App-Kontos"
+    },
+    "PASSWORD": {
+      "NAME": "Passwort",
+      "DESCRIPTION": ""
+    },
+    "POLL": {
+      "NAME": "Report-Intervall [s]",
+      "DESCRIPTION": "Wie oft Berichte von den Mähern angefordert und eine verlorene Verbindung wiederhergestellt wird"
+    },
+    "SCAN": {
+      "NAME": "Mäher suchen",
+      "DESCRIPTION": "Listet die Mäher des Kontos auf"
+    },
+    "MOWER": {
+      "NAME": "Mäher",
+      "DESCRIPTION": "Ein Mammotion Mähroboter",
+      "IOT_ID": {
+        "NAME": "IoT-ID",
+        "DESCRIPTION": "Wird vom Scan ausgefüllt"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": ""
+      },
+      "DEVICE_STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "11 bereit, 13 mäht, 14 fährt zurück, 15 lädt, 19 pausiert, 2 offline, siehe Zustandstext"
+      },
+      "DEVICE_STATE_TEXT": {
+        "NAME": "Zustandstext",
+        "DESCRIPTION": ""
+      },
+      "CHARGE_STATE": {
+        "NAME": "Ladezustand",
+        "DESCRIPTION": "0 lädt nicht, andere Werte lädt"
+      },
+      "MOWING_PROGRESS": {
+        "NAME": "Auftragsfortschritt [%]",
+        "DESCRIPTION": ""
+      },
+      "MOWING_AREA": {
+        "NAME": "Auftragsfläche [m²]",
+        "DESCRIPTION": ""
+      },
+      "REMAINING_TIME": {
+        "NAME": "Restzeit [min]",
+        "DESCRIPTION": ""
+      },
+      "KNIFE_HEIGHT": {
+        "NAME": "Schnitthöhe [mm]",
+        "DESCRIPTION": ""
+      },
+      "START": {
+        "NAME": "Auftrag starten",
+        "DESCRIPTION": "true schreiben, startet den in der App geplanten Auftrag"
+      },
+      "PAUSE": {
+        "NAME": "Pausieren",
+        "DESCRIPTION": "true schreiben"
+      },
+      "RESUME": {
+        "NAME": "Fortsetzen",
+        "DESCRIPTION": "true schreiben"
+      },
+      "STOP": {
+        "NAME": "Auftrag abbrechen",
+        "DESCRIPTION": "true schreiben"
+      },
+      "RETURN_TO_DOCK": {
+        "NAME": "Zur Station",
+        "DESCRIPTION": "true schreiben"
+      }
+    }
+  }
+}

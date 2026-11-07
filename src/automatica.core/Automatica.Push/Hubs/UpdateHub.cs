@@ -30,16 +30,14 @@ namespace Automatica.Push.Hubs
         private readonly ICloudApi _api;
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
-        private readonly IPluginLoader _loader;
         private readonly AsyncKeyedLocker<string> _asyncKeyedLocker;
         private readonly ILogger<UpdateHub> _logger;
 
-        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, AsyncKeyedLocker<string> asyncKeyedLocker, ILogger<UpdateHub> logger)
+        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, AsyncKeyedLocker<string> asyncKeyedLocker, ILogger<UpdateHub> logger)
         {
             _api = api;
             _updateHub = updateHub;
             _coreServer = coreServer;
-            _loader = loader;
             _asyncKeyedLocker = asyncKeyedLocker;
             _logger = logger;
         }
@@ -168,7 +166,7 @@ namespace Automatica.Push.Hubs
                     }
 
                     var pluginDownloader =
-                        new PluginDownloader(cloudPlugin, install, _api, _updateHub, _coreServer, _loader, _logger);
+                        new PluginDownloader(cloudPlugin, install, _api, _updateHub, _coreServer, _logger);
 
                     await pluginDownloader.Download();
                 }
@@ -216,17 +214,26 @@ namespace Automatica.Push.Hubs
                 return;
             }
 
-            var tasks = new List<Task>();
+            var downloaders = new List<PluginDownloader>();
             foreach (var plug in await ResolvePlugins(plugins))
             {
-                var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
-                    _loader, _logger,false);
-
-                tasks.Add(pluginDownloader.Download());
+                downloaders.Add(new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _logger, false));
             }
 
-            await Task.WhenAll(tasks.ToArray());
-            _coreServer.Restart();
+            await Task.WhenAll(downloaders.Select(a => a.Download()));
+
+            // without a restart where possible: only the drivers and logics of the updated plugins are restarted
+            var updates = downloaders.Where(a => a.StagedFile != null).Select(a => new PluginUpdate(a.Plugin, a.StagedFile)).ToList();
+            if (await _coreServer.UpdatePlugins(updates))
+            {
+                _coreServer.Restart();
+                return;
+            }
+
+            foreach (var update in updates)
+            {
+                await Administrators.SendAsync("PluginLoaded", new object[] { update.Plugin.PluginGuid });
+            }
         }
     }
 }

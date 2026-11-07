@@ -1,0 +1,86 @@
+{
+  "MAMMOTION": {
+    "NAME": "Mammotion",
+    "DESCRIPTION": "Mammotion robot mowers (Luba, Yuka) via the Mammotion cloud",
+    "USERNAME": {
+      "NAME": "User name",
+      "DESCRIPTION": "E-mail of the Mammotion app account"
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": ""
+    },
+    "POLL": {
+      "NAME": "Report interval [s]",
+      "DESCRIPTION": "How often reports are requested from the mowers and a lost connection is restored"
+    },
+    "SCAN": {
+      "NAME": "Find mowers",
+      "DESCRIPTION": "Lists the mowers of the account"
+    },
+    "MOWER": {
+      "NAME": "Mower",
+      "DESCRIPTION": "A Mammotion robot mower",
+      "IOT_ID": {
+        "NAME": "IoT ID",
+        "DESCRIPTION": "Filled in by the scan"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": ""
+      },
+      "DEVICE_STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "11 ready, 13 working, 14 returning, 15 charging, 19 paused, 2 offline, see the state text"
+      },
+      "DEVICE_STATE_TEXT": {
+        "NAME": "State text",
+        "DESCRIPTION": ""
+      },
+      "CHARGE_STATE": {
+        "NAME": "Charge state",
+        "DESCRIPTION": "0 not charging, other values charging"
+      },
+      "MOWING_PROGRESS": {
+        "NAME": "Job progress [%]",
+        "DESCRIPTION": ""
+      },
+      "MOWING_AREA": {
+        "NAME": "Job area [m²]",
+        "DESCRIPTION": ""
+      },
+      "REMAINING_TIME": {
+        "NAME": "Remaining time [min]",
+        "DESCRIPTION": ""
+      },
+      "KNIFE_HEIGHT": {
+        "NAME": "Cutting height [mm]",
+        "DESCRIPTION": ""
+      },
+      "START": {
+        "NAME": "Start job",
+        "DESCRIPTION": "Write true, starts the job planned in the app"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Write true"
+      },
+      "RESUME": {
+        "NAME": "Resume",
+        "DESCRIPTION": "Write true"
+      },
+      "STOP": {
+        "NAME": "Cancel job",
+        "DESCRIPTION": "Write true"
+      },
+      "RETURN_TO_DOCK": {
+        "NAME": "Return to dock",
+        "DESCRIPTION": "Write true"
+      }
+    }
+  }
+}

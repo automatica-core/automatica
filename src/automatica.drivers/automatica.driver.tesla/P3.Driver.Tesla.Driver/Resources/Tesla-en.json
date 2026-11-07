@@ -1,0 +1,126 @@
+{
+  "TESLA": {
+    "NAME": "Tesla",
+    "DESCRIPTION": "Tesla vehicles via the Tesla Fleet API",
+    "API_URL": {
+      "NAME": "Fleet API URL",
+      "DESCRIPTION": "Region of the account: EU https://fleet-api.prd.eu.vn.cloud.tesla.com, North America/Asia-Pacific https://fleet-api.prd.na.vn.cloud.tesla.com, China https://fleet-api.prd.cn.vn.cloud.tesla.cn"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client ID",
+      "DESCRIPTION": "Client ID of your application on developer.tesla.com"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh token",
+      "DESCRIPTION": "OAuth refresh token (scope offline_access vehicle_device_data vehicle_cmds vehicle_charging_cmds). Tesla replaces it on every use, the driver keeps the newest one"
+    },
+    "COMMAND_URL": {
+      "NAME": "Command proxy URL",
+      "DESCRIPTION": "Optional. Vehicles built since 2021 only accept signed commands: run Tesla's vehicle-command proxy (tesla-http-proxy) and enter its URL here. Empty = commands go to the Fleet API directly"
+    },
+    "POLL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": "Fleet API calls are billed by Tesla. Data is only requested while a vehicle is online, polling does not wake it"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token state",
+      "DESCRIPTION": ""
+    },
+    "VEHICLE": {
+      "NAME": "Vehicle",
+      "DESCRIPTION": "A Tesla vehicle",
+      "VIN": {
+        "NAME": "VIN",
+        "DESCRIPTION": "Vehicle identification number"
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "online, asleep or offline"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Battery level [%]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_RANGE": {
+        "NAME": "Range [km]",
+        "DESCRIPTION": "Estimated range"
+      },
+      "CHARGING_STATE": {
+        "NAME": "Charging state",
+        "DESCRIPTION": "Disconnected, Stopped, Charging, Complete, ..."
+      },
+      "CHARGING": {
+        "NAME": "Charging",
+        "DESCRIPTION": "Write true to start and false to stop charging"
+      },
+      "CHARGE_LIMIT": {
+        "NAME": "Charge limit [%]",
+        "DESCRIPTION": "50 to 100"
+      },
+      "CHARGER_POWER": {
+        "NAME": "Charging power [kW]",
+        "DESCRIPTION": ""
+      },
+      "TIME_TO_FULL": {
+        "NAME": "Time to full [h]",
+        "DESCRIPTION": ""
+      },
+      "CHARGE_PORT_OPEN": {
+        "NAME": "Charge port open",
+        "DESCRIPTION": "Write true to open and false to close the charge port"
+      },
+      "INSIDE_TEMP": {
+        "NAME": "Inside temperature [°C]",
+        "DESCRIPTION": ""
+      },
+      "OUTSIDE_TEMP": {
+        "NAME": "Outside temperature [°C]",
+        "DESCRIPTION": ""
+      },
+      "CLIMATE": {
+        "NAME": "Climate",
+        "DESCRIPTION": "Write true to start and false to stop climate control"
+      },
+      "TARGET_TEMP": {
+        "NAME": "Target temperature [°C]",
+        "DESCRIPTION": "Driver and passenger, 15 to 28 °C"
+      },
+      "LOCKED": {
+        "NAME": "Locked",
+        "DESCRIPTION": "Write true to lock and false to unlock"
+      },
+      "SENTRY_MODE": {
+        "NAME": "Sentry mode",
+        "DESCRIPTION": ""
+      },
+      "ODOMETER": {
+        "NAME": "Odometer [km]",
+        "DESCRIPTION": ""
+      },
+      "LATITUDE": {
+        "NAME": "Latitude",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Longitude",
+        "DESCRIPTION": ""
+      },
+      "SHIFT_STATE": {
+        "NAME": "Gear",
+        "DESCRIPTION": "P, R, N or D"
+      },
+      "WAKE": {
+        "NAME": "Wake up",
+        "DESCRIPTION": "Write any value to wake the vehicle"
+      },
+      "FLASH_LIGHTS": {
+        "NAME": "Flash lights",
+        "DESCRIPTION": "Write true to flash the lights"
+      },
+      "HONK": {
+        "NAME": "Honk",
+        "DESCRIPTION": "Write true to honk the horn"
+      }
+    }
+  }
+}

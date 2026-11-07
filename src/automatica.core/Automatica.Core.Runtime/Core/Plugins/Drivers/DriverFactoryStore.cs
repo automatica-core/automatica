@@ -20,6 +20,12 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             Add(driver.DriverGuid, driver);
         }
 
+        public void RemoveDriver(Guid driverGuid)
+        {
+            Remove(driverGuid);
+            _driverPluginStore.Remove(driverGuid);
+        }
+
         public PluginManifest? GetManifestForDriver(Guid driverGuid)
         {
             if (_driverPluginStore.TryGetValue(driverGuid, out var driver))

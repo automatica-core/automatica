@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Common.Update.Signing;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core.Plugins
@@ -18,48 +17,6 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
     }
 
-    public class AssemblyLoader : AssemblyLoadContext
-    {
-        private readonly string _currentAssemblyPath;
-        private readonly string[] _path;
-
-        public AssemblyLoader(string currentAssemblyPath, params string[] path)
-        {
-            _currentAssemblyPath = currentAssemblyPath;
-            _path = path;
-        }
-        public Assembly LoadAssembly(AssemblyName assemblyName)
-        {
-            return Load(assemblyName);
-        }
-
-        protected override Assembly Load(AssemblyName assemblyName)
-        {
-            foreach (var path in _path)
-            {
-                var pathFileName = Path.Combine(path, $"{assemblyName.Name}.dll");
-
-                if (File.Exists(pathFileName))
-                {
-                    if (path == _currentAssemblyPath)
-                    {
-                        return LoadFromAssemblyPath(pathFileName);
-                    }
-                    return Default.LoadFromAssemblyPath(pathFileName);
-                }
-            }
-
-            var corePath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName!;
-            var fileName = Path.Combine(corePath, $"{assemblyName.Name!}.dll");
-
-            if (File.Exists(fileName))
-            {
-                return Default.LoadFromAssemblyPath(fileName);
-            }
-
-            return Default.LoadFromAssemblyName(assemblyName);
-        }
-    }
     public static class Loader
     {
         public static async Task<IList<T>> Load<T>(string folder, string searchPattern, ILogger logger, IConfiguration config, bool isInDevMode)
@@ -104,12 +61,6 @@ namespace Automatica.Core.Runtime.Core.Plugins
             return list;
         }
 
-        private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
-        {
-            return (library.Name == (assemblyName.Name))
-                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name!)));
-        }
-
         public static async Task<List<T>> LoadSingle<T>(string file, ILogger logger, IConfiguration config, bool isInDevMode)
         {
             var list = new List<T>();
@@ -120,87 +71,39 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 var folder = fileInfo.DirectoryName;
                 logger.LogInformation($"Loading file {file} and check for interfaces");
 
-                AssemblyLoader loader;
-                if (isInDevMode)
-                {
-                    loader = new AssemblyLoader(folder!,
-                        new FileInfo(Assembly.GetCallingAssembly().Location).DirectoryName!, folder!);
-                }
-                else
-                {
-                    loader = new AssemblyLoader(folder!, folder!);
-
-                }
-
-                Func<AssemblyLoadContext, AssemblyName, Assembly?> assemblyLoader = (context, name) =>
-                {
-                    logger.LogInformation($"Try to load assembly {name} for {file}");
-                    // avoid loading *.resources dll, because of: https://github.com/dotnet/coreclr/issues/8416
-                    if (name.Name == null)
-                    {
-                        throw new ArgumentNullException(nameof(name.Name));
-                    }
-
-                    if (name.Name.EndsWith("resources"))
-                    {
-                        return null;
-                    }
-
-                    logger.LogDebug($"Try to load assembly from {folder}");
-                    var foundDll =
-                        Directory.GetFileSystemEntries(folder!, name.Name + ".dll", SearchOption.AllDirectories);
-                    if (foundDll.Any())
-                    {
-                        return context.LoadFromAssemblyPath(foundDll[0]);
-                    }
-
-                    var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-                    logger.LogDebug($"Try to load assembly from second path: {secondPath}");
-                    foundDll = Directory.GetFileSystemEntries(secondPath!, name.Name + ".dll",
-                        SearchOption.AllDirectories);
-                    if (foundDll.Any())
-                    {
-                        return context.LoadFromAssemblyPath(foundDll[0]);
-                    }
-                    if (DependencyContext.Default == null)
-                    {
-                        throw new ArgumentNullException(nameof(DependencyContext.Default));
-                    }
-                    var dependencies = DependencyContext.Default.RuntimeLibraries;
-                    foreach (var library in dependencies)
-                    {
-                        if (IsCandidateLibrary(library, name))
-                        {
-                            return loader.LoadAssembly(name);
-                        }
-                    }
-
-
-                    return context.LoadFromAssemblyName(name);
-                };
-                AssemblyLoadContext.Default.Resolving += assemblyLoader;
+                // one collectible context per plugin directory: the plugin can be unloaded and updated without a restart
+                var context = PluginLoadContexts.GetOrCreate(folder!);
 
                 Assembly assembly;
                 try
                 {
-                    assembly = Assembly.LoadFrom(file);
-                }
-                catch (FileLoadException fl)
-                {
-                    if (fl.HResult != -2146232799) // Assembly already loaded, can be ignored here
+                    var assemblyName = AssemblyName.GetAssemblyName(file);
+                    if (PluginLoadContext.IsHostAssembly(assemblyName))
                     {
-                        logger.LogError(fl, $"Could not load assembly {file}");
+                        if (!isInDevMode)
+                        {
+                            // a copy of a core assembly (e.g. Automatica.Core.Driver.dll) is never the plugin, the core's own is used
+                            logger.LogDebug($"{file} is shipped by the core, it is not loaded from the plugin directory");
+                            return list;
+                        }
+
+                        // development: drivers referenced by the core project are loaded with the core (no update without restart)
+                        assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
                     }
+                    else
+                    {
+                        assembly = context.LoadPluginAssembly(file);
+                    }
+                }
+                catch (BadImageFormatException)
+                {
+                    // native library
                     return list;
                 }
                 catch (Exception e)
                 {
                     logger.LogError(e, $"Could not load assembly {file}");
                     return list;
-                }
-                finally
-                {
-                    AssemblyLoadContext.Default.Resolving -= assemblyLoader;
                 }
 
                 var resources = assembly.GetManifestResourceNames()
@@ -300,6 +203,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 return list;
             }
 
+            var contextExisted = PluginLoadContexts.Contains(folder);
             foreach (var file in files)
             {
                 try
@@ -310,6 +214,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 {
                     
                 }
+            }
+
+            if (list.Count == 0 && !contextExisted)
+            {
+                // no plugin in this directory (e.g. a sub directory with dependencies), do not keep its assemblies loaded
+                PluginLoadContexts.Unload(folder);
             }
 
             return list;

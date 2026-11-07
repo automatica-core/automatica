@@ -62,7 +62,7 @@ namespace Automatica.Core.Runtime.Core
         Started,
         Stopped
     }
-    public class CoreServer : IHostedService, ICoreServer
+    public partial class CoreServer : IHostedService, ICoreServer
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _config;
@@ -234,25 +234,29 @@ namespace Automatica.Core.Runtime.Core
             
             Task.Run(async () =>
             {
+                var timer = new StartupTimer();
                 try
                 {
-                    await _pluginHandler.CheckAndInstallPluginUpdates();
-                    await _updateHandler.Init();
+                    await timer.Measure("plugin updates", () => _pluginHandler.CheckAndInstallPluginUpdates());
+                    await timer.Measure("update handler", () => _updateHandler.Init());
 
                     RunState = RunState.Loading;
-                    await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
+                    await timer.Measure("load plugins", () => Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern));
 
                     // restore the remanent values before drivers and logics start, they are only stored and not dispatched to the links
-                    try
+                    await timer.Measure("remanent values", async () =>
                     {
-                        await _dispatcher.Init(cancellationToken);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Could not restore remanent values");
-                    }
+                        try
+                        {
+                            await _dispatcher.Init(cancellationToken);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e, "Could not restore remanent values");
+                        }
+                    });
 
-                    await ConfigureAndStart();
+                    await ConfigureAndStart(timer);
 
                     _logicPageCache.All();
 
@@ -261,24 +265,32 @@ namespace Automatica.Core.Runtime.Core
                 {
                     _logger.LogError(e, "Could not startup...");
                 }
+                finally
+                {
+                    // the process start until the hosted service starts is not included
+                    timer.Log(_logger, $"Startup (process up {(DateTime.Now - System.Diagnostics.Process.GetCurrentProcess().StartTime).TotalSeconds:0}s)");
+                }
             }, cancellationToken);
 
             return Task.CompletedTask;
         }
 
 
-        private async Task ConfigureAndStart()
+        private async Task ConfigureAndStart(StartupTimer timer)
         {
-            if (!await _licenseContext.Init())
+            await timer.Measure("license", async () =>
             {
-                //try again 2nd time - seems buggy, but easy fix for now
-                await _licenseContext.Init();
-            }
+                if (!await _licenseContext.Init())
+                {
+                    //try again 2nd time - seems buggy, but easy fix for now
+                    await _licenseContext.Init();
+                }
+            });
 
             _satelliteInstanceCount = 0;
 
             RunState = RunState.Configure;
-            ServerInfo.IsConnectedToCloud = await _cloudApi.Ping();
+            ServerInfo.IsConnectedToCloud = await timer.Measure("cloud ping", () => _cloudApi.Ping());
 
 #pragma warning disable 4014
             //should run async and not awaited!
@@ -303,37 +315,45 @@ namespace Automatica.Core.Runtime.Core
             {
                 try
                 {
-                    await Configure();
+                    await timer.Measure("configure", () => Configure(timer));
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Error during configuration {e}");
                     throw;
                 }
-                await StartRemoteConnectService();
+                await timer.Measure("remote connect", StartRemoteConnectService);
 
                 try
                 {
                     RunState = RunState.Starting;
 
-                    await StartLogicEngine();
-                    foreach (var driver in _driverStore.All())
-                    {
-                        _logger.LogInformation($"Starting driver {driver.Name}...");
-                        await StartDriver(driver);
-                    }
+                    await timer.Measure("logic engine", StartLogicEngine);
 
-                    await StartLogics();
-                    await _trendingContext.Start();
+                    // the drivers are independent of each other: one that waits for its device (up to the start timeout)
+                    // must not hold back the others. Task.Run: a driver that blocks synchronously in Start would serialize them again
+                    var drivers = _driverStore.All().ToList();
+                    await timer.Measure($"start {drivers.Count} drivers", () => Task.WhenAll(drivers.Select(driver =>
+                        timer.MeasureItem($"start {driver.Name}", () => Task.Run(() =>
+                        {
+                            _logger.LogInformation($"Starting driver {driver.Name}...");
+                            return StartDriver(driver);
+                        })))));
+
+                    await timer.Measure("logics", StartLogics);
+                    await timer.Measure("trending", () => _trendingContext.Start());
                     RunState = RunState.Started;
 
-                    foreach (var driver in _driverStore.All())
+                    await timer.Measure("drivers started", async () =>
                     {
-                        await driver.Started();
-                    }
+                        foreach (var driver in _driverStore.All())
+                        {
+                            await driver.Started();
+                        }
+                    });
 
-                    await StartAutomations();
-                    await StartShading();
+                    await timer.Measure("automations", StartAutomations);
+                    await timer.Measure("shading", StartShading);
                 }
                 catch (Exception e)
                 {
@@ -588,8 +608,9 @@ namespace Automatica.Core.Runtime.Core
 
         
 
-        private async Task Stop()
+        private async Task Stop(StartupTimer? timer = null)
         {
+            timer ??= new StartupTimer();
             await _remoteServerHandler.Stop();
 
             // automations, links and logics first, otherwise values are still dispatched into the stopped drivers
@@ -601,7 +622,7 @@ namespace Automatica.Core.Runtime.Core
             var drivers = _driverStore.All().ToList();
             foreach (var driver in drivers)
             {
-                await StopDriver(driver);
+                await timer.MeasureItem($"stop {driver.Name}", () => StopDriver(driver));
             }
 
             foreach (var driver in drivers)
@@ -639,7 +660,9 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await Stop();
+            var timer = new StartupTimer();
+            await timer.Measure("stop", () => Stop(timer));
+            timer.Log(_logger, "Shutdown");
 
             await _remoteConnectService.StopAsync(cancellationToken);
 
@@ -647,7 +670,7 @@ namespace Automatica.Core.Runtime.Core
         }
 
 
-        private async Task ConfigureDriversRecursive(NodeInstance root)
+        private async Task ConfigureDriversRecursive(NodeInstance root, StartupTimer timer)
         {
             foreach (var nodeInstance in root.InverseThis2ParentNodeInstanceNavigation)
             {
@@ -666,7 +689,7 @@ namespace Automatica.Core.Runtime.Core
                     }
                     _logger.LogInformation($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
-                    await ConfigureDriversRecursive(nodeInstance);
+                    await ConfigureDriversRecursive(nodeInstance, timer);
                     continue;
                 }
                 if (nodeInstance.This2NodeTemplateNavigation.IsAdapterInterface != null && nodeInstance.This2NodeTemplateNavigation.IsAdapterInterface.Value)
@@ -681,7 +704,7 @@ namespace Automatica.Core.Runtime.Core
                     }
                     _logger.LogInformation($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
-                    await ConfigureDriversRecursive(nodeInstance);
+                    await ConfigureDriversRecursive(nodeInstance, timer);
                     continue;
                 }
 
@@ -700,7 +723,7 @@ namespace Automatica.Core.Runtime.Core
                     else
                     {
                         _logger.LogDebug($"Creating instance for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
-                        await InitializeDriver(nodeInstance, nodeInstance.This2NodeTemplateNavigation);
+                        await timer.MeasureItem($"configure {nodeInstance.Name}", () => InitializeDriver(nodeInstance, nodeInstance.This2NodeTemplateNavigation));
                     }
 
                 }
@@ -798,10 +821,10 @@ namespace Automatica.Core.Runtime.Core
         }
 
 
-        private async Task Configure()
+        private async Task Configure(StartupTimer timer)
         {
             _logger.LogDebug("Searching instantiated drivers");
-            await _licenseContext.Init();
+            await timer.MeasureItem("configure license", () => _licenseContext.Init());
             if (!_licenseContext.IsLicensed)
             {
                 _logger.LogError("Can not configure drivers - license is invalid");
@@ -810,14 +833,15 @@ namespace Automatica.Core.Runtime.Core
 
             try
             {
-                await _remoteConnectService.InitAsync();
+                await timer.MeasureItem("configure remote connect", () => _remoteConnectService.InitAsync());
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error initialize RemoteControl service {e}");
             }
 
-            var root = _nodeInstanceCache.Root;
+            NodeInstance? root = null;
+            await timer.MeasureItem("load node instances", () => { root = _nodeInstanceCache.Root; return Task.CompletedTask; });
             if (root == null)
             {
                 // the node instance cache could not be loaded (e.g. database not reachable), it is loaded again on the next access
@@ -825,10 +849,11 @@ namespace Automatica.Core.Runtime.Core
             }
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
-            await ConfigureDriversRecursive(root);
+            await ConfigureDriversRecursive(root, timer);
 
 
-            var rules = _logicInstanceCache.All();
+            var rules = new List<RuleInstance>();
+            await timer.MeasureItem("load logic instances", () => { rules = _logicInstanceCache.All().ToList(); return Task.CompletedTask; });
 
             foreach (var ruleInstance in rules)
             {
@@ -848,7 +873,7 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
-            await _trendingContext.Configure();
+            await timer.MeasureItem("configure trending", () => _trendingContext.Configure());
         }
         
       
@@ -923,12 +948,13 @@ namespace Automatica.Core.Runtime.Core
             await _driverNodesStoreInternal.ReInitialize();
             _telegramMonitor?.Clear();
 
-            await Stop();
-            
+            var timer = new StartupTimer();
+            await timer.Measure("stop", () => Stop(timer));
+
             InitInternals();
 
-            await ConfigureAndStart();
-            _logger.LogInformation("ReInit done...");
+            await ConfigureAndStart(timer);
+            timer.Log(_logger, "ReInit");
 
         }
 

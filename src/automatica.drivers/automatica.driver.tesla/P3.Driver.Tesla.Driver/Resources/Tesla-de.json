@@ -1,0 +1,126 @@
+{
+  "TESLA": {
+    "NAME": "Tesla",
+    "DESCRIPTION": "Tesla-Fahrzeuge über die Tesla Fleet API",
+    "API_URL": {
+      "NAME": "Fleet-API-URL",
+      "DESCRIPTION": "Region des Kontos: EU https://fleet-api.prd.eu.vn.cloud.tesla.com, Nordamerika/Asien-Pazifik https://fleet-api.prd.na.vn.cloud.tesla.com, China https://fleet-api.prd.cn.vn.cloud.tesla.cn"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client-ID",
+      "DESCRIPTION": "Client-ID der eigenen Anwendung auf developer.tesla.com"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh-Token",
+      "DESCRIPTION": "OAuth-Refresh-Token (Scope offline_access vehicle_device_data vehicle_cmds vehicle_charging_cmds). Tesla ersetzt ihn bei jeder Verwendung, der Treiber speichert den neuesten"
+    },
+    "COMMAND_URL": {
+      "NAME": "Befehls-Proxy-URL",
+      "DESCRIPTION": "Optional. Fahrzeuge ab Baujahr 2021 akzeptieren nur signierte Befehle: Teslas vehicle-command-Proxy (tesla-http-proxy) betreiben und dessen URL hier eintragen. Leer = Befehle gehen direkt an die Fleet API"
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Fleet-API-Aufrufe werden von Tesla verrechnet. Daten werden nur abgefragt, wenn das Fahrzeug online ist, die Abfrage weckt es nicht"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token-Status",
+      "DESCRIPTION": ""
+    },
+    "VEHICLE": {
+      "NAME": "Fahrzeug",
+      "DESCRIPTION": "Ein Tesla-Fahrzeug",
+      "VIN": {
+        "NAME": "VIN",
+        "DESCRIPTION": "Fahrgestellnummer"
+      },
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION": "online, asleep (schläft) oder offline"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Ladestand [%]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_RANGE": {
+        "NAME": "Reichweite [km]",
+        "DESCRIPTION": "Geschätzte Reichweite"
+      },
+      "CHARGING_STATE": {
+        "NAME": "Ladestatus",
+        "DESCRIPTION": "Disconnected, Stopped, Charging, Complete, ..."
+      },
+      "CHARGING": {
+        "NAME": "Laden",
+        "DESCRIPTION": "true startet, false beendet das Laden"
+      },
+      "CHARGE_LIMIT": {
+        "NAME": "Ladelimit [%]",
+        "DESCRIPTION": "50 bis 100"
+      },
+      "CHARGER_POWER": {
+        "NAME": "Ladeleistung [kW]",
+        "DESCRIPTION": ""
+      },
+      "TIME_TO_FULL": {
+        "NAME": "Zeit bis voll [h]",
+        "DESCRIPTION": ""
+      },
+      "CHARGE_PORT_OPEN": {
+        "NAME": "Ladeklappe offen",
+        "DESCRIPTION": "true öffnet, false schließt die Ladeklappe"
+      },
+      "INSIDE_TEMP": {
+        "NAME": "Innentemperatur [°C]",
+        "DESCRIPTION": ""
+      },
+      "OUTSIDE_TEMP": {
+        "NAME": "Außentemperatur [°C]",
+        "DESCRIPTION": ""
+      },
+      "CLIMATE": {
+        "NAME": "Klimatisierung",
+        "DESCRIPTION": "true startet, false beendet die Klimatisierung"
+      },
+      "TARGET_TEMP": {
+        "NAME": "Solltemperatur [°C]",
+        "DESCRIPTION": "Fahrer und Beifahrer, 15 bis 28 °C"
+      },
+      "LOCKED": {
+        "NAME": "Verriegelt",
+        "DESCRIPTION": "true verriegelt, false entriegelt"
+      },
+      "SENTRY_MODE": {
+        "NAME": "Wächter-Modus",
+        "DESCRIPTION": ""
+      },
+      "ODOMETER": {
+        "NAME": "Kilometerstand [km]",
+        "DESCRIPTION": ""
+      },
+      "LATITUDE": {
+        "NAME": "Breitengrad",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Längengrad",
+        "DESCRIPTION": ""
+      },
+      "SHIFT_STATE": {
+        "NAME": "Gang",
+        "DESCRIPTION": "P, R, N oder D"
+      },
+      "WAKE": {
+        "NAME": "Aufwecken",
+        "DESCRIPTION": "Ein beliebiger Wert weckt das Fahrzeug auf"
+      },
+      "FLASH_LIGHTS": {
+        "NAME": "Lichthupe",
+        "DESCRIPTION": "true lässt die Lichter blinken"
+      },
+      "HONK": {
+        "NAME": "Hupen",
+        "DESCRIPTION": "true hupt"
+      }
+    }
+  }
+}
