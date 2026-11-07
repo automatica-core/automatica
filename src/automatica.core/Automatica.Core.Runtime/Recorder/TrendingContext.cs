@@ -82,7 +82,7 @@ namespace Automatica.Core.Runtime.Recorder
                     foreach (var recorder in _trendingRecorder)
                     {
                         _logger.LogDebug($"{recorder.GetType().Name} added {node.Name} {node.ObjId} for recording...");
-                        await recorder.AddTrend(node.ObjId);
+                        await recorder.AddTrend(node.ObjId, reload: false);
                         recordingDataPointCount++;
                     }
                 }

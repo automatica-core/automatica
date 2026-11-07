@@ -17,6 +17,8 @@ namespace Automatica.Core.Tests.Recorder
         {
         }
 
+        public string GetMetricName(System.Guid nodeInstance) => MetricName.TryGetValue(nodeInstance, out var name) ? name : null;
+
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
             LastTrending = trend;

@@ -47,11 +47,13 @@ namespace Automatica.Core.Runtime.Recorder.Base
         public DataRecorderType RecorderType { get; }
         public IDispatcher Dispatcher { get; }
 
-        public async Task AddTrend(Guid nodeInstance)
+        public async Task AddTrend(Guid nodeInstance, bool reload = true)
         {
-            NodeInstance node;
-            await using (var db = new AutomaticaContext(_config))
+            // reading a node from the database takes a dozen queries, at startup the node cache was just loaded
+            var node = reload ? null : _nodeCache.Get(nodeInstance);
+            if (node == null)
             {
+                await using var db = new AutomaticaContext(_config);
                 node = _nodeCache.GetSingle(nodeInstance, db);
             }
 
