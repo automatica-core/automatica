@@ -20,8 +20,8 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
   private moveInput: RuleInterfaceInstance;
   private stopInput: RuleInterfaceInstance;
   private absolutePositionInput: RuleInterfaceInstance;
-  private upInput: RuleInterfaceInstance;
-  private downInput: RuleInterfaceInstance;
+  upInput: RuleInterfaceInstance;
+  downInput: RuleInterfaceInstance;
   private isMovingOutput: RuleInterfaceInstance;
 
   private absolutePosition: number;
@@ -29,6 +29,12 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
   displayValue: string;
 
   shutterIcon: any;
+
+  /** 0 = open, 100 = closed */
+  public get positionWidth(): number {
+    const v = Number(this.value);
+    return isNaN(v) ? 0 : Math.max(0, Math.min(100, v));
+  }
 
   async ngOnInit() {
     this.baseOnInit();
@@ -76,7 +82,7 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
       }
       this.absolutePosition = value;
       this.value = value;
-      this.displayValue = Math.round(value) + "%";
+      this.displayValue = Math.round(value) + " %";
 
       this.updateIcon();
     }

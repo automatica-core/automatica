@@ -1,8 +1,9 @@
-
 :host {
-    display: block;    
+    display: block;
+    height: 100%;
+    min-width: 0;
     user-select: none;
     touch-action: pan-y;
     -webkit-user-drag: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 }

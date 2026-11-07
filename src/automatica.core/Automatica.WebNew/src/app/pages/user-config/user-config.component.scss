@@ -1,6 +1,17 @@
+@use "../plugins/list";
+
 :host {
-    dx-menu {
-        height: 50px;
-        margin-bottom: 20px;
-    }
+    display: block;
+    height: 100%;
+    min-height: 0;
+}
+
+.pane-head .grow {
+    flex: 1 1 160px;
+    min-width: 0;
+}
+
+.list-pane .pane-body {
+    display: flex;
+    flex-direction: column;
 }

@@ -1,16 +1,13 @@
-<app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location"
-  [hasPopup]="true">
-  <dx-switch control [value]="state" (onValueChanged)="onValueChanged($event)"></dx-switch>
+<app-visualization-control [hint]="displayText" [state]="state ? displayValue : ('COMMON.TOGGLE.OFF' | translateAsync)"
+  [icon]="icon" [location]="location" [pressable]="true" [pressed]="!!state" [active]="!!state"
+  [level]="state ? (stateValue ?? 0) : 0" [disabled]="!stateInput" [hasPopup]="true" (press)="toggle()">
 
-  <div popup>
+  <div popup class="dimmer-popup">
+    <visu-component-switch-button [state]="state" (stateChanged)="switch($event)" [disabled]="!stateInput"></visu-component-switch-button>
 
-    <div>
-      <visu-component-switch-button [state]="state" (stateChanged)="switch($event)"></visu-component-switch-button>
-    </div>
-
-    <div>
+    <div class="dimmer-brightness">
+      <div class="dimmer-label">{{ 'UI.VISU.BRIGHTNESS' | translateAsync }}</div>
       <visu-component-slider [state]="stateValue" (stateChanged)="sliderUpdate($event)"></visu-component-slider>
     </div>
-
   </div>
 </app-visualization-control>

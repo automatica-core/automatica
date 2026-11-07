@@ -54,15 +54,14 @@ export class VisualizationComponent implements OnInit {
 
     const menu = [];
     menu.push({
-      text: "COMMON.HOME",
-      icon: "home",
+      text: "UI.NAV.HOME",
+      icon: "house",
       path: "/visualization/page/home",
     });
 
     const categoriesItem = {
       text: "CATEGORIES.NAME",
-      icon: "th",
-      seperator: false,
+      group: true,
       items: []
     };
 
@@ -77,7 +76,7 @@ export class VisualizationComponent implements OnInit {
 
     const areasItem = {
       text: "AREAS.NAME",
-      icon: "layer-group",
+      group: true,
       items: []
     };
 
@@ -91,8 +90,8 @@ export class VisualizationComponent implements OnInit {
       const item = {
         text: x.DisplayName,
         path: "/visualization/page/area/" + x.ObjId,
-        icon: x.Icon,
-        expanded: true,
+        icon: x.Icon?.replace("fas", "").trim(),
+        expanded: false,
         items: []
       };
       menuMap.set(x.ObjId, item);

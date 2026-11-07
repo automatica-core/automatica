@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
+import { ViewportService } from "src/app/services/viewport.service";
 import { CategoryService } from "src/app/services/categories.service";
 import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
@@ -17,6 +18,9 @@ import { GroupsService } from "src/app/services/groups.service";
     standalone: false
 })
 export class CategoryConfigComponent extends BaseComponent implements OnInit {
+
+  readonly viewport = inject(ViewportService);
+
   groups: CategoryGroup[] = [];
   categories: CategoryInstance[] = [];
   selectedNode: CategoryInstance = void 0;

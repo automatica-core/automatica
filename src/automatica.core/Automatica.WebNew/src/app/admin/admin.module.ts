@@ -1,8 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AdminComponent } from "./admin.component";
-import { SideNavOuterToolbarModule, SideNavInnerToolbarModule } from "../layouts";
-import { FooterModule } from "../shared/components/footer/footer.component";
+import { SideNavInnerToolbarModule } from "../layouts";
 import { RouterModule } from "@angular/router";
 import { LogsComponent } from "../pages/logs/logs.component";
 import { AppComponent } from "../app.component";
@@ -53,9 +52,7 @@ import { AdminRoutingModule } from "./admin-routing.module";
   imports: [
     AdminRoutingModule,
     CommonModule,
-    SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
-    FooterModule,
     RouterModule,
     L10nTranslationModule,
     DxLoadPanelModule,

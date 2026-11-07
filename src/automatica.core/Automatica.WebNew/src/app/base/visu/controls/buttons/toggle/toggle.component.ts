@@ -34,7 +34,8 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
       this.onRuleInstanceValueChanged(nodeId, args[2].value);
     });
 
-    this.readOnly = this.getReadOnly() ?? false;
+    // without an input interface the tile can only show the state
+    this.readOnly = (this.getReadOnly() ?? false) || !this.inputType;
     this.value = this.dataHub.getCurrentValue(this.outputType.ObjId)?.value;
     
 
@@ -66,8 +67,20 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
 
+  public get isOn(): boolean {
+    return this.realValue === true || this.realValue === 1 || this.realValue === "true";
+  }
+
   onValueChanged($event) {
     this.switch($event.value);
+  }
+
+  /** the whole tile is the switch */
+  toggle() {
+    if (this.readOnly) {
+      return;
+    }
+    this.switch(!this.isOn);
   }
 
   ngOnDestroy(): void {

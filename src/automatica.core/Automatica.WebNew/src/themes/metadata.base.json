@@ -1,35 +1,43 @@
 {
   "version": "26.1.6",
-  "date": "11/21/2018",
+  "date": "11/06/2026",
   "themeId": "9",
   "hue": null,
   "items": [
     {
       "key": "$base-accent",
-      "value": "#457987"
-    },
-    {
-      "key": "$base-accent2",
-      "value": "#325862"
-    },
-    {
-      "key": "$base-border-color",
-      "value": "#e0e0e0"
-    },
-    {
-      "key": "$base-border-radius",
-      "value": "4px"
+      "value": "#2f6f7c"
     },
     {
       "key": "$base-text-color",
-      "value": "rgba(0, 0, 0, 0.87)"
+      "value": "#172326"
     },
     {
       "key": "$base-bg",
-      "value": "#fff"
+      "value": "#ffffff"
+    },
+    {
+      "key": "$base-border-color",
+      "value": "#d3dcde"
+    },
+    {
+      "key": "$base-border-radius",
+      "value": "6px"
+    },
+    {
+      "key": "$base-success",
+      "value": "#2f8a57"
+    },
+    {
+      "key": "$base-warning",
+      "value": "#b7791f"
+    },
+    {
+      "key": "$base-danger",
+      "value": "#c0392b"
     }
   ],
-  "baseTheme": "generic.light.compact",
+  "baseTheme": "generic.light",
   "outputColorScheme": "automatica-light",
   "makeSwatch": false,
   "widgets": [],

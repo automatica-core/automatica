@@ -1,9 +1,40 @@
-@import "../../../../../themes/generated/variables.additional.scss"; 
-
 :host {
     display: block;
+    height: 100%;
+}
+
+.gauge-wrap {
+    position: relative;
+    min-width: 0;
 }
 
 .gauge {
-    margin-left: 10px;
+    display: block;
+    width: 100%;
+}
+
+// the number sits inside the arc
+.gauge-value {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    text-align: center;
+    font-family: var(--font-data);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+// the configured range colors stay, the marker and the free labels follow the tokens
+:host ::ng-deep .gauge {
+    .dxg-value-indicator path {
+        fill: var(--fg);
+    }
 }

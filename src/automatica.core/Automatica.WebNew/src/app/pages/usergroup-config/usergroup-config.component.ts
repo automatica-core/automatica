@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
-import { DxDataGridComponent } from "devextreme-angular";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { Role } from "src/app/base/model/user/role";
 import { GroupsService } from "src/app/services/groups.service";
@@ -8,7 +7,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { Guid } from "src/app/base/utils/Guid";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
-import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { confirm } from "devextreme/ui/dialog";
 
 @Component({
     selector: "app-usergroup-config",
@@ -19,12 +18,16 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 })
 export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
-  @ViewChild("grid")
-  grid: DxDataGridComponent;
-
   groups: UserGroup[] = [];
   roles: Role[] = [];
   selectedNode: UserGroup = void 0;
+
+  search = "";
+  loaded = false;
+
+  createVisible = false;
+  newGroup = { Name: "", Description: "" };
+  createError: string = void 0;
 
   constructor(
     private userGroupService: GroupsService,
@@ -40,11 +43,22 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     await this.load();
   }
 
+  get filteredGroups(): UserGroup[] {
+    const q = (this.search || "").trim().toLowerCase();
+    return this.groups
+      .filter(g => !q || [g.Name, g.Description].some(v => (v || "").toLowerCase().includes(q)))
+      .sort((a, b) => (a.Name || "").localeCompare(b.Name || ""));
+  }
+
+  roleCount(g: UserGroup): number {
+    return (g.InverseThis2Roles || []).length;
+  }
+
   async load() {
     const loadingDone = this.appService.beginLoading();
 
     try {
-      var selectedNode = void 0;
+      let selectedNode = void 0;
       if (this.selectedNode) {
         selectedNode = this.selectedNode.ObjId;
       }
@@ -54,28 +68,72 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
       if (selectedNode) {
         this.selectedNode = this.groups.find(x => x.ObjId === selectedNode);
-        this.grid.instance.selectRows([selectedNode], false);
       }
 
     } catch (error) {
+      super.handleError(error);
+    } finally {
+      this.loaded = true;
+      loadingDone();
+    }
+  }
+
+  select(group: UserGroup) {
+    this.selectedNode = group;
+  }
+
+  closeEditor() {
+    this.selectedNode = void 0;
+  }
+
+  /** asks first, then deletes the selected group on the server */
+  async deleteSelected() {
+    const group = this.selectedNode;
+    if (!group) {
+      return;
+    }
+    const message = this.translate.translate("UI.USER_GROUPS.DELETE_CONFIRM", { name: group.Name || "" });
+    const ok = await confirm(message, this.translate.translate("UI.USER_GROUPS.DELETE_TITLE"));
+    if (!ok) {
+      return;
+    }
+
+    const loadingDone = this.appService.beginLoading();
+    try {
+      await this.userGroupService.deleteUserGroup(group);
+      this.groups = this.groups.filter(a => a !== group);
+      this.selectedNode = void 0;
+    }
+    catch (error) {
       super.handleError(error);
     } finally {
       loadingDone();
     }
   }
 
-  /** true if the group was deleted on the server */
-  async delete(): Promise<boolean> {
-    const loadingDone = this.appService.beginLoading();
-    try {
-      await this.userGroupService.deleteUserGroup(this.selectedNode);
-      return true;
+  openCreate() {
+    this.newGroup = { Name: "", Description: "" };
+    this.createError = void 0;
+    this.createVisible = true;
+  }
+
+  async create() {
+    const name = (this.newGroup.Name || "").trim();
+    if (!name) {
+      this.createError = this.translate.translate("UI.USER_GROUPS.NAME_REQUIRED");
+      return;
     }
-    catch (error) {
-      super.handleError(error);
-      return false;
-    } finally {
-      loadingDone();
+
+    const newObject = new UserGroup();
+    newObject.ObjId = Guid.MakeNew().ToString();
+    newObject.Name = name;
+    newObject.Description = (this.newGroup.Description || "").trim();
+    newObject.addVirtualProperties();
+
+    if (await this.saveUserGroup(newObject)) {
+      this.groups = [...this.groups, newObject];
+      this.selectedNode = newObject;
+      this.createVisible = false;
     }
   }
 
@@ -93,59 +151,9 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     }
   }
 
-  colorBoxOnValueChanged($event, cell) {
-    cell.setValue($event.value);
-  }
-
-  onRowRemoving($event) {
-    const data: UserGroup = $event.data;
-    this.selectedNode = data;
-    // the grid keeps the row if the server could not delete it
-    $event.cancel = this.delete().then(deleted => !deleted);
-  }
-
-  itemClick($event) {
-    const item: CustomMenuItem = $event.itemData;
-
-    if (item && item.command) {
-      item.command($event);
-    }
-  }
-
-  onInitNewRow($event) {
-    const newObject = new UserGroup();
-    newObject.ObjId = Guid.MakeNew().ToString();
-    newObject.addVirtualProperties();
-
-    $event.data = newObject;
-
-  }
-
-  onRowInserting($event) {
-    const newObject = new UserGroup();
-    newObject.addVirtualProperties();
-
-    Object.assign(newObject, $event.data);
-    $event.data = newObject;
-
-    this.grid.instance.selectRows([newObject.ObjId], false);
-    this.selectedNode = newObject;
-
-    // the grid drops the new row if the server could not save it
-    $event.cancel = this.saveUserGroup(newObject).then(saved => !saved);
-  }
-   
   async onChanged($event) {
-    var { item } = $event;
+    const { item } = $event;
 
     await this.saveUserGroup(item);
-  }
-
-  onRowClicked($event) {
-    this.selectedNode = $event.data;
-  }
-
-  onInitialized($event) {
-    $event.component.columnOption("command:edit", "width", 150);
   }
 }

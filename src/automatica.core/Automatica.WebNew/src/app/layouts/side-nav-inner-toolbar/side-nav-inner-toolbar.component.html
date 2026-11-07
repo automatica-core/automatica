@@ -1,37 +1,23 @@
-<div class="layout" [ngClass]="sizeClasses" [style.background-color]="backgroundColor">
-  <dx-drawer class="drawer" [closeOnOutsideClick]="!this.isLargeScreen" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
-    [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
+<div class="shell" [class.mobile]="isMobileLayout" [class.menu-open]="mobileOpen" [class.animated]="animated">
+  <app-side-navigation-menu class="side" [items]="menuItems" [compactMode]="!isMobileLayout && collapsed"
+    (navigated)="onNavigated()" (expandRequested)="setCollapsed(false)">
+    @if (!isMobileLayout) {
+      <button type="button" class="collapse" (click)="setCollapsed(!collapsed)"
+        [attr.title]="(collapsed ? 'UI.NAV.EXPAND' : 'UI.NAV.COLLAPSE') | translateAsync"
+        [attr.aria-label]="(collapsed ? 'UI.NAV.EXPAND' : 'UI.NAV.COLLAPSE') | translateAsync">
+        <fa-icon [icon]="collapsed ? 'angles-right' : 'angles-left'"></fa-icon>
+      </button>
+    }
+  </app-side-navigation-menu>
 
-    <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute"
-      class="dx-swatch-additional" *dxTemplate="let dataMenu of 'panel'"
-      (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick($event)" [(menuOpened)]="menuOpened">
-      <dx-toolbar id="navigation-header">
-        @if (minMenuSize !== 0) {
-<dxi-item location="before" widget="dxButton" [options]="{
-                            icon: 'menu',
-                            stylingMode: 'text',
-                            onClick: toggleMenu,
-                            elementAttr: { class: 'menu-button' }
-                        }">
-          </dxi-item>
-        }
-      </dx-toolbar>
-    </app-side-navigation-menu>
+  @if (isMobileLayout && mobileOpen) {
+    <div class="scrim" (click)="mobileOpen = false"></div>
+  }
 
-    <div class="container">
-      <app-header [menuToggleEnabled]="minMenuSize === 0" (menuToggle)="menuOpened = !menuOpened;">
-      </app-header>
-
-
-      <div class="content">
-        <ng-content></ng-content>
-      </div>
-
-      <div class="footer">
-        <ng-content select="app-footer"></ng-content>
-      </div>
-
-      <app-footer></app-footer>
+  <div class="main">
+    <app-header [menuToggleEnabled]="isMobileLayout" (menuToggle)="mobileOpen = !mobileOpen"></app-header>
+    <div class="content">
+      <ng-content></ng-content>
     </div>
-  </dx-drawer>
+  </div>
 </div>

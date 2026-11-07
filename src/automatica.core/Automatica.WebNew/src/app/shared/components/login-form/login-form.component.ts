@@ -4,11 +4,12 @@ import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
 import { DxValidationGroupComponent } from "devextreme-angular";
-import { L10N_LOCALE, L10nLocale } from "angular-l10n";
+import { L10N_LOCALE, L10nLocale, L10nTranslationService } from "angular-l10n";
 import { BaseServiceHelper } from "src/app/services/base-server-helper";
 import { NotifyService } from "src/app/services/notify.service";
 import { DeviceService } from "src/app/services/device/device.service";
 import { DiscoveredServer, ServerDiscoveryService } from "src/app/services/device/server-discovery.service";
+import { ConfigService } from "src/app/services/config.service";
 
 
 @Component({
@@ -26,6 +27,11 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     isWeb: boolean = false;
 
+    /** shown under the fields instead of a toast */
+    errorKey: string = void 0;
+    serverVersion: string = void 0;
+    isBusy = false;
+
     discoveredServers: DiscoveredServer[] = [];
     searchingServers = false;
     private stopDiscovery: () => Promise<void>;
@@ -41,7 +47,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         private notifyService: NotifyService,
         @Inject(L10N_LOCALE) public locale: L10nLocale,
         private deviceService: DeviceService,
-        private serverDiscovery: ServerDiscoveryService) {
+        private serverDiscovery: ServerDiscoveryService,
+        private configService: ConfigService,
+        private translation: L10nTranslationService) {
         // showing the login ends the session (token, cached user, and the plain text password older versions saved)
         this.loginService.logout();
 
@@ -61,6 +69,35 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
         if (!this.isWeb && this.serverDiscovery.isAvailable) {
             this.startDiscovery();
+        }
+
+        this.loadVersion();
+    }
+
+    /** the version endpoint needs no login; in the app it only works once a server is set */
+    private async loadVersion() {
+        if (!this.isWeb && !this.serverIp) {
+            return;
+        }
+        try {
+            const version = await this.configService.getVersion();
+            this.serverVersion = version?.version;
+        } catch {
+            this.serverVersion = void 0;
+        }
+        if (!this.destroyed) {
+            this.changeRef.detectChanges();
+        }
+    }
+
+    /** validation messages in the current language */
+    requiredMessage(key: string) {
+        return this.translation.translate(key);
+    }
+
+    clearError() {
+        if (this.errorKey) {
+            this.errorKey = void 0;
         }
     }
 
@@ -90,6 +127,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     selectServer(server: DiscoveredServer) {
         this.serverIp = server.url;
+        this.errorKey = void 0;
         this.changeRef.detectChanges();
     }
 
@@ -108,6 +146,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     async onLoginClick(args) {
         const loadingDone = this.appService.beginLoading();
+        this.errorKey = void 0;
+        this.isBusy = true;
         this.changeRef.detectChanges();
 
         try {
@@ -123,7 +163,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
                 const value = await this.loginService.login(this.login, this.password);
                 if (!value) {
                     // older servers answer wrong credentials with 204 instead of 401
-                    this.notifyService.notifyError("ERROR.INVALID_CREDENTIALS");
+                    this.errorKey = "UI.LOGIN.ERROR_CREDENTIALS";
                 } else {
                     this.loginService.saveToLocalStorage(value);
 
@@ -136,19 +176,21 @@ export class LoginFormComponent implements OnInit, OnDestroy {
                 }
             } catch (error) {
                 if (error.status === 0) {
-                    this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE");
+                    this.errorKey = "UI.LOGIN.ERROR_SERVER";
                 }
                 else if (error.status === 401) {
-                    this.notifyService.notifyError("ERROR.INVALID_CREDENTIALS");
+                    this.errorKey = "UI.LOGIN.ERROR_CREDENTIALS";
                 }
                 else {
                     console.error(error);
-                    this.notifyService.notifyError("ERROR.LOGIN_FAILED");
+                    this.errorKey = "UI.LOGIN.ERROR_FAILED";
                 }
             }
         }
         finally {
+            this.isBusy = false;
             loadingDone();
+            this.changeRef.detectChanges();
         }
     }
 }

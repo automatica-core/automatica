@@ -1,9 +1,66 @@
-@import "../../../../../themes/generated/variables.additional.scss"; 
-
 :host {
     display: block;
+    height: 100%;
+}
+
+.gauge-wrap {
+    position: relative;
+    min-width: 0;
+
+    &.is-linear {
+        display: flex;
+        flex-direction: column-reverse;
+    }
 }
 
 .gauge {
-    margin-left: 10px;
+    display: block;
+    width: 100%;
+}
+
+// the number sits inside the arc
+.gauge-value {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    text-align: center;
+    font-family: var(--font-data);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+
+    .is-linear & {
+        position: static;
+        text-align: left;
+        font-size: var(--text-xl);
+        line-height: 1.1;
+    }
+}
+
+// DevExtreme draws svg with presentation attributes, css wins over them: token colors in light and dark
+:host ::ng-deep .gauge {
+    .dxg-range-container .dxg-background-range,
+    .dxg-range-container path,
+    .dxg-range-container rect {
+        fill: var(--surface-2);
+    }
+
+    .dxg-value-indicator .dxg-main-bar {
+        fill: var(--accent);
+    }
+
+    .dxg-value-indicator .dxg-back-bar {
+        fill: none;
+    }
+
+    .dxg-scale text {
+        fill: var(--muted);
+    }
 }

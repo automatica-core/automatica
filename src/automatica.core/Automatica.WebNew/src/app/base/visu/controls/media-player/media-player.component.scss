@@ -1,32 +1,200 @@
-@import "../../../../../themes/generated/variables.additional.scss"; 
+:host {
+    display: block;
+    height: 100%;
+}
 
-.center {
+.media {
+    position: relative;
+    box-sizing: border-box;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    color: var(--fg);
+    font-family: var(--font-ui);
+    overflow: hidden;
+}
+
+// album art fades into the tile from the right
+.media-art {
     position: absolute;
-    text-align: center;
-    left: 30%;
-    top: 30px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 46%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.85;
+    -webkit-mask-image: linear-gradient(to right, transparent, var(--fg) 75%);
+    mask-image: linear-gradient(to right, transparent, var(--fg) 75%);
+    pointer-events: none;
 }
 
-.cell_text_hint {
-    margin: 10px;
-    font-size: 14px;
-    color: white;
+.media-head,
+.media-track,
+.media-controls {
+    position: relative;
+    min-width: 0;
 }
-.cell_text_overflow {    
+
+.media-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.media-ico {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 16px;
+
+    .is-playing & {
+        background: var(--accent-fill);
+        color: var(--on-accent);
+    }
+}
+
+.media-names {
+    min-width: 0;
+}
+
+.media-room {
+    font-size: var(--text-xs);
+    color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
+}
 
-  .media_player_button {
-    background: transparent; 
-    border-color:transparent
-  }
+.media-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-  .media_player_button_margin {
-    margin-top: 5px;
-  }
+.media-track {
+    align-self: center;
+    max-width: 70%;
 
-  .volume {
-    margin-bottom: 5px;
-  }
+    .has-art & {
+        max-width: 58%;
+    }
+}
+
+.media-title {
+    font-size: var(--text-md);
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.media-meta {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.media-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.media-btn {
+    appearance: none;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &.is-primary {
+        width: 40px;
+        height: 40px;
+        border-color: transparent;
+        background: var(--accent-fill);
+        color: var(--on-accent);
+    }
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        opacity: 0.6;
+        cursor: default;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+}
+
+.media-volume {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: var(--space-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+}
+
+.media-volume-slider {
+    flex: 1;
+    min-width: 0;
+}
+
+:host ::ng-deep .media-volume-slider {
+    .dx-slider-bar {
+        background: var(--line);
+    }
+
+    .dx-slider-range.dx-slider-range-visible {
+        border-color: var(--accent-fill);
+        background: var(--accent-fill);
+    }
+
+    .dx-slider-handle {
+        background: var(--surface);
+        border-color: var(--accent-fill);
+    }
+}
+
+@media (max-width: 599.98px) {
+    .media {
+        padding: 10px;
+    }
+
+    .media-volume {
+        margin-left: 0;
+    }
+}

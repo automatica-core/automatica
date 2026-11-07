@@ -1,39 +1,39 @@
 :host {
     display: block;
-}
-
-:host {
-    display: block;
+    height: 100%;
     width: 100%;
 }
 
+// a thick touch friendly track in the token colors; scoped to this control
+:host ::ng-deep .visu-range {
+    margin-top: calc(var(--space-8) + var(--space-3));
 
-.slider {
-        width: 100%;
-        height: 57px;
-   
-
-    ::ng-deep .slider .dx-trackbar-container.dx-slider-bar {
-        height: 55px;
+    .dx-slider-bar {
+        height: 12px;
+        margin: 0 var(--space-2);
+        border-radius: 6px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
     }
 
-    ::ng-deep .slider .dx-widget .dx-slider-handle {
-        height: 55px;
-        margin-top: -2px;
-        border-radius: 0px;
-        width: 20px;
+    .dx-slider-range.dx-slider-range-visible {
+        height: 100%;
+        border-radius: 6px;
+        border: 0;
+        background: var(--accent-fill);
     }
 
-    ::ng-deep .slider .dx-trackbar-range .dx-slider-range .dx-slider-range-visible {
-        border-radius: 0px;
-        height: 53px;
+    .dx-slider-handle {
+        background: var(--surface);
+        border: 2px solid var(--accent-fill);
     }
+}
 
-    ::ng-deep .slider .dx-slider-range {
-        height: 53px;
-    }
-
-    ::ng-deep .slider .dx-slider-handle {
-        height: 70px;
-    } 
+.visu-range-scale {
+    display: flex;
+    justify-content: space-between;
+    margin: var(--space-2) var(--space-2) 0;
+    font-family: var(--font-data);
+    font-size: var(--text-xs);
+    color: var(--muted);
 }

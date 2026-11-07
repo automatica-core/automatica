@@ -6,6 +6,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { Router } from "@angular/router";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
@@ -92,7 +93,11 @@ function versionParse(v: string): Version {
 
 
 
-class PluginStateInstance {
+export type PluginListState = "error" | "working" | "update" | "done" | "current" | "available";
+
+const STATE_ORDER: PluginListState[] = ["error", "working", "update", "done", "current", "available"];
+
+export class PluginStateInstance {
   private _downloadMaxFormatted: string;
   private _downloadCurrentFormatted: string;
   private _downloadCurrent: number = 0;
@@ -127,6 +132,46 @@ class PluginStateInstance {
 
   get type() {
     return this.instance.cloudPlugin.pluginType === PluginType.Driver ? "Driver" : "Logic";
+  }
+
+  get isDriver(): boolean {
+    return this.instance.cloudPlugin.pluginType === PluginType.Driver;
+  }
+
+  /** short name without the package prefix and factory suffix, e.g. "P3.Driver.Knx.DriverFactory" -> "Knx" */
+  get displayName(): string {
+    const name = this.instance.cloudPlugin.name || this.instance.cloudPlugin.componentName || "";
+    const short = name
+      .replace(/^(P3|Automatica(\.Core)?)\.(Drivers?|Logics?)\./i, "")
+      .replace(/\.(DriverFactory|LogicFactory|Factory|Driver|Logic)$/i, "");
+    return short || name;
+  }
+
+  get isWorking(): boolean {
+    return !!this.downloadMax && !this.downloaded && !this.error;
+  }
+
+  get state(): PluginListState {
+    if (this.error) {
+      return "error";
+    }
+    if (this.isWorking) {
+      return "working";
+    }
+    if (this.downloaded) {
+      return "done";
+    }
+    if (this.isInstalled) {
+      return this.cloudIsNewer ? "update" : "current";
+    }
+    return "available";
+  }
+
+  get progressPercent(): number {
+    if (!this.downloadMax) {
+      return 0;
+    }
+    return Math.min(100, Math.round(this.downloadCurrent / this.downloadMax * 100));
   }
 
   get isInstalled(): boolean {
@@ -216,37 +261,35 @@ class PluginStateInstance {
 })
 export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy {
   menuItems: CustomMenuItem[] = [];
-  menuUpdate: CustomMenuItem = {
-    id: "save",
-    label: "Update all",
-    icon: "fa-download",
-    items: undefined,
-    command: (event) => { this.updateAll(); }
+  menuMore: CustomMenuItem = {
+    id: "more",
+    label: "",
+    icon: "overflow",
+    items: []
   }
   menuInstall: CustomMenuItem = {
-    id: "save",
-    label: "Install all",
-    icon: "fa-download",
+    id: "install",
+    label: "",
+    icon: "download",
     items: undefined,
     command: (event) => { this.installAll(); }
   }
   menuInstallUpdate: CustomMenuItem = {
-    id: "restart",
-    label: "Install update all",
-    icon: "fa-download",
+    id: "install-update",
+    label: "",
+    icon: "download",
     items: undefined,
     command: (event) => { this.installUpdateAll(); }
-  }
-  menuReload: CustomMenuItem = {
-    id: "reload",
-    label: "Reload",
-    icon: "fa-download",
-    items: undefined,
-    command: (event) => { this.load(); }
   }
 
   plugins: PluginStateInstance[] = [];
   pluginsMap = new Map<string, PluginStateInstance>();
+
+  search = "";
+  typeFilter: "all" | "driver" | "logic" = "all";
+  loadError: string = void 0;
+  loaded = false;
+
   constructor(
     private pluginsService: PluginsService,
     private updateHubService: UpdateHubService,
@@ -255,18 +298,53 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private designTimeDataService: DesignTimeDataService,
     private translationConfigService: TranslationConfigService,
     private hubConnectionService: HubConnectionService,
+    private router: Router,
     appService: AppService) {
     super(notify, translationService, appService);
 
-
-
     appService.setAppTitle("PLUGINS.NAME");
+  }
+
+  get updateCount() {
+    return this.plugins.filter(a => a.state === "update").length;
+  }
+
+  get availableCount() {
+    return this.plugins.filter(a => a.state === "available").length;
+  }
+
+  get installedCount() {
+    return this.plugins.filter(a => a.isInstalled).length;
+  }
+
+  countOf(type: "all" | "driver" | "logic") {
+    if (type === "all") {
+      return this.plugins.length;
+    }
+    return this.plugins.filter(a => a.isDriver === (type === "driver")).length;
+  }
+
+  /** problems and updates first, then installed, then the rest; filtered by search and type */
+  get visiblePlugins(): PluginStateInstance[] {
+    const q = (this.search || "").trim().toLowerCase();
+    return this.plugins
+      .filter(a => this.typeFilter === "all" || a.isDriver === (this.typeFilter === "driver"))
+      .filter(a => !q || a.displayName.toLowerCase().includes(q) || (a.name || "").toLowerCase().includes(q))
+      .sort((a, b) => {
+        const s = STATE_ORDER.indexOf(a.state) - STATE_ORDER.indexOf(b.state);
+        if (s !== 0) {
+          return s;
+        }
+        return a.displayName.localeCompare(b.displayName);
+      });
   }
 
   async load() {
     try {
       this.isLoading = true;
+      this.loadError = void 0;
       this.plugins = [];
+      this.pluginsMap.clear();
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
       for (const p of plugins) {
@@ -280,9 +358,11 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
       }
 
     } catch (error) {
+      this.loadError = String(this.parseErrorString(error) ?? "");
       this.handleError(error);
     }
 
+    this.loaded = true;
     this.isLoading = false;
   }
 
@@ -290,16 +370,15 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     const loadingDone = this.appService.beginLoading();
     this.hubConnectionService.init();
     this.registerObservable(this.translationService.onChange(), () => {
-      this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
-      this.menuInstall.label = this.translationService.translate("PLUGINS.INSTALL_ALL");
-      this.menuInstallUpdate.label = this.translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
-      this.menuReload.label = this.translationService.translate("PLUGINS.RELOAD");
+      this.menuInstall.label = this.translationService.translate("UI.PLUGINS.INSTALL_ALL");
+      this.menuInstallUpdate.label = this.translationService.translate("UI.PLUGINS.INSTALL_UPDATE_ALL");
+      // new array so the menu picks up the translated labels
+      this.menuMore.items = [this.menuInstall, this.menuInstallUpdate];
+      this.menuItems = [this.menuMore];
     });
 
-    this.menuItems.push(this.menuReload);
-    this.menuItems.push(this.menuUpdate);
-    this.menuItems.push(this.menuInstall);
-    this.menuItems.push(this.menuInstallUpdate);
+    this.menuMore.items = [this.menuInstall, this.menuInstallUpdate];
+    this.menuItems = [this.menuMore];
 
     this.baseOnInit();
 
@@ -308,6 +387,9 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
       super.registerEvent(this.updateHubService.PluginDownloadProgressChanged, (a) => {
         const instance = this.pluginsMap.get(a[0][0]);
+        if (!instance) {
+          return;
+        }
 
         instance.downloadMax = a[0][2];
         instance.downloadCurrent = a[0][1];
@@ -315,17 +397,22 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
       super.registerEvent(this.updateHubService.PluginFailed, (a) => {
         const instance = this.pluginsMap.get(a[0][0]);
-        instance.error = a[0][1];
+        if (instance) {
+          instance.error = a[0][1] || this.translationService.translate("UI.PLUGINS.FAILED_UNKNOWN");
+        }
       });
       super.registerEvent(this.updateHubService.PluginFinished, async (a) => {
         const instance = this.pluginsMap.get(a[0][0]);
+        if (!instance) {
+          return;
+        }
         instance.downloaded = true;
         instance.downloadMax = 100;
         instance.downloadCurrent = instance.downloadMax;
 
       });
       super.registerEvent(this.updateHubService.PluginLoaded, async (a) => {
-        await this.translationConfigService.init();     
+        await this.translationConfigService.init();
       });
     } catch (error) {
       super.handleError(error);
@@ -334,13 +421,51 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     }
   }
 
+  /** the one action that fits the plugin's state: install, update or try again */
+  async runAction(data: PluginStateInstance) {
+    const state = data.state;
+    if (state === "error") {
+      data.error = void 0;
+      if (data.isInstalled) {
+        await this.update(void 0, data);
+      } else {
+        await this.install(void 0, data);
+      }
+      return;
+    }
+    if (state === "update") {
+      await this.update(void 0, data);
+    } else if (state === "available") {
+      await this.install(void 0, data);
+    }
+  }
+
+  openLogs() {
+    this.router.navigate(["/admin/logs"]);
+  }
+
+  // shows the progress row right away, the hub fills in the real numbers
+  private markStarted(data: PluginStateInstance) {
+    data.downloadMax = data.downloadMax || 1;
+  }
+
   async install($event, data: PluginStateInstance) {
-    await this.updateHubService.installPlugin(data.instance.cloudPlugin);
+    this.markStarted(data);
+    try {
+      await this.updateHubService.installPlugin(data.instance.cloudPlugin);
+    } catch (error) {
+      data.error = String(this.parseErrorString(error) ?? "");
+    }
     this.designTimeDataService.clearLogicTemplate();
   }
 
   async update($event, data: PluginStateInstance) {
-    await this.updateHubService.updatePlugin(data.instance.cloudPlugin);
+    this.markStarted(data);
+    try {
+      await this.updateHubService.updatePlugin(data.instance.cloudPlugin);
+    } catch (error) {
+      data.error = String(this.parseErrorString(error) ?? "");
+    }
     this.designTimeDataService.clearLogicTemplate();
   }
 
@@ -391,6 +516,6 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
   ngOnDestroy() {
     super.baseOnDestroy();
-    this.translationConfigService.init();     
+    this.translationConfigService.init();
   }
 }

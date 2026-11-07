@@ -1,44 +1,158 @@
-<div class="content-block">
-    <div class="dx-card">
-        <div class="card-header">
-            <h3>Automatica.Core <sub style="font-size: 70%;">(Version {{ version.version }})</sub></h3>
-        </div>
-        <div class="card-block panel-dashboard">
-            <dx-scroll-view>
-                <div class="row">
-                    <img height="300px" src="/assets/images/Logo1.png" />
-                </div>
-                <div class="row">
-                    <span>
-                        Welcome to Automatica.Core. A modern way to automatica your life! A product from <a
-                            href="https://www.p3-software.eu" target="_blank">p3-software</a>.
-                        And available for the public via <a href="https://www.github.com/automatica-core"
-                            target="_blank">GitHub</a>
-                        <br />
-                        <br /> For more information visit
-                        <a href="https://www.automaticacore.com" target="_blank">Automatica.Core</a>
-                        or the documentaiton <a href="https://docu.automaticacore.com" target="_blank">here...</a>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.HOME.TITLE' | translateAsync }}</h1>
+    @if (version?.version) {
+      <span class="sub">Automatica.Core <span class="mono">{{ version.version }}</span></span>
+    }
+  </div>
 
-                    </span>
-                </div>
+  <div class="tiles">
+    <a class="panel tile" routerLink="/admin/system">
+      <span class="eyebrow">{{ 'UI.HOME.SERVER' | translateAsync }}</span>
+      <span class="value"><span class="status-dot" [ngClass]="serverTone"></span>{{ serverStateKey | translateAsync }}</span>
+      <span class="sub">{{ 'COMMON.VERSION' | translateAsync }} <span class="mono">{{ version?.version || '–' }}</span></span>
+    </a>
 
-                <div class="row">
-                    <h3>Special thanks to:</h3>
+    <a class="panel tile" routerLink="/admin/config">
+      <span class="eyebrow">{{ 'UI.HOME.DRIVERS' | translateAsync }}</span>
+      @if (driversFailed) {
+        <span class="value"><span class="status-dot bad"></span>{{ 'UI.HOME.NOT_AVAILABLE' | translateAsync }}</span>
+      } @else if (!driversLoaded) {
+        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+      } @else {
+        <span class="value"><span class="status-dot" [ngClass]="driverTone"></span>{{ 'UI.HOME.DRIVERS_RUNNING' | translateAsync: { count: driversRunning } }}</span>
+        <span class="sub">
+          @if (driverProblems.length > 0) {
+            <span class="bad-text">{{ 'UI.HOME.DRIVERS_PROBLEMS' | translateAsync: { count: driverProblems.length } }}</span>
+          } @else {
+            {{ 'UI.HOME.DRIVERS_NO_PROBLEMS' | translateAsync }}
+          }
+          @if (driversDisabled > 0) { · {{ 'UI.HOME.DRIVERS_DISABLED' | translateAsync: { count: driversDisabled } }} }
+        </span>
+      }
+    </a>
 
-                    <p><a href="https://www.p3-software.eu" target="_blank">Patrik Pfaffenbauer (p3root)</a></p>
-                    <p>For developing the main systems and a list of several drivers/logics.</p>
-                    <img height="320px" src="/assets/images/Logo_white.jpg" />
-                    <br />
-                    <br />
-                </div>
+    <a class="panel tile" routerLink="/admin/satellites">
+      <span class="eyebrow">{{ 'COMMON.SATELLITES' | translateAsync }}</span>
+      @if (satellitesFailed) {
+        <span class="value"><span class="status-dot bad"></span>{{ 'UI.HOME.NOT_AVAILABLE' | translateAsync }}</span>
+      } @else if (!satellitesLoaded) {
+        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+      } @else {
+        <span class="value"><span class="status-dot" [ngClass]="satelliteTone"></span>{{ 'UI.HOME.SATELLITES_ONLINE' | translateAsync: { count: satellitesOnline } }}</span>
+        <span class="sub">{{ 'UI.HOME.SATELLITES_OFFLINE' | translateAsync: { count: satellitesOffline } }}</span>
+      }
+    </a>
 
-                <div class="row">
-                    <h3>Disclaimer</h3>
-                    <p>Use at your own risk - p3-software or any other company/person assumes no liability or guarantee.
-                        See license <a href="https://opensource.org/licenses/LGPL-3.0" target="_blank">here...</a> </p>
-                </div>
-            </dx-scroll-view>
-        </div>
+    <a class="panel tile" routerLink="/admin/plugins">
+      <span class="eyebrow">{{ 'PLUGINS.NAME' | translateAsync }}</span>
+      @if (pluginsFailed) {
+        <span class="value"><span class="status-dot warn"></span>{{ 'UI.HOME.CLOUD_UNREACHABLE' | translateAsync }}</span>
+        <span class="sub">{{ 'UI.HOME.CLOUD_UNREACHABLE_HINT' | translateAsync }}</span>
+      } @else if (!pluginsLoaded) {
+        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+      } @else {
+        <span class="value"><span class="status-dot" [ngClass]="pluginTone"></span>
+          @if (pluginUpdates > 0) {
+            {{ 'UI.PLUGINS.UPDATES_COUNT' | translateAsync: { count: pluginUpdates } }}
+          } @else if (pluginsInstalled === 0) {
+            {{ 'UI.HOME.PLUGINS_NONE' | translateAsync }}
+          } @else {
+            {{ 'UI.PLUGINS.STATE_CURRENT' | translateAsync }}
+          }
+        </span>
+        @if (pluginsInstalled > 0) {
+          <span class="sub">{{ 'UI.HOME.PLUGINS_INSTALLED' | translateAsync: { count: pluginsInstalled } }}</span>
+        } @else {
+          <span class="sub">{{ 'UI.HOME.PLUGINS_NONE_HINT' | translateAsync }}</span>
+        }
+      }
+    </a>
 
+    <a class="panel tile" routerLink="/admin/system">
+      <span class="eyebrow">{{ 'SYSTEM.LICENSE' | translateAsync }}</span>
+      <span class="value"><span class="status-dot" [ngClass]="licenseTone"></span>{{ licenseStateKey | translateAsync }}</span>
+      @if (licenseInfo) {
+        <span class="sub">
+          {{ licenseInfo.type }}
+          @if (licenseInfo.expiration) { · {{ 'UI.HOME.LICENSE_UNTIL' | translateAsync: { date: formatDate(licenseInfo.expiration) } }} }
+        </span>
+      }
+    </a>
+  </div>
+
+  <div class="columns">
+    <section class="panel block" [attr.aria-label]="'UI.HOME.RECENT_ERRORS' | translateAsync">
+      <div class="block-head">
+        <h2 class="section-title">{{ 'UI.HOME.RECENT_ERRORS' | translateAsync }}</h2>
+        <a class="link" routerLink="/admin/logs">{{ 'UI.HOME.OPEN_LOGS' | translateAsync }}</a>
+      </div>
+      @if (errorsFailed) {
+        <div class="empty-state compact"><span>{{ 'UI.HOME.ERRORS_UNAVAILABLE' | translateAsync }}</span></div>
+      } @else if (!errorsLoaded) {
+        <div class="empty-state compact"><span>{{ 'UI.HOME.LOADING' | translateAsync }}</span></div>
+      } @else {
+        <ul class="errors">
+          @for (e of recentErrors; track $index) {
+            <li>
+              <span class="when mono" [title]="e.date + ' ' + e.time">{{ e.time }}</span>
+              <span class="what">
+                <span class="facility mono" [title]="e.facility">{{ shortFacility(e.facility) }}</span>
+                <span class="msg">{{ e.message }}</span>
+              </span>
+              <span class="pill bad">{{ e.level === 'FTL' ? ('UI.LOGS.LEVEL_CRITICAL' | translateAsync) : ('UI.LOGS.LEVEL_ERROR' | translateAsync) }}</span>
+            </li>
+          } @empty {
+            <li class="none">
+              <span class="status-dot"></span>
+              <span>{{ 'UI.HOME.NO_ERRORS' | translateAsync }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="panel block" [attr.aria-label]="'UI.HOME.DRIVER_PROBLEMS' | translateAsync">
+      <div class="block-head">
+        <h2 class="section-title">{{ 'UI.HOME.DRIVER_PROBLEMS' | translateAsync }}</h2>
+        <a class="link" routerLink="/admin/config">{{ 'UI.HOME.OPEN_CONFIG' | translateAsync }}</a>
+      </div>
+      @if (!driversLoaded) {
+        <div class="empty-state compact"><span>{{ 'UI.HOME.LOADING' | translateAsync }}</span></div>
+      } @else {
+        <ul class="errors">
+          @for (d of driverProblems.slice(0, 6); track $index) {
+            <li>
+              <span class="what"><span class="msg strong">{{ d.name }}</span></span>
+              <span class="pill bad">{{ d.stateKey | translateAsync }}</span>
+            </li>
+          } @empty {
+            <li class="none">
+              <span class="status-dot"></span>
+              <span>{{ 'UI.HOME.DRIVERS_NO_PROBLEMS' | translateAsync }}</span>
+            </li>
+          }
+          @if (driverProblems.length > 6) {
+            <li class="more">{{ 'UI.HOME.MORE' | translateAsync: { count: driverProblems.length - 6 } }}</li>
+          }
+        </ul>
+      }
+    </section>
+  </div>
+
+  <section class="about" [attr.aria-label]="'UI.HOME.ABOUT' | translateAsync">
+    <fa-icon icon="automatica-logo" class="about-logo" aria-hidden="true"></fa-icon>
+    <div class="about-text">
+      <b>{{ 'UI.HOME.ABOUT' | translateAsync }}</b>
+      <span>{{ 'UI.HOME.ABOUT_TEXT' | translateAsync }}</span>
+      <span class="about-links">
+        <a href="https://www.automaticacore.com" target="_blank" rel="noopener">automaticacore.com</a>
+        <a href="https://docu.automaticacore.com" target="_blank" rel="noopener">{{ 'UI.HOME.DOCS' | translateAsync }}</a>
+        <a href="https://www.github.com/automatica-core" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.p3-software.eu" target="_blank" rel="noopener">p3-software</a>
+        <a href="https://opensource.org/licenses/LGPL-3.0" target="_blank" rel="noopener">{{ 'UI.HOME.LICENSE_LGPL' | translateAsync }}</a>
+      </span>
+      <span class="disclaimer">{{ 'UI.HOME.DISCLAIMER' | translateAsync: { year: year } }}</span>
     </div>
+  </section>
 </div>

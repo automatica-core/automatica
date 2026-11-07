@@ -9,10 +9,14 @@
     [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
     [expandedRowKeys]="expandedRowKeys"
     (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="true"
-    [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false" >
+    [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false"
+    [showColumnHeaders]="false" [showBorders]="false" [hoverStateEnabled]="true" [showRowLines]="false">
 
     <dxi-column dataField="DisplayName" [renderAsync]="false" cellTemplate="cellTemplate"></dxi-column>
-    <dxi-column dataField="Value" [renderAsync]="true" cellTemplate="valueTemplate"></dxi-column>
+    <dxi-column dataField="Value" [renderAsync]="true" cellTemplate="valueTemplate" width="30%" alignment="right"
+      cssClass="tree-value"></dxi-column>
+
+    <dxo-search-panel [visible]="true" width="100%" [placeholder]="'UI.CONFIG.SEARCH' | translateAsync"></dxo-search-panel>
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaConfigTree"></dxo-state-storing>
@@ -23,21 +27,21 @@
 
     <div id="{{ data.data.Id }}" *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
       <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
-        <div id="{{ data.data.Id }}" dnd-droppable [allowDrop]="allowDrop(data.data)"
+        <div id="{{ data.data.Id }}" class="tree-cell" dnd-droppable [allowDrop]="allowDrop(data.data)"
           (onDropSuccess)="dropSuccess($event, data.data)">
           @if (data.data.Validate && !data.data.ValidationOk) {
-            <fa-icon [icon]="['fas', 'exclamation']"
-            ></fa-icon>
+            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="tree-invalid"></fa-icon>
           }
 
-          <fa-icon [icon]="['fas', data.data.Icon]" [style.color]="data.data.IsAnyDisabled ? 'red' : 'white'"
-          style="margin-right: 2px"></fa-icon>
+          <fa-icon [icon]="['fas', data.data.Icon]" [fixedWidth]="true" class="tree-icon"
+            [class.disabled]="data.data.IsAnyDisabled"></fa-icon>
 
-          <span id="{{ data.data.Id }}">
+          <span class="tree-name" id="{{ data.data.Id }}">{{ data.value }}</span>
+          <span class="tree-state">
             @if (data.data.Validate) {
               @if (data.data.IsAnyDisabled) {
-                <span id="node-instance-disabled-{{data.data.Id}}" class="node-instance-disabled">
-                  <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.SHORT</span><span>) </span>
+                <span id="node-instance-disabled-{{data.data.Id}}" class="pill off">
+                  <span translate>COMMON.PROPERTY.ISDISABLED.SHORT</span>
                   <dx-tooltip target="#node-instance-disabled-{{data.data.Id}}" showEvent="mouseenter"
                     hideEvent="mouseleave" [hideOnOutsideClick]="false" position="right">
                     <div *dxTemplate="let data = data; of: 'content'"> <span
@@ -46,10 +50,10 @@
                 </span>
               }
               @if (!data.data.IsAnyDisabled && (data.data.State == NodeInstanceState.UnknownError || data.data.State == NodeInstanceState.Unknown)) {
-                <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
-                  <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNKNOWN.NAME</span><span>
-                  <fa-icon icon="question"
-                  style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
+                <span class="pill bad" id="unknown_error_id-{{data.data.Id}}">
+                  <span translate>COMMON.NODEINSTANCE.STATE.UNKNOWN.NAME</span><span>
+                  <fa-icon icon="circle-question"
+                  class="pill-help"></fa-icon>
                 </span>
               </span>
               <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
@@ -67,11 +71,11 @@
               </dx-popover>
             }
             @if (!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.OutOfDataPoints) {
-              <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
-                <span>(</span><span
+              <span class="pill bad" id="unknown_error_id-{{data.data.Id}}">
+                <span
               translate>COMMON.NODEINSTANCE.STATE.OUTOFLICENSE.NAME</span><span>
-              <fa-icon icon="question"
-              style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
+              <fa-icon icon="circle-question"
+              class="pill-help"></fa-icon>
             </span>
           </span>
           <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
@@ -83,11 +87,11 @@
           </dx-popover>
         }
         @if (!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.OutOfSatelliteLicenses) {
-          <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
-            <span>(</span><span
+          <span class="pill bad" id="unknown_error_id-{{data.data.Id}}">
+            <span
           translate>COMMON.NODEINSTANCE.STATE.OUT_OF_SATELLITE_LICENSES.NAME</span><span>
-          <fa-icon icon="question"
-          style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
+          <fa-icon icon="circle-question"
+          class="pill-help"></fa-icon>
         </span>
       </span>
       <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
@@ -100,9 +104,9 @@
       </dx-popover>
     }
     @if (!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.Unloaded) {
-      <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
-        <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.NAME</span><span>
-        <fa-icon icon="question"></fa-icon>) </span>
+      <span class="pill bad" id="unknown_error_id-{{data.data.Id}}">
+        <span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.NAME</span><span>
+        <fa-icon icon="circle-question" class="pill-help"></fa-icon></span>
       </span>
       <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
         hideEvent="mouseleave" position="top" [shading]="true"
@@ -113,9 +117,6 @@
       </dx-popover>
     }
   }
-  <ng-container>
-    {{data.value}}
-  </ng-container>
 </span>
 </div>
 </div>
@@ -126,9 +127,9 @@
     <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
       @if (!data.data.IsAnyDisabled) {
         @if (data.data.NodeTemplate && data.data.NodeTemplate.This2NodeDataType == NodeDataTypeEnum.WindowState) {
-          <span id="{{ data.data.Id }}">{{WindowState[data.value]}}</span>
+          <span class="mono" id="{{ data.data.Id }}">{{WindowState[data.value]}}</span>
         } @else {
-          <span id="{{ data.data.Id }}">{{data.value}}</span>
+          <span class="mono" id="{{ data.data.Id }}">{{data.value}}</span>
         }
       }
     </div>

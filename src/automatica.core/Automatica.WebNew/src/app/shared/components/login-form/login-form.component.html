@@ -1,72 +1,89 @@
-<div id="main" style="width:100vw; height: 100vh">
-  <div class="center">
-    <img class="center_img" src="/assets/images/Logo1.png" />
-    <dx-validation-group #validationGroup class="dx-fieldset">
-      <div class="dx-fieldset-header" style="color: white" translate>LOGIN.NAME</div>
+<main id="main" class="login-page">
+  <div class="login-card">
+    <div class="brand">
+      <fa-icon icon="automatica-logo" class="brand-logo" aria-hidden="true"></fa-icon>
+      <div class="brand-text">
+        <span class="product">Automatica.Core</span>
+        <span class="tagline">{{ 'UI.LOGIN.TAGLINE' | translateAsync }}</span>
+      </div>
+    </div>
 
-      @if (!isWeb) {
-        <div class="dx-field">
-          <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}"
-            width="100%">
+    <dx-validation-group #validationGroup>
+      <form class="fields" (submit)="$event.preventDefault(); onLoginClick($event)" novalidate>
+        <h1 class="title">{{ 'UI.LOGIN.TITLE' | translateAsync }}</h1>
+
+        @if (!isWeb) {
+          <label class="field">
+            <span class="label">{{ 'LOGIN.SERVER_IP' | translateAsync }}</span>
+            <dx-text-box [(value)]="serverIp" [height]="44" width="100%" valueChangeEvent="input" (onValueChanged)="clearError()"
+              [inputAttr]="{ autocomplete: 'url', inputmode: 'url' }" placeholder="https://">
+              <dx-validator>
+                <dxi-validation-rule type="required" [message]="'UI.LOGIN.SERVER_REQUIRED' | translateAsync"></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
+          </label>
+
+          @if (discoveredServers.length > 0) {
+            <div class="discovered" role="group" [attr.aria-label]="'LOGIN.FOUND_SERVERS' | translateAsync">
+              <div class="discovered-title">{{ 'LOGIN.FOUND_SERVERS' | translateAsync }}</div>
+              @for (server of discoveredServers; track server.url) {
+                <button type="button" class="discovered-server" [class.selected]="server.url === serverIp" (click)="selectServer(server)">
+                  <span class="discovered-name">{{ server.name }}</span>
+                  <span class="discovered-address mono">{{ server.host }}:{{ server.port }}</span>
+                </button>
+              }
+            </div>
+          } @else if (searchingServers) {
+            <div class="discovered-searching">{{ 'LOGIN.SEARCHING_SERVERS' | translateAsync }}</div>
+          }
+        }
+
+        <label class="field">
+          <span class="label">{{ 'LOGIN.USERNAME' | translateAsync }}</span>
+          <dx-text-box [(value)]="login" [height]="44" width="100%" valueChangeEvent="input" (onValueChanged)="clearError()"
+            (onEnterKey)="onEnterPressed($event)" [inputAttr]="{ autocomplete: 'username', autocapitalize: 'none' }">
             <dx-validator>
-              <dxi-validation-rule type="required" message="ServerIp is required"></dxi-validation-rule>
+              <dxi-validation-rule type="required" [message]="'UI.LOGIN.USER_REQUIRED' | translateAsync"></dxi-validation-rule>
             </dx-validator>
           </dx-text-box>
-        </div>
+        </label>
 
-        @if (discoveredServers.length > 0) {
-          <div class="dx-field discovered">
-            <div class="discovered-title">{{ 'LOGIN.FOUND_SERVERS' | translateAsync }}</div>
-            @for (server of discoveredServers; track server.url) {
-              <div class="discovered-server" [class.selected]="server.url === serverIp" (click)="selectServer(server)">
-                <span class="discovered-name">{{ server.name }}</span>
-                <span class="discovered-address">{{ server.host }}:{{ server.port }}</span>
-              </div>
-            }
-          </div>
-        } @else if (searchingServers) {
-          <div class="dx-field discovered-searching">{{ 'LOGIN.SEARCHING_SERVERS' | translateAsync }}</div>
+        <label class="field">
+          <span class="label">{{ 'LOGIN.PASSWORD' | translateAsync }}</span>
+          <dx-text-box mode="password" [(value)]="password" [height]="44" width="100%" valueChangeEvent="input" (onValueChanged)="clearError()"
+            (onEnterKey)="onEnterPressed($event)" [inputAttr]="{ autocomplete: 'current-password' }">
+            <dx-validator>
+              <dxi-validation-rule type="required" [message]="'UI.LOGIN.PASSWORD_REQUIRED' | translateAsync"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </label>
+
+        @if (!isWeb) {
+          <dx-check-box [(value)]="saveLogin" [text]="'LOGIN.SAVE' | translateAsync"></dx-check-box>
         }
-      }
 
-      <div class="dx-field">
-        <dx-text-box [(value)]="login" placeholder="{{ 'LOGIN.USERNAME' | translateAsync }}"
-          (onEnterKey)="onEnterPressed($event)" width="100%">
-          <dx-validator>
-            <dxi-validation-rule type="required" message="User is required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
-      <div class="dx-field">
-        <dx-text-box mode="password" [(value)]="password" placeholder="{{ 'LOGIN.PASSWORD' | translateAsync }}"
-          width="100%" (onEnterKey)="onEnterPressed($event)">
-          <dx-validator>
-            <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
-      @if (!isWeb) {
-        <div class="dx-field">
-          <dx-check-box [(value)]="saveLogin" text="{{ 'LOGIN.SAVE' | translateAsync }}"></dx-check-box>
-        </div>
-      }
+        @if (errorKey) {
+          <div class="login-error" role="alert">
+            <b>{{ errorKey | translateAsync }}</b>
+            <span>{{ (errorKey + '_HINT') | translateAsync }}</span>
+          </div>
+        }
 
-      <div class="dx-field">
-        <dx-button type="default" text="{{ 'LOGIN.NAME' | translateAsync }}" (onClick)="onLoginClick($event)"
-        width="100%"></dx-button>
-      </div>
+        <dx-button type="default" [height]="44" width="100%" [disabled]="isBusy"
+          [text]="(isBusy ? 'UI.LOGIN.SIGNING_IN' : 'UI.LOGIN.SUBMIT') | translateAsync" (onClick)="onLoginClick($event)"></dx-button>
 
-
-      @if (!isWeb) {
-        <div class="dx-field" style="margin-top:50px;">
-          <dx-button type="default" text="{{ 'LOGIN.DEMO' | translateAsync }}" (onClick)="onDemoLogin($event)"
-          width="100%"></dx-button>
-        </div>
-      }
-
+        @if (!isWeb) {
+          <dx-button stylingMode="outlined" [height]="44" width="100%" [text]="'LOGIN.DEMO' | translateAsync"
+            (onClick)="onDemoLogin($event)"></dx-button>
+        }
+      </form>
     </dx-validation-group>
+
+    <div class="foot">
+      @if (serverVersion) {
+        <span>{{ 'UI.LOGIN.VERSION' | translateAsync }} <span class="mono">{{ serverVersion }}</span></span>
+      }
+      <a href="https://www.automaticacore.com" target="_blank" rel="noopener">automaticacore.com</a>
+    </div>
   </div>
-</div>
-<!-- <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#main1' }" [(visible)]="isLoading"
-[showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
-</dx-load-panel> -->
+</main>

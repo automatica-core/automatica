@@ -1,40 +1,143 @@
-.center {
-    position: absolute;
-    width: 300px;
-    height: 200px;
-    top: 30%;
-    left: 50%;
-    margin: -100px 0 0 -150px;
-  }
-
-  .center_img {
+:host {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+.login-page {
+    min-height: 100vh;
+    min-height: 100dvh;
     width: 100%;
-  }
+    display: grid;
+    place-items: center;
+    padding: calc(var(--space-6) + var(--app-safe-top, 0px)) var(--space-4) calc(var(--space-6) + var(--app-safe-bottom, 0px));
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-ui);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-8) var(--space-6) var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+
+    @media (max-width: 420px) {
+        padding: var(--space-6) var(--space-4) var(--space-4);
+        border-radius: var(--radius-md);
+    }
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    // the logo path draws past its 256 box to the right and bottom, keep room for it
+    .brand-logo {
+        font-size: 40px;
+        color: var(--accent);
+        flex: none;
+        margin: 0 var(--space-5) var(--space-3) 0;
+    }
+
+    .brand-text {
+        display: grid;
+        min-width: 0;
+    }
+
+    .product {
+        font-size: var(--text-lg);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    .tagline {
+        font-size: var(--text-xs);
+        color: var(--muted);
+    }
+}
+
+.fields {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.title {
+    margin: 0;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.field {
+    display: grid;
+    gap: var(--space-1);
+
+    .label {
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--muted);
+    }
+}
+
+.login-error {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--bad) 40%, var(--line));
+    background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+    font-size: var(--text-sm);
+    line-height: 1.4;
+
+    b {
+        color: var(--bad);
+    }
+}
+
+.discovered {
+    display: grid;
+    gap: var(--space-1);
+}
 
 .discovered-title,
 .discovered-searching {
-    color: #8393A3;
-    font-size: 13px;
-    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: var(--text-xs);
 }
 
 .discovered-server {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-    padding: 8px 10px;
-    margin-bottom: 4px;
-    border: 1px solid #515159;
-    border-radius: 4px;
-    color: white;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-sm);
+    text-align: left;
     cursor: pointer;
 
+    &:hover {
+        background: var(--surface-2);
+    }
+
     &.selected {
-        border-color: #457987;
-        background: rgba(69, 121, 135, .25);
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
     }
 }
 
@@ -45,7 +148,31 @@
 }
 
 .discovered-address {
-    color: #8393A3;
-    font-size: 13px;
+    color: var(--muted);
+    font-size: var(--text-xs);
     flex-shrink: 0;
+}
+
+.mono {
+    font-family: var(--font-data);
+}
+
+.foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+    font-size: var(--text-xs);
+    color: var(--muted);
+
+    a {
+        color: var(--accent);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

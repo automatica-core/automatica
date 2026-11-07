@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, inject } from "@angular/core";
+import { ViewportService } from "src/app/services/viewport.service";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { ConfigService } from "src/app/services/config.service";
@@ -24,6 +25,9 @@ import { HubConnectionService } from "src/app/base/communication/hubs/hub-connec
     standalone: false
 })
 export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  readonly viewport = inject(ViewportService);
+
 
   selectedItem: NodeInstance;
 

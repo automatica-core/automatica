@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from "@angular/core";
+import { ViewportService } from "src/app/services/viewport.service";
 import { RulePage } from "src/app/base/model/rule-page";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -27,6 +28,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { ITreeNode } from "src/app/base/model/ITreeNode";
 export class Tab {
+
   id: string;
   text: string;
   page: RulePage;
@@ -40,6 +42,9 @@ export class Tab {
     standalone: false
 })
 export class LogicEditorComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  readonly viewport = inject(ViewportService);
+
 
   public pages: RulePage[] = [];
   public pagesDataSource: DataSource = void 0;
@@ -223,7 +228,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.selectLogicPage(page[0]);
   }
 
-  private selectLogicPage(page: RulePage) {
+  selectLogicPage(page: RulePage) {
     this.configTree.selectNodeById(void 0);
     this.selectedPage = page;
     this.selectedItem = page;

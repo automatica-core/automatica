@@ -1,3 +1,20 @@
 :host {
     display: block;
+    height: 100%;
+}
+
+.dimmer-popup {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.dimmer-brightness {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.dimmer-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--muted);
 }

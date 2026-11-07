@@ -1,28 +1,441 @@
 :host {
-    display: inline-block;   
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+
+    --port-any: var(--muted);
+    --port-bool: var(--lamp);
+    --port-num: var(--accent);
+    --port-text: #8f7fd1;
+    --port-time: #4fa38a;
 }
 
-.block {
-    display: inline-block;
+.canvas {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    outline: none;
+    cursor: default;
+    touch-action: none;
+    background-color: var(--bg);
+    background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 1.2px);
+
+    &.panning {
+        cursor: grabbing;
+    }
+
+    &.connecting {
+        cursor: crosshair;
+    }
+
+    &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--accent-soft);
+    }
 }
 
-::ng-deep .tooltip {
-	position: absolute;
-	background: #EEEEEE;
-	padding:10px;
-
-    font-size: 12px;
-    font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-
-    color: #4a4a4a;
+.world {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    transform-origin: 0 0;
 }
 
-::ng-deep .invert_tooltip {
-	position: absolute;
-	background: transparent;
-	padding:10px;
+// ---------- wires ----------
 
-    color: #4a4a4a;
+.wires {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
     pointer-events: none;
-    
+}
+
+[data-kind="any"] { --kind: var(--port-any); }
+[data-kind="bool"] { --kind: var(--port-bool); }
+[data-kind="num"] { --kind: var(--port-num); }
+[data-kind="text"] { --kind: var(--port-text); }
+[data-kind="time"] { --kind: var(--port-time); }
+
+.wire-hit {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 14;
+    pointer-events: stroke;
+    cursor: pointer;
+}
+
+.wire-line {
+    fill: none;
+    stroke: var(--kind, var(--muted));
+    stroke-width: 2;
+    opacity: .85;
+    pointer-events: none;
+}
+
+.wire:hover .wire-line {
+    stroke-width: 3;
+    opacity: 1;
+}
+
+.wire.selected .wire-line {
+    stroke-width: 3;
+    opacity: 1;
+    stroke-dasharray: 7 4;
+    animation: flow 0.6s linear infinite;
+}
+
+@keyframes flow {
+    to {
+        stroke-dashoffset: -11;
+    }
+}
+
+.wire-pending {
+    fill: none;
+    stroke: var(--kind, var(--accent));
+    stroke-width: 2;
+    stroke-dasharray: 5 4;
+}
+
+// ---------- blocks ----------
+
+.node {
+    position: absolute;
+    box-sizing: border-box;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    color: var(--fg);
+    font-family: var(--font-ui);
+    cursor: grab;
+
+    &:hover {
+        border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    }
+
+    &.selected {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow);
+    }
+}
+
+.rule {
+    .head {
+        box-sizing: border-box;
+        padding: 6px 12px 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-2);
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        overflow: hidden;
+    }
+
+    .title {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sub {
+        font-size: 11px;
+        line-height: 14px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .row {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 50%;
+        box-sizing: border-box;
+        font-size: 12px;
+
+        &.in {
+            left: 0;
+            padding-left: 12px;
+        }
+
+        &.out {
+            right: 0;
+            padding-right: 12px;
+            justify-content: flex-end;
+        }
+    }
+
+    .row .port {
+        position: absolute;
+        top: 50%;
+    }
+
+    .row.in .port {
+        left: 0;
+    }
+
+    .row.out .port {
+        right: 0;
+    }
+
+    .label {
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+        border-radius: 4px;
+        padding: 0 2px;
+
+        &:hover {
+            background: var(--surface-2);
+        }
+    }
+
+    .value {
+        flex: none;
+        color: var(--muted);
+        font-size: 11px;
+        max-width: 64px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:empty {
+            display: none;
+        }
+    }
+}
+
+// a data point: one line, type badge, name, live value
+.dp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border-radius: 999px;
+
+    .badge {
+        flex: none;
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 16px;
+        padding: 0 6px;
+        border-radius: 4px;
+        color: var(--kind, var(--muted));
+        background: color-mix(in srgb, var(--kind, var(--muted)) 16%, transparent);
+    }
+
+    .name {
+        flex: 1;
+        min-width: 0;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .value {
+        flex: none;
+        font-size: 11px;
+        color: var(--fg);
+        max-width: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .port {
+        position: absolute;
+        top: 50%;
+
+        &.in {
+            left: 0;
+        }
+
+        &.out {
+            right: 0;
+        }
+    }
+}
+
+// inverted ports carry the classic overline
+.inverted {
+    text-decoration: overline;
+}
+
+// ---------- ports ----------
+
+.port {
+    width: 12px;
+    height: 12px;
+    margin: -6px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid var(--kind, var(--muted));
+    background: var(--surface);
+    cursor: crosshair;
+    z-index: 1;
+    transition: transform .1s ease;
+
+    // a bigger invisible hit area for fingers and imprecise mice
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -7px;
+        border-radius: 50%;
+    }
+
+    &.linked {
+        background: var(--kind, var(--muted));
+    }
+
+    &.inverted {
+        text-decoration: none;
+        box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--kind, var(--muted));
+    }
+
+    &:hover,
+    &.hover-target {
+        transform: scale(1.35);
+    }
+
+    &.candidate {
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--kind, var(--accent)) 30%, transparent);
+    }
+}
+
+.canvas.connecting .port:not(.candidate) {
+    opacity: .35;
+}
+
+// ---------- overlay ----------
+
+.empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2);
+    text-align: center;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    pointer-events: none;
+    padding: var(--space-6);
+
+    .icon {
+        font-size: 32px;
+        color: var(--line);
+    }
+
+    b {
+        color: var(--fg);
+        font-size: var(--text-md);
+    }
+
+    span {
+        max-width: 340px;
+    }
+}
+
+.hud {
+    position: absolute;
+    left: var(--space-3);
+    bottom: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+
+    button {
+        min-width: 30px;
+        height: 28px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+        font: inherit;
+        font-size: 13px;
+
+        &:hover {
+            background: var(--surface-2);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+        }
+    }
+
+    .pct {
+        min-width: 50px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+}
+
+.minimap {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    width: 180px;
+    height: 120px;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    touch-action: none;
+
+    .mini-rule {
+        fill: var(--surface-2);
+        stroke: var(--line);
+        stroke-width: 4;
+    }
+
+    .mini-dp {
+        fill: var(--accent-soft);
+    }
+
+    .selected {
+        fill: var(--accent);
+    }
+
+    .mini-view {
+        fill: color-mix(in srgb, var(--accent) 10%, transparent);
+        stroke: var(--accent);
+        stroke-width: 1.5;
+        vector-effect: non-scaling-stroke;
+    }
+}
+
+@media (max-width: 599.98px) {
+    .minimap {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wire.selected .wire-line {
+        animation: none;
+    }
 }

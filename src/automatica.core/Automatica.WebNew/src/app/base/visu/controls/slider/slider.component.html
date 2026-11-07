@@ -1,16 +1,12 @@
-<app-visualization-control [hint]="displayText" [value]="state" [icon]="icon" [location]="location" [hasPopup]="true">
-  
-  <dx-switch control [value]="state" (onValueChanged)="onValueChanged($event)"></dx-switch>
- 
+<app-visualization-control [hint]="displayText" [state]="stateText" [icon]="icon" [location]="location"
+  [pressable]="true" [pressed]="isOn" [active]="isOn" [level]="levelPercent" [disabled]="!valueType"
+  [hasPopup]="true" (press)="toggle()">
 
   <div popup>
-    <div>
-      <dx-slider class="slider" [min]="valueMin" [max]="valueMax" [(value)]="state" (onValueChanged)="switch($event)"
-        valueChangeMode="onHandleRelease">
-        <dxo-label [visible]="true" [format]="format" position="top"></dxo-label>
-        <dxo-tooltip [enabled]="true" [format]="format" showMode="always" position="bottom"></dxo-tooltip>
-      </dx-slider>
-    </div>
-
+    <dx-slider class="visu-range" [min]="valueMin" [max]="valueMax" [(value)]="state" (onValueChanged)="switch($event)"
+      valueChangeMode="onHandleRelease" [elementAttr]="{ 'aria-label': displayText }">
+      <dxo-tooltip [enabled]="true" [format]="format" showMode="always" position="top"></dxo-tooltip>
+    </dx-slider>
+    <div class="visu-range-scale" aria-hidden="true"><span>{{ valueMin }}</span><span>{{ valueMax }}</span></div>
   </div>
 </app-visualization-control>

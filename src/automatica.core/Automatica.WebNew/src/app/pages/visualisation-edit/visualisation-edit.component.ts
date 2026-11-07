@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, inject } from "@angular/core";
+import { ViewportService } from "src/app/services/viewport.service";
 import { L10nTranslationService } from "angular-l10n";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -25,6 +26,9 @@ import { LogicEditorInstanceService } from "src/app/services/logic-editor-instan
     standalone: false
 })
 export class VisualisationEditComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  readonly viewport = inject(ViewportService);
+
 
   VisuPageTypes: typeof VisuPageType = VisuPageType;
 

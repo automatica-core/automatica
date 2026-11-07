@@ -49,24 +49,16 @@
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               {
-                "input": "src/themes/generated/theme.additional.css",
-                "bundleName": "additional"
-              },
-              {
                 "input": "src/themes/generated/dx.generic.automatica-light.css",
-                "bundleName": "generic.light.compact"
+                "bundleName": "generic.light"
               },
               {
                 "input": "src/themes/generated/dx.generic.automatica-dark.css",
-                "bundleName": "generic.dark.compact"
+                "bundleName": "generic.dark"
               },
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/jquery-ui-dist/jquery-ui.min.js",
-              "node_modules/automatica-draw2d/dist/automatica-draw2d.js"
-            ],
+            "scripts": [],
             "browser": "src/main.ts"
           },
           "configurations": {

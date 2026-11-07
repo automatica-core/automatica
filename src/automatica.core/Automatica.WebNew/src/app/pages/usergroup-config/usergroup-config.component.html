@@ -1,30 +1,94 @@
-<div class="content-block">
-    <div class="dx-card wide-card panel-height">
-        <as-split direction="horizontal">
-            <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedNode" [roles]="roles" (onChanged)="onChanged($event)"></p3-propertyeditor>
-            </as-split-area>
-            <as-split-area [size]="70">
-                <div style="padding-bottom: 100px;">
-                    <dx-data-grid #grid [dataSource]="groups" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                        (onRowRemoving)="onRowRemoving($event)" 
-                        (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
-                        (onInitialized)="onInitialized($event)">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                            <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
-                                deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
-                                cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
-                        </dxo-editing>
-                        <dxo-selection mode="single"></dxo-selection>
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'USER_GROUPS.NAME' | translateAsync }}</h1>
+    @if (loaded) {
+      <span class="sub">{{ 'UI.USER_GROUPS.COUNT' | translateAsync: { count: groups.length } }}</span>
+    }
+  </div>
 
-                        <dxi-column dataField="Name" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-                        </dxi-column>
+  <div class="split" [class.has-selection]="!!selectedNode">
+    <section class="panel list-pane" [attr.aria-label]="'UI.USER_GROUPS.LIST' | translateAsync">
+      <div class="pane-head">
+        <dx-text-box class="grow" mode="search" valueChangeEvent="input" [(value)]="search"
+          [placeholder]="'UI.USER_GROUPS.SEARCH' | translateAsync"></dx-text-box>
+        <dx-button type="default" icon="add" [text]="'UI.PAGES.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+      </div>
+      <div class="pane-body list">
+        @for (g of filteredGroups; track g.ObjId) {
+          <button type="button" class="li clickable" [class.selected]="g === selectedNode" (click)="select(g)"
+            [attr.aria-current]="g === selectedNode">
+            <span class="ico" aria-hidden="true"><fa-icon [icon]="['fas', 'users']"></fa-icon></span>
+            <span class="nm">
+              <b>{{ g.Name }}</b>
+              @if (g.Description) {
+                <span>{{ g.Description }}</span>
+              }
+            </span>
+            <span class="pill">{{ 'UI.USER_GROUPS.ROLE_COUNT' | translateAsync: { count: roleCount(g) } }}</span>
+          </button>
+        } @empty {
+          @if (loaded) {
+            <div class="empty-state">
+              <fa-icon class="icon" [icon]="['fas', 'users']"></fa-icon>
+              @if (groups.length === 0) {
+                <b>{{ 'UI.USER_GROUPS.EMPTY' | translateAsync }}</b>
+                <span>{{ 'UI.USER_GROUPS.EMPTY_HINT' | translateAsync }}</span>
+                <dx-button type="default" icon="add" [text]="'UI.USER_GROUPS.NEW' | translateAsync" (onClick)="openCreate()"></dx-button>
+              } @else {
+                <b>{{ 'UI.PAGES.NO_MATCH' | translateAsync }}</b>
+                <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </section>
 
-                    </dx-data-grid>
-                </div>
-            </as-split-area>
-        </as-split>
-    </div>
+    <section class="panel editor-pane" [attr.aria-label]="'UI.USER_GROUPS.EDITOR' | translateAsync">
+      @if (selectedNode) {
+        <div class="pane-head">
+          <dx-button class="back" icon="back" stylingMode="text" [hint]="'UI.PAGES.BACK' | translateAsync" (onClick)="closeEditor()"></dx-button>
+          <div class="titles">
+            <span class="eyebrow">{{ 'UI.USER_GROUPS.ITEM' | translateAsync }}</span>
+            <h2>{{ selectedNode.Name }}</h2>
+          </div>
+          <dx-button icon="trash" stylingMode="outlined" type="danger" [text]="'COMMON.DELETE' | translateAsync"
+            (onClick)="deleteSelected()"></dx-button>
+        </div>
+        <div class="pane-body">
+          <p3-propertyeditor [item]="selectedNode" [roles]="roles" (onChanged)="onChanged($event)"></p3-propertyeditor>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <fa-icon class="icon" [icon]="['fas', 'users-gear']"></fa-icon>
+          <b>{{ 'UI.USER_GROUPS.SELECT' | translateAsync }}</b>
+          <span>{{ 'UI.USER_GROUPS.SELECT_HINT' | translateAsync }}</span>
+        </div>
+      }
+    </section>
+  </div>
 </div>
+
+<dx-popup [(visible)]="createVisible" [showTitle]="true" [title]="'UI.USER_GROUPS.NEW' | translateAsync" [width]="'min(420px, 92vw)'"
+  [height]="'auto'" [hideOnOutsideClick]="true" [showCloseButton]="true">
+  <div *dxTemplate="let data of 'content'">
+    <form class="create-form" (submit)="$event.preventDefault(); create()">
+      <label>
+        <span>{{ 'COMMON.NAME' | translateAsync }}</span>
+        <dx-text-box [(value)]="newGroup.Name" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <label>
+        <span>{{ 'COMMON.DESCRIPTION' | translateAsync }}</span>
+        <dx-text-box [(value)]="newGroup.Description" valueChangeEvent="input" (onEnterKey)="create()"></dx-text-box>
+      </label>
+      <p class="hint">{{ 'UI.USER_GROUPS.NEW_HINT' | translateAsync }}</p>
+      @if (createError) {
+        <div class="alert" role="alert"><span>{{ createError }}</span></div>
+      }
+      <div class="form-actions">
+        <dx-button stylingMode="text" [text]="'COMMON.CANCEL' | translateAsync" (onClick)="createVisible = false"></dx-button>
+        <dx-button type="default" [text]="'UI.PAGES.CREATE' | translateAsync" (onClick)="create()"></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

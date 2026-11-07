@@ -1,13 +1,23 @@
-
 :host {
     display: block;
     height: 100%;
 }
 
 .container {
+    box-sizing: border-box;
     width: 100%;
     max-width: 1180px;
-    margin: auto;
-    margin-top: 20px;
+    margin: 0 auto;
     height: 100%;
+}
+
+.container_inner {
+    padding: var(--space-2) 0 var(--space-8);
+}
+
+@media (max-width: 599.98px) {
+    .container_inner {
+        // with the shell's 12px this gives the 16px phone gutter
+        padding: var(--space-1) var(--space-1) var(--space-8);
+    }
 }

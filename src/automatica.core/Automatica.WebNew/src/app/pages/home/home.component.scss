@@ -1,34 +1,234 @@
-.logos-container {
-    margin: 20px 0 40px 0;
-    text-align: center;
-    svg {
-        display: inline-block;
+@use "../plugins/list";
+
+:host {
+    display: block;
+    height: 100%;
+    min-height: 0;
+}
+
+.page {
+    overflow: auto;
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-3);
+
+    @media (max-width: 599.98px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2);
     }
 }
 
-.devextreme-logo {
-    width: 200px;
-    height: 34px;
-    margin-bottom: 13px;
+.tile {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+    padding: var(--space-4);
+    color: var(--fg);
+    text-decoration: none;
+    min-height: 108px;
+    transition: border-color 120ms ease, background-color 120ms ease;
+
+    &:hover {
+        border-color: var(--accent);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    .value {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-size: var(--text-lg);
+        font-weight: 700;
+        line-height: 1.25;
+        margin-top: var(--space-1);
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .sub {
+        color: var(--muted);
+        font-size: var(--text-xs);
+    }
+
+    @media (max-width: 599.98px) {
+        min-height: 0;
+        padding: var(--space-3);
+
+        .value {
+            font-size: var(--text-md);
+        }
+    }
 }
 
-.angular-logo {
-    width: 220px;
-    height: 62px;
+.bad-text {
+    color: var(--bad);
+    font-weight: 600;
 }
 
-.plus {
-    margin: 15px 10px;
-    width: 22px;
-    height: 22px;
+.columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+
+    @media (max-width: 899.98px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
-:host-context(.screen-x-small) .logos-container {
-    svg {
-        width: 100%;
+.block {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.block-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+}
+
+.errors {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-2) var(--space-4);
+        border-top: 1px solid var(--line);
+        min-height: 48px;
+        font-size: var(--text-sm);
+
+        &:first-child {
+            border-top: 0;
+        }
+    }
+
+    li .what {
+        grid-column: 2;
+    }
+
+    li:not(:has(.when)) .what {
+        grid-column: 1 / 3;
+    }
+
+    .when {
+        color: var(--muted);
+        font-size: var(--text-xs);
+    }
+
+    .what {
+        display: grid;
+        min-width: 0;
+        gap: 2px;
+    }
+
+    .facility {
+        font-size: var(--text-xs);
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .msg {
+        overflow-wrap: anywhere;
+    }
+
+    .strong {
+        font-weight: 600;
+    }
+
+    li.none {
+        grid-template-columns: auto minmax(0, 1fr);
+        color: var(--muted);
+    }
+
+    li.more {
         display: block;
-        &.plus {
-            margin: 0;
+        color: var(--muted);
+        font-size: var(--text-xs);
+    }
+
+    @media (max-width: 599.98px) {
+        li {
+            grid-template-columns: minmax(0, 1fr) auto;
+            padding: var(--space-2) var(--space-3);
+        }
+
+        li .when {
+            grid-column: 1 / -1;
+        }
+
+        li .what,
+        li:not(:has(.when)) .what {
+            grid-column: 1;
+        }
+    }
+}
+
+.empty-state.compact {
+    padding: var(--space-5) var(--space-4);
+    height: auto;
+}
+
+.about {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4) 0 var(--space-2);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+
+    // the logo path draws past its 256 box, keep room for it
+    .about-logo {
+        font-size: 32px;
+        color: var(--accent);
+        flex: none;
+        margin: 0 var(--space-3) var(--space-2) 0;
+    }
+
+    .about-text {
+        display: grid;
+        gap: var(--space-1);
+        min-width: 0;
+
+        b {
+            color: var(--fg);
+            font-size: var(--text-sm);
+        }
+    }
+
+    .about-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-4);
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

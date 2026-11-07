@@ -25,6 +25,10 @@ export class SliderComponent {
   @Output()
   stateChanged = new EventEmitter<number>();
 
+  format(value: number) {
+    return `${Math.round(value)} %`;
+  }
+
   switch($event) {
     this.state = $event.value;
 

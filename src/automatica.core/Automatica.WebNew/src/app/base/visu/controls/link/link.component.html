@@ -1,4 +1,3 @@
-<div [style.color]="getPropertyValue('foreground_color')" [style.font-size]="getFontSize()" class="noselect visu-mobile-content" [style.background]="getPropertyValue('background_color')"
-  (click)="linkClicked($event)">
-  {{ value }}
-</div>
+<app-visualization-control [hint]="value" [icon]="linkIcon" [showIcon]="true" [pressable]="!editMode"
+  [state]="'UI.VISU.OPEN_PAGE' | translateAsync" (press)="linkClicked($event)">
+</app-visualization-control>

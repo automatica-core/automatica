@@ -1,39 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles. Colors, type and spacing come from tokens.scss */
 
-
-@import "themes/generated/variables.base";
-@import "common-variables.scss";
+@import "@fontsource-variable/figtree/wght.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "tokens.scss";
 
 .main {
   height:100%;
   width:100%;
 }
 
-.a2 {
-  color: $base-accent2 !important;
-}
-
-.draw2d_InputPort{
-  // fill:red;
-  stroke:transparent;
-}
-.draw2d_OutputPort{
-  fill:green;
-  stroke:transparent;
-}
-
-.dx-swatch-additional .dx-toolbar .dx-toolbar-items-container {
-  height: 30px;
-  overflow: visible;
-}
-
-.dx-toolbar .dx-toolbar-items-container {
-  height: 30px;
-  overflow: visible;
-}
-
 .dx-datagrid-rowsview .dx-colorbox-input-container .dx-colorbox-input {
-  padding-left: 40px!important;
+  padding-left: 40px;
+}
+
+// one typeface for DevExtreme and our own markup
+.dx-viewport,
+.dx-viewport .dx-widget,
+.dx-viewport .dx-widget input,
+.dx-viewport .dx-widget textarea,
+.dx-overlay-wrapper,
+.dx-overlay-wrapper .dx-widget {
+  font-family: var(--font-ui);
 }
 
 html, body {
@@ -44,7 +32,9 @@ html, body {
   
   min-width: 100%;
   width: 100%;
-  background-color: #252529;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
 }
 
 * {
@@ -61,7 +51,7 @@ html, body {
 }
 
 .loading-spinner>div {
-  background-color: $base-accent2;
+  background-color: var(--accent);
   height: 100%;
   width: 6px;
   display: inline-block;
@@ -131,8 +121,8 @@ html, body {
     position: absolute;
     margin-top: 150px;
     margin-left: -25px;
-    color: $base-accent2;
-    font-size: 36px !important;
+    color: var(--accent);
+    font-size: var(--text-xl);
     font-weight: 600;
   }
 }
@@ -150,26 +140,19 @@ html, body {
   }
 
 
-  .panel-height {
-    height: calc(100vh - 150px) !important;
-  }
-  .panel-dashboard {
-    height: calc(100vh - 270px) !important;
-  }
+// pages fill the content area of the shell (topbar + safe areas are outside of it)
+.panel-height,
+.visu-height,
+.monitor-panel-height {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
 
-  .visu-height {
-    height: calc(100vh - 70px) !important;
-  }
-  
-  @media only screen and (min-width: 600px) and (min-height: 400px) {
-    .visu-height {
-      height: calc(100vh - 150px) !important;
-    }
-  }
-
-  .monitor-panel-height {
-    height: calc(100vh - 220px) !important;
-  }
+.panel-dashboard {
+  flex: 1;
+  min-height: 0;
+}
 
   .vertical-center {
     height: 100%;  /* Fallback for browsers do NOT support vh unit */
@@ -219,4 +202,96 @@ app-visualization-element:has(.section_cell_360) {
     --app-safe-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
     --app-safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
     --app-safe-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+}
+
+// ---------- workspaces: toolbar + tree + inspector ----------
+
+// angular-split gutters: a thin line instead of the white bar
+as-split.workspace > .as-split-gutter {
+  background-color: transparent !important; // angular-split sets the colour inline
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--line);
+  }
+
+  &:hover::after {
+    width: 3px;
+    margin-left: -1px;
+    background: var(--accent);
+  }
+
+  .as-split-gutter-icon {
+    background-image: none !important;
+  }
+}
+
+// stacked panes on phones: the line runs across
+as-split.workspace.as-vertical > .as-split-gutter {
+  &::after {
+    top: 50%;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 1px;
+  }
+
+  &:hover::after {
+    width: auto;
+    height: 3px;
+    margin-left: 0;
+    margin-top: -1px;
+  }
+}
+
+as-split.workspace > .as-split-area {
+  overflow: hidden !important; // the panes scroll themselves
+}
+
+// the page menus (dx-menu) read as a toolbar
+.dx-card > dx-menu,
+.dx-card > p3-config-menu > dx-menu {
+  display: block;
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-1) var(--space-2);
+
+  .dx-menu-item {
+    border-radius: var(--radius-sm);
+  }
+
+  .dx-menu-item-content {
+    padding: 6px 10px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+}
+
+// grids and trees inside workspaces: no zebra, quiet lines
+.dx-card .dx-treelist,
+.dx-card .dx-datagrid {
+  background: transparent;
+
+  .dx-treelist-headers,
+  .dx-datagrid-headers {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    border-bottom-color: var(--line);
+  }
+
+  .dx-row > td {
+    border-color: var(--line);
+  }
+
+  .dx-row.dx-selection > td,
+  .dx-row.dx-selection.dx-row-alt > td {
+    background-color: var(--accent-soft);
+    color: var(--fg);
+  }
 }

@@ -1,94 +1,80 @@
+// full screen "server is (re)starting" overlay, colors from tokens.scss only
 
-@import "../../../themes/generated/variables.base.scss";
+.starting {
+    height: 100%;
+    min-height: 60vh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+    color: var(--fg);
+    font-family: var(--font-ui);
+}
+
+.title {
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+}
+
+.hint {
+    margin: 0;
+    max-width: 36ch;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    line-height: 1.45;
+}
 
 .starting-spinner {
-    margin: 100px auto;
     width: 50px;
     height: 40px;
-    text-align: center;
-    font-size: 10px;
-  }
-  
-  .starting-spinner>div {
-    background-color: $base-accent;
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.starting-spinner > div {
+    background-color: var(--accent);
     height: 100%;
     width: 6px;
-    display: inline-block;
-  
-    -webkit-animation: starting-sk-stretchdelay 1.2s infinite ease-in-out;
+    border-radius: 2px;
     animation: starting-sk-stretchdelay 1.2s infinite ease-in-out;
-  }
-  
-  .starting-spinner .rectangle2 {
-    -webkit-animation-delay: -1.1s;
+}
+
+.starting-spinner .rectangle2 {
     animation-delay: -1.1s;
-    margin-left: 2px;
-  }
-  
-  .starting-spinner .rectangle3 {
-    -webkit-animation-delay: -1.0s;
+}
+
+.starting-spinner .rectangle3 {
     animation-delay: -1.0s;
-    margin-left: 2px;
-  }
-  
-  .starting-spinner .rectangle4 {
-    -webkit-animation-delay: -0.9s;
+}
+
+.starting-spinner .rectangle4 {
     animation-delay: -0.9s;
-    margin-left: 2px;
-  }
-  
-  .starting-spinner .rectangle5 {
-    -webkit-animation-delay: -0.8s;
+}
+
+.starting-spinner .rectangle5 {
     animation-delay: -0.8s;
-    margin-left: 2px;
-  }
-  
-    
-  @-webkit-keyframes starting-sk-stretchdelay {
+}
+
+@keyframes starting-sk-stretchdelay {
     0%,
     40%,
     100% {
-      -webkit-transform: scaleY(0.4)
+        transform: scaleY(0.4);
     }
+
     20% {
-      -webkit-transform: scaleY(1.0)
+        transform: scaleY(1.0);
     }
-  }
-  
-  @keyframes starting-sk-stretchdelay {
-    0%,
-    40%,
-    100% {
-      transform: scaleY(0.4);
-      -webkit-transform: scaleY(0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .starting-spinner > div {
+        animation-duration: 2.4s;
     }
-    20% {
-      transform: scaleY(1.0);
-      -webkit-transform: scaleY(1.0);
-    }
-  }
-  
-  .server-loading {
-    position: absolute;
-    left: 50%;
-    top: 35%;
-    margin-left: -40px;
-    background: transparent;
-    border-radius: 100% !important;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 100px;
-    max-height: 100px;
-  
-  }
-  
-  
-  .text-pos {
-    position: absolute;
-    margin-top: 100px;
-    width: 100%;
-    text-align: center;
-    color: $base-accent;
-    font-size: 36px !important;
-    font-weight: 600;
-  }
+}

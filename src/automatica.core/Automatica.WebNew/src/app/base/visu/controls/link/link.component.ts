@@ -25,6 +25,8 @@ export class LinkComponent extends BaseMobileComponent implements OnInit, OnDest
   private _areaLinkProperty: PropertyInstance;
   private _textProperty: PropertyInstance;
 
+  readonly linkIcon = "arrow-right";
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,

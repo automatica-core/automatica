@@ -43,7 +43,7 @@ export class LogicDefaultComponent extends BaseMobileRuleComponent implements On
     this.stateType = this.getInterfaceByType(RuleInterfaceType.Status);
 
     if (this.stateType) {
-      this.value = this.dataHub.getCurrentValue(this.stateType.ObjId);
+      this.value = this.dataHub.getCurrentValue(this.stateType.ObjId)?.value;
     }
   }
 

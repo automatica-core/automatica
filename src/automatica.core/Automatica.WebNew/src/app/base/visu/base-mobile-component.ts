@@ -123,12 +123,18 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get location() {
+        // area pages group the tiles by area already, the section title is the room
+        if (this.pageGroupType === VisuPageGroupType.Area) {
+            return void 0;
+        }
+
         if (this.visuObjectType.This2AreaInstanceNavigation) {
             return this.visuObjectType.This2AreaInstanceNavigation.DisplayName;
         }
 
 
-        if (this.visuObjectType.IsFavorite) {
+        // on the favorites page "Favorit" as the room label says nothing
+        if (this.visuObjectType.IsFavorite && this.pageGroupType !== VisuPageGroupType.Favorites) {
             return this.translate.translate("COMMON.PROPERTY.IS_FAVORITE.NAME");
         }
         return void 0;

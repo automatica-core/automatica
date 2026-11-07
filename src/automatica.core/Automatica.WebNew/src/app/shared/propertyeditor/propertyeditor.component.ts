@@ -13,7 +13,7 @@ import { PropertyInstance } from "src/app/base/model/property-instance";
 import { NodeTemplate } from "src/app/base/model/node-template";
 import { PropertyTemplateTypeAware, PropertyTemplateType, PropertyTemplate } from "src/app/base/model/property-template";
 import { BaseComponent } from "src/app/base/base-component";
-import { NodeInstance } from "src/app/base/model/node-instance";
+import { NodeInstance, NodeInstanceState } from "src/app/base/model/node-instance";
 import { VisuPage } from "src/app/base/model/visu-page";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
@@ -355,12 +355,69 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
   async ngOnInit() {
     this.satellites = await this.satellitesService.getAll();
+  }
 
-    var gridHeight = this.dataTable.instance.element().clientHeight;
-    var pageSize = gridHeight / 30;
+  // ---------- inspector header ----------
 
-    this.dataTable.instance.pageSize(pageSize);
+  get itemName(): string {
+    const item: any = this.item;
+    if (!item) {
+      return "";
+    }
+    const name = item.DisplayName ?? item.Name ?? "";
+    return item instanceof NodeInstance || item instanceof RuleInstance ? name : this.translate.translate(name);
+  }
 
+  get itemType(): string {
+    const item: any = this.item;
+    if (item instanceof NodeInstance) {
+      return item.NodeTemplate ? this.translate.translate(item.NodeTemplate.Name) : "";
+    }
+    if (item instanceof RuleInstance) {
+      return this.translate.translate(item.RuleTemplateName);
+    }
+    if (item instanceof RulePage) {
+      return this.translate.translate("UI.CONFIG.TYPE_LOGIC_PAGE");
+    }
+    return "";
+  }
+
+  get itemPath(): string {
+    const item: any = this.item;
+    if (item instanceof NodeInstance && item.Parent instanceof NodeInstance) {
+      const path = item.Parent.FullName;
+      return path && path !== "Root" ? path : "";
+    }
+    return "";
+  }
+
+  get itemState(): { label: string, tone: string } | undefined {
+    const item = this.item;
+    if (!(item instanceof NodeInstance)) {
+      return void 0;
+    }
+    if (item.IsAnyDisabled) {
+      return { label: "UI.CONFIG.STATE_DISABLED", tone: "off" };
+    }
+    switch (item.State) {
+      case NodeInstanceState.Loaded:
+      case NodeInstanceState.Initialized:
+      case NodeInstanceState.InUse:
+        return { label: "UI.CONFIG.STATE_ACTIVE", tone: "ok" };
+      case NodeInstanceState.Remote:
+        return { label: "UI.CONFIG.STATE_REMOTE", tone: "accent" };
+      case NodeInstanceState.OutOfDataPoints:
+      case NodeInstanceState.OutOfSatelliteLicenses:
+        return { label: "UI.CONFIG.STATE_LICENSE", tone: "warn" };
+      case NodeInstanceState.Unloaded:
+        return { label: "UI.CONFIG.STATE_UNLOADED", tone: "off" };
+      case NodeInstanceState.UnknownError:
+      case NodeInstanceState.Unknown:
+        return { label: "UI.CONFIG.STATE_ERROR", tone: "bad" };
+      case NodeInstanceState.New:
+        return { label: "UI.CONFIG.STATE_NEW", tone: "warn" };
+    }
+    return void 0;
   }
 
   flattenAreaInit() {

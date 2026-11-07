@@ -38,6 +38,11 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
       return void 0;
     }
 
+    // a plain boolean without state texts reads "Ein" / "Aus"
+    if (typeof this.value === "boolean") {
+      return this.translate.translate(this.value ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");
+    }
+
     if (this.nodeInstanceModel && this.nodeInstanceModel.NodeTemplate && this.nodeInstanceModel.NodeTemplate.NodeType) {
       switch (this.nodeInstanceModel.NodeTemplate.NodeType.Type) {
         case NodeDataTypeEnum.Date:

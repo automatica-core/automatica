@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy, inject } from "@angular/core";
+import { ViewportService } from "src/app/services/viewport.service";
 import { DxTreeListComponent } from "devextreme-angular";
 import { AreaService } from "src/app/services/areas.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -18,6 +19,9 @@ import { GroupsService } from "src/app/services/groups.service";
     standalone: false
 })
 export class AreaConfigComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  readonly viewport = inject(ViewportService);
+
   selectedNode: AreaInstance;
   templates: AreaTemplate[] = [];
   instances: AreaInstance[] = [];
