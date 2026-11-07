@@ -19,11 +19,11 @@ namespace Automatica.Core.Runtime.Core
     {
         private readonly SemaphoreSlim _pluginUpdateLock = new(1, 1);
 
-        public async Task<bool> UpdatePlugins(IReadOnlyCollection<PluginUpdate> updates)
+        public async Task<PluginUpdateSummary> UpdatePlugins(IReadOnlyCollection<PluginUpdate> updates)
         {
             if (updates.Count == 0)
             {
-                return false;
+                return PluginUpdateSummary.None;
             }
 
             await _pluginUpdateLock.WaitAsync();

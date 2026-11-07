@@ -41,6 +41,8 @@ namespace Automatica.Push.Helper
             _restartOnUpdate = restartOnUpdate;
         }
 
+        public const string InstallFailedMessage = "The plugin could not be installed, see the server log";
+
         public Plugin Plugin => _plugin;
 
         /// <summary>
@@ -64,18 +66,37 @@ namespace Automatica.Push.Helper
             return Path.Combine(ServerInfo.GetPluginUpdateDirectory(), fileName);
         }
 
+        /// <summary>
+        /// Tells the administrators that the plugin was not installed (the plugin page shows the message), the error is logged by the caller
+        /// </summary>
+        internal static async Task SendFailed(IHubContext<UpdateHub> updateHub, ILogger logger, Guid? pluginGuid, string message)
+        {
+            try
+            {
+                await updateHub.Clients.Group(HubAccess.AdministratorsGroup).SendAsync("PluginFailed", new object[] { pluginGuid, message });
+            }
+            catch (Exception e)
+            {
+                logger.LogWarning(e, "Could not send the plugin failure");
+            }
+        }
+
+        private Task SendFailed(string message) => SendFailed(_updateHub, _logger, _plugin.PluginGuid, message);
+
         public async Task Download()
         {
             var automaticaPluginUpdateFile = GetUpdateFilePath();
             if (automaticaPluginUpdateFile == null)
             {
                 _logger.LogError($"Invalid plugin file name for {_plugin.ComponentName}, plugin is not downloaded");
+                await SendFailed($"Invalid plugin file name {_plugin.AzureFileName}");
                 return;
             }
 
             if (!_api.IsTrustedDownloadUrl(_plugin.AzureUrl, out var reason))
             {
                 _logger.LogError($"Plugin {_plugin.ComponentName} is not downloaded: {reason}");
+                await SendFailed($"The plugin is not downloaded: {reason}");
                 return;
             }
 
@@ -94,6 +115,7 @@ namespace Automatica.Push.Helper
             {
                 _logger.LogError(e, $"Could not download file for {_plugin.ComponentName}");
                 DeleteFile(automaticaPluginUpdateFile);
+                await SendFailed($"Could not download the plugin: {e.Message}");
             }
             finally
             {
@@ -111,6 +133,8 @@ namespace Automatica.Push.Helper
                 {
                     _logger.LogError(e, $"Plugin package for {_plugin.ComponentName} is not trusted, it is not installed");
                     DeleteFile(automaticaPluginUpdateFile);
+                    // e.g. "Package ... is not signed (set AUTOMATICA_ALLOW_UNSIGNED_PACKAGES=true to accept unsigned packages)"
+                    await SendFailed(e.Message);
                     return;
                 }
 
@@ -132,9 +156,16 @@ namespace Automatica.Push.Helper
                 }
 
                 // without a restart where possible: only the plugin's drivers and logics are restarted
-                if (await _coreServer.UpdatePlugins(new[] { new PluginUpdate(_plugin, automaticaPluginUpdateFile) }))
+                var summary = await _coreServer.UpdatePlugins(new[] { new PluginUpdate(_plugin, automaticaPluginUpdateFile) });
+                if (summary.RestartRequired)
                 {
                     _coreServer.Restart();
+                    return;
+                }
+
+                if (summary.Failed.Count > 0)
+                {
+                    await SendFailed(InstallFailedMessage);
                     return;
                 }
 
@@ -143,6 +174,7 @@ namespace Automatica.Push.Helper
             catch (Exception e)
             {
                 _logger.LogError(e, $"Could not install plugin {_plugin.ComponentName}");
+                await SendFailed($"Could not install the plugin: {e.Message}");
             }
         }
 

@@ -100,9 +100,9 @@ namespace Automatica.Core.Tests.Update
             var target = new FakeTarget { IsStarted = false };
             var package = CreatePackage();
 
-            var restart = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => CreateFolder("x"));
+            var summary = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => CreateFolder("x"));
 
-            Assert.True(restart);
+            Assert.True(summary.RestartRequired);
             Assert.True(File.Exists(package));
             Assert.Empty(target.Calls);
         }
@@ -115,9 +115,10 @@ namespace Automatica.Core.Tests.Update
             var folder = CreateFolder("loaded");
             PluginLoadContexts.GetOrCreate(folder);
 
-            var restart = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
+            var summary = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
 
-            Assert.False(restart);
+            Assert.False(summary.RestartRequired);
+            Assert.Equal(package, Assert.Single(summary.Failed).PackageFile);
             Assert.False(File.Exists(package));
             Assert.Equal(new[] { "verify" }, target.Calls);
             Assert.True(PluginLoadContexts.Contains(folder));
@@ -143,9 +144,10 @@ namespace Automatica.Core.Tests.Update
             var context = PluginLoadContexts.GetOrCreate(folder);
             var package = CreatePackage();
 
-            var restart = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
+            var summary = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
 
-            Assert.False(restart);
+            Assert.False(summary.RestartRequired);
+            Assert.Empty(summary.Failed);
             Assert.False(File.Exists(package));
             Assert.Equal(new[] { "verify", "stop", "install", "load", "start" }, target.Calls);
             Assert.Same(context, target.StoppedContext);
@@ -175,9 +177,9 @@ namespace Automatica.Core.Tests.Update
             PluginLoadContexts.GetOrCreate(folder);
             var package = CreatePackage();
 
-            var restart = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
+            var summary = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), package) }, _ => folder);
 
-            Assert.True(restart);
+            Assert.True(summary.RestartRequired);
             Assert.True(File.Exists(package));
         }
 
@@ -203,9 +205,9 @@ namespace Automatica.Core.Tests.Update
             var folder = CreateFolder("loaded");
             PluginLoadContexts.GetOrCreate(folder);
 
-            var restart = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), CreatePackage()) }, _ => folder);
+            var summary = await new PluginUpdater(target, NullLogger.Instance).UpdateAll(new[] { new PluginUpdate(CreatePlugin(), CreatePackage()) }, _ => folder);
 
-            Assert.True(restart);
+            Assert.True(summary.RestartRequired);
             PluginLoadContexts.Unload(folder);
         }
 

@@ -61,6 +61,7 @@
     <ProjectReference Include="..\..\Automatica.Core.UnitTests\Automatica.Core.UnitTests.Base.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Automation\Automatica.Core.Automation.csproj" />
+    <ProjectReference Include="..\..\Automatica.Push\Automatica.Push.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Calendar\" />

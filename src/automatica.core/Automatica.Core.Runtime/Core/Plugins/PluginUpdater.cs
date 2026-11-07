@@ -77,11 +77,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 plugin.ComponentName);
         }
 
-        /// <returns>true if a restart is still required</returns>
-        public async Task<bool> UpdateAll(IReadOnlyCollection<PluginUpdate> updates, Func<Plugin, string>? pluginFolder = null)
+        /// <returns>whether a restart is still required and which updates failed</returns>
+        public async Task<PluginUpdateSummary> UpdateAll(IReadOnlyCollection<PluginUpdate> updates, Func<Plugin, string>? pluginFolder = null)
         {
             pluginFolder ??= GetPluginFolder;
             var restart = false;
+            var failed = new List<PluginUpdate>();
             foreach (var update in updates)
             {
                 PluginUpdateResult result;
@@ -102,11 +103,15 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
                 else
                 {
+                    if (result == PluginUpdateResult.Failed)
+                    {
+                        failed.Add(update);
+                    }
                     DeleteFile(update.PackageFile);
                 }
             }
 
-            return restart;
+            return new PluginUpdateSummary(restart, failed);
         }
 
         internal async Task<PluginUpdateResult> Update(Plugin plugin, string packageFile, string folder)

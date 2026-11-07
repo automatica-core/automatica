@@ -147,21 +147,33 @@ namespace Automatica.Push.Hubs
             return ret;
         }
 
+        /// <summary>
+        /// Plugin installs run one after the other: a second click waits for the running one instead of being dropped
+        /// </summary>
+        internal static TimeSpan PluginLockTimeout = TimeSpan.FromMinutes(10);
+        internal const string BusyMessage = "Another plugin installation is still running, try again when it is finished";
+        internal const string NotOfferedMessage = "The plugin is not offered by the cloud";
+
+        private Task SendFailed(Guid? pluginGuid, string message) => PluginDownloader.SendFailed(_updateHub, _logger, pluginGuid, message);
+
         private Task DownloadPlugin(Plugin plugin, bool install)
         {
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                    using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), PluginLockTimeout).ConfigureAwait(false);
                     if (releaser == null)
                     {
+                        _logger.LogError($"Plugin {plugin?.PluginGuid} is not installed: {BusyMessage}");
+                        await SendFailed(plugin?.PluginGuid, BusyMessage);
                         return;
                     }
 
                     var cloudPlugin = (await ResolvePlugins(new[] { plugin })).SingleOrDefault();
                     if (cloudPlugin == null)
                     {
+                        await SendFailed(plugin?.PluginGuid, NotOfferedMessage);
                         return;
                     }
 
@@ -173,6 +185,7 @@ namespace Automatica.Push.Hubs
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Could not download plugin {plugin?.PluginGuid}");
+                    await SendFailed(plugin?.PluginGuid, $"Could not install the plugin: {e.Message}");
                 }
             });
             return Task.CompletedTask;
@@ -208,29 +221,49 @@ namespace Automatica.Push.Hubs
 
         private async Task InstallOrUpdatePlugins(IList<Plugin> plugins)
         {
-            using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), 100).ConfigureAwait(false);
+            plugins ??= new List<Plugin>();
+            using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), PluginLockTimeout).ConfigureAwait(false);
             if (releaser == null)
             {
+                _logger.LogError($"{plugins.Count} plugins are not installed: {BusyMessage}");
+                foreach (var plugin in plugins)
+                {
+                    await SendFailed(plugin?.PluginGuid, BusyMessage);
+                }
                 return;
             }
 
+            var resolved = await ResolvePlugins(plugins);
+            foreach (var plugin in plugins.Where(a => resolved.All(r => r.PluginGuid != a?.PluginGuid)))
+            {
+                await SendFailed(plugin?.PluginGuid, NotOfferedMessage);
+            }
+
             var downloaders = new List<PluginDownloader>();
-            foreach (var plug in await ResolvePlugins(plugins))
+            foreach (var plug in resolved)
             {
                 downloaders.Add(new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _logger, false));
             }
 
+            // a failed download or an untrusted package is reported to the administrators by the downloader
             await Task.WhenAll(downloaders.Select(a => a.Download()));
 
             // without a restart where possible: only the drivers and logics of the updated plugins are restarted
             var updates = downloaders.Where(a => a.StagedFile != null).Select(a => new PluginUpdate(a.Plugin, a.StagedFile)).ToList();
-            if (await _coreServer.UpdatePlugins(updates))
+            var summary = await _coreServer.UpdatePlugins(updates);
+
+            foreach (var failed in summary.Failed)
+            {
+                await SendFailed(failed.Plugin.PluginGuid, PluginDownloader.InstallFailedMessage);
+            }
+
+            if (summary.RestartRequired)
             {
                 _coreServer.Restart();
                 return;
             }
 
-            foreach (var update in updates)
+            foreach (var update in updates.Where(a => !summary.IsFailed(a)))
             {
                 await Administrators.SendAsync("PluginLoaded", new object[] { update.Plugin.PluginGuid });
             }
