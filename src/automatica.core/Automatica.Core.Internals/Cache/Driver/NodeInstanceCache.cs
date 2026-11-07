@@ -56,10 +56,12 @@ namespace Automatica.Core.Internals.Cache.Driver
                 var items = new List<NodeInstance>();
                 items.Add(rootItem);
 
+                // one query per table instead of ~10 per node
+                var lookup = NodeInstanceLookup.Load(context);
                 foreach (var item in allItems)
                 {
                     _allCache.Add(item.ObjId, item);
-                    FillItem(item, context);
+                    lookup.Fill(item);
 
                     if (item.This2ParentNodeInstance.HasValue)
                     {
@@ -126,7 +128,8 @@ namespace Automatica.Core.Internals.Cache.Driver
             }
         }
 
-        private void FillItem(NodeInstance item, AutomaticaContext context)
+        // a single node (GetSingle), all nodes are filled with the NodeInstanceLookup
+        internal static void FillItem(NodeInstance item, AutomaticaContext context)
         {
             var properties = context.PropertyInstances.AsNoTracking().Where(a => a.This2NodeInstance == item.ObjId).ToList();
 
