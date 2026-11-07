@@ -376,7 +376,8 @@ namespace P3.Driver.ModBus.Tests.Integration
                 await attribute.WriteValue(DispatchableMock.Instance, new DispatchValue(DispatchableMock.Instance.Id, DispatchableType.NodeInstance,
                     -100000, new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), DispatchValueSource.Write));
 
-                await WaitUntil(() => slave.GetHoldingRegister(DeviceId, 7) != 0);
+                // the slave raises the change event after it wrote the registers, waiting on the register alone races the event
+                await WaitUntil(() => !changes.IsEmpty);
                 Assert.Equal(new ushort[] { 0xFFFE, 0x7960 }, slave.GetHoldingRegisters(DeviceId, 6, 2).ToArray());
 
                 var change = Assert.Single(changes);

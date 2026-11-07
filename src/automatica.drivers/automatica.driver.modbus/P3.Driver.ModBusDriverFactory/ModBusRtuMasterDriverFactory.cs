@@ -14,7 +14,7 @@ namespace P3.Driver.ModBusDriverFactory
         public override Guid DriverGuid => new Guid("3e967c47-dad2-4ce5-9a42-7a346facd2fb");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
-        public override Version DriverVersion => new Version(1, 6, 0, 3);
+        public override Version DriverVersion => new Version(1, 6, 0, 4);
 
         protected override void InitDriverTemplates(INodeTemplateFactory factory)
         {
@@ -25,7 +25,7 @@ namespace P3.Driver.ModBusDriverFactory
                 PropertyTemplateType.Baudrate, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", 9600, 0, 0);
 
             factory.CreatePropertyTemplate(new Guid("65ce8f30-a769-43bb-88d8-edbe5e4fa267"), "COMMON.PROPERTY.PARITY.NAME", "COMMON.PROPERTY.PARITY.DESCRIPTION", "modbus-parity",
-                PropertyTemplateType.Parity, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", "even", 0, 0);
+                PropertyTemplateType.Parity, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", "n", 0, 0);
 
             factory.CreatePropertyTemplate(new Guid("208cd361-7b8a-46b8-93b3-4f0245443264"), "COMMON.PROPERTY.DATABITS.NAME", "COMMON.PROPERTY.DATABITS.DESCRIPTION", "modbus-databits",
                 PropertyTemplateType.Baudrate, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", 8, 0, 0);

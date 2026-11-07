@@ -429,7 +429,7 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Theory]
-        [InlineData(" even ", Parity.Even)]
+        [InlineData(" ep ", Parity.Even)]
         [InlineData("E", Parity.Even)]
         [InlineData("O", Parity.Odd)]
         [InlineData("MarkParity", Parity.Mark)]

@@ -36,7 +36,8 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         }
 
         /// <summary>
-        /// Maps the stored parity value (meta values "n/ep/o", the template default "even", or the enum names) case-insensitively
+        /// Maps the stored parity value (meta values "n/ep/o" or the enum names) case-insensitively.
+        /// "even" is the old template default: it was never mapped before and the port ran without parity, so it stays no parity.
         /// </summary>
         internal static Parity FromString(string parity)
         {
@@ -45,10 +46,11 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                 case "n":
                 case "none":
                 case "noparity":
+                // legacy template default, never applied before 213804f6, existing installs run 8N1 with it
+                case "even":
                     return Parity.None;
                 case "e":
                 case "ep":
-                case "even":
                 case "evenparity":
                 case "eventparity":
                     return Parity.Even;

@@ -29,7 +29,7 @@ namespace P3.Driver.ModBus.Tests
         [InlineData("none", Parity.None)]
         [InlineData("e", Parity.Even)]
         [InlineData("ep", Parity.Even)]
-        [InlineData("even", Parity.Even)]
+        [InlineData("even", Parity.None)]
         [InlineData("EventParity", Parity.Even)]
         [InlineData("EvenParity", Parity.Even)]
         [InlineData("o", Parity.Odd)]
@@ -40,6 +40,16 @@ namespace P3.Driver.ModBus.Tests
         public void Rtu_Parity_IsMapped(string value, Parity expected)
         {
             Assert.Equal(expected, ModBusMasterRtuDriver.FromString(value));
+        }
+
+        [Fact]
+        public void Rtu_Parity_LegacyTemplateDefault_KeepsNoParity()
+        {
+            // "even" was the template default and never applied, the meters of existing installs run 8N1
+            Assert.Equal(Parity.None, ModBusMasterRtuDriver.FromString("even"));
+            Assert.Equal(Parity.None, ModBusMasterRtuDriver.FromString("Even"));
+            // an explicitly selected even parity (dropdown value) stays even
+            Assert.Equal(Parity.Even, ModBusMasterRtuDriver.FromString("ep"));
         }
 
         [Theory]
