@@ -209,6 +209,56 @@ namespace Automatica.Core.Tests.Update
             PluginLoadContexts.Unload(folder);
         }
 
+        [Fact]
+        public void Library_ThePluginDoesNotShip_IsLoadedFromAnotherPluginFolder_AsItsOwnCopy()
+        {
+            // like shelly using PureWebSockets that only the loxone folder has
+            var plugin = BuildPlugin("v1", "Drivers/shelly");
+            var other = CreateFolder("Drivers/loxone");
+            File.Move(Path.Combine(plugin, HelperName + ".dll"), Path.Combine(other, HelperName + ".dll"));
+
+            var (helper, helperFolder, ownContext, weak) = InvokeHelper(plugin, _root);
+
+            Assert.Equal("helper v1", helper);
+            Assert.Equal(Path.GetFullPath(other), Path.GetFullPath(helperFolder));
+            Assert.True(ownContext);
+            Assert.True(PluginUpdater.WaitForUnload(weak, 20));
+        }
+
+        [Fact]
+        public void Library_ThePluginDoesNotShip_IsNotFound_WithoutSharedRoot_OrInALowerVersion()
+        {
+            var plugin = BuildPlugin("v1", "Drivers/shelly");
+            var other = CreateFolder("Drivers/loxone");
+            File.Move(Path.Combine(plugin, HelperName + ".dll"), Path.Combine(other, HelperName + ".dll"));
+
+            var ex = Assert.Throws<TargetInvocationException>(() => InvokeHelper(plugin, null));
+            Assert.IsType<FileNotFoundException>(ex.InnerException);
+
+            var context = new PluginLoadContext(plugin, _root);
+            Assert.Equal(Path.GetFullPath(Path.Combine(other, HelperName + ".dll")), Path.GetFullPath(context.FindInOtherPlugins(new AssemblyName(HelperName))!));
+            Assert.Null(context.FindInOtherPlugins(new AssemblyName(HelperName) { Version = new Version(99, 0) }));
+            context.Unload();
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static (string Helper, string HelperFolder, bool OwnContext, WeakReference Context) InvokeHelper(string folder, string? sharedRoot)
+        {
+            var context = new PluginLoadContext(folder, sharedRoot);
+            var weak = new WeakReference(context);
+            try
+            {
+                var assembly = context.LoadPluginAssembly(Path.Combine(folder, PluginName + ".dll"));
+                var helper = (string)assembly.GetType("HotUpdate.Plugin")!.GetMethod("Helper")!.Invoke(null, null)!;
+                var helperAssembly = context.Assemblies.Single(a => a.GetName().Name == HelperName);
+                return (helper, Path.GetDirectoryName(helperAssembly.Location)!, AssemblyLoadContext.GetLoadContext(helperAssembly) == context, weak);
+            }
+            finally
+            {
+                context.Unload();
+            }
+        }
+
         private record InvokeResult(string Version, string Helper, bool CoreTypeShared, bool Collectible, bool OwnContext, bool HelperInOwnContext);
 
         // no reference to the plugin's types may stay on the test method's stack, otherwise it can not be unloaded

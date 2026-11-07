@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.Runtime.Core.Plugins
 {
@@ -12,12 +13,15 @@ namespace Automatica.Core.Runtime.Core.Plugins
     /// One collectible load context per plugin directory, so a plugin can be unloaded and a new version loaded without a restart.
     /// Everything the core ships itself (Automatica.Core.*, Microsoft.*, ...) comes from the default context: the plugin and the core
     /// must share these types. Only the assemblies the core does not have are loaded from the plugin directory.
+    /// A library the plugin does not ship itself is taken from another plugin directory (as its own copy), like before the
+    /// load contexts all plugins shared their libraries (e.g. shelly uses PureWebSockets, only loxone ships it).
     /// </summary>
     internal sealed class PluginLoadContext : AssemblyLoadContext
     {
         private static readonly Lazy<HashSet<string>> HostAssemblies = new(LoadHostAssemblies);
 
         private readonly AssemblyDependencyResolver? _resolver;
+        private readonly string? _sharedRoot;
 
         public string Folder { get; }
 
@@ -26,9 +30,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
         /// </summary>
         public bool NativeLibrariesLoaded { get; internal set; }
 
-        public PluginLoadContext(string folder) : base($"plugin:{Path.GetFileName(folder)}", isCollectible: true)
+        /// <param name="folder">the plugin directory</param>
+        /// <param name="sharedRoot">the directory with all plugin directories, searched for libraries the plugin does not ship</param>
+        public PluginLoadContext(string folder, string? sharedRoot = null) : base($"plugin:{Path.GetFileName(folder)}", isCollectible: true)
         {
             Folder = folder;
+            _sharedRoot = sharedRoot;
             _resolver = CreateResolver(folder);
         }
 
@@ -74,7 +81,49 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
             }
 
+            path ??= FindInOtherPlugins(assemblyName);
+
             return path == null ? null : LoadFromAssemblyPath(path);
+        }
+
+        /// <summary>
+        /// The highest version of the library in another plugin directory, at least the requested version
+        /// </summary>
+        internal string? FindInOtherPlugins(AssemblyName assemblyName)
+        {
+            if (_sharedRoot == null || !Directory.Exists(_sharedRoot))
+            {
+                return null;
+            }
+
+            var options = new EnumerationOptions { RecurseSubdirectories = true, MatchCasing = MatchCasing.CaseInsensitive, IgnoreInaccessible = true };
+            string? best = null;
+            Version? bestVersion = null;
+            foreach (var file in Directory.EnumerateFiles(_sharedRoot, assemblyName.Name + ".dll", options))
+            {
+                Version? version;
+                try
+                {
+                    version = AssemblyName.GetAssemblyName(file).Version;
+                }
+                catch (Exception)
+                {
+                    continue; // native or broken file
+                }
+
+                if (assemblyName.Version != null && (version == null || version < assemblyName.Version))
+                {
+                    continue;
+                }
+
+                if (best == null || (version != null && (bestVersion == null || version > bestVersion)))
+                {
+                    best = file;
+                    bestVersion = version;
+                }
+            }
+
+            return best;
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
@@ -146,7 +195,22 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         public static PluginLoadContext GetOrCreate(string folder)
         {
-            return Contexts.GetOrAdd(Normalize(folder), f => new PluginLoadContext(f));
+            return Contexts.GetOrAdd(Normalize(folder), f => new PluginLoadContext(f, SharedRoot(f)));
+        }
+
+        /// <summary>
+        /// The plugin directory (with Drivers and Rules) when the folder is inside it
+        /// </summary>
+        private static string? SharedRoot(string folder)
+        {
+            if (string.IsNullOrEmpty(ServerInfo.PluginDirectory))
+            {
+                return null;
+            }
+
+            var root = Normalize(ServerInfo.PluginDirectory);
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            return folder.StartsWith(root + Path.DirectorySeparatorChar, comparison) ? root : null;
         }
 
         public static bool TryGet(string folder, out PluginLoadContext context)
