@@ -241,7 +241,7 @@ namespace Automatica.Core.Runtime.Core
                     await timer.Measure("update handler", () => _updateHandler.Init());
 
                     RunState = RunState.Loading;
-                    await timer.Measure("load plugins", () => Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern));
+                    await timer.Measure("load plugins", () => Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern, timer));
 
                     // restore the remanent values before drivers and logics start, they are only stored and not dispatched to the links
                     await timer.Measure("remanent values", async () =>
@@ -878,8 +878,11 @@ namespace Automatica.Core.Runtime.Core
         
       
 
-        internal async Task Load(string path, string searchPattern)
+        internal async Task Load(string path, string searchPattern, StartupTimer? timer = null)
         {
+            Task Step(string name, Func<Task> action) => timer != null ? timer.MeasureItem(name, action) : action();
+            Task SyncStep(string name, Action action) => Step(name, () => { action(); return Task.CompletedTask; });
+
             await using var context = new AutomaticaContext(_config);
             try
             {
@@ -897,19 +900,24 @@ namespace Automatica.Core.Runtime.Core
                 }
                 await context.SaveChangesAsync();
               
-                var foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode);
-                foreach (var driver in foundDrivers)
+                IList<DriverFactory> foundDrivers = new List<DriverFactory>();
+                await Step("driver assemblies", async () => foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode));
+                await Step("driver templates", async () =>
                 {
-                    try
+                    foreach (var driver in foundDrivers)
                     {
-                        await _driverLoader.Load(driver, ServerInfo.BoardType);
+                        try
+                        {
+                            await Step($"init {driver.DriverName}", () => _driverLoader.Load(driver, ServerInfo.BoardType));
+                        }
+                        catch (NoManifestFoundException)
+                        {
+                        }
                     }
-                    catch (NoManifestFoundException)
-                    {
-                    }
-                }
+                });
 
-                _nodeTemplateCache.All();
+                // node templates only change while the drivers are loaded: load them once, with all driver factories known
+                await SyncStep("node template cache", _nodeTemplateCache.ClearAndLoad);
             }
             catch (Exception e)
             {
@@ -920,26 +928,29 @@ namespace Automatica.Core.Runtime.Core
             {
                 var ruleLoadingPath = Path.Combine(path, ServerInfo.LogicsDirectory);
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
-                var logicFactories = await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config,
-                    ServerInfo.IsInDevelopmentMode);
-                foreach (var logic in logicFactories)
+                IList<LogicFactory> logicFactories = new List<LogicFactory>();
+                await Step("logic assemblies", async () => logicFactories = await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config,
+                    ServerInfo.IsInDevelopmentMode));
+                await Step("logic templates", async () =>
                 {
-                    try
+                    foreach (var logic in logicFactories)
                     {
-                        await _logicLoader.Load(logic, ServerInfo.BoardType);
+                        try
+                        {
+                            await Step($"init {logic.LogicName}", () => _logicLoader.Load(logic, ServerInfo.BoardType));
+                        }
+                        catch (NoManifestFoundException)
+                        {
+                        }
                     }
-                    catch (NoManifestFoundException)
-                    {
-                    }
-                }
+                });
             }
             catch (Exception e)
             {
                 _logger.LogError($"Could not load rules {e}", e);
             }
 
-            _logicTemplateCache.ClearAndLoad();
-            _nodeTemplateCache.ClearAndLoad();
+            await SyncStep("logic template cache", _logicTemplateCache.ClearAndLoad);
         }
 
         public async Task ReInit()

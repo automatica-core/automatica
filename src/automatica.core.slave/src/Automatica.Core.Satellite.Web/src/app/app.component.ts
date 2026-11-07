@@ -3,6 +3,7 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { ThemeService } from './services/theme.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

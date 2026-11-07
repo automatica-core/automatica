@@ -5,6 +5,7 @@ import { SingleCardModule } from 'src/app/layouts';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-unauthenticated-content',
   template: `
     <app-single-card [title]="title" [description]="description">

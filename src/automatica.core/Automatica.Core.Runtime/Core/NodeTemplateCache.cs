@@ -40,26 +40,40 @@ namespace Automatica.Core.Runtime.Core
 
         protected override IQueryable<NodeTemplate> GetAll(AutomaticaContext context)
         {
-            var x = context.NodeTemplates.AsNoTracking()
+            // loaded once into memory (the caller enumerates the result again) and with one query per collection:
+            // a single join of templates x properties x constraints x constraint data has a row per combination
+            var templates = Query(context).ToList();
+
+            foreach (var nodeTemplate in templates)
+            {
+                _templateIdDictionary.TryAdd(nodeTemplate.ObjId, nodeTemplate);
+                _templatesKeyDictionary.TryAdd(nodeTemplate.Key, nodeTemplate);
+            }
+            return templates.AsQueryable();
+        }
+
+        internal static IQueryable<NodeTemplate> Query(AutomaticaContext context)
+        {
+            return context.NodeTemplates.AsNoTracking()
                 .Include(a => a.This2NodeDataTypeNavigation)
                 .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
                 .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
                 .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.PropertyTemplate).ThenInclude(b => b.Constraints).ThenInclude(c => c.ConstraintData);
+                .Include(a => a.PropertyTemplate).ThenInclude(b => b.Constraints).ThenInclude(c => c.ConstraintData)
+                .AsSplitQuery();
+        }
 
-            foreach (var nodeTemplate in x)
-            {
-                if (!_templateIdDictionary.ContainsKey(nodeTemplate.ObjId))
-                {
-                    _templateIdDictionary.Add(nodeTemplate.ObjId, nodeTemplate);
-                }
-
-                if (!_templatesKeyDictionary.ContainsKey(nodeTemplate.Key))
-                {
-                    _templatesKeyDictionary.Add(nodeTemplate.Key, nodeTemplate);
-                }
-            }
-            return x;
+        /// <summary>
+        /// Clears the lookups too, otherwise a reload keeps the old templates by key and adds every template once more per interface
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            _neededTemplateKeyDictionary.Clear();
+            _templateIdDictionary.Clear();
+            _templatesKeyDictionary.Clear();
+            _defaultTemplateItemsKeyDictionary.Clear();
+            _nodeTemplateFactoryMapping.Clear();
         }
 
         public override void Add(Guid key, NodeTemplate value)

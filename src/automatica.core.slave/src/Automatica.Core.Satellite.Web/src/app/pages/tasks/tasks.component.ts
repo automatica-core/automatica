@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import 'devextreme/data/odata/store';
 
 @Component({
+  standalone: false,
   templateUrl: 'tasks.component.html'
 })
 

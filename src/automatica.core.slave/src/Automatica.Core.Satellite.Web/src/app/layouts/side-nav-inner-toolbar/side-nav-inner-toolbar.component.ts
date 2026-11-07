@@ -11,6 +11,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { OpenedStateMode, RevealMode } from 'devextreme/ui/drawer';
 
 @Component({
+  standalone: false,
   selector: 'app-side-nav-inner-toolbar',
   templateUrl: './side-nav-inner-toolbar.component.html',
   styleUrls: ['./side-nav-inner-toolbar.component.scss']

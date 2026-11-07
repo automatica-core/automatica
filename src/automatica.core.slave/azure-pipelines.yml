@@ -50,6 +50,9 @@ steps:
       VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
+    # DevExtreme license for the satellite web UI (secret pipeline variable), without it the bundle shows the eval banner
+    buildSecrets: |
+      devexpress_license=$(DEVEXPRESS_LICENSE)
 
 - task: PublishBuildArtifacts@1
   inputs:

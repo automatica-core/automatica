@@ -3,6 +3,7 @@ import notify from 'devextreme/ui/notify';
 import { Config, ConfigService } from 'src/app/services/config.service';
 
 @Component({
+  standalone: false,
   selector: 'app-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
