@@ -205,6 +205,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const element = this.canvasRef.nativeElement;
     this.viewportW = element.clientWidth;
     this.viewportH = element.clientHeight;
+    // the minimap and the first fit depend on the canvas size, which is only known now: render again so the
+    // first check does not see a changed binding (NG0100)
+    this.fitOnce();
+    this.changeRef.detectChanges();
 
     this.resizeObserver = new ResizeObserver(entries => {
       const rect = entries[0].contentRect;

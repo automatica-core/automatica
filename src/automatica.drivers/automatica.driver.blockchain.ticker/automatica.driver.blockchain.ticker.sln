@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Blockchain.Ticker
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Blockchain.Ticker.Console", "P3.Driver.Blockchain.Ticker.Console\P3.Driver.Blockchain.Ticker.Console.csproj", "{2054B921-BDB0-48AC-8D8E-9209F56C49BC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Blockchain.Ticker.Tests", "Tests\P3.Driver.Blockchain.Ticker.Tests\P3.Driver.Blockchain.Ticker.Tests.csproj", "{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{73CFCE32-9A79-512A-865B-271A3D8C57B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +25,18 @@ Global
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFCBC563-FA14-483C-A9D6-5F91ACE0AF11}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A7831EEB-76F1-5DFE-9338-EAC76A7A2DB8} = {73CFCE32-9A79-512A-865B-271A3D8C57B2}
 	EndGlobalSection
 EndGlobal

@@ -32,4 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HueBridge\P3.Driver.HueBridge.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Driver.HueBridge.Tests" />
+  </ItemGroup>
 </Project>

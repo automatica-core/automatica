@@ -47,6 +47,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         [Route("password")]
         [Authorize(Policy = PasswordChangePolicy)]
+        [AllowPendingPasswordChange]
         [EnableRateLimiting(AuthenticationController.LoginRateLimitPolicy)]
         public async Task<ActionResult<User>> ChangePassword([FromBody] ChangePasswordData data)
         {

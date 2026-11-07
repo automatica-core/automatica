@@ -23,7 +23,7 @@ namespace Automatica.Core.Satellite.Runtime
     {
         private MqttClientOptions _options;
         private IMqttClient _mqttClient;
-        private readonly DockerClient _dockerClient;
+        private readonly IDockerClient _dockerClient;
 
         private readonly IDictionary<string, RunningContainerInfo> _runningImages = new Dictionary<string, RunningContainerInfo>();
 
@@ -87,6 +87,17 @@ namespace Automatica.Core.Satellite.Runtime
                 _logger.LogError(e, $"Could not connect do docker daemon!");
             }
 
+            _timer.Elapsed += _timer_Elapsed;
+        }
+
+        /// <summary>
+        /// For tests: a docker client that does not talk to a daemon
+        /// </summary>
+        internal SatelliteRuntime(IConfiguration config, ILogger<SatelliteRuntime> logger, IDockerClient dockerClient)
+        {
+            _config = config;
+            _logger = logger;
+            _dockerClient = dockerClient;
             _timer.Elapsed += _timer_Elapsed;
         }
 

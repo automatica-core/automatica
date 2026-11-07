@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Nuki.Driver", "P3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Nuki.Console", "P3.Driver.Nuki.Console\P3.Driver.Nuki.Console.csproj", "{2054B921-BDB0-48AC-8D8E-9209F56C49BC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Nuki.Tests", "P3.Driver.Nuki.Tests\P3.Driver.Nuki.Tests.csproj", "{7A3F2C1D-5B4E-4C8A-9D6F-2E1B0C9A8D74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2054B921-BDB0-48AC-8D8E-9209F56C49BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A3F2C1D-5B4E-4C8A-9D6F-2E1B0C9A8D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A3F2C1D-5B4E-4C8A-9D6F-2E1B0C9A8D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A3F2C1D-5B4E-4C8A-9D6F-2E1B0C9A8D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A3F2C1D-5B4E-4C8A-9D6F-2E1B0C9A8D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

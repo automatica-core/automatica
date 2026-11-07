@@ -14,6 +14,8 @@
     "prebuild-prod": "npm run generate-license",
     "build-prod": "ng build --configuration=production,dist",
     "test": "ng test",
+    "test:headless": "ng test --browsers=ChromeHeadless --watch=false",
+    "test:i18n": "node tools/check-templates.mjs",
     "build-themes": "devextreme build",
     "set-version": "json -I -f package.json -e \"this.version='$VERSION'\"",
     "ionic:build": "npm run build-prod",

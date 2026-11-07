@@ -28,6 +28,9 @@
     <ProjectReference Include="..\Automatica.Core.Satellite.Runtime\Automatica.Core.Satellite.Runtime.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Automatica.Core.Satellite.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

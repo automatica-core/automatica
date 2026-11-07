@@ -11,8 +11,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.14" />
+    <PackageReference Include="MQTTnet.Server" Version="5.2.0.1603" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Automatica.Core.Satellite.Runtime\Automatica.Core.Satellite.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\Automatica.Core.Satellite\Automatica.Core.Satellite.csproj" />
   </ItemGroup>
 </Project>

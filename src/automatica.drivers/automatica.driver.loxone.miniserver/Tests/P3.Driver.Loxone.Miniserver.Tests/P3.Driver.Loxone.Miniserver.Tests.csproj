@@ -32,8 +32,14 @@
     <PackageReference Include="Automatica.Core.EF" Version="10.0.0.2049" />
     <PackageReference Include="Automatica.Core.Base" Version="10.0.0.2049" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="10.0.0.2049" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- in-process Kestrel for the loopback miniserver fake (http + websocket) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.Loxone.Miniserver.Driver\P3.Driver.Loxone.Miniserver.Driver.csproj" />
+    <ProjectReference Include="..\..\P3.Driver.Loxone.Miniserver.DriverFactory\P3.Driver.Loxone.Miniserver.DriverFactory.csproj" />
   </ItemGroup>
 </Project>

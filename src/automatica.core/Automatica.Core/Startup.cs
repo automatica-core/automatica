@@ -205,10 +205,7 @@ namespace Automatica.Core
                 {
                     // a token of a user that must change the password (initial or old default password) only
                     // allows the password change, see AccountController
-                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .RequireAssertion(ctx => !ctx.User.HasClaim(c => c.Type == UserClaimsProvider.MustChangePasswordClaimType))
-                        .Build();
+                    options.DefaultPolicy = PendingPasswordChange.BuildDefaultPolicy();
                     options.AddPolicy(AccountController.PasswordChangePolicy, policy => policy.RequireAuthenticatedUser());
                     options.AddPolicy(Role.AdminRole, policy => policy.RequireRole(Role.AdminRole));
                     options.AddPolicy(Role.ViewerRole,

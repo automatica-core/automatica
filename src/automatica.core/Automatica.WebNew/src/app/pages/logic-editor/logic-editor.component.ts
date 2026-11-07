@@ -109,6 +109,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     this.route.params.subscribe(async (params) => {
       that.selectLogicPageById(params.id);
+      // OnPush: a route change is no template event
+      that.changeRef.markForCheck();
     });
 
     this.baseOnInit();
@@ -307,7 +309,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   async onLogicNodeInstanceRemoved(item: NodeInstance2RulePage) {
     const page = item.RulePage;
-    page.NodeInstances = page.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
+    page.NodeInstances = page.NodeInstances.filter(a => a.ObjId !== item.ObjId);
     this.pages.filter(a => a.ObjId === page.ObjId)[0].NodeInstances = page.NodeInstances;
 
     this.ruleEngineService.reInit.emit(page);

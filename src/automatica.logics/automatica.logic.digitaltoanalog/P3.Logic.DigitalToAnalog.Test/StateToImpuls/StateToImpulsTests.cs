@@ -26,9 +26,9 @@ namespace P3.Logic.DigitalToAnalog.Tests.StateToImpuls
             Assert.Equal(1, value.First().Value);
 
             // ... and ends with 0 after the impulse time
-            await Task.Delay(600);
-
             var output = GetLogicInterfaceByTemplate(StateToImpulsLogicFactory.RuleOutput);
+            await TestSupport.Poll.UntilAsync(() => Equals(Context.Dispatcher.GetValue(DispatchableType.RuleInstance, output.ObjId)?.Value, 0));
+
             var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
             Assert.Equal(0, values[output.ObjId].Value);
         }
