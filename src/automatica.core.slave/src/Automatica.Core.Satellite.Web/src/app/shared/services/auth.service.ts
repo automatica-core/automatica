@@ -107,10 +107,10 @@ export class AuthService extends BaseService {
     }
   }
 
-  async setupAccount(username: string, password: string) {
+  async setupAccount(username: string, password: string, setupToken: string) {
     try {
-      // Send request
-      const response = await this.http.post("/webapi/setup", { username, password }, { headers: this.headers() }).toPromise();
+      // the setup token is printed to the satellite's log on start while no user exists
+      const response = await this.http.post("/webapi/setup", { username, password, setupToken }, { headers: this.headers() }).toPromise();
 
 
       this.router.navigate(['/login-form']);
@@ -119,10 +119,10 @@ export class AuthService extends BaseService {
         isOk: true
       };
     }
-    catch {
+    catch (e: any) {
       return {
         isOk: false,
-        message: "Failed to create account"
+        message: e?.status === 401 ? "Wrong setup token" : e?.status === 409 ? "The satellite is already set up" : "Failed to create account"
       };
     }
   }

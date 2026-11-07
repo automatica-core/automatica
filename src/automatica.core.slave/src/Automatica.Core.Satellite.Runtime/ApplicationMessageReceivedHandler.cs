@@ -14,7 +14,7 @@ namespace Automatica.Core.Satellite.Runtime
         private readonly string _actionTopic;
         private readonly string _actionTopics;
         private readonly string _reinitTopic;
-        private readonly string _watchdogTopic;
+        private readonly string _watchdogFilter;
 
         public ApplicationMessageReceivedHandler(SatelliteRuntime slave, ILogger logger)
         {
@@ -24,58 +24,52 @@ namespace Automatica.Core.Satellite.Runtime
             _actionTopic = $"slave/{_slave.SlaveId}/action";
             _actionTopics = $"slave/{_slave.SlaveId}/actions";
             _reinitTopic = $"slave/{_slave.SlaveId}/reinit";
-            _watchdogTopic = $"watchdog/{_slave.SlaveId}";
-
+            // will messages of the plugins: watchdog/<satellite>/<node>
+            _watchdogFilter = $"watchdog/{_slave.SlaveId}/+";
         }
 
-        // same argument order as MqttTopicFilterComparer.IsMatch(topic, filter) in MQTTnet 3
-        private static bool IsMatch(string topic, string filter)
+        // argument order as MqttTopicFilterComparer.IsMatch(topic, filter) in MQTTnet 3: the received topic first
+        internal static bool IsMatch(string topic, string filter)
         {
             return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
         }
 
         public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
         {
-            _logger.LogDebug($"Mqtt message received for topic {e.ApplicationMessage.Topic}");
+            var topic = e.ApplicationMessage.Topic;
+            _logger.LogDebug($"Mqtt message received for topic {topic}");
 
-            if (IsMatch(_actionTopic, e.ApplicationMessage.Topic))
+            try
             {
-                var json = e.ApplicationMessage.ConvertPayloadToString();
-                var action = JsonConvert.DeserializeObject<ActionRequest>(json);
-                try
+                if (IsMatch(topic, _actionTopic))
                 {
-                    await _slave.ExecuteAction(action);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Could not execute request");
-                }
-            }
-            else if (IsMatch(_actionTopics, e.ApplicationMessage.Topic))
-            {
-                var json = e.ApplicationMessage.ConvertPayloadToString();
-                var actions = JsonConvert.DeserializeObject<ActionRequest[]>(json);
-                try
-                {
-                    foreach (var action in actions)
+                    var action = JsonConvert.DeserializeObject<ActionRequest>(e.ApplicationMessage.ConvertPayloadToString());
+                    if (action != null)
                     {
                         await _slave.ExecuteAction(action);
                     }
                 }
-                catch (Exception ex)
+                else if (IsMatch(topic, _actionTopics))
                 {
-                    _logger.LogError(ex, $"Could not execute request");
+                    var actions = JsonConvert.DeserializeObject<ActionRequest[]>(e.ApplicationMessage.ConvertPayloadToString());
+                    foreach (var action in actions ?? Array.Empty<ActionRequest>())
+                    {
+                        await _slave.ExecuteAction(action);
+                    }
+                }
+                else if (IsMatch(topic, _reinitTopic))
+                {
+                    await _slave.ReInit();
+                }
+                else if (IsMatch(topic, _watchdogFilter))
+                {
+                    await _slave.RestartPlugin(topic.Substring(topic.LastIndexOf('/') + 1));
                 }
             }
-            else if (IsMatch(_reinitTopic, e.ApplicationMessage.Topic))
+            catch (Exception ex)
             {
-                await _slave.ReInit();
+                _logger.LogError(ex, $"Could not execute request on {topic}");
             }
-            else if (IsMatch(_watchdogTopic, e.ApplicationMessage.Topic))
-            {
-                await _slave.ReInit();
-            }
-
         }
     }
 }

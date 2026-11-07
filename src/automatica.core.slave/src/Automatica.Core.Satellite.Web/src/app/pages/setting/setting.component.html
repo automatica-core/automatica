@@ -2,13 +2,29 @@
 <div class="content-block">
     <dx-form id="form" [formData]="config" *ngIf="config">
         <dxi-item itemType="group">
-            <dxi-item itemType="group">
+            <dxi-item itemType="group" caption="Core">
                 <dxi-item dataField="serverUrl"></dxi-item>
-                <dxi-item dataField="clientId" [editorOptions]="{mode: 'password'}"></dxi-item>
-                <dxi-item dataField="clientKey" [editorOptions]="{mode: 'password'}"></dxi-item>
+                <dxi-item dataField="clientId"></dxi-item>
+                <dxi-item dataField="clientKey"
+                    [editorOptions]="{mode: 'password', placeholder: clientKeyPlaceholder, buttons: [{name: 'generate', location: 'after', options: {text: 'Generate', stylingMode: 'text', onClick: generateKey}}]}">
+                    <dxi-validation-rule type="stringLength" [min]="16" [ignoreEmptyValue]="true"
+                        message="The key needs at least 16 characters"></dxi-validation-rule>
+                </dxi-item>
                 <dxi-item dataField="dockerTag"></dxi-item>
                 <dxi-item dataField="port" editorType="dxNumberBox"
                     [editorOptions]="{min: 1005, max: 65535, showSpinButtons: true}"></dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" caption="Broker connection">
+                <dxi-item dataField="useTls" editorType="dxSelectBox"
+                    [editorOptions]="{items: tlsModes, valueExpr: 'value', displayExpr: 'text'}">
+                    <dxo-label text="Transport"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="tlsPort" editorType="dxNumberBox"
+                    [editorOptions]="{min: 1, max: 65535, showSpinButtons: true}"></dxi-item>
+                <dxi-item dataField="tlsFingerprint"
+                    [editorOptions]="{placeholder: 'SHA-256 of the core broker certificate (mqtt-broker-certificate.sha256), empty = trust on first use'}">
+                    <dxo-label text="Certificate fingerprint"></dxo-label>
+                </dxi-item>
             </dxi-item>
         </dxi-item>
         <dxi-item>

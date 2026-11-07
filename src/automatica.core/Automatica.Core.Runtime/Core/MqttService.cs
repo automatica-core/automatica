@@ -34,6 +34,10 @@ namespace Automatica.Core.Runtime.Core
         private readonly MqttServer _mqttServer;
         private readonly IDispatcher _dispatcher;
         private readonly ILearnMode _learnModeHandler;
+        private readonly MqttNodeRegistry _registry;
+        private readonly MqttBrokerAuthenticator _authenticator;
+        private readonly MqttConnectionValidation _brokerSecurity;
+        private readonly IConfiguration _configuration;
 
         public MqttService(IServiceProvider services)
         {
@@ -52,6 +56,10 @@ namespace Automatica.Core.Runtime.Core
 
             _learnModeHandler = services.GetRequiredService<ILearnMode>();
             _dispatcher = services.GetRequiredService<IDispatcher>();
+            _registry = services.GetRequiredService<MqttNodeRegistry>();
+            _authenticator = services.GetRequiredService<MqttBrokerAuthenticator>();
+            _brokerSecurity = services.GetService<MqttConnectionValidation>();
+            _configuration = services.GetRequiredService<IConfiguration>();
         }
 
         private async Task OnClientPublish(InterceptingPublishEventArgs e)
@@ -62,9 +70,16 @@ namespace Automatica.Core.Runtime.Core
                 return;
             }
 
+            // the ACL (MqttConnectionValidation) denies it as well, checked here too so the handler order does not matter
+            var identity = MqttConnectionValidation.GetIdentity(e.SessionItems);
+            if (!e.ProcessPublish || !MqttAccessControl.CanPublish(identity, e.ApplicationMessage.Topic, _registry))
+            {
+                return;
+            }
+
             try
             {
-                await MessageReceived(new RemoteMessageEvent(e.ClientId, e.ApplicationMessage.Topic, e.ApplicationMessage.ConvertPayloadToString()));
+                await MessageReceived(new RemoteMessageEvent(e.ClientId, e.ApplicationMessage.Topic, e.ApplicationMessage.ConvertPayloadToString()), identity);
             }
             catch (Exception)
             {
@@ -77,12 +92,16 @@ namespace Automatica.Core.Runtime.Core
             return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
         }
 
-        internal static MqttApplicationMessage BuildMessage(string topic, byte[] payload, MqttQualityOfServiceLevel qos)
+        /// <summary>
+        /// Config and actions are not retained: they carry driver secrets and per-plugin passwords, and a retained action
+        /// would replay on every reconnect. Clients get them when they subscribe (see <see cref="ClientSubscribedTopic"/>).
+        /// </summary>
+        internal static MqttApplicationMessage BuildMessage(string topic, byte[] payload, MqttQualityOfServiceLevel qos, bool retain = false)
         {
             var builder = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithQualityOfServiceLevel(qos)
-                .WithRetainFlag();
+                .WithRetainFlag(retain);
 
             if (payload != null)
             {
@@ -95,29 +114,6 @@ namespace Automatica.Core.Runtime.Core
         private Task PublishAsync(MqttApplicationMessage message)
         {
             return _mqttServer.InjectApplicationMessage(new InjectedMqttApplicationMessage(message), CancellationToken.None);
-        }
-
-        public static Task ValidateConnection(ValidatingConnectionEventArgs context, IConfiguration config, ILogger logger)
-        {
-            logger.LogInformation($"Validating connection from {context.RemoteEndPoint} clientId: {context.ClientId}, userName: {context.UserName}, password: *****");
-            var valid = false;
-
-            // empty credentials would match the seeded self-slave row ("local", ClientId/ClientKey "")
-            if (!string.IsNullOrEmpty(context.UserName) && !string.IsNullOrEmpty(context.Password))
-            {
-                using var db = new AutomaticaContext(config);
-                var selfSlaveId = ServerInfo.SelfSlaveGuid;
-                valid = db.Slaves.Any(a => a.ObjId != selfSlaveId &&
-                                           a.ClientId == context.UserName && a.ClientKey == context.Password);
-            }
-
-            // MQTTnet maps the reason code to the MQTT 3.1.1 return code for older clients
-            context.ReasonCode = valid
-                ? MqttConnectReasonCode.Success
-                : MqttConnectReasonCode.BadUserNameOrPassword;
-
-            logger.LogInformation($"Validating connection from {context.RemoteEndPoint} clientId: {context.ClientId}, reasonCode: {context.ReasonCode}");
-            return Task.CompletedTask;
         }
 
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
@@ -163,7 +159,12 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        public async Task MessageReceived(RemoteMessageEvent messageEvent)
+        public Task MessageReceived(RemoteMessageEvent messageEvent)
+        {
+            return MessageReceived(messageEvent, null);
+        }
+
+        internal async Task MessageReceived(RemoteMessageEvent messageEvent, MqttClientIdentity identity)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
@@ -189,6 +190,13 @@ namespace Automatica.Core.Runtime.Core
                         throw new ArgumentNullException(nameof(learnModeDto));
                     }
 
+                    // a plugin may only learn nodes below its own driver node
+                    if (identity != null && (learnModeDto.Self == null || !_registry.IsInPluginTree(identity.NodeId, learnModeDto.Self.ObjId)))
+                    {
+                        _logger.LogWarning($"{messageEvent.ClientId} sent a learn mode message for a node it does not own, ignored");
+                        return;
+                    }
+
                     _logger.LogInformation($"{messageEvent.ClientId} Received LearnMode message");
                     await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description,
                         learnModeDto.Self,
@@ -212,12 +220,17 @@ namespace Automatica.Core.Runtime.Core
             await PublishAsync(msg);
         }
 
-        public Task Init()
+        public async Task Init()
         {
             _mqttSlaves.Clear();
             _mqttNodes.Clear();
+            _registry.Clear();
 
-            return Task.CompletedTask;
+            // a satellite was added or removed: the broker switches between localhost and all addresses
+            if (_brokerSecurity != null)
+            {
+                await _brokerSecurity.RefreshBindingAsync();
+            }
         }
 
 
@@ -246,6 +259,7 @@ namespace Automatica.Core.Runtime.Core
                 _mqttSlaves.Add(id, new Dictionary<NodeInstance, IDriverFactory>());
             }
             _mqttSlaves[id].Add(nodeInstance, factory);
+            _registry.Register(id, nodeInstance);
 
             // start instance asap
             bool connected;
@@ -287,7 +301,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Send action to client {clientId} {JsonConvert.SerializeObject(actionRequest)}");
+                _logger.LogInformation($"Send action {actionRequest.Action} for {actionRequest.Id} ({actionRequest.ImageName}:{actionRequest.Tag}) to client {clientId}");
                 await PublishAsync(BuildMessage($"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)), MqttQualityOfServiceLevel.ExactlyOnce));
             }
             catch (Exception e)
@@ -317,14 +331,16 @@ namespace Automatica.Core.Runtime.Core
                 _logger.LogInformation(
                     $"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
 
-                var actionRequest = new ActionRequest
+                // ImageSource is not sent any more: satellites reject anything but a registry image
+                var actionRequest = new SatelliteActionRequest
                 {
                     Action = SlaveAction.Start,
-                    ImageSource = factory.ImageSource,
                     ImageName = factory.ImageName,
                     Tag = factory.Tag,
-                    Id = nodeInstance.ObjId
+                    Id = nodeInstance.ObjId,
+                    ClientKey = _authenticator.PluginCredentials.GetPassword(clientId, nodeInstance.ObjId)
                 };
+                AddBrokerTls(actionRequest);
 
                 actionRequests.Add(actionRequest);
 
@@ -345,7 +361,6 @@ namespace Automatica.Core.Runtime.Core
                 var actionRequest = new ActionRequest()
                 {
                     Action = SlaveAction.Stop,
-                    ImageSource = factory.ImageSource,
                     ImageName = factory.ImageName,
                     Tag = factory.Tag,
                     Id = nodeInstance.ObjId
@@ -357,6 +372,25 @@ namespace Automatica.Core.Runtime.Core
             catch (Exception e)
             {
                 _logger.LogError(e, "Could not send start instances message...");
+            }
+        }
+
+        private void AddBrokerTls(SatelliteActionRequest request)
+        {
+            if (String.Equals(_configuration["server:mqttTls"], "false", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            try
+            {
+                var port = _configuration["server:mqttTlsPort"];
+                request.BrokerTlsPort = String.IsNullOrEmpty(port) ? 8883 : Convert.ToInt32(port);
+                request.BrokerFingerprint = MqttBrokerCertificate.Fingerprint(MqttBrokerCertificate.Get(_logger));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not add the broker certificate to the start action");
             }
         }
 
@@ -382,5 +416,31 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
+    }
+
+    /// <summary>
+    /// Start action with the fields satellites since the broker hardening understand; older satellites ignore them
+    /// </summary>
+    internal class SatelliteActionRequest : ActionRequest
+    {
+        /// <summary>
+        /// Broker password of the plugin container (see <see cref="MqttPluginCredentials"/>)
+        /// </summary>
+        public string ClientKey { get; set; }
+
+        /// <summary>
+        /// Port of the broker's TLS listener, 0 if there is none
+        /// </summary>
+        public int BrokerTlsPort { get; set; }
+
+        /// <summary>
+        /// SHA-256 fingerprint of the broker certificate (lowercase hex), for pinning
+        /// </summary>
+        public string BrokerFingerprint { get; set; }
+
+        /// <summary>
+        /// Image digest (sha256:...) to pin the image to, when known
+        /// </summary>
+        public string ImageDigest { get; set; }
     }
 }

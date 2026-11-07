@@ -17,10 +17,11 @@ namespace Automatica.Core.Runtime.Core
             _mqttServer = mqttServer;
         }
 
+        // retained, so a plugin gets the current values of its nodes when it subscribes (the topic ACL limits who may)
         public async Task DispatchValue(IDispatchable dispatchable, object value)
         {
             var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{dispatchable.Type}/{dispatchable.Id}";
-            var message = MqttService.BuildMessage(topic, BinarySerializer.Serialize(value), MqttQualityOfServiceLevel.AtLeastOnce);
+            var message = MqttService.BuildMessage(topic, BinarySerializer.Serialize(value), MqttQualityOfServiceLevel.AtLeastOnce, retain: true);
             await _mqttServer.InjectApplicationMessage(new InjectedMqttApplicationMessage(message), CancellationToken.None);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Satellite.Abstraction;
@@ -35,6 +36,12 @@ namespace Automatica.Core.Satellite.Runtime
         private string _useDockerTag;
         private string _logLevel;
 
+        private bool _configured;
+        private bool _useTls;
+        private int _tlsPort;
+        private string _tlsFingerprint;
+        private IMqttClient _stoppedClient;
+
         private readonly ILogger _logger;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
         private readonly SemaphoreSlim _startupSemaphore = new SemaphoreSlim(1);
@@ -55,24 +62,7 @@ namespace Automatica.Core.Satellite.Runtime
             _config = config;
 
             _logger = logger;
-            
-           
 
-            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
-            {
-                //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
-                //{
-                //    var trace =
-                //        $">> [{e.TraceMessage.Timestamp:O}] [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
-                //    if (e.TraceMessage.Exception != null)
-                //    {
-                //        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
-                //    }
-
-                //    _logger.LogTrace(trace);
-                //};
-            }
-         
             try
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -97,9 +87,7 @@ namespace Automatica.Core.Satellite.Runtime
                 _logger.LogError(e, $"Could not connect do docker daemon!");
             }
 
-
             _timer.Elapsed += _timer_Elapsed;
-
         }
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -123,20 +111,23 @@ namespace Automatica.Core.Satellite.Runtime
                             {
                                 "status", new Dictionary<string, bool>
                                 {
-                                    { "running", false }
+                                    { "running", true }
+                                }
+                            },
+                            {
+                                "label", new Dictionary<string, bool>
+                                {
+                                    { $"{ContainerPolicy.ManagedLabel}=true", true }
                                 }
                             }
                         }
                     });
 
-                    foreach (var running in _runningImages)
+                    if (_runningImages.Values.Any(running => containers.All(a => a.ID != running.DockerId)))
                     {
-                        if (containers.All(a => a.ID != running.Value.DockerId))
-                        {
-                            _logger.LogInformation($"Restart containers...");
-                            await StopInternal("restart");
-                            await StartInternal();
-                        }
+                        _logger.LogInformation($"Restart containers...");
+                        await StopInternal("restart");
+                        await StartInternal();
                     }
                 }
             }
@@ -162,6 +153,8 @@ namespace Automatica.Core.Satellite.Runtime
             _timer.Start();
         }
 
+        private ContainerPolicy CreatePolicy() => new ContainerPolicy(_config);
+
         private void Init()
         {
             _masterAddress = _config["server:master"];
@@ -174,17 +167,78 @@ namespace Automatica.Core.Satellite.Runtime
             _useDockerTag = _config["server:dockerTag"];
             _logLevel = _config["Logging:LogLevel:Default"];
 
-            
+            _useTls = String.Equals(_config["server:useTls"], "true", StringComparison.OrdinalIgnoreCase);
+            _tlsPort = Int32.TryParse(_config["server:tlsPort"], out var tlsPort) && tlsPort > 0 ? tlsPort : 8883;
+            _tlsFingerprint = NormalizeFingerprint(_config["server:tlsFingerprint"]);
 
-            _options = new MqttClientOptionsBuilder()
+            _configured = !String.IsNullOrEmpty(_masterAddress) && !String.IsNullOrEmpty(_slaveId) && !String.IsNullOrEmpty(_clientKey);
+
+            var builder = new MqttClientOptionsBuilder()
                 .WithClientId(_slaveId)
-                //   .WithWebSocketServer("localhost:5001/mqtt")
-                .WithTcpServer(_masterAddress, String.IsNullOrEmpty(_masterPort) ? 1883 : Convert.ToInt32(_masterPort))
                 .WithCredentials(_slaveId, _clientKey)
-                .WithCleanSession()
-                .Build();
+                .WithCleanSession();
+
+            if (_useTls)
+            {
+                builder = builder
+                    .WithTcpServer(_masterAddress, _tlsPort)
+                    .WithTlsOptions(o => o
+                        .UseTls()
+                        .WithTargetHost(_masterAddress)
+                        .WithCertificateValidationHandler(ValidateBrokerCertificate));
+            }
+            else
+            {
+                builder = builder.WithTcpServer(_masterAddress, String.IsNullOrEmpty(_masterPort) ? 1883 : Convert.ToInt32(_masterPort));
+            }
+
+            _options = builder.Build();
             _mqttClient = new MqttClientFactory().CreateMqttClient();
             _mqttClient.ApplicationMessageReceivedAsync += new ApplicationMessageReceivedHandler(this, _logger).HandleApplicationMessageReceivedAsync;
+        }
+
+        public static string NormalizeFingerprint(string fingerprint)
+        {
+            if (String.IsNullOrWhiteSpace(fingerprint))
+            {
+                return null;
+            }
+            var hex = new string(fingerprint.Where(Uri.IsHexDigit).ToArray()).ToLowerInvariant();
+            return hex.Length == 64 ? hex : null;
+        }
+
+        /// <summary>
+        /// The broker certificate is pinned by its SHA-256 fingerprint (the core's certificate is self-signed). Without a
+        /// configured fingerprint the first certificate seen is pinned (trust on first use) and stored.
+        /// </summary>
+        private bool ValidateBrokerCertificate(MqttClientCertificateValidationEventArgs args)
+        {
+            if (args.Certificate == null)
+            {
+                return false;
+            }
+
+            var fingerprints = new List<string> { Convert.ToHexString(SHA256.HashData(args.Certificate.GetRawCertData())).ToLowerInvariant() };
+            if (args.Chain != null)
+            {
+                fingerprints.AddRange(args.Chain.ChainElements.Select(e => Convert.ToHexString(SHA256.HashData(e.Certificate.RawData)).ToLowerInvariant()));
+            }
+
+            if (_tlsFingerprint == null)
+            {
+                _tlsFingerprint = fingerprints[0];
+                _config["server:tlsFingerprint"] = _tlsFingerprint;
+                _logger.LogWarning($"No broker certificate fingerprint configured, pinned the certificate of {_masterAddress}: {_tlsFingerprint}");
+                return true;
+            }
+
+            if (fingerprints.Any(f => UserAuthData.FixedTimeEquals(f, _tlsFingerprint)))
+            {
+                return true;
+            }
+
+            _logger.LogError($"Broker certificate of {_masterAddress} ({fingerprints[0]}) does not match the pinned fingerprint {_tlsFingerprint}, not connecting");
+            return false;
         }
 
         private async Task StartInternal()
@@ -193,13 +247,19 @@ namespace Automatica.Core.Satellite.Runtime
             {
                 Init();
 
+                if (!_configured)
+                {
+                    _logger.LogWarning("Satellite is not configured (server, client id and key), not connecting");
+                    return;
+                }
+
                 _logger.LogInformation($"Try fetch docker images...");
                 await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
                 _logger.LogInformation($"Try fetch docker images...done");
-                
 
-                _logger.LogInformation($"Try connect to mqtt broker...");
-                await _mqttClient.ConnectAsync(_options); 
+
+                _logger.LogInformation($"Try connect to mqtt broker {_masterAddress} (tls: {_useTls})...");
+                await _mqttClient.ConnectAsync(_options);
                 _logger.LogInformation($"Try connect to mqtt broker...done");
 
                 var topic = $"slave/{_slaveId}/action";
@@ -213,8 +273,10 @@ namespace Automatica.Core.Satellite.Runtime
                 await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(reinit).WithExactlyOnceQoS().Build());
                 await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(watchdog).WithExactlyOnceQoS().Build());
 
-                // Init() creates a fresh client on every (re)start, so this is attached once per client
-                _mqttClient.DisconnectedAsync += _ => Restart();
+                // Init() creates a fresh client on every (re)start, so this is attached once per client;
+                // disconnects we cause ourselves (StopInternal) don't trigger a restart
+                var client = _mqttClient;
+                client.DisconnectedAsync += e => client == _stoppedClient || client != _mqttClient || !e.ClientWasConnected ? Task.CompletedTask : Restart();
 
                 _logger.LogInformation($"Try subscribe to mqtt topics...done");
                 _connected = true;
@@ -234,10 +296,14 @@ namespace Automatica.Core.Satellite.Runtime
             switch (action.Action)
             {
                 case SlaveAction.Start:
+                    if (UpgradeToTls(action))
+                    {
+                        return;
+                    }
                     if (!await StartImage(action))
                     {
-                        await StopInternal("start");
-                        await StartInternal();
+                        // not inline: this runs in the message handler of the client that is restarted
+                        _ = Task.Run(Restart);
                     }
                     break;
                 case SlaveAction.Stop:
@@ -246,121 +312,209 @@ namespace Automatica.Core.Satellite.Runtime
             }
         }
 
+        /// <summary>
+        /// The core offers a TLS listener: switch to it (unless TLS was configured explicitly) and pin the fingerprint
+        /// it sent. Returns true if the connection is restarted.
+        /// </summary>
+        private bool UpgradeToTls(ActionRequest action)
+        {
+            if (_useTls || !String.IsNullOrEmpty(_config["server:useTls"]) || action.BrokerTlsPort <= 0)
+            {
+                return false;
+            }
+
+            var fingerprint = NormalizeFingerprint(action.BrokerFingerprint);
+            if (fingerprint == null)
+            {
+                return false;
+            }
+
+            _logger.LogInformation($"Core offers a TLS broker on port {action.BrokerTlsPort}, switching to TLS (fingerprint {fingerprint})");
+            _config["server:tlsPort"] = action.BrokerTlsPort.ToString();
+            _config["server:tlsFingerprint"] = fingerprint;
+            _config["server:useTls"] = "true";
+
+            _ = Task.Run(Restart);
+            return true;
+        }
+
+        private async Task<ContainerInspectResponse> GetContainer(string name)
+        {
+            try
+            {
+                return await _dockerClient.Containers.InspectContainerAsync(name);
+            }
+            catch (DockerContainerNotFoundException)
+            {
+                return null;
+            }
+        }
+
+        private static bool IsManaged(ContainerInspectResponse container)
+        {
+            return container?.Config?.Labels != null &&
+                   container.Config.Labels.TryGetValue(ContainerPolicy.ManagedLabel, out var managed) && managed == "true";
+        }
+
         private async Task StopImage(ActionRequest request)
         {
-            var imageFullName = $"{request.ImageName}:{_useDockerTag ?? request.Tag}";
-            _logger.LogInformation($"Stop Image {imageFullName}");
+            var policy = CreatePolicy();
+            _logger.LogInformation($"Stop container {request.Id}");
 
-            try
+            var container = await GetContainer(request.Id.ToString());
+            if (container != null && !IsManaged(container))
             {
-                await _dockerClient.Containers.StopContainerAsync(request.Id.ToString(),
-                    new ContainerStopParameters { WaitBeforeKillSeconds = 120 });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Could not stop container");
+                _logger.LogError($"Container {request.Id} was not created by the satellite, not stopping it");
+                return;
             }
 
-            try
+            if (container != null)
             {
-                await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
+                try
                 {
-                    Force = true
-                });
+                    await _dockerClient.Containers.StopContainerAsync(container.ID, new ContainerStopParameters { WaitBeforeKillSeconds = 120 });
+                    await _dockerClient.Containers.RemoveContainerAsync(container.ID, new ContainerRemoveParameters { Force = true });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Could not stop container");
+                }
             }
-            catch (Exception e)
+
+            // the image is removed so the next start pulls the current one; only allowed images, and not while in use
+            if (policy.TryGetImage(request, _useDockerTag, out _, out _, out var imageReference, out _))
             {
-                _logger.LogError(e, $"Could not delete image");
+                try
+                {
+                    await _dockerClient.Images.DeleteImageAsync(imageReference, new ImageDeleteParameters { Force = false });
+                }
+                catch (Exception e)
+                {
+                    _logger.LogWarning($"Could not delete image {imageReference}: {e.Message}");
+                }
             }
 
             _runningImages.Remove(request.Id.ToString());
-
         }
 
+        /// <summary>
+        /// Returns false if the satellite should reconnect (docker errors), true if the request was handled (also when it was rejected)
+        /// </summary>
         private async Task<bool> StartImage(ActionRequest request)
         {
-            await _semaphore.WaitAsync();
+            var policy = CreatePolicy();
 
-            var imageFullName = $"{request.ImageName}:{_useDockerTag ?? request.Tag}";
+            if (!policy.TryGetImage(request, _useDockerTag, out var repository, out var tag, out var imageReference, out var error))
+            {
+                _logger.LogError($"Rejected start request for {request.Id}: {error}");
+                return true;
+            }
+
+            await _semaphore.WaitAsync();
 
             try
             {
                 if (_runningImages.ContainsKey(request.Id.ToString()))
                 {
-                    _logger.LogWarning($"Image id {request.Id.ToString()} with image {imageFullName} already running, ignore now!");
+                    _logger.LogWarning($"Image id {request.Id} with image {imageReference} already running, ignore now!");
                     return true;
                 }
 
-                _logger.LogInformation($"Start Image {imageFullName}");
+                _logger.LogInformation($"Start Image {imageReference}");
 
-                var imageCreateParams = new ImagesCreateParameters()
+                var existing = await GetContainer(request.Id.ToString());
+                if (existing != null)
                 {
-                    FromImage = request.ImageName,
-                    Tag = _useDockerTag ?? request.Tag
-                };
+                    if (!IsManaged(existing))
+                    {
+                        _logger.LogError($"A container named {request.Id} exists that was not created by the satellite, not replacing it");
+                        return true;
+                    }
 
-                if (!String.IsNullOrEmpty(request.ImageSource))
-                {
-                    imageCreateParams.FromSrc = request.ImageSource;
-                }
-
-                try
-                {
                     _logger.LogInformation($"Remove old container with name {request.Id}");
-                    await _dockerClient.Containers.RemoveContainerAsync(request.Id.ToString(),
-                        new ContainerRemoveParameters
-                        {
-                            Force = true
-                        });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Could not delete container...{ex}");
+                    await _dockerClient.Containers.RemoveContainerAsync(existing.ID, new ContainerRemoveParameters { Force = true });
                 }
 
-                await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(),
-                    new ImageProgress(_logger));
+                await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters
+                {
+                    FromImage = repository,
+                    // the docker api takes a tag or a digest here
+                    Tag = String.IsNullOrEmpty(request.ImageDigest) ? tag : request.ImageDigest
+                }, new AuthConfig(), new ImageProgress(_logger));
+
+                if (!String.IsNullOrEmpty(request.ImageDigest) && !await HasDigest(imageReference, repository, request.ImageDigest))
+                {
+                    _logger.LogError($"Image {imageReference} does not have the requested digest, not starting it");
+                    return true;
+                }
+
+                var password = request.ClientKey;
+                if (String.IsNullOrEmpty(password))
+                {
+                    // cores before the broker hardening don't send per-plugin credentials
+                    _logger.LogWarning($"No plugin credentials for {request.Id}, passing the satellite key (update the core)");
+                    password = _clientKey;
+                }
+
+                var env = new List<string>
+                {
+                    $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
+                    $"AUTOMATICA_SLAVE_PASSWORD={password}", $"AUTOMATICA_NODE_ID={request.Id}",
+                    $"LOG_LEVEL={_logLevel}"
+                };
+                if (_useTls && _tlsFingerprint != null)
+                {
+                    env.Add($"AUTOMATICA_SLAVE_TLS_PORT={_tlsPort}");
+                    env.Add($"AUTOMATICA_SLAVE_TLS_FINGERPRINT={_tlsFingerprint}");
+                }
 
                 var createContainerParams = new CreateContainerParameters()
                 {
-                    Image = imageFullName,
+                    Image = imageReference,
                     AttachStderr = false,
                     Name = $"{request.Id}",
                     AttachStdin = false,
                     AttachStdout = false,
+                    Labels = new Dictionary<string, string>
+                    {
+                        { ContainerPolicy.ManagedLabel, "true" },
+                        { ContainerPolicy.SatelliteLabel, _slaveId },
+                        { ContainerPolicy.NodeLabel, request.Id.ToString() }
+                    },
                     HostConfig = new HostConfig
                     {
-                        DNS = new[] { "8.8.8.8", "8.8.4.4" },
+                        // host network: the drivers talk to devices on the LAN (multicast, broadcast, unknown ports)
                         NetworkMode = "host",
-                        Mounts = new List<Mount>()
+                        Mounts = new List<Mount>(),
+                        SecurityOpt = new List<string> { "no-new-privileges" }
                     },
-                    Env = new[]
-                    {
-                        $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
-                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id}", 
-                        $"MQTT_LOG_VERBOSE=asdf",
-                        $"LOG_LEVEL={_logLevel}"
-                    },
+                    Env = env
                 };
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
                     RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    createContainerParams.HostConfig.Privileged = true;
-
-                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    if (policy.Privileged)
                     {
-                        Source = "/dev",
-                        Target = "/dev",
-                        Type = "bind"
-                    });
+                        _logger.LogWarning($"docker:privileged is set, starting {request.Id} privileged");
+                        createContainerParams.HostConfig.Privileged = true;
+                    }
 
-                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    var devices = policy.GetDevices(request, d => _logger.LogWarning($"Device {d} requested by {request.Id} is not allowed"));
+                    createContainerParams.HostConfig.Devices = devices.Select(d => new DeviceMapping
                     {
-                        Source = "/tmp",
-                        Target = "/tmp",
-                        Type = "bind"
-                    });
+                        PathOnHost = d,
+                        PathInContainer = d,
+                        CgroupPermissions = "rwm"
+                    }).ToList();
+
+                    var caps = policy.GetCapabilities(request, c => _logger.LogWarning($"Capability {c} requested by {request.Id} is not allowed"));
+                    if (caps.Count > 0)
+                    {
+                        createContainerParams.HostConfig.CapAdd = caps;
+                    }
+
+                    _logger.LogInformation($"Container {request.Id}: devices [{String.Join(", ", devices)}], capabilities [{String.Join(", ", caps)}]");
                 }
 
                 var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
@@ -370,7 +524,8 @@ namespace Automatica.Core.Satellite.Runtime
                     CreateContainerParameters = createContainerParams,
                     DockerId = response.ID,
                     Image = createContainerParams.Image,
-                    RequestId = request.Id.ToString()
+                    RequestId = request.Id.ToString(),
+                    Request = request
                 });
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
 
@@ -379,18 +534,7 @@ namespace Automatica.Core.Satellite.Runtime
             }
             catch (DockerApiException ex)
             {
-                if (ex.Message.Contains("already in use by container"))
-                {
-                    await _dockerClient.Containers.RemoveContainerAsync(request.Id.ToString(),
-                        new ContainerRemoveParameters
-                        {
-                            Force = true
-                        });
-                }
-                else
-                {
-                    _logger.LogError(ex, $"Could not delete container...{ex}");
-                }
+                _logger.LogError(ex, $"Could not start container {request.Id}");
             }
             catch (Exception e)
             {
@@ -404,22 +548,71 @@ namespace Automatica.Core.Satellite.Runtime
             return false;
         }
 
+        private async Task<bool> HasDigest(string imageReference, string repository, string digest)
+        {
+            try
+            {
+                var image = await _dockerClient.Images.InspectImageAsync(imageReference);
+                return image.RepoDigests != null && image.RepoDigests.Any(d =>
+                    d.EndsWith("@" + digest, StringComparison.Ordinal) &&
+                    (d.StartsWith(repository + "@", StringComparison.Ordinal) || d.StartsWith("docker.io/" + repository + "@", StringComparison.Ordinal)));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not inspect image {imageReference}");
+                return false;
+            }
+        }
+
         internal async Task ReInit()
         {
             await StopAllContainers("re-init");
         }
 
+        /// <summary>
+        /// A plugin lost its broker connection (its will message): restart its container
+        /// </summary>
+        internal async Task RestartPlugin(string nodeId)
+        {
+            if (!_runningImages.TryGetValue(nodeId, out var info) || info.Request == null)
+            {
+                return;
+            }
+
+            _logger.LogWarning($"Plugin {nodeId} disconnected unexpectedly, restarting its container");
+            try
+            {
+                await _dockerClient.Containers.RemoveContainerAsync(info.DockerId, new ContainerRemoveParameters { Force = true });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not remove container {info.DockerId}");
+            }
+            _runningImages.Remove(nodeId);
+
+            await StartImage(info.Request);
+        }
+
         public async Task Restart()
         {
-            await StopInternal("restart");
-            await StartAsync();
+            await _startupSemaphore.WaitAsync();
+            try
+            {
+                await StopInternal("restart");
+                await StartInternal();
+                _timer.Start();
+            }
+            finally
+            {
+                _startupSemaphore.Release();
+            }
         }
 
         private async Task StopAllContainers(string reason)
         {
             foreach (var id in _runningImages)
             {
-                _logger.LogInformation($"Stopping container instance {id.Value}: Reason {reason}");
+                _logger.LogInformation($"Stopping container instance {id.Key}: Reason {reason}");
                 try
                 {
                     await _dockerClient.Containers.StopContainerAsync(id.Value.DockerId, new ContainerStopParameters());
@@ -440,11 +633,15 @@ namespace Automatica.Core.Satellite.Runtime
 
         private async Task StopInternal(string reason)
         {
+            _stoppedClient = _mqttClient;
             try
             {
                 await StopAllContainers(reason);
 
-                await _mqttClient.DisconnectAsync();
+                if (_mqttClient != null)
+                {
+                    await _mqttClient.DisconnectAsync();
+                }
             }
             catch (Exception e)
             {
@@ -459,6 +656,7 @@ namespace Automatica.Core.Satellite.Runtime
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            _timer.Stop();
             await StopInternal("stop service");
 
 

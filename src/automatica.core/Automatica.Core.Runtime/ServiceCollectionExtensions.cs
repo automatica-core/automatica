@@ -44,7 +44,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MQTTnet.AspNetCore;
+using MQTTnet.Certificates;
 using MQTTnet.Server;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Automatica.Core.Runtime
 {
@@ -131,24 +134,73 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<DatabaseTrendingValueStore, DatabaseTrendingValueStore>();
             }
 
-            var mqttServerPort = configuration["server:mqttPort"];
+            var mqttServerOptions = BuildMqttServerOptions(configuration);
 
-            var mqttServerOptions = new MqttServerOptionsBuilder()
-                .WithDefaultEndpoint()
-                .WithDefaultEndpointBoundIPAddress(IPAddress.Any)
-                .WithDefaultEndpointBoundIPV6Address(IPAddress.None)
-                .WithDefaultEndpointPort(String.IsNullOrEmpty(mqttServerPort) ? 1883 : Convert.ToInt32(mqttServerPort))
-                .WithConnectionBacklog(1000)
-                .Build();
+            services.AddSingleton<MqttNodeRegistry>();
+            services.AddSingleton(_ => new MqttConnectThrottle());
+            services.AddSingleton(provider => new MqttBrokerAuthenticator(
+                new DatabaseMqttSatelliteStore(configuration),
+                provider.GetRequiredService<MqttNodeRegistry>(),
+                MqttPluginCredentials.CreateDefault(),
+                provider.GetRequiredService<MqttConnectThrottle>(),
+                !String.Equals(configuration["server:mqttLegacyPluginCredentials"], "false", StringComparison.OrdinalIgnoreCase),
+                new CoreLogger(configuration, null)));
 
-            // Registered before the hosted MQTT server so the connection validator is attached before it starts
-            // (MQTTnet 3 had it in the server options; without it MQTTnet 5 accepts every client).
-            services.AddSingleton<IHostedService>(provider => new MqttConnectionValidation(provider.GetRequiredService<MqttServer>(), configuration));
+            // Registered before the hosted MQTT server so the connection validator and the topic ACL are attached before
+            // it starts (MQTTnet 3 had it in the server options; without it MQTTnet 5 accepts every client).
+            services.AddSingleton(provider => new MqttConnectionValidation(provider.GetRequiredService<MqttServer>(), mqttServerOptions,
+                configuration, provider.GetRequiredService<MqttNodeRegistry>(), provider.GetRequiredService<MqttBrokerAuthenticator>()));
+            services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<MqttConnectionValidation>());
             services.AddHostedMqttServer(mqttServerOptions);
 
             services.AddAutomaticaVisualization(configuration);
             services.AddInternals(configuration);
             services.AddNotificationManager();
+        }
+
+        /// <summary>
+        /// Plaintext listener on <c>server:mqttPort</c> (1883) and TLS listener on <c>server:mqttTlsPort</c> (8883, off
+        /// with <c>server:mqttTls=false</c>) with the per-install broker certificate. The bind address is decided at
+        /// start by <see cref="MqttConnectionValidation"/> (<c>server:mqttBind</c>).
+        /// </summary>
+        internal static MqttServerOptions BuildMqttServerOptions(IConfiguration configuration)
+        {
+            var mqttServerPort = configuration["server:mqttPort"];
+            var mqttTlsPort = configuration["server:mqttTlsPort"];
+            var tlsEnabled = !String.Equals(configuration["server:mqttTls"], "false", StringComparison.OrdinalIgnoreCase);
+
+            var builder = new MqttServerOptionsBuilder()
+                .WithDefaultEndpoint()
+                .WithDefaultEndpointBoundIPAddress(IPAddress.Loopback)
+                .WithDefaultEndpointBoundIPV6Address(IPAddress.None)
+                .WithDefaultEndpointPort(String.IsNullOrEmpty(mqttServerPort) ? 1883 : Convert.ToInt32(mqttServerPort))
+                .WithConnectionBacklog(1000);
+
+            if (tlsEnabled)
+            {
+                builder = builder
+                    .WithEncryptedEndpoint()
+                    .WithEncryptedEndpointBoundIPAddress(IPAddress.Loopback)
+                    .WithEncryptedEndpointBoundIPV6Address(IPAddress.None)
+                    .WithEncryptedEndpointPort(String.IsNullOrEmpty(mqttTlsPort) ? 8883 : Convert.ToInt32(mqttTlsPort))
+                    .WithEncryptionSslProtocol(SslProtocols.Tls12 | SslProtocols.Tls13)
+                    .WithEncryptionCertificate(new MqttBrokerCertificateProvider(configuration));
+            }
+
+            return builder.Build();
+        }
+
+        private sealed class MqttBrokerCertificateProvider : ICertificateProvider
+        {
+            private readonly IConfiguration _configuration;
+
+            public MqttBrokerCertificateProvider(IConfiguration configuration)
+            {
+                _configuration = configuration;
+            }
+
+            // created lazily when the TLS listener starts
+            public X509Certificate2 GetCertificate() => MqttBrokerCertificate.Get(new CoreLogger(_configuration, null));
         }
 
         public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
