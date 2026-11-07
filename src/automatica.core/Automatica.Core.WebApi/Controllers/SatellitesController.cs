@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Runtime.Core;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -58,11 +59,27 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IEnumerable<Slave>> SaveInstances([FromBody]IList<Slave> instances)
+        public async Task<ActionResult<IEnumerable<Slave>>> SaveInstances([FromBody]IList<Slave> instances)
         {
             if (instances == null)
             {
-                return GetAll();
+                return Ok(GetAll());
+            }
+
+            // a new key is typed in plain text, only its hash is stored (the broker verifies against the hash)
+            foreach (var instance in instances)
+            {
+                if (string.IsNullOrEmpty(instance.ClientKey) || SatelliteClientKey.IsHashed(instance.ClientKey))
+                {
+                    continue;
+                }
+
+                if (instance.ClientKey.Length < SatelliteClientKey.MinimumKeyLength)
+                {
+                    return BadRequest(new WebApiException("SATELLITE_KEY_TOO_SHORT", ExceptionSeverity.Warning).ToJson());
+                }
+
+                instance.ClientKey = SatelliteClientKey.Hash(instance.ClientKey);
             }
 
             var strategy = DbContext.Database.CreateExecutionStrategy();
@@ -117,7 +134,7 @@ namespace Automatica.Core.WebApi.Controllers
                 }
             });
 
-            return GetAll();
+            return Ok(GetAll());
         }
 
     }

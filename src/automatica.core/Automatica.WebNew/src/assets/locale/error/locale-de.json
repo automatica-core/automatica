@@ -14,6 +14,7 @@
         "PASSWORD_TOO_LONG": "Das Passwort ist zu lang.",
         "PASSWORD_EQUALS_USERNAME": "Das Passwort darf nicht der Benutzername sein.",
         "PASSWORD_TOO_WEAK": "Das Passwort ist zu schwach, bitte wähle ein anderes.",
-        "PASSWORDS_DO_NOT_MATCH": "Die Passwörter stimmen nicht überein."
+        "PASSWORDS_DO_NOT_MATCH": "Die Passwörter stimmen nicht überein.",
+        "SATELLITE_KEY_TOO_SHORT": "Der Satelliten-Schlüssel braucht mindestens 16 Zeichen."
     }
 }

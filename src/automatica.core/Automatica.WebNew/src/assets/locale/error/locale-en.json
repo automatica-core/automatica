@@ -14,6 +14,7 @@
         "PASSWORD_TOO_LONG": "The password is too long.",
         "PASSWORD_EQUALS_USERNAME": "The password must not be the user name.",
         "PASSWORD_TOO_WEAK": "The password is too weak, please choose another one.",
-        "PASSWORDS_DO_NOT_MATCH": "The passwords do not match."
+        "PASSWORDS_DO_NOT_MATCH": "The passwords do not match.",
+        "SATELLITE_KEY_TOO_SHORT": "The satellite key needs at least 16 characters."
     }
 }
