@@ -11,6 +11,7 @@ using System.Linq;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.Core;
+using Automatica.Core.Base.Exceptions;
 
 namespace Automatica.Core.WebApi.Controllers
 {
