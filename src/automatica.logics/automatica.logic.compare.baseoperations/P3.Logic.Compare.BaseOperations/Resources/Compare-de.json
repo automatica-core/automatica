@@ -79,6 +79,24 @@
       "OUTPUT": {
         "DESCRIPTION": "1 wenn I1 <= I2, sonst 0"
       }
+    },
+    "THRESHOLD": {
+      "NAME": "Schwellwertschalter",
+      "DESCRIPTION": "Schaltet mit Hysterese zwischen einer Ein- und einer Ausschaltschwelle. EIN über AUS: ein ab V >= EIN (z. B. Lüfter). EIN unter AUS: ein ab V <= EIN (z. B. Heizung)",
+      "INPUT": {
+        "DESCRIPTION": "Überwachter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Schaltzustand, zwischen den Schwellen unverändert"
+      },
+      "ON": {
+        "NAME": "Einschaltschwelle",
+        "DESCRIPTION": "Der Ausgang schaltet ein, wenn dieser Wert erreicht wird"
+      },
+      "OFF": {
+        "NAME": "Ausschaltschwelle",
+        "DESCRIPTION": "Der Ausgang schaltet aus, wenn dieser Wert erreicht wird"
+      }
     }
   }
 }

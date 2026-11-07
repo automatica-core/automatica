@@ -70,6 +70,67 @@
       "OUTPUT": {
         "DESCRIPTION": "True value if I1 = I2, otherwise the false value"
       }
+    },
+    "RS_FLIPFLOP": {
+      "NAME": "RS flip-flop",
+      "DESCRIPTION": "Set/reset memory, reset wins when S and R are 1"
+    },
+    "SR_FLIPFLOP": {
+      "NAME": "SR flip-flop",
+      "DESCRIPTION": "Set/reset memory, set wins when S and R are 1"
+    },
+    "FLIPFLOP": {
+      "SET": {
+        "DESCRIPTION": "1 switches the output on"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 switches the output off"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Stored state"
+      }
+    },
+    "PUSH_SWITCH": {
+      "NAME": "Push switch",
+      "DESCRIPTION": "Impulse relay: every pulse on T toggles the output",
+      "TOGGLE": {
+        "DESCRIPTION": "1 toggles the output, 0 is ignored"
+      },
+      "SET": {
+        "DESCRIPTION": "1 switches the output on"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 switches the output off"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Switch state"
+      }
+    },
+    "EDGE_DETECTION": {
+      "NAME": "Edge detection",
+      "DESCRIPTION": "Sends a pulse when the input changes from 0 to 1 or from 1 to 0",
+      "INPUT": {
+        "DESCRIPTION": "Monitored input"
+      },
+      "RISING": {
+        "DESCRIPTION": "Pulse on a change from 0 to 1"
+      },
+      "FALLING": {
+        "DESCRIPTION": "Pulse on a change from 1 to 0"
+      }
+    },
+    "MULTIPLEXER": {
+      "NAME": "Multiplexer",
+      "DESCRIPTION": "Passes the input selected by S to the output",
+      "SELECT": {
+        "DESCRIPTION": "Number of the input to pass on (1-4)"
+      },
+      "INPUT": {
+        "DESCRIPTION": "Input value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Value of the selected input"
+      }
     }
   }
 }

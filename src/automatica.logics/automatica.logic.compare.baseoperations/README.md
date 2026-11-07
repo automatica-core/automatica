@@ -4,4 +4,9 @@
 
 Automatica.Core.Compare rules. 
 
-... more to come ...
+## Blocks
+
+| Block | What it does |
+|---|---|
+| Bigger, Bigger or equal, Equal, Smaller, Smaller or equal, Unequal | Compare I1 with I2 |
+| Threshold switch | Switches with hysteresis between an ON and an OFF threshold (ON above OFF: fan/cooling, ON below OFF: heating) |

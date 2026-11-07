@@ -70,6 +70,67 @@
       "OUTPUT": {
         "DESCRIPTION": "Wahr-Wert, wenn I1 = I2, sonst der Falsch-Wert"
       }
+    },
+    "RS_FLIPFLOP": {
+      "NAME": "RS-Flipflop",
+      "DESCRIPTION": "Speicher mit Setzen/Rücksetzen, Rücksetzen gewinnt, wenn S und R 1 sind"
+    },
+    "SR_FLIPFLOP": {
+      "NAME": "SR-Flipflop",
+      "DESCRIPTION": "Speicher mit Setzen/Rücksetzen, Setzen gewinnt, wenn S und R 1 sind"
+    },
+    "FLIPFLOP": {
+      "SET": {
+        "DESCRIPTION": "1 schaltet den Ausgang ein"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 schaltet den Ausgang aus"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Gespeicherter Zustand"
+      }
+    },
+    "PUSH_SWITCH": {
+      "NAME": "Stromstoßschalter",
+      "DESCRIPTION": "Jeder Impuls an T schaltet den Ausgang um",
+      "TOGGLE": {
+        "DESCRIPTION": "1 schaltet um, 0 wird ignoriert"
+      },
+      "SET": {
+        "DESCRIPTION": "1 schaltet den Ausgang ein"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 schaltet den Ausgang aus"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Schaltzustand"
+      }
+    },
+    "EDGE_DETECTION": {
+      "NAME": "Flankenerkennung",
+      "DESCRIPTION": "Sendet einen Impuls, wenn der Eingang von 0 auf 1 oder von 1 auf 0 wechselt",
+      "INPUT": {
+        "DESCRIPTION": "Überwachter Eingang"
+      },
+      "RISING": {
+        "DESCRIPTION": "Impuls bei einem Wechsel von 0 auf 1"
+      },
+      "FALLING": {
+        "DESCRIPTION": "Impuls bei einem Wechsel von 1 auf 0"
+      }
+    },
+    "MULTIPLEXER": {
+      "NAME": "Multiplexer",
+      "DESCRIPTION": "Gibt den mit S gewählten Eingang an den Ausgang weiter",
+      "SELECT": {
+        "DESCRIPTION": "Nummer des weitergegebenen Eingangs (1-4)"
+      },
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Wert des gewählten Eingangs"
+      }
     }
 
   }

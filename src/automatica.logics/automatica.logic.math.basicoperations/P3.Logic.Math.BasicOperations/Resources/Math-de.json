@@ -92,6 +92,133 @@
       "OUTPUT": {
         "DESCRIPTION": "Ausgangswert"
       }
+    },
+    "MINMAX": {
+      "NAME": "Min/Max/Mittelwert",
+      "DESCRIPTION": "Kleinster, größter und mittlerer Wert der Eingänge, die einen Wert haben",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert, nicht verbundene Eingänge werden ignoriert"
+      },
+      "MIN": {
+        "DESCRIPTION": "Kleinster Eingangswert"
+      },
+      "MAX": {
+        "DESCRIPTION": "Größter Eingangswert"
+      },
+      "AVERAGE": {
+        "DESCRIPTION": "Mittelwert der Eingangswerte"
+      }
+    },
+    "COUNTER": {
+      "NAME": "Vor-/Rückwärtszähler",
+      "DESCRIPTION": "Zählt Impulse vorwärts und rückwärts",
+      "UP": {
+        "DESCRIPTION": "1 addiert die Schrittweite"
+      },
+      "DOWN": {
+        "DESCRIPTION": "1 subtrahiert die Schrittweite"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 setzt den Zähler auf 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Aktueller Zählerstand"
+      },
+      "REACHED": {
+        "DESCRIPTION": "1, solange der Zählerstand die Grenze erreicht oder überschreitet"
+      },
+      "STEP": {
+        "NAME": "Schrittweite",
+        "DESCRIPTION": "Wert, der pro Impuls addiert oder subtrahiert wird"
+      },
+      "LIMIT": {
+        "NAME": "Grenze",
+        "DESCRIPTION": "Zählerstand, ab dem Q 1 ist, 0 = nicht verwendet"
+      }
+    },
+    "FORMULA": {
+      "NAME": "Formel",
+      "DESCRIPTION": "Berechnet eine Formel über I1 bis I4",
+      "INPUT": {
+        "DESCRIPTION": "Variable der Formel, 0 ohne Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ergebnis der Formel"
+      },
+      "PARAM": {
+        "NAME": "Formel",
+        "DESCRIPTION": "z. B. (I1 + I2) / 2 oder if(I1 > 25, 100, 0). Operatoren + - * / % ^, Vergleiche < <= > >= == != (1 oder 0), && || !, Funktionen abs, sign, min, max, round(x, Stellen), floor, ceil, sqrt, pow, exp, ln, log, sin, cos, tan, clamp(x, min, max), if(Bedingung, dann, sonst), Konstanten pi und e. Dezimaltrennzeichen ist der Punkt"
+      }
+    },
+    "SCALER": {
+      "NAME": "Skalierung",
+      "DESCRIPTION": "Rechnet einen Wert linear von einem Bereich in einen anderen um, z. B. 0-10 V in 0-100 %",
+      "INPUT": {
+        "DESCRIPTION": "Umzurechnender Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Umgerechneter Wert"
+      },
+      "IN_MIN": {
+        "NAME": "Eingang min",
+        "DESCRIPTION": "Eingangswert, der Ausgang min ergibt"
+      },
+      "IN_MAX": {
+        "NAME": "Eingang max",
+        "DESCRIPTION": "Eingangswert, der Ausgang max ergibt"
+      },
+      "OUT_MIN": {
+        "NAME": "Ausgang min",
+        "DESCRIPTION": "Ausgangswert bei Eingang min"
+      },
+      "OUT_MAX": {
+        "NAME": "Ausgang max",
+        "DESCRIPTION": "Ausgangswert bei Eingang max"
+      },
+      "LIMIT": {
+        "NAME": "Begrenzen",
+        "DESCRIPTION": "Hält den Ausgang innerhalb des Ausgangsbereichs"
+      }
+    },
+    "PID": {
+      "NAME": "PID-Regler",
+      "DESCRIPTION": "Regelt einen Istwert auf einen Sollwert, z. B. ein Heizventil. Wird einmal pro Zyklus berechnet; Kd = 0 ergibt einen PI-Regler, ein negatives Kp kehrt die Richtung um (Kühlen)",
+      "ACTUAL": {
+        "DESCRIPTION": "Istwert, z. B. Raumtemperatur"
+      },
+      "SETPOINT": {
+        "DESCRIPTION": "Sollwert"
+      },
+      "ENABLE": {
+        "DESCRIPTION": "0 setzt den Ausgang auf min und löscht den I-Anteil, nicht verbunden = freigegeben"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Stellwert zwischen min und max"
+      },
+      "KP": {
+        "NAME": "Kp",
+        "DESCRIPTION": "Proportionalverstärkung"
+      },
+      "KI": {
+        "NAME": "Ki",
+        "DESCRIPTION": "Integralverstärkung pro Sekunde"
+      },
+      "KD": {
+        "NAME": "Kd",
+        "DESCRIPTION": "Differentialverstärkung in Sekunden"
+      },
+      "CYCLE": {
+        "NAME": "Zyklus [s]",
+        "DESCRIPTION": "Zeit zwischen zwei Berechnungen"
+      },
+      "MIN": {
+        "NAME": "Ausgang min",
+        "DESCRIPTION": "Kleinster Ausgangswert"
+      },
+      "MAX": {
+        "NAME": "Ausgang max",
+        "DESCRIPTION": "Größter Ausgangswert"
+      }
     }
   }
 }
