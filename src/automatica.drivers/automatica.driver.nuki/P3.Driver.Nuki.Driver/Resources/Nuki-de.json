@@ -1,6 +1,7 @@
 ﻿{
   "NUKI": {
     "NAME": "Nuki",
+    "DESCRIPTION": "Nuki Smart Locks über die Nuki Bridge",
     "POLL_INTERVAL": {
       "NAME": "Abfrage Interval [s]",
       "DESCRIPTION": ""
@@ -23,6 +24,7 @@
     },
     "SMART_LOCK": {
       "NAME": "Smart Lock",
+      "DESCRIPTION": "Nuki Smart Lock",
       "ID": {
         "NAME": "Nuki ID",
         "DESCRIPTION": ""

@@ -3,7 +3,7 @@
     "DEVICE": {
       "NAME": "Modbus device",
       "DESCRIPTION": "Represents a modbus device",
-      "ID": "Devcie ID"
+      "ID": "Device ID"
     },
     "CATEGORY": {
       "DEVICE": "Device",
@@ -46,6 +46,8 @@
 	  }
     },
     "ATTRIBUTE": {
+      "NAME": "Modbus register",
+      "DESCRIPTION": "Register of a Modbus device",
       "INTEGER": {
         "POS2BYTE": {
           "NAME": "+2 Byte Integer",
@@ -105,6 +107,19 @@
       "TCP": {
         "NAME": "ModBus Slave TCP",
         "DESCRIPTION": ""
+      }
+    },
+    "CONSTRAINT": {
+      "UNIQUE_ADDRESS": {
+        "NAME": "This device ID is already used"
+      },
+      "POLL_INTERVAL_ON_MASTER": {
+        "NAME": "Poll interval only for master",
+        "DESCRIPTION": "The poll interval is only shown when the driver is a Modbus master"
+      },
+      "REGISTER_ADDRESS": {
+        "NAME": "Register address overlaps",
+        "DESCRIPTION": "Another register in the same table already uses this address range"
       }
     }
   } 

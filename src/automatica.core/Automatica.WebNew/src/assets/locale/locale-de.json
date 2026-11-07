@@ -23,7 +23,7 @@
     "END_DATETIME": "Ende",
     "VISU_PAGE_SELECT": "Visualisierungsseite auswählen",
     "CANCEL": "Abbrechen",
-    "CONFIGURATION": "Config",
+    "CONFIGURATION": "Konfiguration",
     "RULEENGINE": "Logikeditor",
     "LICENSE": "Lizenz",
     "SYSTEM": "System",
@@ -78,24 +78,24 @@
     "DOWNLOADED": "Heruntergeladen...",
     "DOWNLOAD": "Herunterladen",
     "VERSION": "Version",
-    "TEMPLATE": "Template",
+    "TEMPLATE": "Vorlage",
     "SELECT": "Auswählen...",
     "RESTART": "Neustart",
     "LOGIC_PAGE": "Logik Seite",
     "LOGIC_PAGES": "Logik Seiten",
     "PAGES": "Seiten",
     "EDIT": "Bearbeiten...",
-    "TYPES": "Type",
-    "TYPE": "Type",
+    "TYPES": "Typen",
+    "TYPE": "Typ",
     "FAVORITES": "Favoriten",
-    "HOME": "Home",
+    "HOME": "Startseite",
     "RELOAD": "Aktualisieren",
     "SATELLITES": "Satelliten",
     "PASSWORD": "Passwort",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
-    "LIVE_LOGS": "Live logs",
-    "FILE_LOGS": "Datei logs",
+    "LIVE_LOGS": "Live-Protokoll",
+    "FILE_LOGS": "Protokolldateien",
     "LOGGER_LEVEL": "Log Level",
     "INFO": "Information",
     "ZOOM": {
@@ -125,7 +125,7 @@
       }
     },
     "CHART": {
-      "NAME": "Chart",
+      "NAME": "Diagramm",
       "RANGE_AGGREGATION": "Zeitbereich/Aggregierung",
       "RANGE": "Bereich",
       "AGGREGATION": "Aggregierung",
@@ -168,7 +168,7 @@
     "CATEGORY": {
       "ADDRESS": "Adresse",
       "ADRESS": "Adresse",
-      "TRANSFORM": "Transform",
+      "TRANSFORM": "Umwandlung",
       "MISC": "Allgemein",
       "PARAMETERS": "Parameter",
       "VISU": "Visualisierung",
@@ -179,10 +179,12 @@
       "SETTING": "Einstellungen",
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
-      "SATELLITE": "Satellite",
+      "SATELLITE": "Satellit",
       "VALUE": "Wert",
       "CONTROL": "Steuerung",
-      "CONTROLS": "Steuerung"
+      "CONTROLS": "Steuerung",
+      "DEVICE": "Gerät",
+      "REMOTE": "Fernzugriff"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -262,7 +264,7 @@
         "DESCRIPTION": ""
       },
       "PARITY": {
-        "NAME": "Parity",
+        "NAME": "Parität",
         "DESCRIPTION": ""
       },
       "DATABITS": {
@@ -371,11 +373,11 @@
         "DESCRIPTION": ""
       },
       "LATITUDE": {
-        "NAME": "Latitude",
+        "NAME": "Breitengrad",
         "DESCRIPTION": ""
       },
       "LONGITUDE": {
-        "NAME": "Longitude",
+        "NAME": "Längengrad",
         "DESCRIPTION": ""
       },
       "APIKEY": {
@@ -421,7 +423,14 @@
       },
       "TRENDING_TYPE": {
         "NAME": "Aufzeichnungstyp",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "",
+        "VALUES": {
+          "AVERAGE": "Mittelwert",
+          "RAW": "Rohwerte",
+          "MAX": "Maximum",
+          "MIN": "Minimum",
+          "ONCHANGE": "Bei Änderung"
+        }
       },
       "TRENDING_INTERVAL": {
         "NAME": "Intervall [s]",
@@ -432,7 +441,7 @@
         "DESCRIPTION": ""
       },
       "SATELLITE": {
-        "NAME": "Satellite",
+        "NAME": "Satellit",
         "DESCRIPTION": "",
         "CLIENTID": {
           "NAME": "Client Id"
@@ -461,7 +470,7 @@
         "NAME": "Remanenz"
       },
       "ONLY_WRITE_IF_CHANGED": {
-        "NAME": "Only write if changed"
+        "NAME": "Nur bei Änderung schreiben"
       },
       "VALUE": {
         "NAME": "Wert"
@@ -521,6 +530,22 @@
       "VALUE_SOURCE": {
         "NAME": "Quelle",
         "DESCRIPTION": ""
+      },
+      "ADDRESS": {
+        "NAME": "Adresse",
+        "DESCRIPTION": "Wo das Gerät erreichbar ist (serielle Schnittstelle oder IP-Adresse)"
+      },
+      "PORT": {
+        "NAME": "Port",
+        "DESCRIPTION": "Serielle Schnittstelle oder Netzwerkport des Geräts"
+      },
+      "ID": {
+        "NAME": "ID",
+        "DESCRIPTION": "Adresse des Geräts am Bus"
+      },
+      "INTERFACE": {
+        "NAME": "Schnittstelle",
+        "DESCRIPTION": "Serielle Schnittstelle, an der das Gerät angeschlossen ist"
       }
     },
     "CATEGORY_INSTANCE": {
@@ -565,8 +590,8 @@
         "DESCRIPTION": "Photovoltaik"
       },
       "POWER": {
-        "NAME": "Power",
-        "DESCRIPTION": "Power"
+        "NAME": "Strom",
+        "DESCRIPTION": "Strom"
       },
       "TECHNOLOGY": {
         "NAME": "Technik",
@@ -643,6 +668,10 @@
     "HALLWAY": {
       "NAME": "Flur",
       "DESCRIPTION": ""
+    },
+    "PROJECT": {
+      "NAME": "Projekt",
+      "DESCRIPTION": "Oberste Ebene der Gebäudestruktur"
     }
   },
   "AREAS": {

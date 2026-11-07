@@ -11,6 +11,7 @@ namespace Automatica.Core.Internals.Cache
     {
         private readonly IConfiguration _configuration;
         private bool _initialized = false;
+        private bool _loading;
         private bool _loadFailed;
         // after a failed load (e.g. database not reachable) the next attempt waits a bit, so callers don't all hit the db connect timeout
         private static readonly TimeSpan LoadRetryDelay = TimeSpan.FromSeconds(10);
@@ -31,12 +32,20 @@ namespace Automatica.Core.Internals.Cache
                 if (!_initialized && DateTime.UtcNow - _lastFailedLoad >= LoadRetryDelay)
                 {
                     _loadFailed = false;
-                    using (var db = new AutomaticaContext(_configuration))
+                    _loading = true;
+                    try
                     {
-                        foreach (var item in GetAll(db))
+                        using (var db = new AutomaticaContext(_configuration))
                         {
-                            Add(GetKey(item), item);
+                            foreach (var item in GetAll(db))
+                            {
+                                Add(GetKey(item), item);
+                            }
                         }
+                    }
+                    finally
+                    {
+                        _loading = false;
                     }
 
                     // a failed load is retried on the next access instead of keeping an empty cache forever
@@ -53,6 +62,20 @@ namespace Automatica.Core.Internals.Cache
             Initialize();
 
             return base.Get(key);
+        }
+
+        /// <summary>
+        /// Loads the cache like <see cref="Get"/>, otherwise a cleared cache answers false until something else loads it
+        /// (e.g. a category page after the category cache was cleared). Not while loading: Add checks Contains.
+        /// </summary>
+        public override bool Contains(T1 key)
+        {
+            if (!_initialized && !_loading)
+            {
+                Initialize();
+            }
+
+            return base.Contains(key);
         }
 
         protected abstract IQueryable<T2> GetAll(AutomaticaContext context);

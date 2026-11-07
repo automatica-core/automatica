@@ -2,8 +2,10 @@
   "KNX": {
     "BAOS": {
       "NAME": "BAOS 830 kBerry",
+      "DESCRIPTION": "KNX BAOS 830 kBerry module on the serial port",
       "DATAPOINTS": {
-        "NAME": "Datapoints"
+        "NAME": "Datapoints",
+        "DESCRIPTION": "Datapoints configured in the BAOS module"
       }
     },
     "LICENSE": {
@@ -13,7 +15,8 @@
       "DPT": "Datapoint type"
     },
     "GW_STATUS": {
-      "NAME": "Connected"
+      "NAME": "Connected",
+      "DESCRIPTION": "Shows whether the connection to the KNX gateway is up"
     },
     "GATEWAY": {
       "NAME": "KNX IP Gateway",
@@ -37,6 +40,10 @@
       "GROUP": {
         "NAME": "Groupaddress",
         "DESCRIPTION": ""
+      },
+      "VALUE": {
+        "NAME": "Group address",
+        "DESCRIPTION": "Value of a 3-level group address"
       }
     },
     "PROPERTIES": {
@@ -78,17 +85,25 @@
       },
       "SECURE": {
         "AUTHPW": {
-          "NAME": "Auth password"
+          "NAME": "Auth password",
+          "DESCRIPTION": "Device authentication code of the KNX IP interface"
         },
         "USERPW": {
-          "NAME": "User password"
+          "NAME": "User password",
+          "DESCRIPTION": "Password of the tunnel user from the ETS project"
         },
         "IA_ADDRESS": {
-          "NAME": "IA Address"
+          "NAME": "IA Address",
+          "DESCRIPTION": "Individual address of the tunnel"
         },
         "USER_ID": {
-          "NAME": "User ID"
+          "NAME": "User ID",
+          "DESCRIPTION": "User ID of the secure tunnel"
         }
+      },
+      "DPT-SUB": {
+        "NAME": "Character set",
+        "DESCRIPTION": "Subtype of the 14-character string (16.000 ASCII, 16.001 ISO 8859-1)"
       }
     },
     "DPT1": {
@@ -99,20 +114,24 @@
       "NAME": "2.* 1-bit controlled",
       "DESCRIPTION": "",
       "VALUE": {
-        "NAME": "Value bit"
+        "NAME": "Value bit",
+        "DESCRIPTION": "Value that is forced when control is active"
       },
       "CONTROL": {
-        "NAME": "Control bit"
+        "NAME": "Control bit",
+        "DESCRIPTION": "Priority control: 1 = the value bit is forced"
       }
     },
     "DPT3": {
       "NAME": "3.* 3-bit controlled",
       "DESCRIPTION": "",
       "STEPCODE": {
-        "NAME": "Stepcode"
+        "NAME": "Stepcode",
+        "DESCRIPTION": "Step size (0 = stop, 1-7 = number of intervals)"
       },
       "CONTROL": {
-        "NAME": "Control bit"
+        "NAME": "Control bit",
+        "DESCRIPTION": "Direction of the step (increase or decrease)"
       }
     },
     "DPT4": {
@@ -160,22 +179,28 @@
         "NAME": "6.020 status with mode",
         "DESCRIPTION": "",
         "A": {
-          "NAME": "A"
+          "NAME": "A",
+          "DESCRIPTION": "Status bit A"
         },
         "B": {
-          "NAME": "B"
+          "NAME": "B",
+          "DESCRIPTION": "Status bit B"
         },
         "C": {
-          "NAME": "C"
+          "NAME": "C",
+          "DESCRIPTION": "Status bit C"
         },
         "D": {
-          "NAME": "D"
+          "NAME": "D",
+          "DESCRIPTION": "Status bit D"
         },
         "E": {
-          "NAME": "E"
+          "NAME": "E",
+          "DESCRIPTION": "Status bit E"
         },
         "ACTIVE_MODE": {
-          "NAME": "Active mode"
+          "NAME": "Active mode",
+          "DESCRIPTION": "Active mode (bits 0-2)"
         }
       }
     },
@@ -1385,6 +1410,19 @@
           "NAME": "Value (%)"
         }
       }
+    },
+    "CONSTRAINT": {
+      "UNIQUE_ADDRESS": {
+        "NAME": "This group address is already used"
+      }
+    },
+    "ETS": {
+      "UNKNOWN_ERROR": "The ETS project could not be read",
+      "PASSWORD_REQUIRED": "The ETS project is password protected. Enter the project password.",
+      "EMPTY_PROJECT": "The ETS project contains no group addresses",
+      "TO_MANY_PROJECTS": "The file contains more than one project. Export a single project from ETS.",
+      "ZIPFILE_ERROR": "The file is not a valid ETS project archive (.knxproj)",
+      "WRONG_GROUP_STYLE": "Only projects with 3-level group addresses are supported"
     }
   }
 }

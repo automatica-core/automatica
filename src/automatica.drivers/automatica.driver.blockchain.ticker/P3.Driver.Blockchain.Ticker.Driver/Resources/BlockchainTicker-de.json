@@ -1,68 +1,69 @@
 ﻿{
   "BLOCKCHAIN_TICKER": {
     "NAME": "BlockchainTicker",
+    "DESCRIPTION": "Aktuelle Kurse von Bitcoin, Ethereum und Cardano in EUR und USD",
     "POLL_INTERVAL": {
       "NAME": "Abfrage Interval [s]",
       "DESCRIPTION": ""
     },
     "BTC": {
       "NAME": "Bitcoin",
-      "DIRECTION": "",
+      "DESCRIPTION": "",
       "EUR": {
         "NAME": "Preis in EUR",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD": {
         "NAME": "Preis in USD",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "EUR_WITH_SYMBOL": {
         "NAME": "Preis in EUR mit Symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD_WITH_SYMBOL": {
         "NAME": "Preis in USD mit Symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       }
     },
     "ETH": {
       "NAME": "Ethereum",
-      "DIRECTION": "",
+      "DESCRIPTION": "",
       "EUR": {
         "NAME": "Preis in EUR",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD": {
         "NAME": "Preis in USD",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "EUR_WITH_SYMBOL": {
         "NAME": "Preis in EUR mit Symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD_WITH_SYMBOL": {
         "NAME": "Preis in USD mit Symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
+      }
+    },
+    "ADA": {
+      "NAME": "Cardano",
+      "DESCRIPTION": "",
+      "EUR": {
+        "NAME": "Preis in EUR",
+        "DESCRIPTION": ""
       },
-      "ADA": {
-        "NAME": "Cardano",
-        "DIRECTION": "",
-        "EUR": {
-          "NAME": "Preis in EUR",
-          "DIRECTION": ""
-        },
-        "USD": {
-          "NAME": "Preis in USD",
-          "DIRECTION": ""
-        },
-        "EUR_WITH_SYMBOL": {
-          "NAME": "Preis in EUR mit Symbol",
-          "DIRECTION": ""
-        },
-        "USD_WITH_SYMBOL": {
-          "NAME": "Preis in USD mit Symbol",
-          "DIRECTION": ""
-        }
+      "USD": {
+        "NAME": "Preis in USD",
+        "DESCRIPTION": ""
+      },
+      "EUR_WITH_SYMBOL": {
+        "NAME": "Preis in EUR mit Symbol",
+        "DESCRIPTION": ""
+      },
+      "USD_WITH_SYMBOL": {
+        "NAME": "Preis in USD mit Symbol",
+        "DESCRIPTION": ""
       }
     }
   }

@@ -9,33 +9,34 @@
       },
       "DOUBLE_PI": {
         "NAME": "PI*2",
-        "DESCRIPION": "Represents double PI"
+        "DESCRIPTION": "Represents double PI"
       },
       "HALF_PI": {
         "NAME": "PI/2",
-        "DESCRIPION": "Represents half PI"
+        "DESCRIPTION": "Represents half PI"
       },
       "PI": {
         "NAME": "PI",
-        "DESCRIPION": "Represents PI"
+        "DESCRIPTION": "Represents PI"
       },
       "STRING": {
         "NAME": "String",
-        "DESCRIPION": "Returns a fixed string"
+        "DESCRIPTION": "Returns a fixed string"
       },
       "TRUE": {
         "NAME": "True",
-        "DESCRIPION": "Value provides always true"
+        "DESCRIPTION": "Value provides always true"
       },
       "FALSE": {
         "NAME": "False",
-        "DESCRIPION": "Value provides always false"
+        "DESCRIPTION": "Value provides always false"
       }
     },
     "PROPERTY": {
       "VALUE": {
         "NAME": "Const Value",
-        "Description": "Defines the constant value"
+        "Description": "Defines the constant value",
+        "DESCRIPTION": "Value this constant always provides"
       }
     },
     "CATEGORY": {

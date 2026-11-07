@@ -52,9 +52,9 @@ namespace P3.Driver.HueBridgeSimulator.DriverFactory
             factory.CreatePropertyTemplate(new Guid("9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c55"), "HUE_BRIDGE_SIMULATOR.REMOVE_USERS.NAME", "HUE_BRIDGE_SIMULATOR.REMOVE_USERS.DESCRIPTION", RemoveUsersKey,
                 PropertyTemplateType.CustomAction, BusId, "HUE_BRIDGE_SIMULATOR.PAIRING", true, true, null, null, 1, 1);
 
-            factory.CreateNodeTemplate(OnOffLight, "HUE_BRIDGE_SIMULATOR.ON_OFF.NAME", "HUE_BRIDGE_SIMULATOR.ONF_OFF.DESCRIPTION", "hue-onoff", InterfaceId, OnOffLight, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
+            factory.CreateNodeTemplate(OnOffLight, "HUE_BRIDGE_SIMULATOR.ON_OFF.NAME", "HUE_BRIDGE_SIMULATOR.ON_OFF.DESCRIPTION", "hue-onoff", InterfaceId, OnOffLight, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
             factory.CreateNodeTemplate(OnOffLightState, "HUE_BRIDGE_SIMULATOR.ON_OFF.STATE.NAME", "HUE_BRIDGE_SIMULATOR.ON_OFF.STATE.DESCRIPTION", "hue-onoff-state", OnOffLight, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true, NodeDataType.Boolean, 1, false);
-            factory.CreateNodeTemplate(OnOffLightSwitch, "HUE_BRIDGE_SIMULATOR.ON_OFF.SWITCH.NAME", "HUE_BRIDGE_SIMULATOR.ONF_OFF.SWITCH.DESCRIPTION", "hue-onoff-switch", OnOffLight, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
+            factory.CreateNodeTemplate(OnOffLightSwitch, "HUE_BRIDGE_SIMULATOR.ON_OFF.SWITCH.NAME", "HUE_BRIDGE_SIMULATOR.ON_OFF.SWITCH.DESCRIPTION", "hue-onoff-switch", OnOffLight, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
 
         }
 

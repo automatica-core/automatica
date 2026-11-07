@@ -4,7 +4,11 @@
     "DESCRIPTION": "",
     "1": {
       "NAME": "Shelly 1",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "Switching state of the Shelly 1 relay"
+      }
     },
     "SCAN": {
       "NAME": "Scan",
@@ -32,60 +36,77 @@
     },
     "PROPERTIES": {
       "ID": {
-        "NAME": "Id"
+        "NAME": "Id",
+        "DESCRIPTION": "Device ID of the Shelly"
       },
       "POLLING_INTERVAL": {
-        "NAME": "Pollinginterval [ms]"
+        "NAME": "Pollinginterval [ms]",
+        "DESCRIPTION": "How often the device status is read, in milliseconds"
       },
       "USERNAME": {
-        "NAME": "Username"
+        "NAME": "Username",
+        "DESCRIPTION": "Username, if login is enabled on the Shelly"
       },
       "PASSWORD": {
-        "NAME": "Password"
+        "NAME": "Password",
+        "DESCRIPTION": "Password, if login is enabled on the Shelly"
       },
       "SCAN": {
         "NAME": "Scan Shellys"
       },
       "USE_IP": {
-        "NAME": "Use IP"
+        "NAME": "Use IP",
+        "DESCRIPTION": "Connect via the IP address instead of the device ID"
       },
       "IP": {
-        "NAME": "IP"
+        "NAME": "IP",
+        "DESCRIPTION": "IP address of the Shelly"
       }
     },
     "METERS": {
-      "NAME": "Meters"
+      "NAME": "Meters",
+      "DESCRIPTION": "Power meters of the device"
 
     },
     "METER": {
       "NAME": "Meter",
+      "DESCRIPTION": "Power meter of one channel",
       "IS_VALID": {
-        "NAME": "Is valid"
+        "NAME": "Is valid",
+        "DESCRIPTION": "Shows whether the measured values are valid"
       },
       "OVERPOWER": {
-        "NAME": "Overpower"
+        "NAME": "Overpower",
+        "DESCRIPTION": "Power at which the overload protection tripped"
       },
       "POWER": {
-        "NAME": "Power [W]"
+        "NAME": "Power [W]",
+        "DESCRIPTION": "Current power in watts"
       },
       "TIMESTAMP": {
-        "NAME": "Timestamp"
+        "NAME": "Timestamp",
+        "DESCRIPTION": "Time of the last measurement"
       },
       "TOTAL": {
-        "NAME": "Total [Wh]"
+        "NAME": "Total [Wh]",
+        "DESCRIPTION": "Total energy in watt-hours"
       }
     },
     "RELAYS": {
-      "NAME": "Relais"
+      "NAME": "Relais",
+      "DESCRIPTION": "Relays of the device"
 
     },
     "RELAY": {
       "NAME": "Relais",
+      "DESCRIPTION": "Relay channel",
       "HAS_TIMER": {
-        "NAME": "Has timer"
+        "NAME": "Has timer",
+        "DESCRIPTION": "A timer is running on this relay"
       },
       "STATUS": {
-        "NAME": "State"
+        "NAME": "State",
+        "DESCRIPTION": "Switching state of the relay"
       },
       "FLIP_BACK_TIMER": {
         "NAME": "Reset timer",
@@ -94,24 +115,31 @@
     },
     "ROLLER": {
       "NAME": "Roller",
+      "DESCRIPTION": "Roller shutter channel",
       "POSITION": {
-        "NAME": "Position"
+        "NAME": "Position",
+        "DESCRIPTION": "Position of the roller shutter in percent"
       },
       "STATE": {
-        "NAME": "State"
+        "NAME": "State",
+        "DESCRIPTION": "Movement state of the roller shutter"
       },
       "STOP_REASON": {
-        "NAME": "Stop reason"
+        "NAME": "Stop reason",
+        "DESCRIPTION": "Why the roller shutter stopped last"
       },
       "LAST_DIRECTION": {
-        "NAME": "Direction"
+        "NAME": "Direction",
+        "DESCRIPTION": "Direction of the last movement"
       }
     },
     "TEMPERATURE": {
-      "NAME": "Temperature"
+      "NAME": "Temperature",
+      "DESCRIPTION": "Internal device temperature"
     },
     "HAS_UPDATE": {
-      "NAME": "Has update"
+      "NAME": "Has update",
+      "DESCRIPTION": "A firmware update is available"
     }
   }
 }

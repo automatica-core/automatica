@@ -4,27 +4,37 @@
       "NAME": "Ikea Tradfri",
       "DESCRIPTION": "",
       "SCAN": {
-        "NAME": "Suche Ikea Tradfri Gateways"
+        "NAME": "Suche Ikea Tradfri Gateways",
+        "DESCRIPTION": "Sucht im Netzwerk nach Ikea Tradfri Gateways"
       },
       "GATEWAY": {
         "NAME": "Tradfri Gateway",
+        "DESCRIPTION": "Ikea Tradfri Gateway, über das die Tradfri-Geräte verbunden sind",
         "ID": {
-          "NAME": "Gateway Id"
+          "NAME": "Gateway Id",
+          "DESCRIPTION": "Identität für die Anmeldung am Gateway"
         },
         "SECRET": {
-          "NAME": "Secret Key"
+          "NAME": "Secret Key",
+          "DESCRIPTION": "Sicherheitscode von der Unterseite des Gateways"
         },
         "SCAN": {
-          "NAME": "Ger�te suchen"
+          "NAME": "Geräte suchen",
+          "DESCRIPTION": "Liest die mit diesem Gateway gekoppelten Geräte ein"
         }
       },
       "DEVICE": {
-        "ID": "ID"
+        "ID": {
+          "NAME": "Geräte-ID",
+          "DESCRIPTION": "ID des Geräts am Gateway"
+        }
       },
       "RELAY": {
         "NAME": "Steckdose",
+        "DESCRIPTION": "Ikea Tradfri Steckdose",
         "VALUE": {
-          "NAME": "Status"
+          "NAME": "Status",
+          "DESCRIPTION": "Ein/Aus-Zustand der Steckdose"
         }
       },
       "LIGHT": {

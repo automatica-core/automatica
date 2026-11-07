@@ -1,6 +1,7 @@
 ﻿{
   "OPENWEATHERMAP": {
     "NAME": "OpenWeatherMap",
+    "DESCRIPTION": "Current weather and forecast from OpenWeatherMap",
     "APIKEY": {
       "NAME": "API Key",
       "DESCRIPTION": ""
@@ -11,39 +12,39 @@
     },
     "HUMIDITY": {
       "NAME": "Humidity",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "PRESSURE": {
       "NAME": "Pressure",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "SUNRISE": {
       "NAME": "Sunrise",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "SUNSET": {
       "NAME": "Sunset",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE": {
       "NAME": "Temperature",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE_MAX": {
       "NAME": "Temperature max",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE_MIN": {
       "NAME": "Temperature min",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "WIND_DIRECTION": {
       "NAME": "Wind direction",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "WIND_SPEED": {
       "NAME": "Wind speed",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "CLOUDS": {
       "NAME": "Clouds",

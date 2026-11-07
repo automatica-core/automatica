@@ -3,15 +3,36 @@
     "NAME": "Zeit",
     "DELAYOFF": {
       "NAME": "Verzögert aus",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Ausschaltsignal"
+      },
+      "RESET": {
+        "DESCRIPTION": "Schaltet den Ausgang sofort aus"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Schaltet nach der Verzögerung aus"
+      }
     },
     "DELAYON": {
       "NAME": "Verzögert ein",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Einschaltsignal"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Folgt dem Eingang nach der Verzögerung"
+      }
     },
     "MONOFLOP": {
       "NAME": "Monoflop",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Startet den Impuls"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 für die eingestellte Zeit, danach 0"
+      }
     },
     "DELAY": {
       "NAME": "Zeit [s]",
@@ -19,11 +40,23 @@
     },
     "TIMER": {
       "NAME": "Zeitschaltuhr",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "RESET": {
+        "DESCRIPTION": "Setzt den Ausgang zurück"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1, solange eine Schaltzeit aktiv ist"
+      }
     },
     "ADVANCED_TIMER": {
       "NAME": "Erweiterte Zeitschaltuhr",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "RESET": {
+        "DESCRIPTION": "Setzt den Ausgang zurück"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1, solange ein Kalendereintrag aktiv ist"
+      }
     },
     "TRIGGER_ONLY_IF_TRUE": {
       "NAME": "Trigger wenn Wert Wahr",

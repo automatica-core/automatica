@@ -34,7 +34,8 @@ namespace Automatica.Core.Internals.Cache.Common
         public override AreaInstance Get(Guid key)
         {
             Initialize();
-            return _areaInstances[key];
+            // like StoreBase.Get: an unknown key (e.g. a category id in VisualizationController.GetPage) is null
+            return _areaInstances.TryGetValue(key, out var area) ? area : null;
         }
 
 

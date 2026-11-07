@@ -5,92 +5,92 @@
       "NAME": "Sum",
       "DESCRIPTION": "Sums the input values and provides the value as output (O = I1 + I2 + I3 + I4)",
       "INPUT": {
-        "DESCRIPTION": "Inputvalue"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Outputvalue"
+        "DESCRIPTION": "Output value"
       }
     },
     "SUBTRACT": {
       "NAME": "Subtraction",
       "DESCRIPTION": "Subtracts a value from the given inputs (O = - I1 - I2)",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     },
     "DIVISION": {
       "NAME": "Division",
       "DESCRIPTION": "Divides the inputs (O = I1 / I2)",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     },
     "MULTIPLY": {
       "NAME": "Multiplication",
-      "DESCRIPTION": "Multipliziert die Eingangswerte und gibt den Wert beim Ausgang aus (O = I1 * I2)",
+      "DESCRIPTION": "Multiplies the input values and provides the value as output (O = I1 * I2)",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     },
     "CEILING": {
       "NAME": "Ceil",
-      "DESCRIPTION": "Runden den Eingangswert auf",
+      "DESCRIPTION": "Rounds the input value up",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     },
     "FLOOR": {
       "NAME": "Floor",
-      "DESCRIPTION": "Runden den Eingangswert ab",
+      "DESCRIPTION": "Rounds the input value down",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     },
     "MODULO": {
       "NAME": "Modulo",
-      "DESCRIPTION": "Gibt den Divisionrest von I1 / I2 (O = I1 % I2)",
+      "DESCRIPTION": "Returns the remainder of I1 / I2 (O = I1 % I2)",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
       },
       "OUTPUT1": {
-        "DESCRIPTION": "Ausgangswert als Gleitkommazahl"
+        "DESCRIPTION": "Output value as floating point number"
       },
       "OUTPUT2": {
-        "DESCRIPTION": "Ausgangswert als Ganzzahl"
+        "DESCRIPTION": "Output value as integer"
       }
     },
     "RANDOM": {
       "NAME": "Random",
-      "DESCRIPTION": "Generiert eine Zufallszahl",
+      "DESCRIPTION": "Generates a random number",
       "TRIGGER": {
-        "DESCRIPTION": "Sobald ein Wert auf diesen Eingang geschrieben wird, wird eine neue Zufallszahl generiert"
+        "DESCRIPTION": "Generates a new random number whenever a value is written to this input"
       },
       "DISABLED": {
-        "DESCRIPTION": "Sperrt den Trigger Eingang"
+        "DESCRIPTION": "Locks the trigger input"
       },
       "MIN": {
-        "DESCRIPTION": "Minimaler Wert für Zufallszahl"
+        "DESCRIPTION": "Lowest value of the random number"
       },
       "MAX": {
-        "DESCRIPTION": "Maximaler Wert für Zufallszahl"
+        "DESCRIPTION": "Highest value of the random number"
       },
       "OUTPUT": {
-        "DESCRIPTION": "Ausgangswert"
+        "DESCRIPTION": "Output value"
       }
     }
   }

@@ -1,0 +1,40 @@
+# Local demo image of Automatica.Core, built from this source tree by build-local.ps1:
+#   ./docker/demo/build-local.ps1
+#   docker run -d --name automatica-demo -p 5001:5001 automatica-demo:local
+# Login: sa / sa (allowed by server:allow_default_passwords in appsettings.json, demo only).
+#
+# The build output (.build/app, .build/plugins, .build/wwwroot) comes from the host, so this image needs no SDK,
+# no cloud key and no plugin download. automatica.core.db is the seeded demo database (seed/seed.py).
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+
+# ping: .NET's Ping with a custom payload (Ping driver) needs a raw socket, so the non-root user gets
+# CAP_NET_RAW through a file capability on dotnet (part of Docker's default capability set)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends iputils-ping tzdata libcap2-bin \
+ && setcap cap_net_raw+ep /usr/share/dotnet/dotnet \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app/automatica
+
+COPY .build/app/ ./
+COPY .build/wwwroot/ ./wwwroot/
+COPY .build/plugins/ /app/plugins/
+COPY appsettings.json ./appsettings.json
+COPY automatica.core.db ./automatica.core.db
+
+ENV AUTOMATICA_PLUGIN_DIR=/app/plugins \
+    TZ=Europe/Vienna \
+    server__log_level=information
+
+RUN groupadd --system --gid 10001 automatica \
+ && useradd --system --uid 10001 --gid automatica --home-dir /app --no-create-home --shell /usr/sbin/nologin automatica \
+ && chown -R automatica:automatica /app
+USER automatica
+
+# web UI and API
+EXPOSE 5001/tcp
+# built-in MQTT broker (satellites)
+EXPOSE 1883/tcp
+
+ENTRYPOINT ["dotnet", "Automatica.Core.dll"]

@@ -1,6 +1,7 @@
 ﻿{
   "OPENWEATHERMAP": {
     "NAME": "OpenWeatherMap",
+    "DESCRIPTION": "Aktuelles Wetter und Vorhersage von OpenWeatherMap",
     "APIKEY": {
       "NAME": "API Key",
       "DESCRIPTION": ""
@@ -11,39 +12,39 @@
     },
     "HUMIDITY": {
       "NAME": "Feuchtigkeit",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "PRESSURE": {
       "NAME": "Luftdruck",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "SUNRISE": {
       "NAME": "Sonnenaufgang",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "SUNSET": {
       "NAME": "Sonnenuntergang",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE": {
       "NAME": "Temperatur",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE_MAX": {
       "NAME": "Temperatur Max",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "TEMPERATURE_MIN": {
       "NAME": "Temperatur Min",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "WIND_DIRECTION": {
       "NAME": "Windrichtung",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "WIND_SPEED": {
       "NAME": "Windgeschwindigkeit",
-      "DIRECTION": ""
+      "DESCRIPTION": ""
     },
     "CLOUDS": {
       "NAME": "Bewölkung",
@@ -317,6 +318,10 @@
     "UV_INDEX": {
       "NAME": "UV Index",
       "DESCRIPTION": ""
+    },
+    "HOURLY_FORECAST": {
+      "NAME": "Stündliche Vorhersage",
+      "DESCRIPTION": "Wettervorhersage für die nächsten Stunden"
     }
   }
 }

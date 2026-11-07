@@ -1,4 +1,6 @@
 {
   "METERING": {
+    "NAME": "Metering",
+    "DESCRIPTION": "Evaluates meter readings"
   }
 }

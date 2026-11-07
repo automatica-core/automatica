@@ -512,7 +512,7 @@ namespace Automatica.Core.WebApi.Tests.Http
             Assert.NotEmpty((JArray)await response.ReadJson());
         }
 
-        [Fact(Skip = "BUG: SettingsController.SaveSettings dereferences a null body (SettingsController.cs:110), a 'null' post is a NullReferenceException/500 instead of 400")]
+        [Fact]
         public async Task Save_NullBody_Returns400()
         {
             var response = await _admin.PostAsync(Url, HttpTestExtensions.RawJson("null"));
@@ -602,14 +602,14 @@ namespace Automatica.Core.WebApi.Tests.Http
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Fact(Skip = "BUG: AreaCache.Get throws KeyNotFoundException for unknown ids (AreaCache.cs:37), VisualizationController.GetAllByArea expects null: 500 instead of an empty result")]
+        [Fact]
         public async Task AreaLinked_UnknownArea_ForVisu_IsOk()
         {
             var response = await _host.CreateClient(_host.CreateVisuToken()).GetAsync($"{Url}/areaLinked/{Guid.NewGuid()}");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Fact(Skip = "BUG: VisualizationController.GetPage calls _areaCache.Get(pageId) first (VisualizationController.cs:103), which throws for a category id: category pages are a 500")]
+        [Fact]
         public async Task Page_OfACategory_ReturnsTheCategoryFacade()
         {
             Guid categoryId;

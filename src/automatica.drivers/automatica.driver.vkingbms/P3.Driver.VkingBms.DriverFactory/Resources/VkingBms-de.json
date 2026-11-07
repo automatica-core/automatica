@@ -52,7 +52,7 @@
         "DESCRIPTION": ""
       },
       "BMS_TIME": {
-        "NAME": "BMS Time",
+        "NAME": "BMS-Zeit",
         "DESCRIPTION": ""
       },
       "CELL_MIN": {
@@ -159,6 +159,14 @@
     "TEMPERATURE": {
       "NAME": "Temperatures",
       "DESCRIPTION": ""
+    },
+    "PACK_CELL": {
+      "NAME": "Zellspannungen",
+      "DESCRIPTION": "Spannungen der Zellen des Akkupacks (bis zu 16)"
+    },
+    "PACK_TEMP": {
+      "NAME": "Temperaturen",
+      "DESCRIPTION": "Temperatursensoren des Akkupacks (bis zu 6)"
     }
   }
 }

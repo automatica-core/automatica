@@ -1,6 +1,7 @@
 ﻿{
   "OPERATIONS": {
     "NAME": "Operation",
+    "DESCRIPTION": "Controls for the visualization",
     "SWITCH": {
       "NAME": "Switch",
       "DESCRIPTION": "Switch",
@@ -59,7 +60,8 @@
         },
         "VALUE": {
           "NAME": "Value",
-          "Description": "Dimm Value"
+          "Description": "Dimm Value",
+          "DESCRIPTION": "Current brightness"
         }
       },
       "OUTPUT": {
@@ -87,15 +89,18 @@
         },
         "VALUE": {
           "NAME": "Value",
-          "Description": "Value"
+          "Description": "Value",
+          "DESCRIPTION": "Current value"
         },
         "VALUE_MIN": {
           "NAME": "VMIN",
-          "Description": "Min Value"
+          "Description": "Min Value",
+          "DESCRIPTION": "Lowest value of the slider"
         },
         "VALUE_MAX": {
           "NAME": "VMAX",
-          "Description": "Max Value"
+          "Description": "Max Value",
+          "DESCRIPTION": "Highest value of the slider"
         }
       },
       "OUTPUT": {
@@ -131,11 +136,11 @@
         "DESCRIPTION": ""
       },
       "FIRST_SCALE_START": {
-        "NAME": "First Scale start",
+        "NAME": "First scale start",
         "DESCRIPTION": ""
       },
       "FIRST_SCALE_END": {
-        "NAME": "First Scale end",
+        "NAME": "First scale end",
         "DESCRIPTION": ""
       },
       "FIRST_COLOR": {
@@ -143,11 +148,11 @@
         "DESCRIPTION": ""
       },
       "SECOND_SCALE_START": {
-        "NAME": "Second Scale start",
+        "NAME": "Second scale start",
         "DESCRIPTION": ""
       },
       "SECOND_SCALE_END": {
-        "NAME": "Second Scale end",
+        "NAME": "Second scale end",
         "DESCRIPTION": ""
       },
       "SECOND_COLOR": {
@@ -155,11 +160,11 @@
         "DESCRIPTION": ""
       },
       "THIRD_SCALE_START": {
-        "NAME": "Third Scale start",
+        "NAME": "Third scale start",
         "DESCRIPTION": ""
       },
       "THIRD_SCALE_END": {
-        "NAME": "ThirdScale end",
+        "NAME": "Third scale end",
         "DESCRIPTION": ""
       },
       "THIRD_COLOR": {
@@ -172,11 +177,12 @@
       },
       "TYPE": {
         "NAME": "Type",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Form of the gauge (linear or circular)"
       },
       "VALUE": {
         "NAME": "Value",
-        "Description": "Value"
+        "Description": "Value",
+        "DESCRIPTION": "Value shown on the gauge"
       }
     },
     "SHUTTER": {
@@ -230,7 +236,8 @@
           "DESCRIPTION": ""
         },
         "IS_MOVING": {
-          "NAME": "Is Moving"
+          "NAME": "Is moving",
+          "DESCRIPTION": "1 while the shutter is moving"
         }
       }
     }

@@ -62,6 +62,18 @@
             "RGBA": {
                 "NAME": "RGBA",
                 "DESCRIPTION": ""
+            },
+            "DIMMER": {
+                "NAME": "Dimmer",
+                "DESCRIPTION": "Schaltet ein Licht und stellt die Helligkeit ein"
+            },
+            "SHUTTER": {
+                "NAME": "Rollladen",
+                "DESCRIPTION": "Fährt einen Rollladen auf und ab oder auf eine Position"
+            },
+            "MEDIA_PLAYER": {
+                "NAME": "Mediaplayer",
+                "DESCRIPTION": "Steuert Wiedergabe und Lautstärke eines Players"
             }
         },
         "CATEGORY": {
@@ -77,6 +89,9 @@
             },
             "VALUE": {
                 "NAME": "Value"
+            },
+            "PRIVATE": {
+                "NAME": "Intern"
             }
         },
         "APPEARANCE": {
@@ -126,10 +141,12 @@
             },
             "TOGGLE": {
                 "ON": {
-                    "NAME": "Ein Text"
+                    "NAME": "Ein Text",
+                    "DESCRIPTION": "Text, der im eingeschalteten Zustand angezeigt wird"
                 },
                 "OFF": {
-                    "NAME": "Aus Text"
+                    "NAME": "Aus Text",
+                    "DESCRIPTION": "Text, der im ausgeschalteten Zustand angezeigt wird"
                 }
             },
             "STEP": {

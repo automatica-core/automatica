@@ -16,6 +16,7 @@
     "test": "ng test",
     "test:headless": "ng test --browsers=ChromeHeadless --watch=false",
     "test:i18n": "node tools/check-templates.mjs",
+    "test:i18n-plugins": "node tools/check-plugin-i18n.mjs",
     "build-themes": "devextreme build",
     "set-version": "json -I -f package.json -e \"this.version='$VERSION'\"",
     "ionic:build": "npm run build-prod",

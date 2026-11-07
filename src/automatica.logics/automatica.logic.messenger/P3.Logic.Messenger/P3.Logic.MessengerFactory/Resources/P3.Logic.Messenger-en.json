@@ -13,7 +13,10 @@
         "NAME": "Subject",
         "DESCRIPTION": ""
       },
-      "BODY":  "{{NAME}} has value {{VALUE}} from source {{SOURCE}} ({{TIMESTAMP}})"
+      "BODY":  "{{NAME}} has value {{VALUE}} from source {{SOURCE}} ({{TIMESTAMP}})",
+      "TRIGGER": {
+        "DESCRIPTION": "Sends the email"
+      }
     }
   }
 }

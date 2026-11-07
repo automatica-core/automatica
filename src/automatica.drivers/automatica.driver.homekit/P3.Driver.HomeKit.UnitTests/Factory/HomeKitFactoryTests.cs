@@ -121,7 +121,7 @@ namespace P3.Driver.HomeKit.UnitTests.Factory
         {
             var assembly = typeof(HomeKitFactory.HomeKitFactory).Assembly;
             var name = assembly.GetManifestResourceNames().Single(a => a.EndsWith($"HomeKit-{language}.json", StringComparison.Ordinal));
-            using var reader = new StreamReader(assembly.GetManifestResourceStream(name)!, Encoding.Latin1);
+            using var reader = new StreamReader(assembly.GetManifestResourceStream(name)!, Encoding.UTF8);
             var json = JObject.Parse(reader.ReadToEnd());
 
             var keys = HomeKitAccessoryCatalog.AccessoryTypes.SelectMany(a => new[] { a.NameKey, a.DescriptionKey }

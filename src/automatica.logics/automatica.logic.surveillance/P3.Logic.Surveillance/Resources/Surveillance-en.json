@@ -1,0 +1,27 @@
+﻿{
+  "SURVEILLANCE": {
+    "NAME": "Surveillance",
+    "WINDOW_MONITOR": {
+      "NAME": "Window monitor",
+      "DESCRIPTION": "Combines the contacts of a window into one state: closed, tilted or open",
+      "TILT": {
+        "DESCRIPTION": "Contact: window tilted"
+      },
+      "OPEN": {
+        "DESCRIPTION": "Contact: window open"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "Contact: window locked"
+      },
+      "TILT_INVERTED": {
+        "DESCRIPTION": "Contact: window tilted (inverted)"
+      },
+      "OPEN_INVERTED": {
+        "DESCRIPTION": "Contact: window open (inverted)"
+      },
+      "LOCKED_INVERTED": {
+        "DESCRIPTION": "Contact: window locked (inverted)"
+      }
+    }
+  }
+}

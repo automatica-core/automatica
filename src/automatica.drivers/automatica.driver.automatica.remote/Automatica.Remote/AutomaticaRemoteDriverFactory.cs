@@ -28,7 +28,7 @@ namespace P3.Driver.Automatica.Remote
             factory.CreateInterfaceType(AutomaticaBoardInterface, "Automatica.Remote.Device.Board", "", 1, 1, true);
             factory.CreateInterfaceType(AutomaticaBoardInterfaceInterface, "Automatica.Remote.Device.Board.Interface", "", 1, 1, true);
 
-            factory.CreateNodeTemplate(DriverGuid, "Automatica.Device", "", "automatica-device",
+            factory.CreateNodeTemplate(DriverGuid, "AUTOMATICA_REMOTE.NAME", "AUTOMATICA_REMOTE.DESCRIPTION", "automatica-device",
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), AutomaticaDeviceInterface, false, false, true, false, true, NodeDataType.NoAttribute,
                 Int32.MaxValue, false);
 
@@ -45,15 +45,15 @@ namespace P3.Driver.Automatica.Remote
                 "automatica.remote.password", PropertyTemplateType.Ip, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1, 1);
 
 
-            factory.CreatePropertyTemplate(ScanProperty, "Scan", "Scan the device for datapoints",
-                "automatica.remote.scan", PropertyTemplateType.Scan, DriverGuid, "Recovery", true, false, "", "", 1, 1);
+            factory.CreatePropertyTemplate(ScanProperty, "AUTOMATICA_REMOTE.SCAN.NAME", "AUTOMATICA_REMOTE.SCAN.DESCRIPTION",
+                "automatica.remote.scan", PropertyTemplateType.Scan, DriverGuid, "COMMON.CATEGORY.DISCOVERY", true, false, "", "", 1, 1);
 
-            factory.CreateNodeTemplate(new Guid("121d76c8-e046-4d0b-b9c2-bc45d1b0c744"), "AUTOMATICA.REMOTE.BOARD_TYPE.NAME",
-                "AUTOMATICA.REMOTE.BOARD_TYPE.DESCRIPTION", "automatica-device-board", AutomaticaDeviceInterface,
+            factory.CreateNodeTemplate(new Guid("121d76c8-e046-4d0b-b9c2-bc45d1b0c744"), "AUTOMATICA_REMOTE.BOARD_TYPE.NAME",
+                "AUTOMATICA_REMOTE.BOARD_TYPE.DESCRIPTION", "automatica-device-board", AutomaticaDeviceInterface,
                 AutomaticaBoardInterface, false, false, true, false, true, NodeDataType.NoAttribute, 0, false);
 
-            factory.CreateNodeTemplate(new Guid("9db04aa0-8962-4764-aae1-1348801e75c5"), "AUTOMATICA.REMOTE.BOARD_INTERFACE.NAME",
-                "AUTOMATICA.REMOTE.BOARD_INTERFACE.DESCRIPTION", "automatica-device-board", AutomaticaBoardInterface,
+            factory.CreateNodeTemplate(new Guid("9db04aa0-8962-4764-aae1-1348801e75c5"), "AUTOMATICA_REMOTE.BOARD_INTERFACE.NAME",
+                "AUTOMATICA_REMOTE.BOARD_INTERFACE.DESCRIPTION", "automatica-device-board", AutomaticaBoardInterface,
                 AutomaticaBoardInterfaceInterface, false, false, true, false, true, NodeDataType.NoAttribute, 0, false);
 
         }

@@ -1,0 +1,24 @@
+<Project>
+  <!--
+    Imported into every driver and logic project by build-local.ps1 (CustomBeforeMicrosoftCommonTargets).
+    1. Some plugin projects hard-code an absolute OutputPath into a developer checkout: the demo build keeps
+       its build output in the project folder (bin/demo) instead.
+    2. The Automatica.Core.* package references point to the packages packed from this tree
+       (version $(AutomaticaDemoCoreVersion)), so plugins and core are built from the same sources.
+  -->
+  <PropertyGroup Condition="'$(OutputPath)' != '' And $([System.IO.Path]::IsPathRooted('$(OutputPath)'))">
+    <OutputPath>$(MSBuildProjectDirectory)\bin\demo\$(Configuration)\</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(AutomaticaDemoCoreVersion)' != ''">
+    <PackageReference Update="Automatica.Core.Base" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Control" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Driver" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Driver.Utility" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.EF" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Logic" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Model" Version="$(AutomaticaDemoCoreVersion)" />
+    <PackageReference Update="Automatica.Core.Notification" Version="$(AutomaticaDemoCoreVersion)" />
+  </ItemGroup>
+</Project>

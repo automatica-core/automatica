@@ -45,6 +45,16 @@
     "REMOTE_CONNECT_DOMAIN": {
       "NAME": "Remote connect domain",
       "DESCRIPTION": ""
+    },
+    "DSM": {
+      "WEBSTATION": {
+        "NAME": "Web Station",
+        "DESCRIPTION": "Web Station package on the DiskStation",
+        "CONNECTED": {
+          "NAME": "Connected",
+          "DESCRIPTION": "Shows whether Web Station can be reached"
+        }
+      }
     }
   }
 }

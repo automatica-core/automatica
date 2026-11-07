@@ -7,7 +7,13 @@
     <ProjectGuid>{FD6AFFB8-7382-4DE7-B491-8B30065EE768}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Surveillance-de.json" />
+    <None Remove="Resources\Surveillance-en.json" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Surveillance-de.json" />
+    <EmbeddedResource Include="Resources\Surveillance-en.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2049" />

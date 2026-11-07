@@ -8,69 +8,94 @@
     },
     "SUN": {
       "NAME": "Sun",
+      "DESCRIPTION": "Sun times for the location set in the settings",
       "SUNRISE": {
-        "NAME": "Sunrise"
+        "NAME": "Sunrise",
+        "DESCRIPTION": "Time of sunrise"
       },
       "SUNSET": {
-        "NAME": "Sunset"
+        "NAME": "Sunset",
+        "DESCRIPTION": "Time of sunset"
       },
       "DUSK": {
-        "NAME": "Dusk"
+        "NAME": "Dusk",
+        "DESCRIPTION": "Time of dusk"
       },
       "DAWN": {
-        "NAME": "Dawn"
+        "NAME": "Dawn",
+        "DESCRIPTION": "Time of dawn"
       },
       "IS_SUNSET": {
-        "NAME": "Is sunset"
+        "NAME": "Is sunset",
+        "DESCRIPTION": "True from sunset until sunrise"
       },
       "IS_SUNRISE": {
-        "NAME": "Is sunrise"
+        "NAME": "Is sunrise",
+        "DESCRIPTION": "True from sunrise until sunset"
       },
       "IS_DAYLIGHT": {
-        "NAME": "Daylight"
+        "NAME": "Daylight",
+        "DESCRIPTION": "True between sunrise and sunset"
       }
     },
     "DATETIME": {
       "NAME": "Date/Time",
+      "DESCRIPTION": "Current date and time of the server",
       "DATETIME": {
-        "NAME": "Date & time"
+        "NAME": "Date & time",
+        "DESCRIPTION": "Current date and time"
       },
       "DATE": {
-        "NAME": "Date"
+        "NAME": "Date",
+        "DESCRIPTION": "Current date"
       },
       "TIME": {
-        "NAME": "Time"
+        "NAME": "Time",
+        "DESCRIPTION": "Current time"
       },
       "DAY_OF_WEEK": {
-        "NAME": "Day of week"
+        "NAME": "Day of week",
+        "DESCRIPTION": "Day of the week"
       },
       "DAY_OF_MONTH": {
-        "NAME": "Day"
+        "NAME": "Day",
+        "DESCRIPTION": "Day of the month (1-31)"
       },
       "MONTH": {
-        "NAME": "Month"
+        "NAME": "Month",
+        "DESCRIPTION": "Current month (1-12)"
       },
       "YEAR": {
-        "NAME": "Year"
+        "NAME": "Year",
+        "DESCRIPTION": "Current year"
       },
       "MILLISECONDS": {
-        "NAME": "Millisecond"
+        "NAME": "Millisecond",
+        "DESCRIPTION": "Current millisecond (0-999)"
       },
       "SECONDS": {
-        "NAME": "Second"
+        "NAME": "Second",
+        "DESCRIPTION": "Current second (0-59)"
       },
       "MINUTES": {
-        "NAME": "Minute"
+        "NAME": "Minute",
+        "DESCRIPTION": "Current minute (0-59)"
       },
       "HOURS": {
-        "NAME": "Hour"
+        "NAME": "Hour",
+        "DESCRIPTION": "Current hour (0-23)"
       },
       "SECONDS_SINCE_BOOT": {
-        "NAME": "Seconds since boot"
+        "NAME": "Seconds since boot",
+        "DESCRIPTION": "Seconds since the server was started"
       },
       "BOOT_TIME": {
-        "NAME": "Boot time"
+        "NAME": "Boot time",
+        "DESCRIPTION": "Time the server was started"
       }
+    },
+    "INTERFACE": {
+      "NAME": "Date and time"
     }
   }
 }

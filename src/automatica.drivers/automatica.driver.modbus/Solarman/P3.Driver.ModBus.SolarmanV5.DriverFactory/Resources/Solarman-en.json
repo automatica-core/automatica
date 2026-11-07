@@ -301,6 +301,10 @@
     "LAST_POLL_TIMESTAMP": {
       "NAME": "Last poll timestamp",
       "DESCRIPTION": ""
+    },
+    "UPLOAD": {
+      "NAME": "Upload",
+      "DESCRIPTION": "Data the inverter uploads through the Solarman logger"
     }
   }
 }

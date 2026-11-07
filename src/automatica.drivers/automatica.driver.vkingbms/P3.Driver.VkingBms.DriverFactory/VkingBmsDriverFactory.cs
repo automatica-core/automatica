@@ -48,7 +48,7 @@ namespace P3.Driver.VkingBms.DriverFactory
                 "vking-bms-pack-cells", BatteryPackTypeGuid, BatteryPackCellTypeGuid, true, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
-            factory.CreateNodeTemplate(BatteryPackTemperatureTypeGuid, "VKING_BMS.TEMPERATURE.NAME", "SOLARMAN.TEMPERATURE.DESCRIPTION",
+            factory.CreateNodeTemplate(BatteryPackTemperatureTypeGuid, "VKING_BMS.TEMPERATURE.NAME", "VKING_BMS.TEMPERATURE.DESCRIPTION",
                 "vking-bms-pack-cells-temperatures", BatteryPackTypeGuid, BatteryPackTemperatureTypeGuid, true, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
@@ -95,7 +95,7 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         private void CreateValueTemplate(INodeTemplateFactory factory, Guid needsInterfaceGuid, Guid guid, string name, NodeDataType nodeDataType)
         {
-            factory.CreateNodeTemplate(guid, $"VKING_BMS.CELL.{name.ToUpperInvariant()}.NAME", $"SVKING_BMS.CELL.{name.ToUpperInvariant()}.DESCRIPTION", $"vking-bms-pack-cells-{name.ToLowerInvariant()}", needsInterfaceGuid,
+            factory.CreateNodeTemplate(guid, $"VKING_BMS.CELL.{name.ToUpperInvariant()}.NAME", $"VKING_BMS.CELL.{name.ToUpperInvariant()}.DESCRIPTION", $"vking-bms-pack-cells-{name.ToLowerInvariant()}", needsInterfaceGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, nodeDataType, 1, false, true);
 
         }

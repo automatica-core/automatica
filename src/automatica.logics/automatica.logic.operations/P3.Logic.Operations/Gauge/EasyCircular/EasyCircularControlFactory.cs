@@ -56,7 +56,7 @@ namespace P3.Logic.Operations.Gauge.EasyCircular
                 true);
 
 
-            factory.CreateParameterLogicInterfaceTemplate(new Guid("b074af85-00f7-49b7-9815-d963eaae1fd0"), "OPERATIONS.GAUGE.TYPE", "OPERATIONS.GAUGE.TYPE", "gauge_type", LogicGuid, 0,
+            factory.CreateParameterLogicInterfaceTemplate(new Guid("b074af85-00f7-49b7-9815-d963eaae1fd0"), "OPERATIONS.GAUGE.TYPE.NAME", "OPERATIONS.GAUGE.TYPE.DESCRIPTION", "gauge_type", LogicGuid, 0,
                 RuleInterfaceParameterDataType.ConstantString, $"{(int)GaugeType.Circular}");
 
 

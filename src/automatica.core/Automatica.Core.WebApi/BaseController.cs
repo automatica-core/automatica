@@ -16,6 +16,7 @@ namespace Automatica.Core.WebApi
             DbContext = dbContext;
         }
 
+        [NonAction]
         public bool IsUserInGroup(Guid? groupId)
         {
             if(groupId == null)
@@ -30,6 +31,7 @@ namespace Automatica.Core.WebApi
         /// Like <see cref="IsUserInGroup"/>, but administrators may access everything (like the MCP access rules).
         /// Used for the viewer endpoints that return single nodes, pages or values.
         /// </summary>
+        [NonAction]
         public bool CanAccess(Guid? groupId)
         {
             return groupId == null || IsAdmin || IsUserInGroup(groupId);

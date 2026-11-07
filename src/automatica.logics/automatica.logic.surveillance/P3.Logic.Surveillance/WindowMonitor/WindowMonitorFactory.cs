@@ -26,8 +26,8 @@ namespace P3.Logic.Surveillance.WindowMonitor
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateLogicTemplate(LogicGuid, "SURVEILLANCE.WINDOW_MONITOR.NAME", "MATH.WINDOW_MONITOR.DESCRIPTION",
-               "surveillance.window_monitor", "SUVREILLANCE.NAME", 100, 100);
+            factory.CreateLogicTemplate(LogicGuid, "SURVEILLANCE.WINDOW_MONITOR.NAME", "SURVEILLANCE.WINDOW_MONITOR.DESCRIPTION",
+               "surveillance.window_monitor", "SURVEILLANCE.NAME", 100, 100);
 
 
             factory.CreateLogicInterfaceTemplate(Ct, "Ct", "SURVEILLANCE.WINDOW_MONITOR.TILT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, int.MaxValue, 2);

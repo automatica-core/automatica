@@ -6,32 +6,40 @@
       "NAME": "Status zu Impuls",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "Status Eingang"
+        "NAME": "Status Eingang",
+        "DESCRIPTION": "Ein Wert größer 0 startet einen Impuls"
       },
       "OUTPUT": {
-        "NAME": "Impuls Ausgang"
+        "NAME": "Impuls Ausgang",
+        "DESCRIPTION": "Impulsausgang"
       },
       "DELAY": {
-        "NAME": "Impuls dauer [ms]"
+        "NAME": "Impuls dauer [ms]",
+        "DESCRIPTION": "Dauer des Impulses in Millisekunden"
       }
     },
     "TRIGGER": {
       "NAME": "Trigger",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "Trigger Start"
+        "NAME": "Trigger Start",
+        "DESCRIPTION": "Startet den Trigger"
       },
       "OUTPUT": {
-        "NAME": "Trigger Wert"
+        "NAME": "Trigger Wert",
+        "DESCRIPTION": "Gibt den Triggerwert aus"
       },
       "DELAY": {
-        "NAME": "Trigger Verzögerung [ms]"
+        "NAME": "Trigger Verzögerung [ms]",
+        "DESCRIPTION": "Verzögerung, bevor der Wert gesendet wird, in Millisekunden"
       },
       "VALUE": {
-        "NAME": "Trigger Wert"
+        "NAME": "Trigger Wert",
+        "DESCRIPTION": "Wert, der am Ausgang gesendet wird"
       },
       "VALUE_PARAM": {
-        "NAME": "Trigger Wert"
+        "NAME": "Trigger Wert",
+        "DESCRIPTION": "Wert, der gesendet wird, wenn kein Werteingang verbunden ist"
       }
     }
   }

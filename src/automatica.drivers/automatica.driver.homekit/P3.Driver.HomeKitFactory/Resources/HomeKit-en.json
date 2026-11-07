@@ -58,7 +58,7 @@
       "NAME": "Temperaturesensor",
       "DESCRIPTION": "",
       "VALUE": {
-        "NAME": "Temperature (°C)",
+        "NAME": "Temperature (Â°C)",
         "DESCRIPTION": ""
       }
     },
@@ -142,16 +142,16 @@
         "DESCRIPTION": "0 = unknown, 1 = excellent, 2 = good, 3 = fair, 4 = inferior, 5 = poor"
       },
       "PM25": {
-        "NAME": "PM2.5 (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "PM2.5 (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       },
       "PM10": {
-        "NAME": "PM10 (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "PM10 (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       },
       "VOC": {
-        "NAME": "VOC (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "VOC (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       }
     },
     "FAN": {
@@ -178,12 +178,12 @@
         "DESCRIPTION": "0 = off, 1 = heat, 2 = cool, 3 = auto"
       },
       "CURRENT_TEMPERATURE": {
-        "NAME": "Current temperature (°C)",
+        "NAME": "Current temperature (Â°C)",
         "DESCRIPTION": ""
       },
       "TARGET_TEMPERATURE": {
-        "NAME": "Target temperature (°C)",
-        "DESCRIPTION": "10-38 °C in 0.5 °C steps"
+        "NAME": "Target temperature (Â°C)",
+        "DESCRIPTION": "10-38 Â°C in 0.5 Â°C steps"
       },
       "HUMIDITY": {
         "NAME": "Humidity (%)",
@@ -348,6 +348,15 @@
       "NAME": "Remove pairings",
       "DESCRIPTION": "Removes all pairings"
     },
-    "PAIRING": "Pairing"
+    "PAIRING": "Pairing",
+    "STATE": {
+      "NAME": "State",
+      "DESCRIPTION": "On/off state of the outlet in HomeKit"
+    },
+    "HUE": {
+      "BRIGHTNESS": {
+        "DESCRIPTION": "Brightness of the light in percent"
+      }
+    }
   }
 }

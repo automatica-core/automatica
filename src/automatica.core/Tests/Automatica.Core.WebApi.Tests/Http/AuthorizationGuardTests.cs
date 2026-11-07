@@ -184,7 +184,7 @@ namespace Automatica.Core.WebApi.Tests.Http
         private static HttpRequestMessage Request(string method, string url) =>
             new(new HttpMethod(method), url) { Content = HttpTestExtensions.RawJson("{}") };
 
-        [Fact(Skip = "BUG: BaseController.IsUserInGroup/CanAccess are public, so MVC routes them as actions on every controller route (any method, ambiguous match -> 500 instead of 404/405)")]
+        [Fact]
         public void BaseControllerHelpers_AreNotRoutedAsActions()
         {
             var routed = Endpoints(includeBaseControllerMethods: true)

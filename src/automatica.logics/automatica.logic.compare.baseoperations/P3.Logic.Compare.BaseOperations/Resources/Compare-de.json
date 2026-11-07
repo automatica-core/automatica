@@ -4,27 +4,81 @@
     "DESCRIPTION":  "", 
     "BIGGER": {
       "NAME": "Größer",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer und 0 bei kleiner auf den Ausgang"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer und 0 bei kleiner auf den Ausgang",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 > I2, sonst 0"
+      }
     },
     "BIGGER_OR_EQUAL": {
       "NAME": "Größer oder Gleich",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer/gleich und 0 bei kleiner auf den Ausgang"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer/gleich und 0 bei kleiner auf den Ausgang",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 >= I2, sonst 0"
+      }
     },
     "EQUAL": {
       "NAME": "Gleich",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei gleich aus"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei gleich aus",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 = I2, sonst 0"
+      }
     },
     "UNEQUAL": {
       "NAME": "Ungleich",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei ungleich aus"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei ungleich aus",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 ungleich I2, sonst 0"
+      }
     },
     "SMALLER": {
       "NAME": "Kleiner",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleoiner und 0 bei größer auf den Ausgang"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleoiner und 0 bei größer auf den Ausgang",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 < I2, sonst 0"
+      }
     },
     "SMALLER_OR_EQUAL": {
       "NAME": "Kleiner oder Gleich",
-      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleiner/gleich und 0 bei größer auf den Ausgang"
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleiner/gleich und 0 bei größer auf den Ausgang",
+      "INPUT1": {
+        "DESCRIPTION": "Erster Wert"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Zweiter Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn I1 <= I2, sonst 0"
+      }
     }
   }
 }

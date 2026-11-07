@@ -48,7 +48,7 @@ namespace P3.Driver.OmsDriverFactory
             factory.CreateNodeTemplate(new Guid("887d9211-ed89-4aeb-846c-40cc53ef6345"), "MBUS-OMS.DEVICE.ENERGY_R-.NAME", "MBUS-OMS.DEVICE.ENERGY_R-.DESCRIPTION", "mbus-oms-r-", interfaceGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false, false);
 
-            factory.CreateNodeTemplate(new Guid("3b0ce6dd-df80-4351-abd8-fcc6724a30f3   "), "MBUS-OMS.DEVICE.POWER+.NAME", "MBUS-OMS.DEVICE.POWER.DESCRIPTION", "mbus-oms-power+", interfaceGuid,
+            factory.CreateNodeTemplate(new Guid("3b0ce6dd-df80-4351-abd8-fcc6724a30f3   "), "MBUS-OMS.DEVICE.POWER+.NAME", "MBUS-OMS.DEVICE.POWER+.DESCRIPTION", "mbus-oms-power+", interfaceGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false, false);
 
             factory.CreateNodeTemplate(new Guid("b6b4291b-1ce7-4716-9670-1701a0401259"), "MBUS-OMS.DEVICE.POWER-.NAME", "MBUS-OMS.DEVICE.POWER-.DESCRIPTION", "mbus-oms-power-", interfaceGuid,

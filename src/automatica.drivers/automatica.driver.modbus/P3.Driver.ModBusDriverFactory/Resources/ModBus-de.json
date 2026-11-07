@@ -3,7 +3,7 @@
     "DEVICE": {
       "NAME": "Modbus Gerät",
       "DESCRIPTION": "Definiert ein ModBus Gerät",
-      "ID": "Geräte ID"
+      "ID": "Geräte-ID"
     },
     "CATEGORY": {
       "DEVICE": "Gerät",
@@ -46,6 +46,8 @@
 	  }
     },
     "ATTRIBUTE": {
+      "NAME": "Modbus-Register",
+      "DESCRIPTION": "Register eines Modbus-Geräts",
       "INTEGER": {
         "POS2BYTE": {
           "NAME": "+2 Byte Ganzzahl",
@@ -106,6 +108,19 @@
         "NAME": "ModBus Slave TCP",
         "DESCRIPTION": ""
       } 
+    },
+    "CONSTRAINT": {
+      "UNIQUE_ADDRESS": {
+        "NAME": "Diese Geräte-ID wird bereits verwendet"
+      },
+      "POLL_INTERVAL_ON_MASTER": {
+        "NAME": "Abfrageintervall nur beim Master",
+        "DESCRIPTION": "Das Abfrageintervall wird nur angezeigt, wenn der Treiber Modbus-Master ist"
+      },
+      "REGISTER_ADDRESS": {
+        "NAME": "Registeradresse überschneidet sich",
+        "DESCRIPTION": "Ein anderes Register in derselben Tabelle verwendet diesen Adressbereich bereits"
+      }
     } 
   }
 }

@@ -58,13 +58,6 @@ export class ConfigService extends BaseService {
         return super.postMultiple<NodeInstance>("nodeInstances/customAction/" + actionName, node.toJson());
     }
 
-    save(nodeInstances: NodeInstance[]): Promise<NodeInstance[]> {
-        const data = new Array<any>();
-        for (const set of nodeInstances) {
-            data.push(set.toJson());
-        }
-        return super.postMultiple<NodeInstance>("nodeInstances", data);
-    }
     async add(nodeInstance: NodeInstance): Promise<NodeInstance> {
         return await super.put<NodeInstance>("nodeInstancesV2/add", nodeInstance.toJson());
     }

@@ -117,7 +117,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 "knx-baos", KnxBaos, KnxInterface3LevelMiddle, true, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
-            factory.CreateNodeTemplate(KnxGatewayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRITPION",
+            factory.CreateNodeTemplate(KnxGatewayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRIPTION",
                 "knx-gw-state", KnxInterface, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false, false);
 

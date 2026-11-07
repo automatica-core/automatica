@@ -62,6 +62,18 @@
             "RGBA": {
                 "NAME": "RGBA",
                 "DESCRIPTION": ""
+            },
+            "DIMMER": {
+                "NAME": "Dimmer",
+                "DESCRIPTION": "Switches a light and sets its brightness"
+            },
+            "SHUTTER": {
+                "NAME": "Shutter",
+                "DESCRIPTION": "Moves a shutter up and down or to a position"
+            },
+            "MEDIA_PLAYER": {
+                "NAME": "Media player",
+                "DESCRIPTION": "Controls playback and volume of a player"
             }
         },
         "CATEGORY": {
@@ -77,6 +89,9 @@
             },
             "VALUE": {
                 "NAME": "Value"
+            },
+            "PRIVATE": {
+                "NAME": "Internal"
             }
         },
         "APPEARANCE": {
@@ -126,10 +141,12 @@
             },
             "TOGGLE": {
                 "ON": {
-                    "NAME": "On text"
+                    "NAME": "On text",
+                    "DESCRIPTION": "Text shown when the value is on"
                 },
                 "OFF": {
-                    "NAME": "Off text"
+                    "NAME": "Off text",
+                    "DESCRIPTION": "Text shown when the value is off"
                 }
             },
             "STEP": {

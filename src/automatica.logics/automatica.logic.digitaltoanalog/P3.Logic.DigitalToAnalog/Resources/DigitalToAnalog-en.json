@@ -6,32 +6,40 @@
       "NAME": "State to impuls",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "State input"
+        "NAME": "State input",
+        "DESCRIPTION": "A value greater than 0 starts a pulse"
       },
       "OUTPUT": {
-        "NAME": "Impuls output"
+        "NAME": "Impuls output",
+        "DESCRIPTION": "Pulse output"
       },
       "DELAY": {
-        "NAME": "Impulse time [ms]"
+        "NAME": "Impulse time [ms]",
+        "DESCRIPTION": "How long the pulse lasts, in milliseconds"
       }
     },
     "TRIGGER": {
       "NAME": "Trigger",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "Trigger start"
+        "NAME": "Trigger start",
+        "DESCRIPTION": "Starts the trigger"
       },
       "OUTPUT": {
-        "NAME": "Trigger value"
+        "NAME": "Trigger value",
+        "DESCRIPTION": "Sends the trigger value"
       },
       "DELAY": {
-        "NAME": "Trigger delay [ms]"
+        "NAME": "Trigger delay [ms]",
+        "DESCRIPTION": "Delay before the value is sent, in milliseconds"
       },
       "VALUE": {
-        "NAME": "Trigger value"
+        "NAME": "Trigger value",
+        "DESCRIPTION": "Value to send on the output"
       },
       "VALUE_PARAM": {
-        "NAME": "Trigger value"
+        "NAME": "Trigger value",
+        "DESCRIPTION": "Value to send when no value input is connected"
       }
     }
   }

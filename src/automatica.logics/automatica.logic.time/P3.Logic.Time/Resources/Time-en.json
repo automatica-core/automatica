@@ -1,17 +1,38 @@
 ﻿{
   "TIME": {
-    "NAME": "Zeit",
+    "NAME": "Time",
     "DELAYOFF": {
       "NAME": "Delayed off",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Switch-off signal"
+      },
+      "RESET": {
+        "DESCRIPTION": "Switches the output off immediately"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Switches off after the delay"
+      }
     },
     "DELAYON": {
       "NAME": "Delayed on",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Switch-on signal"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Follows the input after the delay"
+      }
     },
     "MONOFLOP": {
       "NAME": "Monoflop",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "DESCRIPTION": "Starts the pulse"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 for the set time, then 0"
+      }
     },
     "DELAY": {
       "NAME": "Delay [s]",
@@ -19,11 +40,23 @@
     },
     "TIMER": {
       "NAME": "Timer",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "RESET": {
+        "DESCRIPTION": "Resets the output"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 while a switching time is active"
+      }
     },
     "ADVANCED_TIMER": {
       "NAME": "Advanced timer",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "RESET": {
+        "DESCRIPTION": "Resets the output"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 while a calendar entry is active"
+      }
     },
     "TRIGGER_ONLY_IF_TRUE": {
       "NAME": "Trigger only if true",

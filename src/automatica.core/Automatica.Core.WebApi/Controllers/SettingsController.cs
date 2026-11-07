@@ -91,8 +91,13 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<ICollection<Setting>> SaveSettings([FromBody]IList<Setting> settings)
+        public async Task<ActionResult<ICollection<Setting>>> SaveSettings([FromBody]IList<Setting> settings)
         {
+            if (settings == null || settings.Any(a => a == null))
+            {
+                return BadRequest();
+            }
+
             var reloadServer = false;
             var reloadContext = new List<SettingReloadContext>();
 
@@ -180,7 +185,7 @@ namespace Automatica.Core.WebApi.Controllers
                 throw;
             }
 
-            return LoadSettings();
+            return new ActionResult<ICollection<Setting>>(LoadSettings());
         }
     }
 }
