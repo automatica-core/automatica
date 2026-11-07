@@ -26,9 +26,10 @@ namespace P3.Logic.Operations.Tests
         // ---------- factory / initial ----------
 
         [Fact]
-        public void Factory_HasSevenInputsAndFiveOutputs()
+        public void Factory_HasEightInputsAndSixOutputs()
         {
-            Assert.Equal(12, RuleInstance.RuleInterfaceInstance.Count);
+            // including slat input and output
+            Assert.Equal(14, RuleInstance.RuleInterfaceInstance.Count);
             Assert.Equal("P3.Logic.Operations.Shutter", Instance.LogicName);
         }
 

@@ -216,6 +216,10 @@
         "LOCKED": {
           "NAME": "Locked",
           "DESCRIPTION": ""
+        },
+        "SLAT": {
+          "NAME": "Slat position",
+          "DESCRIPTION": "Slat position feedback of the actuator in percent (0 horizontal, 100 closed)"
         }
       },
       "OUTPUT": {
@@ -238,6 +242,10 @@
         "IS_MOVING": {
           "NAME": "Is moving",
           "DESCRIPTION": "1 while the shutter is moving"
+        },
+        "SLAT": {
+          "NAME": "Slat position",
+          "DESCRIPTION": "Slat position in percent (0 horizontal, 100 closed)"
         }
       }
     }

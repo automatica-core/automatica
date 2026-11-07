@@ -10,7 +10,7 @@ using Automatica.Core.Logic;
 
 namespace P3.Logic.Operations.Shutter
 {
-    public class ShutterLogic: Automatica.Core.Logic.Logic, IBlind
+    public class ShutterLogic: Automatica.Core.Logic.Logic, ISlatBlind
     {
 
         private readonly RuleInterfaceInstance _moveInput;
@@ -30,6 +30,11 @@ namespace P3.Logic.Operations.Shutter
 
         private readonly RuleInterfaceInstance _isMovingOutput;
 
+        // optional: rule instances created before slats were supported may not have them
+        private readonly RuleInterfaceInstance _slatInput;
+        private readonly RuleInterfaceInstance _slatOutput;
+        private int _slatPosition;
+
         private bool _locked = false;
         private int _direction = 0;
         private int _position;
@@ -41,6 +46,8 @@ namespace P3.Logic.Operations.Shutter
         public bool IsMoving => _moving;
         public int Direction => _direction;
         public int Position => _position;
+        public bool HasSlats => _slatOutput != null;
+        public int SlatPosition => _slatPosition;
         public Guid Id => Context.RuleInstance.ObjId;
         public string Name => Context.RuleInstance.Name;
 
@@ -71,6 +78,10 @@ namespace P3.Logic.Operations.Shutter
                 a.This2RuleInterfaceTemplate == ShutterLogicFactory.RuleOutputAbsolutePercentage);
             _isMovingOutput = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == ShutterLogicFactory.RuleOutputMoveState);
+            _slatInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                a.This2RuleInterfaceTemplate == ShutterLogicFactory.RuleInputSlatPercentage);
+            _slatOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                a.This2RuleInterfaceTemplate == ShutterLogicFactory.RuleOutputSlatPercentage);
           
         }
 
@@ -111,6 +122,11 @@ namespace P3.Logic.Operations.Shutter
                 ret.Add(new LogicOutputChanged(_moveOutput, moveValue));
                 ret.Add(new LogicOutputChanged(_isMovingOutput, true));
                 _moving = true;
+            }
+            else if (_slatInput != null && instance.ObjId == _slatInput.ObjId)
+            {
+                // slat feedback of the actuator
+                _slatPosition = ClampPercent(Convert.ToDouble(value));
             }
             else if (instance.ObjId == _absolutePositionInput.ObjId)
             {
@@ -238,6 +254,22 @@ namespace P3.Logic.Operations.Shutter
         {
             var values = MoveAbsolute(pos, true);
             return DispatchValues(values);
+        }
+
+        public Task MoveSlatAsync(int pos, CancellationToken token = new CancellationToken())
+        {
+            if (_slatOutput == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            _slatPosition = ClampPercent(pos);
+            return DispatchValues(new List<ILogicOutputChanged> { new LogicOutputChanged(_slatOutput, (double)_slatPosition) });
+        }
+
+        private static int ClampPercent(double value)
+        {
+            return (int)Math.Round(Math.Clamp(value, 0, 100));
         }
 
         private async Task DispatchValues(IList<ILogicOutputChanged> list)

@@ -16,16 +16,18 @@ namespace P3.Logic.Operations.Shutter
         public static Guid RuleInputLocked = new Guid("ec8a1979-e15d-4fc7-8d92-ed6569449c9a");
 
         public static Guid RuleInputAbsolutePercentage = new Guid("1f66b971-a80f-4001-bc1e-670bd23630b7");
+        public static Guid RuleInputSlatPercentage = new Guid("0b7d0f53-5c0e-4a52-9f7c-2a0c4f1d8e61");
 
         public static Guid RuleOutputAbsolutePercentage = new Guid("32837da4-a619-41d3-8390-aa0221bf2cba");
         public static Guid RuleOutputShutterMove = new Guid("1e59f6a8-136f-4d3c-9b30-4ec2f8396932");
         public static Guid RuleOutputDirection = new Guid("9f909f2e-68c6-4e0a-8e76-fdcb7f408111");
         public static Guid RuleOutputStop = new Guid("90b89646-bc3c-4ec5-9f6e-6b4e67b43666");
         public static Guid RuleOutputMoveState = new Guid("66703a94-f9c6-4c01-bee9-96286fe148b3");
+        public static Guid RuleOutputSlatPercentage = new Guid("5e3c2b8a-91d4-4f7e-b6a1-3d9f0c7e2a45");
 
         public override string LogicName => "P3.Logic.Operations.Shutter";
         public override Guid LogicGuid => new Guid("2f96f82f-2dd1-4fcb-9960-3e3f016975b8");
-        public override Version LogicVersion => new Version(1, 0, 0, 2);
+        public override Version LogicVersion => new Version(1, 0, 0, 3);
         public override bool InDevelopmentMode => true;
 
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -40,11 +42,15 @@ namespace P3.Logic.Operations.Shutter
             factory.CreateLogicInterfaceTemplate(RuleInputStop, "OPERATIONS.SHUTTER.INPUT.STOP.NAME", "OPERATIONS.SHUTTER.INPUT.STOP.DESCRIPTION", "stop", LogicGuid, LogicInterfaceDirection.Input, 0, 5);
             factory.CreateLogicInterfaceTemplate(RuleInputAbsolutePercentage, "OPERATIONS.SHUTTER.INPUT.ABSOLUTE.NAME", "OPERATIONS.SHUTTER.INPUT.ABSOLUTE.DESCRIPTION", "absolutePercentage", LogicGuid, LogicInterfaceDirection.Input, 0, 6);
             factory.CreateLogicInterfaceTemplate(RuleInputLocked, "OPERATIONS.SHUTTER.INPUT.LOCKED.NAME", "OPERATIONS.SHUTTER.INPUT.LOCKED.DESCRIPTION", "locked", LogicGuid, LogicInterfaceDirection.Input, 0, 6);
+            // venetian blinds: slat position feedback of the actuator (percent, 0 horizontal, 100 closed)
+            factory.CreateLogicInterfaceTemplate(RuleInputSlatPercentage, "OPERATIONS.SHUTTER.INPUT.SLAT.NAME", "OPERATIONS.SHUTTER.INPUT.SLAT.DESCRIPTION", "slatPercentage", LogicGuid, LogicInterfaceDirection.Input, 0, 7);
 
             factory.CreateLogicInterfaceTemplate(RuleOutputAbsolutePercentage, "OPERATIONS.SHUTTER.OUTPUT.ABSOLUTE.NAME", "OPERATIONS.SHUTTER.OUTPUT.ABSOLUTE.DESCRIPTION", "absolutePercentageOutput", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
             factory.CreateLogicInterfaceTemplate(RuleOutputShutterMove, "OPERATIONS.SHUTTER.OUTPUT.MOVE.NAME", "OPERATIONS.SHUTTER.OUTPUT.MOVE.DESCRIPTION", "moveOutput", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
             factory.CreateLogicInterfaceTemplate(RuleOutputDirection, "OPERATIONS.SHUTTER.OUTPUT.DIRECTION.NAME", "OPERATIONS.SHUTTER.OUTPUT.DIRECTION.DESCRIPTION", "directionOutput", LogicGuid, LogicInterfaceDirection.Output, 0, 2);
             factory.CreateLogicInterfaceTemplate(RuleOutputStop, "OPERATIONS.SHUTTER.OUTPUT.STOP.NAME", "OPERATIONS.SHUTTER.OUTPUT.STOP.DESCRIPTION", "stopOutput", LogicGuid, LogicInterfaceDirection.Output, 0, 5);
+
+            factory.CreateLogicInterfaceTemplate(RuleOutputSlatPercentage, "OPERATIONS.SHUTTER.OUTPUT.SLAT.NAME", "OPERATIONS.SHUTTER.OUTPUT.SLAT.DESCRIPTION", "slatPercentageOutput", LogicGuid, LogicInterfaceDirection.Output, 0, 6);
 
             factory.CreateLogicInterfaceTemplate(RuleOutputMoveState, "OPERATIONS.SHUTTER.OUTPUT.IS_MOVING.NAME", "OPERATIONS.SHUTTER.OUTPUT.IS_MOVING.DESCRIPTION", "ruleIsMoving", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 

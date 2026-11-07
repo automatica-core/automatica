@@ -100,5 +100,35 @@ namespace P3.Logic.Operations.Tests
             LogicInputChanged(GetLogicInterfaceByTemplate(ShutterLogicFactory.RuleInputUp), true);
             Assert.False(shutter.IsMoving);
         }
+
+        [Fact]
+        public async Task Slats_MoveSlatSendsOutput_FeedbackUpdatesPosition()
+        {
+            var shutter = (ShutterLogic)Logic;
+            Assert.True(shutter.HasSlats);
+
+            await shutter.MoveSlatAsync(35);
+            var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+            Assert.Equal(35d, Convert.ToDouble(values[ShutterLogicFactory.RuleOutputSlatPercentage].Value));
+            Assert.Equal(35, shutter.SlatPosition);
+
+            LogicInputChanged(GetLogicInterfaceByTemplate(ShutterLogicFactory.RuleInputSlatPercentage), 62.4);
+            Assert.Equal(62, shutter.SlatPosition);
+
+            // out of range is clamped
+            await shutter.MoveSlatAsync(140);
+            Assert.Equal(100, shutter.SlatPosition);
+        }
+
+        [Fact]
+        public void Slats_FeedbackNotifiesTheValueCallbacks()
+        {
+            var shutter = (ShutterLogic)Logic;
+            var calls = 0;
+            shutter.RegisterValueCallback(() => calls++);
+
+            LogicInputChanged(GetLogicInterfaceByTemplate(ShutterLogicFactory.RuleInputSlatPercentage), 20);
+            Assert.Equal(1, calls);
+        }
     }
 }

@@ -216,6 +216,10 @@
         "LOCKED": {
           "NAME": "Gesperrt",
           "DESCRIPTION": ""
+        },
+        "SLAT": {
+          "NAME": "Lamellenposition",
+          "DESCRIPTION": "Rückmeldung der Lamellenposition des Aktors in Prozent (0 waagrecht, 100 geschlossen)"
         }
       },
       "OUTPUT": {
@@ -238,6 +242,10 @@
         "IS_MOVING": {
           "NAME": "In Bewegung",
           "DESCRIPTION": "1, solange sich der Rollladen bewegt"
+        },
+        "SLAT": {
+          "NAME": "Lamellenposition",
+          "DESCRIPTION": "Lamellenposition in Prozent (0 waagrecht, 100 geschlossen)"
         }
       }
     }
