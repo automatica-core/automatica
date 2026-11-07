@@ -7,6 +7,7 @@ import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui
 import { CommonModule } from '@angular/common';
 
 import { Router, NavigationEnd } from '@angular/router';
+import { OpenedStateMode, RevealMode } from 'devextreme/ui/drawer';
 
 @Component({
   selector: 'app-side-nav-outer-toolbar',
@@ -23,8 +24,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
   @Input()
   title!: string;
 
-  menuMode = 'shrink';
-  menuRevealMode = 'expand';
+  menuMode: OpenedStateMode = 'shrink';
+  menuRevealMode: RevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
 

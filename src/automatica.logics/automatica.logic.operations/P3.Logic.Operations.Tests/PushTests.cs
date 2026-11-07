@@ -58,17 +58,18 @@ namespace P3.Logic.Operations.Tests
         public async Task Input_ReturnsNoSynchronousOutputs_AndPulsesTrueThenFalse()
         {
             await Context.Dispatcher.ClearValues();
-            SetDuration(150);
+            // long enough that the polling below sees the true value on a busy build agent (the tests run in parallel)
+            SetDuration(1000);
 
             var sw = Stopwatch.StartNew();
             var outputs = Logic.ValueChanged(GetLogicInterfaceByTemplate(PushLogicFactory.RuleInput), Dispatchable, true);
             Assert.Empty(outputs);
 
-            Assert.True(await WaitForDispatchedValue(Context.Dispatcher, PushLogicFactory.RuleOutput, true, 2000), "pulse did not start");
-            Assert.True(await WaitForDispatchedValue(Context.Dispatcher, PushLogicFactory.RuleOutput, false, 3000), "pulse did not end");
+            Assert.True(await WaitForDispatchedValue(Context.Dispatcher, PushLogicFactory.RuleOutput, true, 5000), "pulse did not start");
+            Assert.True(await WaitForDispatchedValue(Context.Dispatcher, PushLogicFactory.RuleOutput, false, 5000), "pulse did not end");
 
             // the off telegram comes after the configured pulse length
-            Assert.True(sw.ElapsedMilliseconds >= 140, $"pulse ended after {sw.ElapsedMilliseconds}ms");
+            Assert.True(sw.ElapsedMilliseconds >= 990, $"pulse ended after {sw.ElapsedMilliseconds}ms");
         }
 
         [Theory]

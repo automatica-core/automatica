@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using Automatica.Core.Tests.Automation;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
 using Moq;
@@ -14,7 +15,7 @@ namespace Automatica.Core.Tests.Dispatcher
     public class RuleEngineDispatcherTests : BaseDispatcherTest
     {
 
-        public RuleEngineDispatcherTests() : base(DispatcherMock.Instance, new Mock<IRemanentHandler>().Object)
+        public RuleEngineDispatcherTests() : base(new DispatcherMock(), new Mock<IRemanentHandler>().Object)
         {
         }
 
@@ -42,9 +43,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
-            await Task.Delay(200);
-
-            Assert.True(((DriverNodeMock) target.Children[0]).WriteReceived);
+            await AutomationTestHelper.Eventually(() => ((DriverNodeMock) target.Children[0]).WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
@@ -77,9 +77,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
-            await Task.Delay(200);
-
-            Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
+            await AutomationTestHelper.Eventually(() => ((DriverNodeMock)target.Children[0]).WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
@@ -112,9 +111,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
-            await Task.Delay(200);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, target.Output.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, target.Output.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -168,9 +166,8 @@ namespace Automatica.Core.Tests.Dispatcher
             target.Output.Inverted = true;
             
             await Dispatcher.DispatchValue(source.Children[0], true);
-            await Task.Delay(200);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -207,9 +204,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(200);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -252,9 +248,8 @@ namespace Automatica.Core.Tests.Dispatcher
             inputInterface.Inverted = true;
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(400);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -296,9 +291,8 @@ namespace Automatica.Core.Tests.Dispatcher
             targetOutputInterface.Inverted = true;
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(200);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -359,9 +353,8 @@ namespace Automatica.Core.Tests.Dispatcher
             targetOutputInterface.Inverted = true;
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(200);
-
-            Assert.True(target.WriteReceived);
+            await AutomationTestHelper.Eventually(() => target.WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId);
 
             Assert.IsType<bool>(value.Value);
@@ -398,9 +391,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(200);
-
-            Assert.True(((DriverNodeMock) target.Children[0]).WriteReceived);
+            await AutomationTestHelper.Eventually(() => ((DriverNodeMock) target.Children[0]).WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
@@ -437,9 +429,8 @@ namespace Automatica.Core.Tests.Dispatcher
             await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(200);
-
-            Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
+            await AutomationTestHelper.Eventually(() => ((DriverNodeMock)target.Children[0]).WriteReceived, "the write reaches the target");
+            await AutomationTestHelper.Eventually(() => Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id)?.Value != null, "the value is dispatched");
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);

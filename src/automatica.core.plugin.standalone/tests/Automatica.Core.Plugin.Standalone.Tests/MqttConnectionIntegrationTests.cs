@@ -305,7 +305,9 @@ namespace Automatica.Core.Plugin.Standalone.Tests
             var node = new LocalNode();
 
             await _connection.Dispatcher.DispatchValue(node, new DispatchValue(node.Id, node.Type, 21, FixedTime, DispatchValueSource.Read));
-            // subscribing afterwards: the value is retained
+            // the publish is sent in the background: subscribing before the broker has it would deliver it live (retain flag
+            // not set), so wait until the broker got it as retained message, then subscribe
+            await Eventually.Assert(() => _broker.Published.Any(p => p.Topic == $"dispatcher/NodeInstance/{node.Id}" && p.Retain), "dispatched value not published retained");
             await _core.SubscribeAsync("dispatcher/#");
 
             await Eventually.Assert(() => _core.Received.Any(r => r.Topic == $"dispatcher/NodeInstance/{node.Id}"), "dispatched value not received by the core");

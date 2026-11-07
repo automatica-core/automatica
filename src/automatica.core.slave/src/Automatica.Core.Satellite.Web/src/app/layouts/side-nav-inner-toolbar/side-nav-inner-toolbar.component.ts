@@ -8,6 +8,7 @@ import { DxToolbarModule, DxToolbarTypes } from 'devextreme-angular/ui/toolbar';
 import { CommonModule } from '@angular/common';
 
 import { Router, NavigationEnd } from '@angular/router';
+import { OpenedStateMode, RevealMode } from 'devextreme/ui/drawer';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -24,8 +25,8 @@ export class SideNavInnerToolbarComponent implements OnInit {
   @Input()
   title!: string;
 
-  menuMode = 'shrink';
-  menuRevealMode = 'expand';
+  menuMode: OpenedStateMode = 'shrink';
+  menuRevealMode: RevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
 

@@ -34,7 +34,7 @@ namespace P3.Driver.VkingBms.DriverFactory
         public override Task<bool> Init(CancellationToken token = default)
         {
             _port = GetProperty("vking-pack-port").ValueString;
-            _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
+            _driver = CreateDriver();
 
             return base.Init(token);
         }
@@ -44,6 +44,7 @@ namespace P3.Driver.VkingBms.DriverFactory
             _stopped = false;
             try
             {
+                _driver ??= new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
                 _driver.Open();
             }
             catch (Exception e)
@@ -75,6 +76,23 @@ namespace P3.Driver.VkingBms.DriverFactory
             return base.Stop(token);
         }
 
+        /// <summary>
+        /// The serial port needs the native serial library, without it (or without the port) the driver still starts and
+        /// the poll timer retries.
+        /// </summary>
+        private VkingDriver CreateDriver()
+        {
+            try
+            {
+                return new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Could not create the serial port {_port}, retry on next poll...");
+                return null;
+            }
+        }
+
         private void ReOpen()
         {
             lock (_openLock)
@@ -87,16 +105,16 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                 try
                 {
-                    _driver.Close();
+                    _driver?.Close();
                 }
                 catch
                 {
                     //ignore, we create a new instance anyway
                 }
 
-                _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
                 try
                 {
+                    _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
                     _driver.Open();
                 }
                 catch
@@ -125,9 +143,15 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                 DriverContext.Logger.LogInformation("Start read...");
                 using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
-                if (!_driver.IsOpen)
+                if (_driver == null || !_driver.IsOpen)
                 {
                     ReOpen();
+                }
+
+                if (_driver == null || !_driver.IsOpen)
+                {
+                    // the port could not be opened, the next tick tries again
+                    return;
                 }
 
                 foreach (var pack in _packs)
