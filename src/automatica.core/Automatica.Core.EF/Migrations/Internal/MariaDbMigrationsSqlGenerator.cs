@@ -34,6 +34,21 @@ namespace Automatica.Core.EF.Migrations.Internal
 
         public IReadOnlyList<MigrationCommand> Generate(IReadOnlyList<MigrationOperation> operations, IModel model = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
         {
+            operations = operations.Select(DropForeignKeyIfExists).ToList();
+
+            if (model != null)
+            {
+                // migrations generated with the SQLite provider have SQLite store types in their target model (Guid/DateTime -> TEXT,
+                // bool -> INTEGER), Oracle would create TEXT primary keys and indexes. Those columns get the MariaDB type of their CLR type
+                foreach (var (schema, table, name, column) in operations.SelectMany(NamedColumns))
+                {
+                    if (column != null && column.ColumnType == null && HasSqliteStoreType(schema, table, name, model))
+                    {
+                        ResolveColumnType(column);
+                    }
+                }
+            }
+
             if (model == null || operations.All(a => !HasColumnMissingInModel(a, model)))
             {
                 return _inner.Generate(operations, model, options);
@@ -60,6 +75,22 @@ namespace Automatica.Core.EF.Migrations.Internal
             return commands;
         }
 
+        /// <summary>
+        /// Databases created by older versions do not always have the foreign keys of the model (e.g. NodeInstance_ibfk_2 and
+        /// PropertyInstance_ibfk_1 are missing in installations that started on Pomelo), a plain DROP FOREIGN KEY fails the whole
+        /// migration there. MariaDB supports IF EXISTS, the following AddForeignKey recreates the key either way.
+        /// </summary>
+        internal static MigrationOperation DropForeignKeyIfExists(MigrationOperation operation)
+        {
+            if (operation is not DropForeignKeyOperation drop)
+            {
+                return operation;
+            }
+
+            var table = drop.Schema == null ? $"`{drop.Table}`" : $"`{drop.Schema}`.`{drop.Table}`";
+            return new SqlOperation { Sql = $"ALTER TABLE {table} DROP FOREIGN KEY IF EXISTS `{drop.Name}`;" };
+        }
+
         private static IEnumerable<ColumnOperation> Columns(MigrationOperation operation)
         {
             switch (operation)
@@ -75,6 +106,37 @@ namespace Automatica.Core.EF.Migrations.Internal
                     foreach (var column in createTable.Columns)
                     {
                         yield return column;
+                    }
+                    break;
+            }
+        }
+
+        private static readonly HashSet<string> SqliteStoreTypes = new(StringComparer.Ordinal) { "TEXT", "INTEGER", "REAL", "BLOB", "NUMERIC" };
+
+        /// <summary>
+        /// The SQLite generator writes its type affinities in upper case, the MySQL providers write lower case types ("longtext", "int")
+        /// </summary>
+        private static bool HasSqliteStoreType(string schema, string table, string name, IModel model)
+        {
+            var storeType = model.GetRelationalModel().FindTable(table, schema)?.FindColumn(name)?.StoreType;
+            return storeType != null && SqliteStoreTypes.Contains(storeType);
+        }
+
+        private static IEnumerable<(string Schema, string Table, string Name, ColumnOperation Column)> NamedColumns(MigrationOperation operation)
+        {
+            switch (operation)
+            {
+                case AddColumnOperation addColumn:
+                    yield return (addColumn.Schema, addColumn.Table, addColumn.Name, addColumn);
+                    break;
+                case AlterColumnOperation alterColumn:
+                    yield return (alterColumn.Schema, alterColumn.Table, alterColumn.Name, alterColumn);
+                    yield return (alterColumn.Schema, alterColumn.Table, alterColumn.Name, alterColumn.OldColumn);
+                    break;
+                case CreateTableOperation createTable:
+                    foreach (var column in createTable.Columns)
+                    {
+                        yield return (createTable.Schema, createTable.Name, column.Name, column);
                     }
                     break;
             }
