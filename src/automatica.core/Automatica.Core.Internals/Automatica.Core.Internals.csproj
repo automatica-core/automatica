@@ -19,10 +19,10 @@
     <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Logic.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AsyncKeyedLock" Version="8.0.2" />
+    <PackageReference Include="AsyncKeyedLock" Version="8.1.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.14" />
     <PackageReference Include="Standard.Licensing" Version="1.2.2" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 {
     internal class EthereumNode(IDriverContext driverContext) : CoinNode<EthereumValueNode>(driverContext)
     {
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
             EthereumValueNode? node = null;
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)

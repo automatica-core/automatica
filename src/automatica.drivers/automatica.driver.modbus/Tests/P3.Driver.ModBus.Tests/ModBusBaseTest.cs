@@ -32,10 +32,10 @@ namespace P3.Driver.ModBus.Tests
             modbusTcpSlaveDriverFactory.InitNodeTemplates(factory);
 
             var modbusRtuDriverFactory = new ModBusRtuMasterDriverFactory();
-            modbusRtuDriverFactory.InitTemplates(factory);
+            modbusRtuDriverFactory.InitNodeTemplates(factory);
 
             var modbusRtuSlaveDriverFactory = new ModBusRtuSlaveDriverFactory();
-            modbusRtuSlaveDriverFactory.InitTemplates(factory);
+            modbusRtuSlaveDriverFactory.InitNodeTemplates(factory);
 
 
             var driverNode = factory.CreateNodeInstance(ModBusTcpMasterDriverFactory.ModBusMasterTcpGuid);
@@ -69,10 +69,10 @@ namespace P3.Driver.ModBus.Tests
             modbusTcpSlaveDriverFactory.InitNodeTemplates(factory);
 
             var modbusRtuDriverFactory = new ModBusRtuMasterDriverFactory();
-            modbusRtuDriverFactory.InitTemplates(factory);
+            modbusRtuDriverFactory.InitNodeTemplates(factory);
 
             var modbusRtuSlaveDriverFactory = new ModBusRtuSlaveDriverFactory();
-            modbusRtuSlaveDriverFactory.InitTemplates(factory);
+            modbusRtuSlaveDriverFactory.InitNodeTemplates(factory);
 
 
             var driverNode = factory.CreateNodeInstance(modbusTcpSlaveDriverFactory.DriverGuid);

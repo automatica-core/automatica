@@ -18,7 +18,7 @@ namespace P3.Driver.ModBusDriverFactory
 
         public override Version DriverVersion => new Version(1, 2, 0, 3);
 
-        public override void InitTemplates(INodeTemplateFactory factory)
+        protected override void InitDriverTemplates(INodeTemplateFactory factory)
         {
             factory.CreateNodeTemplate(DriverGuid, "MODBUS.MASTER.TCP.NAME", "MODBUS.MASTER.TCP.DESCRIPTION", "modbus-master-tcp", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet),
                 DeviceInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);

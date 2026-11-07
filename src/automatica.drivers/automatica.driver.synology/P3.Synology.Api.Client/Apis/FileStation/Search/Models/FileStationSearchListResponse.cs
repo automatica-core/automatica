@@ -11,6 +11,6 @@ namespace P3.Synology.Api.Client.Apis.FileStation.Search.Models
         
         public bool Finished { get; set; }
 
-        public IEnumerable<FileStationListShare> Files { get; set; }
+        public IEnumerable<FileStationListShare>? Files { get; set; }
     }
 }

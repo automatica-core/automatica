@@ -346,7 +346,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.LogError("FindNics failed", e);
+                Log.LogError(e, "FindNics failed");
             }
         }
 
@@ -661,7 +661,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.LogWarning("Received malformed message", e);
+                Log.LogWarning(e, "Received malformed message");
                 MalformedMessage?.Invoke(this, result.Buffer);
                 return; // eat the exception
             }
@@ -685,7 +685,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.LogError("Receive handler failed", e);
+                Log.LogError(e, "Receive handler failed");
                 // eat the exception
             }
         }

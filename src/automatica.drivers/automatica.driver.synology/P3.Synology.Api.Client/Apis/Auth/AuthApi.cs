@@ -18,7 +18,7 @@ namespace P3.Synology.Api.Client.Apis.Auth
             _apiInfo = apiInfo;
         }
 
-        public Task<LoginResponse> LoginAsync(string username, string password, string otpCode = null)
+        public Task<LoginResponse> LoginAsync(string username, string password, string? otpCode = null)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -35,7 +35,7 @@ namespace P3.Synology.Api.Client.Apis.Auth
                 { "account", username },
                 { "passwd", password },
                 { "format", "sid" },
-                { "otp_code", otpCode }
+                { "otp_code", otpCode ?? string.Empty }
             };
 
             return _synologyHttpClient.GetAsync<LoginResponse>(_apiInfo, "login", queryParams);

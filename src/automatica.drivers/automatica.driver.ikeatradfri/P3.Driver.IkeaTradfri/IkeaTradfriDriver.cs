@@ -44,15 +44,8 @@ namespace P3.Driver.IkeaTradfri
        
         public static TradfriAuth GeneratePsk(string gatewayIp, string appName, string secret)
         {
-            try
-            {
-                var controller = new TradfriController(appName, gatewayIp);
-                return controller.GenerateAppSecret(secret, appName);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            var controller = new TradfriController(appName, gatewayIp);
+            return controller.GenerateAppSecret(secret, appName);
         }
         
         public async Task<List<TradfriDevice>> LoadDevices()

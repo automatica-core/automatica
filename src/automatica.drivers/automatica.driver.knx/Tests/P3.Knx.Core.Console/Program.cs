@@ -71,10 +71,6 @@ namespace P3.Knx.Core.Console
 
                 Thread.Sleep(500);
             }
-
-           
-
-            System.Console.ReadLine();
         }
 
 

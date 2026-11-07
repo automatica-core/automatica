@@ -8,6 +8,6 @@
     <DefineConstants>TRACE;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SerialPortStream" Version="2.4.0" />
+    <PackageReference Include="SerialPortStream" Version="2.4.2" />
   </ItemGroup>
 </Project>

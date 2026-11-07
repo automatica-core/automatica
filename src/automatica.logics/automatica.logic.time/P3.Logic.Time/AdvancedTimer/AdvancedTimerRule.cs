@@ -23,7 +23,6 @@ namespace P3.Logic.Time.AdvancedTimer
         private readonly TimeProvider _timeProvider = DateTimeHelper.ProviderInstance;
 
 
-        private bool _value;
 
         public AdvancedTimerRule(ILogicContext context) : base(context)
         {
@@ -177,15 +176,12 @@ namespace P3.Logic.Time.AdvancedTimer
 
                     Context.Logger.LogInformation($"Set value to {false}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
-
-                    _value = false;
                 }
                 else
                 {
 
                     Context.Logger.LogInformation($"Set value to {true}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
-                    _value = true;
                 }
             }
             else
@@ -194,8 +190,6 @@ namespace P3.Logic.Time.AdvancedTimer
 
                 Context.Logger.LogInformation($"Set value to {false}");
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
-
-                _value = false;
             }
 
             _timer.Interval = timerTickTime == 0 ? 1000 : (timerTickTime < 0 ? timerTickTime * -1 : timerTickTime);

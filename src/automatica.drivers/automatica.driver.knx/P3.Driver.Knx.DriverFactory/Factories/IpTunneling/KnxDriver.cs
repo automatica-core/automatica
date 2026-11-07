@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable annotations
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
@@ -128,6 +129,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             var ipAddress = GetProperty("knx-ip").ValueString;
             var useNat = GetProperty("knx-use-nat").ValueBool;
             var port = GetPropertyValueInt("knx-port");
+
+            // the remote tunnel (InitRemoteConnect) forwards to the same interface
+            _remoteIp = IPAddress.Parse(ipAddress);
+            _remotePort = port;
 
             KnxSecureSettings secureConfig = null;
             if (_secureDriver)

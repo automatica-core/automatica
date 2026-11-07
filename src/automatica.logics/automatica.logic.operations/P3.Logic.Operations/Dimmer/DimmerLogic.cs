@@ -21,7 +21,6 @@ namespace P3.Logic.Operations.Dimmer
 
         private bool? _lastState;
         private int? _lastValue;
-        private bool? _lastOutputState = null;
 
         public DimmerLogic(ILogicContext context) : base(context)
         {

@@ -17,10 +17,6 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.Message
     {
         public Header(Span<byte> header)
         {
-            if(header == null)
-            {
-                throw new ArgumentException("Header must be set");
-            }
             if(header.Length != 8)
             {
                 throw new ArgumentException("Header must have size of 8");

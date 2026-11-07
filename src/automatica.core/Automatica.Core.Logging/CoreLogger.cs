@@ -174,10 +174,9 @@ namespace Automatica.Core.Logging
             }
         }
 
-        public IDisposable BeginScope<TState>(TState state)
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
-            var s = state as IDisposable;
-            return s!;
+            return state as IDisposable;
         }
 
         public bool IsEnabled(LogLevel logLevel)

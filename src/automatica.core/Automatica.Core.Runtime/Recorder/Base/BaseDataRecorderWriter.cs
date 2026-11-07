@@ -64,7 +64,7 @@ namespace Automatica.Core.Runtime.Recorder.Base
             MetricName.TryAdd(nodeInstance, GetFullNodeName(node));
 
             var recorder = new TrendingValueRecorder(node, this);
-            List<IDataRecorder> replaced;
+            List<IDataRecorder>? replaced;
             bool register;
             bool start;
             lock (_lock)
@@ -149,7 +149,7 @@ namespace Automatica.Core.Runtime.Recorder.Base
         }
         private Task DataCallback(IDispatchable dispatchable, DispatchValue value)
         {
-            List<IDataRecorder> recorder;
+            List<IDataRecorder>? recorder;
             lock (_lock)
             {
                 if (!_recorders.TryGetValue(dispatchable.Id, out recorder))
@@ -214,8 +214,8 @@ namespace Automatica.Core.Runtime.Recorder.Base
 
         public async Task RemoveTrend(Guid nodeInstance)
         {
-            List<IDataRecorder> recorders;
-            IDisposable registration;
+            List<IDataRecorder>? recorders;
+            IDisposable? registration;
             lock (_lock)
             {
                 _recorders.Remove(nodeInstance, out recorders);

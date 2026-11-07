@@ -57,7 +57,6 @@ namespace P3.Driver.ModBusDriver
             }
 
             byte lrc = 0;
-            int i = 0;
             int c = 0;
             foreach (byte b in data)
             {
@@ -114,7 +113,6 @@ namespace P3.Driver.ModBusDriver
 
             ushort crc = ushort.MaxValue;
 
-            int i = 0;
             foreach (byte b in data)
             {
 

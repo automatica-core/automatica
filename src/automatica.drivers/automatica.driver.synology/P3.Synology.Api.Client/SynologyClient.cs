@@ -37,7 +37,7 @@ namespace P3.Synology.Api.Client
 
         public IApisInfo ApisInfo { get; set; } = new DefaultApisInfo();
 
-        public ISynologySession Session { get; set; }
+        public ISynologySession? Session { get; set; }
 
         public bool IsLoggedIn => Session != null && !string.IsNullOrWhiteSpace(Session.Sid);
 
@@ -53,22 +53,23 @@ namespace P3.Synology.Api.Client
 
         public IDownloadStationApi DownloadStationApi()
         {
-            if (!IsLoggedIn)
-            {
-                throw new SecurityException(CustomErrorMessages.SessionNotAuthenticated);
-            }
-
-            return new DownloadStationApi(_synologyHttpClient, ApisInfo, Session);
+            return new DownloadStationApi(_synologyHttpClient, ApisInfo, AuthenticatedSession());
         }
 
         public IFileStationApi FileStationApi()
         {
-            if (!IsLoggedIn)
+            return new FileStationApi(_synologyHttpClient, ApisInfo, AuthenticatedSession());
+        }
+
+        private ISynologySession AuthenticatedSession()
+        {
+            var session = Session;
+            if (session == null || string.IsNullOrWhiteSpace(session.Sid))
             {
                 throw new SecurityException(CustomErrorMessages.SessionNotAuthenticated);
             }
 
-            return new FileStationApi(_synologyHttpClient, ApisInfo, Session);
+            return session;
         }
 
         public async Task LoginAsync(
@@ -78,17 +79,24 @@ namespace P3.Synology.Api.Client
         {
             var loginResult = await AuthApi().LoginAsync(username, password, otpCode);
 
-            Session = new SynologySession(loginResult.Sid);
+            var sid = loginResult.Sid;
+            if (sid == null || string.IsNullOrWhiteSpace(sid))
+            {
+                throw new SecurityException(CustomErrorMessages.SessionNotAuthenticated);
+            }
+
+            Session = new SynologySession(sid);
         }
 
         public async Task LogoutAsync()
         {
-            if (!IsLoggedIn)
+            var session = Session;
+            if (session == null || string.IsNullOrWhiteSpace(session.Sid))
             {
                 return;
             }
 
-            await AuthApi().LogoutAsync(Session.Sid);
+            await AuthApi().LogoutAsync(session.Sid);
 
             Session = null;
         }

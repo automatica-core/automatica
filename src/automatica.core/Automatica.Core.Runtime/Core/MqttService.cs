@@ -77,7 +77,7 @@ namespace Automatica.Core.Runtime.Core
             return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
         }
 
-        internal static MqttApplicationMessage BuildMessage(string topic, byte[] payload, MqttQualityOfServiceLevel qos)
+        internal static MqttApplicationMessage BuildMessage(string topic, byte[]? payload, MqttQualityOfServiceLevel qos)
         {
             var builder = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)

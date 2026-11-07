@@ -26,9 +26,7 @@ namespace P3.Logic.Operations.Slider
         private readonly RuleInterfaceInstance _reset;
         private readonly RuleInterfaceInstance _output;
 
-        private bool? _lastState;
         private double? _lastValue;
-        private bool? _lastOutputState;
 
         private double? _min;
         private double? _max;

@@ -6,6 +6,6 @@ namespace P3.Synology.Api.Client.Shared.Models
     {
         public int Code { get; set; }
 
-        public IEnumerable<Errors> Errors { get; set; }
+        public IEnumerable<Errors>? Errors { get; set; }
     }
 }

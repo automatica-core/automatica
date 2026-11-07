@@ -1,4 +1,5 @@
-﻿using Knx.Falcon.Configuration;
+﻿#nullable enable annotations
+using Knx.Falcon.Configuration;
 using Knx.Falcon.KnxnetIp;
 using Knx.Falcon.Sdk;
 using Knx.Falcon;
@@ -44,10 +45,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private readonly KnxSecureSettings _secureSettings;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        private bool _tunnelingEnabled;
         private IPAddress _remoteIp;
         private int _remotePort;
-        private bool _onlyUseTunnel;
         private KnxBus _tunneling;
 
         public KnxConnection(KnxDriver driver, ILogger logger, string ipAddress, bool useNat, int port, bool secureDriver, KnxSecureSettings? secureSettings)

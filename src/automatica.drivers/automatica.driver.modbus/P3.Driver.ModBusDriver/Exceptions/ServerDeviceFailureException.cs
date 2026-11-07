@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace P3.Driver.ModBusDriver.Exceptions
 {
-    [Serializable]
     public class ServerDeviceFailureException : ModBusException
     {
         public ServerDeviceFailureException() : base(ModBusExceptionCode.ServerDeviceFailure)
@@ -11,10 +9,5 @@ namespace P3.Driver.ModBusDriver.Exceptions
             
         }
 
-        protected ServerDeviceFailureException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-
-        }
     }
 }

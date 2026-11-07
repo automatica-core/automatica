@@ -129,7 +129,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         {
             var hdkf = new HkdfSha512();
             var accessory = hdkf.DeriveBytes(
-                SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray(), SharedSecretBlobFormat.RawSharedSecret),
                 Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Salt"),
                 Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Info"), 32);
 
@@ -158,16 +158,17 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             {
                 var iOsEncryptedData = parts.GetType(Constants.EncryptedData).AsSpan(); // A 
                 var zeros = new byte[] { 0, 0, 0, 0 };
-                var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg05"));
+                var nonce = zeros.Concat(Encoding.UTF8.GetBytes("PS-Msg05")).ToArray();
                 var hdkf = new HkdfSha512();
                 var hkdfEncKey = hdkf.DeriveBytes(
-                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray(), SharedSecretBlobFormat.RawSharedSecret),
                     Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Salt"),
                     Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Info"), 32);
 
 
-                var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(
-                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), iOsEncryptedData, out var output);
+                var output = AeadAlgorithm.ChaCha20Poly1305.Decrypt(
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), iOsEncryptedData);
+                var decrypt = output != null;
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 6);
                 if (!decrypt)
@@ -190,7 +191,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
 
                 var okm = hdkf.DeriveBytes(
-                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray(), SharedSecretBlobFormat.RawSharedSecret),
                     Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Salt"),
                     Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Info"), 32);
 
@@ -218,7 +219,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 _logger.LogDebug($"Decrypted payload {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(plaintext.AsSpan())}");
 
 
-                var nonce6 = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg06"));
+                var nonce6 = zeros.Concat(Encoding.UTF8.GetBytes("PS-Msg06")).ToArray();
 
                 var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
                     Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce6,

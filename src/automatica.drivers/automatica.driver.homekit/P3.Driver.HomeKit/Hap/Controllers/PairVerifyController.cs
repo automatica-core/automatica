@@ -55,7 +55,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var proof = Chaos.NaCl.Ed25519.Sign(material, accessoryLtsk);
 
                 var hdkf = new HkdfSha512();
-                var hkdfEncKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), Encoding.UTF8.GetBytes("Pair-Verify-Encrypt-Salt"),
+                var hkdfEncKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret), Encoding.UTF8.GetBytes("Pair-Verify-Encrypt-Salt"),
                     Encoding.UTF8.GetBytes("Pair-Verify-Encrypt-Info"), 32);
 
                 var encoder = new Tlv();
@@ -64,7 +64,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var plaintext = TlvParser.Serialize(encoder);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
-                var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg02"));
+                var nonce = zeros.Concat(Encoding.UTF8.GetBytes("PV-Msg02")).ToArray();
 
                 var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
                     Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), plaintext);
@@ -106,9 +106,10 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 var encryptedData = parts.GetType(Constants.EncryptedData);
                 var zeros = new byte[] { 0, 0, 0, 0 };
-                var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg03"));
+                var nonce = zeros.Concat(Encoding.UTF8.GetBytes("PV-Msg03")).ToArray();
 
-                var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(Key.Import(AeadAlgorithm.ChaCha20Poly1305, session.HkdfPairEncKey, KeyBlobFormat.RawSymmetricKey), nonce, new byte[0], encryptedData, out var output);
+                var output = AeadAlgorithm.ChaCha20Poly1305.Decrypt(Key.Import(AeadAlgorithm.ChaCha20Poly1305, session.HkdfPairEncKey, KeyBlobFormat.RawSymmetricKey), nonce, new byte[0], encryptedData);
+                var decrypt = output != null;
 
                 if (!decrypt)
                 {

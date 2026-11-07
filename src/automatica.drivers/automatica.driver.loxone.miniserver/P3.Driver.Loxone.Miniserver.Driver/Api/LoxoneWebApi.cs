@@ -136,8 +136,8 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Api
             }
 
             
-            var cert = new X509Certificate2(Encoding.UTF8.GetBytes(pubKey));
             string aesData = aesKey.ToHex(true) + ":" + aesIv.ToHex(true);
+            using (var cert = X509CertificateLoader.LoadCertificate(Encoding.UTF8.GetBytes(pubKey)))
             using (RSA rsa = cert.GetRSAPublicKey())
             {
                 rsa.Encrypt(Encoding.UTF8.GetBytes(aesData), RSAEncryptionPadding.OaepSHA1);

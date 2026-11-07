@@ -31,7 +31,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
 
         }
 
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
             return null;
         }

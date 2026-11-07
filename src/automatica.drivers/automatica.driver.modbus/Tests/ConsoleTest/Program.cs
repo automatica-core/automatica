@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using P3.Driver.ModBusDriver;
-using P3.Driver.ModBusDriver.Master.Rtu;
 using RJCP.IO.Ports;
 
 namespace ConsoleTest
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine(JsonConvert.SerializeObject(args));
             ModBus.Logger = new ConsoleLogger();
@@ -56,37 +54,6 @@ namespace ConsoleTest
 
             //solarmanDriver.Open();
             //var data = await solarmanDriver.ReadRegisters(1, 0x0268, 1);
-
-            Console.ReadLine();
-            return;
-            var baud = 9600;
-            var port = "COM10";
-            var dataBits = 8;
-            var stopBits = 1;
-            var parity = "NoParity";
-
-            ModBus.Logger = new ConsoleLogger();
-
-            var modBusDriver = new ModBusMasterRtuDriver(new ModBusMasterRtuConfig()
-            {
-                Port = port,
-                Baud = baud,
-                DataBits = dataBits,
-                Parity = parity,
-                StopBits = stopBits,
-                Timeout = 5000
-            }, new EmptyTelegramMonitorInstance());
-
-            modBusDriver.Open();
-
-            while (true)
-            {
-                var response = await modBusDriver.ReadInputRegisters(23, 8260, 2);
-
-                //var res = await modBusDriver.WriteHoldingRegister(23, 1, 701);
-
-                await Task.Delay(1000);
-            }
 
             Console.ReadLine();
         }

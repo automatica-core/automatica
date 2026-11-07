@@ -13,7 +13,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 {
     internal class BlockchainDriver : DriverNoneAttributeBase
     {
-        private Timer _timer;
+        private Timer? _timer;
       
         private readonly List<CoinNode> _nodes = new List<CoinNode>();
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
@@ -32,7 +32,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             return base.Init(token);
         }
 
-        private async void TimeElapsed(object state)
+        private async void TimeElapsed(object? state)
         {
             try
             {
@@ -90,9 +90,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             return base.Stop(token);
         }
 
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
-            CoinNode node = null;
+            CoinNode? node = null;
             switch(ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "blockchain-btc":

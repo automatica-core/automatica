@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using NSec.Cryptography;
 using Xunit;
@@ -56,13 +57,14 @@ namespace P3.Driver.HomeKit.UnitTests.Crypto
         public void TestChaCha20Poly1305()
         {
             var key = Key.Import(AeadAlgorithm.ChaCha20Poly1305, Chacha20Poly1305Key, KeyBlobFormat.RawSymmetricKey);
-            var nonce = new Nonce(Chacha20Poly1305Nonce, Chacha20Poly1305NoneCounterTag);
+            var nonce = Chacha20Poly1305Nonce.Concat(Chacha20Poly1305NoneCounterTag).ToArray();
             var encrypted = AeadAlgorithm.ChaCha20Poly1305.Encrypt(key, nonce, Chacha20Poly1305Aad,
                 Encoding.UTF8.GetBytes(Chacha20Poly1305Pt));
 
             Assert.Equal(Chacha20Poly1305Ct, encrypted.AsSpan().Slice(0, Chacha20Poly1305Ct.Length).ToArray());
 
-            var decryptOk = AeadAlgorithm.ChaCha20Poly1305.Decrypt(key, nonce, Chacha20Poly1305Aad, encrypted, out var decrypted);
+            var decrypted = AeadAlgorithm.ChaCha20Poly1305.Decrypt(key, nonce, Chacha20Poly1305Aad, encrypted);
+            var decryptOk = decrypted != null;
 
             Assert.True(decryptOk);
 

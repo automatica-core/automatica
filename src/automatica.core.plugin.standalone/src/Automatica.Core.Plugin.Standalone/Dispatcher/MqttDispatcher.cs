@@ -103,10 +103,9 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
                         await DispatchValueInternal(self, value, dis);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        //.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
-
+                        // a failing subscriber must not stop the remaining subscribers
                     }
                 }
             }

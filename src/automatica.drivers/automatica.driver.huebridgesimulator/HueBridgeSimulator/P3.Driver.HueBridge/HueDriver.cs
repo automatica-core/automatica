@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using P3.Driver.HueBridge.Data;
 using P3.Driver.HueBridge.EventArgs;
 using Automatica.Core.Driver.Utility.Network;
@@ -14,7 +15,7 @@ namespace P3.Driver.HueBridge
     {
         public event EventHandler<HueSwitchLightEventArgs> SwitchLight;
 
-        private IWebHost _host;
+        private IHost _host;
 
         internal static HueDiscoveryService HueDiscoveryService { get; private set; }
         internal static HueDriver Instance { get; private set; }
@@ -95,15 +96,13 @@ namespace P3.Driver.HueBridge
             await _host.StopAsync();
         }
 
-        public IWebHost BuildWebHost(int port)
+        public IHost BuildWebHost(int port)
         {
-            var args = new string[0];
-
-            var webHost = WebHost.CreateDefaultBuilder(args)
-                .UseStartup<HueStartup>()
-                .UseUrls($"http://*:{port}/");
-
-            return webHost.Build();
+            return Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webHost => webHost
+                    .UseStartup<HueStartup>()
+                    .UseUrls($"http://*:{port}/"))
+                .Build();
         }
 
   

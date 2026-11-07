@@ -15,7 +15,7 @@ namespace P3.Driver.ModBusDriverFactory
         public override Version DriverVersion => new Version(1, 6, 0, 3);
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
 
-        public override void InitTemplates(INodeTemplateFactory factory)
+        protected override void InitDriverTemplates(INodeTemplateFactory factory)
         {
             factory.CreateNodeTemplate(DriverGuid, "MODBUS.SLAVE.RTU.NAME", "MODBUS.SLAVE.RTU.DESCRIPTION", "modbus-slave-rtu", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs485),
                 DeviceInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);

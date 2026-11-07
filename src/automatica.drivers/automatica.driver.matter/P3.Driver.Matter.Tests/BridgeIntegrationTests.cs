@@ -100,8 +100,8 @@ namespace P3.Driver.Matter.Tests
             // ---- device attestation
             var dacDer = (await controller.InvokeWithResponseAsync(0, OperationalCredentialsCluster.Id, 0x02, w => w.PutUInt(0, 1))).GetBytes(0);
             var paiDer = (await controller.InvokeWithResponseAsync(0, OperationalCredentialsCluster.Id, 0x02, w => w.PutUInt(0, 2))).GetBytes(0);
-            using var dac = new X509Certificate2(dacDer);
-            using var pai = new X509Certificate2(paiDer);
+            using var dac = X509CertificateLoader.LoadCertificate(dacDer);
+            using var pai = X509CertificateLoader.LoadCertificate(paiDer);
             AttestationTests.AssertChainsToTestPaa(dac, pai);
 
             var attestationNonce = MatterCrypto.RandomBytes(32);

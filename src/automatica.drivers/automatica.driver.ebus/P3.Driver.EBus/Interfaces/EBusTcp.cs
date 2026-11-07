@@ -34,7 +34,7 @@ namespace P3.Driver.EBus.Interfaces
             await _tcpClient.ConnectAsync(_config.Ip, _config.Port);
 
             var byteArray = new byte[_tcpClient.Available];
-            await _tcpClient.GetStream().ReadAsync(byteArray);
+            await _tcpClient.GetStream().ReadAtLeastAsync(byteArray, byteArray.Length, throwOnEndOfStream: false);
         }
 
         protected override Task StopReceive()

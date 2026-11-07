@@ -89,12 +89,13 @@ namespace P3.Knx.Core.Ets
                     bool ets6 = true;
                     if (ets6)
                     {
-                        var pbkdf2 = new Rfc2898DeriveBytes(
+                        var key = Rfc2898DeriveBytes.Pbkdf2(
                             password: Encoding.Unicode.GetBytes(password),
                             salt: Encoding.ASCII.GetBytes("21.project.ets.knx.org"),
                             iterations: 65536,
-                            hashAlgorithm: HashAlgorithmName.SHA256);
-                        password = Convert.ToBase64String(pbkdf2.GetBytes(32));
+                            hashAlgorithm: HashAlgorithmName.SHA256,
+                            outputLength: 32);
+                        password = Convert.ToBase64String(key);
                     }
 
                     var projectFastZip = new FastZip

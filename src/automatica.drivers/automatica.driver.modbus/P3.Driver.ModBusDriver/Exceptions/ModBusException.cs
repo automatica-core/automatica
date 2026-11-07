@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace P3.Driver.ModBusDriver.Exceptions
 {
-    [Serializable]
     public abstract class ModBusException : Exception
     {
         private readonly ModBusExceptionCode _code;
@@ -11,10 +9,6 @@ namespace P3.Driver.ModBusDriver.Exceptions
         protected ModBusException(ModBusExceptionCode code)
         {
             _code = code;
-        }
-        protected ModBusException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
 

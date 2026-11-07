@@ -13,7 +13,7 @@ namespace Automatica.Core.EF.Models
     {
         public Guid ObjId { get; set; }
         public Guid? This2NodeInstance { get; set; }
-        public NodeInstance? This2NodeInstanceNavigation { get; set; }
+        public NodeInstance This2NodeInstanceNavigation { get; set; }
 
 
         public Guid This2RuleInstance { get; set; }

@@ -114,16 +114,9 @@ namespace Automatica.Driver.ShellyFactory
                 return false;
             }
 
-            try
+            if (!await Poll(token))
             {
-                if (!await Poll(token))
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
+                return false;
             }
 
             if (Generation == ShellyGeneration.Gen1)

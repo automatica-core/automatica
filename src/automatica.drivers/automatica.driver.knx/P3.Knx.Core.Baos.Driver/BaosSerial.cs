@@ -13,7 +13,6 @@ namespace P3.Knx.Core.Baos.Driver
     {
         private readonly string _port;
         private SerialPort _stream;
-        private bool _connected;
         private bool _eventHandling = true;
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
 
@@ -75,7 +74,6 @@ namespace P3.Knx.Core.Baos.Driver
                 _stream.DataReceived += _stream_DataReceived;
                 _stream.Open();
                 Logger.LogDebug($"Opneing serial interface {_port} 19200 8e1");
-                _connected = true;
 
             }
             catch (Exception e)
@@ -252,7 +250,6 @@ namespace P3.Knx.Core.Baos.Driver
         public bool Close()
         {
             _stream?.Close();
-            _connected = false;
             return true;
         }
 

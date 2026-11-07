@@ -24,7 +24,7 @@ namespace P3.Synology.Api.Client
             _httpClient = httpClient;
         }
 
-        public async Task<T> GetAsync<T>(IApiInfo apiInfo, string apiMethod, Dictionary<string, string> queryParams, ISynologySession session = null)
+        public async Task<T> GetAsync<T>(IApiInfo apiInfo, string apiMethod, Dictionary<string, string> queryParams, ISynologySession? session = null)
         {
             var uri = GetBaseUri(_httpClient.BaseAddress, apiInfo.Path);
             var uriBuilder = new UriBuilder(uri);
@@ -35,7 +35,7 @@ namespace P3.Synology.Api.Client
             return await HandleSynologyResponse<T>(response, apiInfo, apiMethod);
         }
 
-        public async Task<T> PostAsync<T>(IApiInfo apiInfo, string apiMethod, HttpContent content, ISynologySession session = null)
+        public async Task<T> PostAsync<T>(IApiInfo apiInfo, string apiMethod, HttpContent content, ISynologySession? session = null)
         {
             var uri = GetBaseUri(_httpClient.BaseAddress, apiInfo.Path);
             var uriBuilder = new UriBuilder(uri);
@@ -53,15 +53,20 @@ namespace P3.Synology.Api.Client
             return await HandleSynologyResponse<T>(response, apiInfo, apiMethod);
         }
 
-        private static Uri GetBaseUri(Uri baseAddress, string apiPath)
+        private static Uri GetBaseUri(Uri? baseAddress, string apiPath)
         {
+            if (baseAddress == null)
+            {
+                throw new InvalidOperationException("The HttpClient has no BaseAddress, the DSM url must be set.");
+            }
+
             var baseUri = baseAddress.ToString().TrimEnd('/');
             apiPath = apiPath.TrimStart('/');
 
             return new Uri(baseUri + "/" + apiPath);
         }
 
-        private string BuildQueryString(UriBuilder uriBuilder, IApiInfo apiInfo, string apiMethod, Dictionary<string, string> queryParams, ISynologySession session = null)
+        private string BuildQueryString(UriBuilder uriBuilder, IApiInfo apiInfo, string apiMethod, Dictionary<string, string> queryParams, ISynologySession? session = null)
         {
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["api"] = apiInfo.Name;
@@ -83,7 +88,7 @@ namespace P3.Synology.Api.Client
                 query["_sid"] = session.Sid;
             }
 
-            return query.ToString();
+            return query.ToString() ?? string.Empty;
         }
 
         private async Task<T> HandleSynologyResponse<T>(HttpResponseMessage httpResponse, IApiInfo apiInfo, string apiMethod)
@@ -92,16 +97,20 @@ namespace P3.Synology.Api.Client
             {
                 case HttpStatusCode.OK:
                     {
-                        var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<T>>();
+                        var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<T>>()
+                            ?? throw new UnexpectedResponseStatusException("Received an empty response body.", httpResponse.StatusCode);
                         if (!response.Success)
                         {
-                            var errorDescription = GetErrorMessage(response?.Error?.Code ?? 0, apiInfo.Name);
+                            // a failed call does not always carry an error object
+                            var errorCode = response.Error?.Code ?? 0;
+                            var errorDescription = GetErrorMessage(errorCode, apiInfo.Name);
 
-                            var synologyApiException = new SynologyApiException(apiInfo, apiMethod, response.Error.Code, errorDescription);
+                            var synologyApiException = new SynologyApiException(apiInfo, apiMethod, errorCode, errorDescription);
                             //add additional error details if present
-                            if (response?.Error?.Errors?.Any() ?? false)
+                            var errors = response.Error?.Errors;
+                            if (errors != null)
                             {
-                                foreach (var curError in response.Error.Errors)
+                                foreach (var curError in errors)
                                 {
                                     var errorMessage = GetErrorMessage(curError.Code, apiInfo.Name);
                                     synologyApiException.Data.Add($"[{curError.Code}] {errorMessage}", curError.Path);
@@ -113,10 +122,11 @@ namespace P3.Synology.Api.Client
 
                         if (typeof(T) == typeof(BaseApiResponse))
                         {
-                            return (T)Activator.CreateInstance(typeof(T), new object[] { response.Success });
+                            return (T)Activator.CreateInstance(typeof(T), new object[] { response.Success })!;
                         }
 
-                        return response.Data;
+                        // Synology omits data for calls that only report success
+                        return response.Data!;
                     }
                 default:
                     throw new UnexpectedResponseStatusException(httpResponse.StatusCode);
@@ -125,7 +135,7 @@ namespace P3.Synology.Api.Client
 
         private string GetErrorMessage(int errorCode, string apiName)
         {
-            var errorDescription = "";
+            string? errorDescription = null;
 
             if (ErrorMessages.CommonErrors.ContainsKey(errorCode))
             {
@@ -148,7 +158,7 @@ namespace P3.Synology.Api.Client
                 ErrorMessages.DownloadStationBtSearchApiErrors.TryGetValue(errorCode, out errorDescription);
             }
 
-            return errorDescription;
+            return errorDescription ?? "";
         }
     }
 }

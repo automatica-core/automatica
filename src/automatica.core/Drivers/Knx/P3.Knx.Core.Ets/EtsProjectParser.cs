@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using Automatica.Core.Base.Common;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace P3.Knx.Core.Ets
 {
@@ -66,12 +66,14 @@ namespace P3.Knx.Core.Ets
         {
             try
             {
-                using ZipFile s = ZipFile.Read(file);
-              
+                var s = new FastZip();
                 var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
-              
 
-                s.ExtractAll(tmpPath);
+                Directory.CreateDirectory(tmpPath);
+                s.ExtractZip(file, tmpPath, "");
+
+                if (Directory.GetFiles(tmpPath).Length == 0 && Directory.GetDirectories(tmpPath).Length == 0)
+                    throw new EtsProjectParserInvalidZipFileException(new InvalidDataException("The ETS project file contains no entries"));
 
                 if (IsPasswordProtected(tmpPath))
                 {
@@ -80,24 +82,26 @@ namespace P3.Knx.Core.Ets
 
                     var zipFile = Directory.GetFiles(tmpPath).FirstOrDefault(f => f.EndsWith(".zip"));
                     var fileInfo = new FileInfo(zipFile);
-                    using ZipFile projectZip = ZipFile.Read(fileInfo.FullName);
-
                     var projectTempDir = Path.Combine(tmpPath, fileInfo.Name.Replace(fileInfo.Extension, ""));
                     Directory.CreateDirectory(projectTempDir);
 
                     bool ets6 = true;
                     if (ets6)
                     {
-                        var pbkdf2 = new Rfc2898DeriveBytes(
+                        var key = Rfc2898DeriveBytes.Pbkdf2(
                             password: Encoding.Unicode.GetBytes(password),
                             salt: Encoding.ASCII.GetBytes("21.project.ets.knx.org"),
                             iterations: 65536,
-                            hashAlgorithm: HashAlgorithmName.SHA256);
-                        password = Convert.ToBase64String(pbkdf2.GetBytes(32));
+                            hashAlgorithm: HashAlgorithmName.SHA256,
+                            outputLength: 32);
+                        password = Convert.ToBase64String(key);
                     }
 
-                    projectZip.Password = password;
-                    projectZip.ExtractAll(projectTempDir);
+                    var projectFastZip = new FastZip
+                    {
+                        Password = password
+                    };
+                    projectFastZip.ExtractZip(zipFile, projectTempDir, "");
                 }
 
                 foreach (var dir in Directory.GetDirectories(tmpPath))

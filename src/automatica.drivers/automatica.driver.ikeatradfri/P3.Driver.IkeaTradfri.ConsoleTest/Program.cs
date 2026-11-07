@@ -38,33 +38,6 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                await Task.Delay(1000);
 
             }
-
-            foreach (var dev in devices)
-            {
-                var deviceType = DeviceType.ControlOutlet;
-
-                if (dev.DeviceType == DeviceType.ControlOutlet)
-                {
-
-                    await con.SwitchOn(dev.ID);
-                    await con.SwitchOff(dev.ID);
-                    await con.SwitchOn(dev.ID);
-                    continue;
-                }
-                else if (dev.DeviceType == DeviceType.Remote)
-                {
-                    continue;
-                }
-                await con.RegisterChange(token =>
-                {
-                    Console.WriteLine($"Item {dev.Name} sent {token}");
-
-
-                }, dev.ID);
-
-            }
-
-            Console.ReadLine();
         }
     }
 }
