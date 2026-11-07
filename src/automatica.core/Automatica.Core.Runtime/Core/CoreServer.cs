@@ -61,7 +61,7 @@ namespace Automatica.Core.Runtime.Core
         Started,
         Stopped
     }
-    public class CoreServer : IHostedService, ICoreServer
+    public partial class CoreServer : IHostedService, ICoreServer
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _config;

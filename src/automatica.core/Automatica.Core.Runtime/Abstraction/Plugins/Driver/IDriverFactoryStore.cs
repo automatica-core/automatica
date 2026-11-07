@@ -10,5 +10,10 @@ namespace Automatica.Core.Runtime.Abstraction.Plugins.Driver
         void AddDriver(IDriverFactory driver, PluginManifest pluginManifest);
 
         PluginManifest? GetManifestForDriver(Guid driverGuid);
+
+        /// <summary>
+        /// Removes the factory and its manifest, e.g. before a new version of the plugin is loaded
+        /// </summary>
+        void RemoveDriver(Guid driverGuid);
     }
 }

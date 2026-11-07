@@ -24,22 +24,29 @@ namespace Automatica.Push.Helper
         private readonly ICloudApi _api;
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
-        private readonly IPluginLoader _pluginLoader;
         private readonly ILogger _logger;
         private readonly bool _restartOnUpdate;
         private int _previousState;
 
-        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader pluginLoader, ILogger logger, bool restartOnUpdate = true)
+        /// <param name="install">install (or update) right away</param>
+        /// <param name="restartOnUpdate">update right away, false: only download, the caller installs it (<see cref="StagedFile"/>)</param>
+        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, ILogger logger, bool restartOnUpdate = true)
         {
             _plugin = plugin;
             _install = install;
             _api = cloudApi;
             _updateHub = updateHub;
             _coreServer = coreServer;
-            _pluginLoader = pluginLoader;
             _logger = logger;
             _restartOnUpdate = restartOnUpdate;
         }
+
+        public Plugin Plugin => _plugin;
+
+        /// <summary>
+        /// The downloaded and verified package in the plugin update directory, null if the download failed
+        /// </summary>
+        public string StagedFile { get; private set; }
 
         private IClientProxy Administrators => _updateHub.Clients.Group(HubAccess.AdministratorsGroup);
 
@@ -116,20 +123,19 @@ namespace Automatica.Push.Helper
             // awaited by Download (no async void event handler), an install error must not crash the process
             try
             {
+                StagedFile = automaticaPluginUpdateFile;
                 await Administrators.SendAsync("PluginFinished", new object[] {_plugin.PluginGuid});
-                if (_install)
+                if (!_install && !_restartOnUpdate)
                 {
-                    if(await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile))
-                    {
-                        await _pluginLoader.LoadPlugin(_plugin);
-                    }
+                    // the caller installs all downloaded plugins together
+                    return;
                 }
-                else
+
+                // without a restart where possible: only the plugin's drivers and logics are restarted
+                if (await _coreServer.UpdatePlugins(new[] { new PluginUpdate(_plugin, automaticaPluginUpdateFile) }))
                 {
-                    if (_restartOnUpdate)
-                    {
-                        _coreServer.Restart();
-                    }
+                    _coreServer.Restart();
+                    return;
                 }
 
                 await Administrators.SendAsync("PluginLoaded", new object[] { _plugin.PluginGuid });
@@ -137,14 +143,6 @@ namespace Automatica.Push.Helper
             catch (Exception e)
             {
                 _logger.LogError(e, $"Could not install plugin {_plugin.ComponentName}");
-            }
-            finally
-            {
-                if (_install)
-                {
-                    DeleteFile(automaticaPluginUpdateFile);
-                    _logger.LogDebug($"Remove update file for {_plugin.ComponentName}: {automaticaPluginUpdateFile}");
-                }
             }
         }
 

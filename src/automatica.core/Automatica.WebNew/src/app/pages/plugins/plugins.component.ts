@@ -472,19 +472,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   async updateAll() {
     const items = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
     const data = this.preparePluginList(items);
-    await this.updateHubService.updateAllPlugins(data);
-
-    this.appService.isStartingChanged.emit(true);
-    this.designTimeDataService.clearLogicTemplate();
+    await this.runPluginBatch(() => this.updateHubService.updateAllPlugins(data));
   }
 
   async installAll() {
     const items = this.plugins.filter(a => !a.isInstalled);
     const data = this.preparePluginList(items);
-    await this.updateHubService.installAllPlugins(data);
-
-    this.appService.isStartingChanged.emit(true);
-    this.designTimeDataService.clearLogicTemplate();
+    await this.runPluginBatch(() => this.updateHubService.installAllPlugins(data));
   }
 
   async installUpdateAll() {
@@ -492,9 +486,21 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     const installItems = this.plugins.filter(a => !a.isInstalled);
     const items = [...updateItems, ...installItems];
     const data = this.preparePluginList(items);
-    await this.updateHubService.installUpdateAllPlugins(data);
+    await this.runPluginBatch(() => this.updateHubService.installUpdateAllPlugins(data));
+  }
 
-    this.appService.isStartingChanged.emit(true);
+  /**
+   * Plugins in use are updated without a restart where possible. The server only restarts if one could not be updated in place:
+   * then the call does not return (the connection drops) and the overlay stays until the server is started again.
+   */
+  private async runPluginBatch(call: () => Promise<any>) {
+    this.appService.isStarting = true;
+    try {
+      await call();
+      this.appService.isStarting = false;
+    } catch (error) {
+      console.log(error);
+    }
     this.designTimeDataService.clearLogicTemplate();
   }
 
