@@ -1,0 +1,211 @@
+<div class="page">
+  <div class="page-head">
+    <dx-button icon="back" stylingMode="text" [hint]="'UI.PAGES.BACK' | translateAsync" (onClick)="back()"></dx-button>
+    <h1>{{ title }}</h1>
+    @if (loaded && dirty) {
+      <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+    }
+    @if (loaded && !isEnabled) {
+      <span class="pill off">{{ 'UI.AUTOMATIONS.STATUS.OFF' | translateAsync }}</span>
+    }
+    <span class="spacer"></span>
+    @if (loaded) {
+      <div class="head-actions">
+        <dx-button icon="check" stylingMode="outlined" [text]="'UI.AUTOMATIONS.EDIT.TEST' | translateAsync"
+          [hint]="'UI.AUTOMATIONS.EDIT.TEST_HINT' | translateAsync" [disabled]="testing" (onClick)="test()"></dx-button>
+        <dx-drop-down-button [splitButton]="true" icon="runner" [text]="'UI.AUTOMATIONS.EDIT.RUN' | translateAsync"
+          [items]="runItems" keyExpr="id" [displayExpr]="ctx.optionText" [disabled]="isNew"
+          [hint]="(dirty ? 'UI.AUTOMATIONS.EDIT.RUN_SAVED_VERSION' : 'UI.AUTOMATIONS.EDIT.RUN_HINT') | translateAsync"
+          [dropDownOptions]="{ width: 230 }" (onButtonClick)="run(false)" (onItemClick)="run(true)"></dx-drop-down-button>
+        <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync" [disabled]="saving" (onClick)="save()"></dx-button>
+        <dx-button icon="trash" stylingMode="text" [hint]="'UI.AUTOMATIONS.EDIT.DELETE' | translateAsync" (onClick)="remove()"></dx-button>
+      </div>
+    }
+  </div>
+
+  @if (notFound) {
+    <div class="panel">
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'circle-question']"></fa-icon>
+        <b>{{ 'UI.AUTOMATIONS.EDIT.NOT_FOUND' | translateAsync }}</b>
+        <dx-button [text]="'UI.AUTOMATIONS.EDIT.TO_LIST' | translateAsync" (onClick)="back()"></dx-button>
+      </div>
+    </div>
+  } @else if (loaded) {
+    <div class="seg tabs" role="tablist">
+      <button type="button" role="tab" [class.on]="tab === 'rule'" [attr.aria-selected]="tab === 'rule'" (click)="tab = 'rule'">
+        {{ 'UI.AUTOMATIONS.EDIT.TAB_RULE' | translateAsync }}
+        @if (errorCount > 0) { <span class="count bad">{{ errorCount }}</span> }
+      </button>
+      <button type="button" role="tab" [class.on]="tab === 'history'" [attr.aria-selected]="tab === 'history'" (click)="tab = 'history'">
+        {{ 'UI.AUTOMATIONS.EDIT.TAB_HISTORY' | translateAsync }}
+        @if (activeRuns > 0) { <span class="count accent">{{ activeRuns }}</span> }
+      </button>
+    </div>
+
+    <div class="ed" [class.is-hidden]="tab !== 'rule'" role="tabpanel">
+      <div class="main">
+        <div class="panel settings">
+          <div class="fields">
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.NAME' | translateAsync }}</span>
+              <dx-text-box [(value)]="name" valueChangeEvent="input"
+                [placeholder]="'UI.AUTOMATIONS.EDIT.NAME_PLACEHOLDER' | translateAsync"></dx-text-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.AREA' | translateAsync }}</span>
+              <dx-select-box [items]="lookups.areas" valueExpr="id" displayExpr="path" [searchEnabled]="true"
+                [showClearButton]="true" [(value)]="area"></dx-select-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.CATEGORY' | translateAsync }}</span>
+              <dx-select-box [items]="lookups.categories" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+                [showClearButton]="true" [(value)]="category"></dx-select-box>
+            </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.ENABLED' | translateAsync }}</span>
+              <div class="check-row">
+                <dx-switch [(value)]="isEnabled"></dx-switch>
+                <span class="hint switch-hint">{{ (isEnabled ? 'UI.AUTOMATIONS.EDIT.ENABLED_ON' : 'UI.AUTOMATIONS.EDIT.ENABLED_OFF') | translateAsync }}</span>
+              </div>
+            </div>
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.DESCRIPTION' | translateAsync }}</span>
+              <dx-text-area [(value)]="description" valueChangeEvent="input" [autoResizeEnabled]="true" [minHeight]="38"></dx-text-area>
+            </div>
+          </div>
+        </div>
+
+        <section class="sect sc-when" [attr.aria-label]="'UI.AUTOMATIONS.SECTION.WHEN' | translateAsync">
+          <div class="sect-h">
+            <span class="kw">{{ 'UI.AUTOMATIONS.SECTION.WHEN' | translateAsync }}</span>
+            <span class="hint">{{ 'UI.AUTOMATIONS.SECTION.WHEN_HINT' | translateAsync }}</span>
+          </div>
+          @for (t of def.triggers; track t; let i = $index) {
+            <automation-trigger-card [trigger]="t" [path]="'triggers/' + i" (remove)="removeTrigger(i)"></automation-trigger-card>
+          } @empty {
+            <p class="empty">{{ 'UI.AUTOMATIONS.NO_TRIGGERS' | translateAsync }}</p>
+          }
+          <automation-add-menu kind="trigger" [types]="triggerTypes" [label]="'UI.AUTOMATIONS.ADD_TRIGGER' | translateAsync"
+            (add)="addTrigger($event)"></automation-add-menu>
+        </section>
+
+        <section class="sect sc-if" [attr.aria-label]="'UI.AUTOMATIONS.SECTION.IF' | translateAsync">
+          <div class="sect-h">
+            <span class="kw">{{ 'UI.AUTOMATIONS.SECTION.IF' | translateAsync }}</span>
+            <span class="seg logic" role="group" [attr.aria-label]="'UI.AUTOMATIONS.SECTION.IF_MATCH' | translateAsync">
+              <button type="button" [class.on]="def.conditions.operator === 'all'" [attr.aria-pressed]="def.conditions.operator === 'all'"
+                (click)="setRootOperator('all')">{{ 'UI.AUTOMATIONS.GROUP.ALL' | translateAsync }}</button>
+              <button type="button" [class.on]="def.conditions.operator === 'any'" [attr.aria-pressed]="def.conditions.operator === 'any'"
+                (click)="setRootOperator('any')">{{ 'UI.AUTOMATIONS.GROUP.ANY' | translateAsync }}</button>
+            </span>
+            <span class="hint">{{ 'UI.AUTOMATIONS.SECTION.IF_HINT' | translateAsync }}</span>
+          </div>
+          @if (def.conditions.operator === 'not') {
+            <p class="empty">{{ 'UI.AUTOMATIONS.GROUP_HINT.NOT' | translateAsync }}</p>
+          }
+          <automation-condition-list [group]="def.conditions" basePath="conditions" [depth]="0" [flat]="true"
+            emptyText="UI.AUTOMATIONS.NO_CONDITIONS"></automation-condition-list>
+        </section>
+
+        <section class="sect sc-then" [attr.aria-label]="'UI.AUTOMATIONS.SECTION.THEN' | translateAsync">
+          <div class="sect-h">
+            <span class="kw">{{ 'UI.AUTOMATIONS.SECTION.THEN' | translateAsync }}</span>
+            <span class="hint">{{ 'UI.AUTOMATIONS.SECTION.THEN_HINT' | translateAsync }}</span>
+          </div>
+          <automation-action-list [actions]="def.actions" basePath="actions" [depth]="0"></automation-action-list>
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="panel card">
+          <h4 class="eyebrow">{{ 'UI.AUTOMATIONS.SIDE.READS_AS' | translateAsync }}</h4>
+          <p class="sentence rule-sentence" [innerHTML]="ruleSentence"></p>
+        </div>
+
+        <div class="panel card">
+          <h4 class="eyebrow">{{ 'UI.AUTOMATIONS.SIDE.MODE' | translateAsync }}</h4>
+          <dx-select-box [items]="modeItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="mode"></dx-select-box>
+          <p class="note">{{ modeHint }}</p>
+          @if (usesMaxRuns) {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.SIDE.MAX_RUNS' | translateAsync }}</span>
+              <dx-number-box [(value)]="maxRuns" [min]="1" [max]="100" [showSpinButtons]="true"></dx-number-box>
+              <span class="hint">{{ (mode === 'queued' ? 'UI.AUTOMATIONS.SIDE.MAX_RUNS_QUEUED' : 'UI.AUTOMATIONS.SIDE.MAX_RUNS_PARALLEL') | translateAsync }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="panel card">
+          <h4 class="eyebrow">{{ 'UI.AUTOMATIONS.SIDE.TEST' | translateAsync }}</h4>
+          <p class="note">{{ 'UI.AUTOMATIONS.EDIT.TEST_HINT' | translateAsync }}</p>
+          @if (ctx.triggerIds().length > 1) {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.EDIT.TEST_AS_TRIGGER' | translateAsync }}</span>
+              <dx-select-box [items]="ctx.triggerIds()" [(value)]="testTriggerId"></dx-select-box>
+            </div>
+          }
+          <dx-button icon="check" [text]="'UI.AUTOMATIONS.EDIT.TEST' | translateAsync" [disabled]="testing" (onClick)="test()"></dx-button>
+          @if (testPassed !== undefined) {
+            <div class="test-result" [class.ok]="testPassed" [class.bad]="!testPassed" role="status">
+              <span class="mark">{{ testPassed ? '✓' : '✗' }}</span>
+              {{ (testPassed ? 'UI.AUTOMATIONS.TEST.PASSED' : 'UI.AUTOMATIONS.TEST.FAILED') | translateAsync }}
+            </div>
+          }
+        </div>
+
+        <div class="panel card">
+          <h4 class="eyebrow">
+            {{ 'UI.AUTOMATIONS.SIDE.PROBLEMS' | translateAsync }}
+            @if (validating) { <span class="checking">· {{ 'UI.AUTOMATIONS.SIDE.CHECKING' | translateAsync }}</span> }
+          </h4>
+          @for (p of ctx.problems; track $index) {
+            <button type="button" class="problem" [class.warn]="p.severity === 'warning'" (click)="showProblem(p)">
+              <fa-icon [icon]="['fas', p.severity === 'warning' ? 'circle-info' : 'triangle-exclamation']"></fa-icon>
+              <span>
+                <b>{{ problemText(p) }}</b>
+                @if (p.detail) { <span class="detail">{{ p.detail }}</span> }
+                <span class="where">{{ problemTarget(p) }}</span>
+              </span>
+            </button>
+          } @empty {
+            <p class="note ok">{{ 'UI.AUTOMATIONS.SIDE.NO_PROBLEMS' | translateAsync }}</p>
+          }
+        </div>
+      </aside>
+    </div>
+
+    <div class="history" [class.is-hidden]="tab !== 'history'" role="tabpanel">
+      @if (id) {
+        <automation-run-history [automationId]="id" [definition]="saved?.definition"
+          (activeRunsChange)="onActiveRunsChanged($event)"></automation-run-history>
+      } @else {
+        <div class="panel">
+          <div class="empty-state">
+            <fa-icon class="icon" [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+            <b>{{ 'UI.AUTOMATIONS.HISTORY.NOT_SAVED' | translateAsync }}</b>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<dx-popup [width]="viewport.narrow() ? '100%' : '80%'" [height]="viewport.narrow() ? '100%' : '85%'" [showTitle]="true"
+  [title]="('UI.AUTOMATIONS.PICKER.TITLE_' + pickerMode.toUpperCase()) | translateAsync" [visible]="pickerVisible"
+  [showCloseButton]="true" (onHiding)="closePicker(false)">
+  <div *dxTemplate="let data of 'content'" class="picker">
+    <div class="picker-bar">
+      <span class="picker-sel">
+        @if (pickerName) { <b>{{ pickerName }}</b> }
+        @if (pickerProblem) { <span class="hint">{{ pickerProblem }}</span> }
+      </span>
+      <dx-button type="default" [text]="'COMMON.SELECT' | translateAsync" [disabled]="!!pickerProblem" (onClick)="closePicker(true)"></dx-button>
+    </div>
+    <div class="picker-tree">
+      @if (pickerVisible) {
+        <p3-config-tree style="display: block; height: 100%" [useContextMenu]="false" (onNodeSelect)="pickerSelect($event)"></p3-config-tree>
+      }
+    </div>
+  </div>
+</dx-popup>

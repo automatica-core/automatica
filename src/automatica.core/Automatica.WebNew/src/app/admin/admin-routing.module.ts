@@ -16,6 +16,8 @@ import { TelegramMonitorComponent } from "../pages/telegram-monitor/telegram-mon
 import { UserConfigComponent } from "../pages/user-config/user-config.component";
 import { UsergroupConfigComponent } from "../pages/usergroup-config/usergroup-config.component";
 import { VisualisationEditComponent } from "../pages/visualisation-edit/visualisation-edit.component";
+import { AutomationsListComponent } from "../pages/automations/automations-list/automations-list.component";
+import { AutomationEditorComponent } from "../pages/automations/automation-editor/automation-editor.component";
 
 const routes: Routes =[
     {
@@ -35,6 +37,13 @@ const routes: Routes =[
     {
         path: "logic-editor/:id",
         component: LogicEditorComponent
+    }, {
+        path: "automations",
+        component: AutomationsListComponent
+    }, {
+        // "new" creates a rule
+        path: "automations/:id",
+        component: AutomationEditorComponent
     }, {
         path: "visualisation",
         component: VisualisationEditComponent,

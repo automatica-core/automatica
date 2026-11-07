@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -23,6 +23,7 @@
     <PackageReference Include="Telegraf.Infux.Client" Version="1.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Automation\Automatica.Core.Automation.csproj" />
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />

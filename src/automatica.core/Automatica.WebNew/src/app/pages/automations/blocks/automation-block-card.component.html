@@ -1,0 +1,49 @@
+<div class="blk sc-{{ section }}" [id]="domId" [class.open]="open" [class.off]="disabled"
+  [class.err]="severity === 'error'" [class.warn]="severity === 'warning'">
+  <div class="blk-head">
+    <button type="button" class="blk-toggle" (click)="ctx.toggle(block)" [attr.aria-expanded]="open"
+      [attr.aria-controls]="bodyId">
+      <span class="ico" aria-hidden="true"><fa-icon [icon]="['fas', iconName]"></fa-icon></span>
+      <span class="s">
+        <span class="sentence" [innerHTML]="sentence"></span>
+        <small>
+          {{ subText }}
+          @if (test) {
+            @if (testValue !== undefined) {
+              · {{ 'UI.AUTOMATIONS.TEST.NOW' | translateAsync: { value: testValue } }}
+            }
+          }
+        </small>
+      </span>
+    </button>
+    <span class="badges">
+      @if (test) {
+        <span class="pill" [class.ok]="test.passed" [class.bad]="!test.passed"
+          [title]="(test.passed ? 'UI.AUTOMATIONS.TEST.PASSED' : 'UI.AUTOMATIONS.TEST.FAILED') | translateAsync">
+          {{ test.passed ? '✓' : '✗' }}
+        </span>
+      }
+      @if (disabled) {
+        <span class="pill off">{{ 'UI.AUTOMATIONS.CARD.DISABLED' | translateAsync }}</span>
+      }
+      @if (problemCount > 0) {
+        <span class="pill" [class.bad]="severity === 'error'" [class.warn]="severity === 'warning'"
+          [title]="'UI.AUTOMATIONS.CARD.PROBLEMS' | translateAsync: { count: problemCount }">
+          <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>{{ problemCount }}
+        </span>
+      }
+    </span>
+    <span class="head-actions"><ng-content select="[card-actions]"></ng-content></span>
+  </div>
+  @if (open) {
+    <div class="blk-body" [id]="bodyId">
+      @for (p of problems; track $index) {
+        <div class="problem" [class.warn]="p.severity === 'warning'">
+          <fa-icon [icon]="['fas', p.severity === 'warning' ? 'circle-info' : 'triangle-exclamation']"></fa-icon>
+          <span>{{ problemText(p) }}@if (p.detail) { <span class="detail"> {{ p.detail }}</span> }</span>
+        </div>
+      }
+      <ng-content></ng-content>
+    </div>
+  }
+</div>

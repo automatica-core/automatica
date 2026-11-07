@@ -7,6 +7,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using System;
+using Automatica.Core.Automation.Engine;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Runtime.IO;
@@ -73,6 +74,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILicenseContext _licenseContext;
         private readonly ITelegramMonitor _telegramMonitor;
         private readonly ILogicEngineDispatcher _logicEngineDispatcher;
+        private readonly IAutomationEngine _automationEngine;
         private RunState _runState;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
@@ -178,6 +180,7 @@ namespace Automatica.Core.Runtime.Core
 
             
             _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
+            _automationEngine = services.GetRequiredService<IAutomationEngine>();
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
@@ -325,6 +328,8 @@ namespace Automatica.Core.Runtime.Core
                     {
                         await driver.Started();
                     }
+
+                    await StartAutomations();
                 }
                 catch (Exception e)
                 {
@@ -360,6 +365,31 @@ namespace Automatica.Core.Runtime.Core
             }
             _logger.LogInformation("Loading logics...done");
 
+        }
+
+        private async Task StartAutomations()
+        {
+            try
+            {
+                await _automationEngine.StartAsync();
+            }
+            catch (Exception e)
+            {
+                // automations must never keep the server from starting
+                _logger.LogError(e, "Error starting the automations");
+            }
+        }
+
+        private async Task StopAutomations()
+        {
+            try
+            {
+                await _automationEngine.StopAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error stopping the automations");
+            }
         }
 
         private async Task StartLogicEngine()
@@ -533,7 +563,8 @@ namespace Automatica.Core.Runtime.Core
         {
             await _remoteServerHandler.Stop();
 
-            // links and logics first, otherwise values are still dispatched into the stopped drivers
+            // automations, links and logics first, otherwise values are still dispatched into the stopped drivers
+            await StopAutomations();
             await StopLogicEngine();
 
             // StopDriver removes the driver from the store, Stopped() has to be called on a snapshot

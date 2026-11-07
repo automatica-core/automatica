@@ -15,7 +15,7 @@ namespace Automatica.Core.EF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -145,6 +145,129 @@ namespace Automatica.Core.EF.Migrations
                     b.HasKey("ObjId");
 
                     b.ToTable("AreaTypes");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.Automation", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Definition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("LastError")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastRunAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("LastRunState")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxRuns")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(10);
+
+                    b.Property<int>("Mode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("This2AreaInstance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("This2CategoryInstance")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("This2AreaInstance");
+
+                    b.HasIndex("This2CategoryInstance");
+
+                    b.ToTable("Automations");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.AutomationReference", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ReferenceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReferenceType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("This2Automation")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.HasIndex("This2Automation");
+
+                    b.ToTable("AutomationReferences");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.AutomationRun", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("State")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Steps")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("This2Automation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TriggerId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("This2Automation", "StartedAt");
+
+                    b.ToTable("AutomationRuns");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardInterface", b =>
@@ -686,13 +809,18 @@ namespace Automatica.Core.EF.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("This2Automation")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("This2NodeInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RuleInstance")
+                    b.Property<Guid?>("This2RuleInstance")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
+
+                    b.HasIndex("This2Automation");
 
                     b.HasIndex("This2NodeInstance");
 
@@ -1981,6 +2109,49 @@ namespace Automatica.Core.EF.Migrations
                     b.Navigation("This2AreaTypeNavigation");
                 });
 
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.Automation", b =>
+                {
+                    b.HasOne("Automatica.Core.EF.Models.Areas.AreaInstance", "This2AreaInstanceNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2AreaInstance")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("AreaInstance2Automation");
+
+                    b.HasOne("Automatica.Core.EF.Models.Categories.CategoryInstance", "This2CategoryInstanceNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2CategoryInstance")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("CategoryInstance2Automation");
+
+                    b.Navigation("This2AreaInstanceNavigation");
+
+                    b.Navigation("This2CategoryInstanceNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.AutomationReference", b =>
+                {
+                    b.HasOne("Automatica.Core.EF.Models.Automations.Automation", "This2AutomationNavigation")
+                        .WithMany("References")
+                        .HasForeignKey("This2Automation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("Automation2AutomationReference");
+
+                    b.Navigation("This2AutomationNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.AutomationRun", b =>
+                {
+                    b.HasOne("Automatica.Core.EF.Models.Automations.Automation", "This2AutomationNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2Automation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("Automation2AutomationRun");
+
+                    b.Navigation("This2AutomationNavigation");
+                });
+
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardInterface", b =>
                 {
                     b.HasOne("Automatica.Core.EF.Models.BoardType", "This2BoardTypeNavigation")
@@ -2168,6 +2339,12 @@ namespace Automatica.Core.EF.Migrations
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Notification", b =>
                 {
+                    b.HasOne("Automatica.Core.EF.Models.Automations.Automation", "This2AutomationNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2Automation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Automation2Notification");
+
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2NodeInstanceNavigation")
                         .WithMany()
                         .HasForeignKey("This2NodeInstance")
@@ -2178,8 +2355,9 @@ namespace Automatica.Core.EF.Migrations
                         .WithMany()
                         .HasForeignKey("This2RuleInstance")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("RuleInstance2Notification");
+
+                    b.Navigation("This2AutomationNavigation");
 
                     b.Navigation("This2NodeInstanceNavigation");
 
@@ -2567,6 +2745,11 @@ namespace Automatica.Core.EF.Migrations
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
                     b.Navigation("InverseThis2ParentNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Automations.Automation", b =>
+                {
+                    b.Navigation("References");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardType", b =>

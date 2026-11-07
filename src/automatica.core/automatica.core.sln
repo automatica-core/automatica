@@ -83,6 +83,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Notificatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Mcp", "Automatica.Core.Mcp\Automatica.Core.Mcp.csproj", "{BC2CB0B1-E850-4250-9CFB-CA2C598C9EDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Automation", "Automatica.Core.Automation\Automatica.Core.Automation.csproj", "{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -843,6 +845,30 @@ Global
 		{BC2CB0B1-E850-4250-9CFB-CA2C598C9EDD}.Release|x64.Build.0 = Release|Any CPU
 		{BC2CB0B1-E850-4250-9CFB-CA2C598C9EDD}.Release|x86.ActiveCfg = Release|Any CPU
 		{BC2CB0B1-E850-4250-9CFB-CA2C598C9EDD}.Release|x86.Build.0 = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|x64.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Debug|x86.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|x64.ActiveCfg = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|x64.Build.0 = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|x86.ActiveCfg = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugLocal|x86.Build.0 = DebugLocal|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|Any CPU.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|Any CPU.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|x64.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|x64.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|x86.ActiveCfg = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.DebugTests|x86.Build.0 = Debug|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|x64.ActiveCfg = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|x64.Build.0 = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|x86.ActiveCfg = Release|Any CPU
+		{58B94619-3A4A-41FD-8CB5-CF2F4A974E89}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

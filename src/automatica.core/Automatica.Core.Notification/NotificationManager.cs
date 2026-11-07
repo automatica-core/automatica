@@ -33,6 +33,20 @@ namespace Automatica.Core.Notification
             return AddAndSaveNotification(notification, token);
         }
 
+        public Task CreateAutomationNotification(Guid automationId, string body, string subject, NotificationSeverity severity, CancellationToken token = default)
+        {
+            var notification = new EF.Models.Notification
+            {
+                Body = body,
+                Subject = subject,
+                CreatedAt = DateTime.Now,
+                ObjId = Guid.NewGuid(),
+                Severity = severity,
+                This2Automation = automationId
+            };
+            return AddAndSaveNotification(notification, token);
+        }
+
         private async Task AddAndSaveNotification(EF.Models.Notification notification, CancellationToken token)
         {
             await using var dbContext = await contextFactory.CreateDbContextAsync(token);

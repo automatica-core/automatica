@@ -1,0 +1,67 @@
+<div class="runs">
+  <div class="panel runlist">
+    <div class="pane-head">
+      <h2>{{ 'UI.AUTOMATIONS.HISTORY.TITLE' | translateAsync }}</h2>
+      <span class="sub">{{ 'UI.AUTOMATIONS.HISTORY.AUTO_REFRESH' | translateAsync }}</span>
+      <span class="spacer"></span>
+      <dx-button icon="refresh" stylingMode="text" [hint]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="refresh()"></dx-button>
+    </div>
+    @if (loadError) {
+      <p class="err-line">{{ 'UI.AUTOMATIONS.HISTORY.LOAD_FAILED' | translateAsync }}</p>
+    }
+    <div class="list">
+      @for (r of runs; track r.objId) {
+        <button type="button" class="r" [class.sel]="r.objId === selectedId" [attr.aria-pressed]="r.objId === selectedId"
+          (click)="select(r)">
+          <span class="t mono" [title]="started(r)">{{ startedClock(r) }} <span class="day">{{ started(r) }}</span></span>
+          <span class="trig">{{ triggerText(r) }}</span>
+          <span class="pill {{ stateClass(r.state) }}">{{ stateText(r) }}</span>
+        </button>
+      } @empty {
+        @if (loaded) {
+          <div class="empty-state">
+            <fa-icon class="icon" [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+            <b>{{ 'UI.AUTOMATIONS.HISTORY.EMPTY' | translateAsync }}</b>
+            <span>{{ 'UI.AUTOMATIONS.HISTORY.EMPTY_HINT' | translateAsync }}</span>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="panel detail">
+    @if (selected; as run) {
+      <div class="pane-head">
+        <div class="titles">
+          <h2>{{ triggerText(run) }}</h2>
+          <span class="sub">{{ started(run) }} · <span class="pill {{ stateClass(run.state) }}">{{ stateText(run) }}</span></span>
+        </div>
+        @if (isActive(run.state)) {
+          <dx-button icon="close" type="danger" stylingMode="outlined" [text]="'UI.AUTOMATIONS.HISTORY.STOP' | translateAsync"
+            [disabled]="stopping.has(run.objId)" (onClick)="stop(run)"></dx-button>
+        }
+      </div>
+      @if (run.error) {
+        <div class="alert run-error"><b>{{ 'UI.AUTOMATIONS.HISTORY.ERROR' | translateAsync }}</b><span>{{ run.error }}</span></div>
+      }
+      <ol class="tl">
+        @for (v of steps(run); track $index) {
+          <li class="step sc-{{ v.section }}">
+            <div class="h">
+              <span class="chip">{{ v.chip }}</span>
+              <span class="sentence" [innerHTML]="v.sentence"></span>
+            </div>
+            @for (line of v.details; track $index) {
+              <div class="d">{{ line }}</div>
+            }
+            <div class="ts mono">{{ v.time }}</div>
+          </li>
+        } @empty {
+          <li class="none">{{ 'UI.AUTOMATIONS.HISTORY.NO_STEPS' | translateAsync }}</li>
+        }
+      </ol>
+    } @else if (runs.length) {
+      <div class="empty-state"><span>{{ 'UI.AUTOMATIONS.HISTORY.SELECT' | translateAsync }}</span></div>
+    }
+  </div>
+</div>

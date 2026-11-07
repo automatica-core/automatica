@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Version>10.0.0.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <Description>Automations ("if this then that" rules) for automatica.core</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Automatica.Core.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SolarCalculator" Version="3.6.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Control\Automatica.Core.Control.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
+    <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Notification\Automatica.Core.Notification.csproj" />
+  </ItemGroup>
+</Project>

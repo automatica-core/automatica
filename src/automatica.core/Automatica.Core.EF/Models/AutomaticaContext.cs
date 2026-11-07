@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Reflection;
 using Automatica.Core.EF.Models.Areas;
+using Automatica.Core.EF.Models.Automations;
 using Automatica.Core.EF.Models.Categories;
 using System;
 using Automatica.Core.EF.Interceptors;
@@ -80,6 +81,10 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<Slave> Slaves { get; set; }
 
         public virtual DbSet<Notification> Notifications { get; set; }
+
+        public virtual DbSet<Automation> Automations { get; set; }
+        public virtual DbSet<AutomationReference> AutomationReferences { get; set; }
+        public virtual DbSet<AutomationRun> AutomationRuns { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -1472,6 +1477,67 @@ namespace Automatica.Core.EF.Models
                     .WithMany().HasForeignKey(a => a.This2RuleInstance)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("RuleInstance2Notification");
+
+                entity.HasOne(d => d.This2AutomationNavigation)
+                    .WithMany().HasForeignKey(a => a.This2Automation)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("Automation2Notification");
+
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<Automation>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Description);
+                entity.Property(e => e.IsEnabled).HasDefaultValue(true);
+                entity.Property(e => e.Mode).HasDefaultValue(AutomationMode.Single);
+                entity.Property(e => e.MaxRuns).HasDefaultValue(10);
+                entity.Property(e => e.Definition).IsRequired();
+                entity.Property(e => e.LastError);
+
+                entity.HasOne(d => d.This2AreaInstanceNavigation)
+                    .WithMany().HasForeignKey(d => d.This2AreaInstance)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("AreaInstance2Automation");
+
+                entity.HasOne(d => d.This2CategoryInstanceNavigation)
+                    .WithMany().HasForeignKey(d => d.This2CategoryInstance)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("CategoryInstance2Automation");
+
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<AutomationReference>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+
+                entity.HasIndex(e => e.ReferenceId);
+
+                entity.HasOne(d => d.This2AutomationNavigation)
+                    .WithMany(p => p.References).HasForeignKey(d => d.This2Automation)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("Automation2AutomationReference");
+
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<AutomationRun>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+
+                entity.HasIndex(e => new { e.This2Automation, e.StartedAt });
+
+                entity.HasOne(d => d.This2AutomationNavigation)
+                    .WithMany().HasForeignKey(d => d.This2Automation)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("Automation2AutomationRun");
 
                 entity.Ignore(e => e.TypeInfo);
             });

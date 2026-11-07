@@ -1,0 +1,94 @@
+<automation-block-card kind="trigger" [block]="trigger" [path]="path" [sub]="sub">
+  <span card-actions>
+    <dx-button icon="trash" stylingMode="text" [hint]="'UI.AUTOMATIONS.CARD.DELETE' | translateAsync" (onClick)="remove.emit()"></dx-button>
+  </span>
+
+  @if (ctx.isExpanded(trigger)) {
+    <div class="fields">
+      @switch (trigger.type) {
+        @case ('datapoint') {
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DATAPOINT' | translateAsync }}</span>
+            <automation-node-field [(node)]="trigger.node" mode="read"></automation-node-field>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CHANGE' | translateAsync }}</span>
+            <dx-select-box [items]="changeItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="trigger.change"
+              (onValueChanged)="changeChanged($event.value)"></dx-select-box>
+          </div>
+          @if (trigger.change !== 'any') {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.VALUE' | translateAsync }}</span>
+              <automation-value-input [node]="trigger.node" [(value)]="trigger.value"></automation-value-input>
+            </div>
+          }
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.FOR' | translateAsync }}</span>
+            <automation-duration-input [(seconds)]="trigger.forSeconds"></automation-duration-input>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.FOR_HINT' | translateAsync }}</span>
+          </div>
+          <div class="fld">
+            <div class="check-row">
+              <dx-check-box [value]="hasFrom" (onValueChanged)="setHasFrom($event.value)"
+                [text]="'UI.AUTOMATIONS.FIELD.FROM_ENABLE' | translateAsync"></dx-check-box>
+            </div>
+            @if (hasFrom) {
+              <automation-value-input [node]="trigger.node" [(value)]="trigger.from"></automation-value-input>
+            }
+          </div>
+        }
+        @case ('time') {
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AT' | translateAsync }}</span>
+            <automation-time-input [(value)]="trigger.at"></automation-time-input>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DAYS' | translateAsync }}</span>
+            <automation-days-picker [(days)]="trigger.days"></automation-days-picker>
+          </div>
+        }
+        @case ('sun') {
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.EVENT' | translateAsync }}</span>
+            <dx-select-box [items]="sunItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="trigger.event"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.OFFSET' | translateAsync }}</span>
+            <dx-number-box [(value)]="trigger.offsetMinutes" [showSpinButtons]="true" [step]="5"></dx-number-box>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.OFFSET_HINT' | translateAsync }}</span>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DAYS' | translateAsync }}</span>
+            <automation-days-picker [(days)]="trigger.days"></automation-days-picker>
+          </div>
+        }
+        @case ('conditions') {
+          <div class="fld wide">
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.CONDITIONS_TRIGGER_HINT' | translateAsync }}</span>
+            <automation-condition-list [group]="trigger.conditions" [basePath]="path + '/conditions'" [depth]="0"
+              [showOperator]="true"></automation-condition-list>
+          </div>
+        }
+        @case ('control') {
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONTROL' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.switchControls" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [(value)]="trigger.control"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.TO' | translateAsync }}</span>
+            <dx-select-box [items]="controlToItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="trigger.to"></dx-select-box>
+          </div>
+        }
+        @case ('startup') {
+          <div class="fld wide"><span class="hint">{{ 'UI.AUTOMATIONS.FIELD.STARTUP_HINT' | translateAsync }}</span></div>
+        }
+      }
+      <div class="fld">
+        <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.TRIGGER_ID' | translateAsync }}</span>
+        <dx-text-box [(value)]="trigger.id" valueChangeEvent="input"></dx-text-box>
+        <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.TRIGGER_ID_HINT' | translateAsync }}</span>
+      </div>
+    </div>
+  }
+</automation-block-card>

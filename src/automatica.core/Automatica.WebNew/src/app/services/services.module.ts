@@ -27,6 +27,7 @@ import { NodeTemplateService } from "./node-template.service";
 import { LogsService } from "./logs.service";
 import { HyperSeriesService } from "./hyperseries.service";
 import { ControlsService } from "./controls.service";
+import { AutomationsService } from "./automations.service";
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { ControlsService } from "./controls.service";
     NodeTemplateService,
     LogsService,
     HyperSeriesService,
-    ControlsService
+    ControlsService,
+    AutomationsService
 
   ]
 })

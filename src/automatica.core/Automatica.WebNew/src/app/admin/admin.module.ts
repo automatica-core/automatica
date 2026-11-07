@@ -30,6 +30,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "../services/services.module";
 import { SharedModule } from "../shared/shared.module";
 import { AdminRoutingModule } from "./admin-routing.module";
+import { AutomationsModule } from "../pages/automations/automations.module";
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { AdminRoutingModule } from "./admin-routing.module";
     ServicesModule,
     SharedModule,
     DxSelectBoxModule,
-    DxTabsModule
+    DxTabsModule,
+    AutomationsModule
   ],
   exports: [
     AdminComponent

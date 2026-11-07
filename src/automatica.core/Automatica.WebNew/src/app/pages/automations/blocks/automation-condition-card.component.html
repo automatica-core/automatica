@@ -1,0 +1,107 @@
+<automation-block-card kind="condition" [block]="condition" [path]="path" [sub]="sub">
+  <span card-actions>
+    <dx-button icon="trash" stylingMode="text" [hint]="'UI.AUTOMATIONS.CARD.DELETE' | translateAsync" (onClick)="remove.emit()"></dx-button>
+  </span>
+
+  @if (ctx.isExpanded(condition)) {
+    @switch (condition.type) {
+      @case ('group') {
+        <automation-condition-list [group]="condition" [basePath]="path" [depth]="depth + 1"
+          [showOperator]="true"></automation-condition-list>
+      }
+      @case ('datapoint') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DATAPOINT' | translateAsync }}</span>
+            <automation-node-field [(node)]="condition.node" mode="read"></automation-node-field>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.OPERATOR' | translateAsync }}</span>
+            <dx-select-box [items]="compareItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="condition.operator"
+              (onValueChanged)="operatorChanged($event.value)"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.VALUE' | translateAsync }}</span>
+            <automation-value-input [node]="condition.node" [(value)]="condition.value"></automation-value-input>
+          </div>
+          @if (condition.operator === 'between') {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.VALUE2' | translateAsync }}</span>
+              <automation-value-input [node]="condition.node" [(value)]="condition.value2"></automation-value-input>
+            </div>
+          }
+        </div>
+      }
+      @case ('time') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AFTER' | translateAsync }}</span>
+            <automation-time-input [(value)]="condition.after" [clearable]="true"></automation-time-input>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.BEFORE' | translateAsync }}</span>
+            <automation-time-input [(value)]="condition.before" [clearable]="true"></automation-time-input>
+          </div>
+          <div class="fld wide">
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.TIME_WINDOW_HINT' | translateAsync }}</span>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DAYS' | translateAsync }}</span>
+            <automation-days-picker [(days)]="condition.days"></automation-days-picker>
+          </div>
+        </div>
+      }
+      @case ('sun') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AFTER' | translateAsync }}</span>
+            <dx-select-box [items]="sunItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="condition.after"
+              [showClearButton]="true" [placeholder]="'UI.AUTOMATIONS.SUN.NONE' | translateAsync"
+              (onValueChanged)="setSun('after', $event.value)"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.OFFSET' | translateAsync }}</span>
+            <dx-number-box [(value)]="condition.afterOffsetMinutes" [showSpinButtons]="true" [step]="5"
+              [disabled]="!condition.after"></dx-number-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.BEFORE' | translateAsync }}</span>
+            <dx-select-box [items]="sunItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="condition.before"
+              [showClearButton]="true" [placeholder]="'UI.AUTOMATIONS.SUN.NONE' | translateAsync"
+              (onValueChanged)="setSun('before', $event.value)"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.OFFSET' | translateAsync }}</span>
+            <dx-number-box [(value)]="condition.beforeOffsetMinutes" [showSpinButtons]="true" [step]="5"
+              [disabled]="!condition.before"></dx-number-box>
+          </div>
+          <div class="fld wide">
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.SUN_WINDOW_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+      }
+      @case ('control') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONTROL' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.switchControls" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [(value)]="condition.control"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.STATE' | translateAsync }}</span>
+            <dx-select-box [items]="onItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="condition.on"></dx-select-box>
+          </div>
+        </div>
+      }
+      @case ('trigger') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.TRIGGER' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.triggerIds()" [(value)]="condition.triggerId" [acceptCustomValue]="true"
+              [noDataText]="'UI.AUTOMATIONS.FIELD.NO_TRIGGER_IDS' | translateAsync"></dx-select-box>
+          </div>
+        </div>
+      }
+    }
+  }
+</automation-block-card>

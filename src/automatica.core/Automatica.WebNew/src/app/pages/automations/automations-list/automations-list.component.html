@@ -1,0 +1,75 @@
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.AUTOMATIONS.TITLE' | translateAsync }}</h1>
+    @if (loaded && !loadError) {
+      <span class="sub">{{ 'UI.AUTOMATIONS.COUNT' | translateAsync: { count: rows.length } }}</span>
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button icon="refresh" stylingMode="text" [hint]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      <dx-button type="default" icon="add" [text]="'UI.AUTOMATIONS.NEW' | translateAsync" (onClick)="create()"></dx-button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <dx-text-box class="grow" mode="search" valueChangeEvent="input" [(value)]="search"
+      [placeholder]="'UI.AUTOMATIONS.SEARCH' | translateAsync"></dx-text-box>
+    <dx-select-box class="filter" [items]="areaItems" valueExpr="id" displayExpr="name" [(value)]="areaFilter"
+      [searchEnabled]="true" [inputAttr]="{ 'aria-label': ('UI.AUTOMATIONS.FILTER_AREA' | translateAsync) }"></dx-select-box>
+    <dx-select-box class="filter" [items]="statusItems" valueExpr="value" [displayExpr]="optionText" [(value)]="statusFilter"
+      [inputAttr]="{ 'aria-label': ('UI.AUTOMATIONS.FILTER_STATUS' | translateAsync) }"></dx-select-box>
+  </div>
+
+  @if (loadError) {
+    <div class="panel">
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
+        <b>{{ 'UI.AUTOMATIONS.LOAD_FAILED' | translateAsync }}</b>
+        <span class="mono">{{ loadError }}</span>
+        <dx-button icon="refresh" [text]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      </div>
+    </div>
+  } @else if (loaded) {
+    @for (g of groups; track g.key) {
+      <section class="group">
+        <h2 class="eyebrow">{{ g.title }}</h2>
+        <div class="panel rules">
+          @for (r of g.rows; track r.dto.objId) {
+            <div class="rule">
+              <dx-switch class="tog" [value]="r.dto.isEnabled" [disabled]="isToggling(r)"
+                [hint]="'UI.AUTOMATIONS.ENABLE' | translateAsync" (onValueChanged)="setEnabled(r, $event.value)"></dx-switch>
+              <button type="button" class="open" (click)="open(r)">
+                <span class="name">{{ r.dto.name || ('UI.AUTOMATIONS.EDIT.UNNAMED' | translateAsync) }}</span>
+                <span class="sum sentence" [innerHTML]="r.summary"></span>
+                @if (r.status === 'failed' && r.dto.lastError) {
+                  <span class="err">{{ r.dto.lastError }}</span>
+                }
+              </button>
+              <span class="meta">
+                <span class="pill {{ statusClass(r.status) }}">{{ 'UI.AUTOMATIONS.STATUS.' + r.status.toUpperCase() | translateAsync }}</span>
+                @if (r.hasErrors && r.status !== 'problems') {
+                  <span class="pill warn">{{ 'UI.AUTOMATIONS.STATUS.PROBLEMS' | translateAsync }}</span>
+                }
+                <span class="when">{{ r.lastRun || ('UI.AUTOMATIONS.NEVER_RUN' | translateAsync) }}</span>
+              </span>
+            </div>
+          }
+        </div>
+      </section>
+    } @empty {
+      <div class="panel">
+        <div class="empty-state">
+          <fa-icon class="icon" [icon]="['fas', 'bolt']"></fa-icon>
+          @if (rows.length === 0) {
+            <b>{{ 'UI.AUTOMATIONS.EMPTY' | translateAsync }}</b>
+            <span>{{ 'UI.AUTOMATIONS.EMPTY_HINT' | translateAsync }}</span>
+            <dx-button type="default" icon="add" [text]="'UI.AUTOMATIONS.NEW' | translateAsync" (onClick)="create()"></dx-button>
+          } @else {
+            <b>{{ 'UI.PAGES.NO_MATCH' | translateAsync }}</b>
+            <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

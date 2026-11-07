@@ -1,4 +1,5 @@
 ﻿using System;
+using Automatica.Core.Automation;
 using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.Common;
@@ -128,6 +129,7 @@ namespace Automatica.Core.Runtime
 
                 services.AddSingleton<INotifyDriver, NotifyDriverHandler>();
                 services.AddSingleton<ILogicEngineDispatcher, LogicEngineDispatcher>();
+                services.AddAutomations();
 
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 

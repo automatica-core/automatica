@@ -16,8 +16,11 @@ namespace Automatica.Core.EF.Models
         public NodeInstance This2NodeInstanceNavigation { get; set; }
 
 
-        public Guid This2RuleInstance { get; set; }
+        public Guid? This2RuleInstance { get; set; }
         public RuleInstance This2RuleInstanceNavigation { get; set; }
+
+        public Guid? This2Automation { get; set; }
+        public Automations.Automation This2AutomationNavigation { get; set; }
 
         public string Subject { get; set; }
         public string Body { get; set; }

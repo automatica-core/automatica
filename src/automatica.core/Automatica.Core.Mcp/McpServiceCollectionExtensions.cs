@@ -62,7 +62,8 @@ namespace Automatica.Core.Mcp
                 .WithTools<StructureTools>()
                 .WithTools<DataPointTools>()
                 .WithTools<HistoryTools>()
-                .WithTools<LogicTools>();
+                .WithTools<LogicTools>()
+                .WithTools<AutomationTools>();
 
             return services;
         }

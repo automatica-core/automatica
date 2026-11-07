@@ -1,0 +1,271 @@
+@use "../../plugins/list";
+@use "../automations";
+
+@include automations.section-colors;
+
+:host {
+    display: block;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.page {
+    height: auto;
+    min-height: 100%;
+}
+
+.page-head h1 {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+.tabs {
+    align-self: flex-start;
+
+    .count {
+        border-radius: 999px;
+        padding: 0 6px;
+
+        &.bad {
+            color: var(--bad);
+            background: color-mix(in srgb, var(--bad) 14%, transparent);
+        }
+
+        &.accent {
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+    }
+}
+
+.ed {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: var(--space-5);
+    align-items: start;
+
+    @media (max-width: 899.98px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.main {
+    display: grid;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+.settings {
+    padding: var(--space-4);
+}
+
+.switch-hint {
+    margin-left: var(--space-2);
+}
+
+.sect {
+    border-left: 3px solid var(--sc);
+    padding-left: var(--space-4);
+    min-width: 0;
+}
+
+.sect-h {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
+
+    .kw {
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-size: var(--text-sm);
+        color: var(--sc);
+    }
+
+    .hint {
+        font-size: var(--text-xs);
+        color: var(--muted);
+    }
+}
+
+.seg.logic button {
+    min-height: 26px;
+    font-size: var(--text-xs);
+
+    &.on {
+        background: var(--scs);
+        color: var(--sc);
+    }
+}
+
+.empty {
+    font-size: var(--text-sm);
+    color: var(--muted);
+    margin: 0 0 var(--space-2);
+}
+
+.side {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    min-width: 0;
+
+    @media (min-width: 900px) {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.card {
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+
+    h4 {
+        margin: 0;
+    }
+
+    .note {
+        margin: 0;
+        font-size: var(--text-xs);
+        color: var(--muted);
+        line-height: 1.45;
+
+        &.ok {
+            color: var(--ok);
+        }
+    }
+}
+
+.rule-sentence {
+    margin: 0;
+    font-size: var(--text-sm);
+}
+
+.checking {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+.test-result {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+
+    &.ok {
+        color: var(--ok);
+    }
+
+    &.bad {
+        color: var(--bad);
+    }
+
+    .mark {
+        font-size: var(--text-md);
+    }
+}
+
+.problem {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    text-align: left;
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid color-mix(in srgb, var(--bad) 30%, var(--line));
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--bad) 6%, var(--surface));
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    fa-icon {
+        color: var(--bad);
+    }
+
+    &.warn {
+        border-color: color-mix(in srgb, var(--warn) 30%, var(--line));
+        background: color-mix(in srgb, var(--warn) 6%, var(--surface));
+
+        fa-icon {
+            color: var(--warn);
+        }
+    }
+
+    > span {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    .detail,
+    .where {
+        font-size: var(--text-xs);
+        color: var(--muted);
+        overflow-wrap: anywhere;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+}
+
+.picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+    min-height: 0;
+}
+
+.picker-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+
+    .picker-sel {
+        display: grid;
+        flex: 1 1 200px;
+        min-width: 0;
+    }
+
+    .hint {
+        font-size: var(--text-xs);
+        color: var(--muted);
+    }
+}
+
+.picker-tree {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+@media (max-width: 599.98px) {
+    .head-actions {
+        width: 100%;
+    }
+
+    .sect {
+        padding-left: var(--space-3);
+    }
+}

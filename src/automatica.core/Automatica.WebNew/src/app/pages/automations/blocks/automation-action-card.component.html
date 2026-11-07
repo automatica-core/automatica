@@ -1,0 +1,228 @@
+<automation-block-card kind="action" [block]="action" [path]="path" [sub]="sub" [disabled]="!enabled">
+  <span card-actions class="card-btns">
+    <dx-switch [value]="enabled" (onValueChanged)="setEnabled($event.value)"
+      [hint]="'UI.AUTOMATIONS.CARD.ENABLE' | translateAsync"></dx-switch>
+    <dx-button icon="arrowup" stylingMode="text" [disabled]="first" [hint]="'UI.AUTOMATIONS.CARD.MOVE_UP' | translateAsync"
+      (onClick)="moveUp.emit()"></dx-button>
+    <dx-button icon="arrowdown" stylingMode="text" [disabled]="last" [hint]="'UI.AUTOMATIONS.CARD.MOVE_DOWN' | translateAsync"
+      (onClick)="moveDown.emit()"></dx-button>
+    <dx-button icon="trash" stylingMode="text" [hint]="'UI.AUTOMATIONS.CARD.DELETE' | translateAsync" (onClick)="remove.emit()"></dx-button>
+  </span>
+
+  @if (ctx.isExpanded(action)) {
+    @switch (action.type) {
+      @case ('setValue') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.DATAPOINT' | translateAsync }}</span>
+            <automation-node-field [(node)]="action.node" mode="write"></automation-node-field>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.MODE' | translateAsync }}</span>
+            <dx-select-box [items]="modeItems" valueExpr="value" [displayExpr]="ctx.optionText" [value]="action.mode"
+              (onValueChanged)="modeChanged($event.value)"></dx-select-box>
+          </div>
+          @if (action.mode === 'value') {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.VALUE' | translateAsync }}</span>
+              <automation-value-input [node]="action.node" [(value)]="action.value"></automation-value-input>
+            </div>
+          }
+          @if (action.mode === 'increment') {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.STEP' | translateAsync }}</span>
+              <dx-number-box [(value)]="action.step" [showSpinButtons]="true"></dx-number-box>
+            </div>
+          }
+          @if (action.mode === 'copy') {
+            <div class="fld wide">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SOURCE' | translateAsync }}</span>
+              <automation-node-field [(node)]="action.source" mode="read"></automation-node-field>
+            </div>
+          }
+        </div>
+      }
+      @case ('control') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONTROL' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.controls" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [value]="action.control" (onValueChanged)="controlChanged($event.value)"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.COMMAND' | translateAsync }}</span>
+            <dx-select-box [items]="controlCommands" valueExpr="value" [displayExpr]="ctx.optionText" [value]="action.command"
+              (onValueChanged)="commandChanged($event.value)"></dx-select-box>
+          </div>
+          @if (needsPercent) {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.PERCENT' | translateAsync }}</span>
+              <dx-number-box [(value)]="action.value" [min]="0" [max]="100" [showSpinButtons]="true" [step]="5"></dx-number-box>
+            </div>
+          }
+        </div>
+      }
+      @case ('groupControl') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AREA' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.areas" valueExpr="id" displayExpr="path" [searchEnabled]="true"
+              [showClearButton]="true" [(value)]="action.area"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CATEGORY' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.categories" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [showClearButton]="true" [(value)]="action.category"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.COMMAND' | translateAsync }}</span>
+            <dx-select-box [items]="allCommands" valueExpr="value" [displayExpr]="ctx.optionText" [value]="action.command"
+              (onValueChanged)="commandChanged($event.value)"></dx-select-box>
+          </div>
+          @if (needsPercent) {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.PERCENT' | translateAsync }}</span>
+              <dx-number-box [(value)]="action.value" [min]="0" [max]="100" [showSpinButtons]="true" [step]="5"></dx-number-box>
+            </div>
+          }
+          <div class="fld wide">
+            <div class="check-row">
+              <dx-check-box [(value)]="action.includeSubAreas" [text]="'UI.AUTOMATIONS.FIELD.INCLUDE_SUB_AREAS' | translateAsync"></dx-check-box>
+            </div>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.GROUP_CONTROL_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+      }
+      @case ('delay') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ (hasRandom ? 'UI.AUTOMATIONS.FIELD.RANDOM_FROM' : 'UI.AUTOMATIONS.FIELD.DURATION') | translateAsync }}</span>
+            <automation-duration-input [(seconds)]="action.seconds"></automation-duration-input>
+          </div>
+          @if (hasRandom) {
+            <div class="fld">
+              <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.RANDOM_TO' | translateAsync }}</span>
+              <automation-duration-input [(seconds)]="action.randomToSeconds"></automation-duration-input>
+            </div>
+          }
+          <div class="fld wide">
+            <div class="check-row">
+              <dx-check-box [value]="hasRandom" (onValueChanged)="setRandom($event.value)"
+                [text]="'UI.AUTOMATIONS.FIELD.RANDOM' | translateAsync"></dx-check-box>
+            </div>
+          </div>
+        </div>
+      }
+      @case ('waitUntil') {
+        <div class="fld">
+          <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONDITION' | translateAsync }}</span>
+          @if (conditionIsGroup) {
+            <automation-condition-list [group]="action.condition" [basePath]="path + '/condition'" [depth]="0"
+              [showOperator]="true"></automation-condition-list>
+          } @else {
+            <automation-condition-card [condition]="action.condition" [path]="path + '/condition'" [depth]="1"
+              (remove)="clearCondition()"></automation-condition-card>
+          }
+        </div>
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.FOR' | translateAsync }}</span>
+            <automation-duration-input [(seconds)]="action.forSeconds"></automation-duration-input>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.TIMEOUT' | translateAsync }}</span>
+            <automation-duration-input [(seconds)]="action.timeoutSeconds"></automation-duration-input>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.TIMEOUT_HINT' | translateAsync }}</span>
+          </div>
+          <div class="fld wide">
+            <div class="check-row">
+              <dx-check-box [(value)]="action.continueOnTimeout" [disabled]="!action.timeoutSeconds"
+                [text]="'UI.AUTOMATIONS.FIELD.CONTINUE_ON_TIMEOUT' | translateAsync"></dx-check-box>
+            </div>
+          </div>
+        </div>
+      }
+      @case ('notify') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SUBJECT' | translateAsync }}</span>
+            <dx-text-box [(value)]="action.subject" valueChangeEvent="input"></dx-text-box>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.BODY' | translateAsync }}</span>
+            <dx-text-area [(value)]="action.body" valueChangeEvent="input" [minHeight]="70" [autoResizeEnabled]="true"></dx-text-area>
+            <span class="placeholders">{{ 'UI.AUTOMATIONS.FIELD.PLACEHOLDERS' | translateAsync }} <code>{{ placeholders }}</code></span>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SEVERITY' | translateAsync }}</span>
+            <dx-select-box [items]="severityItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="action.severity"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.EMAIL' | translateAsync }}</span>
+            <dx-text-box [value]="emailText" (onValueChanged)="setEmailText($event.value)"
+              [placeholder]="'UI.AUTOMATIONS.FIELD.EMAIL_PLACEHOLDER' | translateAsync"></dx-text-box>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.EMAIL_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+      }
+      @case ('if') {
+        <div class="fld">
+          <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONDITION' | translateAsync }}</span>
+          @if (conditionIsGroup) {
+            <automation-condition-list [group]="action.condition" [basePath]="path + '/condition'" [depth]="0"
+              [showOperator]="true"></automation-condition-list>
+          } @else {
+            <automation-condition-card [condition]="action.condition" [path]="path + '/condition'" [depth]="1"
+              (remove)="clearCondition()"></automation-condition-card>
+          }
+        </div>
+        <div class="sub-list sc-then">
+          <div class="sub-head"><span class="kw">{{ 'UI.AUTOMATIONS.SECTION.THEN' | translateAsync }}</span></div>
+          <automation-action-list [actions]="action.then" [basePath]="path + '/then'" [depth]="depth + 1"></automation-action-list>
+        </div>
+        <div class="sub-list sc-then">
+          <div class="sub-head"><span class="kw">{{ 'UI.AUTOMATIONS.SECTION.ELSE' | translateAsync }}</span></div>
+          <automation-action-list [actions]="action.else" [basePath]="path + '/else'" [depth]="depth + 1"></automation-action-list>
+        </div>
+      }
+      @case ('runAutomation') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AUTOMATION' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.automations" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [(value)]="action.automation"></dx-select-box>
+          </div>
+          <div class="fld wide">
+            <div class="check-row">
+              <dx-check-box [(value)]="action.skipConditions" [text]="'UI.AUTOMATIONS.FIELD.SKIP_CONDITIONS' | translateAsync"></dx-check-box>
+            </div>
+          </div>
+        </div>
+      }
+      @case ('enableAutomation') {
+        <div class="fields">
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.AUTOMATION' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.automations" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [(value)]="action.automation"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.ENABLE' | translateAsync }}</span>
+            <dx-select-box [items]="enableItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="action.enable"></dx-select-box>
+          </div>
+        </div>
+      }
+      @case ('stop') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.REASON' | translateAsync }}</span>
+            <dx-text-box [(value)]="action.reason" valueChangeEvent="input"></dx-text-box>
+          </div>
+        </div>
+      }
+    }
+    <div class="check-row">
+      <dx-check-box [(value)]="action.continueOnError" [text]="'UI.AUTOMATIONS.FIELD.CONTINUE_ON_ERROR' | translateAsync"></dx-check-box>
+    </div>
+  }
+</automation-block-card>
