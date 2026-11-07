@@ -20,7 +20,7 @@
     <Folder Include="Models\User\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="MessagePack" Version="2.5.303" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 </Project>
