@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Driver.Shelly.Common;
 using Automatica.Driver.Shelly.Gen2.Models;
-using Microsoft.Build.Framework;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {

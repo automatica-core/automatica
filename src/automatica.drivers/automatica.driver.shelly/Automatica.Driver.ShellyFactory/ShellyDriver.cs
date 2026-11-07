@@ -6,7 +6,6 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Discovery;
 using Automatica.Driver.ShellyFactory.Types;
-using Humanizer;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Driver.ShellyFactory

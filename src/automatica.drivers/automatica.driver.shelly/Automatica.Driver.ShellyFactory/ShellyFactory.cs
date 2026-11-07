@@ -4,7 +4,6 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Migrations;
 using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Discovery;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace Automatica.Driver.ShellyFactory
