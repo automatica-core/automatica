@@ -5,13 +5,79 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Common.Update.Signing;
+using Automatica.Core.Tests.Signing;
 using Newtonsoft.Json;
+using System.IO.Compression;
 using Xunit;
 
 namespace Automatica.Core.Tests.Update
 {
+    [Collection(PackageSigningCollection.Name)]
     public class PluginManifestTests
     {
+        private readonly PackageSigningFixture _fixture;
+
+        public PluginManifestTests(PackageSigningFixture fixture)
+        {
+            _fixture = fixture;
+            PackageSigningFixture.ResetPolicy();
+        }
+
+        /// <summary>
+        /// Signs the package like automatica-cli does (component name and plugin version from the manifest)
+        /// </summary>
+        private void Sign(string file)
+        {
+            PluginManifest manifest;
+            using (var archive = ZipFile.OpenRead(file))
+            using (var reader = new StreamReader(archive.GetEntry("automatica-manifest.json")!.Open()))
+            {
+                manifest = JsonConvert.DeserializeObject<PluginManifest>(reader.ReadToEnd());
+            }
+            PackageSigner.Sign(file, _fixture.TrustedKey, PackageSignatureFormat.TypePlugin, manifest.Automatica.ComponentName,
+                manifest.Automatica.PluginVersion?.ToString() ?? "0.0.0.1", null);
+        }
+
+        private static async Task<string> CopyResource(string name)
+        {
+            var tmpFile = Path.GetTempFileName();
+            await using var fileStream = File.Create(tmpFile);
+            await Assembly.GetExecutingAssembly().GetManifestResourceStream(name)!.CopyToAsync(fileStream);
+            return tmpFile;
+        }
+
+        [Fact]
+        public async Task UnsignedPackage_IsRejected()
+        {
+            var tmpPath = Directory.CreateDirectory(Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString("N")));
+            var tmpFile = await CopyResource("Automatica.Core.Tests.P3.Driver.Automatica.Remote-0.3.0.1.acpkg");
+
+            // nothing is extracted before the signature is checked
+            Assert.Null(Plugin.GetPluginManifest(NullLogger.Instance, tmpFile, tmpPath.FullName));
+            Assert.Empty(Directory.GetFileSystemEntries(tmpPath.FullName));
+
+            PackageSecurityPolicy.AllowUnsignedOverride = true;
+            Assert.NotNull(Plugin.GetPluginManifest(NullLogger.Instance, tmpFile, tmpPath.FullName));
+
+            File.Delete(tmpFile);
+            Directory.Delete(tmpPath.FullName, true);
+        }
+
+        [Fact]
+        public async Task SignedPackage_WithOtherComponentName_IsRejected()
+        {
+            var tmpPath = Directory.CreateDirectory(Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString("N")));
+            var tmpFile = await CopyResource("Automatica.Core.Tests.P3.Driver.Automatica.Remote-0.3.0.1.acpkg");
+
+            // a valid signature for another plugin name must not be accepted for this manifest
+            PackageSigner.Sign(tmpFile, _fixture.TrustedKey, PackageSignatureFormat.TypePlugin, "Knx", "0.3.0.1", null);
+
+            Assert.Null(Plugin.GetPluginManifest(NullLogger.Instance, tmpFile, tmpPath.FullName));
+
+            File.Delete(tmpFile);
+            Directory.Delete(tmpPath.FullName, true);
+        }
         [Fact]
         public async Task TestManifestParsing()
         {
@@ -21,7 +87,7 @@ namespace Automatica.Core.Tests.Update
             {
                 await Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Tests.P3.Driver.Automatica.Remote-0.3.0.1.acpkg").CopyToAsync(fileStream.BaseStream);
             }
-
+            Sign(tmpFile);
 
             var manifest = Plugin.GetPluginManifest(NullLogger.Instance, tmpFile, tmpPath.FullName);
 
@@ -48,6 +114,7 @@ namespace Automatica.Core.Tests.Update
             {
                 await Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Tests.P3.Driver.HueBridgeSimulator.DriverFactory-0.3.0.1.acpkg").CopyToAsync(fileStream.BaseStream);
             }
+            Sign(tmpFile);
 
             var manifest = Plugin.GetPluginManifest(NullLogger.Instance, tmpFile, tmpPath.FullName);
 
@@ -89,6 +156,7 @@ namespace Automatica.Core.Tests.Update
             {
                 await Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Tests.P3.Driver.HueBridgeSimulator.DriverFactory-0.3.0.1.acpkg").CopyToAsync(fileStream.BaseStream);
             }
+            Sign(tmpFile);
 
             var manifest = Plugin.CheckPluginFile(NullLogger.Instance, tmpFile, false);
             Assert.True(manifest);

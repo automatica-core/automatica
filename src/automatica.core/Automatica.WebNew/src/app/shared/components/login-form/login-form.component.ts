@@ -27,8 +27,16 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     isWeb: boolean = false;
 
+    /** the server requires a new password before the login (initial or default password) */
+    mustChangePassword = false;
+    newPassword = "";
+    newPasswordConfirm = "";
+    private pendingToken: string;
+
     /** shown under the fields instead of a toast */
     errorKey: string = void 0;
+    /** a second line with what to do; only the UI.LOGIN errors have one */
+    errorHint: string = void 0;
     serverVersion: string = void 0;
     isBusy = false;
 
@@ -98,7 +106,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     clearError() {
         if (this.errorKey) {
             this.errorKey = void 0;
+            this.errorHint = void 0;
         }
+    }
+
+    private setError(key: string, withHint = true) {
+        this.errorKey = key;
+        this.errorHint = withHint ? key + "_HINT" : void 0;
     }
 
     ngOnDestroy(): void {
@@ -127,12 +141,74 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     selectServer(server: DiscoveredServer) {
         this.serverIp = server.url;
-        this.errorKey = void 0;
+        this.clearError();
         this.changeRef.detectChanges();
     }
 
     async onEnterPressed($event) {
+        if (this.mustChangePassword) {
+            await this.onChangePasswordClick($event);
+            return;
+        }
         await this.onLoginClick($event);
+    }
+
+    passwordsMatch = () => this.newPassword === this.newPasswordConfirm;
+
+    cancelPasswordChange() {
+        this.loginService.logout();
+        this.mustChangePassword = false;
+        this.pendingToken = void 0;
+        this.password = "";
+        this.newPassword = "";
+        this.newPasswordConfirm = "";
+        this.clearError();
+        this.changeRef.detectChanges();
+    }
+
+    async onChangePasswordClick(args) {
+        if (!this.validationGroup.instance.validate().isValid) {
+            return;
+        }
+
+        const loadingDone = this.appService.beginLoading();
+        this.clearError();
+        this.isBusy = true;
+        this.changeRef.detectChanges();
+        try {
+            const user = await this.loginService.changePassword(this.pendingToken, this.password, this.newPassword);
+            this.pendingToken = void 0;
+            this.mustChangePassword = false;
+            this.finishLogin(user);
+        } catch (error) {
+            const key = typeof error?.error === "string" ? error.error : error?.error?.error;
+            if (error?.status === 429) {
+                this.setError("ERROR.TOO_MANY_LOGIN_ATTEMPTS", false);
+            } else if (error?.status === 401 || error?.status === 403) {
+                this.cancelPasswordChange();
+                this.setError("UI.LOGIN.ERROR_CREDENTIALS");
+            } else if (key && /^[A-Z_]+$/.test(key)) {
+                this.setError("ERROR." + key, false);
+            } else {
+                console.error(error);
+                this.setError("ERROR.PASSWORD_CHANGE_FAILED", false);
+            }
+        } finally {
+            this.isBusy = false;
+            loadingDone();
+            this.changeRef.detectChanges();
+        }
+    }
+
+    private finishLogin(value) {
+        this.loginService.saveToLocalStorage(value);
+
+        if (this.saveLogin && !this.isWeb) {
+            localStorage.setItem("s1user", this.login);
+        }
+
+        this.loginService.userLoggedIn.emit(value);
+        this.router.navigate(["/"]);
     }
 
     async onDemoLogin($event) {
@@ -146,7 +222,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
     async onLoginClick(args) {
         const loadingDone = this.appService.beginLoading();
-        this.errorKey = void 0;
+        this.clearError();
         this.isBusy = true;
         this.changeRef.detectChanges();
 
@@ -163,27 +239,29 @@ export class LoginFormComponent implements OnInit, OnDestroy {
                 const value = await this.loginService.login(this.login, this.password);
                 if (!value) {
                     // older servers answer wrong credentials with 204 instead of 401
-                    this.errorKey = "UI.LOGIN.ERROR_CREDENTIALS";
+                    this.setError("UI.LOGIN.ERROR_CREDENTIALS");
+                } else if (value.MustChangePassword) {
+                    // the token only allows the password change
+                    this.pendingToken = value.Token;
+                    this.mustChangePassword = true;
+                    this.newPassword = "";
+                    this.newPasswordConfirm = "";
                 } else {
-                    this.loginService.saveToLocalStorage(value);
-
-                    if (this.saveLogin && !this.isWeb) {
-                        localStorage.setItem("s1user", this.login);
-                    }
-
-                    this.loginService.userLoggedIn.emit(value);
-                    this.router.navigate(["/"]);
+                    this.finishLogin(value);
                 }
             } catch (error) {
                 if (error.status === 0) {
-                    this.errorKey = "UI.LOGIN.ERROR_SERVER";
+                    this.setError("UI.LOGIN.ERROR_SERVER");
                 }
                 else if (error.status === 401) {
-                    this.errorKey = "UI.LOGIN.ERROR_CREDENTIALS";
+                    this.setError("UI.LOGIN.ERROR_CREDENTIALS");
+                }
+                else if (error.status === 429) {
+                    this.setError("ERROR.TOO_MANY_LOGIN_ATTEMPTS", false);
                 }
                 else {
                     console.error(error);
-                    this.errorKey = "UI.LOGIN.ERROR_FAILED";
+                    this.setError("UI.LOGIN.ERROR_FAILED");
                 }
             }
         }

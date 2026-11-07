@@ -8,6 +8,20 @@ namespace Automatica.Core.Internals.UserHelper
 {
     public static class UserHelper
     {
+        private const string PasswordAlphabet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        /// <returns>a random password from a CSPRNG (no ambiguous characters)</returns>
+        public static string GenerateRandomPassword(int length = 20)
+        {
+            return RandomNumberGenerator.GetString(PasswordAlphabet, length);
+        }
+
+        /// <returns>a new random security stamp (changes on every password change, see User.SecurityStamp)</returns>
+        public static string NewSecurityStamp()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
         /// <summary>
         /// Prefix of the current password hash format: <c>pbkdf2-sha512$&lt;iterations&gt;$&lt;base64 hash&gt;</c> (the salt is stored separately).
         /// Hashes without a prefix are the legacy format (PBKDF2-SHA1, 10000 iterations, see <see cref="HashPassword"/>).

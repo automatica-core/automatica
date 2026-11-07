@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Base.Common;
+using Automatica.Core.Common.Update.Signing;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -11,15 +12,37 @@ namespace Automatica.Core.Common.Update
 {
     public static class Plugin
     {
-        public static void InstallPlugin(string pluginFile, string installDirectory)
+        public const string ManifestFileName = "automatica-manifest.json";
+
+        /// <summary>
+        /// Verifies the plugin package signature and extracts it to <paramref name="installDirectory"/>
+        /// </summary>
+        /// <param name="componentName">the expected component name, null to accept any signed name</param>
+        /// <returns>the verified signature, null if an unsigned package was accepted by the policy</returns>
+        /// <exception cref="PackageVerificationException">the package must not be installed</exception>
+        public static PackageSignature InstallPlugin(ILogger logger, string pluginFile, string installDirectory, string componentName)
         {
+            var signature = VerifyPluginPackage(logger, pluginFile, componentName);
+
             ZipFile.ExtractToDirectory(pluginFile, installDirectory, true);
-            File.Delete(Path.Combine(installDirectory, "automatica-manifest.json"));
+            File.Delete(Path.Combine(installDirectory, ManifestFileName));
+            return signature;
+        }
+
+        /// <summary>
+        /// Verifies the signature of a plugin package before it is extracted
+        /// </summary>
+        /// <returns>the signature, null if an unsigned package was accepted by the policy</returns>
+        /// <exception cref="PackageVerificationException">the package must not be installed</exception>
+        public static PackageSignature VerifyPluginPackage(ILogger logger, string pluginFile, string componentName)
+        {
+            var result = PackageVerifier.VerifyZip(pluginFile, PackageSignatureFormat.TypePlugin, componentName);
+            return PackageVerifier.EnsureTrusted(result, Path.GetFileName(pluginFile), logger);
         }
 
         public static PluginManifest GetEmbeddedPluginManifest(ILogger logger, Assembly assembly)
         {
-            var resources = assembly.GetManifestResourceNames().SingleOrDefault(a => a.EndsWith("automatica-manifest.json"));
+            var resources = assembly.GetManifestResourceNames().SingleOrDefault(a => a.EndsWith(ManifestFileName));
             if(resources == null)
             {
                 logger.LogWarning($"{assembly} does not contain a manifest files");
@@ -29,17 +52,21 @@ namespace Automatica.Core.Common.Update
         }
         public static bool CheckPluginFile(ILogger logger, string fileName, bool checkVersion)
         {
-            var tempPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
+            var tempPath = ServerInfo.CreatePrivateTempDirectory();
             var check = CheckPluginFileInternal(logger, tempPath, fileName, checkVersion);
 
             if (Directory.Exists(tempPath))
             {
                 Directory.Delete(tempPath, true);
             }
-            
+
             return check;
         }
 
+        /// <summary>
+        /// Verifies the signature of the plugin package and extracts it to <paramref name="tempPath"/>
+        /// </summary>
+        /// <returns>the manifest, null if the package is invalid or its signature is not trusted</returns>
         public static PluginManifest GetPluginManifest(ILogger logger, string fileName, string tempPath)
         {
             var manifest = GetPluginManifestInternal(logger, tempPath, fileName);
@@ -48,6 +75,22 @@ namespace Automatica.Core.Common.Update
 
         private static PluginManifest GetPluginManifestInternal(ILogger logger, string tempPath, string fileName)
         {
+            PackageSignature signature;
+            try
+            {
+                signature = VerifyPluginPackage(logger, fileName, null);
+            }
+            catch (PackageVerificationException e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Could not verify the plugin file");
+                return null;
+            }
+
             try
             {
                 ZipFile.ExtractToDirectory(fileName, tempPath, true);
@@ -58,20 +101,32 @@ namespace Automatica.Core.Common.Update
                 return null;
             }
 
-            var files = Directory.GetFiles(tempPath, "automatica-manifest.json");
+            var manifest = Path.Combine(tempPath, ManifestFileName);
 
-            if (files.Length == 0)
+            if (!File.Exists(manifest))
             {
                 logger.LogError("Could not find automatica-manifest.json file");
                 return null;
             }
 
-            var manifest = files[0];
-            
+            PluginManifest pluginManifest;
             using (var reader = new StreamReader(manifest))
             {
-                return LoadManifest(logger, reader.BaseStream);
+                pluginManifest = LoadManifest(logger, reader.BaseStream);
             }
+
+            if (signature != null && pluginManifest?.Automatica != null)
+            {
+                // old manifests have no plugin version, the signed version is the one that counts
+                if (signature.Name != pluginManifest.Automatica.ComponentName || !Version.TryParse(signature.Version, out var signedVersion) ||
+                    (pluginManifest.Automatica.PluginVersion != null && signedVersion != pluginManifest.Automatica.PluginVersion))
+                {
+                    logger.LogError($"Plugin manifest {pluginManifest.Automatica.ComponentName} {pluginManifest.Automatica.PluginVersion} does not match the signed {signature.Name} {signature.Version}");
+                    return null;
+                }
+            }
+
+            return pluginManifest;
         }
 
         private static PluginManifest LoadManifest(ILogger logger, Stream stream)

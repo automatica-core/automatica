@@ -8,6 +8,7 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using System;
 using Automatica.Core.EF.Interceptors;
+using Automatica.Core.EF.Security;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
@@ -134,6 +135,9 @@ namespace Automatica.Core.EF.Models
                 }
             }
             optionsBuilder.EnableDetailedErrors();
+
+            // password properties and secret settings are encrypted at rest
+            optionsBuilder.AddInterceptors(SecretsInterceptor.Instance);
 
             // parameter values (password hashes, api keys, ...) only end up in the logs when database logging is enabled explicitly
             if (databaseLogs)
@@ -1288,6 +1292,8 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.Salt).IsRequired().HasMaxLength(1024);
                 entity.Property(e => e.Password).IsRequired().HasMaxLength(1024);
+                entity.Property(e => e.MustChangePassword).IsRequired().HasDefaultValue(false);
+                entity.Property(e => e.SecurityStamp).HasMaxLength(64);
 
                 entity.Ignore(e => e.TypeInfo);
                 entity.Ignore(e => e.PasswordConfirm);

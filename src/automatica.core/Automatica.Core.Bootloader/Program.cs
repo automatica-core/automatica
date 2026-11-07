@@ -73,25 +73,39 @@ namespace Automatica.Core.Bootloader
         private static void CheckForUpdateAndInstall()
         {
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+            var targetDir = Path.GetFullPath(Path.Combine(fi.DirectoryName, "..", "automatica"));
 
-            var sourceDir = tmpPath;
-            var targetDir = Path.Combine(fi.DirectoryName, "..", "automatica");
-
-            if (!Directory.Exists(sourceDir))
-            {
-                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
-                return;
-            }
             if (!Directory.Exists(targetDir))
             {
                 Console.Error.WriteLine($"Target directory does not exist ({targetDir})...");
                 return;
             }
 
+            // the private staging directory of the installation (0700), never the world writable temp directory
+            var tmpPath = ServerInfo.GetUpdateStagingDirectory(targetDir);
+            var sourceDir = tmpPath;
+
+            if (!Directory.Exists(sourceDir))
+            {
+                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
+                return;
+            }
+
+            try
+            {
+                // the watchdog verified the package before it was extracted, the extracted files are verified again
+                Common.Update.Update.VerifyExtractedUpdate(null, sourceDir);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"The staged update is not trusted, it is not installed: {e.Message}");
+                TryDeleteDirectory(tmpPath);
+                return;
+            }
+
             Console.WriteLine("Starting update...");
 
-            var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+            var tmpDirectory = ServerInfo.CreatePrivateTempDirectory(targetDir);
 
             Console.WriteLine("Back up current binaries...");
             if (!CopyDirectory(targetDir, tmpDirectory, true))

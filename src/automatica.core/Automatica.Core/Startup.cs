@@ -15,6 +15,7 @@ using Automatica.Discovery;
 using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -80,7 +81,7 @@ namespace Automatica.Core
         }
 
         /// <summary>
-        /// Replaces the roles and user groups of the token with the current ones and rejects tokens of deleted users.
+        /// Replaces the roles and user groups of the token with the current ones and rejects tokens of deleted users and revoked tokens.
         /// </summary>
         private static Task ValidateTokenUser(TokenValidatedContext context)
         {
@@ -90,20 +91,13 @@ namespace Automatica.Core
                 return Task.CompletedTask;
             }
 
-            var idClaim = identity.FindFirst(UserClaimsProvider.UserIdClaimType)?.Value ?? identity.FindFirst("nameid")?.Value;
-            Guid? userId = Guid.TryParse(idClaim, out var id) ? id : null;
-            var userName = identity.Name ?? identity.FindFirst("unique_name")?.Value;
-
             var provider = context.HttpContext.RequestServices.GetRequiredService<UserClaimsProvider>();
-            var claims = provider.Get(userId, userName);
-
-            if (claims == null)
+            var error = provider.Refresh(identity);
+            if (error != null)
             {
-                context.Fail("The user of the token does not exist anymore");
-                return Task.CompletedTask;
+                context.Fail(error);
             }
 
-            UserClaimsProvider.Apply(identity, claims);
             return Task.CompletedTask;
         }
 
@@ -132,8 +126,9 @@ namespace Automatica.Core
             services.AddRateLimiter(options =>
             {
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                // the client address honours X-Forwarded-For only from the local Remote Connect tunnel / reverse proxy
                 options.AddPolicy(AuthenticationController.LoginRateLimitPolicy, context =>
-                    RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    RateLimitPartition.GetFixedWindowLimiter(LoginThrottle.GetClientKey(context),
                         _ => new FixedWindowRateLimiterOptions
                         {
                             PermitLimit = 10,
@@ -143,6 +138,8 @@ namespace Automatica.Core
             });
 
             services.AddSingleton<UserClaimsProvider>();
+            // per user name lockout of the login
+            services.AddSingleton<LoginThrottle>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -192,9 +189,27 @@ namespace Automatica.Core
                 })
                 .AddMcpApiKey();
 
-            services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
+            services.AddMvcCore(config =>
+                {
+                    config.Filters.Add(new AuthorizeFilter());
+                    // viewer / visu responses: no password values, nothing of other user groups
+                    config.Filters.Add(new NonAdminResponseFilter(new JsonSerializerSettings
+                    {
+                        // same as AddNewtonsoftJson below
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Converters = { new ByteArrayToLongConverter() }
+                    }));
+                })
                 .AddAuthorization(options =>
                 {
+                    // a token of a user that must change the password (initial or old default password) only
+                    // allows the password change, see AccountController
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .RequireAssertion(ctx => !ctx.User.HasClaim(c => c.Type == UserClaimsProvider.MustChangePasswordClaimType))
+                        .Build();
+                    options.AddPolicy(AccountController.PasswordChangePolicy, policy => policy.RequireAuthenticatedUser());
                     options.AddPolicy(Role.AdminRole, policy => policy.RequireRole(Role.AdminRole));
                     options.AddPolicy(Role.ViewerRole,
                         policy => policy.RequireRole(Role.ViewerRole, Role.AdminRole, Role.VisuRole));
@@ -248,13 +263,16 @@ namespace Automatica.Core
             {
                 // exception texts only for developers (HubException messages are always sent)
                 options.EnableDetailedErrors = _environment?.IsDevelopment() ?? false;
+                // the token is only validated on connect: re-check user, roles and admin policies on every hub call
+                options.AddFilter<CurrentUserHubFilter>();
             }).AddJsonProtocol(options =>
             {
             });
             services.AddAutomaticaRemoteConnectWithFrp(a =>
             {
                 a.UseWeb = true;
-                a.UseSsh = true;
+                // the ssh tunnel exposes the ssh daemon of the host to the cloud: explicit opt-in only
+                a.UseSsh = bool.TryParse(Configuration["server:remote_connect_ssh"], out var useSsh) && useSsh;
 
                 a.ServerAddress = Configuration["server:remote_connect_url"];
                 a.ServerPort = 7000;
@@ -291,6 +309,8 @@ namespace Automatica.Core
                 app.UseHttpsRedirection();
             }
 
+            app.UseSecurityHeaders(Configuration);
+
             app.UseCors("CorsPolicy");
             app.UseRouting();
             app.UseRateLimiter();
@@ -305,13 +325,15 @@ namespace Automatica.Core
 
             app.UseEndpoints(endpoints =>
             {
+                // connections end when the token expires (they are not re-validated otherwise)
                 endpoints.MapHub<DataHub>("/signalr/dataHub", options =>
                 {
                     options.ApplicationMaxBufferSize = 1024 * 1024;
+                    options.CloseOnAuthenticationExpiration = true;
                 });
-                endpoints.MapHub<TelegramHub>("/signalr/telegramHub");
-                endpoints.MapHub<UpdateHub>("/signalr/updateHub");
-                endpoints.MapHub<LoggingHub>("/signalr/loggingHub");
+                endpoints.MapHub<TelegramHub>("/signalr/telegramHub", options => options.CloseOnAuthenticationExpiration = true);
+                endpoints.MapHub<UpdateHub>("/signalr/updateHub", options => options.CloseOnAuthenticationExpiration = true);
+                endpoints.MapHub<LoggingHub>("/signalr/loggingHub", options => options.CloseOnAuthenticationExpiration = true);
                 endpoints.MapAutomaticaMcp();
 
                 endpoints.MapControllerRoute("webapi", "");

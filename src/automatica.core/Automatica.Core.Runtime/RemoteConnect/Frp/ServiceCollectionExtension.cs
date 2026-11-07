@@ -25,6 +25,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
         private static void AddFrpServicesInternal(this IServiceCollection services)
         {
+            services.AddSingleton<FrpcCredentials>();
             services.AddSingleton<IFrpcApiClient, FrpcApiClient>();
             services.AddSingleton<IFrpProcess, FrpProcess>();
             services.AddSingleton<IFrpService, FrpService>();

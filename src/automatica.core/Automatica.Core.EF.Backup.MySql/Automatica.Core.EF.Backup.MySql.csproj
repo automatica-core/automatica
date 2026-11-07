@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="MySqlBackup.NET" Version="2.7.0" />
     <PackageReference Include="MySqlBackup.NET.MySqlConnector" Version="2.7.0" />
+    <!-- pinned above the version of MySqlBackup.NET: GHSA-473q-m89c-ghf8 -->
+    <PackageReference Include="MySqlConnector" Version="2.6.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />

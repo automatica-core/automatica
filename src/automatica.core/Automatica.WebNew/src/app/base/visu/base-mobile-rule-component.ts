@@ -65,6 +65,15 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
     }
 
     protected async mobileRuleInit() {
+        // the server sends the values of logic interfaces only to subscribed connections
+        for (const interf of this.ruleInstance?.Interfaces ?? []) {
+            try {
+                await this.dataHubService.subscribe(interf.ObjId);
+            } catch (error) {
+                console.error("could not subscribe logic interface", interf.ObjId, error);
+            }
+        }
+
         this.registerEvent(this.dataHubService.ruleInstanceValueChanged, (data) => {
             if (this.ruleInstance && this.ruleInstance.Interfaces && this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
                 this.onRuleInstanceValueChanged(data[0], data[1]);

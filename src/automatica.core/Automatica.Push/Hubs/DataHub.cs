@@ -89,6 +89,17 @@ namespace Automatica.Push.Hubs
             return true;
         }
 
+        private static string SanitizeForLog(string value)
+        {
+            if (value == null)
+            {
+                return "<null>";
+            }
+
+            var cleaned = new string(Array.ConvertAll(value.ToCharArray(), c => char.IsControl(c) ? '_' : c));
+            return cleaned.Length > 64 ? cleaned.Substring(0, 64) + "..." : cleaned;
+        }
+
         [Authorize(Policy = Role.AdminRole)]
         public async Task EnableLearnMode(Guid nodeInstanceId)
         {
@@ -111,6 +122,11 @@ namespace Automatica.Push.Hubs
         }
 
 
+        /// <summary>
+        /// Writes a data point or logic input. Needs a role (viewer, visu or admin); non-admins only write data points
+        /// marked as writeable in their user groups.
+        /// </summary>
+        [Authorize(Policy = Role.ViewerRole)]
         public void SetValue(Guid instanceId, JsonElement value)
         {
             object convertedValue = null;
@@ -163,9 +179,8 @@ namespace Automatica.Push.Hubs
 
                 if (!nodeInstanceValue.IsWriteable && !HubAccess.IsAdmin(Context.User))
                 {
-                    // the flag was never enforced for the visualization, existing visu controls may be bound to such
-                    // data points - log it instead of breaking them, the user group check above is the access boundary
-                    _logger.LogWarning($"User {Context.User?.Identity?.Name} writes data point {instanceId}, which is not marked as writeable");
+                    _logger.LogWarning($"Refused write of user {SanitizeForLog(Context.User?.Identity?.Name)} to data point {instanceId}, which is not writeable");
+                    throw new HubException($"Data point {instanceId} is not writeable");
                 }
 
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,

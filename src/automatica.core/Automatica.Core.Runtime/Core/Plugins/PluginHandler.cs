@@ -19,22 +19,26 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         public async Task CheckAndInstallPluginUpdates()
         {
-            var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
-            if (!Directory.Exists(updateDirectory))
-            {
-                Directory.CreateDirectory(updateDirectory);
-                return;
-            }
+            // private staging directory, never the world writable temp directory (the old /tmp/Automatica.Core.Plugins is ignored)
+            var updateDirectory = ServerInfo.GetPluginUpdateDirectory();
 
             var files = Directory.GetFiles(updateDirectory);
 
             foreach (var f in files)
             {
-                var tmp = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+                var tmp = ServerInfo.CreatePrivateTempDirectory();
                 try
                 {
+                    // verifies the signature before anything is extracted
                     var manifest = Common.Update.Plugin.GetPluginManifest(logger, f, tmp);
-                    await pluginInstaller.InstallPlugin(manifest, f);
+                    if (manifest == null)
+                    {
+                        logger.LogError($"Invalid plugin package {Path.GetFileName(f)}, it is not installed");
+                    }
+                    else
+                    {
+                        await pluginInstaller.InstallPlugin(manifest, f);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -42,7 +46,10 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
                 finally
                 {
-                    Directory.Delete(tmp, true);
+                    if (Directory.Exists(tmp))
+                    {
+                        Directory.Delete(tmp, true);
+                    }
                 }
                 File.Delete(f);
             }

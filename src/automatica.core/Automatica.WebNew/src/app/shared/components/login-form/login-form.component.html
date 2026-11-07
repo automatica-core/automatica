@@ -9,7 +9,47 @@
     </div>
 
     <dx-validation-group #validationGroup>
-      <form class="fields" (submit)="$event.preventDefault(); onLoginClick($event)" novalidate>
+      <form class="fields" (submit)="$event.preventDefault(); onEnterPressed($event)" novalidate>
+        @if (mustChangePassword) {
+        <h1 class="title">{{ 'LOGIN.CHANGE_PASSWORD' | translateAsync }}</h1>
+        <p class="must-change-hint">{{ 'LOGIN.MUST_CHANGE_PASSWORD' | translateAsync }}</p>
+
+        <label class="field">
+          <span class="label">{{ 'LOGIN.NEW_PASSWORD' | translateAsync }}</span>
+          <dx-text-box mode="password" [(value)]="newPassword" [height]="44" width="100%" valueChangeEvent="input" (onValueChanged)="clearError()"
+            (onEnterKey)="onEnterPressed($event)" [inputAttr]="{ autocomplete: 'new-password' }">
+            <dx-validator>
+              <dxi-validation-rule type="required" [message]="'LOGIN.NEW_PASSWORD' | translateAsync"></dxi-validation-rule>
+              <dxi-validation-rule type="stringLength" [min]="8" [message]="'ERROR.PASSWORD_TOO_SHORT' | translateAsync"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </label>
+
+        <label class="field">
+          <span class="label">{{ 'LOGIN.NEW_PASSWORD_CONFIRM' | translateAsync }}</span>
+          <dx-text-box mode="password" [(value)]="newPasswordConfirm" [height]="44" width="100%" valueChangeEvent="input" (onValueChanged)="clearError()"
+            (onEnterKey)="onEnterPressed($event)" [inputAttr]="{ autocomplete: 'new-password' }">
+            <dx-validator>
+              <dxi-validation-rule type="custom" [validationCallback]="passwordsMatch" [reevaluate]="true"
+                [message]="'ERROR.PASSWORDS_DO_NOT_MATCH' | translateAsync"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </label>
+
+        @if (errorKey) {
+          <div class="login-error" role="alert">
+            <b>{{ errorKey | translateAsync }}</b>
+            @if (errorHint) {
+              <span>{{ errorHint | translateAsync }}</span>
+            }
+          </div>
+        }
+
+        <dx-button type="default" [height]="44" width="100%" [disabled]="isBusy"
+          [text]="'LOGIN.CHANGE_PASSWORD' | translateAsync" (onClick)="onChangePasswordClick($event)"></dx-button>
+        <dx-button stylingMode="outlined" [height]="44" width="100%" [text]="'LOGIN.CANCEL' | translateAsync"
+          (onClick)="cancelPasswordChange()"></dx-button>
+        } @else {
         <h1 class="title">{{ 'UI.LOGIN.TITLE' | translateAsync }}</h1>
 
         @if (!isWeb) {
@@ -65,7 +105,9 @@
         @if (errorKey) {
           <div class="login-error" role="alert">
             <b>{{ errorKey | translateAsync }}</b>
-            <span>{{ (errorKey + '_HINT') | translateAsync }}</span>
+            @if (errorHint) {
+              <span>{{ errorHint | translateAsync }}</span>
+            }
           </div>
         }
 
@@ -75,6 +117,7 @@
         @if (!isWeb) {
           <dx-button stylingMode="outlined" [height]="44" width="100%" [text]="'LOGIN.DEMO' | translateAsync"
             (onClick)="onDemoLogin($event)"></dx-button>
+        }
         }
       </form>
     </dx-validation-group>

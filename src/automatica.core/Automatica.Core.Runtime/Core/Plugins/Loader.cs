@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
+using Automatica.Core.Common.Update.Signing;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyModel;
@@ -292,7 +293,14 @@ namespace Automatica.Core.Runtime.Core.Plugins
         {
             logger.LogDebug($"Loading files from {folder} and check for {typeof(T)}");
             var list = new List<T>();
-            foreach (var file in Directory.GetFiles(folder, searchPattern))
+            var files = Directory.GetFiles(folder, searchPattern);
+
+            if (files.Length > 0 && !isInDevMode && !IsFolderTrusted(folder, logger))
+            {
+                return list;
+            }
+
+            foreach (var file in files)
             {
                 try
                 {
@@ -305,6 +313,39 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// An installed plugin directory with a signature file must match it exactly (no unsigned or modified file).
+        /// Plugins installed before package signing have no signature file: they are loaded with a warning, unless
+        /// <see cref="PackageSecurityPolicy.RequireSignedPluginsEnv"/> is set.
+        /// </summary>
+        internal static bool IsFolderTrusted(string folder, ILogger logger)
+        {
+            try
+            {
+                var result = PackageVerifier.VerifyDirectory(folder, PackageSignatureFormat.TypePlugin, null, null, false, true);
+
+                switch (result.Status)
+                {
+                    case PackageVerificationStatus.Valid:
+                        return true;
+                    case PackageVerificationStatus.Unsigned when !PackageSecurityPolicy.RequireSignedPlugins:
+                        logger.LogWarning($"Plugin directory {folder} has no signature file (installed before package signing), loading it anyway");
+                        return true;
+                    case PackageVerificationStatus.Unsigned:
+                        logger.LogError($"Plugin directory {folder} has no signature file, it is not loaded ({PackageSecurityPolicy.RequireSignedPluginsEnv} is set)");
+                        return false;
+                    default:
+                        logger.LogError($"Plugin directory {folder} does not match its signature, it is not loaded: {result.Error}");
+                        return false;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Could not verify the plugin directory {folder}, it is not loaded");
+                return false;
+            }
         }
     }
 }

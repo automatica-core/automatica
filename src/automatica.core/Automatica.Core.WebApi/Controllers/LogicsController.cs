@@ -1,4 +1,5 @@
 ﻿using System;
+using Automatica.Core.Runtime.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -686,6 +687,13 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public object GetInstanceData(Guid id)
         {
+            // logics of other user groups look like unknown ids
+            var logic = _logicCacheFacade.InstanceCache.Get(id);
+            if (logic == null || !CanAccess(logic.This2UserGroup))
+            {
+                throw new RuleNotFoundException();
+            }
+
             return _logicDataHandler.GetDataForRuleInstance(id);
         }
 
