@@ -96,7 +96,7 @@ namespace Automatica.Core.Runtime.Core
         /// Config and actions are not retained: they carry driver secrets and per-plugin passwords, and a retained action
         /// would replay on every reconnect. Clients get them when they subscribe (see <see cref="ClientSubscribedTopic"/>).
         /// </summary>
-        internal static MqttApplicationMessage BuildMessage(string topic, byte[] payload, MqttQualityOfServiceLevel qos, bool retain = false)
+        internal static MqttApplicationMessage BuildMessage(string topic, byte[]? payload, MqttQualityOfServiceLevel qos, bool retain = false)
         {
             var builder = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)

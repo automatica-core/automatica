@@ -15,9 +15,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
         {
         }
 
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
-            BitcoinValueNode node = null;
+            BitcoinValueNode? node = null;
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "blockchain-btc-usd":

@@ -74,7 +74,7 @@ public class CoreLoggerSettings : ICoreLoggerSettings
                 var json = File.ReadAllText("log_levels.json");
                 var levels = JsonConvert.DeserializeObject<Dictionary<string, LogLevel>>(json);
 
-                foreach (var (key, value) in levels)
+                foreach (var (key, value) in levels ?? new Dictionary<string, LogLevel>())
                 {
                     _logLevels.Add(key, value);
                 }

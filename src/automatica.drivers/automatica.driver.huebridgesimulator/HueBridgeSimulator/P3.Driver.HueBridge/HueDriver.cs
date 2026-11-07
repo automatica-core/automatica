@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using P3.Driver.HueBridge.Data;
 using P3.Driver.HueBridge.EventArgs;
 using Automatica.Core.Driver.Utility.Network;
@@ -29,7 +30,7 @@ namespace P3.Driver.HueBridge
         /// </summary>
         public event EventHandler WhiteListChanged;
 
-        private IWebHost _host;
+        private IHost _host;
         private readonly object _linkLock = new object();
         private DateTime _linkButtonOpenUntil = DateTime.MinValue;
 
@@ -254,9 +255,8 @@ namespace P3.Driver.HueBridge
             }
         }
 
-        public IWebHost BuildWebHost()
+        public IHost BuildWebHost()
         {
-            var args = new string[0];
             string host;
             if (BindAddress.Equals(IPAddress.Any))
             {
@@ -272,14 +272,14 @@ namespace P3.Driver.HueBridge
             }
 
             // the web host must not touch the global (Serilog) logger of the core process
-            var webHost = WebHost.CreateDefaultBuilder(args)
+            return Host.CreateDefaultBuilder()
                 .ConfigureLogging(logging => logging.ClearProviders())
                 .ConfigureServices(services => services.AddSingleton(this))
-                .UseKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024)
-                .UseStartup<HueStartup>()
-                .UseUrls($"http://{host}:{Port}/");
-
-            return webHost.Build();
+                .ConfigureWebHostDefaults(webHost => webHost
+                    .UseKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024)
+                    .UseStartup<HueStartup>()
+                    .UseUrls($"http://{host}:{Port}/"))
+                .Build();
         }
     }
 }

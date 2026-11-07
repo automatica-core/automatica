@@ -38,8 +38,8 @@ namespace P3.Driver.Matter.Tests
         public void Test_credentials_chain_to_the_test_paa()
         {
             using var attestation = DeviceAttestation.CreateTestCredentials();
-            using var dac = new X509Certificate2(attestation.DacCertificate);
-            using var pai = new X509Certificate2(attestation.PaiCertificate);
+            using var dac = X509CertificateLoader.LoadCertificate(attestation.DacCertificate);
+            using var pai = X509CertificateLoader.LoadCertificate(attestation.PaiCertificate);
             AssertChainsToTestPaa(dac, pai);
             Assert.Equal(DeviceAttestation.TestVendorId, attestation.VendorId);
         }
@@ -55,7 +55,7 @@ namespace P3.Driver.Matter.Tests
         public void Dac_key_matches_the_dac()
         {
             using var attestation = DeviceAttestation.CreateTestCredentials();
-            using var dac = new X509Certificate2(attestation.DacCertificate);
+            using var dac = X509CertificateLoader.LoadCertificate(attestation.DacCertificate);
             var data = new byte[] { 1, 2, 3 };
             var signature = attestation.SignWithChallenge(data, new byte[16]);
             using var pub = dac.GetECDsaPublicKey()!;

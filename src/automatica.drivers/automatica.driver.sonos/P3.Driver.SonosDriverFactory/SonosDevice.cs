@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable annotations
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

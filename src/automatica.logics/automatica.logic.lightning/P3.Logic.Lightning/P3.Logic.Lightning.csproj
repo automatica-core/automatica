@@ -19,6 +19,6 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2049" />
-	  <PackageReference Include="Microsoft.Build.Framework" Version="18.0.2" />
+	  <PackageReference Include="Microsoft.Build.Framework" Version="18.11.0" />
   </ItemGroup>
 </Project>

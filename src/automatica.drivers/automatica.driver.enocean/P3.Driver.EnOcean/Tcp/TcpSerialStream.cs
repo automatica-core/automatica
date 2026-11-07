@@ -194,7 +194,7 @@ namespace P3.Driver.EnOcean.Tcp
             {
                 _tcpReceiver.Pause();
                 Logger.Logger.Instance.LogHexOut(frame.RawData);
-                _tcpClient.Client.SendAsync(frame.RawData.ToArray());
+                await _tcpClient.Client.SendAsync(frame.RawData.ToArray());
                 return await ReadFrame();
             }
             catch (Exception e)

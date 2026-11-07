@@ -34,14 +34,6 @@ namespace P3.Driver.MBus.ConsoleTest
 
                 await Task.Delay(1000);
             }
-
-            var mbusTest = new MBusTest(args[0]);
-            await mbusTest.Start();
-
-            Console.ReadLine();
-
-
-            await mbusTest.Stop();
         }
 
     }

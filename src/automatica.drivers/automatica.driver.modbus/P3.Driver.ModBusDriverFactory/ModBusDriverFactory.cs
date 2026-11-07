@@ -127,7 +127,7 @@ namespace P3.Driver.ModBusDriverFactory
 
 
 
-            InitTemplates(factory);
+            InitDriverTemplates(factory);
         }
 
         private void CreatePropertiesForModbusValue(Guid nodeGuid, INodeTemplateFactory factory, bool isByteRegister, int registerLength)
@@ -207,7 +207,7 @@ namespace P3.Driver.ModBusDriverFactory
 
   
 
-        public abstract void InitTemplates(INodeTemplateFactory factory);
+        protected abstract void InitDriverTemplates(INodeTemplateFactory factory);
 
     }
 }

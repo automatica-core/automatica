@@ -479,6 +479,6 @@
     public class FontCharacter
     {
         public char Character { get; set; }
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

@@ -14,7 +14,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
        
 
       
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
             return null;
         }

@@ -1,4 +1,6 @@
-﻿using Automatica.Core.Driver;
+﻿#nullable enable annotations
+
+using Automatica.Core.Driver;
 
 namespace P3.Driver.VkingBms.DriverFactory.Nodes
 {

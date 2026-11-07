@@ -32,7 +32,7 @@ namespace P3.Driver.HomeKit.UnitTests.Crypto
         public void TestHkdkf()
         {
             var hkdkf = new HkdfSha512();
-            var result = hkdkf.DeriveBytes(SharedSecret.Import(HkdfIkm), HkdfSalt, HkdfInfo, 42);
+            var result = hkdkf.DeriveBytes(SharedSecret.Import(HkdfIkm, SharedSecretBlobFormat.RawSharedSecret), HkdfSalt, HkdfInfo, 42);
 
             Assert.Equal(HkdfOkm, result);
         }

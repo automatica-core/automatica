@@ -274,7 +274,7 @@ namespace P3.Driver.HomeKit.Http
                 resultData = resultData.Concat(dataLength).ToArray();
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
-                var nonce = new Nonce(zeros, BitConverter.GetBytes(session.OutboundBinaryMessageCount++));
+                var nonce = zeros.Concat(BitConverter.GetBytes(session.OutboundBinaryMessageCount++)).ToArray();
 
                 var dataToEncrypt = new byte[length];
                 Array.Copy(plainData, offset, dataToEncrypt, 0, length);
@@ -342,12 +342,13 @@ namespace P3.Driver.HomeKit.Http
                 var message = content.AsSpan(offset + lengthSize, frameLength + authTagSize);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
-                var nonce = new Nonce(zeros, BitConverter.GetBytes(session.InboundBinaryMessageCount++));
+                var nonce = zeros.Concat(BitConverter.GetBytes(session.InboundBinaryMessageCount++)).ToArray();
 
 
                 // Use the ControllerToAccessory key to decrypt the data.
                 //
-                var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(Key.Import(AeadAlgorithm.ChaCha20Poly1305, session.ControllerToAccessoryKey, KeyBlobFormat.RawSymmetricKey), nonce, twoBytes, message, out var output);
+                var output = AeadAlgorithm.ChaCha20Poly1305.Decrypt(Key.Import(AeadAlgorithm.ChaCha20Poly1305, session.ControllerToAccessoryKey, KeyBlobFormat.RawSymmetricKey), nonce, twoBytes, message);
+                var decrypt = output != null;
 
                 if (!decrypt)
                 {

@@ -25,7 +25,7 @@ namespace P3.Synology.Api.Client.Apis.FileStation.List
         {
             var additionalParams = new[] { "real_path", "owner", "time", "size" };
 
-            string patternValue = null;
+            string? patternValue = null;
             if (fileStationListRequest.Patterns?.Count() == 1)
             {
                 patternValue = fileStationListRequest.Patterns.First();
@@ -42,9 +42,10 @@ namespace P3.Synology.Api.Client.Apis.FileStation.List
                 { "limit", fileStationListRequest.Limit.ToString() },
                 { "sort_by", fileStationListRequest.SortBy ?? FileStationListSortByEnumeration.Name },
                 { "sort_direction", fileStationListRequest.SortDirection ?? "asc" },
-                { "pattern", patternValue },
+                // unset values go out as empty parameters, like the query builder did with null
+                { "pattern", patternValue ?? string.Empty },
                 { "filetype", fileStationListRequest.FileType ?? "all" },
-                { "goto_path", fileStationListRequest.GoToPath },
+                { "goto_path", fileStationListRequest.GoToPath ?? string.Empty },
                 { "additional", additionalParams.ToCommaSeparatedAroundBrackets() }
             };
 

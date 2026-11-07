@@ -92,7 +92,7 @@ namespace Automatica.Core.Plugin.Standalone
 
                 Logger.LogInformation($"Starting driver...done");
 
-                await _connection.MqttClient.SubscribeAsync(new TopicFilterBuilder()
+                await _connection.MqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
                     .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/+")
                     .WithExactlyOnceQoS()
                     .Build());

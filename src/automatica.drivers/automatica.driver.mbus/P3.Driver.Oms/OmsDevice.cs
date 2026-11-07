@@ -67,7 +67,7 @@ namespace P3.Driver.Oms
                 {
                     _logger.LogDebug($"Read frame...1({frame.GetType()})");
 
-                    MBusFrame data = null;
+                    MBusFrame? data = null;
                     if (frame is ShortFrame)
                     {
 

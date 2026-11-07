@@ -12,7 +12,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
         : CoinValueNode(driverContext, ethNode, currency, addSymbol, symbol)
     {
      
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
             return null;
         }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace P3.Driver.Sonos
 {
-    [Serializable]
     public class SonosException : Exception
     {
         public SonosException()
@@ -18,10 +16,5 @@ namespace P3.Driver.Sonos
         {
         }
 
-        protected SonosException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

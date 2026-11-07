@@ -34,7 +34,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         protected CoinNode(IDriverContext driverContext) : base(driverContext)
         {
         }
-        internal void AddNode(T node)
+        internal void AddNode(T? node)
         {
             if (node != null)
             {
@@ -54,6 +54,11 @@ namespace P3.Driver.Blockchain.Ticker.Driver
                 var res = await response.Content.ReadAsStringAsync(token);
 
                 var jsonToken = JsonConvert.DeserializeObject<DiaAssetQuotation>(res);
+                if (jsonToken == null)
+                {
+                    DriverContext.Logger.LogWarning("Empty ticker response from {Url}", GetUrl());
+                    return;
+                }
 
                 foreach (var node in _nodes)
                 {

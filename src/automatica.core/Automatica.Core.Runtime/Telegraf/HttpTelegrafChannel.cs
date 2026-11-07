@@ -75,7 +75,7 @@ namespace Automatica.Core.Runtime.Telegraf
             task.ContinueWith(static (_, state) =>
                 {
                     var (tasks, id) = ((ConcurrentDictionary<Guid, Task>, Guid))state!;
-                    tasks.TryRemove(id, out _);
+                    tasks.TryRemove(id, out Task? _);
                 }, (_tasks, taskId), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously,
                 TaskScheduler.Default);
         }

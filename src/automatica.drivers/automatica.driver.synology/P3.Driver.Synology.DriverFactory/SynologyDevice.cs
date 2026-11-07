@@ -27,7 +27,6 @@ namespace P3.Driver.Synology.DriverFactory
 
         private SynologyClient _client;
 
-        private bool _connected;
         private int _port;
         private bool _ignoreSslErrors;
         private string _certificateThumbprint;
@@ -79,7 +78,6 @@ namespace P3.Driver.Synology.DriverFactory
                 
                     if (!String.IsNullOrEmpty(_username) && !String.IsNullOrEmpty(_password))
                         await _client.LoginAsync(_username, _password);
-                    _connected = true;
                     _connectedAttribute.DispatchRead(true);
 
                 }

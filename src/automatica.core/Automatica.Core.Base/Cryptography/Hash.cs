@@ -37,9 +37,7 @@ namespace Automatica.Core.Base.Cryptography
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
 
-            var sha1 = SHA1.Create("sha1");
-
-            var hash = sha1.ComputeHash(buffer);
+            var hash = SHA1.HashData(buffer);
 
             return hash.ToHex(true);
         }

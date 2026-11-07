@@ -21,7 +21,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Automatica.Core.EF" Version="10.0.0.2049" />
     <PackageReference Include="Automatica.Core.Base" Version="10.0.0.2049" />
     <PackageReference Include="Automatica.Core.Driver" Version="10.0.0.2049" />

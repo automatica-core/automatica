@@ -23,9 +23,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             return true;
         }
 
-        public override IDriverNode CreateDriverNode(IDriverContext ctx)
+        public override IDriverNode? CreateDriverNode(IDriverContext ctx)
         {
-            CardanoValueNode node = null;
+            CardanoValueNode? node = null;
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "blockchain-ada-usd":

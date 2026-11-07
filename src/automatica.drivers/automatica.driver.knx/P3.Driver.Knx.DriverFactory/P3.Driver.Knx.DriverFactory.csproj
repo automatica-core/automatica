@@ -26,6 +26,8 @@
     <PackageReference Include="Automatica.Core.Driver" Version="10.0.0.2049" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
     <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
+    <!-- Falcon 6.1 pulls System.Security.Cryptography.Xml 5.0.0 -> System.Drawing.Common 5.0.0 (GHSA-rxg9-xrhp-64gj) -->
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.14" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj" />

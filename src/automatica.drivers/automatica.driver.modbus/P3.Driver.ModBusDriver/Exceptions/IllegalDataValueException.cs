@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace P3.Driver.ModBusDriver.Exceptions
 {
-    [Serializable]
     public class IllegalDataValueException : ModBusException
 
     {
@@ -12,10 +10,5 @@ namespace P3.Driver.ModBusDriver.Exceptions
             
         }
 
-        protected IllegalDataValueException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-
-        }
     }
 }

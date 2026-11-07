@@ -21,11 +21,11 @@ namespace P3.Synology.Api.Client.Apis.FileStation.List.Models
             string folderPath,
             int offset = 0,
             int limit = 0,
-            string sortBy = null,
-            string sortDirection = null,
-            IEnumerable<string> patterns = null,
-            string fileType = null,
-            string goToPath = null)
+            string? sortBy = null,
+            string? sortDirection = null,
+            IEnumerable<string>? patterns = null,
+            string? fileType = null,
+            string? goToPath = null)
         {
             if (string.IsNullOrWhiteSpace(folderPath))
             {
@@ -45,11 +45,11 @@ namespace P3.Synology.Api.Client.Apis.FileStation.List.Models
         public string FolderPath { get; set; }
         public int Offset { get; set; }
         public int Limit { get; set; }
-        public string SortBy { get; set; }
-        public string SortDirection { get; set; }
-        public IEnumerable<string> Patterns { get; set; } = new List<string>();
-        public string FileType { get; set; }
-        public string GoToPath { get; set; }
+        public string? SortBy { get; set; }
+        public string? SortDirection { get; set; }
+        public IEnumerable<string>? Patterns { get; set; } = new List<string>();
+        public string? FileType { get; set; }
+        public string? GoToPath { get; set; }
     }
 }
 

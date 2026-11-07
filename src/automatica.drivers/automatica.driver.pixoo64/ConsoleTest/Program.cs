@@ -47,7 +47,3 @@ while (true)
         i = 0;
     }
 }
-
-
-
-Console.ReadLine();

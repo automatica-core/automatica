@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable annotations
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -41,7 +42,7 @@ namespace P3.Driver.Pixoo64
                 }
                 catch (Exception e)
                 {
-                    DriverContext.Logger.LogError($"Could not parse IPAddress ({ipAddress})");
+                    DriverContext.Logger.LogError(e, $"Could not parse IPAddress ({ipAddress})");
                 }
             }
 

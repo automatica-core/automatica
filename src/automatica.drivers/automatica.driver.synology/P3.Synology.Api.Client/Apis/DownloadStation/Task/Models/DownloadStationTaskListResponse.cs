@@ -8,6 +8,6 @@ namespace P3.Synology.Api.Client.Apis.DownloadStation.Task.Models
 
         public int Offset { get; set; }
 
-        public IEnumerable<DownloadStationTask> Tasks { get; set; }
+        public IEnumerable<DownloadStationTask>? Tasks { get; set; }
     }
 }
