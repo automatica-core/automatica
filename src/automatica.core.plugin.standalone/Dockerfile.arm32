@@ -19,6 +19,11 @@ RUN dotnet publish -c Release -o /app/plugin /src/src/Automatica.Core.Plugin.Sta
 RUN echo $VERSION
 RUN rm -rf /src
 
+# Root for now: every plugin image starts FROM this one (automatica.build plugin Dockerfile) and
+# the satellite runs it --privileged with the host's /dev. Plugins still write next to their own
+# assemblies (HomeKit unpacks libsodium into /plugin at start), so a non-root USER here breaks them.
+# To switch: plugins write to a data directory, the plugin Dockerfile copies with --chown, then
+# "USER 10001" with supplementary groups dialout (20) and plugdev (46) for serial / HID devices.
 FROM automaticacore/automatica-plugin-runtime:arm32v7-10 AS runtime
 WORKDIR /app/
 

@@ -17,6 +17,9 @@ RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor
 RUN rm -rf /src
 RUN rm -rf /app/supervisor/appsettings.json
 
+# Runs as root on purpose: the supervisor creates, updates and removes the core / satellite
+# containers through the host's docker.sock (bind-mounted by supervisor.service), which is root on
+# the host anyway.
 FROM automaticacore/automatica-plugin-standalone:$RUNTIME_IMAGE_TAG AS runtime
 WORKDIR /app/supervisor
 

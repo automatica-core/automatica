@@ -1,6 +1,8 @@
 trigger:
   - master  
   - develop
+# no PR builds: they would run with the pipeline secrets (variable group) for fork code
+pr: none
   
 pool:
   vmImage: ubuntu-latest

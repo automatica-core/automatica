@@ -1,0 +1,17 @@
+# Secret scanning for this repo: gitleaks' default rules plus the known, public test fixtures.
+#   scan the tree:     docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.21.2 dir /repo --redact
+#   scan new commits:  gitleaks git --log-opts="origin/develop..HEAD" --redact
+#   on every commit:   pip install pre-commit && pre-commit install   (see .pre-commit-config.yaml)
+# Never allowlist a real credential here: remove it, then rotate it.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "public test vectors"
+paths = [
+  # Matter (CHIP) SDK test certificates and keys, published by the CSA for testing
+  '''src/automatica\.drivers/automatica\.driver\.matter/P3\.Driver\.Matter/Resources/TestCerts/.*''',
+  # SRP test vectors from the HomeKit Accessory Protocol pair-setup tests
+  '''src/automatica\.drivers/automatica\.driver\.homekit/P3\.Driver\.HomeKit\.UnitTests/Setup/PairSetupTests\.cs''',
+]
