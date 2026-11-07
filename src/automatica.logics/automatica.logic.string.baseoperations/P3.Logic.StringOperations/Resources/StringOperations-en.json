@@ -3,7 +3,13 @@
     "NAME": "String",
     "CONCAT": {
       "NAME": "String concatenation",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "INPUT": {
+        "DESCRIPTION": "Text to append"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Combined text"
+      }
     }
   }
 }

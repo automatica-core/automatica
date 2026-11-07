@@ -1,7 +1,7 @@
 ﻿{
   "PIXOO64": {
     "NAME": "Pixoo64",
-    "DESCRIPTION": "Provides an interface to show different pages on a pixoo64 screen",
+    "DESCRIPTION": "Zeigt verschiedene Seiten auf einem Pixoo64-Display an",
     "BATTERYSCREEN": {
       "NAME": "Battery",
       "DESCRIPTION": "",

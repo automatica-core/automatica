@@ -490,7 +490,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_COLOR_FALSE", 9, this, () => this.StateColorValueFalse, (value) => this.StateColorValueFalse = value, false, PropertyTemplateType.Color, "COMMON.CATEGORY.VISU"));
             }
             this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
-            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
+            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes, "COMMON.PROPERTY.TRENDING_TYPE.VALUES")));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
 
 

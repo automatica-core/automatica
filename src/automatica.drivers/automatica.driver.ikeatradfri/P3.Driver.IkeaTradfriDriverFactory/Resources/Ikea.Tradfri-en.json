@@ -4,27 +4,37 @@
       "NAME": "Ikea Tradfri",
       "DESCRIPTION": "",
       "SCAN": {
-        "NAME": "Search Ikea Tradfri gateways"
+        "NAME": "Search Ikea Tradfri gateways",
+        "DESCRIPTION": "Searches the network for Ikea Tradfri gateways"
       },
       "GATEWAY": {
         "NAME": "Tradfri Gateway",
+        "DESCRIPTION": "Ikea Tradfri gateway that connects the Tradfri devices",
         "ID": {
-          "NAME": "Gateway Id"
+          "NAME": "Gateway Id",
+          "DESCRIPTION": "Identity used to log in to the gateway"
         },
         "SECRET": {
-          "NAME": "Secret key"
+          "NAME": "Secret key",
+          "DESCRIPTION": "Security code printed on the bottom of the gateway"
         },
         "SCAN": {
-          "NAME": "Search devices"
+          "NAME": "Search devices",
+          "DESCRIPTION": "Reads the devices paired with this gateway"
         }
       },
       "DEVICE": {
-        "ID": "ID"
+        "ID": {
+          "NAME": "Device ID",
+          "DESCRIPTION": "ID of the device on the gateway"
+        }
       },
       "RELAY": {
         "NAME": "Wall Plug",
+        "DESCRIPTION": "Ikea Tradfri wall plug",
         "VALUE": {
-          "NAME": "State"
+          "NAME": "State",
+          "DESCRIPTION": "On/off state of the wall plug"
         }
       },
       "LIGHT": {

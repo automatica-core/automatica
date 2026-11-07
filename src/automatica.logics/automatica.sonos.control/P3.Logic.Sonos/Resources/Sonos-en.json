@@ -51,7 +51,7 @@
       "DESCRIPTION": ""
     },
     "RADIO_STATION_OUTPUT_VALUE": {
-      "NAME": "RAdio Station ID",
+      "NAME": "Radio station ID",
       "DESCRIPTION": ""
     },
     "VOLUME_ON_START": {
@@ -99,6 +99,8 @@
       "DESCRIPTION": ""
     },
     "STATE": {
+      "NAME": "State",
+      "DESCRIPTION": "Track that is playing right now",
       "TITLE": {
         "NAME": "Title",
         "DESCRIPTION": ""
@@ -127,9 +129,9 @@
         "NAME": "Relative time",
         "DESCRIPTION": ""
       }
+    },
+    "GROUP": {
+      "NAME": "Sonos controls"
     }
-  },
-  "SONOS": {
-    "NAME": "Sonos Controls"
   }
 }

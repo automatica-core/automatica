@@ -8,69 +8,94 @@
     },
     "SUN": {
       "NAME": "Sonne",
+      "DESCRIPTION": "Sonnenzeiten für den in den Einstellungen hinterlegten Standort",
       "SUNRISE": {
-        "NAME": "Sonnenaufgang"
+        "NAME": "Sonnenaufgang",
+        "DESCRIPTION": "Zeitpunkt des Sonnenaufgangs"
       },
       "SUNSET": {
-        "NAME": "Sonnenuntergang"
+        "NAME": "Sonnenuntergang",
+        "DESCRIPTION": "Zeitpunkt des Sonnenuntergangs"
       },
       "DUSK": {
-        "NAME": "Abenddämmerung"
+        "NAME": "Abenddämmerung",
+        "DESCRIPTION": "Zeitpunkt der Abenddämmerung"
       },
       "DAWN": {
-        "NAME": "Morgendämmerung"
+        "NAME": "Morgendämmerung",
+        "DESCRIPTION": "Zeitpunkt der Morgendämmerung"
       },
       "IS_SUNSET": {
-        "NAME": "Ist Sonnenuntergang"
+        "NAME": "Ist Sonnenuntergang",
+        "DESCRIPTION": "Wahr von Sonnenuntergang bis Sonnenaufgang"
       },
       "IS_SUNRISE": {
-        "NAME": "Ist Sonnenaufgang"
+        "NAME": "Ist Sonnenaufgang",
+        "DESCRIPTION": "Wahr von Sonnenaufgang bis Sonnenuntergang"
       },
       "IS_DAYLIGHT": {
-        "NAME":  "Tageslicht"
+        "NAME":  "Tageslicht",
+        "DESCRIPTION": "Wahr zwischen Sonnenaufgang und Sonnenuntergang"
       }
     },
     "DATETIME": {
       "NAME": "Datum/Zeit",
+      "DESCRIPTION": "Aktuelles Datum und aktuelle Uhrzeit des Servers",
       "DATETIME": {
-        "NAME": "Datum & Zeit"
+        "NAME": "Datum & Zeit",
+        "DESCRIPTION": "Aktuelles Datum und Uhrzeit"
       },
       "DATE": {
-        "NAME": "Datum"
+        "NAME": "Datum",
+        "DESCRIPTION": "Aktuelles Datum"
       },
       "TIME": {
-        "NAME": "Zeit"
+        "NAME": "Zeit",
+        "DESCRIPTION": "Aktuelle Uhrzeit"
       },
       "DAY_OF_WEEK": {
-        "NAME": "Tag der Woche"
+        "NAME": "Tag der Woche",
+        "DESCRIPTION": "Wochentag"
       },
       "DAY_OF_MONTH": {
-        "NAME": "Tag"
+        "NAME": "Tag",
+        "DESCRIPTION": "Tag des Monats (1-31)"
       },
       "MONTH": {
-        "NAME": "Monat"
+        "NAME": "Monat",
+        "DESCRIPTION": "Aktueller Monat (1-12)"
       },
       "YEAR": {
-        "NAME": "Jahr"
+        "NAME": "Jahr",
+        "DESCRIPTION": "Aktuelles Jahr"
       },
       "MILLISECONDS": {
-        "NAME": "Millisekunde"
+        "NAME": "Millisekunde",
+        "DESCRIPTION": "Aktuelle Millisekunde (0-999)"
       },
       "SECONDS": {
-        "NAME": "Sekunde"
+        "NAME": "Sekunde",
+        "DESCRIPTION": "Aktuelle Sekunde (0-59)"
       },
       "MINUTES": {
-        "NAME": "Minute"
+        "NAME": "Minute",
+        "DESCRIPTION": "Aktuelle Minute (0-59)"
       },
       "HOURS": {
-        "NAME": "Stunde"
+        "NAME": "Stunde",
+        "DESCRIPTION": "Aktuelle Stunde (0-23)"
       },
       "SECONDS_SINCE_BOOT": {
-        "NAME": "Sekunden seit Start"
+        "NAME": "Sekunden seit Start",
+        "DESCRIPTION": "Sekunden seit dem Start des Servers"
       },
       "BOOT_TIME": {
-        "NAME": "Startzeit"
+        "NAME": "Startzeit",
+        "DESCRIPTION": "Zeitpunkt, zu dem der Server gestartet wurde"
       }
+    },
+    "INTERFACE": {
+      "NAME": "Datum und Zeit"
     } 
   }
 }

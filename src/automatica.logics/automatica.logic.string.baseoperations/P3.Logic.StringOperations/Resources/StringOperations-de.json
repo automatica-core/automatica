@@ -3,7 +3,13 @@
     "NAME":  "Text", 
     "CONCAT": {
       "NAME": "Text Verkettung",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "INPUT": {
+        "DESCRIPTION": "Anzuhängender Text"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Zusammengefügter Text"
+      }
     }
   }
 }

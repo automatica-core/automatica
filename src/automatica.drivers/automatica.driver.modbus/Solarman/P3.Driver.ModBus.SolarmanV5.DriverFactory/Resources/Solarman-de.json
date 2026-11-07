@@ -249,7 +249,7 @@
           "DESCRIPTION": ""
         },
         "SMARTLOAD-ENABLED-STATUS": {
-          "NAME": "Smartload Enabled",
+          "NAME": "Smartload aktiviert",
           "DESCRIPTION": ""
         },
         "TOTAL-LOAD-CONSUMPTION": {
@@ -301,6 +301,10 @@
     "LAST_POLL_TIMESTAMP": {
       "NAME": "Last poll timestamp",
       "DESCRIPTION": ""
+    },
+    "UPLOAD": {
+      "NAME": "Upload",
+      "DESCRIPTION": "Daten, die der Wechselrichter über den Solarman-Logger überträgt"
     }
   }
 }

@@ -1,37 +1,55 @@
 ﻿{
   "LOGIC": {
-    "NAME": "Logik",
+    "NAME": "Logic",
     "AND": {
-      "NAME": "Und",
-      "DESCRIPTION": "Logische UND Verknüpfung der Eingänge",
+      "NAME": "And",
+      "DESCRIPTION": "Logical AND of the inputs",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if all inputs are 1"
       }
     },
     "OR": {
-      "NAME": "Oder",
-      "DESCRIPTION": "Logische ODER Verknüpfung der Eingänge",
+      "NAME": "Or",
+      "DESCRIPTION": "Logical OR of the inputs",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if at least one input is 1"
       }
     },
     "EXCLUSIVE_OR": {
-      "NAME": "Exklusives Oder",
-      "DESCRIPTION": "Logische Exklusives ODER Verknüpfung der Eingänge",
+      "NAME": "Exclusive or",
+      "DESCRIPTION": "Logical exclusive OR of the inputs",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if exactly one input is 1"
       }
     },
     "NOT": {
-      "NAME": "Nicht",
-      "DESCRIPTION": "Invertiert den Eingang",
+      "NAME": "Not",
+      "DESCRIPTION": "Inverts the input",
       "INPUT": {
-        "DESCRIPTION": "Eingangswert"
+        "DESCRIPTION": "Input value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Inverted input value"
       }
     },
     "BINARY_DECODER": {
-      "NAME": "Binarydecoder",
-      "DESCRIPTION": "Converts a value to single bits"
+      "NAME": "Binary decoder",
+      "DESCRIPTION": "Converts a value to single bits",
+      "INPUT": {
+        "DESCRIPTION": "Value to split into bits"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Bit of the input value"
+      }
     },
     "IF": {
       "NAME": "If",
@@ -45,6 +63,12 @@
           "NAME": "False value",
           "DESCRIPTION": ""
         }
+      },
+      "INPUT": {
+        "DESCRIPTION": "Value to compare"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "True value if I1 = I2, otherwise the false value"
       }
     }
   }

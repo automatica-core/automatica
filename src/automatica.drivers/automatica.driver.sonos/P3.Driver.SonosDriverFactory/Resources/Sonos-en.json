@@ -87,6 +87,10 @@
         "NAME": "Use fix IP",
         "DESCRIPTION": ""
       }
+    },
+    "SCAN": {
+      "NAME": "Search devices",
+      "DESCRIPTION": "Searches the network for Sonos speakers"
     }
   }
 }

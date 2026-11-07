@@ -1,4 +1,6 @@
 {
   "METERING": {
+    "NAME": "Zählerauswertung",
+    "DESCRIPTION": "Wertet Zählerstände aus"
   }
 }

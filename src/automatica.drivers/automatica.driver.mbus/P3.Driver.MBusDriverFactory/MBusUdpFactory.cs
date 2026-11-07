@@ -59,7 +59,7 @@ namespace P3.Driver.MBusDriverFactory
             factory.CreatePropertyTemplate(GenerateNewGuid(MbusSerialNode, 1), "COMMON.PROPERTY.BAUDRATE.NAME", "COMMON.PROPERTY.BAUDRATE.DESCRIPTION",
                 "mbus-baudrate", PropertyTemplateType.Baudrate, MbusSerialNode, "COMMON.CATEGORY.ADDRESS", true, false, "", "9600", 1,
                 1);
-            factory.CreatePropertyTemplate(GenerateNewGuid(MbusSerialNode, 2), "MBUS.PROPERTY.TIMEOUT.NAME", ".PROPERTY.TIMEOUT.DESCRIPTION",
+            factory.CreatePropertyTemplate(GenerateNewGuid(MbusSerialNode, 2), "MBUS.PROPERTY.TIMEOUT.NAME", "MBUS.PROPERTY.TIMEOUT.DESCRIPTION",
                 "mbus-timeout", PropertyTemplateType.Integer, MbusSerialNode, "COMMON.CATEGORY.ADDRESS", true, false, "", "5000", 1,
                 1);
 
@@ -127,7 +127,7 @@ namespace P3.Driver.MBusDriverFactory
 
         private void CreateAttributeNodeTemplate(Guid guid, string name, Unit key, INodeTemplateFactory factory)
         {
-            factory.CreateNodeTemplate(guid, $"MBUS.ATTRIBUTES.{name}.NAME", $"MBUS.ATTRIBUTES{name}.DESCRIPTION", "mbus-"+ key,
+            factory.CreateNodeTemplate(guid, $"MBUS.ATTRIBUTES.{name}.NAME", $"MBUS.ATTRIBUTES.{name}.DESCRIPTION", "mbus-"+ key,
                 _mbusAttributeInterfaceType, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true,
                 NodeDataType.Double, 100, false);
 

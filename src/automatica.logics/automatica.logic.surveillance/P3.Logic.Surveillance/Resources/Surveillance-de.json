@@ -1,0 +1,27 @@
+﻿{
+  "SURVEILLANCE": {
+    "NAME": "Überwachung",
+    "WINDOW_MONITOR": {
+      "NAME": "Fensterüberwachung",
+      "DESCRIPTION": "Fasst die Kontakte eines Fensters zu einem Zustand zusammen: geschlossen, gekippt oder offen",
+      "TILT": {
+        "DESCRIPTION": "Kontakt: Fenster gekippt"
+      },
+      "OPEN": {
+        "DESCRIPTION": "Kontakt: Fenster offen"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "Kontakt: Fenster verriegelt"
+      },
+      "TILT_INVERTED": {
+        "DESCRIPTION": "Kontakt: Fenster gekippt (invertiert)"
+      },
+      "OPEN_INVERTED": {
+        "DESCRIPTION": "Kontakt: Fenster offen (invertiert)"
+      },
+      "LOCKED_INVERTED": {
+        "DESCRIPTION": "Kontakt: Fenster verriegelt (invertiert)"
+      }
+    }
+  }
+}

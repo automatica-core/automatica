@@ -48,8 +48,8 @@ namespace P3.Driver.ModBusDriverFactory
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
-            factory.CreateInterfaceType(DeviceInterface, "MODBUS.DEVICE", "", 250, 250, true);
-            factory.CreateInterfaceType(AttributeInterface, "MODBUS.ATTRIBUTE", "", ushort.MaxValue, byte.MaxValue, false);
+            factory.CreateInterfaceType(DeviceInterface, "MODBUS.DEVICE.NAME", "MODBUS.DEVICE.DESCRIPTION", 250, 250, true);
+            factory.CreateInterfaceType(AttributeInterface, "MODBUS.ATTRIBUTE.NAME", "MODBUS.ATTRIBUTE.DESCRIPTION", ushort.MaxValue, byte.MaxValue, false);
 
             factory.CreateNodeTemplate(DeviceTemplate, "MODBUS.DEVICE.NAME", "MODBUS.DEVICE.DESCRIPTION", "modbus-device",
                 DeviceInterface, AttributeInterface, false, true, false, true, false, NodeDataType.NoAttribute, 250, false);

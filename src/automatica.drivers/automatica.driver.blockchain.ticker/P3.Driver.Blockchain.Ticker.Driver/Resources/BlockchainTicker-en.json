@@ -1,68 +1,69 @@
 ﻿{
   "BLOCKCHAIN_TICKER": {
     "NAME": "BlockchainTicker",
+    "DESCRIPTION": "Current prices of Bitcoin, Ethereum and Cardano in EUR and USD",
     "POLL_INTERVAL": {
       "NAME": "Polling interval [s]",
       "DESCRIPTION": ""
     },
     "BTC": {
       "NAME": "Bitcoin",
-      "DIRECTION": "",
+      "DESCRIPTION": "",
       "EUR": {
         "NAME": "Price in EUR",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD": {
         "NAME": "Price in USD",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "EUR_WITH_SYMBOL": {
         "NAME": "Price in EUR with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD_WITH_SYMBOL": {
         "NAME": "Price in USD with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       }
     },
     "ETH": {
       "NAME": "Ethereum",
-      "DIRECTION": "",
+      "DESCRIPTION": "",
       "EUR": {
         "NAME": "Price in EUR",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD": {
         "NAME": "Price in USD",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "EUR_WITH_SYMBOL": {
         "NAME": "Price in EUR with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD_WITH_SYMBOL": {
         "NAME": "Price in USD with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       }
     },
     "ADA": {
       "NAME": "Cardano",
-      "DIRECTION": "",
+      "DESCRIPTION": "",
       "EUR": {
         "NAME": "Price in EUR",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD": {
         "NAME": "Price in USD",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "EUR_WITH_SYMBOL": {
         "NAME": "Price in EUR with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       },
       "USD_WITH_SYMBOL": {
         "NAME": "Price in USD with symbol",
-        "DIRECTION": ""
+        "DESCRIPTION": ""
       }
     }
   }

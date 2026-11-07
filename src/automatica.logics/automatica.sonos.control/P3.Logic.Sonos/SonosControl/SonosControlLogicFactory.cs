@@ -69,7 +69,7 @@ public class SonosControlLogicFactory : LogicFactory
 
     public override void InitTemplates(ILogicTemplateFactory factory)
     {
-        factory.CreateLogicTemplate(LogicGuid, "SONOS_CONTROL.NAME", "SONOS_CONTROL.DESCRIPTION", "sonos.control", "SONOS.NAME", 100, 100);
+        factory.CreateLogicTemplate(LogicGuid, "SONOS_CONTROL.NAME", "SONOS_CONTROL.DESCRIPTION", "sonos.control", "SONOS_CONTROL.GROUP.NAME", 100, 100);
 
         factory.CreateParameterLogicInterfaceTemplate(RadioStation, "SONOS_CONTROL.RADIO_STATION.NAME",
             "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", LogicGuid, 1, RuleInterfaceParameterDataType.Text, DefaultRadioStation);

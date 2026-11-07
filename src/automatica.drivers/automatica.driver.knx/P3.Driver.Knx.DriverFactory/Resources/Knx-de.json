@@ -2,8 +2,10 @@
   "KNX": {
     "BAOS": {
       "NAME": "BAOS 830 kBerry",
+      "DESCRIPTION": "KNX BAOS 830 kBerry Modul an der seriellen Schnittstelle",
       "DATAPOINTS": {
-        "NAME": "Datenpunkte"
+        "NAME": "Datenpunkte",
+        "DESCRIPTION": "Im BAOS-Modul konfigurierte Datenpunkte"
       }
     },
     "LICENSE": {
@@ -13,7 +15,8 @@
       "DPT": "Datenpunkt Typ"
     },
     "GW_STATUS": {
-      "NAME": "Verbunden"
+      "NAME": "Verbunden",
+      "DESCRIPTION": "Zeigt an, ob die Verbindung zum KNX-Gateway besteht"
     },
     "GATEWAY": {
       "NAME": "KNX IP Gateway",
@@ -37,6 +40,10 @@
       "GROUP": {
         "NAME": "Gruppenadresse",
         "DESCRIPTION": ""
+      },
+      "VALUE": {
+        "NAME": "Gruppenadresse",
+        "DESCRIPTION": "Wert einer dreistufigen Gruppenadresse"
       }
     },
     "PROPERTIES": {
@@ -78,17 +85,25 @@
       },
       "SECURE": {
         "AUTHPW": {
-          "NAME": "Auth password"
+          "NAME": "Auth password",
+          "DESCRIPTION": "Geräte-Authentifizierungscode der KNX-IP-Schnittstelle"
         },
         "USERPW": {
-          "NAME": "User password"
+          "NAME": "User password",
+          "DESCRIPTION": "Passwort des Tunnel-Benutzers aus dem ETS-Projekt"
         },
         "IA_ADDRESS": {
-          "NAME": "IA Address"
+          "NAME": "IA Address",
+          "DESCRIPTION": "Physikalische Adresse des Tunnels"
         },
         "USER_ID": {
-          "NAME": "User ID"
+          "NAME": "User ID",
+          "DESCRIPTION": "Benutzer-ID des sicheren Tunnels"
         }
+      },
+      "DPT-SUB": {
+        "NAME": "Zeichensatz",
+        "DESCRIPTION": "Untertyp des 14-Zeichen-Textes (16.000 ASCII, 16.001 ISO 8859-1)"
       }
     },
     "DPT1": {
@@ -99,20 +114,24 @@
       "NAME": "2.* 1-Bit gesteuert",
       "DESCRIPTION": "",
       "VALUE": {
-        "NAME": "Wert-Bit"
+        "NAME": "Wert-Bit",
+        "DESCRIPTION": "Wert, der bei aktiver Zwangssteuerung gilt"
       },
       "CONTROL": {
-        "NAME": "Kontroll-Bit"
+        "NAME": "Kontroll-Bit",
+        "DESCRIPTION": "Zwangssteuerung: 1 = das Wert-Bit wird erzwungen"
       }
     },
     "DPT3": {
       "NAME": "3.* 3-Bit gesteuert",
       "DESCRIPTION": "",
       "STEPCODE": {
-        "NAME": "Schrittwert"
+        "NAME": "Schrittwert",
+        "DESCRIPTION": "Schrittweite (0 = Stopp, 1-7 = Anzahl der Intervalle)"
       },
       "CONTROL": {
-        "NAME": "Kontroll-Bit"
+        "NAME": "Kontroll-Bit",
+        "DESCRIPTION": "Richtung des Schritts (erhöhen oder verringern)"
       }
     },
     "DPT4": {
@@ -160,22 +179,28 @@
         "NAME": "6.020 Status mit Modus",
         "DESCRIPTION": "",
         "A": {
-          "NAME": "A"
+          "NAME": "A",
+          "DESCRIPTION": "Statusbit A"
         },
         "B": {
-          "NAME": "B"
+          "NAME": "B",
+          "DESCRIPTION": "Statusbit B"
         },
         "C": {
-          "NAME": "C"
+          "NAME": "C",
+          "DESCRIPTION": "Statusbit C"
         },
         "D": {
-          "NAME": "D"
+          "NAME": "D",
+          "DESCRIPTION": "Statusbit D"
         },
         "E": {
-          "NAME": "E"
+          "NAME": "E",
+          "DESCRIPTION": "Statusbit E"
         },
         "ACTIVE_MODE": {
-          "NAME": "Aktiver Modus"
+          "NAME": "Aktiver Modus",
+          "DESCRIPTION": "Aktiver Modus (Bits 0-2)"
         }
       }
     },
@@ -1385,6 +1410,19 @@
           "NAME": "Wert (%)"
         }
       }
+    },
+    "CONSTRAINT": {
+      "UNIQUE_ADDRESS": {
+        "NAME": "Diese Gruppenadresse wird bereits verwendet"
+      }
+    },
+    "ETS": {
+      "UNKNOWN_ERROR": "Das ETS-Projekt konnte nicht gelesen werden",
+      "PASSWORD_REQUIRED": "Das ETS-Projekt ist passwortgeschützt. Bitte das Projektpasswort eingeben.",
+      "EMPTY_PROJECT": "Das ETS-Projekt enthält keine Gruppenadressen",
+      "TO_MANY_PROJECTS": "Die Datei enthält mehr als ein Projekt. Bitte nur ein Projekt aus der ETS exportieren.",
+      "ZIPFILE_ERROR": "Die Datei ist kein gültiges ETS-Projektarchiv (.knxproj)",
+      "WRONG_GROUP_STYLE": "Es werden nur Projekte mit dreistufigen Gruppenadressen unterstützt"
     }
   }
 }

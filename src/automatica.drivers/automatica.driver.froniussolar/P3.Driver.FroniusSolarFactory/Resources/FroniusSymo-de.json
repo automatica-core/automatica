@@ -8,6 +8,10 @@
       "DEVICE_ID": {
         "NAME": "Device Id",
         "DESCRIPTION": ""
+      },
+      "DISABLED": {
+        "NAME": "Deaktiviert",
+        "DESCRIPTION": "Beendet die Abfrage dieses Wechselrichters"
       }
     },
     "CATEGORY": {
@@ -143,7 +147,7 @@
         "DESCRIPTION": ""
       },
       "MGM-TIMER-REMAINING-TIME": {
-        "NAME": "Management Timer Remaining Time",
+        "NAME": "Management-Timer Restzeit",
         "DESCRIPTION": ""
       },
       "ERROR-CODE": {

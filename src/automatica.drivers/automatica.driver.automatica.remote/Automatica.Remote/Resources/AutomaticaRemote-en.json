@@ -1,0 +1,34 @@
+﻿{
+  "AUTOMATICA_REMOTE": {
+    "NAME": "Automatica remote",
+    "DESCRIPTION": "Connects another Automatica server",
+    "IP": {
+      "NAME": "Address",
+      "DESCRIPTION": "IP address or host name of the remote server"
+    },
+    "PORT": {
+      "NAME": "Port",
+      "DESCRIPTION": "Port of the remote server"
+    },
+    "USER": {
+      "NAME": "Username",
+      "DESCRIPTION": "User for the login on the remote server"
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": "Password for the login on the remote server"
+    },
+    "SCAN": {
+      "NAME": "Search datapoints",
+      "DESCRIPTION": "Reads the datapoints of the remote server"
+    },
+    "BOARD_TYPE": {
+      "NAME": "Board",
+      "DESCRIPTION": "Board of the remote server"
+    },
+    "BOARD_INTERFACE": {
+      "NAME": "Board interface",
+      "DESCRIPTION": "Interface of a board on the remote server"
+    }
+  }
+}

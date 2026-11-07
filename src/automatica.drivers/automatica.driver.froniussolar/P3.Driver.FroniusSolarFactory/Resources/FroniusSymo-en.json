@@ -8,6 +8,10 @@
       "DEVICE_ID": {
         "NAME": "Device Id",
         "DESCRIPTION": ""
+      },
+      "DISABLED": {
+        "NAME": "Disabled",
+        "DESCRIPTION": "Stops polling this inverter"
       }
     },
     "CATEGORY": {

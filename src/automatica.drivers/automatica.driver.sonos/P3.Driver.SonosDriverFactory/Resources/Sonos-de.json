@@ -87,6 +87,10 @@
         "NAME": "FIxe IP verwenden",
         "DESCRIPTION": ""
       }
+    },
+    "SCAN": {
+      "NAME": "Geräte suchen",
+      "DESCRIPTION": "Sucht im Netzwerk nach Sonos-Lautsprechern"
     }
   }
 }

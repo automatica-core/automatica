@@ -12,8 +12,8 @@
       }
     },
     "SUBTRACT": {
-      "NAME": "Subtract",
-      "DESCRIPTION": "Substraihiert die Eingangswerte und gibt den Wert beim Ausgang aus (O = - I1 - I2)",
+      "NAME": "Subtraktion",
+      "DESCRIPTION": "Subtrahiert die Eingangswerte und gibt den Wert beim Ausgang aus (O = - I1 - I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -43,7 +43,7 @@
     },
     "CEILING": {
       "NAME": "Aufrunden",
-      "DESCRIPTION": "Runden den Eingangswert auf",
+      "DESCRIPTION": "Rundet den Eingangswert auf",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -53,7 +53,7 @@
     },
     "FLOOR": {
       "NAME": "Abrunden",
-      "DESCRIPTION": "Runden den Eingangswert ab",
+      "DESCRIPTION": "Rundet den Eingangswert ab",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -63,7 +63,7 @@
     },
     "MODULO": {
       "NAME": "Modulo",
-      "DESCRIPTION": "Gibt den Divisionrest von I1 / I2 (O = I1 % I2)",
+      "DESCRIPTION": "Gibt den Divisionsrest von I1 / I2 aus (O = I1 % I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -81,13 +81,13 @@
         "DESCRIPTION": "Sobald ein Wert auf diesen Eingang geschrieben wird, wird eine neue Zufallszahl generiert"
       },
       "DISABLED": {
-        "DESCRIPTION": "Sperrt den Trigger Eingang"
+        "DESCRIPTION": "Sperrt den Trigger-Eingang"
       },
       "MIN": {
-        "DESCRIPTION": "Minimaler Wert für Zufallszahl"
+        "DESCRIPTION": "Kleinster Wert der Zufallszahl"
       },
       "MAX": {
-        "DESCRIPTION": "Maximaler Wert für Zufallszahl"
+        "DESCRIPTION": "Größter Wert der Zufallszahl"
       },
       "OUTPUT": {
         "DESCRIPTION": "Ausgangswert"

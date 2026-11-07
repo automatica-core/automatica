@@ -2,8 +2,9 @@
   "MBUS-OMS": {
       "DEVICE": {
         "NAME": "OMS Gerät",
+        "DESCRIPTION": "Smart Meter, das verschlüsselte OMS-Telegramme sendet",
         "KEY": {
-          "NAME": "Key",
+          "NAME": "Schlüssel",
           "DESCRIPTION": ""
         },
         "PORT": {

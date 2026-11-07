@@ -249,7 +249,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateInterfaceType(relayInterfaceId, "SHELLY.ROLLER.NAME",
                 "SHELLY.ROLLER.DESCRIPTION", 2, maxRollers, false);
             var relayId = GenerateNewGuid(id, nextId++);
-            factory.CreateNodeTemplate(relayId, "SHELLY.ROLLER.NAME", "SHELLY.ROLLER.DESCRIPTIONS", "roller", needsInterface,
+            factory.CreateNodeTemplate(relayId, "SHELLY.ROLLER.NAME", "SHELLY.ROLLER.DESCRIPTION", "roller", needsInterface,
                 relayInterfaceId, true, true, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
@@ -280,7 +280,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateInterfaceType(relayInterfaceId, "SHELLY.RELAY.NAME",
                 "SHELLY.RELAY.DESCRIPTION", 2, maxRelays, false);
             var relayId = GenerateNewGuid(id, nextId++);
-            factory.CreateNodeTemplate(relayId, "SHELLY.RELAY.NAME", "SHELLY.RELAY.DESCRIPTIONS", "relay",
+            factory.CreateNodeTemplate(relayId, "SHELLY.RELAY.NAME", "SHELLY.RELAY.DESCRIPTION", "relay",
                 needsInterface,
                 relayInterfaceId, true, true, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
@@ -293,11 +293,11 @@ namespace Automatica.Driver.ShellyFactory
 
             var relayStateId = GenerateNewGuid(id, nextId++);
             factory.CreateNodeTemplate(relayStateId, "SHELLY.RELAY.STATUS.NAME",
-                "SHELLY.RELAY.STATUS.DESCRIPTIONS", "relay-state", relayInterfaceId,
+                "SHELLY.RELAY.STATUS.DESCRIPTION", "relay-state", relayInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, true, false,
                 NodeDataType.Boolean, 1, false);
             factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.RELAY.HAS_TIMER.NAME",
-                "SHELLY.RELAY.HAS_TIMER.DESCRIPTIONS", "relay-timer", relayInterfaceId,
+                "SHELLY.RELAY.HAS_TIMER.DESCRIPTION", "relay-timer", relayInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false);
 
@@ -313,7 +313,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateInterfaceType(meterInterfaceId, "SHELLY.METER.NAME",
                 "SHELLY.METER.DESCRIPTION", 2, maxMeter, false);
             var meterId = GenerateNewGuid(id, nextId++);
-            factory.CreateNodeTemplate(meterId, "SHELLY.METER.NAME", "SHELLY.METER.DESCRIPTIONS", "meter", needsInterface,
+            factory.CreateNodeTemplate(meterId, "SHELLY.METER.NAME", "SHELLY.METER.DESCRIPTION", "meter", needsInterface,
                 meterInterfaceId, true, true, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
@@ -322,21 +322,21 @@ namespace Automatica.Driver.ShellyFactory
            
             factory.ChangeNodeTemplateMetaName(meterId, "{NODE:Name}{CONST:-}{PROPERTY:shelly-meter-channel}");
 
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.POWER.NAME", "SHELLY.METER.POWER.DESCRIPTIONS", "meter-power", meterInterfaceId,
+            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.POWER.NAME", "SHELLY.METER.POWER.DESCRIPTION", "meter-power", meterInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Integer, 1, false);
 
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.OVERPOWER.NAME", "SHELLY.METER.OVERPOWER.DESCRIPTIONS", "meter-overpower", meterInterfaceId,
+            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.OVERPOWER.NAME", "SHELLY.METER.OVERPOWER.DESCRIPTION", "meter-overpower", meterInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Integer, 1, false);
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.IS_VALID.NAME", "SHELLY.METER.IS_VALID.DESCRIPTIONS", "meter-is-valid", meterInterfaceId,
+            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.IS_VALID.NAME", "SHELLY.METER.IS_VALID.DESCRIPTION", "meter-is-valid", meterInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false);
 
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.TIMESTAMP.NAME", "SHELLY.METER.TIMESTAMP.DESCRIPTIONS", "meter-timestamp", meterInterfaceId,
+            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.TIMESTAMP.NAME", "SHELLY.METER.TIMESTAMP.DESCRIPTION", "meter-timestamp", meterInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.DateTime, 1, false);
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.TOTAL.NAME", "SHELLY.METER.TOTAL.DESCRIPTIONS", "meter-total", meterInterfaceId,
+            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.METER.TOTAL.NAME", "SHELLY.METER.TOTAL.DESCRIPTION", "meter-total", meterInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Integer, 1, false);
         }
@@ -345,11 +345,11 @@ namespace Automatica.Driver.ShellyFactory
         private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid, ShellyGeneration generation)
         {
             factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 5), "SHELLY.TEMPERATURE.NAME",
-                "SHELLY.TEMPERATURE.DESCRIPTIONS", "temperature", parentGuid,
+                "SHELLY.TEMPERATURE.DESCRIPTION", "temperature", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Double, 1, false);
             factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 6), "SHELLY.HAS_UPDATE.NAME",
-                "SHELLY.HAS_UPDATE.DESCRIPTIONS", "has_update", parentGuid,
+                "SHELLY.HAS_UPDATE.DESCRIPTION", "has_update", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false);
 

@@ -159,6 +159,14 @@
     "TEMPERATURE": {
       "NAME": "Temperatures",
       "DESCRIPTION": ""
+    },
+    "PACK_CELL": {
+      "NAME": "Cell voltages",
+      "DESCRIPTION": "Voltages of the battery pack cells (up to 16)"
+    },
+    "PACK_TEMP": {
+      "NAME": "Temperatures",
+      "DESCRIPTION": "Temperature sensors of the battery pack (up to 6)"
     }
   }
 }

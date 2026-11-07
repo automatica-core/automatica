@@ -20,7 +20,7 @@ namespace P3.Logic.Math.BasicOperations.Division
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateLogicTemplate(LogicGuid, "MATH.DIVISION.NAME", "MATH.DIVIDE.DESCRIPTION",
+            factory.CreateLogicTemplate(LogicGuid, "MATH.DIVISION.NAME", "MATH.DIVISION.DESCRIPTION",
                 "math.division", "MATH.NAME", 100, 100);
 
             factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "MATH.DIVISION.INPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);

@@ -38,7 +38,7 @@ namespace P3.Logic.Operations.Gauge.RangeCircular
             count = GenerateRangeScaleProperties(factory, "third", 2, 67, 100, "green", count);
 
 
-            factory.CreateParameterLogicInterfaceTemplate(new Guid("67dfb610-5ef1-4d75-a6ec-e2d91bc6e9f5"), "OPERATIONS.GAUGE.TYPE", "OPERATIONS.GAUGE.TYPE", "gauge_type", LogicGuid, 0,
+            factory.CreateParameterLogicInterfaceTemplate(new Guid("67dfb610-5ef1-4d75-a6ec-e2d91bc6e9f5"), "OPERATIONS.GAUGE.TYPE.NAME", "OPERATIONS.GAUGE.TYPE.DESCRIPTION", "gauge_type", LogicGuid, 0,
                 RuleInterfaceParameterDataType.ConstantString, $"{(int)GaugeType.CircularThreeRange}");
 
 

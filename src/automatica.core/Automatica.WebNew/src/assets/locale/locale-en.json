@@ -182,7 +182,9 @@
       "SATELLITE": "Satellite",
       "VALUE": "Value",
       "CONTROL":"Controls",
-      "CONTROLS":"Controls"
+      "CONTROLS":"Controls",
+      "DEVICE": "Device",
+      "REMOTE": "Remote access"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -421,7 +423,14 @@
       },
       "TRENDING_TYPE": {
         "NAME": "Type",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "",
+        "VALUES": {
+          "AVERAGE": "Average",
+          "RAW": "Raw values",
+          "MAX": "Maximum",
+          "MIN": "Minimum",
+          "ONCHANGE": "On change"
+        }
       },
       "TRENDING_INTERVAL": {
         "NAME": "Interval [s]",
@@ -521,6 +530,22 @@
       "VALUE_SOURCE": {
         "NAME": "Source",
         "DESCRIPTION": ""
+      },
+      "ADDRESS": {
+        "NAME": "Address",
+        "DESCRIPTION": "Where the device is reached (serial port or IP address)"
+      },
+      "PORT": {
+        "NAME": "Port",
+        "DESCRIPTION": "Serial port or network port of the device"
+      },
+      "ID": {
+        "NAME": "ID",
+        "DESCRIPTION": "Address of the device on the bus"
+      },
+      "INTERFACE": {
+        "NAME": "Interface",
+        "DESCRIPTION": "Serial port the device is connected to"
       }
     },
     "CATEGORY_INSTANCE": {
@@ -643,6 +668,10 @@
     "HALLWAY": {
       "NAME": "Hallway",
       "DESCRIPTION": ""
+    },
+    "PROJECT": {
+      "NAME": "Project",
+      "DESCRIPTION": "Top level of the building structure"
     }
   },
   "AREAS": {

@@ -9,9 +9,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\AutomaticaRemote-de.json" />
+    <None Remove="Resources\AutomaticaRemote-en.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\AutomaticaRemote-de.json" />
+    <EmbeddedResource Include="Resources\AutomaticaRemote-en.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.14" />

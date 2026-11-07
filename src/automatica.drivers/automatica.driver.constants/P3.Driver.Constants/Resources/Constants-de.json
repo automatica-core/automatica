@@ -9,33 +9,34 @@
       },
       "HALF_PI": {
         "NAME": "PI/2",
-        "DESCRIPION": "Definiert Halb PI"
+        "DESCRIPTION": "Definiert Halb PI"
       },
       "DOUBLE_PI": {
         "NAME": "PI*2",
-        "DESCRIPION": "Definiert Zweimal PI"
+        "DESCRIPTION": "Definiert Zweimal PI"
       },
       "PI": {
         "NAME": "PI",
-        "DESCRIPION": "Definiert PI"
+        "DESCRIPTION": "Definiert PI"
       },
       "STRING": {
         "NAME": "Text",
-        "DESCRIPION": "Gibt einen Fixen Wert zurück"
+        "DESCRIPTION": "Gibt einen Fixen Wert zurück"
       },
       "TRUE": {
         "NAME": "Wahr",
-        "DESCRIPION": "Wert liefert immer Wahr (true)"
+        "DESCRIPTION": "Wert liefert immer Wahr (true)"
       },
       "FALSE": {
         "NAME": "Falsch",
-        "DESCRIPION": "Wert liefer immer Falsch (false)"
+        "DESCRIPTION": "Wert liefer immer Falsch (false)"
       }
     },
     "PROPERTY": {
       "VALUE": {
         "NAME": "Konst Wert",
-        "Description": "Definiert den Konstanten Wert"
+        "Description": "Definiert den Konstanten Wert",
+        "DESCRIPTION": "Wert, den diese Konstante immer liefert"
       }
     },
     "CATEGORY": {

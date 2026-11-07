@@ -4,27 +4,81 @@
     "DESCRIPTION": "",
     "BIGGER": {
       "NAME": "Bigger",
-      "DESCRIPTION": "Compares two values sets 1 on the output if bigger and 0 otherwise"
+      "DESCRIPTION": "Compares two values sets 1 on the output if bigger and 0 otherwise",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 > I2, otherwise 0"
+      }
     },
     "BIGGER_OR_EQUAL": {
       "NAME": "Bigger or equal",
-      "DESCRIPTION": "Compares two values sets 1 on the output if bigger/equal and 0 otherwise"
+      "DESCRIPTION": "Compares two values sets 1 on the output if bigger/equal and 0 otherwise",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 >= I2, otherwise 0"
+      }
     },
     "EQUAL": {
       "NAME": "Equal",
-      "DESCRIPTION": "Compares two values and sets 1 on the output if equal"
+      "DESCRIPTION": "Compares two values and sets 1 on the output if equal",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 = I2, otherwise 0"
+      }
     },
     "SMALLER": {
       "NAME": "Smaller",
-      "DESCRIPTION": "Compares two values sets 1 on the output if smaler and 0 otherwise"
+      "DESCRIPTION": "Compares two values sets 1 on the output if smaler and 0 otherwise",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 < I2, otherwise 0"
+      }
     },
     "SMALLER_OR_EQUAL": {
       "NAME": "Smaller or equal",
-      "DESCRIPTION": "Compares two values sets 1 on the output if smaller/equal and 0 otherwise"
+      "DESCRIPTION": "Compares two values sets 1 on the output if smaller/equal and 0 otherwise",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 <= I2, otherwise 0"
+      }
     },
     "UNEQUAL": {
       "NAME": "Unequal",
-      "DESCRIPTION": "Compares two values and sets 1 on the output if unequal"
+      "DESCRIPTION": "Compares two values and sets 1 on the output if unequal",
+      "INPUT1": {
+        "DESCRIPTION": "First value"
+      },
+      "INPUT2": {
+        "DESCRIPTION": "Second value"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 if I1 differs from I2, otherwise 0"
+      }
     }
   }
 }

@@ -51,7 +51,7 @@
       "DESCRIPTION": "Dimmer",
       "INPUT": {
         "STATE": {
-          "NAME": "State",
+          "NAME": "Status",
           "DESCRIPTION": "S"
         },
         "RESET": {
@@ -59,17 +59,18 @@
           "DESCRIPTION": "R"
         },
         "VALUE": {
-          "NAME": "Value",
-          "Description": "Dimm Value"
+          "NAME": "Wert",
+          "Description": "Dimm Value",
+          "DESCRIPTION": "Aktuelle Helligkeit"
         }
       },
       "OUTPUT": {
         "VALUE": {
-          "NAME": "Value",
+          "NAME": "Wert",
           "DESCRIPTION": "V"
         },
         "STATE": {
-          "NAME": "State",
+          "NAME": "Status",
           "DESCRIPTION": "S"
         }
       }
@@ -79,7 +80,7 @@
       "DESCRIPTION": "Slider",
       "INPUT": {
         "STATE": {
-          "NAME": "State",
+          "NAME": "Status",
           "DESCRIPTION": "S"
         },
         "RESET": {
@@ -87,84 +88,87 @@
           "DESCRIPTION": "R"
         },
         "VALUE": {
-          "NAME": "Value",
-          "Description": "Value"
+          "NAME": "Wert",
+          "Description": "Value",
+          "DESCRIPTION": "Aktueller Wert"
         },
         "VALUE_MIN": {
           "NAME": "VMIN",
-          "Description": "Min Value"
+          "Description": "Min Value",
+          "DESCRIPTION": "Kleinster Wert des Schiebereglers"
         },
         "VALUE_MAX": {
           "NAME": "VMAX",
-          "Description": "Max Value"
+          "Description": "Max Value",
+          "DESCRIPTION": "Größter Wert des Schiebereglers"
         }
       },
       "OUTPUT": {
         "VALUE": {
-          "NAME": "Value",
+          "NAME": "Wert",
           "DESCRIPTION": "V"
         },
         "STATE": {
-          "NAME": "State",
+          "NAME": "Status",
           "DESCRIPTION": "V > 0"
         }
       }
     },
     "GAUGE": {
       "EASY_LINEAR": {
-        "NAME": "Linear (1 Scale)",
+        "NAME": "Linear (1 Skala)",
         "DESCRIPTION": ""
       },
       "EASY_CIRCULAR": {
-        "NAME": "Circular (1 Scale)",
+        "NAME": "Rund (1 Skala)",
         "DESCRIPTION": ""
       },
       "RANGE_CIRCULAR": {
-        "NAME": "Circular (3 Scale)",
+        "NAME": "Rund (3 Skalen)",
         "DESCRIPTION": ""
       },
       "SCALE_START": {
-        "NAME": "Scale start",
+        "NAME": "Skalenanfang",
         "DESCRIPTION": ""
       },
       "SCALE_END": {
-        "NAME": "Scale end",
+        "NAME": "Skalenende",
         "DESCRIPTION": ""
       },
       "FIRST_SCALE_START": {
-        "NAME": "First Scale start",
+        "NAME": "Anfang erste Skala",
         "DESCRIPTION": ""
       },
       "FIRST_SCALE_END": {
-        "NAME": "First Scale end",
+        "NAME": "Ende erste Skala",
         "DESCRIPTION": ""
       },
       "FIRST_COLOR": {
-        "NAME": "First color",
+        "NAME": "Erste Farbe",
         "DESCRIPTION": ""
       },
       "SECOND_SCALE_START": {
-        "NAME": "Second Scale start",
+        "NAME": "Anfang zweite Skala",
         "DESCRIPTION": ""
       },
       "SECOND_SCALE_END": {
-        "NAME": "Second Scale end",
+        "NAME": "Ende zweite Skala",
         "DESCRIPTION": ""
       },
       "SECOND_COLOR": {
-        "NAME": "Second color",
+        "NAME": "Zweite Farbe",
         "DESCRIPTION": ""
       },
       "THIRD_SCALE_START": {
-        "NAME": "Third Scale start",
+        "NAME": "Anfang dritte Skala",
         "DESCRIPTION": ""
       },
       "THIRD_SCALE_END": {
-        "NAME": "ThirdScale end",
+        "NAME": "Ende dritte Skala",
         "DESCRIPTION": ""
       },
       "THIRD_COLOR": {
-        "NAME": "Third color",
+        "NAME": "Dritte Farbe",
         "DESCRIPTION": ""
       },
       "TICKS": {
@@ -172,12 +176,13 @@
         "DESCRIPTION": ""
       },
       "TYPE": {
-        "NAME": "Type",
-        "DESCRIPTION": ""
+        "NAME": "Typ",
+        "DESCRIPTION": "Form der Anzeige (linear oder rund)"
       },
       "VALUE": {
-        "NAME": "Value",
-        "Description": "Value"
+        "NAME": "Wert",
+        "Description": "Value",
+        "DESCRIPTION": "Angezeigter Wert"
       }
     },
     "SHUTTER": {
@@ -231,7 +236,8 @@
           "DESCRIPTION": ""
         },
         "IS_MOVING": {
-          "NAME": "Is Moving"
+          "NAME": "In Bewegung",
+          "DESCRIPTION": "1, solange sich der Rollladen bewegt"
         }
       }
     }

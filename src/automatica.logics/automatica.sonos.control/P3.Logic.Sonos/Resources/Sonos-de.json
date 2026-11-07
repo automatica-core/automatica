@@ -15,7 +15,7 @@
       "DESCRIPTION": ""
     },
     "VOLUME": {
-      "NAME": "Lautsträke",
+      "NAME": "Lautstärke",
       "DESCRIPTION": ""
     },
     "VOLUME_INCREMENT": {
@@ -47,7 +47,7 @@
       "DESCRIPTION": ""
     },
     "VOLUME_OUTPUT_STATE": {
-      "NAME": "Lautsträke",
+      "NAME": "Lautstärke",
       "DESCRIPTION": ""
     },
     "RADIO_STATION_OUTPUT_VALUE": {
@@ -129,9 +129,9 @@
         "NAME": "Relative Dauer",
         "DESCRIPTION": ""
       }
+    },
+    "GROUP": {
+      "NAME": "Sonos Regeln"
     }
-  },
-  "SONOS":  {
-    "NAME": "Sonos Regeln" 
   }
 }

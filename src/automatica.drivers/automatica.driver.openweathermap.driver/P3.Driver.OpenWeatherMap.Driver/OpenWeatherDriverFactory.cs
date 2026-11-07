@@ -196,7 +196,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                     GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
                 factory.CreateNodeTemplate(GenerateNewGuid(new Guid("80588b18-0343-44c8-b782-f146baf80b65"), i), "OPENWEATHERMAP.PRECIPITATION.NAME", "OPENWEATHERMAP.PRECIPITATION.DESCRIPTION", "openweathermap-forecast-precipitation", parentGuid,
                     GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
-                factory.CreateNodeTemplate(GenerateNewGuid(new Guid("0c04d651-6ab1-4421-8a31-f9f6d8408e23"), i), "OPENWEATHERMAP.RAIN.NAME", "OPENWEATHERMAP.TEMPERAINRATURE.DESCRIPTION", "openweathermap-forecast-rain", parentGuid,
+                factory.CreateNodeTemplate(GenerateNewGuid(new Guid("0c04d651-6ab1-4421-8a31-f9f6d8408e23"), i), "OPENWEATHERMAP.RAIN.NAME", "OPENWEATHERMAP.RAIN.DESCRIPTION", "openweathermap-forecast-rain", parentGuid,
                     GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
                 factory.CreateNodeTemplate(GenerateNewGuid(new Guid("3fa925f0-ee5a-4d08-9646-dbad7535d10d"), i), "OPENWEATHERMAP.SNOW.NAME", "OPENWEATHERMAP.SNOW.DESCRIPTION", "openweathermap-forecast-snow", parentGuid,
                     GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);

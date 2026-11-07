@@ -1,24 +1,30 @@
 {
   "TEXT_TO_SPEECH": {
-    "NAME": "Text to speech",
+    "NAME": "Sprachausgabe",
     "DESCRIPTION": "",
     "SYNTHESIZE": {
-      "NAME": "Text To Speech",
+      "NAME": "Text vorlesen",
       "DESCRIPTION": "",
       "TEXT": {
-        "NAME": "Text"
+        "NAME": "Text",
+        "DESCRIPTION": "Zu sprechender Text"
       },
       "VOICE": {
-        "NAME": "Sprache"
+        "NAME": "Sprache",
+        "DESCRIPTION": "Sprache und Stimme der Sprachausgabe"
       },
       "OUTPUT": {
-        "NAME": "O"
+        "NAME": "O",
+        "DESCRIPTION": "URL der erzeugten Audiodatei"
       },
       "DURATION": {
-        "Name": "D"
+        "Name": "D",
+        "NAME": "Dauer",
+        "DESCRIPTION": "Länge der erzeugten Audiodatei"
       },
       "TRIGGER":  {
-        "NAME": "Trigger"
+        "NAME": "Trigger",
+        "DESCRIPTION": "Startet die Sprachausgabe"
       }
     }
 

@@ -23,7 +23,7 @@
       }
     },
     "CONTACT_SENSOR": {
-      "NAME": "Tür/Fenster Kontakt",
+      "NAME": "TÃ¼r/Fenster Kontakt",
       "DESCRIPTION": "",
       "CONTACT": {
         "NAME": "Kontakt",
@@ -58,7 +58,7 @@
       "NAME": "Temperatur Sensor",
       "DESCRIPTION": "",
       "VALUE": {
-        "NAME": "Temperatur (°C)",
+        "NAME": "Temperatur (Â°C)",
         "DESCRIPTION": ""
       }
     },
@@ -87,10 +87,10 @@
       }
     },
     "OCCUPANCY_SENSOR": {
-      "NAME": "Präsenzmelder",
+      "NAME": "PrÃ¤senzmelder",
       "DESCRIPTION": "",
       "OCCUPANCY": {
-        "NAME": "Präsenz",
+        "NAME": "PrÃ¤senz",
         "DESCRIPTION": "true = Anwesenheit erkannt"
       }
     },
@@ -135,23 +135,23 @@
       }
     },
     "AIR_QUALITY_SENSOR": {
-      "NAME": "Luftqualitätssensor",
+      "NAME": "LuftqualitÃ¤tssensor",
       "DESCRIPTION": "",
       "AIR_QUALITY": {
-        "NAME": "Luftqualität",
+        "NAME": "LuftqualitÃ¤t",
         "DESCRIPTION": "0 = unbekannt, 1 = ausgezeichnet, 2 = gut, 3 = mittel, 4 = schlecht, 5 = sehr schlecht"
       },
       "PM25": {
-        "NAME": "PM2.5 (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "PM2.5 (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       },
       "PM10": {
-        "NAME": "PM10 (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "PM10 (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       },
       "VOC": {
-        "NAME": "VOC (µg/m³)",
-        "DESCRIPTION": "0-1000 µg/m³"
+        "NAME": "VOC (Âµg/mÂ³)",
+        "DESCRIPTION": "0-1000 Âµg/mÂ³"
       }
     },
     "FAN": {
@@ -171,19 +171,19 @@
       "DESCRIPTION": "",
       "CURRENT_STATE": {
         "NAME": "Aktueller Modus",
-        "DESCRIPTION": "0 = aus, 1 = heizt, 2 = kühlt"
+        "DESCRIPTION": "0 = aus, 1 = heizt, 2 = kÃ¼hlt"
       },
       "TARGET_STATE": {
         "NAME": "Soll-Modus",
-        "DESCRIPTION": "0 = aus, 1 = heizen, 2 = kühlen, 3 = automatisch"
+        "DESCRIPTION": "0 = aus, 1 = heizen, 2 = kÃ¼hlen, 3 = automatisch"
       },
       "CURRENT_TEMPERATURE": {
-        "NAME": "Ist-Temperatur (°C)",
+        "NAME": "Ist-Temperatur (Â°C)",
         "DESCRIPTION": ""
       },
       "TARGET_TEMPERATURE": {
-        "NAME": "Soll-Temperatur (°C)",
-        "DESCRIPTION": "10-38 °C in 0,5 °C Schritten"
+        "NAME": "Soll-Temperatur (Â°C)",
+        "DESCRIPTION": "10-38 Â°C in 0,5 Â°C Schritten"
       },
       "HUMIDITY": {
         "NAME": "Luftfeuchtigkeit (%)",
@@ -195,11 +195,11 @@
       "DESCRIPTION": "",
       "CURRENT_STATE": {
         "NAME": "Aktueller Zustand",
-        "DESCRIPTION": "0 = offen, 1 = geschlossen, 2 = öffnet, 3 = schließt, 4 = gestoppt"
+        "DESCRIPTION": "0 = offen, 1 = geschlossen, 2 = Ã¶ffnet, 3 = schlieÃŸt, 4 = gestoppt"
       },
       "TARGET_STATE": {
         "NAME": "Soll-Zustand",
-        "DESCRIPTION": "0 = öffnen, 1 = schließen"
+        "DESCRIPTION": "0 = Ã¶ffnen, 1 = schlieÃŸen"
       },
       "OBSTRUCTION": {
         "NAME": "Hindernis",
@@ -219,7 +219,7 @@
       }
     },
     "DOOR": {
-      "NAME": "Tür",
+      "NAME": "TÃ¼r",
       "DESCRIPTION": "",
       "CURRENT_POSITION": {
         "NAME": "Aktuelle Position (%)",
@@ -231,7 +231,7 @@
       },
       "POSITION_STATE": {
         "NAME": "Bewegung",
-        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+        "DESCRIPTION": "0 = schlieÃŸt, 1 = Ã¶ffnet, 2 = gestoppt"
       }
     },
     "WINDOW": {
@@ -247,7 +247,7 @@
       },
       "POSITION_STATE": {
         "NAME": "Bewegung",
-        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+        "DESCRIPTION": "0 = schlieÃŸt, 1 = Ã¶ffnet, 2 = gestoppt"
       }
     },
     "WINDOW_COVERING": {
@@ -263,7 +263,7 @@
       },
       "POSITION_STATE": {
         "NAME": "Bewegung",
-        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+        "DESCRIPTION": "0 = schlieÃŸt, 1 = Ã¶ffnet, 2 = gestoppt"
       },
       "HOLD_POSITION": {
         "NAME": "Stopp",
@@ -279,7 +279,7 @@
       }
     },
     "VALVE": {
-      "NAME": "Ventil / Bewässerung",
+      "NAME": "Ventil / BewÃ¤sserung",
       "DESCRIPTION": "",
       "ACTIVE": {
         "NAME": "Aktiv",
@@ -287,7 +287,7 @@
       },
       "IN_USE": {
         "NAME": "In Betrieb",
-        "DESCRIPTION": "true = Wasser fließt"
+        "DESCRIPTION": "true = Wasser flieÃŸt"
       },
       "SET_DURATION": {
         "NAME": "Laufzeit (s)",
@@ -301,7 +301,7 @@
         "NAME": "Ventiltyp",
         "DESCRIPTION": "Symbol in HomeKit",
         "GENERIC": "Ventil",
-        "IRRIGATION": "Bewässerung",
+        "IRRIGATION": "BewÃ¤sserung",
         "SHOWER_HEAD": "Duschkopf",
         "WATER_FAUCET": "Wasserhahn"
       }
@@ -311,7 +311,7 @@
       "DESCRIPTION": "",
       "CURRENT_STATE": {
         "NAME": "Aktueller Zustand",
-        "DESCRIPTION": "0 = scharf (zuhause), 1 = scharf (abwesend), 2 = scharf (Nacht), 3 = unscharf, 4 = Alarm ausgelöst"
+        "DESCRIPTION": "0 = scharf (zuhause), 1 = scharf (abwesend), 2 = scharf (Nacht), 3 = unscharf, 4 = Alarm ausgelÃ¶st"
       },
       "TARGET_STATE": {
         "NAME": "Soll-Zustand",
@@ -328,13 +328,13 @@
         "DESCRIPTION": "0-100 %"
       },
       "FAULT": {
-        "NAME": "Störung",
-        "DESCRIPTION": "true = Sensor gestört"
+        "NAME": "StÃ¶rung",
+        "DESCRIPTION": "true = Sensor gestÃ¶rt"
       }
     },
     "SWITCH_CONTROL_TYPE": {
       "NAME": "Schalter-Controls anzeigen als",
-      "DESCRIPTION": "HomeKit Gerätetyp für Schalter-Controls",
+      "DESCRIPTION": "HomeKit GerÃ¤tetyp fÃ¼r Schalter-Controls",
       "SWITCH": "Schalter",
       "OUTLET": "Steckdose",
       "LIGHT": "Licht",
@@ -345,9 +345,18 @@
       "DESCRIPTION": ""
     },
     "CLEAN_PAIRINGS": {
-      "NAME": "Pairing löschen",
+      "NAME": "Pairing lÃ¶schen",
       "DESCRIPTION": "Hebt alle Pairings auf"
     },
-    "PAIRING":  "Pairing" 
+    "PAIRING":  "Pairing",
+    "STATE": {
+      "NAME": "Status",
+      "DESCRIPTION": "Ein/Aus-Zustand der Steckdose in HomeKit"
+    },
+    "HUE": {
+      "BRIGHTNESS": {
+        "DESCRIPTION": "Helligkeit des Lichts in Prozent"
+      }
+    } 
   }
 }

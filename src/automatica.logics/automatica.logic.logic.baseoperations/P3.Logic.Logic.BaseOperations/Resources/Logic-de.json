@@ -3,23 +3,32 @@
     "NAME": "Logik",
     "AND": {
       "NAME": "Und",
-      "DESCRIPTION": "Logische UND Verknüpfung der Eingänge",
+      "DESCRIPTION": "Logische UND-Verknüpfung der Eingänge",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1, wenn alle Eingänge 1 sind"
       }
     },
     "OR": {
       "NAME": "Oder",
-      "DESCRIPTION": "Logische ODER Verknüpfung der Eingänge",
+      "DESCRIPTION": "Logische ODER-Verknüpfung der Eingänge",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1, wenn mindestens ein Eingang 1 ist"
       }
     },
     "EXCLUSIVE_OR": {
       "NAME": "Exklusives Oder",
-      "DESCRIPTION": "Logische Exklusives ODER Verknüpfung der Eingänge",
+      "DESCRIPTION": "Logische Exklusiv-ODER-Verknüpfung der Eingänge",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1, wenn genau ein Eingang 1 ist"
       }
     },
     "NOT": {
@@ -27,24 +36,39 @@
       "DESCRIPTION": "Invertiert den Eingang",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Invertierter Eingangswert"
       }
     },
     "BINARY_DECODER": {
       "NAME": "Binärdekoder",
-      "DESCRIPTION": "Verwandelt einen Wert in die einzelnen Bits"
+      "DESCRIPTION": "Verwandelt einen Wert in die einzelnen Bits",
+      "INPUT": {
+        "DESCRIPTION": "Wert, der in Bits zerlegt wird"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Bit des Eingangswerts"
+      }
     },
     "IF": {
       "NAME": "Wenn",
       "DESCRIPTION": "",
       "PARAM": {
         "TRUE": {
-          "NAME": "Wahr Wert",
+          "NAME": "Wahr-Wert",
           "DESCRIPTION": ""
         },
         "FALSE": {
-          "NAME": "Falsch Wert",
+          "NAME": "Falsch-Wert",
           "DESCRIPTION": ""
         }
+      },
+      "INPUT": {
+        "DESCRIPTION": "Zu vergleichender Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Wahr-Wert, wenn I1 = I2, sonst der Falsch-Wert"
       }
     }
 

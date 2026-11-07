@@ -97,11 +97,15 @@ export class EnumExtendedPropertyTemplate extends DefaultExtendedPropertyTemplat
 
     public items: any[] = [];
 
-    static createFromEnum(data): string {
+    /**
+     * @param keyPrefix optional translation key prefix: the item names become <prefix>.<ENUM NAME> (the enum editor
+     * translates the names, a plain enum name is shown untranslated)
+     */
+    static createFromEnum(data, keyPrefix?: string): string {
         const objects: { id: number; name: string }[] = [];
         for (const n in data) {
             if (typeof data[n] === "number") {
-                objects.push({ id: <any>data[n], name: n });
+                objects.push({ id: <any>data[n], name: keyPrefix ? `${keyPrefix}.${n.toUpperCase()}` : n });
             }
         }
 

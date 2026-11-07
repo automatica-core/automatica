@@ -4,7 +4,8 @@
       "NAME": "EnOcean",
       "DESCRIPTION": "",
       "PORT": {
-        "NAME": "Port"
+        "NAME": "Port",
+        "DESCRIPTION": "Serielle Schnittstelle des EnOcean-USB-Sticks"
       }
     },
     "LEARN": {
@@ -20,7 +21,16 @@
       "DESCRIPTION": ""
     },
     "SIMULATED": {
-      "NAME": "Simulierte Geräte"
+      "NAME": "Simulierte Geräte",
+      "DESCRIPTION": "Geräte, die Automatica simuliert und in EnOcean-Aktoren einlernt",
+      "RELAY": {
+        "NAME": "Simuliertes Relais",
+        "DESCRIPTION": "Simulierter Schalter, der ein eingelerntes EnOcean-Relais steuert",
+        "VALUE": {
+          "NAME": "Status",
+          "DESCRIPTION": "Schaltzustand, der an das Relais gesendet wird (ein/aus)"
+        }
+      }
     },
     "RORG_F6": {
       "FUNCTION_01": {

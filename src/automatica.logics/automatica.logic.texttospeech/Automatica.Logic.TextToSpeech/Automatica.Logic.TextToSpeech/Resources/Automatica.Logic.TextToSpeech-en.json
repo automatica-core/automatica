@@ -3,22 +3,28 @@
     "NAME": "Text to speech",
     "DESCRIPTION": "",
     "SYNTHESIZE": {
-      "NAME": "Text To Speech",
+      "NAME": "Text to speech",
       "DESCRIPTION": "",
       "TEXT": {
-        "NAME": "Text"
+        "NAME": "Text",
+        "DESCRIPTION": "Text to speak"
       },
       "VOICE": {
-        "NAME": "Voice"
+        "NAME": "Voice",
+        "DESCRIPTION": "Language and voice of the speech output"
       },
       "OUTPUT": {
-        "NAME": "O"
+        "NAME": "O",
+        "DESCRIPTION": "URL of the generated audio file"
       },
       "DURATION": {
-        "Name": "D"
+        "Name": "D",
+        "NAME": "Duration",
+        "DESCRIPTION": "Length of the generated audio"
       },
       "TRIGGER": {
-        "NAME": "Trigger"
+        "NAME": "Trigger",
+        "DESCRIPTION": "Starts the speech synthesis"
       }
     }
 

@@ -4,7 +4,8 @@
       "NAME": "EnOcean",
       "DESCRIPTION": "",
       "PORT": {
-        "NAME": "Port"
+        "NAME": "Port",
+        "DESCRIPTION": "Serial port of the EnOcean USB stick"
       }
     },
     "LEARN": {
@@ -20,7 +21,16 @@
       "DESCRIPTION": ""
     },
     "SIMULATED": {
-      "NAME": "Simuldated devices"
+      "NAME": "Simuldated devices",
+      "DESCRIPTION": "Devices that Automatica simulates and teaches in to EnOcean actuators",
+      "RELAY": {
+        "NAME": "Simulated relay",
+        "DESCRIPTION": "Simulated switch that controls a taught-in EnOcean relay",
+        "VALUE": {
+          "NAME": "State",
+          "DESCRIPTION": "Switching state sent to the relay (on/off)"
+        }
+      }
     },
     "RORG_F6": {
       "FUNCTION_01": {

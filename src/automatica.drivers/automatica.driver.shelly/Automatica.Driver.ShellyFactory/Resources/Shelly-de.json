@@ -4,7 +4,11 @@
     "DESCRIPTION": "",
     "1": {
       "NAME": "Shelly 1",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION": "Schaltzustand des Shelly 1 Relais"
+      }
     },
     "SCAN": {
       "NAME": "Scan",
@@ -32,60 +36,77 @@
     },
     "PROPERTIES": {
       "ID": {
-        "NAME": "Id"
+        "NAME": "Id",
+        "DESCRIPTION": "Geräte-ID des Shelly"
       },
       "POLLING_INTERVAL": {
-        "NAME": "Abfrageintervall [ms]"
+        "NAME": "Abfrageintervall [ms]",
+        "DESCRIPTION": "Wie oft der Gerätestatus gelesen wird, in Millisekunden"
       },
       "USERNAME": {
-        "NAME": "Benutzername"
+        "NAME": "Benutzername",
+        "DESCRIPTION": "Benutzername, falls die Anmeldung am Shelly aktiviert ist"
       },
       "PASSWORD": {
-        "NAME": "Passwort"
+        "NAME": "Passwort",
+        "DESCRIPTION": "Passwort, falls die Anmeldung am Shelly aktiviert ist"
       },
       "SCAN": {
         "NAME": "Suche"
       },
       "USE_IP": {
-        "NAME": "Use IP"
+        "NAME": "Use IP",
+        "DESCRIPTION": "Über die IP-Adresse statt über die Geräte-ID verbinden"
       },
       "IP": {
-        "NAME": "IP"
+        "NAME": "IP",
+        "DESCRIPTION": "IP-Adresse des Shelly"
       }
     },
     "METERS": {
-      "NAME": "Stromzähler"
+      "NAME": "Stromzähler",
+      "DESCRIPTION": "Stromzähler des Geräts"
 
     },
     "METER": {
       "NAME": "Stromzähler",
+      "DESCRIPTION": "Stromzähler eines Kanals",
       "IS_VALID": {
-        "NAME": "Ist gültig"
+        "NAME": "Ist gültig",
+        "DESCRIPTION": "Zeigt an, ob die Messwerte gültig sind"
       },
       "OVERPOWER": {
-        "NAME": "Überlastung"
+        "NAME": "Überlastung",
+        "DESCRIPTION": "Leistung, bei der der Überlastschutz ausgelöst hat"
       },
       "POWER": {
-        "NAME": "Leistung [W]"
+        "NAME": "Leistung [W]",
+        "DESCRIPTION": "Aktuelle Leistung in Watt"
       },
       "TIMESTAMP": {
-        "NAME": "Zeitstempel"
+        "NAME": "Zeitstempel",
+        "DESCRIPTION": "Zeitpunkt der letzten Messung"
       },
       "TOTAL": {
-        "NAME": "Gesamt [Wh]"
+        "NAME": "Gesamt [Wh]",
+        "DESCRIPTION": "Gesamtenergie in Wattstunden"
       }
     },
     "RELAYS": {
-      "NAME": "Relais"
+      "NAME": "Relais",
+      "DESCRIPTION": "Relais des Geräts"
 
     },
     "RELAY": {
       "NAME": "Relais",
+      "DESCRIPTION": "Relaiskanal",
       "HAS_TIMER": {
-        "NAME": "Has Timer"
+        "NAME": "Has Timer",
+        "DESCRIPTION": "Auf diesem Relais läuft ein Timer"
       },
       "STATUS": {
-        "NAME": "Status"
+        "NAME": "Status",
+        "DESCRIPTION": "Schaltzustand des Relais"
       },
       "FLIP_BACK_TIMER": {
         "NAME": "Reset Interval",
@@ -94,24 +115,31 @@
     },
     "ROLLER": {
       "NAME": "Rollladen",
+      "DESCRIPTION": "Rollladenkanal",
       "POSITION": {
-        "NAME": "Position"
+        "NAME": "Position",
+        "DESCRIPTION": "Position des Rollladens in Prozent"
       },
       "STATE": {
-        "NAME": "Status"
+        "NAME": "Status",
+        "DESCRIPTION": "Bewegungszustand des Rollladens"
       },
       "STOP_REASON": {
-        "NAME": "Stop Grund"
+        "NAME": "Stop Grund",
+        "DESCRIPTION": "Grund für den letzten Stopp des Rollladens"
       },
       "LAST_DIRECTION": {
-        "NAME": "Richtung"
+        "NAME": "Richtung",
+        "DESCRIPTION": "Richtung der letzten Bewegung"
       }
     },
     "TEMPERATURE": {
-      "NAME": "Temperatur"
+      "NAME": "Temperatur",
+      "DESCRIPTION": "Interne Gerätetemperatur"
     },
     "HAS_UPDATE": {
-      "NAME": "Update verfügbar"
+      "NAME": "Update verfügbar",
+      "DESCRIPTION": "Ein Firmware-Update ist verfügbar"
     }
   }
 }

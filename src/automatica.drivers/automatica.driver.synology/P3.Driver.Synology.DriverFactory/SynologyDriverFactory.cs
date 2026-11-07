@@ -70,7 +70,7 @@ namespace P3.Driver.Synology.DriverFactory
         private void AddWebStationNodes(INodeTemplateFactory factory)
         {
             var dsmWebStationGuid = new Guid("25a06729-049f-409f-9e0e-f731f444db07");
-            factory.CreateInterfaceType(dsmWebStationGuid, "SYNOLOGY.DSM.WEBSTATION.NAME", "SYNOLOGY..WEBSTATION.DESCRIPTION", int.MaxValue, 1, false);
+            factory.CreateInterfaceType(dsmWebStationGuid, "SYNOLOGY.DSM.WEBSTATION.NAME", "SYNOLOGY.DSM.WEBSTATION.DESCRIPTION", int.MaxValue, 1, false);
 
             factory.CreateNodeTemplate(dsmWebStationGuid, "SYNOLOGY.DSM.WEBSTATION.NAME", "SYNOLOGY.DSM.WEBSTATION.DESCRIPTION", "synology-dsm-webstation",
                 SynologyDevice, dsmWebStationGuid, false, true,

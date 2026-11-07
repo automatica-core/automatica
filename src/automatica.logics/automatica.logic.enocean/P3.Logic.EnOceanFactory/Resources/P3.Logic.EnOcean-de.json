@@ -6,12 +6,12 @@
       "NAME": "Fenstergriff",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "Input",
+        "NAME": "Eingang",
         "DESCRIPTION": "Der Wert des Fenstergriff"
       },
       "OUTPUT": {
-        "NAME": "Output",
-        "DESCRIPTION": "Der Status des Fenstergriff (0 = Geschlossen, 1 = Geöffnet, 2 = Gekiptt)"
+        "NAME": "Ausgang",
+        "DESCRIPTION": "Der Status des Fenstergriff (0 = Geschlossen, 1 = GeÃ¶ffnet, 2 = Gekiptt)"
       }
     }
   }
