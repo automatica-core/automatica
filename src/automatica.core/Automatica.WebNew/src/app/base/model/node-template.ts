@@ -6,6 +6,9 @@ import { PropertyTemplate } from "./property-template"
 import { NodeInstance } from "./node-instance";
 import { BoardInterface } from "./board-interface";
 
+/** VisuMobileObjectTemplateTypes.Label, the default tile of every node template */
+export const LABEL_VISU_TEMPLATE = "16780dfd-887a-4a0a-9b2a-4d62ccc32c93";
+
 @Model()
 export class NodeTemplate extends BaseModel {
     @JsonProperty()
@@ -72,6 +75,14 @@ export class NodeTemplate extends BaseModel {
 
     @JsonProperty()
     This2DefaultMobileVisuTemplate: string;
+
+    /**
+     * true if the node has a tile of its own in the generated visu (e.g. the camera of the camera driver), so it can be put
+     * in an area or category although it has no value. Every other node defaults to the label tile
+     */
+    public get HasOwnVisuTile(): boolean {
+        return !!this.This2DefaultMobileVisuTemplate && this.This2DefaultMobileVisuTemplate.toLowerCase() !== LABEL_VISU_TEMPLATE;
+    }
 
 
     public get DisplayName() {

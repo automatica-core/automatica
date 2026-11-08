@@ -465,15 +465,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
 
 
-        if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
-            this.Properties.push(new VirtualReadablePropertyInstance(this));
+        const hasValue = this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0;
 
-            if (!this.NodeTemplate.IsWriteableFixed) {
-                this.Properties.push(new VirtualWriteablePropertyInstance(this));
-                this.Properties.push(new VirtualRemanentPropertyInstance(this));
-                this.Properties.push(new VirtualOnlyWriteIfChangedPropertyInstance(this));
-            }
-
+        // nodes without a value but with a tile of their own (cameras) go into the visu like data points
+        if (hasValue || (this.NodeTemplate && this.NodeTemplate.HasOwnVisuTile)) {
             this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
             this.Properties.push(new VirtualAreaPropertyInstance(this));
             this.Properties.push(new VirtualCategoryPropertyInstance(this));
@@ -481,6 +476,16 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
             this.Properties.push(new VirtualUserGroupPropertyInstance(this));
             this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
+        }
+
+        if (hasValue) {
+            this.Properties.push(new VirtualReadablePropertyInstance(this));
+
+            if (!this.NodeTemplate.IsWriteableFixed) {
+                this.Properties.push(new VirtualWriteablePropertyInstance(this));
+                this.Properties.push(new VirtualRemanentPropertyInstance(this));
+                this.Properties.push(new VirtualOnlyWriteIfChangedPropertyInstance(this));
+            }
 
             if (this.NodeTemplate.This2NodeDataType === NodeDataTypeEnum.Boolean) {
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_TEXT_TRUE", 6, this, () => this.StateTextValueTrue, (value) => this.StateTextValueTrue = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
