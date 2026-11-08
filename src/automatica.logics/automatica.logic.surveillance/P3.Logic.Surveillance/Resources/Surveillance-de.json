@@ -22,6 +22,743 @@
       "LOCKED_INVERTED": {
         "DESCRIPTION": "Kontakt: Fenster verriegelt (invertiert)"
       }
+    },
+    "BURGLAR_ALARM": {
+      "NAME": "Einbruchmeldeanlage",
+      "DESCRIPTION": "Einbruchalarm aus Bewegungs-, Glasbruch-, Fenster- und Türsensoren mit sechs zeitlich gestaffelten Alarmstufen",
+      "PRESENCE": {
+        "DESCRIPTION": "Präsenz-/Bewegungsmelder (nur bei Scharfschaltung mit Präsenz)"
+      },
+      "GLASS": {
+        "DESCRIPTION": "Glasbruchmelder"
+      },
+      "WINDOW": {
+        "DESCRIPTION": "Fensterkontakte (1 = offen)"
+      },
+      "DOOR": {
+        "DESCRIPTION": "Türkontakte (1 = offen)"
+      },
+      "OTHER": {
+        "DESCRIPTION": "Weitere Alarmsensoren"
+      },
+      "TOGGLE": {
+        "DESCRIPTION": "Impuls: scharf (mit Präsenz) oder unscharf schalten"
+      },
+      "TOGGLE_NP": {
+        "DESCRIPTION": "Impuls: scharf (ohne Präsenz) oder unscharf schalten"
+      },
+      "ARM": {
+        "DESCRIPTION": "Impuls: sofort scharf mit Präsenz"
+      },
+      "ARM_NP": {
+        "DESCRIPTION": "Impuls: sofort scharf ohne Präsenz"
+      },
+      "ARM_DELAYED": {
+        "DESCRIPTION": "Impuls: verzögert scharf mit Präsenz"
+      },
+      "ARM_DELAYED_NP": {
+        "DESCRIPTION": "Impuls: verzögert scharf ohne Präsenz"
+      },
+      "OFF": {
+        "DESCRIPTION": "Impuls: unscharf; gehalten: gesperrt (kein Scharfschalten)"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Impuls: Alarm quittieren, die Anlage bleibt scharf"
+      },
+      "DISABLE_PERIPHERY": {
+        "DESCRIPTION": "1 = Eingänge zum Scharfschalten werden ignoriert (Visualisierung funktioniert weiter)"
+      },
+      "STATUS": {
+        "DESCRIPTION": "0 unscharf, 1 scharf, 2 scharf ohne Präsenz"
+      },
+      "ALARM": {
+        "DESCRIPTION": "Alarm aktiv"
+      },
+      "SILENT": {
+        "DESCRIPTION": "Alarmstufe 1: stiller Alarm"
+      },
+      "AUDIBLE": {
+        "DESCRIPTION": "Alarmstufe 2: akustischer Alarm (Sirene)"
+      },
+      "VISUAL": {
+        "DESCRIPTION": "Alarmstufe 3: optischer Alarm (Licht)"
+      },
+      "INTERNAL": {
+        "DESCRIPTION": "Alarmstufe 4: interner Alarm"
+      },
+      "EXTERNAL": {
+        "DESCRIPTION": "Alarmstufe 5: externer Alarm"
+      },
+      "REMOTE": {
+        "DESCRIPTION": "Alarmstufe 6: Fernalarm (z.B. Anrufer oder Leitstelle)"
+      },
+      "ACTIVE_SENSORS": {
+        "DESCRIPTION": "Anzahl aktiver Sensoren"
+      },
+      "TEST": {
+        "DESCRIPTION": "Alarm im Testmodus (keine Alarmstufen)"
+      },
+      "ARMING_REMAINING": {
+        "DESCRIPTION": "Sekunden bis zur Scharfschaltung"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Auslösender Sensor"
+      },
+      "TIME": {
+        "DESCRIPTION": "Zeitpunkt des Alarms"
+      },
+      "OPEN_CONTACTS": {
+        "DESCRIPTION": "Anzahl offener Fenster und Türen"
+      },
+      "OPEN_CONTACTS_TEXT": {
+        "DESCRIPTION": "Ansage offener Fenster und Türen beim Scharfschalten (für Sprachausgabe)"
+      },
+      "ARMING_DELAY": {
+        "NAME": "Scharfschaltverzögerung [s]",
+        "DESCRIPTION": "Verzögerung bei verzögertem Scharfschalten"
+      },
+      "SILENT_DELAY": {
+        "NAME": "Stiller Alarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 1"
+      },
+      "AUDIBLE_DELAY": {
+        "NAME": "Akustischer Alarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 2"
+      },
+      "VISUAL_DELAY": {
+        "NAME": "Optischer Alarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 3"
+      },
+      "INTERNAL_DELAY": {
+        "NAME": "Interner Alarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 4"
+      },
+      "EXTERNAL_DELAY": {
+        "NAME": "Externer Alarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 5"
+      },
+      "REMOTE_DELAY": {
+        "NAME": "Fernalarm nach [s]",
+        "DESCRIPTION": "Sekunden nach der Auslösung bis Alarmstufe 6"
+      },
+      "MAX_ALARM": {
+        "NAME": "Maximale Alarmdauer [s]",
+        "DESCRIPTION": "Danach enden die Alarmstufen (muss länger als die Verzögerungen der Stufen sein)"
+      },
+      "SILENT_CONFIRM": {
+        "NAME": "Quittieren nach maximaler Dauer",
+        "DESCRIPTION": "Der Alarm wird nach der maximalen Alarmdauer automatisch quittiert"
+      },
+      "PULSE_EXTENSION": {
+        "NAME": "Sensorverlängerung [s]",
+        "DESCRIPTION": "Kurze Sensorimpulse gelten so lange als aktiv"
+      },
+      "SECOND_PRESENCE": {
+        "NAME": "Zweite Präsenz innerhalb [s]",
+        "DESCRIPTION": "Ein Präsenzmelder löst erst aus, wenn ein zweiter (oder derselbe erneut) innerhalb dieser Zeit meldet; 0 = sofort"
+      },
+      "ARM_OPEN_CONTACTS": {
+        "NAME": "Scharfschalten mit offenen Kontakten",
+        "DESCRIPTION": "Beim Scharfschalten offene Fenster und Türen werden ignoriert, bis sie schließen"
+      },
+      "TEST_MODE": {
+        "NAME": "Testmodus",
+        "DESCRIPTION": "Sensoren setzen nur den Testausgang, keine Alarmstufen"
+      },
+      "START_DELAY": {
+        "NAME": "Startverzögerung [s]",
+        "DESCRIPTION": "Nach einem Neustart im scharfen Zustand werden die Sensoren so lange ignoriert"
+      },
+      "LIGHTS": {
+        "NAME": "Beleuchtung",
+        "DESCRIPTION": "Wird beim optischen Alarm eingeschaltet"
+      },
+      "BLINDS": {
+        "NAME": "Beschattung",
+        "DESCRIPTION": "Fährt bei einem Alarm hoch"
+      },
+      "TEXT": {
+        "ONE_OPEN": "Achtung, {0} ist noch offen!",
+        "SEVERAL_OPEN": "Achtung! Mehrere Fenster oder Türen sind noch offen!"
+      }
+    },
+    "BURGLAR_ALARM_CENTRAL": {
+      "NAME": "Einbruchmeldeanlage Zentral",
+      "DESCRIPTION": "Schaltet und quittiert mehrere Einbruchmeldeanlagen gemeinsam",
+      "ARMED_COUNT": {
+        "DESCRIPTION": "Anzahl scharfer Einbruchmeldeanlagen"
+      },
+      "ALARM": {
+        "DESCRIPTION": "Eine der Einbruchmeldeanlagen hat einen Alarm"
+      },
+      "ALARMS": {
+        "NAME": "Einbruchmeldeanlagen",
+        "DESCRIPTION": "Die gemeinsam gesteuerten Einbruchmeldeanlagen"
+      }
+    },
+    "FIRE_WATER_ALARM": {
+      "NAME": "Brand- und Wasseralarm",
+      "DESCRIPTION": "Brand- und Wasseralarm mit Vor- und Hauptalarm sowie Servicemodus; immer aktiv",
+      "SMOKE": {
+        "DESCRIPTION": "Rauchmelder"
+      },
+      "WATER": {
+        "DESCRIPTION": "Wassermelder"
+      },
+      "ARC_FAULT": {
+        "DESCRIPTION": "Fehlerlichtbogen-Melder"
+      },
+      "TEMPERATURE": {
+        "DESCRIPTION": "Temperatur; Alarm bei der Maximaltemperatur"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Impuls: Alarm quittieren"
+      },
+      "CONFIRM_SIGNALS": {
+        "DESCRIPTION": "Impuls: Alarmsignale stummschalten"
+      },
+      "OFF": {
+        "DESCRIPTION": "Impuls: quittieren; gehalten: Sensoren werden ignoriert"
+      },
+      "PRE_ALARM": {
+        "DESCRIPTION": "Voralarm"
+      },
+      "MAIN_ALARM": {
+        "DESCRIPTION": "Hauptalarm"
+      },
+      "PRE_ALARM_SIGNAL": {
+        "DESCRIPTION": "Signal des Voralarms (aus wenn stummgeschaltet)"
+      },
+      "MAIN_ALARM_SIGNAL": {
+        "DESCRIPTION": "Signal des Hauptalarms (aus wenn stummgeschaltet)"
+      },
+      "ACTIVE_SENSORS": {
+        "DESCRIPTION": "Anzahl aktiver Sensoren"
+      },
+      "TEST": {
+        "DESCRIPTION": "Alarm im Servicemodus"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Auslösender Sensor"
+      },
+      "TIME": {
+        "DESCRIPTION": "Zeitpunkt des Alarms"
+      },
+      "MAIN_DELAY": {
+        "NAME": "Hauptalarm nach [s]",
+        "DESCRIPTION": "Sekunden vom Voralarm bis zum Hauptalarm"
+      },
+      "MAX_TEMPERATURE": {
+        "NAME": "Maximaltemperatur [°C]",
+        "DESCRIPTION": "Der Temperatureingang löst ab diesem Wert aus"
+      },
+      "MAX_ALARM": {
+        "NAME": "Maximale Alarmdauer [s]",
+        "DESCRIPTION": "Danach endet der Hauptalarm; 0 = unbegrenzt"
+      },
+      "PRE_ALARM_CONFIRM": {
+        "NAME": "Quittieren nach maximaler Dauer",
+        "DESCRIPTION": "Der gesamte Alarm wird nach der maximalen Dauer quittiert"
+      },
+      "SERVICE_MODE": {
+        "NAME": "Servicemodus",
+        "DESCRIPTION": "0 = aus, 1 = dauerhaft ein, mehr = so viele Sekunden ein; Sensoren lösen nur einen Testalarm aus"
+      },
+      "SERVICE_DURATION": {
+        "NAME": "Servicemodus aus der Visualisierung [s]",
+        "DESCRIPTION": "Dauer des in der Visualisierung gestarteten Servicemodus"
+      },
+      "LIGHTS": {
+        "NAME": "Beleuchtung",
+        "DESCRIPTION": "Wird bei Brandalarm eingeschaltet"
+      },
+      "BLINDS": {
+        "NAME": "Beschattung",
+        "DESCRIPTION": "Fährt bei Brandalarm hoch (Fluchtwege)"
+      }
+    },
+    "EMERGENCY_ALARM": {
+      "NAME": "Notrufalarm",
+      "DESCRIPTION": "Hilferuf über Taster oder Visualisierung, mit Quittierung und Eskalation",
+      "TOGGLE_HOLD": {
+        "DESCRIPTION": "Drücken und halten: löst den Alarm aus bzw. quittiert ihn"
+      },
+      "ACTIVATE": {
+        "DESCRIPTION": "Impuls: Alarm sofort auslösen"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Impuls: Alarm quittieren"
+      },
+      "OFF": {
+        "DESCRIPTION": "Impuls: quittieren; gehalten: gesperrt"
+      },
+      "ALARM": {
+        "DESCRIPTION": "Alarm aktiv"
+      },
+      "ALARM_ON": {
+        "DESCRIPTION": "Impuls bei Alarmbeginn"
+      },
+      "ALARM_OFF": {
+        "DESCRIPTION": "Impuls bei Quittierung"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Taster oder Benutzer, der den Alarm ausgelöst hat"
+      },
+      "CONFIRM_CAUSE": {
+        "DESCRIPTION": "Taster oder Benutzer, der den Alarm quittiert hat"
+      },
+      "ESCALATED": {
+        "DESCRIPTION": "Niemand hat innerhalb der Eskalationszeit quittiert"
+      },
+      "HOLD_ALARM": {
+        "NAME": "Haltezeit Alarm [s]",
+        "DESCRIPTION": "So lange muss der Taster zum Auslösen gehalten werden"
+      },
+      "HOLD_CONFIRM": {
+        "NAME": "Haltezeit Quittierung [s]",
+        "DESCRIPTION": "So lange muss der Taster zum Quittieren gehalten werden"
+      },
+      "ESCALATION": {
+        "NAME": "Eskalation nach [s]",
+        "DESCRIPTION": "Schaltet den Eskalationsausgang, wenn niemand quittiert hat; 0 = aus"
+      }
+    },
+    "ALARM_CHAIN": {
+      "NAME": "Alarmkette",
+      "DESCRIPTION": "Gibt einen Alarmtext von Stufe zu Stufe weiter, bis jemand quittiert, zuletzt an die Notdienste",
+      "ALARM": {
+        "DESCRIPTION": "1 = Kette starten"
+      },
+      "URGENT": {
+        "DESCRIPTION": "1 = dringend: alle Stufen gleichzeitig"
+      },
+      "EMERGENCY_IN": {
+        "DESCRIPTION": "1 = sofort die Notdienste alarmieren"
+      },
+      "TEXT": {
+        "DESCRIPTION": "Text oder Wert für die Meldungen (<vt1>, <v1>)"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Impuls: quittieren; gehalten: gesperrt"
+      },
+      "OFF": {
+        "DESCRIPTION": "Impuls: beenden; gehalten: gesperrt"
+      },
+      "STAGE_OUT": {
+        "DESCRIPTION": "Alarmtext während diese Stufe aktiv ist, sonst leer"
+      },
+      "EMERGENCY_OUT": {
+        "DESCRIPTION": "Notfalltext, wenn niemand reagiert hat"
+      },
+      "STAGE": {
+        "DESCRIPTION": "Aktive Stufe: 0 keine, -1 alle (dringend)"
+      },
+      "START_TIME": {
+        "DESCRIPTION": "Beginn des Alarms"
+      },
+      "STOP_TIME": {
+        "DESCRIPTION": "Ende des Alarms"
+      },
+      "CONFIRM_CAUSE": {
+        "DESCRIPTION": "Wer quittiert hat"
+      },
+      "CONFIRM_TIME": {
+        "DESCRIPTION": "Zeitpunkt der Quittierung"
+      },
+      "REACTION_TIME": {
+        "NAME": "Reaktionszeit [s]",
+        "DESCRIPTION": "Zeit je Stufe; 0 = alle Stufen gleichzeitig"
+      },
+      "MAX_REPETITIONS": {
+        "NAME": "Wiederholungen",
+        "DESCRIPTION": "Durchläufe der Stufen, bevor die Notdienste alarmiert werden; 0 = endlos"
+      },
+      "STAGES": {
+        "NAME": "Stufen",
+        "DESCRIPTION": "Anzahl verwendeter Stufen (1-10)"
+      },
+      "ALARM_TEXT": {
+        "NAME": "Alarmtext",
+        "DESCRIPTION": "Platzhalter: <vn> Name, <vt1-3> Texte, <v1-3> Werte, <v1.2> zwei Nachkommastellen, <vton> Beginn, <vcn> Kunde, <vca> Adresse, <vtes> Sekunden bis Notdienste"
+      },
+      "EMERGENCY_TEXT": {
+        "NAME": "Notfalltext",
+        "DESCRIPTION": "Text für die Notdienste, gleiche Platzhalter"
+      },
+      "CUSTOMER_NAME": {
+        "NAME": "Kundenname",
+        "DESCRIPTION": "Für <vcn>"
+      },
+      "CUSTOMER_ADDRESS": {
+        "NAME": "Kundenadresse",
+        "DESCRIPTION": "Für <vca>"
+      }
+    },
+    "CALLER": {
+      "NAME": "Anrufer",
+      "DESCRIPTION": "Ruft Telefonnummern an und liest eine Nachricht per Sprachausgabe vor",
+      "TRIGGER": {
+        "DESCRIPTION": "Steigende Flanke: anrufen"
+      },
+      "VALUE": {
+        "DESCRIPTION": "Wert für Nachricht und Nummern (<v1>..<v8>)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Gehalten: keine Anrufe"
+      },
+      "CALLS": {
+        "DESCRIPTION": "Anrufe der letzten 24 Stunden"
+      },
+      "RESULT": {
+        "DESCRIPTION": "Ergebnis des letzten Anrufs (Nummer gekürzt)"
+      },
+      "ERROR": {
+        "DESCRIPTION": "Der letzte Anruf ist fehlgeschlagen"
+      },
+      "PROVIDER": {
+        "NAME": "Telefonie-Anbieter",
+        "DESCRIPTION": "0 = Simulation (kein Anruf), 1 = Twilio"
+      },
+      "NUMBERS": {
+        "NAME": "Telefonnummern",
+        "DESCRIPTION": "Internationale Nummern (+43... oder 0043...), durch Kommas getrennt; Platzhalter möglich"
+      },
+      "MESSAGE": {
+        "NAME": "Nachricht",
+        "DESCRIPTION": "Gesprochener Text; <vn> Name, <v1>..<v8> Werte, <v1.2> zwei Nachkommastellen"
+      },
+      "LANGUAGE": {
+        "NAME": "Sprache",
+        "DESCRIPTION": "Sprache der Sprachausgabe, z.B. de-DE oder en-US"
+      },
+      "TRIGGER_DELAY": {
+        "NAME": "Auslöseverzögerung [ms]",
+        "DESCRIPTION": "Wartet nach der Auslösung, damit die Werte stabil sind"
+      },
+      "UPDATE_INTERVAL": {
+        "NAME": "Wiederholintervall [s]",
+        "DESCRIPTION": "Ruft erneut an, solange der Auslöser ein bleibt; 0 = aus"
+      },
+      "NOTIFY": {
+        "NAME": "Zusätzlich Benachrichtigung senden",
+        "DESCRIPTION": "Sendet die Nachricht auch als Server-Benachrichtigung"
+      },
+      "TWILIO_SID": {
+        "NAME": "Twilio Account SID",
+        "DESCRIPTION": "Account SID (AC...) des Twilio-Kontos"
+      },
+      "TWILIO_TOKEN": {
+        "NAME": "Twilio Auth Token",
+        "DESCRIPTION": "Geheimes Token; sichtbar für alle, die diese Logik bearbeiten oder sehen können"
+      },
+      "TWILIO_FROM": {
+        "NAME": "Twilio Anrufernummer",
+        "DESCRIPTION": "Twilio-Nummer oder verifizierte Rufnummer, die anruft"
+      }
+    },
+    "SIA": {
+      "NAME": "SIA DC-09",
+      "DESCRIPTION": "Sendet Alarmereignisse an eine Leitstelle (SIA DC-09 über TCP, optional AES-verschlüsselt)",
+      "TRIGGER": {
+        "DESCRIPTION": "Steigende Flanke oder Änderung: Ein-Meldung; fallende Flanke: Aus-Meldung (Wiederherstellung)"
+      },
+      "MESSAGE_IN": {
+        "DESCRIPTION": "Text, der als ganze Meldung gesendet wird, z.B. BA01^Wohnzimmer"
+      },
+      "OFF": {
+        "DESCRIPTION": "Gehalten: es werden keine Ereignisse gesendet"
+      },
+      "OK": {
+        "DESCRIPTION": "Die letzte Übertragung wurde bestätigt"
+      },
+      "ERROR": {
+        "DESCRIPTION": "Fehler der letzten Übertragung"
+      },
+      "QUEUE": {
+        "DESCRIPTION": "Ereignisse, die auf das Senden warten"
+      },
+      "LAST_EVENT": {
+        "DESCRIPTION": "Zuletzt bestätigtes Ereignis"
+      },
+      "SERVER": {
+        "NAME": "Empfänger",
+        "DESCRIPTION": "host:port der Leitstelle"
+      },
+      "BACKUP_SERVER": {
+        "NAME": "Ersatzempfänger",
+        "DESCRIPTION": "host:port, wenn der Empfänger nicht antwortet"
+      },
+      "POLLING": {
+        "NAME": "Abfrageintervall [s]",
+        "DESCRIPTION": "Überwachungsmeldungen an den Empfänger; 0 = aus"
+      },
+      "BACKUP_POLLING": {
+        "NAME": "Abfrageintervall Ersatz [s]",
+        "DESCRIPTION": "Überwachungsmeldungen an den Ersatzempfänger; 0 = aus"
+      },
+      "TIMEOUT": {
+        "NAME": "Zeitüberschreitung [s]",
+        "DESCRIPTION": "Wartezeit auf die Bestätigung (1-10)"
+      },
+      "FORMAT": {
+        "NAME": "Datenformat",
+        "DESCRIPTION": "0 = SIA DC-04 (SIA-DCS, Text erlaubt), 1 = Contact ID DC-05 (ADM-CID)"
+      },
+      "KEY": {
+        "NAME": "Schlüssel",
+        "DESCRIPTION": "32, 48 oder 64 Hex-Zeichen (AES-128/192/256); leer = unverschlüsselt. Sichtbar für alle, die diese Logik sehen können"
+      },
+      "ACCOUNT": {
+        "NAME": "Kundennummer",
+        "DESCRIPTION": "Kundennummer bei der Leitstelle (3-16 Hex-Zeichen)"
+      },
+      "PREFIX": {
+        "NAME": "Kontopräfix",
+        "DESCRIPTION": "1-6 Hex-Zeichen, 0 wenn keines"
+      },
+      "RECEIVER": {
+        "NAME": "Empfängernummer",
+        "DESCRIPTION": "Optional, 1-6 Hex-Zeichen"
+      },
+      "MIN_INTERVAL": {
+        "NAME": "Mindestabstand [s]",
+        "DESCRIPTION": "Je Eingang; Änderungen in dieser Zeit werden danach gesendet (letzter Stand)"
+      },
+      "ON_MESSAGE_1": {
+        "NAME": "I1: Ein-Meldung",
+        "DESCRIPTION": "Ereignis und Zone, z.B. BA01^Wohnzimmer; <v> = Eingangswert"
+      },
+      "OFF_MESSAGE_1": {
+        "NAME": "I1: Aus-Meldung",
+        "DESCRIPTION": "Wiederherstellungsereignis, z.B. BR01^Wohnzimmer"
+      },
+      "ON_MESSAGE_2": {
+        "NAME": "I2: Ein-Meldung",
+        "DESCRIPTION": "Ereignis und Zone, z.B. BA01^Wohnzimmer; <v> = Eingangswert"
+      },
+      "OFF_MESSAGE_2": {
+        "NAME": "I2: Aus-Meldung",
+        "DESCRIPTION": "Wiederherstellungsereignis, z.B. BR01^Wohnzimmer"
+      },
+      "ON_MESSAGE_3": {
+        "NAME": "I3: Ein-Meldung",
+        "DESCRIPTION": "Ereignis und Zone, z.B. BA01^Wohnzimmer; <v> = Eingangswert"
+      },
+      "OFF_MESSAGE_3": {
+        "NAME": "I3: Aus-Meldung",
+        "DESCRIPTION": "Wiederherstellungsereignis, z.B. BR01^Wohnzimmer"
+      },
+      "ON_MESSAGE_4": {
+        "NAME": "I4: Ein-Meldung",
+        "DESCRIPTION": "Ereignis und Zone, z.B. BA01^Wohnzimmer; <v> = Eingangswert"
+      },
+      "OFF_MESSAGE_4": {
+        "NAME": "I4: Aus-Meldung",
+        "DESCRIPTION": "Wiederherstellungsereignis, z.B. BR01^Wohnzimmer"
+      }
+    },
+    "ACCESS_CONTROLLER": {
+      "NAME": "Zutrittskontrolle",
+      "DESCRIPTION": "Benutzer mit Codes und Tags, Benutzergruppen mit Zutrittszeiten, Türausgang und Zutrittsprotokoll",
+      "CODE": {
+        "DESCRIPTION": "Code von einer Tastatur"
+      },
+      "TAG": {
+        "DESCRIPTION": "Tag-ID von einem NFC- oder RFID-Leser"
+      },
+      "OPEN": {
+        "DESCRIPTION": "Impuls: Tür öffnen (z.B. Taster innen)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Gehalten: Zutritt gesperrt"
+      },
+      "DOOR": {
+        "DESCRIPTION": "Türöffner"
+      },
+      "GRANTED": {
+        "DESCRIPTION": "Impuls: Zutritt gewährt"
+      },
+      "DENIED": {
+        "DESCRIPTION": "Impuls: Zutritt verweigert"
+      },
+      "USER": {
+        "DESCRIPTION": "Benutzer des letzten Zutritts"
+      },
+      "TIME": {
+        "DESCRIPTION": "Zeitpunkt des letzten Zutritts"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Ergebnis des letzten Zutritts"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "Zutritt ist gesperrt"
+      },
+      "GROUPS": {
+        "NAME": "Benutzergruppen",
+        "DESCRIPTION": "z.B. Familie: Mo-So 00:00-24:00; Reinigung: Mo,Do 08:00-12:00 | Sa 09:00-10:00"
+      },
+      "AUTH_MODE": {
+        "NAME": "Authentifizierung",
+        "DESCRIPTION": "0 = Code und Tag, 1 = Code oder Tag, 2 = nur Tag, 3 = nur Code"
+      },
+      "DOOR_ON": {
+        "NAME": "Tür offen [s]",
+        "DESCRIPTION": "So lange wird der Türöffner eingeschaltet"
+      },
+      "MAX_FAILURES": {
+        "NAME": "Fehlversuche",
+        "DESCRIPTION": "Falsche Codes oder Tags in Folge bis zur Sperre; 0 = keine Sperre"
+      },
+      "LOCKOUT": {
+        "NAME": "Sperre [s]",
+        "DESCRIPTION": "So lange ist der Zutritt nach zu vielen Fehlversuchen gesperrt"
+      },
+      "TWO_FACTOR_WINDOW": {
+        "NAME": "Zweiter Faktor innerhalb [s]",
+        "DESCRIPTION": "Bei Code und Tag: Zeit für den zweiten Faktor"
+      }
+    },
+    "ACCESS": {
+      "CAUSE": {
+        "CODE": "Zutritt mit Code",
+        "TAG": "Zutritt mit Tag",
+        "OPEN": "Tür geöffnet",
+        "UNKNOWN_CODE": "Unbekannter Code",
+        "UNKNOWN_TAG": "Unbekannter Tag",
+        "OUTSIDE_TIME": "Außerhalb der Zutrittszeiten",
+        "LOCKED": "Zutritt gesperrt",
+        "LOCKOUT": "Gesperrt nach Fehlversuchen",
+        "FACTORS_MISMATCH": "Code und Tag gehören zu verschiedenen Benutzern",
+        "CODE_NOT_ALLOWED": "Codes sind nicht erlaubt",
+        "TAG_NOT_ALLOWED": "Tags sind nicht erlaubt",
+        "WAITING_TAG": "Warte auf den Tag",
+        "WAITING_CODE": "Warte auf den Code",
+        "TIMEOUT": "Zweiter Faktor zu spät",
+        "TAG_LEARNED": "Tag eingelernt",
+        "TAG_IN_USE": "Tag gehört einem anderen Benutzer"
+      }
+    },
+    "NOTIFY": {
+      "BURGLAR_ALARM": "Einbruchalarm",
+      "FIRE_ALARM": "Brandalarm",
+      "WATER_ALARM": "Wasseralarm",
+      "EMERGENCY_ALARM": "Notruf",
+      "CALL": "Alarmanruf",
+      "SIA_FAILED": "Leitstelle nicht erreichbar",
+      "ACCESS_LOCKOUT": "Zutritt nach Fehlversuchen gesperrt"
+    },
+    "VISU": {
+      "ARM": "Scharf schalten",
+      "ARM_NP": "Scharf ohne Präsenz",
+      "ARM_DELAYED": "Verzögert scharf",
+      "ARM_DELAYED_NP": "Verzögert scharf ohne Präsenz",
+      "ARM_ALL": "Alle scharf schalten",
+      "ARM_NP_ALL": "Alle scharf ohne Präsenz",
+      "ARM_DELAYED_ALL": "Alle verzögert scharf",
+      "DISARM": "Unscharf schalten",
+      "DISARM_ALL": "Alle unscharf",
+      "ACKNOWLEDGE": "Quittieren",
+      "ACKNOWLEDGE_ALL": "Alle quittieren",
+      "SILENCE": "Stummschalten",
+      "SERVICE_START": "Servicemodus starten",
+      "SERVICE_STOP": "Servicemodus beenden",
+      "CALL_HELP": "Hilfe rufen",
+      "OPEN_DOOR": "Tür öffnen",
+      "LOCK_ACCESS": "Zutritt sperren",
+      "UNLOCK_ACCESS": "Zutritt freigeben",
+      "CANCEL": "Abbrechen",
+      "YES": "Ja",
+      "STAGE_ALL": "Alle Stufen",
+      "STAGE_EMERGENCY": "Notdienste",
+      "DETAIL": {
+        "LEVEL": "Alarmstufe",
+        "CAUSE": "Ursache",
+        "ACTIVE_SENSORS": "Aktive Sensoren",
+        "OPEN": "Offen",
+        "LOCKED": "Gesperrt durch",
+        "STAGE": "Stufe",
+        "LAST_ACCESS": "Letzter Zutritt",
+        "USER": "Benutzer"
+      },
+      "STATUS": {
+        "DISARMED": "Unscharf",
+        "ARMED": "Scharf",
+        "ARMED_NP": "Scharf ohne Präsenz",
+        "ARMING": "Wird scharf geschaltet",
+        "PARTLY_ARMED": "Teilweise scharf",
+        "ALARM": "Alarm",
+        "ALARM_TEST": "Testalarm",
+        "PRE_ALARM": "Voralarm",
+        "MAIN_ALARM": "Hauptalarm",
+        "SERVICE": "Servicemodus",
+        "READY": "Bereit",
+        "EMERGENCY": "Notruf",
+        "ESCALATED": "Notruf - eskaliert",
+        "EMERGENCY_SERVICES": "Notdienste alarmiert",
+        "ACCESS_LOCKED": "Zutritt gesperrt",
+        "LOCKOUT": "Gesperrt nach Fehlversuchen",
+        "DOOR_OPEN": "Tür offen"
+      }
+    },
+    "EVENT": {
+      "ARMED": "Scharf geschaltet",
+      "ARMED_NP": "Scharf ohne Präsenz geschaltet",
+      "ARMING": "Scharfschaltung gestartet",
+      "DISARMED": "Unscharf geschaltet",
+      "ALARM": "Alarm",
+      "ALARM_TEST": "Testalarm",
+      "ACKNOWLEDGED": "Quittiert",
+      "AUTO_ACKNOWLEDGED": "Automatisch quittiert",
+      "MAX_ALARM": "Maximale Alarmdauer erreicht",
+      "CENTRAL_ARM": "Zentral: scharf",
+      "CENTRAL_ARM_NP": "Zentral: scharf ohne Präsenz",
+      "CENTRAL_ARM_DELAYED": "Zentral: verzögert scharf",
+      "CENTRAL_ARM_DELAYED_NP": "Zentral: verzögert scharf ohne Präsenz",
+      "CENTRAL_DISARM": "Zentral: unscharf",
+      "CENTRAL_ACKNOWLEDGE": "Zentral: quittieren",
+      "FIRE": "Brandalarm",
+      "WATER": "Wasseralarm",
+      "SILENCED": "Signale stummgeschaltet",
+      "MAIN_ALARM": "Hauptalarm",
+      "SERVICE_START": "Servicemodus gestartet",
+      "SERVICE_END": "Servicemodus beendet",
+      "EMERGENCY": "Notfall",
+      "ESCALATED": "Eskaliert",
+      "ALARM_START": "Alarmkette gestartet",
+      "ALARM_STOP": "Alarmkette beendet",
+      "CALL": "Anruf",
+      "CALL_FAILED": "Anruf fehlgeschlagen",
+      "CALL_INVALID_NUMBER": "Ungültige Telefonnummer",
+      "CALL_RATE_LIMITED": "Anruf verworfen (Limit erreicht)",
+      "SIA_QUEUED": "Ereignis eingereiht",
+      "SIA_SENT": "Ereignis gesendet",
+      "SIA_SENT_BACKUP": "Ereignis an den Ersatzempfänger gesendet",
+      "SIA_FAILED": "Übertragung fehlgeschlagen",
+      "SIA_RESTORED": "Verbindung wiederhergestellt",
+      "SIA_INVALID_MESSAGE": "Ungültige Meldung",
+      "SIA_QUEUE_FULL": "Warteschlange voll, ältestes Ereignis verworfen",
+      "GRANTED_CODE": "Zutritt mit Code",
+      "GRANTED_TAG": "Zutritt mit Tag",
+      "DENIED_UNKNOWN_CODE": "Verweigert: unbekannter Code",
+      "DENIED_UNKNOWN_TAG": "Verweigert: unbekannter Tag",
+      "DENIED_OUTSIDE_TIME": "Verweigert: außerhalb der Zutrittszeiten",
+      "DENIED_LOCKED": "Verweigert: Zutritt gesperrt",
+      "DENIED_LOCKOUT": "Verweigert: Sperre nach Fehlversuchen",
+      "DENIED_FACTORS_MISMATCH": "Verweigert: Code und Tag verschiedener Benutzer",
+      "DENIED_CODE_NOT_ALLOWED": "Verweigert: Codes nicht erlaubt",
+      "DENIED_TAG_NOT_ALLOWED": "Verweigert: Tags nicht erlaubt",
+      "LOCKOUT": "Gesperrt nach Fehlversuchen",
+      "LOCKED": "Zutritt gesperrt",
+      "UNLOCKED": "Zutritt freigegeben",
+      "OPEN_VISU": "Tür in der Visualisierung geöffnet",
+      "OPEN_INPUT": "Tür über Eingang geöffnet",
+      "USER_CREATED": "Benutzer angelegt",
+      "USER_CHANGED": "Benutzer geändert",
+      "USER_DELETED": "Benutzer gelöscht",
+      "TAG_LEARN_START": "Tag-Einlernen gestartet",
+      "TAG_LEARNED": "Tag eingelernt",
+      "TAG_LEARN_DUPLICATE": "Tag gehört einem anderen Benutzer",
+      "TAG_LEARN_TIMEOUT": "Tag-Einlernen abgelaufen"
     }
   }
 }

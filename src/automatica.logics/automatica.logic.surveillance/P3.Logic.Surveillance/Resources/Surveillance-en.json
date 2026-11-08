@@ -22,6 +22,743 @@
       "LOCKED_INVERTED": {
         "DESCRIPTION": "Contact: window locked (inverted)"
       }
+    },
+    "BURGLAR_ALARM": {
+      "NAME": "Burglar alarm",
+      "DESCRIPTION": "Intrusion alarm from motion, glass, window and door sensors with six time-staggered alarm levels",
+      "PRESENCE": {
+        "DESCRIPTION": "Presence / motion sensors (only when armed with presence)"
+      },
+      "GLASS": {
+        "DESCRIPTION": "Glass breakage sensors"
+      },
+      "WINDOW": {
+        "DESCRIPTION": "Window contacts (1 = open)"
+      },
+      "DOOR": {
+        "DESCRIPTION": "Door contacts (1 = open)"
+      },
+      "OTHER": {
+        "DESCRIPTION": "Other alarm sensors"
+      },
+      "TOGGLE": {
+        "DESCRIPTION": "Pulse: arm (with presence) or disarm"
+      },
+      "TOGGLE_NP": {
+        "DESCRIPTION": "Pulse: arm (without presence) or disarm"
+      },
+      "ARM": {
+        "DESCRIPTION": "Pulse: arm immediately with presence"
+      },
+      "ARM_NP": {
+        "DESCRIPTION": "Pulse: arm immediately without presence"
+      },
+      "ARM_DELAYED": {
+        "DESCRIPTION": "Pulse: arm after the arming delay, with presence"
+      },
+      "ARM_DELAYED_NP": {
+        "DESCRIPTION": "Pulse: arm after the arming delay, without presence"
+      },
+      "OFF": {
+        "DESCRIPTION": "Pulse: disarm; held: locked (cannot be armed)"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Pulse: acknowledge the alarm, the system stays armed"
+      },
+      "DISABLE_PERIPHERY": {
+        "DESCRIPTION": "1 = the arming and toggle inputs are ignored (the visualization still works)"
+      },
+      "STATUS": {
+        "DESCRIPTION": "0 disarmed, 1 armed, 2 armed without presence"
+      },
+      "ALARM": {
+        "DESCRIPTION": "Alarm is active"
+      },
+      "SILENT": {
+        "DESCRIPTION": "Alarm level 1: silent alarm"
+      },
+      "AUDIBLE": {
+        "DESCRIPTION": "Alarm level 2: audible alarm (siren)"
+      },
+      "VISUAL": {
+        "DESCRIPTION": "Alarm level 3: visual alarm (lights)"
+      },
+      "INTERNAL": {
+        "DESCRIPTION": "Alarm level 4: internal alarm"
+      },
+      "EXTERNAL": {
+        "DESCRIPTION": "Alarm level 5: external alarm"
+      },
+      "REMOTE": {
+        "DESCRIPTION": "Alarm level 6: remote alarm (e.g. caller or monitoring station)"
+      },
+      "ACTIVE_SENSORS": {
+        "DESCRIPTION": "Number of active sensors"
+      },
+      "TEST": {
+        "DESCRIPTION": "Alarm in test mode (no alarm levels)"
+      },
+      "ARMING_REMAINING": {
+        "DESCRIPTION": "Seconds until the system is armed"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Sensor that caused the alarm"
+      },
+      "TIME": {
+        "DESCRIPTION": "Time of the alarm"
+      },
+      "OPEN_CONTACTS": {
+        "DESCRIPTION": "Number of open windows and doors"
+      },
+      "OPEN_CONTACTS_TEXT": {
+        "DESCRIPTION": "Announcement of open windows and doors when arming (for text to speech)"
+      },
+      "ARMING_DELAY": {
+        "NAME": "Arming delay [s]",
+        "DESCRIPTION": "Delay of the delayed arming"
+      },
+      "SILENT_DELAY": {
+        "NAME": "Silent alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 1"
+      },
+      "AUDIBLE_DELAY": {
+        "NAME": "Audible alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 2"
+      },
+      "VISUAL_DELAY": {
+        "NAME": "Visual alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 3"
+      },
+      "INTERNAL_DELAY": {
+        "NAME": "Internal alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 4"
+      },
+      "EXTERNAL_DELAY": {
+        "NAME": "External alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 5"
+      },
+      "REMOTE_DELAY": {
+        "NAME": "Remote alarm after [s]",
+        "DESCRIPTION": "Seconds after the trigger until alarm level 6"
+      },
+      "MAX_ALARM": {
+        "NAME": "Maximum alarm duration [s]",
+        "DESCRIPTION": "After this time the alarm levels go off (must be longer than the level delays)"
+      },
+      "SILENT_CONFIRM": {
+        "NAME": "Acknowledge after maximum duration",
+        "DESCRIPTION": "The alarm is acknowledged automatically after the maximum alarm duration"
+      },
+      "PULSE_EXTENSION": {
+        "NAME": "Sensor extension [s]",
+        "DESCRIPTION": "Short sensor pulses count as active for this time"
+      },
+      "SECOND_PRESENCE": {
+        "NAME": "Second presence within [s]",
+        "DESCRIPTION": "A presence sensor only triggers when a second one (or the same one again) reports within this time; 0 = at once"
+      },
+      "ARM_OPEN_CONTACTS": {
+        "NAME": "Arm with open contacts",
+        "DESCRIPTION": "Windows and doors open while arming are ignored until they close"
+      },
+      "TEST_MODE": {
+        "NAME": "Test mode",
+        "DESCRIPTION": "Sensors only set the test output, no alarm levels"
+      },
+      "START_DELAY": {
+        "NAME": "Start delay [s]",
+        "DESCRIPTION": "After a restart in armed state the sensors are ignored for this time"
+      },
+      "LIGHTS": {
+        "NAME": "Lights",
+        "DESCRIPTION": "Switched on during the visual alarm"
+      },
+      "BLINDS": {
+        "NAME": "Blinds",
+        "DESCRIPTION": "Moved up on an alarm"
+      },
+      "TEXT": {
+        "ONE_OPEN": "Attention, {0} is still open!",
+        "SEVERAL_OPEN": "Attention! Several windows or doors are still open!"
+      }
+    },
+    "BURGLAR_ALARM_CENTRAL": {
+      "NAME": "Burglar alarm central",
+      "DESCRIPTION": "Arms, disarms and acknowledges several burglar alarms together",
+      "ARMED_COUNT": {
+        "DESCRIPTION": "Number of armed burglar alarms"
+      },
+      "ALARM": {
+        "DESCRIPTION": "One of the burglar alarms has an alarm"
+      },
+      "ALARMS": {
+        "NAME": "Burglar alarms",
+        "DESCRIPTION": "The burglar alarm blocks controlled together"
+      }
+    },
+    "FIRE_WATER_ALARM": {
+      "NAME": "Fire and water alarm",
+      "DESCRIPTION": "Fire and water alarm with pre-alarm, main alarm and service mode; always active",
+      "SMOKE": {
+        "DESCRIPTION": "Smoke detectors"
+      },
+      "WATER": {
+        "DESCRIPTION": "Water sensors"
+      },
+      "ARC_FAULT": {
+        "DESCRIPTION": "Arc fault detectors"
+      },
+      "TEMPERATURE": {
+        "DESCRIPTION": "Temperature; alarm at the maximum temperature"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Pulse: acknowledge the alarm"
+      },
+      "CONFIRM_SIGNALS": {
+        "DESCRIPTION": "Pulse: silence the alarm signals"
+      },
+      "OFF": {
+        "DESCRIPTION": "Pulse: acknowledge; held: sensors are ignored"
+      },
+      "PRE_ALARM": {
+        "DESCRIPTION": "Pre-alarm"
+      },
+      "MAIN_ALARM": {
+        "DESCRIPTION": "Main alarm"
+      },
+      "PRE_ALARM_SIGNAL": {
+        "DESCRIPTION": "Signal of the pre-alarm (off when silenced)"
+      },
+      "MAIN_ALARM_SIGNAL": {
+        "DESCRIPTION": "Signal of the main alarm (off when silenced)"
+      },
+      "ACTIVE_SENSORS": {
+        "DESCRIPTION": "Number of active sensors"
+      },
+      "TEST": {
+        "DESCRIPTION": "Alarm in service mode"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Sensor that caused the alarm"
+      },
+      "TIME": {
+        "DESCRIPTION": "Time of the alarm"
+      },
+      "MAIN_DELAY": {
+        "NAME": "Main alarm after [s]",
+        "DESCRIPTION": "Seconds from the pre-alarm to the main alarm"
+      },
+      "MAX_TEMPERATURE": {
+        "NAME": "Maximum temperature [°C]",
+        "DESCRIPTION": "The temperature input raises an alarm from this value"
+      },
+      "MAX_ALARM": {
+        "NAME": "Maximum alarm duration [s]",
+        "DESCRIPTION": "After this time the main alarm goes off; 0 = no limit"
+      },
+      "PRE_ALARM_CONFIRM": {
+        "NAME": "Acknowledge after maximum duration",
+        "DESCRIPTION": "The whole alarm is acknowledged after the maximum duration"
+      },
+      "SERVICE_MODE": {
+        "NAME": "Service mode",
+        "DESCRIPTION": "0 = off, 1 = permanently on, more = on for that many seconds; sensors only raise a test alarm"
+      },
+      "SERVICE_DURATION": {
+        "NAME": "Service mode from the visualization [s]",
+        "DESCRIPTION": "Duration of the service mode started in the visualization"
+      },
+      "LIGHTS": {
+        "NAME": "Lights",
+        "DESCRIPTION": "Switched on on a fire alarm"
+      },
+      "BLINDS": {
+        "NAME": "Blinds",
+        "DESCRIPTION": "Moved up on a fire alarm (escape routes)"
+      }
+    },
+    "EMERGENCY_ALARM": {
+      "NAME": "Emergency alarm",
+      "DESCRIPTION": "Call for help from buttons or the visualization, with acknowledgement and escalation",
+      "TOGGLE_HOLD": {
+        "DESCRIPTION": "Push and hold: raises the alarm, or acknowledges it while active"
+      },
+      "ACTIVATE": {
+        "DESCRIPTION": "Pulse: raise the alarm at once"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Pulse: acknowledge the alarm"
+      },
+      "OFF": {
+        "DESCRIPTION": "Pulse: acknowledge; held: locked"
+      },
+      "ALARM": {
+        "DESCRIPTION": "Alarm is active"
+      },
+      "ALARM_ON": {
+        "DESCRIPTION": "Pulse when the alarm starts"
+      },
+      "ALARM_OFF": {
+        "DESCRIPTION": "Pulse when the alarm is acknowledged"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Button or user who raised the alarm"
+      },
+      "CONFIRM_CAUSE": {
+        "DESCRIPTION": "Button or user who acknowledged the alarm"
+      },
+      "ESCALATED": {
+        "DESCRIPTION": "Nobody acknowledged within the escalation time"
+      },
+      "HOLD_ALARM": {
+        "NAME": "Hold time alarm [s]",
+        "DESCRIPTION": "How long the button must be held to raise the alarm"
+      },
+      "HOLD_CONFIRM": {
+        "NAME": "Hold time acknowledge [s]",
+        "DESCRIPTION": "How long the button must be held to acknowledge"
+      },
+      "ESCALATION": {
+        "NAME": "Escalation after [s]",
+        "DESCRIPTION": "Turns on the escalation output when nobody acknowledged; 0 = off"
+      }
+    },
+    "ALARM_CHAIN": {
+      "NAME": "Alarm chain",
+      "DESCRIPTION": "Passes an alarm text from stage to stage until somebody acknowledges, finally to the emergency services",
+      "ALARM": {
+        "DESCRIPTION": "1 = start the chain"
+      },
+      "URGENT": {
+        "DESCRIPTION": "1 = urgent: all stages at once"
+      },
+      "EMERGENCY_IN": {
+        "DESCRIPTION": "1 = alarm the emergency services at once"
+      },
+      "TEXT": {
+        "DESCRIPTION": "Text or value for the messages (<vt1>, <v1>)"
+      },
+      "CONFIRM": {
+        "DESCRIPTION": "Pulse: acknowledge; held: locked"
+      },
+      "OFF": {
+        "DESCRIPTION": "Pulse: stop; held: locked"
+      },
+      "STAGE_OUT": {
+        "DESCRIPTION": "Alarm text while this stage is active, otherwise empty"
+      },
+      "EMERGENCY_OUT": {
+        "DESCRIPTION": "Emergency text when nobody reacted"
+      },
+      "STAGE": {
+        "DESCRIPTION": "Active stage: 0 none, -1 all (urgent)"
+      },
+      "START_TIME": {
+        "DESCRIPTION": "Start of the alarm"
+      },
+      "STOP_TIME": {
+        "DESCRIPTION": "End of the alarm"
+      },
+      "CONFIRM_CAUSE": {
+        "DESCRIPTION": "Who acknowledged"
+      },
+      "CONFIRM_TIME": {
+        "DESCRIPTION": "Time of the acknowledgement"
+      },
+      "REACTION_TIME": {
+        "NAME": "Reaction time [s]",
+        "DESCRIPTION": "Time per stage; 0 = all stages at once"
+      },
+      "MAX_REPETITIONS": {
+        "NAME": "Repetitions",
+        "DESCRIPTION": "Runs through the stages before the emergency services are alarmed; 0 = endless"
+      },
+      "STAGES": {
+        "NAME": "Stages",
+        "DESCRIPTION": "Number of stages used (1-10)"
+      },
+      "ALARM_TEXT": {
+        "NAME": "Alarm text",
+        "DESCRIPTION": "Placeholders: <vn> name, <vt1-3> texts, <v1-3> values, <v1.2> two decimals, <vton> start, <vcn> customer, <vca> address, <vtes> seconds to emergency services"
+      },
+      "EMERGENCY_TEXT": {
+        "NAME": "Emergency text",
+        "DESCRIPTION": "Text for the emergency services, same placeholders"
+      },
+      "CUSTOMER_NAME": {
+        "NAME": "Customer name",
+        "DESCRIPTION": "For <vcn>"
+      },
+      "CUSTOMER_ADDRESS": {
+        "NAME": "Customer address",
+        "DESCRIPTION": "For <vca>"
+      }
+    },
+    "CALLER": {
+      "NAME": "Caller",
+      "DESCRIPTION": "Calls phone numbers and reads a message with text to speech",
+      "TRIGGER": {
+        "DESCRIPTION": "Rising edge: call"
+      },
+      "VALUE": {
+        "DESCRIPTION": "Value for the message and the numbers (<v1>..<v8>)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Held: no calls"
+      },
+      "CALLS": {
+        "DESCRIPTION": "Calls in the last 24 hours"
+      },
+      "RESULT": {
+        "DESCRIPTION": "Result of the last call (number shortened)"
+      },
+      "ERROR": {
+        "DESCRIPTION": "The last call failed"
+      },
+      "PROVIDER": {
+        "NAME": "Telephony provider",
+        "DESCRIPTION": "0 = simulation (no call), 1 = Twilio"
+      },
+      "NUMBERS": {
+        "NAME": "Phone numbers",
+        "DESCRIPTION": "International numbers (+43... or 0043...), separated by commas; placeholders allowed"
+      },
+      "MESSAGE": {
+        "NAME": "Message",
+        "DESCRIPTION": "Spoken text; <vn> name, <v1>..<v8> values, <v1.2> two decimals"
+      },
+      "LANGUAGE": {
+        "NAME": "Language",
+        "DESCRIPTION": "Language of the text to speech, e.g. de-DE or en-US"
+      },
+      "TRIGGER_DELAY": {
+        "NAME": "Trigger delay [ms]",
+        "DESCRIPTION": "Waits after the trigger so the values settle"
+      },
+      "UPDATE_INTERVAL": {
+        "NAME": "Repeat interval [s]",
+        "DESCRIPTION": "Calls again while the trigger stays on; 0 = off"
+      },
+      "NOTIFY": {
+        "NAME": "Also send a notification",
+        "DESCRIPTION": "Sends the message as a server notification too"
+      },
+      "TWILIO_SID": {
+        "NAME": "Twilio account SID",
+        "DESCRIPTION": "Account SID (AC...) of the Twilio account"
+      },
+      "TWILIO_TOKEN": {
+        "NAME": "Twilio auth token",
+        "DESCRIPTION": "Secret token; visible to everybody who can edit or see this logic"
+      },
+      "TWILIO_FROM": {
+        "NAME": "Twilio caller number",
+        "DESCRIPTION": "Twilio number or verified caller id that calls"
+      }
+    },
+    "SIA": {
+      "NAME": "SIA DC-09",
+      "DESCRIPTION": "Sends alarm events to a monitoring station (SIA DC-09 over TCP, optionally AES encrypted)",
+      "TRIGGER": {
+        "DESCRIPTION": "Rising edge or change: on message; falling edge: off message (restore)"
+      },
+      "MESSAGE_IN": {
+        "DESCRIPTION": "Text sent as the whole message, e.g. BA01^Living room"
+      },
+      "OFF": {
+        "DESCRIPTION": "Held: no events are sent"
+      },
+      "OK": {
+        "DESCRIPTION": "The last transmission was acknowledged"
+      },
+      "ERROR": {
+        "DESCRIPTION": "Error of the last transmission"
+      },
+      "QUEUE": {
+        "DESCRIPTION": "Events waiting to be sent"
+      },
+      "LAST_EVENT": {
+        "DESCRIPTION": "Last acknowledged event"
+      },
+      "SERVER": {
+        "NAME": "Receiver",
+        "DESCRIPTION": "host:port of the monitoring station"
+      },
+      "BACKUP_SERVER": {
+        "NAME": "Backup receiver",
+        "DESCRIPTION": "host:port used when the receiver does not answer"
+      },
+      "POLLING": {
+        "NAME": "Polling [s]",
+        "DESCRIPTION": "Supervision messages to the receiver; 0 = off"
+      },
+      "BACKUP_POLLING": {
+        "NAME": "Backup polling [s]",
+        "DESCRIPTION": "Supervision messages to the backup receiver; 0 = off"
+      },
+      "TIMEOUT": {
+        "NAME": "Timeout [s]",
+        "DESCRIPTION": "Wait for the acknowledgement (1-10)"
+      },
+      "FORMAT": {
+        "NAME": "Data format",
+        "DESCRIPTION": "0 = SIA DC-04 (SIA-DCS, text allowed), 1 = Contact ID DC-05 (ADM-CID)"
+      },
+      "KEY": {
+        "NAME": "Encryption key",
+        "DESCRIPTION": "32, 48 or 64 hex characters (AES-128/192/256); empty = unencrypted. Visible to everybody who can see this logic"
+      },
+      "ACCOUNT": {
+        "NAME": "Account",
+        "DESCRIPTION": "Account at the monitoring station (3-16 hex characters)"
+      },
+      "PREFIX": {
+        "NAME": "Account prefix",
+        "DESCRIPTION": "1-6 hex characters, 0 if none"
+      },
+      "RECEIVER": {
+        "NAME": "Receiver number",
+        "DESCRIPTION": "Optional, 1-6 hex characters"
+      },
+      "MIN_INTERVAL": {
+        "NAME": "Minimum interval [s]",
+        "DESCRIPTION": "Per input; changes within this time are sent afterwards (latest state)"
+      },
+      "ON_MESSAGE_1": {
+        "NAME": "I1: on message",
+        "DESCRIPTION": "Event and zone, e.g. BA01^Living room; <v> = input value"
+      },
+      "OFF_MESSAGE_1": {
+        "NAME": "I1: off message",
+        "DESCRIPTION": "Restore event, e.g. BR01^Living room"
+      },
+      "ON_MESSAGE_2": {
+        "NAME": "I2: on message",
+        "DESCRIPTION": "Event and zone, e.g. BA01^Living room; <v> = input value"
+      },
+      "OFF_MESSAGE_2": {
+        "NAME": "I2: off message",
+        "DESCRIPTION": "Restore event, e.g. BR01^Living room"
+      },
+      "ON_MESSAGE_3": {
+        "NAME": "I3: on message",
+        "DESCRIPTION": "Event and zone, e.g. BA01^Living room; <v> = input value"
+      },
+      "OFF_MESSAGE_3": {
+        "NAME": "I3: off message",
+        "DESCRIPTION": "Restore event, e.g. BR01^Living room"
+      },
+      "ON_MESSAGE_4": {
+        "NAME": "I4: on message",
+        "DESCRIPTION": "Event and zone, e.g. BA01^Living room; <v> = input value"
+      },
+      "OFF_MESSAGE_4": {
+        "NAME": "I4: off message",
+        "DESCRIPTION": "Restore event, e.g. BR01^Living room"
+      }
+    },
+    "ACCESS_CONTROLLER": {
+      "NAME": "Access controller",
+      "DESCRIPTION": "Users with codes and tags, user groups with access times, door output and access log",
+      "CODE": {
+        "DESCRIPTION": "Code from a keypad"
+      },
+      "TAG": {
+        "DESCRIPTION": "Tag id from an NFC or RFID reader"
+      },
+      "OPEN": {
+        "DESCRIPTION": "Pulse: open the door (e.g. inside button)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Held: access locked"
+      },
+      "DOOR": {
+        "DESCRIPTION": "Door opener"
+      },
+      "GRANTED": {
+        "DESCRIPTION": "Pulse: access granted"
+      },
+      "DENIED": {
+        "DESCRIPTION": "Pulse: access denied"
+      },
+      "USER": {
+        "DESCRIPTION": "User of the last access"
+      },
+      "TIME": {
+        "DESCRIPTION": "Time of the last access"
+      },
+      "CAUSE": {
+        "DESCRIPTION": "Result of the last access"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "Access is locked"
+      },
+      "GROUPS": {
+        "NAME": "User groups",
+        "DESCRIPTION": "e.g. Family: Mo-Su 00:00-24:00; Cleaner: Mo,Th 08:00-12:00 | Sa 09:00-10:00"
+      },
+      "AUTH_MODE": {
+        "NAME": "Authentication",
+        "DESCRIPTION": "0 = code and tag, 1 = code or tag, 2 = tag only, 3 = code only"
+      },
+      "DOOR_ON": {
+        "NAME": "Door open [s]",
+        "DESCRIPTION": "How long the door opener is switched on"
+      },
+      "MAX_FAILURES": {
+        "NAME": "Failed attempts",
+        "DESCRIPTION": "Wrong codes or tags in a row until the lockout; 0 = no lockout"
+      },
+      "LOCKOUT": {
+        "NAME": "Lockout [s]",
+        "DESCRIPTION": "How long access is locked after too many failed attempts"
+      },
+      "TWO_FACTOR_WINDOW": {
+        "NAME": "Second factor within [s]",
+        "DESCRIPTION": "With code and tag: time for the second factor"
+      }
+    },
+    "ACCESS": {
+      "CAUSE": {
+        "CODE": "Access with code",
+        "TAG": "Access with tag",
+        "OPEN": "Door opened",
+        "UNKNOWN_CODE": "Unknown code",
+        "UNKNOWN_TAG": "Unknown tag",
+        "OUTSIDE_TIME": "Outside the access times",
+        "LOCKED": "Access locked",
+        "LOCKOUT": "Locked after failed attempts",
+        "FACTORS_MISMATCH": "Code and tag belong to different users",
+        "CODE_NOT_ALLOWED": "Codes are not allowed",
+        "TAG_NOT_ALLOWED": "Tags are not allowed",
+        "WAITING_TAG": "Waiting for the tag",
+        "WAITING_CODE": "Waiting for the code",
+        "TIMEOUT": "Second factor too late",
+        "TAG_LEARNED": "Tag learned",
+        "TAG_IN_USE": "Tag belongs to another user"
+      }
+    },
+    "NOTIFY": {
+      "BURGLAR_ALARM": "Burglar alarm",
+      "FIRE_ALARM": "Fire alarm",
+      "WATER_ALARM": "Water alarm",
+      "EMERGENCY_ALARM": "Emergency call",
+      "CALL": "Alarm call",
+      "SIA_FAILED": "Monitoring station not reachable",
+      "ACCESS_LOCKOUT": "Access locked after failed attempts"
+    },
+    "VISU": {
+      "ARM": "Arm",
+      "ARM_NP": "Arm without presence",
+      "ARM_DELAYED": "Arm delayed",
+      "ARM_DELAYED_NP": "Arm delayed without presence",
+      "ARM_ALL": "Arm all",
+      "ARM_NP_ALL": "Arm all without presence",
+      "ARM_DELAYED_ALL": "Arm all delayed",
+      "DISARM": "Disarm",
+      "DISARM_ALL": "Disarm all",
+      "ACKNOWLEDGE": "Acknowledge",
+      "ACKNOWLEDGE_ALL": "Acknowledge all",
+      "SILENCE": "Silence",
+      "SERVICE_START": "Start service mode",
+      "SERVICE_STOP": "End service mode",
+      "CALL_HELP": "Call for help",
+      "OPEN_DOOR": "Open door",
+      "LOCK_ACCESS": "Lock access",
+      "UNLOCK_ACCESS": "Unlock access",
+      "CANCEL": "Cancel",
+      "YES": "Yes",
+      "STAGE_ALL": "All stages",
+      "STAGE_EMERGENCY": "Emergency services",
+      "DETAIL": {
+        "LEVEL": "Alarm level",
+        "CAUSE": "Cause",
+        "ACTIVE_SENSORS": "Active sensors",
+        "OPEN": "Open",
+        "LOCKED": "Locked by",
+        "STAGE": "Stage",
+        "LAST_ACCESS": "Last access",
+        "USER": "User"
+      },
+      "STATUS": {
+        "DISARMED": "Disarmed",
+        "ARMED": "Armed",
+        "ARMED_NP": "Armed without presence",
+        "ARMING": "Arming",
+        "PARTLY_ARMED": "Partly armed",
+        "ALARM": "Alarm",
+        "ALARM_TEST": "Test alarm",
+        "PRE_ALARM": "Pre-alarm",
+        "MAIN_ALARM": "Main alarm",
+        "SERVICE": "Service mode",
+        "READY": "Ready",
+        "EMERGENCY": "Emergency call",
+        "ESCALATED": "Emergency call - escalated",
+        "EMERGENCY_SERVICES": "Emergency services alarmed",
+        "ACCESS_LOCKED": "Access locked",
+        "LOCKOUT": "Locked after failed attempts",
+        "DOOR_OPEN": "Door open"
+      }
+    },
+    "EVENT": {
+      "ARMED": "Armed",
+      "ARMED_NP": "Armed without presence",
+      "ARMING": "Arming started",
+      "DISARMED": "Disarmed",
+      "ALARM": "Alarm",
+      "ALARM_TEST": "Test alarm",
+      "ACKNOWLEDGED": "Acknowledged",
+      "AUTO_ACKNOWLEDGED": "Acknowledged automatically",
+      "MAX_ALARM": "Maximum alarm duration reached",
+      "CENTRAL_ARM": "Central: arm",
+      "CENTRAL_ARM_NP": "Central: arm without presence",
+      "CENTRAL_ARM_DELAYED": "Central: arm delayed",
+      "CENTRAL_ARM_DELAYED_NP": "Central: arm delayed without presence",
+      "CENTRAL_DISARM": "Central: disarm",
+      "CENTRAL_ACKNOWLEDGE": "Central: acknowledge",
+      "FIRE": "Fire alarm",
+      "WATER": "Water alarm",
+      "SILENCED": "Signals silenced",
+      "MAIN_ALARM": "Main alarm",
+      "SERVICE_START": "Service mode started",
+      "SERVICE_END": "Service mode ended",
+      "EMERGENCY": "Emergency",
+      "ESCALATED": "Escalated",
+      "ALARM_START": "Alarm chain started",
+      "ALARM_STOP": "Alarm chain ended",
+      "CALL": "Call",
+      "CALL_FAILED": "Call failed",
+      "CALL_INVALID_NUMBER": "Invalid phone number",
+      "CALL_RATE_LIMITED": "Call dropped (limit reached)",
+      "SIA_QUEUED": "Event queued",
+      "SIA_SENT": "Event sent",
+      "SIA_SENT_BACKUP": "Event sent to the backup receiver",
+      "SIA_FAILED": "Transmission failed",
+      "SIA_RESTORED": "Connection restored",
+      "SIA_INVALID_MESSAGE": "Invalid message",
+      "SIA_QUEUE_FULL": "Queue full, oldest event dropped",
+      "GRANTED_CODE": "Access with code",
+      "GRANTED_TAG": "Access with tag",
+      "DENIED_UNKNOWN_CODE": "Denied: unknown code",
+      "DENIED_UNKNOWN_TAG": "Denied: unknown tag",
+      "DENIED_OUTSIDE_TIME": "Denied: outside the access times",
+      "DENIED_LOCKED": "Denied: access locked",
+      "DENIED_LOCKOUT": "Denied: lockout",
+      "DENIED_FACTORS_MISMATCH": "Denied: code and tag of different users",
+      "DENIED_CODE_NOT_ALLOWED": "Denied: codes not allowed",
+      "DENIED_TAG_NOT_ALLOWED": "Denied: tags not allowed",
+      "LOCKOUT": "Locked after failed attempts",
+      "LOCKED": "Access locked",
+      "UNLOCKED": "Access unlocked",
+      "OPEN_VISU": "Door opened in the visualization",
+      "OPEN_INPUT": "Door opened by input",
+      "USER_CREATED": "User created",
+      "USER_CHANGED": "User changed",
+      "USER_DELETED": "User deleted",
+      "TAG_LEARN_START": "Tag learning started",
+      "TAG_LEARNED": "Tag learned",
+      "TAG_LEARN_DUPLICATE": "Tag belongs to another user",
+      "TAG_LEARN_TIMEOUT": "Tag learning timed out"
     }
   }
 }

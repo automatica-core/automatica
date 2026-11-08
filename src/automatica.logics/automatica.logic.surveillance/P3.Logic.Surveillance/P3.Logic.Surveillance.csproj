@@ -16,6 +16,6 @@
     <EmbeddedResource Include="Resources\Surveillance-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.9317" />
   </ItemGroup>
 </Project>
