@@ -6,6 +6,7 @@ import { Guid } from "../utils/Guid";
 import { TimerPropertyData } from "./timer-property-data";
 import { L10nTranslationService } from "angular-l10n";
 import { CalendarPropertyData } from "./calendar-property-data";
+import { ControlConfiguration } from "./control-configuration";
 
 @Model()
 export class RuleInterfaceInstance extends BaseModel {
@@ -138,6 +139,14 @@ export class RuleInterfaceInstance extends BaseModel {
                 }
                 return calendarProperty;
             }
+            case RuleInterfaceParameterDataType.Controls: {
+                // the blocks picked for a central (the same picker as the Matter bridge)
+                const controlsProperty = new ControlConfiguration();
+                if (this.ValueString) {
+                    controlsProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
+                }
+                return controlsProperty;
+            }
         }
 
         return void 0;
@@ -174,6 +183,17 @@ export class RuleInterfaceInstance extends BaseModel {
                 {
                     if (value instanceof CalendarPropertyData) {
                         this.ValueString = JSON.stringify(value.toJson());
+                    } else {
+                        this.ValueString = void 0;
+                    }
+                    break;
+                }
+            case RuleInterfaceParameterDataType.Controls:
+                {
+                    if (value instanceof ControlConfiguration) {
+                        this.ValueString = JSON.stringify(value.toJson());
+                    } else if (typeof value === "string") {
+                        this.ValueString = value;
                     } else {
                         this.ValueString = void 0;
                     }

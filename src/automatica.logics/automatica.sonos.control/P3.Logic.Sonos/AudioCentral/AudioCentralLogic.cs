@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using P3.Logic.Sonos.SonosControl;
 using F = P3.Logic.Sonos.AudioCentral.AudioCentralLogicFactory;
 
 namespace P3.Logic.Sonos.AudioCentral
@@ -15,10 +16,32 @@ namespace P3.Logic.Sonos.AudioCentral
     /// Central for several Sonos Control blocks. The outputs are linked to the inputs of every player block, the play and
     /// volume outputs of the players come back as feedback: they give the number of active players and the ratio that a
     /// new volume keeps (the loudest players get the new value, the others are scaled with them).
+    /// The Sonos Control blocks picked in the "players" parameter get the same commands on their inputs directly and are
+    /// counted from their state, polled every <see cref="PollInterval"/>.
     /// </summary>
     public class AudioCentralLogic : Automatica.Core.Logic.Logic
     {
+        internal static readonly TimeSpan PollInterval = TimeSpan.FromSeconds(2);
+
+        /// <summary>
+        /// The input of a Sonos Control block that each output is meant to be linked to
+        /// </summary>
+        private static readonly Dictionary<Guid, Guid> PlayerInputs = new()
+        {
+            [F.OutputPlay] = SonosControlLogicFactory.PlayPauseTrigger,
+            [F.OutputVolumeUp] = SonosControlLogicFactory.VolumeIncrement,
+            [F.OutputVolumeDown] = SonosControlLogicFactory.VolumeDecrement,
+            [F.OutputNext] = SonosControlLogicFactory.Next,
+            [F.OutputPrevious] = SonosControlLogicFactory.Previous,
+            [F.OutputRadioStation] = SonosControlLogicFactory.RadioStationInput,
+            [F.OutputSoundUrl] = SonosControlLogicFactory.PlaySoundUrl,
+            [F.OutputSoundTrigger] = SonosControlLogicFactory.PlaySoundTrigger
+        };
+
         private readonly object _sync = new();
+        private readonly System.Timers.Timer _poll = new() { AutoReset = true, Interval = PollInterval.TotalMilliseconds };
+        private IReadOnlyList<Guid> _players = Array.Empty<Guid>();
+        private bool _running;
         private readonly Dictionary<Guid, RuleInterfaceInstance> _byTemplate;
         private readonly bool?[] _playing = new bool?[F.InputPlayings.Length];
         private readonly double?[] _volumes = new double?[F.InputPlayerVolumes.Length];
@@ -35,6 +58,7 @@ namespace P3.Logic.Sonos.AudioCentral
             _byTemplate = context.RuleInstance.RuleInterfaceInstance
                 .GroupBy(a => a.This2RuleInterfaceTemplate)
                 .ToDictionary(a => a.Key, a => a.First());
+            _poll.Elapsed += (_, _) => Poll();
         }
 
         internal IReadOnlyList<string> Favorites => _favorites;
@@ -43,10 +67,37 @@ namespace P3.Logic.Sonos.AudioCentral
         {
             lock (_sync)
             {
+                _running = true;
                 SendActiveCount();
             }
             return base.Start(instance, token);
         }
+
+        protected override Task<bool> Stop(RuleInstance instance, CancellationToken token = default)
+        {
+            lock (_sync)
+            {
+                _running = false;
+                _poll.Stop();
+            }
+            return base.Stop(instance, token);
+        }
+
+        /// <summary>
+        /// The picked players are not linked: their play state is polled
+        /// </summary>
+        internal void Poll()
+        {
+            lock (_sync)
+            {
+                if (_running)
+                {
+                    SendActiveCount();
+                }
+            }
+        }
+
+        private List<SonosControlLogic> Players() => CentralTargets.Resolve(Context, _players).OfType<SonosControlLogic>().ToList();
 
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
@@ -66,6 +117,19 @@ namespace P3.Logic.Sonos.AudioCentral
                 else if (template == F.ParamAlarmUrl)
                 {
                     AlarmUrl = Convert.ToString(value, CultureInfo.InvariantCulture)?.Trim() ?? "";
+                }
+                else if (template == F.ParamPlayers)
+                {
+                    _players = CentralTargets.Ids(value);
+                    if (_running && _players.Count > 0)
+                    {
+                        _poll.Start();
+                    }
+                    else
+                    {
+                        _poll.Stop();
+                    }
+                    SendActiveCount();
                 }
             }
         }
@@ -114,6 +178,12 @@ namespace P3.Logic.Sonos.AudioCentral
                 else if (IsTruthy(value))
                 {
                     Button(template);
+                }
+
+                if (_players.Count > 0)
+                {
+                    // the picked players changed right away
+                    SendActiveCount();
                 }
             }
             return new List<ILogicOutputChanged>();
@@ -168,7 +238,7 @@ namespace P3.Logic.Sonos.AudioCentral
             }
         }
 
-        private bool AnyPlaying => _playing.Any(a => a == true);
+        private bool AnyPlaying => _playing.Any(a => a == true) || Players().Any(a => a.IsPlaying);
 
         /// <summary>
         /// The common output gets the value; the loudest players get it too and the others keep their ratio to them
@@ -176,7 +246,9 @@ namespace P3.Logic.Sonos.AudioCentral
         private void SetVolume(double volume)
         {
             Send(F.OutputVolume, volume);
-            var loudest = _volumes.Where(a => a.HasValue).Select(a => a.Value).DefaultIfEmpty(0).Max();
+            var players = Players();
+            var loudest = _volumes.Where(a => a.HasValue).Select(a => a.Value)
+                .Concat(players.Select(a => (double)a.CurrentVolume)).DefaultIfEmpty(0).Max();
             for (var i = 0; i < _volumes.Length; i++)
             {
                 var player = _volumes[i];
@@ -187,6 +259,13 @@ namespace P3.Logic.Sonos.AudioCentral
                     // until the feedback arrives the next change starts from here
                     _volumes[i] = value;
                 }
+            }
+
+            var from = Interface(F.OutputVolume);
+            foreach (var player in players)
+            {
+                var value = loudest > 0 ? Math.Round(player.CurrentVolume * volume / loudest) : Math.Round(volume);
+                CentralTargets.Feed(player, SonosControlLogicFactory.Volume, (long)value, from);
             }
         }
 
@@ -202,7 +281,7 @@ namespace P3.Logic.Sonos.AudioCentral
 
         private void SendActiveCount()
         {
-            var active = _playing.Count(a => a == true);
+            var active = _playing.Count(a => a == true) + Players().Count(a => a.IsPlaying);
             if (_lastActive == active)
             {
                 return;
@@ -220,7 +299,18 @@ namespace P3.Logic.Sonos.AudioCentral
             {
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(instance, value).Instance, value);
             }
+
+            if (PlayerInputs.TryGetValue(output, out var input))
+            {
+                instance ??= Interface(output);
+                foreach (var player in Players())
+                {
+                    CentralTargets.Feed(player, input, value, instance);
+                }
+            }
         }
+
+        private RuleInterfaceInstance Interface(Guid output) => _byTemplate.TryGetValue(output, out var instance) ? instance : null;
 
         internal static bool IsTruthy(object value)
         {

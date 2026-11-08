@@ -496,7 +496,7 @@
           "NAME": "Room 8 light on"
         },
         "ACTIVE": {
-          "DESCRIPTION": "Link the 'Light on' output of a lighting controller"
+          "DESCRIPTION": "Link the 'Light on' output of a lighting controller (not needed for lights picked in 'Lights')"
         }
       },
       "OUTPUT": {
@@ -531,6 +531,12 @@
         "ANY_ACTIVE": {
           "NAME": "Any light on",
           "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "LIGHTS": {
+          "NAME": "Lights",
+          "DESCRIPTION": "Pick the lighting controllers, switches and dimmers instead of linking them: they get on, off, moods and +/- directly and are counted. Pick or link a controller, not both."
         }
       }
     },

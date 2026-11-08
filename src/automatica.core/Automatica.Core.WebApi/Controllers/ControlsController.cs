@@ -36,7 +36,9 @@ namespace Automatica.Core.WebApi.Controllers
                     Type = "media-player";
                     break;
                 default:
-                    Type = control.GetType().Name;
+                    // logic blocks that are controls (lighting controller, garage / gate, Sonos control...): the picker groups by it
+                    var name = control.GetType().Name;
+                    Type = name.Length > "Logic".Length && name.EndsWith("Logic", StringComparison.Ordinal) ? name[..^"Logic".Length] : name;
                     break;
             }
         }

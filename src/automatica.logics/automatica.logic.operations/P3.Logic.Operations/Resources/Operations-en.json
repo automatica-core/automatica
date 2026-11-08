@@ -205,6 +205,12 @@
           "NAME": "Closed doors (Nc)",
           "DESCRIPTION": "Number of closed doors"
         }
+      },
+      "PARAM": {
+        "GATES": {
+          "NAME": "Gates",
+          "DESCRIPTION": "Pick the Garage / Gate blocks instead of linking them: they get the commands directly and are counted. Pick or link a block, not both."
+        }
       }
     },
     "WINDOW_CENTRAL": {
@@ -314,6 +320,10 @@
         "SLIGHTLY_OPEN": {
           "NAME": "Slightly open position (%)",
           "DESCRIPTION": "Opening for So"
+        },
+        "WINDOWS": {
+          "NAME": "Windows",
+          "DESCRIPTION": "Pick the windows (shutter blocks of the window actuators) instead of linking them: open = up, close = down; they are moved directly and counted. Pick or link a window, not both."
         }
       }
     },

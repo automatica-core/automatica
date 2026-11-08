@@ -205,6 +205,12 @@
           "NAME": "Geschlossene Tore (Nc)",
           "DESCRIPTION": "Anzahl der geschlossenen Tore"
         }
+      },
+      "PARAM": {
+        "GATES": {
+          "NAME": "Tore",
+          "DESCRIPTION": "Garage / Tor Bausteine auswählen statt verknüpfen: sie erhalten die Befehle direkt und werden mitgezählt. Einen Baustein entweder auswählen oder verknüpfen, nicht beides."
+        }
       }
     },
     "WINDOW_CENTRAL": {
@@ -314,6 +320,10 @@
         "SLIGHTLY_OPEN": {
           "NAME": "Spaltlüftung (%)",
           "DESCRIPTION": "Öffnung für So"
+        },
+        "WINDOWS": {
+          "NAME": "Fenster",
+          "DESCRIPTION": "Fenster (Beschattungsbausteine der Fensterantriebe) auswählen statt verknüpfen: Auf = hoch, Zu = runter; sie werden direkt gefahren und mitgezählt. Ein Fenster entweder auswählen oder verknüpfen, nicht beides."
         }
       }
     },

@@ -496,7 +496,7 @@
           "NAME": "Raum 8 Licht ein"
         },
         "ACTIVE": {
-          "DESCRIPTION": "Den Ausgang 'Licht ein' einer Lichtsteuerung verbinden"
+          "DESCRIPTION": "Den Ausgang 'Licht ein' einer Lichtsteuerung verbinden (nicht nötig für Lichter, die unter 'Lichter' ausgewählt sind)"
         }
       },
       "OUTPUT": {
@@ -531,6 +531,12 @@
         "ANY_ACTIVE": {
           "NAME": "Irgendein Licht ein",
           "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "LIGHTS": {
+          "NAME": "Lichter",
+          "DESCRIPTION": "Lichtsteuerungen, Schalter und Dimmer auswählen statt verbinden: sie erhalten Ein, Aus, Stimmungen und +/- direkt und werden mitgezählt. Eine Lichtsteuerung entweder auswählen oder verbinden, nicht beides."
         }
       }
     },

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 
@@ -37,8 +38,9 @@ namespace P3.Logic.Operations.Garage
     /// Garage door or gate. The position (0 closed, 100 open) is estimated from the travel times and corrected by the end switches.
     /// Two outputs (open / close) drive the motor directly; in single button mode the block sends pulses and follows the
     /// open, stop, close, stop cycle of the drive.
+    /// A control (<see cref="IControl"/>): the Garage / Gate Central picks its doors from the controls.
     /// </summary>
-    public class GarageGateLogic : DispatchingLogic
+    public class GarageGateLogic : DispatchingLogic, IControl
     {
         internal const double Tolerance = 0.5;
         private const int MaxCyclePulses = 4;
@@ -82,6 +84,9 @@ namespace P3.Logic.Operations.Garage
         internal double Target => _target;
         internal bool Locked => _locked;
         internal int PulsesPending => _pulsesPending;
+
+        public Guid Id => Context.RuleInstance.ObjId;
+        public string Name => Context.RuleInstance.Name;
 
         protected override Task<bool> Start(RuleInstance instance, CancellationToken token = default)
         {

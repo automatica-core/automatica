@@ -4,13 +4,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Sonos.SonosControl;
 
-public class SonosControlLogic : Automatica.Core.Logic.Logic
+/// <remarks>A control (<see cref="IControl"/>): the audio central picks its players from the controls.</remarks>
+public class SonosControlLogic : Automatica.Core.Logic.Logic, IControl
 {
     private readonly ILogicContext _context;
 
@@ -65,6 +67,14 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private bool _playMediaEnabledValue = true;
     private IReadOnlyList<RadioStation> _radioStations = Array.Empty<RadioStation>();
     private string _currentStation;
+
+    public Guid Id => Context.RuleInstance.ObjId;
+    public string Name => Context.RuleInstance.Name;
+
+    /// <summary>playing, as last commanded or reported on the play state input</summary>
+    public bool IsPlaying => _currentlyPlaying == true;
+
+    public long CurrentVolume => _currentVolume;
 
     public SonosControlLogic(ILogicContext context) : base(context)
     {

@@ -214,6 +214,10 @@
       "ALARM_URL": {
         "NAME": "Alarmton-URL",
         "DESCRIPTION": "MP3, das die Player für den Alarm spielen"
+      },
+      "PLAYERS": {
+        "NAME": "Player",
+        "DESCRIPTION": "Sonos Control Bausteine auswählen statt verknüpfen: sie erhalten Play/Pause, Lautstärke, Titel, Favoriten und Töne direkt und werden mitgezählt. Einen Player entweder auswählen oder verknüpfen, nicht beides."
       }
     }
   },

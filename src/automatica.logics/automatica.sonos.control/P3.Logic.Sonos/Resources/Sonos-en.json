@@ -214,6 +214,10 @@
       "ALARM_URL": {
         "NAME": "Alarm sound URL",
         "DESCRIPTION": "MP3 that the players play for the alarm"
+      },
+      "PLAYERS": {
+        "NAME": "Players",
+        "DESCRIPTION": "Pick the Sonos Control blocks instead of linking them: they get play/pause, volume, tracks, favorites and sounds directly and are counted. Pick or link a player, not both."
       }
     }
   },

@@ -67,6 +67,7 @@ namespace P3.Logic.Sonos.AudioCentral
         public const string DefaultFavorites = "at-oe3;at-fm4;at-oe1";
         public static readonly Guid ParamBellUrl = new Guid("571afa9a-c4d4-5770-ab99-c2f0493f699b");
         public static readonly Guid ParamAlarmUrl = new Guid("58f9fb2a-20a9-5adc-9f70-8499f7eab24b");
+        public static readonly Guid ParamPlayers = new Guid("ba6f775d-64d4-446c-bae6-e7b61bfd63f2");
 
         public static readonly Guid[] InputPlayings = { InputPlaying1, InputPlaying2, InputPlaying3, InputPlaying4, InputPlaying5, InputPlaying6, InputPlaying7, InputPlaying8 };
         public static readonly Guid[] InputPlayerVolumes = { InputPlayerVolume1, InputPlayerVolume2, InputPlayerVolume3, InputPlayerVolume4, InputPlayerVolume5, InputPlayerVolume6, InputPlayerVolume7, InputPlayerVolume8 };
@@ -74,7 +75,8 @@ namespace P3.Logic.Sonos.AudioCentral
 
         public override string LogicName => "SonosAudioCentral";
         public override Guid LogicGuid => new Guid("0e77c46d-998e-56db-9a98-95c64ee73950");
-        public override Version LogicVersion => new Version(1, 1, 0, 0);
+        // 1.2: "players" parameter (pick the Sonos Control blocks instead of linking them)
+        public override Version LogicVersion => new Version(1, 2, 0, 0);
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -132,6 +134,7 @@ namespace P3.Logic.Sonos.AudioCentral
             factory.CreateParameterLogicInterfaceTemplate(ParamFavorites, "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.NAME", "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.DESCRIPTION", "favorites", LogicGuid, 1, RuleInterfaceParameterDataType.RadioStations, DefaultFavorites, false);
             factory.CreateParameterLogicInterfaceTemplate(ParamBellUrl, "SONOS_AUDIO_CENTRAL.PARAM.BELL_URL.NAME", "SONOS_AUDIO_CENTRAL.PARAM.BELL_URL.DESCRIPTION", "bellUrl", LogicGuid, 2, RuleInterfaceParameterDataType.Text, "", false);
             factory.CreateParameterLogicInterfaceTemplate(ParamAlarmUrl, "SONOS_AUDIO_CENTRAL.PARAM.ALARM_URL.NAME", "SONOS_AUDIO_CENTRAL.PARAM.ALARM_URL.DESCRIPTION", "alarmUrl", LogicGuid, 3, RuleInterfaceParameterDataType.Text, "", false);
+            factory.CreateParameterLogicInterfaceTemplate(ParamPlayers, "SONOS_AUDIO_CENTRAL.PARAM.PLAYERS.NAME", "SONOS_AUDIO_CENTRAL.PARAM.PLAYERS.DESCRIPTION", "players", LogicGuid, 4, RuleInterfaceParameterDataType.Controls, null);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)

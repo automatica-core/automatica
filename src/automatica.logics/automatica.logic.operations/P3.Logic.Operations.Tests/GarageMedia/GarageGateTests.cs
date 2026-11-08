@@ -433,7 +433,7 @@ namespace P3.Logic.Operations.Tests.GarageMedia
         public void Factory_HasEightStateInputs()
         {
             Assert.Equal(8, GarageCentralLogicFactory.InputStates.Length);
-            Assert.Equal(7 + 8 + 3, RuleInstance.RuleInterfaceInstance.Count);
+            Assert.Equal(7 + 8 + 3 + 1, RuleInstance.RuleInterfaceInstance.Count);
         }
 
         [Fact]

@@ -54,6 +54,10 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.RadioStations;
                 this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
                 break;
+            case RuleInterfaceParameterDataType.Controls:
+                // e.g. the lights of the lighting central: picked like the controls of the Matter bridge
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Controls;
+                break;
         }
 
     }

@@ -919,26 +919,26 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
     if (prop.Value && prop.Value instanceof ControlConfiguration) {
       this.controlsEditValue = prop.Value.copy() as ControlConfiguration;
-
-      var map = new Map<string, Control[]>();
-
-      for (let control of this.availableControlsList) {
-        if (!map.has(control.Type)) {
-          map.set(control.Type, []);
-        }
-        map.get(control.Type).push(control);
-      }
-
-      this.controlsGroup = [];
-      for (let key of map.keys()) {
-        var group = new ControlGrouped();
-        group.key = key;
-        group.items = map.get(key);
-        this.controlsGroup.push(group);
-      }
-
-      this.changeDetection.detectChanges();
-
     }
+
+    // grouped by type (switch, dimmer, blind, the logic blocks that are controls), also when nothing is picked yet
+    var map = new Map<string, Control[]>();
+
+    for (let control of this.availableControlsList ?? []) {
+      if (!map.has(control.Type)) {
+        map.set(control.Type, []);
+      }
+      map.get(control.Type).push(control);
+    }
+
+    this.controlsGroup = [];
+    for (let key of map.keys()) {
+      var group = new ControlGrouped();
+      group.key = key;
+      group.items = map.get(key);
+      this.controlsGroup.push(group);
+    }
+
+    this.changeDetection.detectChanges();
   }
 }

@@ -35,12 +35,14 @@ namespace P3.Logic.Operations.WindowCentral
         public static readonly Guid OutputOpenCount = new Guid("64eb4bf0-f62c-556d-98de-39c00ae8f9bf");
         public static readonly Guid OutputClosedCount = new Guid("c3987add-d90d-56ba-a635-fb8cadff3f27");
         public static readonly Guid ParamSlightlyOpen = new Guid("4b37428e-ec0d-578c-9ffc-f549ff81a747");
+        public static readonly Guid ParamWindows = new Guid("e49243e5-6946-451f-958d-838b7ca3ec12");
 
         public static readonly Guid[] InputWindowPositions = { InputWindowPosition1, InputWindowPosition2, InputWindowPosition3, InputWindowPosition4, InputWindowPosition5, InputWindowPosition6, InputWindowPosition7, InputWindowPosition8 };
 
         public override string LogicName => "P3.Logic.Operations.WindowCentral";
         public override Guid LogicGuid => new Guid("43a77ba6-18c2-5580-918e-4904e00400ef");
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        // 1.1: "windows" parameter (pick the window / shutter blocks instead of linking them)
+        public override Version LogicVersion => new Version(1, 1, 0, 0);
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -71,6 +73,7 @@ namespace P3.Logic.Operations.WindowCentral
             factory.CreateLogicInterfaceTemplate(OutputOpenCount, "OPERATIONS.WINDOW_CENTRAL.OUTPUT.OPEN_COUNT.NAME", "OPERATIONS.WINDOW_CENTRAL.OUTPUT.OPEN_COUNT.DESCRIPTION", "openCount", LogicGuid, LogicInterfaceDirection.Output, 0, 6);
             factory.CreateLogicInterfaceTemplate(OutputClosedCount, "OPERATIONS.WINDOW_CENTRAL.OUTPUT.CLOSED_COUNT.NAME", "OPERATIONS.WINDOW_CENTRAL.OUTPUT.CLOSED_COUNT.DESCRIPTION", "closedCount", LogicGuid, LogicInterfaceDirection.Output, 0, 7);
             factory.CreateParameterLogicInterfaceTemplate(ParamSlightlyOpen, "OPERATIONS.WINDOW_CENTRAL.PARAM.SLIGHTLY_OPEN.NAME", "OPERATIONS.WINDOW_CENTRAL.PARAM.SLIGHTLY_OPEN.DESCRIPTION", "slightlyOpenPosition", LogicGuid, 1, RuleInterfaceParameterDataType.Integer, 10, false);
+            factory.CreateParameterLogicInterfaceTemplate(ParamWindows, "OPERATIONS.WINDOW_CENTRAL.PARAM.WINDOWS.NAME", "OPERATIONS.WINDOW_CENTRAL.PARAM.WINDOWS.DESCRIPTION", "windows", LogicGuid, 2, RuleInterfaceParameterDataType.Controls, null);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)

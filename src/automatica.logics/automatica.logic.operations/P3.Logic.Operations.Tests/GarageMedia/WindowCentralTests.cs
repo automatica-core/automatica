@@ -9,7 +9,7 @@ namespace P3.Logic.Operations.Tests.GarageMedia
         public void Factory_HasEightFeedbackInputs()
         {
             Assert.Equal(8, F.InputWindowPositions.Length);
-            Assert.Equal(9 + 8 + 7 + 1, RuleInstance.RuleInterfaceInstance.Count);
+            Assert.Equal(9 + 8 + 7 + 2, RuleInstance.RuleInterfaceInstance.Count);
         }
 
         [Fact]

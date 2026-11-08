@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,8 @@ namespace P3.Logic.Lightning.LightingController
         Simulation
     }
 
-    public class LightingControllerLogic : ClockedLogic
+    /// <remarks>A control (<see cref="IControl"/>): the lighting central picks its rooms from the controls.</remarks>
+    public class LightingControllerLogic : ClockedLogic, IControl
     {
         private readonly LightingControllerIds _ids;
         private readonly Dictionary<Guid, bool> _edges = new();
@@ -77,6 +79,12 @@ namespace P3.Logic.Lightning.LightingController
         }
 
         internal PresenceSimulationBinding PresenceSimulation { get; }
+
+        public Guid Id => Context.RuleInstance.ObjId;
+        public string Name => Context.RuleInstance.Name;
+
+        /// <summary>the input templates of this controller (the hotel controller has its own)</summary>
+        internal LightingControllerIds Ids => _ids;
 
         internal int CurrentMood => _mood;
         internal IReadOnlyList<LightValue> Values => _values;

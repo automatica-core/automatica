@@ -10,6 +10,8 @@ namespace P3.Logic.Lightning.LightingCentral
     /// Lighting central (Loxone "Lighting Central"): drives many lighting controllers together. Its outputs are linked to the same
     /// inputs of every lighting controller (+, -, mood, off, on, disable motion); the "active" outputs of the controllers are linked
     /// back to count the rooms with light (Na).
+    /// Instead of linking, the rooms can be picked in the "lights" parameter (lighting controllers, switches and dimmers, the
+    /// same picker as the Matter bridge): they get the commands directly and are counted without a link.
     /// </summary>
     public class LightingCentralLogicFactory : LogicFactory
     {
@@ -33,9 +35,12 @@ namespace P3.Logic.Lightning.LightingCentral
         public static readonly Guid ActiveCount = new("a05d4062-8eb1-4a7f-8259-61cdbea05f17");
         public static readonly Guid AnyActive = new("a05d4062-8eb1-4a7f-8259-61cdbea05f18");
 
+        public static readonly Guid ParamLights = new("a05d4062-8eb1-4a7f-8259-61cdbea05f21");
+
         public override string LogicName => "LightingCentral";
         public override Guid LogicGuid => new("a05d4062-8eb1-4a7f-8259-61cdbea05f00");
-        public override Version LogicVersion => new(1, 0, 0, 0);
+        // 1.1: "lights" parameter (pick the rooms instead of linking them)
+        public override Version LogicVersion => new(1, 1, 0, 0);
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -66,6 +71,9 @@ namespace P3.Logic.Lightning.LightingCentral
             CentralOutput(DisableMotionOut, "DISABLE_MOTION", "disableMotionOut");
             CentralOutput(ActiveCount, "ACTIVE_COUNT", "activeCount");
             CentralOutput(AnyActive, "ANY_ACTIVE", "anyActive");
+
+            factory.CreateParameterLogicInterfaceTemplate(ParamLights, $"{Prefix}.PARAM.LIGHTS.NAME", $"{Prefix}.PARAM.LIGHTS.DESCRIPTION", "lights", LogicGuid, 1,
+                RuleInterfaceParameterDataType.Controls, null);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)

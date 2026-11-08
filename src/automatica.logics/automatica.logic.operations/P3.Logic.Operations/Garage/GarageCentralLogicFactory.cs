@@ -7,6 +7,7 @@ namespace P3.Logic.Operations.Garage
 {
     /// <summary>
     /// Garage / Gate Central: Controls several Garage / Gate blocks together and counts the open and closed doors (modelled on the Loxone function block of the same name)
+    /// The blocks are linked, or picked in the "gates" parameter (the same picker as the Matter bridge).
     /// </summary>
     public class GarageCentralLogicFactory : LogicFactory
     {
@@ -28,12 +29,14 @@ namespace P3.Logic.Operations.Garage
         public static readonly Guid OutputCommand = new Guid("fc565464-efd8-581e-8dbf-c60e7408ed73");
         public static readonly Guid OutputOpenCount = new Guid("6eb4754d-8c22-5528-a1b5-743b8966dd1f");
         public static readonly Guid OutputClosedCount = new Guid("d1e922bd-6416-5009-8959-7048790ee6e1");
+        public static readonly Guid ParamGates = new Guid("9c4070d8-9de3-4fd7-bc34-03f3e189832f");
 
         public static readonly Guid[] InputStates = { InputState1, InputState2, InputState3, InputState4, InputState5, InputState6, InputState7, InputState8 };
 
         public override string LogicName => "P3.Logic.Operations.GarageCentral";
         public override Guid LogicGuid => new Guid("c3f5bffa-388c-5fbb-9182-4ad8f6367d6b");
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        // 1.1: "gates" parameter (pick the Garage / Gate blocks instead of linking them)
+        public override Version LogicVersion => new Version(1, 1, 0, 0);
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -57,6 +60,7 @@ namespace P3.Logic.Operations.Garage
             factory.CreateLogicInterfaceTemplate(OutputCommand, "OPERATIONS.GARAGE_CENTRAL.OUTPUT.COMMAND.NAME", "OPERATIONS.GARAGE_CENTRAL.OUTPUT.COMMAND.DESCRIPTION", "command", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
             factory.CreateLogicInterfaceTemplate(OutputOpenCount, "OPERATIONS.GARAGE_CENTRAL.OUTPUT.OPEN_COUNT.NAME", "OPERATIONS.GARAGE_CENTRAL.OUTPUT.OPEN_COUNT.DESCRIPTION", "openCount", LogicGuid, LogicInterfaceDirection.Output, 0, 2);
             factory.CreateLogicInterfaceTemplate(OutputClosedCount, "OPERATIONS.GARAGE_CENTRAL.OUTPUT.CLOSED_COUNT.NAME", "OPERATIONS.GARAGE_CENTRAL.OUTPUT.CLOSED_COUNT.DESCRIPTION", "closedCount", LogicGuid, LogicInterfaceDirection.Output, 0, 3);
+            factory.CreateParameterLogicInterfaceTemplate(ParamGates, "OPERATIONS.GARAGE_CENTRAL.PARAM.GATES.NAME", "OPERATIONS.GARAGE_CENTRAL.PARAM.GATES.DESCRIPTION", "gates", LogicGuid, 1, RuleInterfaceParameterDataType.Controls, null);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)
