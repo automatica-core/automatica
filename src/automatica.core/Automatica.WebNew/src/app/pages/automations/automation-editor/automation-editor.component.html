@@ -137,6 +137,18 @@
         </div>
 
         <div class="panel card">
+          <h4 class="eyebrow">{{ 'UI.AUTOMATIONS.SIDE.USER_ACCESS' | translateAsync }}</h4>
+          <div class="check-row">
+            <dx-switch [value]="!!def.userAccess" (onValueChanged)="setUserAccess($event.value)"></dx-switch>
+            <span class="hint switch-hint">{{ (def.userAccess ? 'UI.AUTOMATIONS.SIDE.USER_ACCESS_ON' : 'UI.AUTOMATIONS.SIDE.USER_ACCESS_OFF') | translateAsync }}</span>
+          </div>
+          <p class="note">{{ 'UI.AUTOMATIONS.SIDE.USER_ACCESS_HINT' | translateAsync }}</p>
+          @if (def.userAccess) {
+            <p class="note">{{ 'UI.AUTOMATIONS.SIDE.USER_ACCESS_BLOCKS' | translateAsync: { count: userEditableCount } }}</p>
+          }
+        </div>
+
+        <div class="panel card">
           <h4 class="eyebrow">{{ 'UI.AUTOMATIONS.SIDE.TEST' | translateAsync }}</h4>
           <p class="note">{{ 'UI.AUTOMATIONS.EDIT.TEST_HINT' | translateAsync }}</p>
           @if (ctx.triggerIds().length > 1) {

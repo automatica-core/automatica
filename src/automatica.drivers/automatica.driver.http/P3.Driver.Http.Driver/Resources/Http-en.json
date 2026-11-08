@@ -1,0 +1,116 @@
+{
+  "HTTP": {
+    "NAME": "HTTP",
+    "DESCRIPTION": "Virtual HTTP inputs and outputs: poll web pages and APIs and read values from them, send HTTP commands to devices",
+    "CATEGORY": {
+      "SECURITY": "Security",
+      "REQUEST": "Request",
+      "AUTH": "Authentication",
+      "EXTRACT": "Value",
+      "COMMAND": "Command"
+    },
+    "ALLOW_LOCAL_HOST": {
+      "NAME": "Allow local host",
+      "DESCRIPTION": "Allows requests to this server itself (localhost, 127.0.0.1). Off by default, so a URL cannot reach the services of the server. Devices in the local network are always allowed"
+    },
+    "TIMEOUT": {
+      "NAME": "Timeout [s]",
+      "DESCRIPTION": "How long to wait for the answer"
+    },
+    "USERNAME": {
+      "NAME": "User",
+      "DESCRIPTION": "User for HTTP basic authentication, empty = no authentication"
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": "Password for HTTP basic authentication, stored encrypted. Over http it is sent unencrypted, use https if the device supports it"
+    },
+    "INPUT": {
+      "NAME": "HTTP input",
+      "DESCRIPTION": "Polls a URL and reads values from the answer",
+      "URL": {
+        "NAME": "URL",
+        "DESCRIPTION": "Address that is requested, e.g. http://192.168.1.20/status. Only http and https, no user and password in the URL"
+      },
+      "POLL": {
+        "NAME": "Polling interval [s]",
+        "DESCRIPTION": "How often the URL is requested (10 seconds to 7 days)"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": "True while the URL answers"
+      },
+      "VALUE": {
+        "NAME": "Value",
+        "DESCRIPTION": "A number read from the answer"
+      },
+      "DIGITAL": {
+        "NAME": "Digital value",
+        "DESCRIPTION": "On or off read from the answer: true/false, on/off, yes/no or a number (0 = off)"
+      },
+      "TEXT": {
+        "NAME": "Text",
+        "DESCRIPTION": "A text read from the answer"
+      }
+    },
+    "MODE": {
+      "NAME": "Read with",
+      "DESCRIPTION": "How the value is found in the answer",
+      "PATTERN": "Command recognition",
+      "JSON": "JSON path",
+      "REGEX": "Regular expression",
+      "TEXT": "Whole answer"
+    },
+    "PATTERN": {
+      "NAME": "Pattern",
+      "DESCRIPTION": "JSON path: $.sensors[0].temp. Regular expression: the first group is the value, e.g. temp=([0-9.]+). Command recognition: \\iTemperature:\\i\\v reads the number after \"Temperature:\" (\\i..\\i search, \\v number, \\h hex number, \\sN skip N characters, \\1-\\4 bytes)"
+    },
+    "OUTPUT": {
+      "NAME": "HTTP output",
+      "DESCRIPTION": "Sends HTTP commands to a device",
+      "ADDRESS": {
+        "NAME": "Address",
+        "DESCRIPTION": "Base address of the device, e.g. http://192.168.1.30. The commands are appended to it"
+      },
+      "STATUS": {
+        "NAME": "Status",
+        "DESCRIPTION": "HTTP status of the last command, 0 = no answer"
+      },
+      "COMMAND": {
+        "NAME": "Command",
+        "DESCRIPTION": "Sends a request when the value changes. <v> is replaced by the value"
+      },
+      "DIGITAL_COMMAND": {
+        "NAME": "Digital command",
+        "DESCRIPTION": "Sends the ON command for true and the OFF command for false"
+      }
+    },
+    "METHOD": {
+      "NAME": "Method",
+      "DESCRIPTION": "HTTP method of the request",
+      "GET": "GET",
+      "POST": "POST",
+      "PUT": "PUT"
+    },
+    "COMMAND_ON": {
+      "NAME": "Command for ON",
+      "DESCRIPTION": "Path appended to the address (e.g. /relay/0?turn=on) or a full URL. <v> is the value, <v.1> the value with one decimal"
+    },
+    "BODY_ON": {
+      "NAME": "Body for ON",
+      "DESCRIPTION": "Body of a POST or PUT request, <v> is the value"
+    },
+    "COMMAND_OFF": {
+      "NAME": "Command for OFF",
+      "DESCRIPTION": "Sent for 0 or false. Empty: a command sends the ON command with 0, a digital command sends nothing"
+    },
+    "BODY_OFF": {
+      "NAME": "Body for OFF",
+      "DESCRIPTION": "Body of a POST or PUT request for 0 or false"
+    },
+    "CONTENT_TYPE": {
+      "NAME": "Content type",
+      "DESCRIPTION": "Content type of the body, e.g. application/json or text/plain"
+    }
+  }
+}

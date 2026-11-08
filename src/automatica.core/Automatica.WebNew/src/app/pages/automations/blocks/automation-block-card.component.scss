@@ -75,6 +75,23 @@
     flex: none;
 }
 
+.release {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--text-xs);
+    font-weight: 600;
+
+    &:not(.accent) {
+        opacity: 0.7;
+    }
+
+    &:hover,
+    &:focus-visible {
+        opacity: 1;
+    }
+}
+
 .head-actions:empty {
     display: none;
 }

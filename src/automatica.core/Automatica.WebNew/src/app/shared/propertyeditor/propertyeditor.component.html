@@ -222,9 +222,16 @@
         </dx-drop-down-box>
       }
       @case (PropertyTemplateType.Text) {
-        <dx-text-box #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
-          [(value)]="data.data.Value" [maxLength]="data.data.PropertyTemplate.ExtendedType.length"
-        [readOnly]="data.data.IsReadonly" (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+        @if (isMultiline(data.data)) {
+          <!-- a program or other multi-line text (meta MULTILINE): edited in a popup -->
+          <dx-button #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
+            width="100%" [text]="multilinePreview(data.data) || ('COMMON.EDIT' | translateAsync)" [disabled]="data.data.IsReadonly"
+          (click)="onMultilineEditClick($event, data.data)"></dx-button>
+        } @else {
+          <dx-text-box #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
+            [(value)]="data.data.Value" [maxLength]="data.data.PropertyTemplate.ExtendedType.length"
+          [readOnly]="data.data.IsReadonly" (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+        }
       }
       @case (PropertyTemplateType.DateTime) {
         <dx-date-box #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
@@ -370,6 +377,20 @@
       <div class="dx-field-value-static">
         <dx-button [disabled]="timerSaveButtonDisabled" text="{{ 'COMMON.SAVE' | translateAsync }}"
         (click)="onCalendarEditPopupClosing($event, true)"></dx-button>
+      </div>
+    </div>
+  </dx-popup>
+}
+
+@if (multilineEditPopupVisible) {
+  <dx-popup width="min(900px, 95vw)" height="min(640px, 90vh)" [showTitle]="true"
+    [title]="multilineEditTitle" [visible]="multilineEditPopupVisible" [showCloseButton]="true"
+    (onHiding)="onMultilineEditPopupClosing($event, false)">
+    <div *dxTemplate="let data of 'content'" class="multiline-edit">
+      <dx-text-area class="multiline-code" [(value)]="multilineEditValue" valueChangeEvent="input" [spellcheck]="false"
+        [maxLength]="multilineEditMaxLength" height="100%"></dx-text-area>
+      <div class="multiline-buttons">
+        <dx-button type="default" text="{{ 'COMMON.SAVE' | translateAsync }}" (onClick)="onMultilineEditPopupClosing($event, true)"></dx-button>
       </div>
     </div>
   </dx-popup>

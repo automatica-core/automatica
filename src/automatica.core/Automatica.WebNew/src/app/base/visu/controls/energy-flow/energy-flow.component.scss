@@ -1,0 +1,285 @@
+// Energy flow tile: nodes around a hub, dots run along the lines in the direction of the flow.
+// Colors and spacing come from src/tokens.scss, so light and dark theme work without own values.
+
+:host {
+    display: block;
+    height: 100%;
+}
+
+.energy {
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    color: var(--fg);
+    font-family: var(--font-ui);
+}
+
+.energy-head {
+    min-width: 0;
+
+    .tile-room {
+        font-size: var(--text-xs);
+        line-height: 1.35;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tile-name {
+        font-size: var(--text-sm);
+        font-weight: 600;
+        line-height: 1.25;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+// the stage keeps the ratio of the SVG view box, so nodes (HTML, in %) and lines (SVG) stay on top of each other
+.energy-stage {
+    position: relative;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    aspect-ratio: 320 / 220;
+    min-height: 0;
+}
+
+.energy-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.energy-track {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+.energy-flow {
+    fill: none;
+    stroke: var(--accent);
+    stroke-linecap: round;
+    // a dot every 14 units (DOT_SPACING in energy-flow-model.ts), the dot size is the stroke width
+    stroke-dasharray: 0 14;
+    stroke-dashoffset: 0;
+
+    &.tone-pv {
+        stroke: var(--lamp);
+    }
+
+    &.tone-grid {
+        stroke: var(--accent);
+    }
+
+    &.tone-battery {
+        stroke: var(--ok);
+    }
+
+    &.tone-house,
+    &.tone-consumer {
+        stroke: color-mix(in srgb, var(--fg) 60%, transparent);
+    }
+}
+
+.is-animated .energy-flow {
+    animation-name: energy-dots;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes energy-dots {
+    to {
+        stroke-dashoffset: -14;
+    }
+}
+
+.energy-hub {
+    fill: var(--muted);
+}
+
+.energy-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 84px;
+    text-align: center;
+    pointer-events: none;
+
+    // PV and battery sit in the middle column, with room for "Entladen · 38 %"
+    &.kind-pv,
+    &.kind-battery {
+        width: 128px;
+    }
+}
+
+.energy-ico {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 15px;
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.energy-node.is-active .energy-ico {
+    color: var(--fg);
+}
+
+.energy-node.kind-pv.is-active .energy-ico {
+    color: var(--lamp);
+    border-color: color-mix(in srgb, var(--lamp) 60%, var(--line));
+    background: color-mix(in srgb, var(--lamp) 14%, var(--surface-2));
+}
+
+.energy-node.kind-grid.is-active .energy-ico {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+}
+
+.energy-node.kind-battery.is-active .energy-ico {
+    color: var(--ok);
+    border-color: color-mix(in srgb, var(--ok) 60%, var(--line));
+    background: color-mix(in srgb, var(--ok) 14%, var(--surface-2));
+}
+
+.energy-node.kind-house .energy-ico,
+.energy-node.kind-consumer.is-active .energy-ico {
+    border-color: color-mix(in srgb, var(--fg) 35%, var(--line));
+}
+
+.energy-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.15;
+    min-width: 0;
+    max-width: 100%;
+    // keeps the text readable where it crosses a line
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 0 4px;
+}
+
+.energy-value {
+    font-family: var(--font-data);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+
+    small {
+        margin-left: 2px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+    }
+}
+
+.energy-label {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.energy-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--line);
+}
+
+.energy-stat {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.energy-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.energy-stat-value {
+    font-family: var(--font-data);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+// phones: smaller nodes so five to seven of them fit into ~340 px
+@media (max-width: 480px) {
+    .energy {
+        padding: 10px;
+    }
+
+    .energy-node {
+        width: 72px;
+    }
+
+    .energy-ico {
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    .energy-value {
+        font-size: 12px;
+    }
+
+    .energy-label {
+        font-size: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    // no running dots: the solid line still shows that something flows and how much
+    .is-animated .energy-flow {
+        animation: none;
+    }
+
+    .energy-flow {
+        stroke-dasharray: none;
+        opacity: 0.8;
+    }
+
+    .energy-ico {
+        transition: none;
+    }
+}

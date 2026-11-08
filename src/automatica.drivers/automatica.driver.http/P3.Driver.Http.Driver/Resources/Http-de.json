@@ -1,0 +1,116 @@
+{
+  "HTTP": {
+    "NAME": "HTTP",
+    "DESCRIPTION": "Virtuelle HTTP-Eingänge und -Ausgänge: Webseiten und APIs abfragen und Werte daraus lesen, HTTP-Befehle an Geräte senden",
+    "CATEGORY": {
+      "SECURITY": "Sicherheit",
+      "REQUEST": "Anfrage",
+      "AUTH": "Anmeldung",
+      "EXTRACT": "Wert",
+      "COMMAND": "Befehl"
+    },
+    "ALLOW_LOCAL_HOST": {
+      "NAME": "Lokalen Host erlauben",
+      "DESCRIPTION": "Erlaubt Anfragen an diesen Server selbst (localhost, 127.0.0.1). Standardmäßig aus, damit eine URL die Dienste des Servers nicht erreicht. Geräte im lokalen Netzwerk sind immer erlaubt"
+    },
+    "TIMEOUT": {
+      "NAME": "Zeitlimit [s]",
+      "DESCRIPTION": "Wie lange auf die Antwort gewartet wird"
+    },
+    "USERNAME": {
+      "NAME": "Benutzer",
+      "DESCRIPTION": "Benutzer für die HTTP-Basic-Anmeldung, leer = keine Anmeldung"
+    },
+    "PASSWORD": {
+      "NAME": "Passwort",
+      "DESCRIPTION": "Passwort für die HTTP-Basic-Anmeldung, wird verschlüsselt gespeichert. Über http wird es unverschlüsselt gesendet, nutze https, wenn das Gerät es kann"
+    },
+    "INPUT": {
+      "NAME": "HTTP-Eingang",
+      "DESCRIPTION": "Fragt eine URL ab und liest Werte aus der Antwort",
+      "URL": {
+        "NAME": "URL",
+        "DESCRIPTION": "Adresse, die abgefragt wird, z. B. http://192.168.1.20/status. Nur http und https, kein Benutzer und Passwort in der URL"
+      },
+      "POLL": {
+        "NAME": "Abfrageintervall [s]",
+        "DESCRIPTION": "Wie oft die URL abgefragt wird (10 Sekunden bis 7 Tage)"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": "Wahr, solange die URL antwortet"
+      },
+      "VALUE": {
+        "NAME": "Wert",
+        "DESCRIPTION": "Eine Zahl aus der Antwort"
+      },
+      "DIGITAL": {
+        "NAME": "Digitaler Wert",
+        "DESCRIPTION": "Ein oder aus aus der Antwort: true/false, on/off, yes/no oder eine Zahl (0 = aus)"
+      },
+      "TEXT": {
+        "NAME": "Text",
+        "DESCRIPTION": "Ein Text aus der Antwort"
+      }
+    },
+    "MODE": {
+      "NAME": "Lesen mit",
+      "DESCRIPTION": "Wie der Wert in der Antwort gefunden wird",
+      "PATTERN": "Befehlserkennung",
+      "JSON": "JSON-Pfad",
+      "REGEX": "Regulärer Ausdruck",
+      "TEXT": "Ganze Antwort"
+    },
+    "PATTERN": {
+      "NAME": "Muster",
+      "DESCRIPTION": "JSON-Pfad: $.sensors[0].temp. Regulärer Ausdruck: die erste Gruppe ist der Wert, z. B. temp=([0-9.]+). Befehlserkennung: \\iTemperatur:\\i\\v liest die Zahl nach \"Temperatur:\" (\\i..\\i suchen, \\v Zahl, \\h Hex-Zahl, \\sN N Zeichen überspringen, \\1-\\4 Bytes)"
+    },
+    "OUTPUT": {
+      "NAME": "HTTP-Ausgang",
+      "DESCRIPTION": "Sendet HTTP-Befehle an ein Gerät",
+      "ADDRESS": {
+        "NAME": "Adresse",
+        "DESCRIPTION": "Basisadresse des Geräts, z. B. http://192.168.1.30. Die Befehle werden angehängt"
+      },
+      "STATUS": {
+        "NAME": "Status",
+        "DESCRIPTION": "HTTP-Status des letzten Befehls, 0 = keine Antwort"
+      },
+      "COMMAND": {
+        "NAME": "Befehl",
+        "DESCRIPTION": "Sendet eine Anfrage, wenn sich der Wert ändert. <v> wird durch den Wert ersetzt"
+      },
+      "DIGITAL_COMMAND": {
+        "NAME": "Digitaler Befehl",
+        "DESCRIPTION": "Sendet bei wahr den EIN-Befehl und bei falsch den AUS-Befehl"
+      }
+    },
+    "METHOD": {
+      "NAME": "Methode",
+      "DESCRIPTION": "HTTP-Methode der Anfrage",
+      "GET": "GET",
+      "POST": "POST",
+      "PUT": "PUT"
+    },
+    "COMMAND_ON": {
+      "NAME": "Befehl bei EIN",
+      "DESCRIPTION": "Pfad, der an die Adresse angehängt wird (z. B. /relay/0?turn=on), oder eine ganze URL. <v> ist der Wert, <v.1> der Wert mit einer Nachkommastelle"
+    },
+    "BODY_ON": {
+      "NAME": "Inhalt bei EIN",
+      "DESCRIPTION": "Inhalt einer POST- oder PUT-Anfrage, <v> ist der Wert"
+    },
+    "COMMAND_OFF": {
+      "NAME": "Befehl bei AUS",
+      "DESCRIPTION": "Wird bei 0 oder falsch gesendet. Leer: ein Befehl sendet den EIN-Befehl mit 0, ein digitaler Befehl sendet nichts"
+    },
+    "BODY_OFF": {
+      "NAME": "Inhalt bei AUS",
+      "DESCRIPTION": "Inhalt einer POST- oder PUT-Anfrage bei 0 oder falsch"
+    },
+    "CONTENT_TYPE": {
+      "NAME": "Inhaltstyp",
+      "DESCRIPTION": "Inhaltstyp des Inhalts, z. B. application/json oder text/plain"
+    }
+  }
+}

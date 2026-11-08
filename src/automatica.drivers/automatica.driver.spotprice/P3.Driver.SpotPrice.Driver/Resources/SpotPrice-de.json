@@ -1,0 +1,40 @@
+{
+  "SPOT_PRICE": {
+    "NAME": "Spotpreis",
+    "DESCRIPTION": "Day-Ahead-Strompreise (aWATTar AT/DE oder ENTSO-E) mit Ausgängen für die günstigsten Stunden",
+    "PROVIDER": {
+      "NAME": "Anbieter",
+      "DESCRIPTION": "aWATTar braucht keinen Schlüssel (Fair Use: 100 Anfragen pro Tag). ENTSO-E braucht ein Security Token und funktioniert für jede Preiszone",
+      "AWATTAR_AT": "aWATTar Österreich",
+      "AWATTAR_DE": "aWATTar Deutschland",
+      "ENTSOE": "ENTSO-E"
+    },
+    "TOKEN": { "NAME": "ENTSO-E Security Token", "DESCRIPTION": "Nur für ENTSO-E: API-Zugang per E-Mail an transparency@entsoe.eu beantragen, danach das Token im Konto auf transparency.entsoe.eu erzeugen" },
+    "ZONE": { "NAME": "ENTSO-E Preiszone", "DESCRIPTION": "EIC-Code der Preiszone, nur für ENTSO-E. Österreich 10YAT-APG------L, Deutschland/Luxemburg 10Y1001A1001A82H" },
+    "SURCHARGE": { "NAME": "Aufschlag [EUR/kWh]", "DESCRIPTION": "Wird vor der USt. zum Marktpreis addiert: Lieferantengebühr, Netzentgelte, Abgaben. 0 = nur Marktpreis" },
+    "VAT": { "NAME": "USt. [%]", "DESCRIPTION": "Auf Marktpreis + Aufschlag, z. B. 20 für Österreich, 19 für Deutschland. 0 = Nettopreise" },
+    "REFRESH": { "NAME": "Aktualisierungsintervall [min]", "DESCRIPTION": "Wie oft die Preise geholt werden. Solange die Preise für morgen fehlen, fragt der Treiber alle 15 Minuten" },
+    "API_URL": { "NAME": "API-URL", "DESCRIPTION": "Optional. Leer = Standard des Anbieters (https://api.awattar.at, https://api.awattar.de, https://web-api.tp.entsoe.eu/api)" },
+    "PRICE_NOW": { "NAME": "Preis jetzt [EUR/kWh]", "DESCRIPTION": "Aktueller Preis mit Aufschlag und USt., z. B. für den Bezugspreis des Energiemonitors" },
+    "MARKET_PRICE_NOW": { "NAME": "Marktpreis jetzt [EUR/kWh]", "DESCRIPTION": "Aktueller Day-Ahead-Marktpreis, netto, ohne Aufschlag" },
+    "PRICE_NEXT_HOUR": { "NAME": "Preis nächste Stunde [EUR/kWh]", "DESCRIPTION": "Durchschnittspreis der nächsten vollen Stunde, mit Aufschlag und USt." },
+    "PRICE_MIN_TODAY": { "NAME": "Niedrigster Preis heute [EUR/kWh]", "DESCRIPTION": "Mit Aufschlag und USt." },
+    "PRICE_MAX_TODAY": { "NAME": "Höchster Preis heute [EUR/kWh]", "DESCRIPTION": "Mit Aufschlag und USt." },
+    "PRICE_AVG_TODAY": { "NAME": "Durchschnittspreis heute [EUR/kWh]", "DESCRIPTION": "Zeitgewichtet, mit Aufschlag und USt." },
+    "PRICES_UNTIL": { "NAME": "Preise bekannt bis", "DESCRIPTION": "Ende des letzten bekannten Preisintervalls (Ortszeit)" },
+    "CONNECTED": { "NAME": "Verbunden", "DESCRIPTION": "Der letzte Abruf hat funktioniert" },
+    "WINDOW": {
+      "NAME": "Günstigste Stunden",
+      "DESCRIPTION": "true während der günstigsten (oder teuersten) Stunden jedes Zeitraums, z. B. die günstigsten 3 Stunden in 24 Stunden",
+      "HOURS": { "NAME": "Stunden", "DESCRIPTION": "Länge des Fensters in Stunden (auch Viertelstunden, z. B. 1,5)" },
+      "PERIOD": { "NAME": "Zeitraum [h]", "DESCRIPTION": "Das Fenster wird einmal pro Zeitraum dieser Länge gewählt. Ein begonnenes Fenster bleibt, der Ausgang ist also genau die angegebenen Stunden pro Zeitraum ein" },
+      "CONTIGUOUS": { "NAME": "Zusammenhängend", "DESCRIPTION": "Ein: ein Block aufeinanderfolgender Stunden (z. B. Geschirrspüler). Aus: die günstigsten einzelnen Intervalle (z. B. Boiler)" },
+      "MODE": {
+        "NAME": "Modus",
+        "DESCRIPTION": "Günstigste oder teuerste Stunden (z. B. um Verbraucher bei Spitzenpreisen zu sperren)",
+        "CHEAPEST": "Günstigste",
+        "MOST_EXPENSIVE": "Teuerste"
+      }
+    }
+  }
+}

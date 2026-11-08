@@ -40,6 +40,8 @@ export function newTrigger(type: TriggerType, existing: TriggerDefinition[]): Tr
             return { type, id, to: "on" };
         case "startup":
             return { type, id };
+        case "scene":
+            return { type, id };
     }
 }
 
@@ -77,6 +79,8 @@ export function newAction(type: ActionType): ActionDefinition {
             return { ...base, type, condition: newGroup("all"), forSeconds: 0, timeoutSeconds: 0, continueOnTimeout: true };
         case "notify":
             return { ...base, type, subject: "", body: "", severity: "info", email: [] };
+        case "mail":
+            return { ...base, type, to: [], subject: "", body: "" };
         case "if":
             return { ...base, type, condition: newGroup("all"), then: [], else: [] };
         case "runAutomation":
@@ -96,7 +100,8 @@ const TRIGGER_ICONS: Record<TriggerType, string> = {
     sun: "sun",
     conditions: "circle-check",
     control: "toggle-on",
-    startup: "power-off"
+    startup: "power-off",
+    scene: "clapperboard"
 };
 
 const CONDITION_ICONS: Record<ConditionType, string> = {
@@ -116,6 +121,7 @@ const ACTION_ICONS: Record<ActionType, string> = {
     delay: "hourglass-half",
     waitUntil: "stopwatch",
     notify: "bell",
+    mail: "envelope",
     if: "code-branch",
     runAutomation: "play",
     enableAutomation: "power-off",
@@ -264,6 +270,9 @@ export function normalizeDefinition(def: AutomationDefinition): AutomationDefini
         }
         if (a.type === "notify" && !a.email) {
             a.email = [];
+        }
+        if (a.type === "mail" && !a.to) {
+            a.to = [];
         }
         return a;
     });

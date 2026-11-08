@@ -1,0 +1,186 @@
+// Status monitor tile and popup. Colors come from the tokens; a state color (--chip-color) only tints dots and chips,
+// texts keep the normal text colors so every state color stays readable in light and dark.
+
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sm-dot {
+    flex: none;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--chip-color, var(--muted));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 12%, transparent);
+}
+
+.sm-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 0;
+    max-height: 48px;
+    overflow: hidden;
+}
+
+.sm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px 2px 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--chip-color, var(--muted)) 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--chip-color, var(--muted)) 35%, var(--line));
+    font-family: var(--font-data);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+    line-height: 18px;
+
+    &.is-empty {
+        opacity: 0.55;
+    }
+
+    .sm-dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+.sm-popup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    color: var(--fg);
+    font-family: var(--font-ui);
+}
+
+.sm-heading {
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.sm-empty {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
+.sm-states {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-2);
+}
+
+.sm-state {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--chip-color, var(--muted)) 10%, var(--surface-2));
+    border: 1px solid color-mix(in srgb, var(--chip-color, var(--muted)) 30%, var(--line));
+}
+
+.sm-state-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sm-state-count {
+    font-family: var(--font-data);
+    font-size: var(--text-lg);
+    font-variant-numeric: tabular-nums;
+}
+
+// the popup frame grows with its content: long object lists and logs scroll inside, so the popup fits the screen
+.sm-objects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-height: min(36vh, 360px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.sm-group-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+}
+
+.sm-list,
+.sm-log {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        min-width: 0;
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--text-sm);
+
+        & + li {
+            border-top: 1px solid var(--line);
+        }
+    }
+}
+
+.sm-log {
+    max-height: min(30vh, 300px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.sm-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sm-meta,
+.sm-time {
+    flex: none;
+    font-family: var(--font-data);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+}
+
+.sm-time {
+    min-width: 7ch;
+}
+
+.sm-log-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+
+    b {
+        font-weight: 600;
+    }
+}

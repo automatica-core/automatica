@@ -1,0 +1,139 @@
+<div class="visu-automations">
+  <div class="head">
+    <h1>{{ 'UI.AUTOMATIONS.VISU.TITLE' | translateAsync }}</h1>
+    <p class="hint">{{ 'UI.AUTOMATIONS.VISU.HINT' | translateAsync }}</p>
+  </div>
+
+  @if (!loaded) {
+    <p class="hint">{{ 'UI.AUTOMATIONS.VISU.LOADING' | translateAsync }}</p>
+  } @else if (failed) {
+    <div class="panel empty-state">
+      <fa-icon class="icon" [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+      <b>{{ 'UI.AUTOMATIONS.LOAD_FAILED' | translateAsync }}</b>
+      <dx-button [text]="'UI.AUTOMATIONS.VISU.RETRY' | translateAsync" (onClick)="load()"></dx-button>
+    </div>
+  } @else {
+    @for (item of automations; track item.dto.objId) {
+      <section class="panel rule" [class.off]="!item.on" [attr.aria-label]="item.dto.name">
+        <div class="rule-head">
+          <span class="ico" aria-hidden="true"><fa-icon [icon]="['fas', 'bolt']"></fa-icon></span>
+          <div class="txt">
+            <h2>{{ item.dto.name }}</h2>
+            @if (item.dto.description) {
+              <p class="desc">{{ item.dto.description }}</p>
+            }
+            <small class="last">
+              {{ 'UI.AUTOMATIONS.VISU.LAST_RUN' | translateAsync }}: {{ runState(item) }}
+              @if (item.dto.lastRunAt) { · {{ item.dto.lastRunAt | date: 'short' }} }
+            </small>
+          </div>
+          <div class="switch">
+            <dx-switch [(value)]="item.on" [disabled]="!item.dto.canEdit || item.switching"
+              (onValueChanged)="setEnabled(item, $event.value)"></dx-switch>
+            <span class="state">{{ (item.on ? 'UI.AUTOMATIONS.ENABLED_ON' : 'UI.AUTOMATIONS.ENABLED_OFF') | translateAsync }}</span>
+          </div>
+        </div>
+
+        @if (item.blocks.length) {
+          <div class="blocks">
+            @for (block of item.blocks; track block.dto.path) {
+              <div class="block sc-{{ block.dto.kind }}">
+                <div class="block-head">
+                  <span class="kw">{{ ('UI.AUTOMATIONS.VISU.KIND.' + block.dto.kind.toUpperCase()) | translateAsync }}</span>
+                  <b>{{ block.title }}</b>
+                  @if (block.detail) {
+                    <span class="detail">{{ block.detail }}</span>
+                  }
+                </div>
+                <div class="fields">
+                  @for (f of block.fields; track f.name) {
+                    <div class="fld" [class.wide]="f.kind === 'days' || f.kind === 'mailTo'">
+                      <span class="lbl">{{ f.label }}</span>
+                      @switch (f.kind) {
+                        @case ('time') {
+                          <automation-time-input [(value)]="block.values[f.name]"></automation-time-input>
+                        }
+                        @case ('timeOptional') {
+                          <automation-time-input [(value)]="block.values[f.name]" [clearable]="true"></automation-time-input>
+                        }
+                        @case ('days') {
+                          <automation-days-picker [(days)]="block.values[f.name]"></automation-days-picker>
+                        }
+                        @case ('sunEvent') {
+                          <dx-select-box [items]="sunEvents" valueExpr="value" [displayExpr]="ctx.optionText"
+                            [value]="sunValue(block, f.name)" [disabled]="!item.dto.canEdit"
+                            (onValueChanged)="setSun(block, f.name, $event.value, false)"></dx-select-box>
+                        }
+                        @case ('sunEventOptional') {
+                          <dx-select-box [items]="sunEventsOptional" valueExpr="value" [displayExpr]="ctx.optionText"
+                            [value]="sunValue(block, f.name)" [disabled]="!item.dto.canEdit"
+                            (onValueChanged)="setSun(block, f.name, $event.value, true)"></dx-select-box>
+                        }
+                        @case ('minutes') {
+                          <dx-number-box [(value)]="block.values[f.name]" [showSpinButtons]="true" [step]="5"
+                            [disabled]="!item.dto.canEdit"></dx-number-box>
+                        }
+                        @case ('duration') {
+                          <automation-duration-input [(seconds)]="block.values[f.name]"></automation-duration-input>
+                        }
+                        @case ('durationOptional') {
+                          <automation-duration-input [(seconds)]="block.values[f.name]" [nullable]="true"></automation-duration-input>
+                        }
+                        @case ('percent') {
+                          <dx-number-box [(value)]="block.values[f.name]" [min]="0" [max]="100" [showSpinButtons]="true"
+                            [disabled]="!item.dto.canEdit"></dx-number-box>
+                        }
+                        @case ('number') {
+                          <dx-number-box [(value)]="block.values[f.name]" [showSpinButtons]="true"
+                            [disabled]="!item.dto.canEdit"></dx-number-box>
+                        }
+                        @case ('mailTo') {
+                          <dx-text-box [value]="mailText(block)" (onValueChanged)="setMailText(block, $event.value)"
+                            [placeholder]="'UI.AUTOMATIONS.FIELD.EMAIL_PLACEHOLDER' | translateAsync"
+                            [disabled]="!item.dto.canEdit"></dx-text-box>
+                        }
+                        @case ('value') {
+                          @switch (f.valueKind) {
+                            @case ('bool') {
+                              <dx-switch [(value)]="block.values[f.name]" [disabled]="!item.dto.canEdit"></dx-switch>
+                            }
+                            @case ('number') {
+                              <dx-number-box [(value)]="block.values[f.name]" [showSpinButtons]="true"
+                                [disabled]="!item.dto.canEdit"></dx-number-box>
+                            }
+                            @default {
+                              <dx-text-box [value]="textOf(block.values[f.name])" (onValueChanged)="setText(block, f.name, $event.value)"
+                                [placeholder]="'UI.AUTOMATIONS.FIELD.VALUE_ANY' | translateAsync"
+                                [disabled]="!item.dto.canEdit"></dx-text-box>
+                            }
+                          }
+                        }
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          @if (item.dto.canEdit) {
+            <div class="actions">
+              @if (isDirty(item)) {
+                <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+              }
+              <dx-button [text]="'UI.AUTOMATIONS.VISU.RESET' | translateAsync" stylingMode="text"
+                [disabled]="!isDirty(item) || item.saving" (onClick)="reset(item)"></dx-button>
+              <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync"
+                [disabled]="!isDirty(item) || item.saving" (onClick)="save(item)"></dx-button>
+            </div>
+          }
+        }
+      </section>
+    } @empty {
+      <div class="panel empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'bolt']"></fa-icon>
+        <b>{{ 'UI.AUTOMATIONS.VISU.EMPTY' | translateAsync }}</b>
+        <span class="hint">{{ 'UI.AUTOMATIONS.VISU.EMPTY_HINT' | translateAsync }}</span>
+      </div>
+    }
+  }
+</div>

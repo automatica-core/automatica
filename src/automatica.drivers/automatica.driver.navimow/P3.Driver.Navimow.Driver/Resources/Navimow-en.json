@@ -1,0 +1,110 @@
+{
+  "NAVIMOW": {
+    "NAME": "Segway Navimow",
+    "DESCRIPTION": "Segway Navimow robot mowers via the Navimow cloud (EU region)",
+    "CLIENT_ID": {
+      "NAME": "Client ID",
+      "DESCRIPTION": "OAuth client id issued by Segway for this installation"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client secret",
+      "DESCRIPTION": "OAuth client secret issued by Segway"
+    },
+    "REDIRECT_URI": {
+      "NAME": "Redirect URI",
+      "DESCRIPTION": "The redirect URI registered for the client (empty if Segway registered none)"
+    },
+    "AUTHORIZATION_CODE": {
+      "NAME": "Authorization code",
+      "DESCRIPTION": "Open the login URL shown in Status, sign in with the Navimow account and paste the code parameter of the address you are sent to. Used once"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh token",
+      "DESCRIPTION": "Optional, instead of an authorization code"
+    },
+    "POLL": {
+      "NAME": "Poll interval [s]",
+      "DESCRIPTION": "One request for all mowers per interval"
+    },
+    "LOGIN_URL": {
+      "NAME": "Login URL",
+      "DESCRIPTION": "https://navimow-h5-fra.willand.com/smartHome/login"
+    },
+    "TOKEN_URL": {
+      "NAME": "Token URL",
+      "DESCRIPTION": "https://navimow-fra.ninebot.com/openapi/oauth/getAccessToken"
+    },
+    "API_URL": {
+      "NAME": "API URL",
+      "DESCRIPTION": "https://navimow-fra.ninebot.com"
+    },
+    "SCAN": {
+      "NAME": "Search mowers",
+      "DESCRIPTION": "Lists the mowers of the account"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token state",
+      "DESCRIPTION": "Stored login (internal)"
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "OK, the login URL when a login is needed, or the last error"
+    },
+    "MOWER": {
+      "NAME": "Mower",
+      "DESCRIPTION": "A Segway Navimow",
+      "DEVICE_ID": {
+        "NAME": "Device ID",
+        "DESCRIPTION": "Filled by the scan"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "isDocked, isRunning, isPaused, isDocking, isLifted, Error, Offline, ..."
+      },
+      "MOWING": {
+        "NAME": "Mowing",
+        "DESCRIPTION": "Write true to start mowing, false to send the mower to the dock"
+      },
+      "PAUSED": {
+        "NAME": "Paused",
+        "DESCRIPTION": "Write true to pause, false to resume"
+      },
+      "DOCK": {
+        "NAME": "Return to dock",
+        "DESCRIPTION": "Write true to send the mower to the dock"
+      },
+      "STOP": {
+        "NAME": "Stop",
+        "DESCRIPTION": "Write true to stop mowing where the mower is"
+      },
+      "DOCKED": {
+        "NAME": "Docked",
+        "DESCRIPTION": ""
+      },
+      "RETURNING": {
+        "NAME": "Returning",
+        "DESCRIPTION": "On the way to the dock"
+      },
+      "ERROR": {
+        "NAME": "Error",
+        "DESCRIPTION": ""
+      },
+      "LIFTED": {
+        "NAME": "Lifted",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": ""
+      },
+      "FIRMWARE": {
+        "NAME": "Firmware",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

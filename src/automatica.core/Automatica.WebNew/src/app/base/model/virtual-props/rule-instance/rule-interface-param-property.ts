@@ -24,6 +24,10 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
                 break;
             case RuleInterfaceParameterDataType.Text:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Text;
+                // "MULTILINE": edited in a popup (e.g. the program of the sequence controller)
+                if (ruleInterface.Template.Meta === "MULTILINE") {
+                    this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
+                }
                 break;
             case RuleInterfaceParameterDataType.Timer:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Timer;

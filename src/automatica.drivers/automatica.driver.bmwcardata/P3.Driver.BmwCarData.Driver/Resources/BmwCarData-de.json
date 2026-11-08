@@ -1,0 +1,114 @@
+{
+  "BMWCARDATA": {
+    "NAME": "BMW CarData",
+    "DESCRIPTION": "BMW- und MINI-Fahrzeuge über die offizielle BMW CarData Customer API (nur lesend)",
+    "CLIENT_ID": {
+      "NAME": "Client-ID",
+      "DESCRIPTION": "Im My-BMW-Portal unter CarData erstellt (CarData-Client erstellen), abonniert für CarData API und für Live-Werte CarData Stream"
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Eine Anfrage pro Fahrzeug und Intervall. BMW erlaubt 50 Anfragen pro Tag, ein kürzeres Intervall wird automatisch verlängert"
+    },
+    "STREAMING": {
+      "NAME": "Live-Werte (Stream)",
+      "DESCRIPTION": "Mit dem CarData-Stream verbinden. Die gestreamten Werte werden im My-BMW-Portal ausgewählt"
+    },
+    "MQTT_HOST": {
+      "NAME": "Stream-Host",
+      "DESCRIPTION": "host:port, wie im Portal nach dem Einrichten des Streams angezeigt"
+    },
+    "CONTAINER_ID": {
+      "NAME": "Container-ID",
+      "DESCRIPTION": "Optional: einen bestehenden Container verwenden, statt den Treiber einen anlegen zu lassen"
+    },
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://api-cardata.bmwgroup.com"
+    },
+    "AUTH_URL": {
+      "NAME": "Login-URL",
+      "DESCRIPTION": "https://customer.bmwgroup.com/gcdm/oauth"
+    },
+    "SCAN": {
+      "NAME": "Fahrzeuge suchen",
+      "DESCRIPTION": "Listet die dem Konto zugeordneten Fahrzeuge"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token-Status",
+      "DESCRIPTION": "Gespeicherte Anmeldung (intern)"
+    },
+    "LOGIN_STATUS": {
+      "NAME": "Anmeldestatus",
+      "DESCRIPTION": "OK, Login-Link und Code wenn eine Anmeldung nötig ist, oder der letzte Fehler"
+    },
+    "STREAM_CONNECTED": {
+      "NAME": "Stream verbunden",
+      "DESCRIPTION": ""
+    },
+    "VEHICLE": {
+      "NAME": "Fahrzeug",
+      "DESCRIPTION": "Ein Fahrzeug des Kontos (man muss Hauptnutzer sein)",
+      "VIN": {
+        "NAME": "FIN",
+        "DESCRIPTION": "Wird von der Suche ausgefüllt"
+      },
+      "SOC": {
+        "NAME": "Ladestand [%]",
+        "DESCRIPTION": ""
+      },
+      "TARGET_SOC": {
+        "NAME": "Ziel-Ladestand [%]",
+        "DESCRIPTION": ""
+      },
+      "ELECTRIC_RANGE": {
+        "NAME": "Elektrische Reichweite",
+        "DESCRIPTION": ""
+      },
+      "RANGE": {
+        "NAME": "Reichweite",
+        "DESCRIPTION": ""
+      },
+      "MILEAGE": {
+        "NAME": "Kilometerstand",
+        "DESCRIPTION": ""
+      },
+      "CHARGING_STATUS": {
+        "NAME": "Ladestatus",
+        "DESCRIPTION": ""
+      },
+      "CHARGING_TIME_REMAINING": {
+        "NAME": "Restladezeit [min]",
+        "DESCRIPTION": ""
+      },
+      "CHARGING_PORT": {
+        "NAME": "Ladeklappe",
+        "DESCRIPTION": ""
+      },
+      "LATITUDE": {
+        "NAME": "Breitengrad",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Längengrad",
+        "DESCRIPTION": ""
+      },
+      "LAST_UPDATE": {
+        "NAME": "Letzte Aktualisierung",
+        "DESCRIPTION": "Neuester Zeitstempel der empfangenen Werte (UTC)"
+      },
+      "CUSTOM_NUMBER": {
+        "NAME": "Eigener Zahlenwert",
+        "DESCRIPTION": "Beliebiger numerischer Schlüssel aus dem BMW Telematics Data Catalogue"
+      },
+      "CUSTOM_TEXT": {
+        "NAME": "Eigener Textwert",
+        "DESCRIPTION": "Beliebiger Schlüssel aus dem BMW Telematics Data Catalogue"
+      },
+      "CUSTOM_KEY": {
+        "NAME": "Telematik-Schlüssel",
+        "DESCRIPTION": "z. B. vehicle.cabin.door.lock.status"
+      }
+    }
+  }
+}

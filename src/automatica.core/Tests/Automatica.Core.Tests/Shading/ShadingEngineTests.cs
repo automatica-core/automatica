@@ -144,6 +144,52 @@ namespace Automatica.Core.Tests.Shading
         }
 
         [Fact]
+        public async Task RoofWindow_HighSunFromBehindTheFacade_IsShaded()
+        {
+            // a roof window on the north side (20 degrees pitch): the wall window next to it gets no sun
+            var wall = AddBlind(_north);
+            var roof = AddBlind(_north, new BlindDefinition { Inclination = 20 });
+            await StartShadingAsync();
+
+            Assert.Empty(wall.Commands);
+            Assert.False(Status(wall).SunOnWindow);
+            Assert.Single(roof.Commands);
+            Assert.True(Status(roof).SunOnWindow);
+            Assert.Equal(BlindMode.Shading, Status(roof).Mode);
+        }
+
+        [Fact]
+        public async Task RoofFacade_InclinationAppliesToItsBlinds_AndShowsInTheStatus()
+        {
+            var roofFacade = new FacadeConfig(Guid.NewGuid(), "Roof north", 0, true,
+                new FacadeDefinition { Brightness = Signal.FromDatapoint(_southBrightness), Inclination = 25 });
+            _store.Facades.Add(roofFacade);
+            var blind = AddBlind(roofFacade);
+            await StartShadingAsync();
+
+            Assert.Single(blind.Commands);
+            var status = _engine.GetStatus().Facades.Single(a => a.Id == roofFacade.Id);
+            Assert.True(status.SunOnFacade);
+            Assert.Equal(25, status.Inclination);
+            Assert.Equal(90, _engine.GetStatus().Facades.Single(a => a.Id == _north.Id).Inclination);
+        }
+
+        [Fact]
+        public async Task RoofWindow_VenetianSlatsKeepTheFixedAngle()
+        {
+            var blind = AddBlind(_south, new BlindDefinition
+            {
+                Type = BlindType.Venetian,
+                Inclination = 30,
+                Slats = new SlatDefinition { TrackSun = true, FixedAngle = 45 }
+            }, slats: true);
+            await StartShadingAsync();
+
+            Assert.Equal(2, blind.Commands.Count);
+            Assert.Equal(50, blind.Commands[1].Slat);
+        }
+
+        [Fact]
         public async Task Overhang_HighSunDoesNotReachTheWindow()
         {
             var blind = AddBlind(_south, new BlindDefinition { MaxElevation = 50 });

@@ -36,6 +36,39 @@ namespace Automatica.Core.Base.Templates
         Shutter = 14,
         [VisuMobileObjectTemplateType("3733855a-667d-4cdd-bd43-6a7246046e4d")]
         Camera = 15,
+        [VisuMobileObjectTemplateType("8f0c6d1e-3b7a-4c52-9e41-6a2d5f8b9c03")]
+        EnergyFlow = 16,
+        // 17..22 and 26 are claimed by other features in progress (room controller, garage, security, ...); keep the numbers unique
+        /// <summary>
+        /// Status text, icon and color of the status logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("5d2f7a1c-8e34-4b6a-9c1d-2f7e3a9b4c17")]
+        Status = 23,
+        /// <summary>
+        /// Counts per state, objects and activity log of the status monitor logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("6e3a8b2d-9f45-4c7b-8d2e-3a8f4b0c5d18")]
+        StatusMonitor = 24,
+        /// <summary>
+        /// Event log of the tracker logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("7f4b9c3e-0a56-4d8c-9e3f-4b9a5c1d6e19")]
+        Tracker = 25,
+        /// <summary>
+        /// Intelligent room controller (climate logic): current / target temperature, mode, +/- for the comfort temperature
+        /// </summary>
+        [VisuMobileObjectTemplateType("5b0f3c1e-8d2a-4f6b-9c47-1e2d3a4b5c6d")]
+        RoomController = 17,
+        /// <summary>
+        /// Climate unit (AC unit, fan coil unit): current / target temperature, mode, fan, on/off
+        /// </summary>
+        [VisuMobileObjectTemplateType("2d6e9a41-7c3b-4f85-a1d2-6b9e0c4f7a28")]
+        ClimateUnit = 27,
+        /// <summary>
+        /// Central climate source (heating/cooling controller, HVAC, AC / fan coil central, mixing valve): read-only state
+        /// </summary>
+        [VisuMobileObjectTemplateType("3e7fab52-8d4c-4096-b2e3-7cafd15081b9")]
+        ClimateCentral = 28,
         /// <summary>
         /// Arming / acknowledging tile of the security logics (burglar, fire/water, emergency alarm, access controller),
         /// commands go through the authorised webapi/security-visu

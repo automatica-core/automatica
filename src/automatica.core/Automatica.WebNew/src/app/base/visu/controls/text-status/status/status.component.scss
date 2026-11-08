@@ -1,0 +1,26 @@
+// Status tile: the frame of base-control, tinted with the color of the rule that applies (--status-color).
+// The text keeps the normal text color so every rule color stays readable in light and dark.
+
+:host {
+    display: block;
+    height: 100%;
+}
+
+// a status is a sentence, not a measured value
+:host ::ng-deep .tile-value {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+:host(.has-color) ::ng-deep {
+    .tile {
+        border-color: color-mix(in srgb, var(--status-color) 55%, var(--line));
+        background: color-mix(in srgb, var(--status-color) 7%, var(--surface));
+    }
+
+    .tile-ico {
+        background: color-mix(in srgb, var(--status-color) 20%, var(--surface));
+        color: color-mix(in srgb, var(--status-color) 80%, var(--fg));
+    }
+}

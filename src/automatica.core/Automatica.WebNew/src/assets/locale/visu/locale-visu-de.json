@@ -79,6 +79,34 @@
                 "NAME": "Kamera",
                 "DESCRIPTION": "Live-Bild einer Kamera (Kamera-Treiber)"
             },
+            "ENERGY_FLOW": {
+                "NAME": "Energiefluss",
+                "DESCRIPTION": "Aktueller Leistungsfluss zwischen Netz, PV, Speicher und Verbrauchern (Logik Energiemonitor)"
+            },
+            "STATUS": {
+                "NAME": "Status",
+                "DESCRIPTION": "Statustext mit Symbol und Farbe (Status-Logik)"
+            },
+            "STATUS_MONITOR": {
+                "NAME": "Statusmonitor",
+                "DESCRIPTION": "Objekte je Zustand und die letzten Änderungen (Statusmonitor-Logik)"
+            },
+            "TRACKER": {
+                "NAME": "Tracker",
+                "DESCRIPTION": "Ereignisprotokoll mit Zeitstempel (Tracker-Logik)"
+            },
+            "ROOM_CONTROLLER": {
+                "NAME": "Raumregler",
+                "DESCRIPTION": "Ist- und Solltemperatur eines Raums, wärmer / kühler"
+            },
+            "CLIMATE_UNIT": {
+                "NAME": "Klimagerät",
+                "DESCRIPTION": "Klimagerät oder Fan Coil: Temperatur, Sollwert, Modus und Lüfter"
+            },
+            "CLIMATE_CENTRAL": {
+                "NAME": "Klimazentrale",
+                "DESCRIPTION": "Heiz-/Kühlquelle, HVAC, Zentrale oder Mischventil: Status und Last"
+            },
             "SECURITY": {
                 "NAME": "Sicherheit",
                 "DESCRIPTION": "Scharfschalten, Quittieren und Protokoll einer Alarm- oder Zutrittslogik"

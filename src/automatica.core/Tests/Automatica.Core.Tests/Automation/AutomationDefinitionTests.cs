@@ -129,11 +129,17 @@ namespace Automatica.Core.Tests.Automation
                 {
                     new SetValueAction { Node = readOnly, Value = Json(true) },
                     new RunAutomationAction { Automation = Guid.NewGuid() },
-                    new GroupControlAction()
+                    new GroupControlAction(),
+                    new MailAction { Subject = "x" },
+                    new MailAction { To = { "ok@example.com; not-an-address" } }
                 }
             };
 
             var problems = await engine.ValidateAsync(definition, null);
+
+            Assert.Contains(problems, a => a.Path == "actions/3" && a.Code == "recipientMissing");
+            Assert.Contains(problems, a => a.Path == "actions/4" && a.Code == "invalidMailAddress" && a.Detail == "not-an-address");
+            Assert.Contains(problems, a => a.Path == "actions/4" && a.Code == "valueMissing");
 
             Assert.Contains(problems, a => a.Path == "triggers/0" && a.Code == "nodeNotFound");
             Assert.Contains(problems, a => a.Path == "triggers/0" && a.Code == "valueMissing");

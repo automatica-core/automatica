@@ -7,7 +7,7 @@ import { ConfigTreeComponent } from "./config-tree/config-tree.component";
 import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
-import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule } from "devextreme-angular";
+import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule } from "devextreme-angular";
 import { DndModule } from "p3root-angular-dnd";
 import { L10nTranslationModule } from "angular-l10n";
 import { NodeValueSelectorComponent } from "./node-value-selector/node-value-selector.component";
@@ -51,7 +51,8 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         DxContextMenuModule,
         DxSchedulerModule,
         DxTooltipModule,
-        DxTabsModule
+        DxTabsModule,
+        DxTextAreaModule
     ],
     declarations: [
         PropertyEditorComponent,

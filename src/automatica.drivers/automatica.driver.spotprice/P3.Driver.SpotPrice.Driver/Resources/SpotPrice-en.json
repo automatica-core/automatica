@@ -1,0 +1,40 @@
+{
+  "SPOT_PRICE": {
+    "NAME": "Spot price",
+    "DESCRIPTION": "Day-ahead electricity prices (aWATTar AT/DE or ENTSO-E) with cheapest-hours outputs",
+    "PROVIDER": {
+      "NAME": "Provider",
+      "DESCRIPTION": "aWATTar needs no key (fair use: 100 requests a day). ENTSO-E needs a security token and works for every bidding zone",
+      "AWATTAR_AT": "aWATTar Austria",
+      "AWATTAR_DE": "aWATTar Germany",
+      "ENTSOE": "ENTSO-E"
+    },
+    "TOKEN": { "NAME": "ENTSO-E security token", "DESCRIPTION": "Only for ENTSO-E: request API access by e-mail to transparency@entsoe.eu, then create the token in your account on transparency.entsoe.eu" },
+    "ZONE": { "NAME": "ENTSO-E bidding zone", "DESCRIPTION": "EIC code of the bidding zone, only for ENTSO-E. Austria 10YAT-APG------L, Germany/Luxembourg 10Y1001A1001A82H" },
+    "SURCHARGE": { "NAME": "Surcharge [EUR/kWh]", "DESCRIPTION": "Added to the market price before VAT: supplier fee, grid fees, levies. 0 = market price only" },
+    "VAT": { "NAME": "VAT [%]", "DESCRIPTION": "Applied to market price + surcharge, e.g. 20 for Austria, 19 for Germany. 0 = net prices" },
+    "REFRESH": { "NAME": "Refresh interval [min]", "DESCRIPTION": "How often the prices are fetched. While tomorrow's prices are missing, the driver asks every 15 minutes" },
+    "API_URL": { "NAME": "API URL", "DESCRIPTION": "Optional. Empty = the provider's default (https://api.awattar.at, https://api.awattar.de, https://web-api.tp.entsoe.eu/api)" },
+    "PRICE_NOW": { "NAME": "Price now [EUR/kWh]", "DESCRIPTION": "Current price with surcharge and VAT, e.g. for the import price of the energy monitor" },
+    "MARKET_PRICE_NOW": { "NAME": "Market price now [EUR/kWh]", "DESCRIPTION": "Current day-ahead market price, net, without surcharge" },
+    "PRICE_NEXT_HOUR": { "NAME": "Price next hour [EUR/kWh]", "DESCRIPTION": "Average price of the next full hour, with surcharge and VAT" },
+    "PRICE_MIN_TODAY": { "NAME": "Lowest price today [EUR/kWh]", "DESCRIPTION": "With surcharge and VAT" },
+    "PRICE_MAX_TODAY": { "NAME": "Highest price today [EUR/kWh]", "DESCRIPTION": "With surcharge and VAT" },
+    "PRICE_AVG_TODAY": { "NAME": "Average price today [EUR/kWh]", "DESCRIPTION": "Time-weighted, with surcharge and VAT" },
+    "PRICES_UNTIL": { "NAME": "Prices known until", "DESCRIPTION": "End of the last known price slot (local time)" },
+    "CONNECTED": { "NAME": "Connected", "DESCRIPTION": "The last fetch worked" },
+    "WINDOW": {
+      "NAME": "Cheapest hours",
+      "DESCRIPTION": "true during the cheapest (or most expensive) hours of each period, e.g. the cheapest 3 hours in 24 hours",
+      "HOURS": { "NAME": "Hours", "DESCRIPTION": "Length of the window in hours (also quarter hours, e.g. 1.5)" },
+      "PERIOD": { "NAME": "Period [h]", "DESCRIPTION": "The window is chosen once per period of this many hours. A started window is kept, so the output is on for exactly the given hours per period" },
+      "CONTIGUOUS": { "NAME": "Contiguous", "DESCRIPTION": "On: one block of hours in a row (e.g. a dishwasher). Off: the cheapest single slots (e.g. a boiler)" },
+      "MODE": {
+        "NAME": "Mode",
+        "DESCRIPTION": "Cheapest or most expensive hours (e.g. to block loads at peak prices)",
+        "CHEAPEST": "Cheapest",
+        "MOST_EXPENSIVE": "Most expensive"
+      }
+    }
+  }
+}

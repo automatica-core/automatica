@@ -1,0 +1,17 @@
+{
+  "Automatica": {
+    "manifest-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "plugin-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "PluginGuid": "7d3e9a51-c84f-4b26-a0e7-5f1b2c8d6e94",
+    "Name": "P3.Driver.SpotPrice.Driver",
+    "ComponentName": "SpotPrice",
+    "Type": "driver",
+    "Output": "P3.Driver.SpotPrice.Driver.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.spotprice",
+    "MinCoreServerVersion": { "Minor": 0, "Major": 10, "Build": 0, "Revision": 2068 },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

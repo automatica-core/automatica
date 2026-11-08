@@ -97,6 +97,82 @@
         "NAME": "Ausschaltschwelle",
         "DESCRIPTION": "Der Ausgang schaltet aus, wenn dieser Wert erreicht wird"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 setzt den Ausgang zurück und sperrt den Baustein, bis Off wieder 0 ist"
+      }
+    },
+    "VALUE_MONITOR": {
+      "NAME": "Analogwertüberwachung",
+      "DESCRIPTION": "Meldet, wenn der Wert das Toleranzband zwischen unterer und oberer Schwelle verlässt",
+      "VALUE": {
+        "DESCRIPTION": "Zu überwachender Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 solange der Wert außerhalb des Toleranzbands liegt"
+      },
+      "UPPER": {
+        "NAME": "Obere Schwelle",
+        "DESCRIPTION": "Über diesem Wert ist der Ausgang 1"
+      },
+      "LOWER": {
+        "NAME": "Untere Schwelle",
+        "DESCRIPTION": "Unter diesem Wert ist der Ausgang 1"
+      }
+    },
+    "COMPARATOR": {
+      "NAME": "Komparator",
+      "DESCRIPTION": "Schaltet ein, wenn V1 - V2 über den Einschaltwert steigt, und aus, wenn die Differenz unter den Ausschaltwert fällt",
+      "VALUE1": {
+        "DESCRIPTION": "Wert 1"
+      },
+      "VALUE2": {
+        "DESCRIPTION": "Wert 2, wird von Wert 1 abgezogen"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 wenn die Differenz überschritten wurde"
+      },
+      "ON": {
+        "NAME": "Einschaltwert",
+        "DESCRIPTION": "Differenz, über der der Ausgang einschaltet"
+      },
+      "OFF": {
+        "NAME": "Ausschaltwert",
+        "DESCRIPTION": "Differenz, unter der der Ausgang ausschaltet"
+      }
+    },
+    "VALUE_VALIDATOR": {
+      "NAME": "Wertvalidierung",
+      "DESCRIPTION": "Lässt nur gültige Werte durch: Zahlen im Bereich, die sich oft genug ändern. Ungültige Werte werden verworfen und setzen E",
+      "VALUE": {
+        "DESCRIPTION": "Zu prüfender Wert"
+      },
+      "ENABLE": {
+        "DESCRIPTION": "0 ignoriert den Eingang; jede 1 wartet einmal die Verzögerung ab (unbenutzt = immer freigegeben)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Letzter gültiger Wert"
+      },
+      "ERROR": {
+        "DESCRIPTION": "1 solange der Wert ungültig ist oder sich im Mindeständerungsintervall nicht geändert hat"
+      },
+      "CHANGE_INTERVAL": {
+        "NAME": "Mindeständerungsintervall [s]",
+        "DESCRIPTION": "In dieser Zeit muss sich der Wert ändern, 0 = keine Prüfung"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Kleinster gültiger Wert"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Größter gültiger Wert"
+      },
+      "DELAY": {
+        "NAME": "Verzögerung [s]",
+        "DESCRIPTION": "Wartezeit nach Enable = 1, bevor Werte an den Ausgang gehen"
+      }
     }
   }
 }

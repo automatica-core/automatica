@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.Control.Cache;
@@ -9,10 +10,12 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Configuration;
+using Automatica.Core.Internals.Mail;
 using Automatica.Core.Internals.Templates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Automatica.Core.Internals
 {
@@ -53,6 +56,11 @@ namespace Automatica.Core.Internals
             services.AddSingleton<ILogicNodeInstanceCache, LogicNodeInstanceCache>();
 
             services.AddSingleton<ILinkCache, LinkCache>();
+
+            services.TryAddSingleton(TimeProvider.System);
+            services.TryAddSingleton<ISmtpTransport, MailKitSmtpTransport>();
+            // singleton: it holds the hourly SMTP limit
+            services.AddSingleton<IMailService, MailService>();
 
             services.AddTransient<ServerCloudApi>();
             services.AddTransient<CloudApi>();

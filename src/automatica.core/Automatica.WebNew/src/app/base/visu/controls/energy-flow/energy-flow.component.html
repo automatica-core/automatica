@@ -1,0 +1,54 @@
+<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false">
+  <div control_full class="energy" [class.is-animated]="animate" role="group" [attr.aria-label]="displayText">
+
+    <div class="energy-head">
+      @if (location) {
+        <div class="tile-room">{{ location }}</div>
+      }
+      <div class="tile-name">{{ displayText }}</div>
+    </div>
+
+    <div class="energy-stage">
+      <svg class="energy-lines" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+        @for (link of layout.links; track link.id) {
+          <path class="energy-track" [attr.d]="link.path"></path>
+          @if (link.active) {
+            <path class="energy-flow tone-{{ link.kind }}" [attr.d]="link.path" [attr.data-direction]="link.direction"
+              [style.stroke-width]="link.width" [style.animation-duration.s]="link.duration"></path>
+          }
+        }
+        <circle class="energy-hub" [attr.cx]="hub.x" [attr.cy]="hub.y" r="3.5"></circle>
+      </svg>
+
+      @for (node of layout.nodes; track node.id) {
+        @let p = power(node);
+        <div class="energy-node kind-{{ node.kind }}" [class.is-active]="node.direction !== 'none'"
+          [attr.data-node]="node.id" [style.left.%]="left(node)" [style.top.%]="top(node)">
+          <span class="energy-ico" aria-hidden="true"><fa-icon [icon]="nodeIcon(node)"></fa-icon></span>
+          <span class="energy-text">
+            <span class="energy-value">{{ p.value }}@if (p.unit) {<small>{{ p.unit }}</small>}</span>
+            <span class="energy-label">{{ label(node) }}@if (socText(node); as soc) { · {{ soc }}}</span>
+          </span>
+        </div>
+      }
+      <span class="sr-only" aria-live="off">{{ summary }}</span>
+    </div>
+
+    @if (hasStats) {
+      <div class="energy-stats">
+        <div class="energy-stat">
+          <span class="energy-stat-label">{{ 'UI.VISU.ENERGY_AUTARKY' | translateAsync }}</span>
+          <span class="energy-stat-value">{{ autarkyText }}</span>
+        </div>
+        <div class="energy-stat">
+          <span class="energy-stat-label">{{ 'UI.VISU.ENERGY_SELF_CONSUMPTION' | translateAsync }}</span>
+          <span class="energy-stat-value">{{ selfConsumptionText }}</span>
+        </div>
+        <div class="energy-stat">
+          <span class="energy-stat-label">{{ 'UI.VISU.ENERGY_PV_TODAY' | translateAsync }}</span>
+          <span class="energy-stat-value">{{ pvTodayText }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</app-visualization-control>

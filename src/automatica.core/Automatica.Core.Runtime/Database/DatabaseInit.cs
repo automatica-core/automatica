@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Automatica.Core.Internals.Mail;
+using System;
 using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
@@ -113,6 +114,7 @@ namespace Automatica.Core.Runtime.Database
                 context.SaveChanges();
             }
 
+            // the location is read live from the settings cache (automations, shading), a change needs no server reload
             var lat = context.Settings.SingleOrDefault(a => a.ValueKey == "Latitude");
             var longi = context.Settings.SingleOrDefault(a => a.ValueKey == "Longitude");
 
@@ -127,8 +129,8 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 10,
-                    ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.None,
+                    NeedsReloadOnChange = false,
                     CreatedAt = DateTimeOffset.Now,
                     ModifiedAt = DateTimeOffset.Now
                 });
@@ -136,8 +138,8 @@ namespace Automatica.Core.Runtime.Database
             else
             {
                 lat.ValueDouble ??= 0;
-                lat.NeedsReloadOnChange = true;
-                lat.ReloadContext = SettingReloadContext.Server;
+                lat.NeedsReloadOnChange = false;
+                lat.ReloadContext = SettingReloadContext.None;
                 context.Settings.Update(lat);
             }
             if(longi == null)
@@ -150,8 +152,8 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 11,
-                    ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.None,
+                    NeedsReloadOnChange = false,
                     CreatedAt = DateTimeOffset.Now,
                     ModifiedAt = DateTimeOffset.Now
                 });
@@ -159,8 +161,8 @@ namespace Automatica.Core.Runtime.Database
             else
             {
                 longi.ValueDouble ??= 0;
-                longi.NeedsReloadOnChange = true;
-                longi.ReloadContext = SettingReloadContext.Server;
+                longi.NeedsReloadOnChange = false;
+                longi.ReloadContext = SettingReloadContext.None;
                 context.Settings.Update(longi);
             }
 
@@ -374,6 +376,7 @@ namespace Automatica.Core.Runtime.Database
             AddRemoteConnectSettings(context);
             AddHyperSeriesRecorderSettings(context, config);
             AddMcpSettings(context);
+            AddSmtpSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -689,6 +692,47 @@ namespace Automatica.Core.Runtime.Database
                     ModifiedAt = DateTimeOffset.Now
                 });
             }
+        }
+
+        private static void AddSmtpSettings(AutomaticaContext context)
+        {
+            // own SMTP server for the mails of logics and automations, off = mails go through the Automatica cloud
+            void Add(string key, PropertyTemplateType type, object value, int order, string meta = null)
+            {
+                var existing = context.Settings.SingleOrDefault(a => a.ValueKey == key);
+                if (existing != null)
+                {
+                    if (meta != null && existing.Meta != meta)
+                    {
+                        existing.Meta = meta;
+                    }
+                    return;
+                }
+
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = key,
+                    Type = (long)type,
+                    Value = value,
+                    Group = SmtpSettings.Group,
+                    IsVisible = true,
+                    Order = order,
+                    Meta = meta,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
+
+            Add(SmtpSettings.EnabledKey, PropertyTemplateType.Bool, false, 1);
+            Add(SmtpSettings.HostKey, PropertyTemplateType.Text, "", 2);
+            Add(SmtpSettings.PortKey, PropertyTemplateType.Integer, SmtpSettings.DefaultPort, 3);
+            Add(SmtpSettings.SecurityKey, PropertyTemplateType.Enum, (int)SmtpSecurity.Auto, 4, PropertyHelper.CreateEnumMetaString(typeof(SmtpSecurity)));
+            Add(SmtpSettings.UserKey, PropertyTemplateType.Text, "", 5);
+            Add(SmtpSettings.PasswordKey, PropertyTemplateType.Password, "", 6);
+            Add(SmtpSettings.FromKey, PropertyTemplateType.Text, "", 7);
+            Add(SmtpSettings.FromNameKey, PropertyTemplateType.Text, "Automatica", 8);
+            Add(SmtpSettings.AcceptInvalidCertificateKey, PropertyTemplateType.Bool, false, 9);
+            Add(SmtpSettings.TestKey, PropertyTemplateType.CustomAction, null, 10);
         }
 
         private static void AddHyperSeriesRecorderSettings(AutomaticaContext context, IConfiguration config)

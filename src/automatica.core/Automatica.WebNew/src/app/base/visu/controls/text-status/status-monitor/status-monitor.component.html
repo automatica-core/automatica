@@ -1,0 +1,67 @@
+<app-visualization-control icon="list-check" [hint]="displayText" [location]="location"
+  [value]="top ? top.count : undefined" [unit]="top ? stateText(top) : undefined"
+  [subValue]="top ? undefined : (totalObjects > 0 ? ('UI.VISU.STATUS_ALL_FINE' | translateAsync) : ('UI.VISU.STATUS_NO_OBJECTS' | translateAsync))"
+  [hasPopup]="true" (onPopupShowing)="onPopupShowing()">
+
+  @if (chips.length > 0) {
+    <div control class="sm-chips" aria-hidden="true">
+      @for (chip of chips; track chip.state) {
+        <span class="sm-chip" [class.is-empty]="chip.count === 0" [style.--chip-color]="color(chip)" [attr.title]="stateText(chip)">
+          <i class="sm-dot"></i>{{ chip.count }}
+        </span>
+      }
+    </div>
+  }
+
+  <div popup class="sm-popup">
+    @if (chips.length > 0) {
+      <ul class="sm-states">
+        @for (chip of chips; track chip.state) {
+          <li class="sm-state" [style.--chip-color]="color(chip)">
+            <i class="sm-dot"></i>
+            <span class="sm-state-text">{{ stateText(chip) }}</span>
+            <span class="sm-state-count">{{ chip.count }}</span>
+          </li>
+        }
+      </ul>
+    }
+
+    <h3 class="sm-heading">{{ 'UI.VISU.STATUS_OBJECTS' | translateAsync }}</h3>
+    @if (groups.length === 0) {
+      <p class="sm-empty">{{ 'UI.VISU.STATUS_NO_OBJECTS' | translateAsync }}</p>
+    }
+    @if (groups.length > 0) {
+      <!-- many objects scroll here, the popup itself keeps the size of the screen -->
+      <div class="sm-objects">
+        @for (group of groups; track group.state.state) {
+          <div class="sm-group" [style.--chip-color]="group.color">
+            <div class="sm-group-head"><i class="sm-dot"></i>{{ stateText(group.state) }}</div>
+            <ul class="sm-list">
+              @for (o of group.objects; track o.id) {
+                <li>
+                  <span class="sm-name">{{ o.name || o.id }}</span>
+                  <span class="sm-meta" [attr.title]="fullTime(o.changed)">{{ o.value }} · {{ time(o.changed) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    }
+
+    <h3 class="sm-heading">{{ 'UI.VISU.STATUS_ACTIVITY' | translateAsync }}</h3>
+    @if (!data?.log?.length) {
+      <p class="sm-empty">{{ 'UI.VISU.STATUS_NO_ACTIVITY' | translateAsync }}</p>
+    } @else {
+      <ol class="sm-log">
+        @for (entry of data.log; track $index) {
+          <li [style.--chip-color]="colorOf(entry.state)">
+            <time class="sm-time" [attr.datetime]="entry.time" [attr.title]="fullTime(entry.time)">{{ time(entry.time) }}</time>
+            <i class="sm-dot"></i>
+            <span class="sm-log-text"><b>{{ entry.name }}</b> {{ entry.text }}</span>
+          </li>
+        }
+      </ol>
+    }
+  </div>
+</app-visualization-control>

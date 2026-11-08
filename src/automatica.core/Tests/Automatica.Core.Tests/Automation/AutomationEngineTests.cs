@@ -386,6 +386,48 @@ namespace Automatica.Core.Tests.Automation
         }
 
         [Fact]
+        public async Task SceneTrigger_FiresOnEveryActivationPulse()
+        {
+            var scene = Guid.NewGuid();
+            var activated = Guid.NewGuid();
+            _environment.LogicOutputs[(scene, SceneTrigger.ActivatedOutputKey)] = activated;
+
+            _store.Add(new AutomationDefinition
+            {
+                Triggers = { new SceneTrigger { Id = "scene", Scene = scene } },
+                Actions = { new SetValueAction { Node = _light, Value = Json(true) } }
+            });
+            await _engine.StartAsync();
+            Assert.Equal(1, _environment.SubscriberCount(activated));
+
+            // the scene block pulses 1 and back to 0 on every activation
+            await _environment.PublishAsync(activated, true);
+            await Eventually(() => _store.Runs.Count == 1, "first activation");
+            await _environment.PublishAsync(activated, false);
+            await _environment.PublishAsync(activated, true);
+            await Eventually(() => _store.Runs.Count == 2, "second activation");
+
+            Assert.All(_store.Runs, r => Assert.Equal("scene", r.TriggerId));
+        }
+
+        [Fact]
+        public async Task SceneTrigger_UnknownScene_IsAValidationError_AndDoesNotStart()
+        {
+            var definition = new AutomationDefinition
+            {
+                Triggers = { new SceneTrigger { Id = "scene", Scene = Guid.NewGuid() } },
+                Actions = { new SetValueAction { Node = _light, Value = Json(true) } }
+            };
+
+            var problems = await _engine.ValidateAsync(definition, null);
+            Assert.Contains(problems, p => p.Code == "sceneNotFound" && p.Path == "triggers/0");
+
+            _store.Add(definition);
+            await _engine.StartAsync();
+            Assert.Empty(_store.Runs);
+        }
+
+        [Fact]
         public async Task ManualRun_OfDisabledAutomation_SkipsConditions()
         {
             var automation = _store.Add(MotionLight(), enabled: false);
@@ -467,6 +509,40 @@ namespace Automatica.Core.Tests.Automation
             var (subject, body) = _environment.Notifications.Single();
             Assert.Equal("Hallway: motion", subject);
             Assert.Equal("Brightness 12, value on", body);
+        }
+
+        [Fact]
+        public async Task Mail_SendsToEveryRecipientWithPlaceholders()
+        {
+            _store.Add(MotionLight(new MailAction
+            {
+                To = { "a@example.com; b@example.com", "A@example.com" },
+                Subject = "{automation} at {time}",
+                Body = "Brightness {value:" + _brightness + "} on {date}"
+            }), name: "Hallway");
+            await _engine.StartAsync();
+
+            await _environment.PublishAsync(_motion, true);
+            await Eventually(() => _environment.Emails.Count == 1, "mail");
+
+            var (to, subject, body) = _environment.Emails.Single();
+            Assert.Equal(new[] { "a@example.com", "b@example.com" }, to);
+            var now = _environment.Time.GetLocalNow();
+            Assert.Equal($"Hallway at {now.ToString("t", System.Globalization.CultureInfo.CurrentCulture)}", subject);
+            Assert.Equal($"Brightness 12 on {now.ToString("d", System.Globalization.CultureInfo.CurrentCulture)}", body);
+            Assert.Empty(_environment.Notifications);
+            await Eventually(() => _store.Runs.Count == 1 && _store.Runs.Single().State == AutomationRunState.Done, "run done");
+        }
+
+        [Fact]
+        public async Task Mail_FailsTheRunWhenTheMailIsNotSent()
+        {
+            _environment.EmailResult = false;
+            _store.Add(MotionLight(new MailAction { To = { "a@example.com" }, Subject = "x" }));
+            await _engine.StartAsync();
+
+            await _environment.PublishAsync(_motion, true);
+            await Eventually(() => _store.Runs.Count == 1 && _store.Runs.Single().State == AutomationRunState.Failed, "run failed");
         }
 
         [Fact]

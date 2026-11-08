@@ -41,6 +41,8 @@ import { Control, ControlGrouped } from "src/app/base/model/control";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 import { VirtualSettingsPropertyInstance } from "src/app/base/model/virtual-props/settings/settings-property-instance";
 import { getUploadedFileName } from "../uploaded-file-name";
+import { SettingsService } from "src/app/services/settings.service";
+import { confirm } from "devextreme/ui/dialog";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -172,6 +174,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   public learnedNodeInstances: NodeInstance[] = [];
   public learnModeVisible: boolean = false;
   public learnNodeInstance: LearnNodeInstance[] = [];
+
+  /** multi-line text (property meta MULTILINE, e.g. the program of the sequence controller) */
+  public multilineEditPopupVisible: boolean = false;
+  public multilineEditValue: string = "";
+  public multilineEditTitle: string = "";
+  public multilineEditMaxLength: number = 65535;
+  private multilineEditSource: any;
 
   @ViewChild("timerEditPopup")
   popupTimerEdit: DxPopupComponent;
@@ -354,7 +363,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
     private changeDetection: ChangeDetectorRef,
     private router: Router,
     private nodeInstanceImportService: NodeInstanceImportSerivce,
-    private controlsService: ControlsService) {
+    private controlsService: ControlsService,
+    private settingsService: SettingsService) {
     super(notify, translate, appService);
   }
 
@@ -521,6 +531,42 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
     }
   }
 
+  isMultiline(prop: PropertyInstance): boolean {
+    return prop?.PropertyTemplate?.Meta === "MULTILINE";
+  }
+
+  /** the first line that is not empty, for the button in the grid */
+  multilinePreview(prop: PropertyInstance): string {
+    const text = typeof prop?.Value === "string" ? prop.Value : "";
+    const first = text.split(/\r?\n/).map(l => l.trim()).find(l => l.length > 0) ?? "";
+    return first.length > 40 ? first.substring(0, 40) + "…" : first;
+  }
+
+  onMultilineEditClick($event, prop: PropertyInstance) {
+    this.selectedProperty = prop;
+    this.multilineEditSource = this.item;
+    this.multilineEditValue = typeof prop.Value === "string" ? prop.Value : "";
+    this.multilineEditTitle = this.translate.translate(prop.PropertyTemplate.Name);
+    this.multilineEditMaxLength = (prop.PropertyTemplate.ExtendedType as any)?.length ?? 65535;
+    this.multilineEditPopupVisible = true;
+  }
+
+  onMultilineEditPopupClosing($event, ok: boolean) {
+    if (!this.multilineEditPopupVisible) {
+      return;
+    }
+    this.multilineEditPopupVisible = false;
+
+    if (ok && this.selectedProperty && this.selectedProperty.Value !== this.multilineEditValue) {
+      this.item = this.multilineEditSource;
+      this.selectedProperty.Value = this.multilineEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
+    }
+
+    this.selectedProperty = void 0;
+    this.multilineEditSource = void 0;
+  }
+
   onTimerEditClick($event, prop: PropertyInstance) {
     this.timerEditValue = new TimerPropertyData();
     this.selectedProperty = prop;
@@ -647,7 +693,34 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   }
 
   async onCustomActionClick($event, data: PropertyInstance) {
+    if (data instanceof VirtualSettingsPropertyInstance) {
+      await this.onSettingsAction(data);
+      return;
+    }
     await this.config.customAction(this.item as NodeInstance, data.PropertyTemplate.Key);
+  }
+
+  /** buttons in the server settings (settings of type CustomAction) */
+  private async onSettingsAction(data: VirtualSettingsPropertyInstance) {
+    if (data.setting.ValueKey !== "smtpTest") {
+      return;
+    }
+
+    const ok = await confirm(this.translate.translate("COMMON.PROPERTY.SMTPTEST.CONFIRM"), this.translate.translate("COMMON.PROPERTY.SMTPTEST.NAME"));
+    if (!ok) {
+      return;
+    }
+
+    try {
+      const result = await this.settingsService.sendSmtpTest();
+      if (result?.success) {
+        this.notify.notifySuccess(this.translate.translate("COMMON.PROPERTY.SMTPTEST.OK"));
+      } else {
+        this.notify.notifyError(this.translate.translate("COMMON.PROPERTY.SMTPTEST.FAILED", { error: result?.error ?? "" }));
+      }
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   async onLearnClick($event, data: PropertyInstance) {
@@ -748,7 +821,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
         if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
           await this.nodeInstanceService.saveSetting(prop);
-          this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
+          // most settings apply without a restart (or only reload their own part), only tell the user when the server restarts
+          if (prop.setting.restartsServerOnChange) {
+            this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
+          }
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);

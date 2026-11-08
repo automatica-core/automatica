@@ -1,0 +1,186 @@
+{
+  "MIELE": {
+    "NAME": "Miele",
+    "DESCRIPTION": "Miele@home-Geräte über die offizielle Miele 3rd Party API",
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://api.mcs3.miele.com"
+    },
+    "TOKEN_URL": {
+      "NAME": "Token-URL",
+      "DESCRIPTION": "OAuth-Token-Endpunkt. Standard: die neue Miele-Anmeldung (EU). Konten aus dort nicht unterstützten Ländern (z. B. CH, UK, US) nutzen https://api.mcs3.miele.com/thirdparty/token, solange Miele ihn betreibt"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client-ID",
+      "DESCRIPTION": "Client-ID aus dem Miele-Entwicklerportal (developer.miele.com)"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client-Secret",
+      "DESCRIPTION": "Client-Secret aus dem Miele-Entwicklerportal"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh-Token",
+      "DESCRIPTION": "OAuth-Refresh-Token des Miele-Kontos (Anmeldung per Authorization Code, siehe README). Miele ersetzt ihn bei jeder Erneuerung, der Treiber speichert den neuesten"
+    },
+    "LANGUAGE": {
+      "NAME": "Sprache",
+      "DESCRIPTION": "Sprache der Programm- und Phasennamen (z. B. en, de)"
+    },
+    "POLL": {
+      "NAME": "Intervall vollständiges Lesen [s]",
+      "DESCRIPTION": "Änderungen kommen live über den Ereignis-Stream, das ist nur eine Rückfallebene"
+    },
+    "SCAN": {
+      "NAME": "Geräte suchen",
+      "DESCRIPTION": "Listet die für die Anwendung freigegebenen Geräte"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token-Status",
+      "DESCRIPTION": ""
+    },
+    "LOGIN_STATUS": {
+      "NAME": "Anmeldestatus",
+      "DESCRIPTION": "OK oder warum die Anmeldung fehlschlug"
+    },
+    "STREAM_CONNECTED": {
+      "NAME": "Ereignis-Stream verbunden",
+      "DESCRIPTION": "Wahr, solange Live-Änderungen ankommen"
+    },
+    "APPLIANCE": {
+      "NAME": "Gerät",
+      "DESCRIPTION": "Ein Miele-Gerät",
+      "DEVICE_ID": {
+        "NAME": "Geräte-ID",
+        "DESCRIPTION": "Fabrikationsnummer, wird von der Suche ausgefüllt"
+      },
+      "CONNECTED": {
+        "NAME": "Verbunden",
+        "DESCRIPTION": "Das Gerät ist online"
+      },
+      "STATUS_CODE": {
+        "NAME": "Statuscode",
+        "DESCRIPTION": "1 aus, 2 ein, 3 programmiert, 4 Startvorwahl, 5 läuft, 6 Pause, 7 Programmende, 8 Störung, ..., 255 nicht verbunden"
+      },
+      "STATUS": {
+        "NAME": "Status",
+        "DESCRIPTION": "Off, On, Programmed, WaitingToStart, Running, Pause, EndProgrammed, Failure, ..."
+      },
+      "POWER": {
+        "NAME": "Eingeschaltet",
+        "DESCRIPTION": "Wahr schreiben zum Einschalten, falsch zum Ausschalten (wenn das Gerät es gerade erlaubt)"
+      },
+      "RUNNING": {
+        "NAME": "Läuft",
+        "DESCRIPTION": "Wahr schreiben startet, falsch stoppt das Programm (MobileStart oder Fernsteuerung am Gerät nötig)"
+      },
+      "PAUSED": {
+        "NAME": "Pausiert",
+        "DESCRIPTION": "Wahr schreiben pausiert, falsch setzt fort"
+      },
+      "PROGRAM": {
+        "NAME": "Programm",
+        "DESCRIPTION": "Name des Programms"
+      },
+      "PROGRAM_ID": {
+        "NAME": "Programm-ID",
+        "DESCRIPTION": "Programm-ID schreiben startet dieses Programm"
+      },
+      "PROGRAM_PHASE": {
+        "NAME": "Programmphase",
+        "DESCRIPTION": ""
+      },
+      "REMAINING_TIME": {
+        "NAME": "Restzeit [min]",
+        "DESCRIPTION": ""
+      },
+      "ELAPSED_TIME": {
+        "NAME": "Verstrichene Zeit [min]",
+        "DESCRIPTION": ""
+      },
+      "START_TIME": {
+        "NAME": "Start in [min]",
+        "DESCRIPTION": "Startvorwahl; Minuten schreiben setzt sie"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperatur [°C]",
+        "DESCRIPTION": "Zone 1"
+      },
+      "TEMPERATURE_2": {
+        "NAME": "Temperatur 2 [°C]",
+        "DESCRIPTION": "Zone 2 (z. B. Gefrierteil)"
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Solltemperatur [°C]",
+        "DESCRIPTION": "Zone 1, ganze °C schreiben"
+      },
+      "TARGET_TEMPERATURE_2": {
+        "NAME": "Solltemperatur 2 [°C]",
+        "DESCRIPTION": "Zone 2, ganze °C schreiben"
+      },
+      "CORE_TEMPERATURE": {
+        "NAME": "Kerntemperatur [°C]",
+        "DESCRIPTION": "Speisenthermometer"
+      },
+      "DOOR_OPEN": {
+        "NAME": "Tür offen",
+        "DESCRIPTION": ""
+      },
+      "SIGNAL_INFO": {
+        "NAME": "Infosignal",
+        "DESCRIPTION": "Das Gerät zeigt einen Hinweis (z. B. Salz oder Klarspüler)"
+      },
+      "SIGNAL_FAILURE": {
+        "NAME": "Störungssignal",
+        "DESCRIPTION": ""
+      },
+      "REMOTE_CONTROL": {
+        "NAME": "Fernsteuerung aktiviert",
+        "DESCRIPTION": ""
+      },
+      "MOBILE_START": {
+        "NAME": "MobileStart aktiviert",
+        "DESCRIPTION": ""
+      },
+      "SMART_GRID": {
+        "NAME": "SmartStart aktiviert",
+        "DESCRIPTION": ""
+      },
+      "LIGHT": {
+        "NAME": "Licht",
+        "DESCRIPTION": "Wahr / falsch schreiben schaltet das Licht"
+      },
+      "SUPERFREEZING": {
+        "NAME": "SuperFrost",
+        "DESCRIPTION": "Wahr / falsch schreiben startet oder stoppt"
+      },
+      "SUPERCOOLING": {
+        "NAME": "SuperCool",
+        "DESCRIPTION": "Wahr / falsch schreiben startet oder stoppt"
+      },
+      "VENTILATION_STEP": {
+        "NAME": "Lüfterstufe",
+        "DESCRIPTION": "Dunstabzug: 0 bis 4"
+      },
+      "SPINNING_SPEED": {
+        "NAME": "Schleuderdrehzahl [U/min]",
+        "DESCRIPTION": ""
+      },
+      "DRYING_STEP": {
+        "NAME": "Trockenstufe",
+        "DESCRIPTION": ""
+      },
+      "ENERGY_CONSUMPTION": {
+        "NAME": "Energie des Programms [kWh]",
+        "DESCRIPTION": ""
+      },
+      "WATER_CONSUMPTION": {
+        "NAME": "Wasser des Programms [l]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": "Saugroboter"
+      }
+    }
+  }
+}

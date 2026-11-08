@@ -61,6 +61,7 @@ namespace Automatica.Core.Shading.Definition
             }
             ValidateSignal(facade.Brightness, "brightness", problems, SignalKind.Brightness);
             ValidateAngles(facade.AcceptanceAngle, facade.MinElevation, facade.MaxElevation, problems);
+            ValidateInclination(facade.Inclination, problems);
             return problems;
         }
 
@@ -72,6 +73,7 @@ namespace Automatica.Core.Shading.Definition
                 problems.Add(new ShadingProblem("azimuth", "OUT_OF_RANGE", "0..359.9"));
             }
             ValidateAngles(blind.AcceptanceAngle, blind.MinElevation, blind.MaxElevation, problems);
+            ValidateInclination(blind.Inclination, problems);
 
             if (blind.ShadePosition is < 0 or > 100)
             {
@@ -109,6 +111,14 @@ namespace Automatica.Core.Shading.Definition
             }
 
             return problems;
+        }
+
+        private static void ValidateInclination(double? inclination, List<ShadingProblem> problems)
+        {
+            if (inclination is < 0 or > 90)
+            {
+                problems.Add(new ShadingProblem("inclination", "OUT_OF_RANGE", "0..90"));
+            }
         }
 
         private static void ValidateAngles(double? acceptance, double? minElevation, double? maxElevation, List<ShadingProblem> problems)

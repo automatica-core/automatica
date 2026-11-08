@@ -1,0 +1,28 @@
+{
+  "POWERWALL": {
+    "NAME": "Tesla Powerwall",
+    "DESCRIPTION": "Tesla Powerwall über die lokale API des Backup Gateway 2 (LAN)",
+    "HOST": { "NAME": "Gateway-Adresse", "DESCRIPTION": "IP-Adresse oder Hostname des Backup Gateway, z. B. 192.168.1.50 (es wird https verwendet)" },
+    "PASSWORD": { "NAME": "Kundenpasswort", "DESCRIPTION": "Passwort des Kunden-Logins am Gateway (standardmäßig die letzten 5 Zeichen der Gateway-Seriennummer)" },
+    "EMAIL": { "NAME": "E-Mail", "DESCRIPTION": "Optional. Wird beim Login mitgeschickt, das Gateway prüft sie nicht" },
+    "POLL": { "NAME": "Abfrageintervall [s]", "DESCRIPTION": "Wie oft Zähler, Ladezustand, Netzstatus und Betriebseinstellungen gelesen werden" },
+    "ALLOW_WRITES": { "NAME": "Modus und Reserve schreiben erlauben", "DESCRIPTION": "Standardmäßig aus. Aktuelle Gateway-Firmware lehnt Änderungen für den Kunden-Login ab (403), der Treiber protokolliert dann einen Fehler und behält die Werte des Gateways" },
+    "FINGERPRINT": { "NAME": "Zertifikat-Fingerabdruck (SHA-256)", "DESCRIPTION": "Das Gateway verwendet ein selbstsigniertes Zertifikat. Leer = das erste Zertifikat wird vertraut und hier gespeichert; danach wird nur dieses akzeptiert. Leeren, wenn das Gateway ein neues Zertifikat hat" },
+    "CONNECTED": { "NAME": "Verbunden", "DESCRIPTION": "Die letzte Abfrage hat das Gateway erreicht" },
+    "GRID_POWER": { "NAME": "Netzleistung [kW]", "DESCRIPTION": "+ Bezug, - Einspeisung" },
+    "SOLAR_POWER": { "NAME": "PV-Leistung [kW]", "DESCRIPTION": "PV-Erzeugung" },
+    "BATTERY_POWER": { "NAME": "Batterieleistung [kW]", "DESCRIPTION": "+ Laden, - Entladen" },
+    "LOAD_POWER": { "NAME": "Hausverbrauch [kW]", "DESCRIPTION": "Leistung der Verbraucher im Haus" },
+    "SOC": { "NAME": "Ladezustand [%]", "DESCRIPTION": "Wie in der Tesla-App (die eigene 5-%-Reserve des Gateways zählt nicht)" },
+    "GRID_STATUS": { "NAME": "Netzstatus", "DESCRIPTION": "SystemGridConnected, SystemIslandedActive, SystemTransitionToGrid, ..." },
+    "GRID_CONNECTED": { "NAME": "Netz verbunden", "DESCRIPTION": "false bei Netzausfall (Notstrombetrieb)" },
+    "OPERATION_MODE": { "NAME": "Betriebsmodus", "DESCRIPTION": "self_consumption (Eigenverbrauch), autonomous (zeitbasierte Steuerung) oder backup. Schreibbar, wenn in den Treibereinstellungen erlaubt" },
+    "BACKUP_RESERVE": { "NAME": "Notstromreserve [%]", "DESCRIPTION": "Reserve für Netzausfälle, Skala der App. Schreibbar, wenn in den Treibereinstellungen erlaubt" },
+    "GRID_IMPORT_ENERGY": { "NAME": "Netzbezug [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" },
+    "GRID_EXPORT_ENERGY": { "NAME": "Netzeinspeisung [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" },
+    "SOLAR_ENERGY": { "NAME": "PV-Energie [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" },
+    "BATTERY_CHARGE_ENERGY": { "NAME": "Batterie geladen [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" },
+    "BATTERY_DISCHARGE_ENERGY": { "NAME": "Batterie entladen [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" },
+    "LOAD_ENERGY": { "NAME": "Hausverbrauch [kWh]", "DESCRIPTION": "Gesamtzähler des Gateways" }
+  }
+}

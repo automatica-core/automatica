@@ -1,0 +1,186 @@
+{
+  "MIELE": {
+    "NAME": "Miele",
+    "DESCRIPTION": "Miele@home appliances via the official Miele 3rd party API",
+    "API_URL": {
+      "NAME": "API URL",
+      "DESCRIPTION": "https://api.mcs3.miele.com"
+    },
+    "TOKEN_URL": {
+      "NAME": "Token URL",
+      "DESCRIPTION": "OAuth token endpoint. Default: the new Miele login (EU). Accounts from countries not supported there (e.g. CH, UK, US) use https://api.mcs3.miele.com/thirdparty/token while Miele keeps it running"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client ID",
+      "DESCRIPTION": "Client ID from the Miele developer portal (developer.miele.com)"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client secret",
+      "DESCRIPTION": "Client secret from the Miele developer portal"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh token",
+      "DESCRIPTION": "OAuth refresh token of your Miele account (authorization code login, see README). Miele replaces it on every refresh, the driver keeps the newest one"
+    },
+    "LANGUAGE": {
+      "NAME": "Language",
+      "DESCRIPTION": "Language of program and phase names (e.g. en, de)"
+    },
+    "POLL": {
+      "NAME": "Full read interval [s]",
+      "DESCRIPTION": "Changes arrive live through the event stream, this is only a fallback"
+    },
+    "SCAN": {
+      "NAME": "Search appliances",
+      "DESCRIPTION": "Lists the appliances shared with the application"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token state",
+      "DESCRIPTION": ""
+    },
+    "LOGIN_STATUS": {
+      "NAME": "Login status",
+      "DESCRIPTION": "OK or why the login failed"
+    },
+    "STREAM_CONNECTED": {
+      "NAME": "Event stream connected",
+      "DESCRIPTION": "True while live updates arrive"
+    },
+    "APPLIANCE": {
+      "NAME": "Appliance",
+      "DESCRIPTION": "A Miele appliance",
+      "DEVICE_ID": {
+        "NAME": "Device ID",
+        "DESCRIPTION": "Fabrication number, filled by the scan"
+      },
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": "The appliance is online"
+      },
+      "STATUS_CODE": {
+        "NAME": "Status code",
+        "DESCRIPTION": "1 off, 2 on, 3 programmed, 4 waiting to start, 5 running, 6 pause, 7 end programmed, 8 failure, ..., 255 not connected"
+      },
+      "STATUS": {
+        "NAME": "Status",
+        "DESCRIPTION": "Off, On, Programmed, WaitingToStart, Running, Pause, EndProgrammed, Failure, ..."
+      },
+      "POWER": {
+        "NAME": "Power",
+        "DESCRIPTION": "Write true to switch on and false to switch off (if the appliance allows it right now)"
+      },
+      "RUNNING": {
+        "NAME": "Running",
+        "DESCRIPTION": "Write true to start and false to stop the program (needs MobileStart or remote control on the appliance)"
+      },
+      "PAUSED": {
+        "NAME": "Paused",
+        "DESCRIPTION": "Write true to pause and false to continue"
+      },
+      "PROGRAM": {
+        "NAME": "Program",
+        "DESCRIPTION": "Name of the program"
+      },
+      "PROGRAM_ID": {
+        "NAME": "Program ID",
+        "DESCRIPTION": "Write a program id to start that program"
+      },
+      "PROGRAM_PHASE": {
+        "NAME": "Program phase",
+        "DESCRIPTION": ""
+      },
+      "REMAINING_TIME": {
+        "NAME": "Remaining time [min]",
+        "DESCRIPTION": ""
+      },
+      "ELAPSED_TIME": {
+        "NAME": "Elapsed time [min]",
+        "DESCRIPTION": ""
+      },
+      "START_TIME": {
+        "NAME": "Start in [min]",
+        "DESCRIPTION": "Delayed start; write minutes to set it"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperature [°C]",
+        "DESCRIPTION": "Zone 1"
+      },
+      "TEMPERATURE_2": {
+        "NAME": "Temperature 2 [°C]",
+        "DESCRIPTION": "Zone 2 (e.g. freezer)"
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Target temperature [°C]",
+        "DESCRIPTION": "Zone 1, write whole °C"
+      },
+      "TARGET_TEMPERATURE_2": {
+        "NAME": "Target temperature 2 [°C]",
+        "DESCRIPTION": "Zone 2, write whole °C"
+      },
+      "CORE_TEMPERATURE": {
+        "NAME": "Core temperature [°C]",
+        "DESCRIPTION": "Food probe"
+      },
+      "DOOR_OPEN": {
+        "NAME": "Door open",
+        "DESCRIPTION": ""
+      },
+      "SIGNAL_INFO": {
+        "NAME": "Info signal",
+        "DESCRIPTION": "The appliance shows a notification (e.g. salt or rinse aid)"
+      },
+      "SIGNAL_FAILURE": {
+        "NAME": "Failure signal",
+        "DESCRIPTION": ""
+      },
+      "REMOTE_CONTROL": {
+        "NAME": "Remote control enabled",
+        "DESCRIPTION": ""
+      },
+      "MOBILE_START": {
+        "NAME": "MobileStart enabled",
+        "DESCRIPTION": ""
+      },
+      "SMART_GRID": {
+        "NAME": "SmartStart enabled",
+        "DESCRIPTION": ""
+      },
+      "LIGHT": {
+        "NAME": "Light",
+        "DESCRIPTION": "Write true / false to switch the light"
+      },
+      "SUPERFREEZING": {
+        "NAME": "SuperFrost",
+        "DESCRIPTION": "Write true / false to start or stop"
+      },
+      "SUPERCOOLING": {
+        "NAME": "SuperCool",
+        "DESCRIPTION": "Write true / false to start or stop"
+      },
+      "VENTILATION_STEP": {
+        "NAME": "Fan level",
+        "DESCRIPTION": "Hood: 0 to 4"
+      },
+      "SPINNING_SPEED": {
+        "NAME": "Spin speed [rpm]",
+        "DESCRIPTION": ""
+      },
+      "DRYING_STEP": {
+        "NAME": "Drying level",
+        "DESCRIPTION": ""
+      },
+      "ENERGY_CONSUMPTION": {
+        "NAME": "Energy of the program [kWh]",
+        "DESCRIPTION": ""
+      },
+      "WATER_CONSUMPTION": {
+        "NAME": "Water of the program [l]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": "Robot vacuum"
+      }
+    }
+  }
+}

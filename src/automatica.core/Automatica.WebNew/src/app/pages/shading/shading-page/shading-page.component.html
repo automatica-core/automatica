@@ -235,7 +235,7 @@
             </span>
             <span class="nm">
               <b>{{ f.name }}</b>
-              <span>{{ directionLabel(f.azimuth) }} · {{ 'UI.SHADING.FACADES.ACCEPTANCE' | translateAsync: { angle: f.definition.acceptanceAngle } }}</span>
+              <span>{{ directionLabel(f.azimuth) }} · {{ 'UI.SHADING.FACADES.ACCEPTANCE' | translateAsync: { angle: f.definition.acceptanceAngle } }}@if (isRoof(f.definition.inclination)) { · {{ 'UI.SHADING.FACADES.ROOF' | translateAsync: { angle: f.definition.inclination } }}}</span>
             </span>
             <span class="act" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
               <span class="hint">{{ 'UI.SHADING.FACADES.BLIND_COUNT' | translateAsync: { count: blindCount(f) } }}</span>
@@ -549,6 +549,13 @@
               <span class="lbl">{{ 'UI.SHADING.FIELD.MAX_ELEVATION' | translateAsync }}</span>
               <dx-number-box [(value)]="facadeEdit.definition.maxElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
             </div>
+            <div class="fld">
+              <span class="lbl">{{ 'UI.SHADING.FIELD.INCLINATION' | translateAsync }}</span>
+              <dx-number-box [(value)]="facadeEdit.definition.inclination" [min]="0" [max]="90" [step]="5" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div class="fld wide">
+              <span class="hint">{{ 'UI.SHADING.FIELD.INCLINATION_HINT' | translateAsync }}</span>
+            </div>
             <div class="fld wide">
               <span class="hint">{{ 'UI.SHADING.FIELD.GEOMETRY_HINT' | translateAsync }}</span>
             </div>
@@ -651,6 +658,13 @@
                 (onValueChanged)="setOverride('maxElevation', $event.value)"></dx-check-box>
               @if (hasOverride('maxElevation')) {
                 <dx-number-box [(value)]="def.maxElevation" [min]="0" [max]="90" [showSpinButtons]="true"></dx-number-box>
+              }
+            </div>
+            <div class="fld">
+              <dx-check-box [value]="hasOverride('inclination')" [text]="'UI.SHADING.FIELD.INCLINATION' | translateAsync"
+                (onValueChanged)="setOverride('inclination', $event.value)"></dx-check-box>
+              @if (hasOverride('inclination')) {
+                <dx-number-box [(value)]="def.inclination" [min]="0" [max]="90" [step]="5" [showSpinButtons]="true"></dx-number-box>
               }
             </div>
             <div class="fld wide">

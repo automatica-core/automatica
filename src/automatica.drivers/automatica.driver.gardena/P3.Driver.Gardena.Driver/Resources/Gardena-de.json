@@ -1,0 +1,182 @@
+{
+  "GARDENA": {
+    "NAME": "GARDENA smart system",
+    "DESCRIPTION": "GARDENA smart system über die offizielle GARDENA smart system API",
+    "APPLICATION_KEY": {
+      "NAME": "Application Key",
+      "DESCRIPTION": "Application Key von developer.husqvarnagroup.cloud (mit der GARDENA smart system API verbunden)"
+    },
+    "APPLICATION_SECRET": {
+      "NAME": "Application Secret",
+      "DESCRIPTION": "Application Secret der Anwendung"
+    },
+    "LOCATION_ID": {
+      "NAME": "Standort-ID",
+      "DESCRIPTION": "Optional. Leer = der erste Standort des Kontos"
+    },
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://api.smart.gardena.dev/v2"
+    },
+    "AUTH_URL": {
+      "NAME": "Token-URL",
+      "DESCRIPTION": "Husqvarna Authentication API"
+    },
+    "SCAN": {
+      "NAME": "Geräte suchen",
+      "DESCRIPTION": "Listet Ventile, Mähroboter, Steckdosen und Sensoren des Standorts"
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "OK oder der letzte Fehler (z. B. Anfragelimit erreicht)"
+    },
+    "SOCKET_CONNECTED": {
+      "NAME": "Live-Verbindung",
+      "DESCRIPTION": "Wahr, solange der Web-Socket verbunden ist"
+    },
+    "SERVICE_ID": {
+      "NAME": "Service-ID",
+      "DESCRIPTION": "Wird von der Suche ausgefüllt"
+    },
+    "DEFAULT_MINUTES": {
+      "NAME": "Standarddauer [min]",
+      "DESCRIPTION": "Wird beim Start mit wahr verwendet"
+    },
+    "VALVE": {
+      "NAME": "Ventil",
+      "DESCRIPTION": "Ein Ventil (Water Control, Irrigation Control)",
+      "WATERING": {
+        "NAME": "Bewässerung",
+        "DESCRIPTION": "Wahr schreiben bewässert für die Standarddauer, falsch stoppt bis zum nächsten geplanten Vorgang"
+      },
+      "WATER_MINUTES": {
+        "NAME": "Bewässern für [min]",
+        "DESCRIPTION": "Minuten schreiben bewässert so lange, 0 stoppt"
+      },
+      "ACTIVITY": {
+        "NAME": "Aktivität",
+        "DESCRIPTION": "CLOSED, MANUAL_WATERING oder SCHEDULED_WATERING"
+      },
+      "PAUSE": {
+        "NAME": "Zeitplan pausieren",
+        "DESCRIPTION": "Wahr schreiben setzt den Zeitplan aus, falsch setzt ihn fort"
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "OK, WARNING, ERROR oder UNAVAILABLE"
+      },
+      "LAST_ERROR": {
+        "NAME": "Letzter Fehler",
+        "DESCRIPTION": "Fehlercode des Geräts"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Batterie [%]",
+        "DESCRIPTION": ""
+      },
+      "RF_LINK_STATE": {
+        "NAME": "Funkverbindung",
+        "DESCRIPTION": "ONLINE oder OFFLINE"
+      }
+    },
+    "MOWER": {
+      "NAME": "Mähroboter",
+      "DESCRIPTION": "Ein GARDENA smart SILENO Mähroboter",
+      "MOWING": {
+        "NAME": "Mäht",
+        "DESCRIPTION": "Wahr schreiben mäht für die Standarddauer, falsch parkt bis zum nächsten geplanten Vorgang"
+      },
+      "MOW_MINUTES": {
+        "NAME": "Mähen für [min]",
+        "DESCRIPTION": "Minuten schreiben mäht so lange, 0 parkt"
+      },
+      "PARK": {
+        "NAME": "Parken bis auf Weiteres",
+        "DESCRIPTION": "Wahr schreiben parkt und setzt den Zeitplan aus"
+      },
+      "RESUME_SCHEDULE": {
+        "NAME": "Zeitplan fortsetzen",
+        "DESCRIPTION": "Wahr schreiben kehrt zum Automatikbetrieb zurück"
+      },
+      "ACTIVITY": {
+        "NAME": "Aktivität",
+        "DESCRIPTION": "OK_CUTTING, OK_SEARCHING, OK_CHARGING, PARKED_TIMER, PAUSED, ..."
+      },
+      "OPERATING_HOURS": {
+        "NAME": "Betriebsstunden [h]",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "OK, WARNING, ERROR oder UNAVAILABLE"
+      },
+      "LAST_ERROR": {
+        "NAME": "Letzter Fehler",
+        "DESCRIPTION": "Fehlercode des Geräts"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Batterie [%]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_STATE": {
+        "NAME": "Batteriezustand",
+        "DESCRIPTION": "OK, LOW, REPLACE_NOW, CHARGING, ..."
+      },
+      "RF_LINK_STATE": {
+        "NAME": "Funkverbindung",
+        "DESCRIPTION": "ONLINE oder OFFLINE"
+      }
+    },
+    "POWER_SOCKET": {
+      "NAME": "Steckdose",
+      "DESCRIPTION": "Eine GARDENA smart Power Steckdose",
+      "ON": {
+        "NAME": "Ein",
+        "DESCRIPTION": "Wahr schreiben schaltet ein (bis ausgeschaltet), falsch schaltet bis zum nächsten geplanten Vorgang aus"
+      },
+      "ON_MINUTES": {
+        "NAME": "Ein für [min]",
+        "DESCRIPTION": "Minuten schreiben schaltet so lange ein, 0 aus"
+      },
+      "ACTIVITY": {
+        "NAME": "Aktivität",
+        "DESCRIPTION": "OFF, FOREVER_ON, TIME_LIMITED_ON oder SCHEDULED_ON"
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "OK, WARNING, ERROR oder UNAVAILABLE"
+      },
+      "RF_LINK_STATE": {
+        "NAME": "Funkverbindung",
+        "DESCRIPTION": "ONLINE oder OFFLINE"
+      }
+    },
+    "SENSOR": {
+      "NAME": "Sensor",
+      "DESCRIPTION": "Ein GARDENA smart Sensor",
+      "SOIL_HUMIDITY": {
+        "NAME": "Bodenfeuchte [%]",
+        "DESCRIPTION": ""
+      },
+      "SOIL_TEMPERATURE": {
+        "NAME": "Bodentemperatur [°C]",
+        "DESCRIPTION": ""
+      },
+      "AMBIENT_TEMPERATURE": {
+        "NAME": "Lufttemperatur [°C]",
+        "DESCRIPTION": ""
+      },
+      "LIGHT_INTENSITY": {
+        "NAME": "Licht [lx]",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Batterie [%]",
+        "DESCRIPTION": ""
+      },
+      "RF_LINK_STATE": {
+        "NAME": "Funkverbindung",
+        "DESCRIPTION": "ONLINE oder OFFLINE"
+      }
+    }
+  }
+}

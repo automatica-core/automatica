@@ -1,0 +1,126 @@
+{
+  "HOMECONNECT": {
+    "NAME": "Home Connect",
+    "DESCRIPTION": "Home Connect appliances (Bosch, Siemens, Neff, Gaggenau, ...) via the official Home Connect API",
+    "API_URL": {
+      "NAME": "API URL",
+      "DESCRIPTION": "https://api.home-connect.com, or https://simulator.home-connect.com for the appliance simulator of the developer portal"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client ID",
+      "DESCRIPTION": "Client ID of your application on developer.home-connect.com (authorization type Device Flow)"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client secret",
+      "DESCRIPTION": "Client secret of your application"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh token",
+      "DESCRIPTION": "Optional. Empty = the driver starts a device login and shows the link and code under Login status"
+    },
+    "POLL": {
+      "NAME": "Full read interval [s]",
+      "DESCRIPTION": "Changes arrive live through the event stream. Home Connect allows 1000 requests per day, each full read costs 1 + 4 per appliance"
+    },
+    "SCAN": {
+      "NAME": "Search appliances",
+      "DESCRIPTION": "Lists the appliances of the account"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token state",
+      "DESCRIPTION": ""
+    },
+    "LOGIN_STATUS": {
+      "NAME": "Login status",
+      "DESCRIPTION": "OK, or the link and code to confirm the login with your Home Connect account"
+    },
+    "STREAM_CONNECTED": {
+      "NAME": "Event stream connected",
+      "DESCRIPTION": "True while live updates arrive"
+    },
+    "APPLIANCE": {
+      "NAME": "Appliance",
+      "DESCRIPTION": "A Home Connect appliance",
+      "HA_ID": {
+        "NAME": "Appliance ID (haId)",
+        "DESCRIPTION": "Filled by the scan"
+      },
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": "The appliance is online"
+      },
+      "OPERATION_STATE": {
+        "NAME": "Operation state",
+        "DESCRIPTION": "Inactive, Ready, DelayedStart, Run, Pause, ActionRequired, Finished, Error, Aborting"
+      },
+      "DOOR_STATE": {
+        "NAME": "Door",
+        "DESCRIPTION": "Open, Closed or Locked"
+      },
+      "REMOTE_CONTROL_ACTIVE": {
+        "NAME": "Remote control active",
+        "DESCRIPTION": ""
+      },
+      "REMOTE_START_ALLOWED": {
+        "NAME": "Remote start allowed",
+        "DESCRIPTION": "Remote start has to be enabled on the appliance before programs can be started"
+      },
+      "LOCAL_CONTROL_ACTIVE": {
+        "NAME": "Operated locally",
+        "DESCRIPTION": "Someone is using the appliance"
+      },
+      "POWER": {
+        "NAME": "Power",
+        "DESCRIPTION": "Write true to switch on, false to switch off (or standby)"
+      },
+      "ACTIVE_PROGRAM": {
+        "NAME": "Active program",
+        "DESCRIPTION": "Program key, e.g. Dishcare.Dishwasher.Program.Eco50. Write a key to start it, an empty text to stop"
+      },
+      "SELECTED_PROGRAM": {
+        "NAME": "Selected program",
+        "DESCRIPTION": "Write a program key to select it"
+      },
+      "RUNNING": {
+        "NAME": "Program running",
+        "DESCRIPTION": "Write true to start the selected program with its options, false to stop"
+      },
+      "PAUSED": {
+        "NAME": "Paused",
+        "DESCRIPTION": "Write true to pause and false to resume (if the appliance supports it)"
+      },
+      "REMAINING_TIME": {
+        "NAME": "Remaining time [s]",
+        "DESCRIPTION": ""
+      },
+      "ELAPSED_TIME": {
+        "NAME": "Elapsed time [s]",
+        "DESCRIPTION": ""
+      },
+      "PROGRESS": {
+        "NAME": "Progress [%]",
+        "DESCRIPTION": ""
+      },
+      "LAST_EVENT": {
+        "NAME": "Last event",
+        "DESCRIPTION": "Key of the last event, e.g. BSH.Common.Event.ProgramFinished"
+      },
+      "CUSTOM_NUMBER": {
+        "NAME": "Value (number)",
+        "DESCRIPTION": "Any numeric status, setting or option by its Home Connect key"
+      },
+      "CUSTOM_SWITCH": {
+        "NAME": "Value (switch)",
+        "DESCRIPTION": "Any boolean status, setting or option, or a command (write true), by its Home Connect key"
+      },
+      "CUSTOM_TEXT": {
+        "NAME": "Value (text)",
+        "DESCRIPTION": "Any status, setting or option by its Home Connect key, enum values as full key"
+      },
+      "CUSTOM_KEY": {
+        "NAME": "Home Connect key",
+        "DESCRIPTION": "e.g. Refrigeration.FridgeFreezer.Setting.SetpointTemperatureRefrigerator or Cooking.Oven.Status.CurrentCavityTemperature. .Setting. and .Option. keys can be written"
+      }
+    }
+  }
+}
