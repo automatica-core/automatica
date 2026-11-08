@@ -1,5 +1,47 @@
 ﻿{
   "MATH": {
+    "WIND_GAUGE": {
+      "NAME": "Wind gauge",
+      "DESCRIPTION": "Turns the frequency of a wind sensor into the wind speed: average, 3 second gust, maximum and wind alarm",
+      "INPUT": {
+        "FREQUENCY": {
+          "NAME": "Frequency (F)",
+          "DESCRIPTION": "Frequency of the wind sensor in Hz"
+        }
+      },
+      "OUTPUT": {
+        "AVERAGE": {
+          "NAME": "Average wind speed (Avg)",
+          "DESCRIPTION": "Average over the averaging time"
+        },
+        "GUST": {
+          "NAME": "Gust (G)",
+          "DESCRIPTION": "3 second average"
+        },
+        "MAXIMUM": {
+          "NAME": "Maximum (AvgMax)",
+          "DESCRIPTION": "Highest gust in the averaging time"
+        },
+        "ALARM": {
+          "NAME": "Wind alarm (Wa)",
+          "DESCRIPTION": "1 when a gust reaches the alarm speed, 0 when the gusts and the average are below 90 % of it again"
+        }
+      },
+      "PARAM": {
+        "AVERAGING_TIME": {
+          "NAME": "Averaging time (Avgt, min)",
+          "DESCRIPTION": "Time window of the average and the maximum"
+        },
+        "FACTOR": {
+          "NAME": "Factor (F)",
+          "DESCRIPTION": "Speed per Hz from the data sheet of the sensor (e.g. km/h per Hz)"
+        },
+        "ALARM_SPEED": {
+          "NAME": "Wind alarm speed (W)",
+          "DESCRIPTION": "Speed for the wind alarm, in the unit of the factor"
+        }
+      }
+    },
     "NAME": "Math",
     "ADD": {
       "NAME": "Sum",

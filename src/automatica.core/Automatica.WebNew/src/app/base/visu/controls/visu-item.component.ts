@@ -38,6 +38,9 @@ const TEXT_STATUS_TILES: { [key: string]: Type<BaseMobileComponent> } = {
   "status-monitor": StatusMonitorComponent,
   "tracker": TrackerComponent
 };
+import { GarageComponent } from "./garage/garage.component";
+import { MediaControllerComponent } from "./media-controller/media-controller.component";
+import { IrrigationComponent } from "./irrigation/irrigation.component";
 
 @Component({
     selector: "visu-component",
@@ -169,6 +172,19 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "lighting-controller": {
         this.component = LightingControllerComponent;
+        break;
+      }
+      // tiles of logic blocks: they need the values of their logic
+      case "garage": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? GarageComponent : LabelComponent;
+        break;
+      }
+      case "media-controller": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? MediaControllerComponent : LabelComponent;
+        break;
+      }
+      case "irrigation": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? IrrigationComponent : LabelComponent;
         break;
       }
       

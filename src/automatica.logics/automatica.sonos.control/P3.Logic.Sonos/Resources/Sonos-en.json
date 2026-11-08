@@ -1,4 +1,222 @@
 ﻿{
+  "SONOS_AUDIO_CENTRAL": {
+    "NAME": "Audio Central",
+    "DESCRIPTION": "Controls several Sonos Control blocks together: on/off, volume (keeps the ratio between the players), favorites, doorbell and alarm sounds",
+    "INPUT": {
+      "TOGGLE": {
+        "NAME": "Toggle zone (TgZ)",
+        "DESCRIPTION": "Pulse: switches all players off when one plays, otherwise on"
+      },
+      "ON": {
+        "NAME": "Zone on (Zon)",
+        "DESCRIPTION": "Pulse: all players play"
+      },
+      "OFF": {
+        "NAME": "Zone off (Zoff)",
+        "DESCRIPTION": "Pulse: all players pause"
+      },
+      "VOLUME_UP": {
+        "NAME": "Volume + (V+)",
+        "DESCRIPTION": "Pulse: all players louder"
+      },
+      "VOLUME_DOWN": {
+        "NAME": "Volume - (V-)",
+        "DESCRIPTION": "Pulse: all players quieter"
+      },
+      "VOLUME": {
+        "NAME": "Volume (V)",
+        "DESCRIPTION": "Sets the volume in %; the loudest players get this value, the others keep their ratio"
+      },
+      "NEXT_FAVORITE": {
+        "NAME": "Next favorite (S+)",
+        "DESCRIPTION": "Pulse: plays the next radio station of the favorites"
+      },
+      "PLAY": {
+        "NAME": "Play",
+        "DESCRIPTION": "Pulse"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Pulse"
+      },
+      "NEXT": {
+        "NAME": "Next track",
+        "DESCRIPTION": "Pulse"
+      },
+      "PREVIOUS": {
+        "NAME": "Previous track",
+        "DESCRIPTION": "Pulse"
+      },
+      "BELL": {
+        "NAME": "Bell",
+        "DESCRIPTION": "Pulse: plays the doorbell sound on all players"
+      },
+      "ALARM": {
+        "NAME": "Alarm",
+        "DESCRIPTION": "Pulse: plays the alarm sound on all players"
+      },
+      "LOCK": {
+        "NAME": "Off / lock (Off)",
+        "DESCRIPTION": "1: pauses all players and locks the central, 0: unlocks it"
+      },
+      "DISABLE_PERIPHERY": {
+        "NAME": "Disable periphery (DisPc)",
+        "DESCRIPTION": "1: ignores the command inputs from links (child lock); the visualization still works"
+      },
+      "PLAYING1": {
+        "NAME": "Playing player 1",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 1"
+      },
+      "PLAYING2": {
+        "NAME": "Playing player 2",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 2"
+      },
+      "PLAYING3": {
+        "NAME": "Playing player 3",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 3"
+      },
+      "PLAYING4": {
+        "NAME": "Playing player 4",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 4"
+      },
+      "PLAYING5": {
+        "NAME": "Playing player 5",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 5"
+      },
+      "PLAYING6": {
+        "NAME": "Playing player 6",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 6"
+      },
+      "PLAYING7": {
+        "NAME": "Playing player 7",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 7"
+      },
+      "PLAYING8": {
+        "NAME": "Playing player 8",
+        "DESCRIPTION": "Link the Play output of Sonos Control block 8"
+      },
+      "PLAYER_VOLUME1": {
+        "NAME": "Volume player 1",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 1"
+      },
+      "PLAYER_VOLUME2": {
+        "NAME": "Volume player 2",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 2"
+      },
+      "PLAYER_VOLUME3": {
+        "NAME": "Volume player 3",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 3"
+      },
+      "PLAYER_VOLUME4": {
+        "NAME": "Volume player 4",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 4"
+      },
+      "PLAYER_VOLUME5": {
+        "NAME": "Volume player 5",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 5"
+      },
+      "PLAYER_VOLUME6": {
+        "NAME": "Volume player 6",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 6"
+      },
+      "PLAYER_VOLUME7": {
+        "NAME": "Volume player 7",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 7"
+      },
+      "PLAYER_VOLUME8": {
+        "NAME": "Volume player 8",
+        "DESCRIPTION": "Link the Volume output of Sonos Control block 8"
+      }
+    },
+    "OUTPUT": {
+      "PLAY": {
+        "NAME": "Play / pause",
+        "DESCRIPTION": "1 play, 0 pause (link to the Play/Pause input of the players)"
+      },
+      "VOLUME": {
+        "NAME": "Volume",
+        "DESCRIPTION": "The same volume for all players"
+      },
+      "VOLUME_UP": {
+        "NAME": "Volume +",
+        "DESCRIPTION": "Sends 1 for every volume up command"
+      },
+      "VOLUME_DOWN": {
+        "NAME": "Volume -",
+        "DESCRIPTION": "Sends 1 for every volume down command"
+      },
+      "NEXT": {
+        "NAME": "Next track",
+        "DESCRIPTION": "Sends 1 for every command"
+      },
+      "PREVIOUS": {
+        "NAME": "Previous track",
+        "DESCRIPTION": "Sends 1 for every command"
+      },
+      "RADIO_STATION": {
+        "NAME": "Radio station",
+        "DESCRIPTION": "Station of the selected favorite (link to the radio station input of the Sonos Control blocks or of the Sonos devices)"
+      },
+      "SOUND_URL": {
+        "NAME": "Sound URL",
+        "DESCRIPTION": "URL of the bell or alarm sound (link to the play sound URL input of the players)"
+      },
+      "SOUND_TRIGGER": {
+        "NAME": "Play sound",
+        "DESCRIPTION": "Sends 1 after the sound URL (link to the play sound trigger of the players)"
+      },
+      "PLAYER_VOLUME1": {
+        "NAME": "Volume player 1",
+        "DESCRIPTION": "Volume for player 1 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME2": {
+        "NAME": "Volume player 2",
+        "DESCRIPTION": "Volume for player 2 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME3": {
+        "NAME": "Volume player 3",
+        "DESCRIPTION": "Volume for player 3 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME4": {
+        "NAME": "Volume player 4",
+        "DESCRIPTION": "Volume for player 4 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME5": {
+        "NAME": "Volume player 5",
+        "DESCRIPTION": "Volume for player 5 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME6": {
+        "NAME": "Volume player 6",
+        "DESCRIPTION": "Volume for player 6 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME7": {
+        "NAME": "Volume player 7",
+        "DESCRIPTION": "Volume for player 7 that keeps the ratio between the players"
+      },
+      "PLAYER_VOLUME8": {
+        "NAME": "Volume player 8",
+        "DESCRIPTION": "Volume for player 8 that keeps the ratio between the players"
+      },
+      "ACTIVE_COUNT": {
+        "NAME": "Active players (Na)",
+        "DESCRIPTION": "Number of playing players"
+      }
+    },
+    "PARAM": {
+      "FAVORITES": {
+        "NAME": "Favorites",
+        "DESCRIPTION": "Radio stations for S+, separated by ; (TuneIn ids like s8007)"
+      },
+      "BELL_URL": {
+        "NAME": "Bell sound URL",
+        "DESCRIPTION": "MP3 that the players play for the bell"
+      },
+      "ALARM_URL": {
+        "NAME": "Alarm sound URL",
+        "DESCRIPTION": "MP3 that the players play for the alarm"
+      }
+    }
+  },
   "SONOS_CONTROL": {
     "NAME": "Sonos Control",
     "DESCRIPTION": "Controls a sonos wireless speaker",
@@ -33,6 +251,10 @@
     "NEXT": {
       "NAME": "Next",
       "DESCRIPTION": ""
+    },
+    "RADIO_STATIONS": {
+      "NAME": "Radio stations",
+      "DESCRIPTION": "Station list for the visu tile: Name=station;Name=station. A station is a TuneIn id (e.g. s8007, from the tunein.com address of the station) or a stream url (e.g. x-rincon-mp3radio://host/stream); selecting it in the visu plays it via the radio station output"
     },
     "RADIO_STATION": {
       "NAME": "Radio Station ID",

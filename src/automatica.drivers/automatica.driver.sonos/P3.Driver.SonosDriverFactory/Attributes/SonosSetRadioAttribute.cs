@@ -39,7 +39,8 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             try
             {
                 var strValue = value.ToString();
-                var mediaUrl = String.Format(SonosController.TuneInMediaUrl, strValue);
+                // a TuneIn id or a stream url (e.g. from the station list of Sonos Control)
+                var mediaUrl = SonosController.RadioStationUrl(strValue);
 
 
                 await Device.Controller.SetMediaUrl(mediaUrl);

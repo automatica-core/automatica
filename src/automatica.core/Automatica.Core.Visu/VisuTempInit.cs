@@ -150,6 +150,29 @@ namespace Automatica.Core.Visu
             factory.CreateVisuMobileTemplate(security, "VISU.OBJECT.SECURITY.NAME", "VISU.OBJECT.SECURITY.DESCRIPTION", "security",
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
             AddCommonProperty(security, factory);
+            AddLogicBlockControls(factory);
+        }
+
+        /// <summary>
+        /// Tiles of logic blocks of the operations plugin (garage / gate, media controller, irrigation). The logic sets the
+        /// tile as its default; the tile reads the values of that logic, the details popup holds the full control.
+        /// </summary>
+        private void AddLogicBlockControls(VisuMobileTemplateFactory factory)
+        {
+            var garage = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Garage);
+            factory.CreateVisuMobileTemplate(garage, "VISU.OBJECT.GARAGE.NAME", "VISU.OBJECT.GARAGE.DESCRIPTION", "garage",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(garage, factory);
+
+            var mediaController = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.MediaController);
+            factory.CreateVisuMobileTemplate(mediaController, "VISU.OBJECT.MEDIA_CONTROLLER.NAME", "VISU.OBJECT.MEDIA_CONTROLLER.DESCRIPTION", "media-controller",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(mediaController, factory);
+
+            var irrigation = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Irrigation);
+            factory.CreateVisuMobileTemplate(irrigation, "VISU.OBJECT.IRRIGATION.NAME", "VISU.OBJECT.IRRIGATION.DESCRIPTION", "irrigation",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(irrigation, factory);
         }
 
         /// <summary>

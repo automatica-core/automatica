@@ -7,7 +7,7 @@ namespace P3.Logic.Sonos.SonosControl;
 
 public class SonosControlLogicFactory : LogicFactory
 {
-    public override Version LogicVersion => new Version(1, 2, 0, 1);
+    public override Version LogicVersion => new Version(1, 2, 0, 2);
 
     public override bool InDevelopmentMode => true;
 
@@ -44,6 +44,7 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid VolumeOnPlay = new Guid("c1af8a31-094b-4411-9db3-1cca9ee73235");
     public static readonly Guid RadioStation = new Guid("01bf3fb1-cac8-43c4-95c9-c024fde1a2af");
     public static readonly Guid MaxVolume = new Guid("ac7e676e-d562-4f38-b66b-4581a44bd9ba");
+    public static readonly Guid RadioStations = new Guid("cf112d8b-7379-485f-b81f-0ccf118ddb82");
 
 
     public static readonly Guid PlayMediaUrl = new Guid("2e61ab0e-17f7-49dd-baf2-a5916e3d40fa");
@@ -86,6 +87,9 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.PLAY_SOUND_VOLUME.DESCRIPTION", LogicGuid, 6, RuleInterfaceParameterDataType.Integer, 50, true);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundEnabled, "SONOS_CONTROL.PLAY_SOUND_ENABLED.NAME",
             "SONOS_CONTROL.PLAY_SOUND_ENABLED.DESCRIPTION", LogicGuid, 7, RuleInterfaceParameterDataType.Bool, true, true);
+        // "Name=station;Name=station", shown as station buttons on the visu tile
+        factory.CreateParameterLogicInterfaceTemplate(RadioStations, "SONOS_CONTROL.RADIO_STATIONS.NAME",
+            "SONOS_CONTROL.RADIO_STATIONS.DESCRIPTION", LogicGuid, 8, RuleInterfaceParameterDataType.Text, "");
 
         factory.CreateLogicInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", "play_pause", LogicGuid, LogicInterfaceDirection.Input, 0, 0, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlayDefaultTrigger, "SONOS_CONTROL.PLAY_DEFAULT.NAME", "SONOS_CONTROL.PLAY_DEFAULT.DESCRIPTION", "play_default", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);

@@ -114,6 +114,18 @@
             "LIGHTING_CONTROLLER": {
                 "NAME": "Lighting controller",
                 "DESCRIPTION": "Moods and lighting circuits of a room (lighting controller logic)"
+            },
+            "GARAGE": {
+                "NAME": "Garage / gate",
+                "DESCRIPTION": "Garage door or gate with its position: open, stop, close (garage / gate logic)"
+            },
+            "MEDIA_CONTROLLER": {
+                "NAME": "Media controller",
+                "DESCRIPTION": "Universal remote: modes (TV, radio, ...), power, volume, channels and navigation (media controller logic)"
+            },
+            "IRRIGATION": {
+                "NAME": "Irrigation",
+                "DESCRIPTION": "Irrigation zones with time left, rain skip, schedule and history (irrigation logic)"
             }
         },
         "CATEGORY": {

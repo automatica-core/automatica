@@ -63,6 +63,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private string _currentMediaUrlValue;
     private long _playMediaVolumeValue = 50;
     private bool _playMediaEnabledValue = true;
+    private IReadOnlyList<RadioStation> _radioStations = Array.Empty<RadioStation>();
+    private string _currentStation;
 
     public SonosControlLogic(ILogicContext context) : base(context)
     {
@@ -169,6 +171,11 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         {
             _playMediaEnabledValue = Convert.ToBoolean(value);
         }
+
+        if (instance.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations)
+        {
+            _radioStations = RadioStation.ParseList(Convert.ToString(value));
+        }
         base.ParameterValueChanged(instance, source, value);
     }
 
@@ -185,6 +192,10 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         _playMediaVolumeValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == _playMediaVolume.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
+
+        // blocks created before the station list have no such parameter
+        _radioStations = RadioStation.ParseList(Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations)?.ValueString);
 
         return base.Start(instance, token);
     }
@@ -241,6 +252,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             {
                 _currentVolume = _volumeOnPlayValue;
                 _currentlyPlaying = true;
+                _currentStation = _radioStationValue;
 
                 ret.Add(new LogicOutputChanged(_radioStationOutputValue, _radioStationValue));
                 ret.Add(new LogicOutputChanged(_pauseOutputStatus, false));
@@ -308,7 +320,31 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _radioStationInput.This2RuleInterfaceTemplate)
         {
-            ret.Add(new LogicOutputChanged(_radioStationOutputValue, _radioStationValue));
+            // a trigger (bool, 1/0, empty) sends the configured station; a station id (e.g. from the audio central) or the
+            // name of a station of the list (e.g. from the visu) is sent and played
+            var station = StationOf(value);
+            if (station == null)
+            {
+                _currentStation = _radioStationValue;
+                ret.Add(new LogicOutputChanged(_radioStationOutputValue, _radioStationValue));
+            }
+            else
+            {
+                _currentStation = _radioStations.FirstOrDefault(a => string.Equals(a.Name, station, StringComparison.OrdinalIgnoreCase))?.Id ?? station;
+                _currentlyPlaying = true;
+                _lastPlayValue = true;
+
+                ret.Add(new LogicOutputChanged(_radioStationOutputValue, _currentStation));
+                ret.Add(new LogicOutputChanged(_pauseOutputStatus, false));
+                ret.Add(new LogicOutputChanged(_playOutputStatus, true));
+
+                // like play default: the player stops when its station changes, play again once it is loaded
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(100);
+                    await Context.Dispatcher.DispatchValue(new LogicOutputChanged(_playOutputStatus, true).Instance, true);
+                });
+            }
         }
 
         if (instance.This2RuleInterfaceTemplate == _playMediaUrlInput.This2RuleInterfaceTemplate)
@@ -346,6 +382,44 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         }
 
         return ret;
+    }
+
+    /// <summary>
+    /// The interface values plus the station list and the station played last, for the station buttons of the visu tile
+    /// </summary>
+    public override object GetDataForVisu()
+    {
+        var ret = new Dictionary<string, object>();
+        if (base.GetDataForVisu() is IDictionary<string, object> baseValues)
+        {
+            foreach (var pair in baseValues)
+            {
+                ret[pair.Key] = pair.Value;
+            }
+        }
+
+        ret["radioStations"] = _radioStations.Select(a => new Dictionary<string, object> { ["name"] = a.Name, ["id"] = a.Id }).ToList();
+        ret["radioStation"] = _currentStation;
+        return ret;
+    }
+
+    /// <summary>
+    /// The station of a value at the radio station input, null for a trigger value
+    /// </summary>
+    internal static string StationOf(object value)
+    {
+        if (value is not string text)
+        {
+            return null;
+        }
+
+        text = text.Trim();
+        if (text.Length == 0 || bool.TryParse(text, out _) || text == "0" || text == "1")
+        {
+            return null;
+        }
+
+        return text;
     }
 
     private void StartPlayMediaUrl()

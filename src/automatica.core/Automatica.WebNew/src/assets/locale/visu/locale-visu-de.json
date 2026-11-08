@@ -114,6 +114,18 @@
             "LIGHTING_CONTROLLER": {
                 "NAME": "Lichtsteuerung",
                 "DESCRIPTION": "Stimmungen und Lichtkreise eines Raums (Logik Lichtsteuerung)"
+            },
+            "GARAGE": {
+                "NAME": "Garage / Tor",
+                "DESCRIPTION": "Garagentor oder Tor mit Position: öffnen, stoppen, schließen (Logik Garage / Tor)"
+            },
+            "MEDIA_CONTROLLER": {
+                "NAME": "Media Controller",
+                "DESCRIPTION": "Universalfernbedienung: Modi (TV, Radio, ...), Ein/Aus, Lautstärke, Sender und Navigation (Logik Media Controller)"
+            },
+            "IRRIGATION": {
+                "NAME": "Bewässerung",
+                "DESCRIPTION": "Bewässerungszonen mit Restzeit, Regen-Aussetzen, Zeitplan und Verlauf (Logik Bewässerung)"
             }
         },
         "CATEGORY": {

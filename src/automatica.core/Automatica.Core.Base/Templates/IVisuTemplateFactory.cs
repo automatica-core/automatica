@@ -77,7 +77,16 @@ namespace Automatica.Core.Base.Templates
         Security = 26,
         /// <summary>Lighting controller logic (P3.Logic.Lightning): moods and circuits of a room</summary>
         [VisuMobileObjectTemplateType("3b9e5f7a-2c41-4d8e-a6f3-9e1c7b5d2a23")]
-        LightingController = 29
+        LightingController = 29,
+        /// <summary>
+        /// Tiles of the garage / gate, media controller and irrigation logics (operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("fcca6237-0620-4dae-9b73-d61e3e796746")]
+        Garage = 20,
+        [VisuMobileObjectTemplateType("fdcce008-c4db-4e52-99e1-f0084bb896d3")]
+        MediaController = 21,
+        [VisuMobileObjectTemplateType("d8e57178-3b40-4961-a989-991beb455890")]
+        Irrigation = 22
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

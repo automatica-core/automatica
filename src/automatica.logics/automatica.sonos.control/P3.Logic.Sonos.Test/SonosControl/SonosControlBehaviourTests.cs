@@ -408,14 +408,82 @@ public class SonosControlBehaviourTests : LogicTest<SonosControlLogicFactory>
 
     [Theory]
     [InlineData(true)]
-    [InlineData("anything")]
+    [InlineData(false)]
+    [InlineData(1L)]
+    [InlineData("true")]
+    [InlineData("1")]
+    [InlineData(" ")]
     [InlineData(null)]
-    public void RadioStationInput_AnyValue_EmitsTheConfiguredStation(object value)
+    public void RadioStationInput_Trigger_EmitsTheConfiguredStation(object value)
     {
         var change = Assert.Single(In(SonosControlLogicFactory.RadioStationInput, value));
 
         Assert.Equal(SonosControlLogicFactory.RadioStationOutputValue, change.Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate);
         Assert.Equal(SonosControlLogicFactory.DefaultRadioStation, change.Value);
+    }
+
+    [Theory]
+    [InlineData("s24896", "s24896")]
+    [InlineData(" x-rincon-mp3radio://stream.example/radio ", "x-rincon-mp3radio://stream.example/radio")]
+    public async Task RadioStationInput_StationId_EmitsAndPlaysThatStation(string value, string expected)
+    {
+        var result = ToMap(In(SonosControlLogicFactory.RadioStationInput, value));
+
+        Assert.Equal(expected, result[SonosControlLogicFactory.RadioStationOutputValue]);
+        Assert.Equal(true, result[SonosControlLogicFactory.PlayOutputStatus]);
+        Assert.Equal(false, result[SonosControlLogicFactory.PauseOutputStatus]);
+        // play again once the station is loaded
+        await _play.WaitForCountAsync(1);
+    }
+
+    [Fact]
+    public void RadioStationInput_NameOfTheList_PlaysItsStation()
+    {
+        Param(SonosControlLogicFactory.RadioStations, "Ö3=s8007;FM4 = s8235");
+
+        var result = ToMap(In(SonosControlLogicFactory.RadioStationInput, "fm4"));
+
+        Assert.Equal("s8235", result[SonosControlLogicFactory.RadioStationOutputValue]);
+    }
+
+    [Fact]
+    public void VisuData_HasTheStationListAndTheCurrentStation()
+    {
+        Param(SonosControlLogicFactory.RadioStations, "Ö3=s8007;FM4=s8235");
+        In(SonosControlLogicFactory.RadioStationInput, "s8235");
+
+        var data = (IDictionary<string, object>)Logic.GetDataForVisu();
+        var stations = (IList<Dictionary<string, object>>)data["radioStations"];
+
+        Assert.Equal(new[] { "Ö3", "FM4" }, stations.Select(a => a["name"]));
+        Assert.Equal(new[] { "s8007", "s8235" }, stations.Select(a => a["id"]));
+        Assert.Equal("s8235", data["radioStation"]);
+    }
+
+    [Theory]
+    [InlineData(null, new string[0], new string[0])]
+    [InlineData("s8007", new[] { "s8007" }, new[] { "s8007" })]
+    [InlineData(" Ö3 = s8007 ;\nFM4=s8235\n;", new[] { "Ö3", "FM4" }, new[] { "s8007", "s8235" })]
+    [InlineData("Stream=http://radio.example/live?bitrate=128", new[] { "Stream" }, new[] { "http://radio.example/live?bitrate=128" })]
+    [InlineData("http://radio.example/live?bitrate=128", new[] { "http://radio.example/live?bitrate=128" }, new[] { "http://radio.example/live?bitrate=128" })]
+    [InlineData("Empty=;=s1", new[] { "s1" }, new[] { "s1" })]
+    public void RadioStation_ParseList(string text, string[] names, string[] ids)
+    {
+        var stations = RadioStation.ParseList(text);
+
+        Assert.Equal(names, stations.Select(a => a.Name));
+        Assert.Equal(ids, stations.Select(a => a.Id));
+    }
+
+    [Fact]
+    public void RadioStationInput_StationId_KeepsTheConfiguredStationForPlayDefault()
+    {
+        In(SonosControlLogicFactory.RadioStationInput, "s99");
+        In(SonosControlLogicFactory.PlayDefaultTrigger, false);
+
+        var result = ToMap(In(SonosControlLogicFactory.PlayDefaultTrigger, true));
+
+        Assert.Equal(SonosControlLogicFactory.DefaultRadioStation, result[SonosControlLogicFactory.RadioStationOutputValue]);
     }
 
     [Fact]

@@ -1,5 +1,788 @@
 ﻿{
   "OPERATIONS": {
+    "GARAGE_GATE": {
+      "NAME": "Garage / Tor",
+      "DESCRIPTION": "Motorsteuerung eines Garagentors oder Tors mit einem oder zwei Tastern, Endschaltern und Lichtschranke",
+      "INPUT": {
+        "TOGGLE": {
+          "NAME": "Umschalten (Tg)",
+          "DESCRIPTION": "Impuls: Auf, Stopp, Zu, Stopp - für die Bedienung mit einem Taster"
+        },
+        "OPEN": {
+          "NAME": "Auf (Op)",
+          "DESCRIPTION": "Impuls: öffnet, stoppt während der Fahrt"
+        },
+        "CLOSE": {
+          "NAME": "Zu (Cl)",
+          "DESCRIPTION": "Impuls: schließt, stoppt während der Fahrt"
+        },
+        "COMPLETE_OPEN": {
+          "NAME": "Komplett auf (Co)",
+          "DESCRIPTION": "Impuls: öffnet ganz, Stoppen nicht möglich"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Komplett zu (Cc)",
+          "DESCRIPTION": "Impuls: schließt ganz, Stoppen nicht möglich"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Teilweise öffnen (Po)",
+          "DESCRIPTION": "Impuls: fährt auf die Teilöffnung"
+        },
+        "STOP": {
+          "NAME": "Stopp",
+          "DESCRIPTION": "Impuls: stoppt die Fahrt"
+        },
+        "LOCK": {
+          "NAME": "Aus / Sperre (Off)",
+          "DESCRIPTION": "1: stoppt und sperrt den Baustein, 0: gibt ihn frei"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Peripherie sperren (DisPc)",
+          "DESCRIPTION": "1: ignoriert Tg, Op, Cl, Co, Cc, Po und Stopp von Verknüpfungen (Kindersicherung); Visualisierung und Zentrale gehen weiter"
+        },
+        "END_OPEN": {
+          "NAME": "Endschalter offen",
+          "DESCRIPTION": "1: das Tor ist ganz offen"
+        },
+        "END_CLOSED": {
+          "NAME": "Endschalter geschlossen",
+          "DESCRIPTION": "1: das Tor ist ganz geschlossen"
+        },
+        "OBSTACLE": {
+          "NAME": "Hindernis / Lichtschranke",
+          "DESCRIPTION": "1 beim Schließen: stoppt und öffnet wieder; Schließen ist gesperrt solange 1"
+        },
+        "CENTRAL": {
+          "NAME": "Zentralbefehl",
+          "DESCRIPTION": "Mit dem Befehlsausgang einer Garage / Tor Zentrale verknüpfen (1 auf, 2 zu, 3 stopp, 4 teilweise auf); ignoriert DisPc"
+        }
+      },
+      "OUTPUT": {
+        "OPEN": {
+          "NAME": "Motor auf (Qo)",
+          "DESCRIPTION": "1 während das Tor öffnet"
+        },
+        "CLOSE": {
+          "NAME": "Motor zu (Qc)",
+          "DESCRIPTION": "1 während das Tor schließt"
+        },
+        "PULSE": {
+          "NAME": "Motorimpuls (Qi)",
+          "DESCRIPTION": "Impulse für einen Antrieb mit einem Tastereingang (Motorsteuerung: Einzeltaster)"
+        },
+        "POSITION": {
+          "NAME": "Position",
+          "DESCRIPTION": "Geschätzte Öffnung in % (0 zu, 100 offen)"
+        },
+        "STATE": {
+          "NAME": "Zustand",
+          "DESCRIPTION": "0 zu, 1 offen, 2 teilweise offen, 3 öffnet, 4 schließt"
+        },
+        "IS_OPEN": {
+          "NAME": "Offen",
+          "DESCRIPTION": "1 wenn das Tor nicht ganz zu ist"
+        },
+        "LOCKED": {
+          "NAME": "Gesperrt",
+          "DESCRIPTION": "1 solange der Baustein gesperrt ist (Off)"
+        }
+      },
+      "PARAM": {
+        "TYPE": {
+          "NAME": "Typ",
+          "DESCRIPTION": "Garagentor oder Tor, ändert die Animation in der Visualisierung"
+        },
+        "MOTOR_MODE": {
+          "NAME": "Motorsteuerung",
+          "DESCRIPTION": "Zwei Ausgänge (Auf / Zu) oder ein Impulsausgang für einen Antrieb mit einem Tastereingang (Auf, Stopp, Zu, Stopp)"
+        },
+        "OPEN_TIME": {
+          "NAME": "Öffnungszeit (s)",
+          "DESCRIPTION": "Zeit von zu bis ganz offen"
+        },
+        "CLOSE_TIME": {
+          "NAME": "Schließzeit (s)",
+          "DESCRIPTION": "Zeit von ganz offen bis zu"
+        },
+        "PARTIAL_POSITION": {
+          "NAME": "Teilöffnung (%)",
+          "DESCRIPTION": "Position für Po, z. B. für Fußgänger oder Haustiere"
+        },
+        "PULSE_LENGTH": {
+          "NAME": "Impulslänge (ms)",
+          "DESCRIPTION": "Länge eines Impulses am Motorimpuls-Ausgang (Qi)"
+        },
+        "AUTO_CLOSE": {
+          "NAME": "Automatisch schließen nach (s)",
+          "DESCRIPTION": "Schließt das Tor so lange nachdem es ganz offen ist, 0 = aus"
+        }
+      },
+      "TYPE": {
+        "GARAGE": "Garagentor",
+        "SLIDING_GATE": "Schiebetor",
+        "SWING_GATE": "Flügeltor"
+      },
+      "MOTOR": {
+        "TWO_OUTPUTS": "Zwei Ausgänge (Auf / Zu)",
+        "SINGLE_BUTTON": "Ein Impulsausgang (Einzeltaster)"
+      }
+    },
+    "GARAGE_CENTRAL": {
+      "NAME": "Garage / Tor Zentrale",
+      "DESCRIPTION": "Steuert mehrere Garage / Tor Bausteine gemeinsam und zählt die offenen und geschlossenen Tore",
+      "INPUT": {
+        "TOGGLE": {
+          "NAME": "Umschalten (Tg)",
+          "DESCRIPTION": "Impuls: stoppt alle Tore wenn eines fährt, sonst schließt alle wenn eines offen ist, sonst öffnet alle"
+        },
+        "COMPLETE_OPEN": {
+          "NAME": "Komplett auf (Co)",
+          "DESCRIPTION": "Impuls: öffnet alle Tore"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Komplett zu (Cc)",
+          "DESCRIPTION": "Impuls: schließt alle Tore"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Teilweise öffnen (Po)",
+          "DESCRIPTION": "Impuls: fährt alle Tore auf ihre Teilöffnung"
+        },
+        "STOP": {
+          "NAME": "Stopp",
+          "DESCRIPTION": "Impuls: stoppt alle Tore"
+        },
+        "LOCK": {
+          "NAME": "Aus / Sperre (Off)",
+          "DESCRIPTION": "1: stoppt alle Tore und sperrt die Zentrale, 0: gibt sie frei"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Peripherie sperren (DisPc)",
+          "DESCRIPTION": "1: ignoriert Tg, Co, Cc, Po und Stopp von Verknüpfungen (Kindersicherung)"
+        },
+        "STATE1": {
+          "NAME": "Zustand Tor 1",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE2": {
+          "NAME": "Zustand Tor 2",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE3": {
+          "NAME": "Zustand Tor 3",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE4": {
+          "NAME": "Zustand Tor 4",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE5": {
+          "NAME": "Zustand Tor 5",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE6": {
+          "NAME": "Zustand Tor 6",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE7": {
+          "NAME": "Zustand Tor 7",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        },
+        "STATE8": {
+          "NAME": "Zustand Tor 8",
+          "DESCRIPTION": "Mit dem Zustand-Ausgang eines Garage / Tor Bausteins verknüpfen"
+        }
+      },
+      "OUTPUT": {
+        "COMMAND": {
+          "NAME": "Befehl",
+          "DESCRIPTION": "Mit dem Zentralbefehl-Eingang jedes Garage / Tor Bausteins verknüpfen (1 auf, 2 zu, 3 stopp, 4 teilweise auf)"
+        },
+        "OPEN_COUNT": {
+          "NAME": "Offene Tore (No)",
+          "DESCRIPTION": "Anzahl der Tore, die nicht zu sind"
+        },
+        "CLOSED_COUNT": {
+          "NAME": "Geschlossene Tore (Nc)",
+          "DESCRIPTION": "Anzahl der geschlossenen Tore"
+        }
+      }
+    },
+    "WINDOW_CENTRAL": {
+      "NAME": "Fenster Zentrale",
+      "DESCRIPTION": "Zentrale Steuerung mehrerer motorischer Fenster (Fensteraktoren oder Jalousie-Bausteine), Wetterschutz und Zähler",
+      "INPUT": {
+        "COMPLETE_OPEN": {
+          "NAME": "Komplett auf (Co)",
+          "DESCRIPTION": "Impuls: öffnet alle Fenster ganz"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Komplett zu (Cc)",
+          "DESCRIPTION": "Impuls: schließt alle Fenster"
+        },
+        "TOGGLE": {
+          "NAME": "Umschalten (Tg)",
+          "DESCRIPTION": "Impuls: Auf, Stopp, Zu, Stopp - für die Bedienung mit einem Taster"
+        },
+        "POSITION": {
+          "NAME": "Position (Pos)",
+          "DESCRIPTION": "Fährt alle Fenster auf diese Öffnung in % (0 zu, 100 offen)"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Auf solange gedrückt (Po)",
+          "DESCRIPTION": "1: öffnet, 0: stoppt (Tippbetrieb)"
+        },
+        "PARTIAL_CLOSE": {
+          "NAME": "Zu solange gedrückt (Pc)",
+          "DESCRIPTION": "1: schließt, 0: stoppt (Tippbetrieb)"
+        },
+        "SLIGHTLY_OPEN": {
+          "NAME": "Spaltlüften (So)",
+          "DESCRIPTION": "Impuls: fährt alle Fenster auf die Spaltlüftung"
+        },
+        "WEATHER_PROTECTION": {
+          "NAME": "Wetterschutz (Wp)",
+          "DESCRIPTION": "1: schließt alle Fenster und sperrt sie (Regen, Wind), 0: gibt sie frei"
+        },
+        "LOCK": {
+          "NAME": "Aus / Sperre (Off)",
+          "DESCRIPTION": "1: stoppt alle Fenster und sperrt die Zentrale, 0: gibt sie frei"
+        },
+        "WINDOW_POSITION1": {
+          "NAME": "Position Fenster 1",
+          "DESCRIPTION": "Öffnung von Fenster 1 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION2": {
+          "NAME": "Position Fenster 2",
+          "DESCRIPTION": "Öffnung von Fenster 2 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION3": {
+          "NAME": "Position Fenster 3",
+          "DESCRIPTION": "Öffnung von Fenster 3 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION4": {
+          "NAME": "Position Fenster 4",
+          "DESCRIPTION": "Öffnung von Fenster 4 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION5": {
+          "NAME": "Position Fenster 5",
+          "DESCRIPTION": "Öffnung von Fenster 5 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION6": {
+          "NAME": "Position Fenster 6",
+          "DESCRIPTION": "Öffnung von Fenster 6 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION7": {
+          "NAME": "Position Fenster 7",
+          "DESCRIPTION": "Öffnung von Fenster 7 in % (0 zu, 100 offen), für die Zähler"
+        },
+        "WINDOW_POSITION8": {
+          "NAME": "Position Fenster 8",
+          "DESCRIPTION": "Öffnung von Fenster 8 in % (0 zu, 100 offen), für die Zähler"
+        }
+      },
+      "OUTPUT": {
+        "OPEN": {
+          "NAME": "Auf",
+          "DESCRIPTION": "Sendet 1 bei jedem Auf-Befehl (mit dem Auf-Eingang der Fenster verknüpfen)"
+        },
+        "CLOSE": {
+          "NAME": "Zu",
+          "DESCRIPTION": "Sendet 1 bei jedem Zu-Befehl"
+        },
+        "STOP": {
+          "NAME": "Stopp",
+          "DESCRIPTION": "Sendet 1 bei jedem Stopp-Befehl"
+        },
+        "POSITION": {
+          "NAME": "Position",
+          "DESCRIPTION": "Soll-Öffnung in % für Aktoren mit Positionseingang (0 zu, 100 offen)"
+        },
+        "LOCKED": {
+          "NAME": "Gesperrt",
+          "DESCRIPTION": "1 solange Wetterschutz oder Off aktiv ist (mit dem Sperreingang der Fenster verknüpfen)"
+        },
+        "OPEN_COUNT": {
+          "NAME": "Offene Fenster (No)",
+          "DESCRIPTION": "Anzahl der Fenster mit einer Öffnung über 0 %"
+        },
+        "CLOSED_COUNT": {
+          "NAME": "Geschlossene Fenster (Nc)",
+          "DESCRIPTION": "Anzahl der geschlossenen Fenster"
+        }
+      },
+      "PARAM": {
+        "SLIGHTLY_OPEN": {
+          "NAME": "Spaltlüftung (%)",
+          "DESCRIPTION": "Öffnung für So"
+        }
+      }
+    },
+    "MEDIA_CONTROLLER_MODE": {
+      "NAME": "Media Controller Modus",
+      "DESCRIPTION": "Einer pro Gerät eines Media Controllers: gibt nur die Befehle seines Modus weiter (mit dem Befehlsausgang des Media Controllers verknüpfen)",
+      "INPUT": {
+        "COMMAND": {
+          "NAME": "Befehl",
+          "DESCRIPTION": "Befehlsausgang des Media Controllers"
+        }
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Modus des Media Controllers (1-8), zu dem dieses Gerät gehört"
+        }
+      },
+      "OUTPUT": {
+        "POWER": {
+          "NAME": "Ein",
+          "DESCRIPTION": "1, solange dieser Modus eingeschaltet ist (das Gerät damit einschalten)"
+        }
+      }
+    },
+    "MEDIA_CONTROLLER": {
+      "NAME": "Media Controller",
+      "DESCRIPTION": "Universalfernbedienung: bis zu 8 Modi (z. B. TV, Radio) mit Ein/Aus, Lautstärke, Kanal, Ziffernblock, Navigation und Wiedergabe",
+      "INPUT": {
+        "POWER_TOGGLE": {
+          "NAME": "Ein/Aus umschalten (Ptg)",
+          "DESCRIPTION": "Impuls: schaltet den aktuellen Modus ein oder aus"
+        },
+        "POWER_ON": {
+          "NAME": "Ein (Pon)",
+          "DESCRIPTION": "Impuls: schaltet den letzten Modus ein"
+        },
+        "POWER_OFF": {
+          "NAME": "Aus (Poff)",
+          "DESCRIPTION": "Impuls: schaltet den aktuellen Modus aus"
+        },
+        "VOLUME_UP": {
+          "NAME": "Lautstärke + (V+)",
+          "DESCRIPTION": "Impuls: lauter, schaltet den letzten Modus ein wenn aus"
+        },
+        "VOLUME_DOWN": {
+          "NAME": "Lautstärke - (V-)",
+          "DESCRIPTION": "Impuls: leiser"
+        },
+        "VOLUME": {
+          "NAME": "Lautstärke (V)",
+          "DESCRIPTION": "Setzt die Lautstärke in %"
+        },
+        "MUTE": {
+          "NAME": "Stumm",
+          "DESCRIPTION": "Impuls: stumm"
+        },
+        "CHANNEL_UP": {
+          "NAME": "Kanal + (Ch+)",
+          "DESCRIPTION": "Impuls: nächster Kanal"
+        },
+        "CHANNEL_DOWN": {
+          "NAME": "Kanal - (Ch-)",
+          "DESCRIPTION": "Impuls: vorheriger Kanal"
+        },
+        "CHANNEL": {
+          "NAME": "Kanal (Ch)",
+          "DESCRIPTION": "Schaltet auf diese Kanalnummer"
+        },
+        "DIGIT": {
+          "NAME": "Ziffer",
+          "DESCRIPTION": "Ziffer 0-9; der Kanal wird nach der Ziffernblock-Wartezeit gesendet"
+        },
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Aktiviert den Modus mit dieser Nummer (1-8), 0 schaltet aus"
+        },
+        "MODE1": {
+          "NAME": "Modus 1 (M1)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 1"
+        },
+        "MODE2": {
+          "NAME": "Modus 2 (M2)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 2"
+        },
+        "MODE3": {
+          "NAME": "Modus 3 (M3)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 3"
+        },
+        "MODE4": {
+          "NAME": "Modus 4 (M4)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 4"
+        },
+        "MODE5": {
+          "NAME": "Modus 5 (M5)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 5"
+        },
+        "MODE6": {
+          "NAME": "Modus 6 (M6)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 6"
+        },
+        "MODE7": {
+          "NAME": "Modus 7 (M7)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 7"
+        },
+        "MODE8": {
+          "NAME": "Modus 8 (M8)",
+          "DESCRIPTION": "Impuls: aktiviert Modus 8"
+        },
+        "PLAY_PAUSE": {
+          "NAME": "Wiedergabe / Pause",
+          "DESCRIPTION": "Impuls"
+        },
+        "NEXT": {
+          "NAME": "Weiter",
+          "DESCRIPTION": "Impuls"
+        },
+        "PREVIOUS": {
+          "NAME": "Zurück",
+          "DESCRIPTION": "Impuls"
+        },
+        "NAV_UP": {
+          "NAME": "Hoch",
+          "DESCRIPTION": "Impuls: Navigation hoch"
+        },
+        "NAV_DOWN": {
+          "NAME": "Runter",
+          "DESCRIPTION": "Impuls: Navigation runter"
+        },
+        "NAV_LEFT": {
+          "NAME": "Links",
+          "DESCRIPTION": "Impuls: Navigation links"
+        },
+        "NAV_RIGHT": {
+          "NAME": "Rechts",
+          "DESCRIPTION": "Impuls: Navigation rechts"
+        },
+        "NAV_OK": {
+          "NAME": "OK",
+          "DESCRIPTION": "Impuls: bestätigen"
+        },
+        "BACK": {
+          "NAME": "Zurück (Menü)",
+          "DESCRIPTION": "Impuls"
+        },
+        "MENU": {
+          "NAME": "Menü",
+          "DESCRIPTION": "Impuls"
+        },
+        "HOME": {
+          "NAME": "Home",
+          "DESCRIPTION": "Impuls"
+        },
+        "LOCK": {
+          "NAME": "Aus / Sperre (Off)",
+          "DESCRIPTION": "1: schaltet aus und sperrt den Baustein, 0: gibt ihn frei"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Peripherie sperren (DisPc)",
+          "DESCRIPTION": "1: ignoriert die Befehlseingänge von Verknüpfungen (Kindersicherung); die Visualisierung geht weiter"
+        }
+      },
+      "OUTPUT": {
+        "COMMAND": {
+          "NAME": "Befehl (an die Modus-Bausteine)",
+          "DESCRIPTION": "Jeder Befehl als \"Modus:Befehl[:Wert]\", mit dem Baustein \"Media Controller Modus\" jedes Geräts verknüpfen"
+        },
+        "MODE": {
+          "NAME": "Aktueller Modus (M)",
+          "DESCRIPTION": "Nummer des aktiven Modus, 0 = aus"
+        },
+        "POWER": {
+          "NAME": "Ein (P)",
+          "DESCRIPTION": "1 solange ein Modus aktiv ist"
+        },
+        "MODE_ACTIVE1": {
+          "NAME": "Modus 1 aktiv",
+          "DESCRIPTION": "1 solange Modus 1 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE2": {
+          "NAME": "Modus 2 aktiv",
+          "DESCRIPTION": "1 solange Modus 2 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE3": {
+          "NAME": "Modus 3 aktiv",
+          "DESCRIPTION": "1 solange Modus 3 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE4": {
+          "NAME": "Modus 4 aktiv",
+          "DESCRIPTION": "1 solange Modus 4 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE5": {
+          "NAME": "Modus 5 aktiv",
+          "DESCRIPTION": "1 solange Modus 5 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE6": {
+          "NAME": "Modus 6 aktiv",
+          "DESCRIPTION": "1 solange Modus 6 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE7": {
+          "NAME": "Modus 7 aktiv",
+          "DESCRIPTION": "1 solange Modus 7 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "MODE_ACTIVE8": {
+          "NAME": "Modus 8 aktiv",
+          "DESCRIPTION": "1 solange Modus 8 aktiv ist (damit die Geräte dieses Modus einschalten)"
+        },
+        "VOLUME_UP": {
+          "NAME": "Lautstärke +",
+          "DESCRIPTION": "Sendet 1 bei jedem Lauter-Befehl"
+        },
+        "VOLUME_DOWN": {
+          "NAME": "Lautstärke -",
+          "DESCRIPTION": "Sendet 1 bei jedem Leiser-Befehl"
+        },
+        "VOLUME": {
+          "NAME": "Lautstärke",
+          "DESCRIPTION": "Lautstärke in %"
+        },
+        "MUTE": {
+          "NAME": "Stumm",
+          "DESCRIPTION": "Sendet 1 bei jedem Stumm-Befehl"
+        },
+        "CHANNEL_UP": {
+          "NAME": "Kanal +",
+          "DESCRIPTION": "Sendet 1 bei jedem Kanal-hoch-Befehl"
+        },
+        "CHANNEL_DOWN": {
+          "NAME": "Kanal -",
+          "DESCRIPTION": "Sendet 1 bei jedem Kanal-runter-Befehl"
+        },
+        "CHANNEL": {
+          "NAME": "Kanal",
+          "DESCRIPTION": "Gewählte Kanalnummer"
+        },
+        "PLAY_PAUSE": {
+          "NAME": "Wiedergabe / Pause",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NEXT": {
+          "NAME": "Weiter",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "PREVIOUS": {
+          "NAME": "Zurück",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NAV_UP": {
+          "NAME": "Hoch",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NAV_DOWN": {
+          "NAME": "Runter",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NAV_LEFT": {
+          "NAME": "Links",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NAV_RIGHT": {
+          "NAME": "Rechts",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "NAV_OK": {
+          "NAME": "OK",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "BACK": {
+          "NAME": "Zurück (Menü)",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "MENU": {
+          "NAME": "Menü",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        },
+        "HOME": {
+          "NAME": "Home",
+          "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+        }
+      },
+      "PARAM": {
+        "MODE_NAME1": {
+          "NAME": "Name Modus 1",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME2": {
+          "NAME": "Name Modus 2",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME3": {
+          "NAME": "Name Modus 3",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME4": {
+          "NAME": "Name Modus 4",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME5": {
+          "NAME": "Name Modus 5",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME6": {
+          "NAME": "Name Modus 6",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME7": {
+          "NAME": "Name Modus 7",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "MODE_NAME8": {
+          "NAME": "Name Modus 8",
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt, leer = Modus nicht verwendet"
+        },
+        "NUMPAD_TIMEOUT": {
+          "NAME": "Ziffernblock-Wartezeit (ms)",
+          "DESCRIPTION": "Zeit nach der letzten Ziffer bis der Kanal gesendet wird (Nst)"
+        }
+      }
+    },
+    "IRRIGATION": {
+      "NAME": "Bewässerung",
+      "DESCRIPTION": "Bewässert bis zu 8 Zonen nacheinander mit Pumpe; lässt einen Lauf nach Regen oder bei Regenvorhersage aus oder verkürzt ihn",
+      "INPUT": {
+        "ACTIVATE": {
+          "NAME": "Aktivieren (Act)",
+          "DESCRIPTION": "Impuls: startet einen Lauf, außer es hat in den letzten 24 Stunden genug geregnet oder es ist genug Regen vorhergesagt"
+        },
+        "START": {
+          "NAME": "Jetzt starten",
+          "DESCRIPTION": "Impuls: startet einen Lauf in jedem Fall (wie die Visualisierung)"
+        },
+        "STOP": {
+          "NAME": "Stopp",
+          "DESCRIPTION": "Impuls: stoppt den Lauf, die Pumpe und alle Ventile"
+        },
+        "SELECT": {
+          "NAME": "Ventil wählen (Sel)",
+          "DESCRIPTION": "1-8 bewässert nur diese Zone, 9 öffnet alle Ventile, 0 stoppt"
+        },
+        "RAIN_FORECAST": {
+          "NAME": "Regenvorhersage (Raf)",
+          "DESCRIPTION": "Erwarteter Niederschlag der nächsten Stunden in mm (l/m²), z. B. von OpenWeatherMap"
+        },
+        "RAIN": {
+          "NAME": "Regen (Ra)",
+          "DESCRIPTION": "1 solange es regnet (Regensensor), für die Regendauer der letzten 24 Stunden"
+        },
+        "LOCK": {
+          "NAME": "Aus / Sperre (Off)",
+          "DESCRIPTION": "1: stoppt und sperrt den Baustein, 0: gibt ihn frei"
+        }
+      },
+      "OUTPUT": {
+        "PUMP": {
+          "NAME": "Pumpe (P)",
+          "DESCRIPTION": "1 solange ein Ventil offen ist"
+        },
+        "VALVE1": {
+          "NAME": "Ventil 1 (V1)",
+          "DESCRIPTION": "1 solange Zone 1 bewässert wird"
+        },
+        "VALVE2": {
+          "NAME": "Ventil 2 (V2)",
+          "DESCRIPTION": "1 solange Zone 2 bewässert wird"
+        },
+        "VALVE3": {
+          "NAME": "Ventil 3 (V3)",
+          "DESCRIPTION": "1 solange Zone 3 bewässert wird"
+        },
+        "VALVE4": {
+          "NAME": "Ventil 4 (V4)",
+          "DESCRIPTION": "1 solange Zone 4 bewässert wird"
+        },
+        "VALVE5": {
+          "NAME": "Ventil 5 (V5)",
+          "DESCRIPTION": "1 solange Zone 5 bewässert wird"
+        },
+        "VALVE6": {
+          "NAME": "Ventil 6 (V6)",
+          "DESCRIPTION": "1 solange Zone 6 bewässert wird"
+        },
+        "VALVE7": {
+          "NAME": "Ventil 7 (V7)",
+          "DESCRIPTION": "1 solange Zone 7 bewässert wird"
+        },
+        "VALVE8": {
+          "NAME": "Ventil 8 (V8)",
+          "DESCRIPTION": "1 solange Zone 8 bewässert wird"
+        },
+        "ACTIVE_VALVE": {
+          "NAME": "Aktives Ventil (Av)",
+          "DESCRIPTION": "0 alle aus, 1-8 die aktive Zone, 9 alle an"
+        },
+        "RUNNING": {
+          "NAME": "Läuft",
+          "DESCRIPTION": "1 solange ein Lauf oder ein gewähltes Ventil aktiv ist"
+        },
+        "REMAINING": {
+          "NAME": "Restzeit (s)",
+          "DESCRIPTION": "Restzeit der aktiven Zone"
+        },
+        "SKIPPED": {
+          "NAME": "Ausgelassen",
+          "DESCRIPTION": "1 wenn die letzte Aktivierung wegen Regen ausgelassen wurde"
+        },
+        "RAIN_TIME": {
+          "NAME": "Regendauer 24 h (s)",
+          "DESCRIPTION": "Wie lange es in den letzten 24 Stunden geregnet hat"
+        }
+      },
+      "PARAM": {
+        "MAX_RAIN_FORECAST": {
+          "NAME": "Maximale Regenvorhersage (MaxR, mm)",
+          "DESCRIPTION": "Act startet nicht, wenn die Regenvorhersage darüber liegt"
+        },
+        "MAX_RAIN_TIME": {
+          "NAME": "Maximale Regendauer (MaxRa, s)",
+          "DESCRIPTION": "Act startet nicht, wenn es in den letzten 24 Stunden länger geregnet hat"
+        },
+        "ADJUST_BY_RAIN": {
+          "NAME": "Nach Regen verkürzen",
+          "DESCRIPTION": "Verkürzt die Zonenzeiten um den Anteil von Regenvorhersage und Regendauer an ihren Grenzen (z. B. halbe Grenze = halbe Zeit)"
+        },
+        "SCHEDULE": {
+          "NAME": "Zeitplan",
+          "DESCRIPTION": "Startzeit und Wochentage für eine automatische Aktivierung (wie Act); die Endzeit wird nicht verwendet"
+        },
+        "SCHEDULE_ENABLED": {
+          "NAME": "Zeitplan aktiv",
+          "DESCRIPTION": "Aktiviert den Zeitplan"
+        },
+        "ZONE_NAMES": {
+          "NAME": "Zonennamen",
+          "DESCRIPTION": "Namen der Zonen für die Visualisierung, mit ; getrennt"
+        },
+        "DURATION1": {
+          "NAME": "Zeit Zone 1 (Tv1, s)",
+          "DESCRIPTION": "Wie lange Zone 1 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION2": {
+          "NAME": "Zeit Zone 2 (Tv2, s)",
+          "DESCRIPTION": "Wie lange Zone 2 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION3": {
+          "NAME": "Zeit Zone 3 (Tv3, s)",
+          "DESCRIPTION": "Wie lange Zone 3 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION4": {
+          "NAME": "Zeit Zone 4 (Tv4, s)",
+          "DESCRIPTION": "Wie lange Zone 4 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION5": {
+          "NAME": "Zeit Zone 5 (Tv5, s)",
+          "DESCRIPTION": "Wie lange Zone 5 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION6": {
+          "NAME": "Zeit Zone 6 (Tv6, s)",
+          "DESCRIPTION": "Wie lange Zone 6 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION7": {
+          "NAME": "Zeit Zone 7 (Tv7, s)",
+          "DESCRIPTION": "Wie lange Zone 7 bewässert wird, 0 = Zone nicht verwendet"
+        },
+        "DURATION8": {
+          "NAME": "Zeit Zone 8 (Tv8, s)",
+          "DESCRIPTION": "Wie lange Zone 8 bewässert wird, 0 = Zone nicht verwendet"
+        }
+      }
+    },
     "NAME": "Bedienung",
     "DESCRIPTION": "Bedienung",
     "SWITCH": {

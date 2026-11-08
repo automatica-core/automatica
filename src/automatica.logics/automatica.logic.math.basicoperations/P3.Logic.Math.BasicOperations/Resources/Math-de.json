@@ -1,5 +1,47 @@
 ﻿{
   "MATH": {
+    "WIND_GAUGE": {
+      "NAME": "Windmesser",
+      "DESCRIPTION": "Wandelt die Frequenz eines Windsensors in die Windgeschwindigkeit um: Mittelwert, 3-Sekunden-Böe, Maximum und Windalarm",
+      "INPUT": {
+        "FREQUENCY": {
+          "NAME": "Frequenz (F)",
+          "DESCRIPTION": "Frequenz des Windsensors in Hz"
+        }
+      },
+      "OUTPUT": {
+        "AVERAGE": {
+          "NAME": "Mittlere Windgeschwindigkeit (Avg)",
+          "DESCRIPTION": "Mittelwert über die Mittelungszeit"
+        },
+        "GUST": {
+          "NAME": "Böe (G)",
+          "DESCRIPTION": "3-Sekunden-Mittelwert"
+        },
+        "MAXIMUM": {
+          "NAME": "Maximum (AvgMax)",
+          "DESCRIPTION": "Höchste Böe in der Mittelungszeit"
+        },
+        "ALARM": {
+          "NAME": "Windalarm (Wa)",
+          "DESCRIPTION": "1 wenn eine Böe die Alarmgeschwindigkeit erreicht, 0 wenn Böen und Mittelwert wieder unter 90 % davon sind"
+        }
+      },
+      "PARAM": {
+        "AVERAGING_TIME": {
+          "NAME": "Mittelungszeit (Avgt, min)",
+          "DESCRIPTION": "Zeitfenster für Mittelwert und Maximum"
+        },
+        "FACTOR": {
+          "NAME": "Faktor (F)",
+          "DESCRIPTION": "Geschwindigkeit pro Hz laut Datenblatt des Sensors (z. B. km/h pro Hz)"
+        },
+        "ALARM_SPEED": {
+          "NAME": "Windalarm-Geschwindigkeit (W)",
+          "DESCRIPTION": "Geschwindigkeit für den Windalarm, in der Einheit des Faktors"
+        }
+      }
+    },
     "NAME":  "Mathematik", 
     "ADD": {
       "NAME": "Summieren",

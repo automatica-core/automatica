@@ -1,5 +1,788 @@
 ﻿{
   "OPERATIONS": {
+    "GARAGE_GATE": {
+      "NAME": "Garage / Gate",
+      "DESCRIPTION": "Motor control of a garage door or gate with one or two buttons, end switches and a light barrier",
+      "INPUT": {
+        "TOGGLE": {
+          "NAME": "Toggle (Tg)",
+          "DESCRIPTION": "Pulse: open, stop, close, stop - for single button control"
+        },
+        "OPEN": {
+          "NAME": "Open (Op)",
+          "DESCRIPTION": "Pulse: opens, stops while moving"
+        },
+        "CLOSE": {
+          "NAME": "Close (Cl)",
+          "DESCRIPTION": "Pulse: closes, stops while moving"
+        },
+        "COMPLETE_OPEN": {
+          "NAME": "Complete open (Co)",
+          "DESCRIPTION": "Pulse: opens completely, stopping is not possible"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Complete close (Cc)",
+          "DESCRIPTION": "Pulse: closes completely, stopping is not possible"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Partially open (Po)",
+          "DESCRIPTION": "Pulse: moves to the partial open position"
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": "Pulse: stops the movement"
+        },
+        "LOCK": {
+          "NAME": "Off / lock (Off)",
+          "DESCRIPTION": "1: stops and locks the block, 0: unlocks it"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Disable periphery (DisPc)",
+          "DESCRIPTION": "1: ignores Tg, Op, Cl, Co, Cc, Po and Stop from links (child lock); the visualization and the central still work"
+        },
+        "END_OPEN": {
+          "NAME": "End switch open",
+          "DESCRIPTION": "1: the door is fully open"
+        },
+        "END_CLOSED": {
+          "NAME": "End switch closed",
+          "DESCRIPTION": "1: the door is fully closed"
+        },
+        "OBSTACLE": {
+          "NAME": "Obstacle / light barrier",
+          "DESCRIPTION": "1 while closing: stops and opens again; closing is blocked while 1"
+        },
+        "CENTRAL": {
+          "NAME": "Central command",
+          "DESCRIPTION": "Link the command output of a Garage / Gate Central (1 open, 2 close, 3 stop, 4 partially open); ignores DisPc"
+        }
+      },
+      "OUTPUT": {
+        "OPEN": {
+          "NAME": "Motor open (Qo)",
+          "DESCRIPTION": "1 while the door opens"
+        },
+        "CLOSE": {
+          "NAME": "Motor close (Qc)",
+          "DESCRIPTION": "1 while the door closes"
+        },
+        "PULSE": {
+          "NAME": "Motor pulse (Qi)",
+          "DESCRIPTION": "Pulses for a motor with one button input (motor control: single button)"
+        },
+        "POSITION": {
+          "NAME": "Position",
+          "DESCRIPTION": "Estimated opening in % (0 closed, 100 open)"
+        },
+        "STATE": {
+          "NAME": "State",
+          "DESCRIPTION": "0 closed, 1 open, 2 partially open, 3 opening, 4 closing"
+        },
+        "IS_OPEN": {
+          "NAME": "Open",
+          "DESCRIPTION": "1 when the door is not fully closed"
+        },
+        "LOCKED": {
+          "NAME": "Locked",
+          "DESCRIPTION": "1 while the block is locked (Off)"
+        }
+      },
+      "PARAM": {
+        "TYPE": {
+          "NAME": "Type",
+          "DESCRIPTION": "Garage door or gate, changes the animation in the visualization"
+        },
+        "MOTOR_MODE": {
+          "NAME": "Motor control",
+          "DESCRIPTION": "Two outputs (open / close) or one pulse output for a drive with a single button input (open, stop, close, stop)"
+        },
+        "OPEN_TIME": {
+          "NAME": "Opening time (s)",
+          "DESCRIPTION": "Time from closed to fully open"
+        },
+        "CLOSE_TIME": {
+          "NAME": "Closing time (s)",
+          "DESCRIPTION": "Time from fully open to closed"
+        },
+        "PARTIAL_POSITION": {
+          "NAME": "Partial open position (%)",
+          "DESCRIPTION": "Position for Po, e.g. to let a pedestrian or a pet through"
+        },
+        "PULSE_LENGTH": {
+          "NAME": "Pulse length (ms)",
+          "DESCRIPTION": "Length of a pulse at the motor pulse output (Qi)"
+        },
+        "AUTO_CLOSE": {
+          "NAME": "Close automatically after (s)",
+          "DESCRIPTION": "Closes the door this long after it reached fully open, 0 = off"
+        }
+      },
+      "TYPE": {
+        "GARAGE": "Garage door",
+        "SLIDING_GATE": "Sliding gate",
+        "SWING_GATE": "Swing gate"
+      },
+      "MOTOR": {
+        "TWO_OUTPUTS": "Two outputs (open / close)",
+        "SINGLE_BUTTON": "One pulse output (single button)"
+      }
+    },
+    "GARAGE_CENTRAL": {
+      "NAME": "Garage / Gate Central",
+      "DESCRIPTION": "Controls several Garage / Gate blocks together and counts the open and closed doors",
+      "INPUT": {
+        "TOGGLE": {
+          "NAME": "Toggle (Tg)",
+          "DESCRIPTION": "Pulse: stops all doors when one moves, otherwise closes all when one is open, otherwise opens all"
+        },
+        "COMPLETE_OPEN": {
+          "NAME": "Complete open (Co)",
+          "DESCRIPTION": "Pulse: opens all doors"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Complete close (Cc)",
+          "DESCRIPTION": "Pulse: closes all doors"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Partially open (Po)",
+          "DESCRIPTION": "Pulse: moves all doors to their partial open position"
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": "Pulse: stops all doors"
+        },
+        "LOCK": {
+          "NAME": "Off / lock (Off)",
+          "DESCRIPTION": "1: stops all doors and locks the central, 0: unlocks it"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Disable periphery (DisPc)",
+          "DESCRIPTION": "1: ignores Tg, Co, Cc, Po and Stop from links (child lock)"
+        },
+        "STATE1": {
+          "NAME": "State door 1",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE2": {
+          "NAME": "State door 2",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE3": {
+          "NAME": "State door 3",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE4": {
+          "NAME": "State door 4",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE5": {
+          "NAME": "State door 5",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE6": {
+          "NAME": "State door 6",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE7": {
+          "NAME": "State door 7",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        },
+        "STATE8": {
+          "NAME": "State door 8",
+          "DESCRIPTION": "Link the State output of a Garage / Gate block"
+        }
+      },
+      "OUTPUT": {
+        "COMMAND": {
+          "NAME": "Command",
+          "DESCRIPTION": "Link to the Central command input of every Garage / Gate block (1 open, 2 close, 3 stop, 4 partially open)"
+        },
+        "OPEN_COUNT": {
+          "NAME": "Open doors (No)",
+          "DESCRIPTION": "Number of doors that are not closed"
+        },
+        "CLOSED_COUNT": {
+          "NAME": "Closed doors (Nc)",
+          "DESCRIPTION": "Number of closed doors"
+        }
+      }
+    },
+    "WINDOW_CENTRAL": {
+      "NAME": "Window Central",
+      "DESCRIPTION": "Central control of several motorised windows (window actuators or shutter blocks), weather protection and counters",
+      "INPUT": {
+        "COMPLETE_OPEN": {
+          "NAME": "Complete open (Co)",
+          "DESCRIPTION": "Pulse: opens all windows completely"
+        },
+        "COMPLETE_CLOSE": {
+          "NAME": "Complete close (Cc)",
+          "DESCRIPTION": "Pulse: closes all windows"
+        },
+        "TOGGLE": {
+          "NAME": "Toggle (Tg)",
+          "DESCRIPTION": "Pulse: open, stop, close, stop - for single button control"
+        },
+        "POSITION": {
+          "NAME": "Position (Pos)",
+          "DESCRIPTION": "Moves all windows to this opening in % (0 closed, 100 open)"
+        },
+        "PARTIAL_OPEN": {
+          "NAME": "Open while pressed (Po)",
+          "DESCRIPTION": "1: opens, 0: stops (push and hold)"
+        },
+        "PARTIAL_CLOSE": {
+          "NAME": "Close while pressed (Pc)",
+          "DESCRIPTION": "1: closes, 0: stops (push and hold)"
+        },
+        "SLIGHTLY_OPEN": {
+          "NAME": "Slightly open (So)",
+          "DESCRIPTION": "Pulse: moves all windows to the slightly open position"
+        },
+        "WEATHER_PROTECTION": {
+          "NAME": "Weather protection (Wp)",
+          "DESCRIPTION": "1: closes all windows and locks them (rain, wind), 0: releases them"
+        },
+        "LOCK": {
+          "NAME": "Off / lock (Off)",
+          "DESCRIPTION": "1: stops all windows and locks the central, 0: unlocks it"
+        },
+        "WINDOW_POSITION1": {
+          "NAME": "Position window 1",
+          "DESCRIPTION": "Opening of window 1 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION2": {
+          "NAME": "Position window 2",
+          "DESCRIPTION": "Opening of window 2 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION3": {
+          "NAME": "Position window 3",
+          "DESCRIPTION": "Opening of window 3 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION4": {
+          "NAME": "Position window 4",
+          "DESCRIPTION": "Opening of window 4 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION5": {
+          "NAME": "Position window 5",
+          "DESCRIPTION": "Opening of window 5 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION6": {
+          "NAME": "Position window 6",
+          "DESCRIPTION": "Opening of window 6 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION7": {
+          "NAME": "Position window 7",
+          "DESCRIPTION": "Opening of window 7 in % (0 closed, 100 open), for the counters"
+        },
+        "WINDOW_POSITION8": {
+          "NAME": "Position window 8",
+          "DESCRIPTION": "Opening of window 8 in % (0 closed, 100 open), for the counters"
+        }
+      },
+      "OUTPUT": {
+        "OPEN": {
+          "NAME": "Open",
+          "DESCRIPTION": "Sends 1 for every open command (link to the open / up input of the windows)"
+        },
+        "CLOSE": {
+          "NAME": "Close",
+          "DESCRIPTION": "Sends 1 for every close command"
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": "Sends 1 for every stop command"
+        },
+        "POSITION": {
+          "NAME": "Position",
+          "DESCRIPTION": "Target opening in % for actuators with a position input (0 closed, 100 open)"
+        },
+        "LOCKED": {
+          "NAME": "Locked",
+          "DESCRIPTION": "1 while weather protection or Off is active (link to the lock input of the windows)"
+        },
+        "OPEN_COUNT": {
+          "NAME": "Open windows (No)",
+          "DESCRIPTION": "Number of windows with an opening above 0 %"
+        },
+        "CLOSED_COUNT": {
+          "NAME": "Closed windows (Nc)",
+          "DESCRIPTION": "Number of closed windows"
+        }
+      },
+      "PARAM": {
+        "SLIGHTLY_OPEN": {
+          "NAME": "Slightly open position (%)",
+          "DESCRIPTION": "Opening for So"
+        }
+      }
+    },
+    "MEDIA_CONTROLLER_MODE": {
+      "NAME": "Media Controller Mode",
+      "DESCRIPTION": "One per device of a media controller: passes on only the commands of its mode (link the command output of the media controller)",
+      "INPUT": {
+        "COMMAND": {
+          "NAME": "Command",
+          "DESCRIPTION": "Command output of the media controller"
+        }
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Mode of the media controller (1-8) this device belongs to"
+        }
+      },
+      "OUTPUT": {
+        "POWER": {
+          "NAME": "Power",
+          "DESCRIPTION": "1 while this mode is on (switch the device on with it)"
+        }
+      }
+    },
+    "MEDIA_CONTROLLER": {
+      "NAME": "Media Controller",
+      "DESCRIPTION": "Universal remote: up to 8 modes (e.g. TV, radio) with power, volume, channel, number pad, navigation and playback commands",
+      "INPUT": {
+        "POWER_TOGGLE": {
+          "NAME": "Power toggle (Ptg)",
+          "DESCRIPTION": "Pulse: switches the current mode on or off"
+        },
+        "POWER_ON": {
+          "NAME": "Power on (Pon)",
+          "DESCRIPTION": "Pulse: switches the last mode on"
+        },
+        "POWER_OFF": {
+          "NAME": "Power off (Poff)",
+          "DESCRIPTION": "Pulse: switches the current mode off"
+        },
+        "VOLUME_UP": {
+          "NAME": "Volume + (V+)",
+          "DESCRIPTION": "Pulse: volume up, switches the last mode on when off"
+        },
+        "VOLUME_DOWN": {
+          "NAME": "Volume - (V-)",
+          "DESCRIPTION": "Pulse: volume down"
+        },
+        "VOLUME": {
+          "NAME": "Volume (V)",
+          "DESCRIPTION": "Sets the volume in %"
+        },
+        "MUTE": {
+          "NAME": "Mute",
+          "DESCRIPTION": "Pulse: mute"
+        },
+        "CHANNEL_UP": {
+          "NAME": "Channel + (Ch+)",
+          "DESCRIPTION": "Pulse: next channel"
+        },
+        "CHANNEL_DOWN": {
+          "NAME": "Channel - (Ch-)",
+          "DESCRIPTION": "Pulse: previous channel"
+        },
+        "CHANNEL": {
+          "NAME": "Channel (Ch)",
+          "DESCRIPTION": "Switches to this channel number"
+        },
+        "DIGIT": {
+          "NAME": "Number pad digit",
+          "DESCRIPTION": "Digit 0-9; the channel is sent after the number pad timeout"
+        },
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Activates the mode with this number (1-8), 0 switches off"
+        },
+        "MODE1": {
+          "NAME": "Mode 1 (M1)",
+          "DESCRIPTION": "Pulse: activates mode 1"
+        },
+        "MODE2": {
+          "NAME": "Mode 2 (M2)",
+          "DESCRIPTION": "Pulse: activates mode 2"
+        },
+        "MODE3": {
+          "NAME": "Mode 3 (M3)",
+          "DESCRIPTION": "Pulse: activates mode 3"
+        },
+        "MODE4": {
+          "NAME": "Mode 4 (M4)",
+          "DESCRIPTION": "Pulse: activates mode 4"
+        },
+        "MODE5": {
+          "NAME": "Mode 5 (M5)",
+          "DESCRIPTION": "Pulse: activates mode 5"
+        },
+        "MODE6": {
+          "NAME": "Mode 6 (M6)",
+          "DESCRIPTION": "Pulse: activates mode 6"
+        },
+        "MODE7": {
+          "NAME": "Mode 7 (M7)",
+          "DESCRIPTION": "Pulse: activates mode 7"
+        },
+        "MODE8": {
+          "NAME": "Mode 8 (M8)",
+          "DESCRIPTION": "Pulse: activates mode 8"
+        },
+        "PLAY_PAUSE": {
+          "NAME": "Play / pause",
+          "DESCRIPTION": "Pulse"
+        },
+        "NEXT": {
+          "NAME": "Next",
+          "DESCRIPTION": "Pulse"
+        },
+        "PREVIOUS": {
+          "NAME": "Previous",
+          "DESCRIPTION": "Pulse"
+        },
+        "NAV_UP": {
+          "NAME": "Up",
+          "DESCRIPTION": "Pulse: navigation up"
+        },
+        "NAV_DOWN": {
+          "NAME": "Down",
+          "DESCRIPTION": "Pulse: navigation down"
+        },
+        "NAV_LEFT": {
+          "NAME": "Left",
+          "DESCRIPTION": "Pulse: navigation left"
+        },
+        "NAV_RIGHT": {
+          "NAME": "Right",
+          "DESCRIPTION": "Pulse: navigation right"
+        },
+        "NAV_OK": {
+          "NAME": "OK",
+          "DESCRIPTION": "Pulse: confirm"
+        },
+        "BACK": {
+          "NAME": "Back",
+          "DESCRIPTION": "Pulse"
+        },
+        "MENU": {
+          "NAME": "Menu",
+          "DESCRIPTION": "Pulse"
+        },
+        "HOME": {
+          "NAME": "Home",
+          "DESCRIPTION": "Pulse"
+        },
+        "LOCK": {
+          "NAME": "Off / lock (Off)",
+          "DESCRIPTION": "1: switches off and locks the block, 0: unlocks it"
+        },
+        "DISABLE_PERIPHERY": {
+          "NAME": "Disable periphery (DisPc)",
+          "DESCRIPTION": "1: ignores the command inputs from links (child lock); the visualization still works"
+        }
+      },
+      "OUTPUT": {
+        "COMMAND": {
+          "NAME": "Command (to the mode blocks)",
+          "DESCRIPTION": "Every command as \"mode:command[:value]\", link it to the \"Media Controller Mode\" block of each device"
+        },
+        "MODE": {
+          "NAME": "Current mode (M)",
+          "DESCRIPTION": "Number of the active mode, 0 = off"
+        },
+        "POWER": {
+          "NAME": "Power (P)",
+          "DESCRIPTION": "1 while a mode is active"
+        },
+        "MODE_ACTIVE1": {
+          "NAME": "Mode 1 active",
+          "DESCRIPTION": "1 while mode 1 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE2": {
+          "NAME": "Mode 2 active",
+          "DESCRIPTION": "1 while mode 2 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE3": {
+          "NAME": "Mode 3 active",
+          "DESCRIPTION": "1 while mode 3 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE4": {
+          "NAME": "Mode 4 active",
+          "DESCRIPTION": "1 while mode 4 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE5": {
+          "NAME": "Mode 5 active",
+          "DESCRIPTION": "1 while mode 5 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE6": {
+          "NAME": "Mode 6 active",
+          "DESCRIPTION": "1 while mode 6 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE7": {
+          "NAME": "Mode 7 active",
+          "DESCRIPTION": "1 while mode 7 is active (switch the devices of this mode on with it)"
+        },
+        "MODE_ACTIVE8": {
+          "NAME": "Mode 8 active",
+          "DESCRIPTION": "1 while mode 8 is active (switch the devices of this mode on with it)"
+        },
+        "VOLUME_UP": {
+          "NAME": "Volume +",
+          "DESCRIPTION": "Sends 1 for every volume up command"
+        },
+        "VOLUME_DOWN": {
+          "NAME": "Volume -",
+          "DESCRIPTION": "Sends 1 for every volume down command"
+        },
+        "VOLUME": {
+          "NAME": "Volume",
+          "DESCRIPTION": "Volume in %"
+        },
+        "MUTE": {
+          "NAME": "Mute",
+          "DESCRIPTION": "Sends 1 for every mute command"
+        },
+        "CHANNEL_UP": {
+          "NAME": "Channel +",
+          "DESCRIPTION": "Sends 1 for every channel up command"
+        },
+        "CHANNEL_DOWN": {
+          "NAME": "Channel -",
+          "DESCRIPTION": "Sends 1 for every channel down command"
+        },
+        "CHANNEL": {
+          "NAME": "Channel",
+          "DESCRIPTION": "Selected channel number"
+        },
+        "PLAY_PAUSE": {
+          "NAME": "Play / pause",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NEXT": {
+          "NAME": "Next",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "PREVIOUS": {
+          "NAME": "Previous",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NAV_UP": {
+          "NAME": "Up",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NAV_DOWN": {
+          "NAME": "Down",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NAV_LEFT": {
+          "NAME": "Left",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NAV_RIGHT": {
+          "NAME": "Right",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "NAV_OK": {
+          "NAME": "OK",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "BACK": {
+          "NAME": "Back",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "MENU": {
+          "NAME": "Menu",
+          "DESCRIPTION": "Sends 1 for every command"
+        },
+        "HOME": {
+          "NAME": "Home",
+          "DESCRIPTION": "Sends 1 for every command"
+        }
+      },
+      "PARAM": {
+        "MODE_NAME1": {
+          "NAME": "Name of mode 1",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME2": {
+          "NAME": "Name of mode 2",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME3": {
+          "NAME": "Name of mode 3",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME4": {
+          "NAME": "Name of mode 4",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME5": {
+          "NAME": "Name of mode 5",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME6": {
+          "NAME": "Name of mode 6",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME7": {
+          "NAME": "Name of mode 7",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "MODE_NAME8": {
+          "NAME": "Name of mode 8",
+          "DESCRIPTION": "Shown in the visualization, empty = mode not used"
+        },
+        "NUMPAD_TIMEOUT": {
+          "NAME": "Number pad timeout (ms)",
+          "DESCRIPTION": "Time after the last digit before the channel is sent (Nst)"
+        }
+      }
+    },
+    "IRRIGATION": {
+      "NAME": "Irrigation",
+      "DESCRIPTION": "Waters up to 8 zones one after the other with a pump; skips or shortens a run after rain or when rain is forecast",
+      "INPUT": {
+        "ACTIVATE": {
+          "NAME": "Activate (Act)",
+          "DESCRIPTION": "Pulse: starts a run unless there was enough rain in the last 24 hours or enough rain is forecast"
+        },
+        "START": {
+          "NAME": "Start now",
+          "DESCRIPTION": "Pulse: starts a run in any case (like the visualization)"
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": "Pulse: stops the run, the pump and all valves"
+        },
+        "SELECT": {
+          "NAME": "Select valve (Sel)",
+          "DESCRIPTION": "1-8 waters only this zone, 9 opens all valves, 0 stops"
+        },
+        "RAIN_FORECAST": {
+          "NAME": "Rain forecast (Raf)",
+          "DESCRIPTION": "Expected precipitation in the next hours in mm (l/m²), e.g. from OpenWeatherMap"
+        },
+        "RAIN": {
+          "NAME": "Rain (Ra)",
+          "DESCRIPTION": "1 while it rains (rain sensor), used for the rain time of the last 24 hours"
+        },
+        "LOCK": {
+          "NAME": "Off / lock (Off)",
+          "DESCRIPTION": "1: stops and locks the block, 0: unlocks it"
+        }
+      },
+      "OUTPUT": {
+        "PUMP": {
+          "NAME": "Pump (P)",
+          "DESCRIPTION": "1 while a valve is open"
+        },
+        "VALVE1": {
+          "NAME": "Valve 1 (V1)",
+          "DESCRIPTION": "1 while zone 1 is watered"
+        },
+        "VALVE2": {
+          "NAME": "Valve 2 (V2)",
+          "DESCRIPTION": "1 while zone 2 is watered"
+        },
+        "VALVE3": {
+          "NAME": "Valve 3 (V3)",
+          "DESCRIPTION": "1 while zone 3 is watered"
+        },
+        "VALVE4": {
+          "NAME": "Valve 4 (V4)",
+          "DESCRIPTION": "1 while zone 4 is watered"
+        },
+        "VALVE5": {
+          "NAME": "Valve 5 (V5)",
+          "DESCRIPTION": "1 while zone 5 is watered"
+        },
+        "VALVE6": {
+          "NAME": "Valve 6 (V6)",
+          "DESCRIPTION": "1 while zone 6 is watered"
+        },
+        "VALVE7": {
+          "NAME": "Valve 7 (V7)",
+          "DESCRIPTION": "1 while zone 7 is watered"
+        },
+        "VALVE8": {
+          "NAME": "Valve 8 (V8)",
+          "DESCRIPTION": "1 while zone 8 is watered"
+        },
+        "ACTIVE_VALVE": {
+          "NAME": "Active valve (Av)",
+          "DESCRIPTION": "0 all off, 1-8 the active zone, 9 all on"
+        },
+        "RUNNING": {
+          "NAME": "Running",
+          "DESCRIPTION": "1 while a run or a selected valve is active"
+        },
+        "REMAINING": {
+          "NAME": "Remaining time (s)",
+          "DESCRIPTION": "Remaining time of the active zone"
+        },
+        "SKIPPED": {
+          "NAME": "Skipped",
+          "DESCRIPTION": "1 when the last activation was skipped because of rain"
+        },
+        "RAIN_TIME": {
+          "NAME": "Rain time 24 h (s)",
+          "DESCRIPTION": "How long it rained in the last 24 hours"
+        }
+      },
+      "PARAM": {
+        "MAX_RAIN_FORECAST": {
+          "NAME": "Maximum rain forecast (MaxR, mm)",
+          "DESCRIPTION": "Act does not start when the rain forecast is above this value"
+        },
+        "MAX_RAIN_TIME": {
+          "NAME": "Maximum rain time (MaxRa, s)",
+          "DESCRIPTION": "Act does not start when it rained longer than this in the last 24 hours"
+        },
+        "ADJUST_BY_RAIN": {
+          "NAME": "Shorten by rain",
+          "DESCRIPTION": "Shortens the zone times by the share of the rain forecast and rain time in their limits (e.g. half the limit = half the time)"
+        },
+        "SCHEDULE": {
+          "NAME": "Schedule",
+          "DESCRIPTION": "Start time and weekdays for an automatic activation (like Act); the stop time is not used"
+        },
+        "SCHEDULE_ENABLED": {
+          "NAME": "Schedule active",
+          "DESCRIPTION": "Activates the schedule"
+        },
+        "ZONE_NAMES": {
+          "NAME": "Zone names",
+          "DESCRIPTION": "Names of the zones for the visualization, separated by ;"
+        },
+        "DURATION1": {
+          "NAME": "Time zone 1 (Tv1, s)",
+          "DESCRIPTION": "How long zone 1 is watered, 0 = zone not used"
+        },
+        "DURATION2": {
+          "NAME": "Time zone 2 (Tv2, s)",
+          "DESCRIPTION": "How long zone 2 is watered, 0 = zone not used"
+        },
+        "DURATION3": {
+          "NAME": "Time zone 3 (Tv3, s)",
+          "DESCRIPTION": "How long zone 3 is watered, 0 = zone not used"
+        },
+        "DURATION4": {
+          "NAME": "Time zone 4 (Tv4, s)",
+          "DESCRIPTION": "How long zone 4 is watered, 0 = zone not used"
+        },
+        "DURATION5": {
+          "NAME": "Time zone 5 (Tv5, s)",
+          "DESCRIPTION": "How long zone 5 is watered, 0 = zone not used"
+        },
+        "DURATION6": {
+          "NAME": "Time zone 6 (Tv6, s)",
+          "DESCRIPTION": "How long zone 6 is watered, 0 = zone not used"
+        },
+        "DURATION7": {
+          "NAME": "Time zone 7 (Tv7, s)",
+          "DESCRIPTION": "How long zone 7 is watered, 0 = zone not used"
+        },
+        "DURATION8": {
+          "NAME": "Time zone 8 (Tv8, s)",
+          "DESCRIPTION": "How long zone 8 is watered, 0 = zone not used"
+        }
+      }
+    },
     "NAME": "Operation",
     "DESCRIPTION": "Controls for the visualization",
     "SWITCH": {

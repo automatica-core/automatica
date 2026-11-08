@@ -33,6 +33,9 @@ import { ClimateUnitComponent } from "./climate/climate-unit.component";
 import { ClimateCentralComponent } from "./climate/climate-central.component";
 import { SecurityComponent } from "./security/security.component";
 import { LightingControllerComponent } from "./lighting-controller/lighting-controller.component";
+import { GarageComponent } from "./garage/garage.component";
+import { MediaControllerComponent } from "./media-controller/media-controller.component";
+import { IrrigationComponent } from "./irrigation/irrigation.component";
 
 @NgModule({
   imports: [
@@ -88,7 +91,10 @@ import { LightingControllerComponent } from "./lighting-controller/lighting-cont
     ClimateUnitComponent,
     ClimateCentralComponent,
     SecurityComponent,
-    LightingControllerComponent
+    LightingControllerComponent,
+    GarageComponent,
+    MediaControllerComponent,
+    IrrigationComponent
   ],
   exports: [
     VisuItemComponent

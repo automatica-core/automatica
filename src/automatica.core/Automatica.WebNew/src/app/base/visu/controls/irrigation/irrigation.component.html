@@ -1,0 +1,112 @@
+<app-visualization-control [hint]="displayText" [location]="location" icon="droplet" [active]="running" [hasPopup]="true"
+  [state]="running ? activeName + ' · ' + remainingText : ((skipped ? 'UI.VISU.IRRIGATION.SKIPPED' : 'UI.VISU.IRRIGATION.IDLE') | translateAsync)"
+  [level]="running ? progress : undefined" levelTone="accent" (onPopupShowing)="refresh()">
+
+  <div control class="irr-row">
+    @if (raining) {
+      <span class="irr-hint" [attr.title]="'UI.VISU.IRRIGATION.RAINING' | translateAsync"><fa-icon icon="cloud-rain"></fa-icon></span>
+    }
+    @if (locked) {
+      <span class="irr-hint" [attr.title]="'UI.VISU.IRRIGATION.LOCKED' | translateAsync"><fa-icon icon="lock"></fa-icon></span>
+    }
+    <span class="irr-spacer"></span>
+    @if (running) {
+      <button type="button" class="irr-btn" (click)="stop()" [disabled]="!stopInput || locked"
+        [attr.aria-label]="('UI.VISU.IRRIGATION.STOP' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.IRRIGATION.STOP' | translateAsync">
+        <fa-icon icon="stop"></fa-icon>
+      </button>
+    } @else {
+      <button type="button" class="irr-btn" (click)="start()" [disabled]="!startInput || locked"
+        [attr.aria-label]="('UI.VISU.IRRIGATION.START' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.IRRIGATION.START' | translateAsync">
+        <fa-icon icon="play"></fa-icon>
+      </button>
+    }
+  </div>
+
+  <div popup class="irr-popup">
+    @if (locked) {
+      <div class="irr-note"><fa-icon icon="lock"></fa-icon> {{ 'UI.VISU.IRRIGATION.LOCKED' | translateAsync }}</div>
+    }
+
+    <div class="irr-actions">
+      <button type="button" class="irr-btn is-large" (click)="start()" [disabled]="!startInput || locked">
+        <fa-icon icon="play"></fa-icon> {{ 'UI.VISU.IRRIGATION.START_ALL' | translateAsync }}
+      </button>
+      <button type="button" class="irr-btn is-large" (click)="stop()" [disabled]="!stopInput || locked || !running">
+        <fa-icon icon="stop"></fa-icon> {{ 'UI.VISU.IRRIGATION.STOP' | translateAsync }}
+      </button>
+    </div>
+
+    <section>
+      <h3 class="irr-title">{{ 'UI.VISU.IRRIGATION.ZONES' | translateAsync }}</h3>
+      <ul class="irr-zones">
+        @for (z of zones; track z.zone) {
+          @let active = running && z.zone === activeZone;
+          <li class="irr-zone" [class.is-active]="active">
+            <button type="button" class="irr-btn" (click)="runZone(z.zone)" [disabled]="!selectInput || locked"
+              [attr.aria-label]="((active ? 'UI.VISU.IRRIGATION.STOP' : 'UI.VISU.IRRIGATION.WATER_ZONE') | translateAsync) + ': ' + z.name">
+              <fa-icon [icon]="active ? 'stop' : 'play'"></fa-icon>
+            </button>
+            <span class="irr-zone-name">{{ z.name }}</span>
+            <span class="irr-zone-time">
+              @if (active) {
+                {{ remainingText }} / {{ duration(z.duration * factor) }}
+              } @else {
+                {{ duration(z.duration) }}
+              }
+            </span>
+            @if (active) {
+              <span class="irr-zone-bar" aria-hidden="true"><i [style.width.%]="progress"></i></span>
+            }
+          </li>
+        } @empty {
+          <li class="irr-note">{{ 'UI.VISU.IRRIGATION.NO_ZONES' | translateAsync }}</li>
+        }
+      </ul>
+    </section>
+
+    <section>
+      <h3 class="irr-title">{{ 'UI.VISU.IRRIGATION.RAIN' | translateAsync }}</h3>
+      <dl class="irr-facts">
+        <dt>{{ 'UI.VISU.IRRIGATION.RAIN_NOW' | translateAsync }}</dt>
+        <dd>{{ (raining ? 'UI.VISU.IRRIGATION.YES' : 'UI.VISU.IRRIGATION.NO') | translateAsync }}</dd>
+        <dt>{{ 'UI.VISU.IRRIGATION.RAIN_24H' | translateAsync }}</dt>
+        <dd [class.is-over]="maxRainSeconds > 0 && rainSeconds > maxRainSeconds">
+          {{ duration(rainSeconds) }}@if (maxRainSeconds > 0) {<small class="irr-max">/ {{ duration(maxRainSeconds) }}</small>}
+        </dd>
+        <dt>{{ 'UI.VISU.IRRIGATION.FORECAST' | translateAsync }}</dt>
+        <dd [class.is-over]="maxRainForecast > 0 && rainForecast > maxRainForecast">
+          @if (rainForecast !== undefined) { {{ rainForecast }} mm } @else { – }@if (maxRainForecast > 0) {<small class="irr-max">/ {{ maxRainForecast }} mm</small>}
+        </dd>
+        @if (factor !== 1) {
+          <dt>{{ 'UI.VISU.IRRIGATION.FACTOR' | translateAsync }}</dt>
+          <dd>{{ factor * 100 | number:'1.0-0' }} %</dd>
+        }
+      </dl>
+    </section>
+
+    <section>
+      <h3 class="irr-title">{{ 'UI.VISU.IRRIGATION.SCHEDULE' | translateAsync }}</h3>
+      @if (scheduleEnabled && scheduleTime) {
+        <div>{{ scheduleTime }} · {{ scheduleDays.join(', ') }}</div>
+      } @else {
+        <div class="irr-note">{{ 'UI.VISU.IRRIGATION.NO_SCHEDULE' | translateAsync }}</div>
+      }
+    </section>
+
+    @if (history.length > 0) {
+      <section>
+        <h3 class="irr-title">{{ 'UI.VISU.IRRIGATION.HISTORY' | translateAsync }}</h3>
+        <ul class="irr-history">
+          @for (h of history; track $index) {
+            <li>
+              <time [attr.datetime]="h.at.toISOString()">{{ time(h.at) }}</time>
+              <span>{{ (historyTexts[h.kind] ?? h.kind) | translateAsync }}@if (h.zone > 0) { · {{ zoneName(h.zone) }}}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+
+</app-visualization-control>
