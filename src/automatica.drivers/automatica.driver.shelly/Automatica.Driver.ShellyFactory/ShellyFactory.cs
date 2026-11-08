@@ -4,6 +4,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Migrations;
 using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Discovery;
+using Automatica.Driver.ShellyFactory.Generic;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace Automatica.Driver.ShellyFactory
@@ -25,7 +26,7 @@ namespace Automatica.Driver.ShellyFactory
 
         public override string ImageName => "automaticacore/plugin-automatica.driver.shelly";
 
-        public override Version DriverVersion => new Version(0, 2, 0, 0);
+        public override Version DriverVersion => new Version(0, 3, 0, 0);
 
         public override bool InDevelopmentMode => true;
 
@@ -55,6 +56,10 @@ namespace Automatica.Driver.ShellyFactory
             InitShellyPlus1PmTemplates(factory);
             InitShellyPlus2PmTemplates(factory);
             InitShellyPlugSTemplates(factory);
+
+            // every Gen1 / Gen2 / Gen3 / Gen4 device and the BLU devices behind a gateway, built from its components by the scan
+            ShellyGenericTemplates.InitDriverProperties(factory, DriverGuid);
+            ShellyGenericTemplates.Init(factory, DriverGuid);
         }
 
         private void InitShelly1Templates(INodeTemplateFactory factory)

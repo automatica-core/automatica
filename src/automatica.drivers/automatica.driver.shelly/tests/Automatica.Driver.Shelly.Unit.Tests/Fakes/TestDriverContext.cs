@@ -22,6 +22,14 @@ namespace Automatica.Driver.Shelly.Unit.Tests.Fakes
     /// <summary>
     /// <see cref="DriverContextMock"/> with a logger and a dispatcher of the test (the mock always logs to NullLogger).
     /// </summary>
+    internal sealed class EmptyZeroconf : IZeroconfDiscovery
+    {
+        public static EmptyZeroconf Instance { get; } = new();
+
+        public Task<System.Collections.Generic.IEnumerable<ZeroconfHost>> DiscoverAsync(string serviceType, TimeSpan timeout) =>
+            Task.FromResult<System.Collections.Generic.IEnumerable<ZeroconfHost>>(Array.Empty<ZeroconfHost>());
+    }
+
     internal sealed class TestDriverContext : IDriverContext
     {
         private readonly DriverContextMock _inner;
@@ -40,12 +48,15 @@ namespace Automatica.Driver.Shelly.Unit.Tests.Fakes
         public ILicenseState LicenseState => _inner.LicenseState;
         public bool IsTest => true;
         public ILogger Logger { get; }
-        public ILearnMode LearnMode => _inner.LearnMode;
+        public ILearnMode LearnMode { get; set; }
         public IServerCloudApi CloudApi => _inner.CloudApi;
         public ILicenseContract LicenseContract => _inner.LicenseContract;
         public ILoggerFactory LoggerFactory => _inner.LoggerFactory;
         public ITunnelingProvider TunnelingProvider => _inner.TunnelingProvider;
-        public IZeroconfDiscovery ZeroconfDiscovery => _inner.ZeroconfDiscovery;
+        /// <summary>
+        /// mDNS of the test, default: finds nothing (the mock has none)
+        /// </summary>
+        public IZeroconfDiscovery ZeroconfDiscovery { get; set; } = EmptyZeroconf.Instance;
         public IControlContext ControlContext => _inner.ControlContext;
         public TimeProvider TimeProvider => _inner.TimeProvider;
         public ILocalizationProvider LocalizationProvider => _inner.LocalizationProvider;
@@ -54,6 +65,6 @@ namespace Automatica.Driver.Shelly.Unit.Tests.Fakes
         public Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default) => Task.CompletedTask;
 
         public IDriverContext Copy(NodeInstance node, ILogger logger) =>
-            new TestDriverContext(node, Factory, NodeTemplateFactory, Dispatcher, logger ?? Logger);
+            new TestDriverContext(node, Factory, NodeTemplateFactory, Dispatcher, logger ?? Logger) { LearnMode = LearnMode, ZeroconfDiscovery = ZeroconfDiscovery };
     }
 }

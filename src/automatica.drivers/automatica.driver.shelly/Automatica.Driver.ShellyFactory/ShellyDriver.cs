@@ -1,20 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Automatica.Driver.Shelly.CoIoT;
+using Automatica.Driver.Shelly.Rpc;
 using Automatica.Driver.ShellyFactory.Discovery;
-using Automatica.Driver.ShellyFactory.Types;
+using Automatica.Driver.ShellyFactory.Generic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Automatica.Driver.ShellyFactory
 {
     internal class ShellyDriver : DriverBase
     {
         public List<ShellyDevice> DiscoveredShellys { get; private set; } = new List<ShellyDevice>();
+        public List<ShellyDiscoveredHost> DiscoveredHosts { get; private set; } = new List<ShellyDiscoveredHost>();
         public ShellyDiscoveryService DiscoveryService { get; }
         private readonly List<ShellyDriverDevice> _devices = new List<ShellyDriverDevice>();
+        private readonly List<ShellyGenericDevice> _genericDevices = new List<ShellyGenericDevice>();
+
+        /// <summary>
+        /// Devices that woke up / connected but are not configured yet (sleeping devices are asleep during a scan), keyed by MAC.
+        /// </summary>
+        private readonly ConcurrentDictionary<string, NodeInstance> _learned = new ConcurrentDictionary<string, NodeInstance>();
+        private readonly ConcurrentDictionary<string, byte> _probing = new ConcurrentDictionary<string, byte>();
+
+        private CoIoTListener _coiot;
+        private ShellyOutboundWebSocketServer _outbound;
+        private volatile bool _learnMode;
+
+        /// <summary>CoIoT port, the tests use an ephemeral one</summary>
+        internal int CoIoTPort { get; set; } = CoIoTListener.DefaultPort;
+        internal bool CoIoTJoinMulticast { get; set; } = true;
+        internal int? OutboundWebSocketPortOverride { get; set; }
+        internal TimeSpan ProbeTimeout { get; set; } = TimeSpan.FromSeconds(5);
+
+        public int? OutboundWebSocketPort => _outbound?.Port;
+        public int? CoIoTListenerPort => _coiot?.Port;
+        public IReadOnlyCollection<NodeInstance> LearnedDevices => _learned.Values.ToList();
+        internal IReadOnlyList<ShellyGenericDevice> GenericDevices => _genericDevices;
+
         public ShellyDriver(IDriverContext driverContext) : base(driverContext)
         {
             DiscoveryService = new ShellyDiscoveryService(driverContext.ZeroconfDiscovery, driverContext.Logger);
@@ -30,108 +60,354 @@ namespace Automatica.Driver.ShellyFactory
             return Task.FromResult(false);
         }
 
-        public override async Task<bool> Init(CancellationToken token = new CancellationToken())
-        {
-            DiscoveredShellys = await DiscoveryService.SearchShellys();
-
-            return await base.Init(token);
-        }
-
-        public override async Task<bool> Start(CancellationToken token = new CancellationToken())
-        {
-            DiscoveredShellys = await DiscoveryService.SearchShellys();
-            return await base.Start(token);
-        }
-
         protected override bool CreateTelegramMonitor()
         {
             return true;
         }
 
-        public override Task OnDelete(NodeInstance instance, CancellationToken token = new CancellationToken())
+        private async Task Discover()
         {
-            var toRemove = new List<ShellyDriverDevice>();
-            foreach (var device in _devices)
+            try
             {
-                if (device.DriverContext.NodeInstance.ObjId == instance.ObjId)
+                var legacy = DiscoveryService.SearchShellys();
+                var all = DiscoveryService.SearchAllAsync();
+                DiscoveredShellys = await legacy;
+                DiscoveredHosts = await all;
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogWarning($"Shelly mDNS discovery failed: {e.Message}");
+            }
+        }
+
+        public override async Task<bool> Init(CancellationToken token = new CancellationToken())
+        {
+            await Discover();
+            return await base.Init(token);
+        }
+
+        public override async Task<bool> Start(CancellationToken token = new CancellationToken())
+        {
+            await Discover();
+            StartListeners();
+            return await base.Start(token);
+        }
+
+        internal void StartListeners()
+        {
+            StopListeners();
+
+            if (GetPropertyValueBool(ShellyGenericTemplates.CoIoTEnabledKey) ?? true)
+            {
+                try
                 {
-                    toRemove.Add(device);
-                    break;
+                    _coiot = new CoIoTListener(DriverContext.Logger, CoIoTPort, CoIoTJoinMulticast);
+                    _coiot.MessageReceived += OnCoIoT;
+                    _coiot.Start();
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogWarning($"Could not listen for Gen1 CoIoT on udp {CoIoTPort}: {e.Message}; Gen1 devices are polled only");
+                    _coiot = null;
                 }
             }
 
-            foreach (var device in toRemove)
+            var port = OutboundWebSocketPortOverride ?? GetPropertyValueInt(ShellyGenericTemplates.OutboundWebSocketPortKey);
+            if (port > 0 || OutboundWebSocketPortOverride.HasValue)
             {
-                _devices.Remove(device);
+                try
+                {
+                    _outbound = new ShellyOutboundWebSocketServer(port, DriverContext.Logger, OutboundWebSocketPortOverride.HasValue ? IPAddress.Loopback : null);
+                    _outbound.MessageReceived += OnOutboundMessage;
+                    _outbound.Start();
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError($"Could not start the shelly outbound websocket server on port {port}: {e.Message}");
+                    _outbound = null;
+                }
             }
-            
+        }
+
+        private void StopListeners()
+        {
+            if (_coiot != null)
+            {
+                _coiot.MessageReceived -= OnCoIoT;
+                _coiot.Dispose();
+                _coiot = null;
+            }
+
+            if (_outbound != null)
+            {
+                _outbound.MessageReceived -= OnOutboundMessage;
+                _outbound.Dispose();
+                _outbound = null;
+            }
+        }
+
+        public override async Task<bool> Stop(CancellationToken token = new CancellationToken())
+        {
+            StopListeners();
+            return await base.Stop(token);
+        }
+
+        internal void OnCoIoT(CoIoTMessage message, IPAddress sender)
+        {
+            if (!message.IsStatus)
+            {
+                return;
+            }
+
+            var device = _genericDevices.OfType<ShellyGen1Device>().FirstOrDefault(a => a.Matches(message.DeviceId));
+            if (device != null)
+            {
+                device.HandleCoIoT(message, sender);
+                return;
+            }
+
+            if (IsConfigured(ShellyGenericDevice.NormalizeMac(message.DeviceId)))
+            {
+                return;
+            }
+
+            // an unknown device is awake right now: learn it while it can be read
+            _ = LearnAsync(message.DeviceId, sender.ToString());
+        }
+
+        internal void OnOutboundMessage(string source, string method, JObject parameters, IPAddress remote)
+        {
+            var device = _genericDevices.OfType<ShellyRpcDevice>().FirstOrDefault(a => a.Matches(source));
+            if (device != null)
+            {
+                device.HandleNotification(method, parameters, remote);
+                return;
+            }
+
+            if (method == "NotifyFullStatus")
+            {
+                LearnFromFullStatus(source, parameters, remote);
+            }
+        }
+
+        private void LearnFromFullStatus(string source, JObject status, IPAddress remote)
+        {
+            var mac = ShellyGenericDevice.NormalizeMac(status.SelectToken("sys.mac")?.Value<string>() ?? source.Split('-')[^1]);
+            if (mac.Length == 0 || IsConfigured(mac))
+            {
+                return;
+            }
+
+            // the device sleeps again right away: build it from the pushed status, the model comes from the id ("shellyhtg3-...")
+            var info = new JObject
+            {
+                ["id"] = source,
+                ["mac"] = mac,
+                ["app"] = source.Contains('-') ? source.Substring(0, source.LastIndexOf('-')) : source,
+                ["gen"] = 2
+            };
+            var node = ShellyNodeBuilder.BuildRpc(DriverContext.NodeTemplateFactory, info, status, null, remote.ToString(),
+                GetPropertyValueString(ShellyGenericTemplates.DefaultPasswordKey));
+            node.SetProperty(ShellyGenericTemplates.SleepingKey, true);
+            AddLearned(mac, node);
+        }
+
+        private async Task LearnAsync(string deviceId, string address)
+        {
+            var key = ShellyGenericDevice.NormalizeMac(deviceId);
+            if (key.Length == 0 || _learned.Keys.Any(a => a.EndsWith(key) || key.EndsWith(a)) || !_probing.TryAdd(key, 0))
+            {
+                return;
+            }
+
+            try
+            {
+                var node = await ShellyNodeBuilder.ProbeAsync(DriverContext.NodeTemplateFactory, address, DefaultCredentials, DriverContext.Logger,
+                    CancellationToken.None, ProbeTimeout);
+                if (node != null)
+                {
+                    AddLearned(ShellyGenericDevice.NormalizeMac(node.GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey)), node);
+                }
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogDebug($"Could not learn shelly {deviceId} at {address}: {e.Message}");
+            }
+            finally
+            {
+                _probing.TryRemove(key, out _);
+            }
+        }
+
+        private void AddLearned(string mac, NodeInstance node)
+        {
+            if (!_learned.TryAdd(mac, node))
+            {
+                return;
+            }
+
+            DriverContext.Logger.LogInformation($"Learned shelly {node.Name} ({mac}), the next scan adds it");
+            if (_learnMode)
+            {
+                NotifyLearned(node);
+            }
+        }
+
+        private void NotifyLearned(NodeInstance node)
+        {
+            try
+            {
+                DriverContext.LearnMode?.NotifyLearnNode(node.Name, node.GetPropertyValueString(ShellyGenericTemplates.ModelKey), DriverContext.NodeInstance,
+                    new List<NodeTemplate> { node.This2NodeTemplateNavigation }, node.PropertyInstance.ToList());
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogWarning($"Could not report the learned shelly {node.Name}: {e.Message}");
+            }
+        }
+
+        private ShellyCredentials DefaultCredentials => new ShellyCredentials(
+            GetPropertyValueString(ShellyGenericTemplates.DefaultUserNameKey),
+            GetPropertyValueString(ShellyGenericTemplates.DefaultPasswordKey));
+
+        /// <summary>
+        /// Whether a device with this MAC is a node of the driver already (also disabled or failed ones).
+        /// </summary>
+        private bool IsConfigured(string mac)
+        {
+            if (string.IsNullOrEmpty(mac))
+            {
+                return false;
+            }
+
+            foreach (var node in DriverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
+            {
+                var id = ShellyGenericDevice.NormalizeMac(node.GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey));
+                if (id.Length > 0 && (id == mac || id.EndsWith(mac) || mac.EndsWith(id)))
+                {
+                    return true;
+                }
+            }
+
+            return _genericDevices.Any(a => a.Matches(mac)) || _devices.Any(a => ShellyGenericDevice.NormalizeMac(a.ShellyId) == mac);
+        }
+
+        public override Task<bool> EnableLearnMode(CancellationToken token = new CancellationToken())
+        {
+            _learnMode = true;
+            foreach (var node in _learned.Values)
+            {
+                NotifyLearned(node);
+            }
+            return Task.FromResult(true);
+        }
+
+        public override Task<bool> DisableLearnMode(CancellationToken token = new CancellationToken())
+        {
+            _learnMode = false;
+            return Task.FromResult(true);
+        }
+
+        public override Task OnDelete(NodeInstance instance, CancellationToken token = new CancellationToken())
+        {
+            _devices.RemoveAll(a => a.DriverContext.NodeInstance.ObjId == instance.ObjId);
+            _genericDevices.RemoveAll(a => a.DriverContext.NodeInstance.ObjId == instance.ObjId);
+
             return base.OnDelete(instance, token);
         }
 
+        /// <summary>
+        /// Finds every Shelly (mDNS, the addresses of the scan property, devices that woke up meanwhile), reads what it is
+        /// and returns the device nodes with exactly the components and data points of the device.
+        /// </summary>
         public override async Task<IList<NodeInstance>> Scan(CancellationToken token = new CancellationToken())
         {
-            var devices = await DiscoveryService.SearchShellys();
-            var ret = new List<NodeInstance>();
+            await Discover();
 
-            DiscoveredShellys = devices;
-
-            foreach (var device in devices)
+            var addresses = DiscoveredHosts.Select(a => a.IpAddress).ToList();
+            var configured = GetPropertyValueString(ShellyGenericTemplates.ScanAddressesKey);
+            if (!string.IsNullOrWhiteSpace(configured))
             {
-                if (_devices.Any(a => a.ShellyId == device.DeviceId))
+                addresses.AddRange(configured.Split(new[] { ',', ';', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
+            }
+
+            var ret = new List<NodeInstance>();
+            var credentials = DefaultCredentials;
+            using var limit = new SemaphoreSlim(8);
+            var probes = addresses.Distinct().Select(async address =>
+            {
+                await limit.WaitAsync(token);
+                try
                 {
-                    DriverContext.Logger.LogInformation($"Device with id {device.Id} already added...");
-                    continue;   
+                    return await ShellyNodeBuilder.ProbeAsync(DriverContext.NodeTemplateFactory, address, credentials, DriverContext.Logger, token, ProbeTimeout);
+                }
+                finally
+                {
+                    limit.Release();
+                }
+            }).ToList();
+
+            foreach (var node in await Task.WhenAll(probes))
+            {
+                if (node == null)
+                {
+                    continue;
                 }
 
-                NodeInstance node;
-                switch (device.Type)
+                var mac = ShellyGenericDevice.NormalizeMac(node.GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey));
+                _learned.TryRemove(mac, out _);
+                if (IsConfigured(mac))
                 {
-                    case ShellyDeviceType.Shelly1:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly1Device);
-                        break;
-                    case ShellyDeviceType.Shelly1Pm:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly1PmDevice);
-                        break;
-                    case ShellyDeviceType.Shelly25:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly25Device);
-                        break;
-
-                    case ShellyDeviceType.ShellyPlus1Pm:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlus1PmDevice);
-                        break;
-                    case ShellyDeviceType.ShellyPlus2Pm:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlus2PmDevice);
-                        break;
-                    case ShellyDeviceType.ShellyPlugS:
-                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlugS);
-                        break;
-                    default:
-                        DriverContext.Logger.LogInformation($"Device with id {device.Id} not supported...");
-                        continue;
-                
+                    DriverContext.Logger.LogInformation($"Shelly {mac} is configured already...");
+                    continue;
                 }
-                var idProp = node.GetProperty(ShellyFactory.DeviceIdPropertyKey);
-                idProp.Value = device.DeviceId;
-                node.Name = device.Name;
 
-                var ipProp = node.GetProperty(ShellyFactory.DeviceIpPropertyKey);
-                ipProp.Value = device.IpAddress;
+                if (ret.Any(a => ShellyGenericDevice.NormalizeMac(a.GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey)) == mac))
+                {
+                    continue;
+                }
 
                 ret.Add(node);
             }
 
+            foreach (var learned in _learned.ToList())
+            {
+                if (!IsConfigured(learned.Key))
+                {
+                    ret.Add(learned.Value);
+                }
+                _learned.TryRemove(learned.Key, out _);
+            }
 
             return ret;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            var key = ctx.NodeInstance.This2NodeTemplateNavigation.Key;
+            var key = ctx.NodeInstance.This2NodeTemplateNavigation?.Key;
 
-            var shellyDevice = new ShellyDriverDevice(ctx, TelegramMonitor);
-            
-            _devices.Add(shellyDevice);
-            return shellyDevice;
+            switch (key)
+            {
+                case ShellyGenericTemplates.Gen1DeviceKey:
+                {
+                    var device = new ShellyGen1Device(ctx, TelegramMonitor);
+                    _genericDevices.Add(device);
+                    return device;
+                }
+                case ShellyGenericTemplates.RpcDeviceKey:
+                {
+                    var device = new ShellyRpcDevice(ctx, TelegramMonitor);
+                    _genericDevices.Add(device);
+                    return device;
+                }
+                default:
+                {
+                    // the model templates of driver version 0.2 (Shelly 1, 1PM, 2.5, Plus 1PM, Plus 2PM, Plus Plug S)
+                    var shellyDevice = new ShellyDriverDevice(ctx, TelegramMonitor);
+                    _devices.Add(shellyDevice);
+                    return shellyDevice;
+                }
+            }
         }
     }
 }

@@ -1,0 +1,120 @@
+{
+  "gen": 2,
+  "deviceinfo": {
+    "name": null,
+    "id": "shellyprorgbwwpm-34987a1b2c3d",
+    "mac": "34987A1B2C3D",
+    "slot": 0,
+    "model": "SPDC-0D5PE16EU",
+    "gen": 2,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "ProRGBWWPM",
+    "auth_en": false,
+    "auth_domain": null,
+    "profile": "cct x2"
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "34987A1B2C3D",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "cct:0": {
+      "id": 0,
+      "source": "init",
+      "output": true,
+      "brightness": 70,
+      "ct": 4000,
+      "apower": 18.0,
+      "voltage": 24.0,
+      "freq": 50.0,
+      "current": 0.75,
+      "pf": 0.92,
+      "aenergy": {
+        "total": 9.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "ret_aenergy": {
+        "total": 0.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "temperature": {
+        "tC": 41.0,
+        "tF": 105.8
+      }
+    },
+    "cct:1": {
+      "id": 1,
+      "source": "init",
+      "output": false,
+      "brightness": 100,
+      "ct": 2700,
+      "apower": 0.0,
+      "voltage": 230.0,
+      "freq": 50.0,
+      "current": 0.0,
+      "pf": 0.0,
+      "aenergy": {
+        "total": 0.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "ret_aenergy": {
+        "total": 0.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "temperature": {
+        "tC": 40.0,
+        "tF": 104.0
+      }
+    }
+  },
+  "config": {}
+}

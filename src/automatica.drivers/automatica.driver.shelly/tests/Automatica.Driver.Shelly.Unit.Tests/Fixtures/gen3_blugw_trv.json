@@ -1,0 +1,70 @@
+{
+  "gen": 3,
+  "deviceinfo": {
+    "name": null,
+    "id": "shellyblugwg3-8cbfea1a2b3c",
+    "mac": "8CBFEA1A2B3C",
+    "slot": 0,
+    "model": "S3GW-1DBT001",
+    "gen": 3,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "BluGwG3",
+    "auth_en": false,
+    "auth_domain": null
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "8CBFEA1A2B3C",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "blugw": {},
+    "blutrv:200": {
+      "id": 200,
+      "target_C": 21.0,
+      "current_C": 19.5,
+      "pos": 35,
+      "rssi": -72,
+      "battery": 90,
+      "packet_id": 5,
+      "last_updated_ts": 1700000000,
+      "paired": true,
+      "fw_ver": "1.0.4"
+    }
+  },
+  "config": {
+    "blutrv:200": {
+      "id": 200,
+      "name": "Living room TRV",
+      "addr": "f8:44:77:1a:2b:3c"
+    }
+  }
+}

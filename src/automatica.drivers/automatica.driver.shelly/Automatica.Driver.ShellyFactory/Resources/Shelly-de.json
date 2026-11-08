@@ -61,6 +61,54 @@
       "IP": {
         "NAME": "IP",
         "DESCRIPTION": "IP-Adresse des Shelly"
+      },
+      "SLEEPING": {
+        "NAME": "Batteriegerät (schläft)",
+        "DESCRIPTION": "Das Gerät schläft meistens und meldet sich selbst, wenn es aufwacht (CoIoT bei Gen1, ausgehender Websocket bei Gen2+)"
+      },
+      "MODEL": {
+        "NAME": "Modell",
+        "DESCRIPTION": "Modell des Geräts, beim Scan gelesen"
+      },
+      "GENERATION": {
+        "NAME": "Generation",
+        "DESCRIPTION": "API-Generation des Geräts (1 = Gen1 REST, 2+ = JSON-RPC)"
+      },
+      "MODE": {
+        "NAME": "Modus",
+        "DESCRIPTION": "Gen1-Gerätemodus (Relais/Rollladen, Farbe/Weiß)"
+      },
+      "COIOT_DESCRIPTION": {
+        "NAME": "CoIoT-Beschreibung",
+        "DESCRIPTION": "Sensorbeschreibung (/cit/d) des Geräts, beim Scan gelesen"
+      },
+      "COMPONENT_ID": {
+        "NAME": "Komponenten-ID",
+        "DESCRIPTION": "ID der Komponente am Gerät (z. B. 0 für switch:0)"
+      },
+      "SCAN_ADDRESSES": {
+        "NAME": "Scan-Adressen",
+        "DESCRIPTION": "Zusätzliche IP-Adressen (Host oder Host:Port, durch Komma getrennt), die der Scan liest, für Geräte, die mDNS nicht findet"
+      },
+      "DEFAULT_USERNAME": {
+        "NAME": "Standard-Benutzername",
+        "DESCRIPTION": "Benutzername, den der Scan für Gen1-Geräte mit aktivierter Anmeldung verwendet"
+      },
+      "DEFAULT_PASSWORD": {
+        "NAME": "Standard-Passwort",
+        "DESCRIPTION": "Passwort, das der Scan für Geräte mit aktivierter Anmeldung verwendet"
+      },
+      "LEARN": {
+        "NAME": "Geräte anlernen",
+        "DESCRIPTION": "Meldet Batteriegeräte, die aufwachen, während der Anlernmodus aktiv ist"
+      },
+      "COIOT": {
+        "NAME": "CoIoT",
+        "DESCRIPTION": "Gen1-CoIoT-Push-Updates empfangen (UDP 5683, Multicast 224.0.1.187)"
+      },
+      "OUTBOUND_WS_PORT": {
+        "NAME": "Port ausgehender Websocket",
+        "DESCRIPTION": "Port, mit dem sich Gen2+-Batteriegeräte verbinden (am Gerät ws://<Server>:<Port> als ausgehenden Websocket einstellen), 0 = aus"
       }
     },
     "METERS": {
@@ -140,6 +188,590 @@
     "HAS_UPDATE": {
       "NAME": "Update verfügbar",
       "DESCRIPTION": "Ein Firmware-Update ist verfügbar"
+    },
+    "GEN1_DEVICE": {
+      "NAME": "Shelly Gen1-Gerät",
+      "DESCRIPTION": "Shelly Gen1-Gerät (REST-API und CoIoT), die Komponenten legt der Scan an"
+    },
+    "RPC_DEVICE": {
+      "NAME": "Shelly Gen2+-Gerät",
+      "DESCRIPTION": "Shelly Gen2/Gen3/Gen4-Gerät (JSON-RPC und Websocket), die Komponenten legt der Scan an"
+    },
+    "COMPONENT": {
+      "CB": {
+        "NAME": "Leitungsschutzschalter",
+        "DESCRIPTION": "Shelly-Komponente: Leitungsschutzschalter"
+      },
+      "ADC": {
+        "NAME": "Analogeingang",
+        "DESCRIPTION": "Shelly-Komponente: Analogeingang"
+      },
+      "BLUTRV": {
+        "NAME": "BLU-Heizkörperthermostat",
+        "DESCRIPTION": "Shelly-Komponente: BLU-Heizkörperthermostat"
+      },
+      "BOOLEAN": {
+        "NAME": "Virtueller Schalter",
+        "DESCRIPTION": "Shelly-Komponente: Virtueller Schalter"
+      },
+      "BTHOMEDEVICE": {
+        "NAME": "BLU-Gerät",
+        "DESCRIPTION": "Shelly-Komponente: BLU-Gerät"
+      },
+      "BTHOMESENSOR": {
+        "NAME": "BLU-Sensor",
+        "DESCRIPTION": "Shelly-Komponente: BLU-Sensor"
+      },
+      "BUTTON": {
+        "NAME": "Virtueller Taster",
+        "DESCRIPTION": "Shelly-Komponente: Virtueller Taster"
+      },
+      "CCT": {
+        "NAME": "Weißlicht (Farbtemperatur)",
+        "DESCRIPTION": "Shelly-Komponente: Weißlicht (Farbtemperatur)"
+      },
+      "COVER": {
+        "NAME": "Rollladen",
+        "DESCRIPTION": "Shelly-Komponente: Rollladen"
+      },
+      "DEVICE": {
+        "NAME": "Gerät",
+        "DESCRIPTION": "Shelly-Komponente: Gerät"
+      },
+      "DEVICEPOWER": {
+        "NAME": "Stromversorgung",
+        "DESCRIPTION": "Shelly-Komponente: Stromversorgung"
+      },
+      "EM": {
+        "NAME": "3-Phasen-Energiezähler",
+        "DESCRIPTION": "Shelly-Komponente: 3-Phasen-Energiezähler"
+      },
+      "EM1": {
+        "NAME": "Energiezähler",
+        "DESCRIPTION": "Shelly-Komponente: Energiezähler"
+      },
+      "EM1DATA": {
+        "NAME": "Energiezählerstände",
+        "DESCRIPTION": "Shelly-Komponente: Energiezählerstände"
+      },
+      "EMDATA": {
+        "NAME": "3-Phasen-Energiezählerstände",
+        "DESCRIPTION": "Shelly-Komponente: 3-Phasen-Energiezählerstände"
+      },
+      "EMETER": {
+        "NAME": "Energiezähler",
+        "DESCRIPTION": "Shelly-Komponente: Energiezähler"
+      },
+      "ENUM": {
+        "NAME": "Virtuelle Auswahl",
+        "DESCRIPTION": "Shelly-Komponente: Virtuelle Auswahl"
+      },
+      "EXT_HUMIDITY": {
+        "NAME": "Externe Luftfeuchtigkeit",
+        "DESCRIPTION": "Shelly-Komponente: Externe Luftfeuchtigkeit"
+      },
+      "EXT_SWITCH": {
+        "NAME": "Externer Eingang",
+        "DESCRIPTION": "Shelly-Komponente: Externer Eingang"
+      },
+      "EXT_TEMPERATURE": {
+        "NAME": "Externe Temperatur",
+        "DESCRIPTION": "Shelly-Komponente: Externe Temperatur"
+      },
+      "FLOOD": {
+        "NAME": "Wassermelder",
+        "DESCRIPTION": "Shelly-Komponente: Wassermelder"
+      },
+      "HUMIDITY": {
+        "NAME": "Luftfeuchtigkeit",
+        "DESCRIPTION": "Shelly-Komponente: Luftfeuchtigkeit"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Helligkeit",
+        "DESCRIPTION": "Shelly-Komponente: Helligkeit"
+      },
+      "INPUT": {
+        "NAME": "Eingang",
+        "DESCRIPTION": "Shelly-Komponente: Eingang"
+      },
+      "LIGHT": {
+        "NAME": "Licht",
+        "DESCRIPTION": "Shelly-Komponente: Licht"
+      },
+      "METER": {
+        "NAME": "Zähler",
+        "DESCRIPTION": "Shelly-Komponente: Zähler"
+      },
+      "NUMBER": {
+        "NAME": "Virtuelle Zahl",
+        "DESCRIPTION": "Shelly-Komponente: Virtuelle Zahl"
+      },
+      "PM1": {
+        "NAME": "Leistungsmesser",
+        "DESCRIPTION": "Shelly-Komponente: Leistungsmesser"
+      },
+      "PRESENCE": {
+        "NAME": "Anwesenheit",
+        "DESCRIPTION": "Shelly-Komponente: Anwesenheit"
+      },
+      "PRESENCEZONE": {
+        "NAME": "Anwesenheitszone",
+        "DESCRIPTION": "Shelly-Komponente: Anwesenheitszone"
+      },
+      "RELAY": {
+        "NAME": "Relais",
+        "DESCRIPTION": "Shelly-Komponente: Relais"
+      },
+      "RGB": {
+        "NAME": "RGB-Licht",
+        "DESCRIPTION": "Shelly-Komponente: RGB-Licht"
+      },
+      "RGBCCT": {
+        "NAME": "RGB- und Weißlicht",
+        "DESCRIPTION": "Shelly-Komponente: RGB- und Weißlicht"
+      },
+      "RGBW": {
+        "NAME": "RGBW-Licht",
+        "DESCRIPTION": "Shelly-Komponente: RGBW-Licht"
+      },
+      "ROLLER": {
+        "NAME": "Rollladen",
+        "DESCRIPTION": "Shelly-Komponente: Rollladen"
+      },
+      "SENSORS": {
+        "NAME": "Sensoren",
+        "DESCRIPTION": "Shelly-Komponente: Sensoren"
+      },
+      "SMOKE": {
+        "NAME": "Rauchmelder",
+        "DESCRIPTION": "Shelly-Komponente: Rauchmelder"
+      },
+      "SWITCH": {
+        "NAME": "Schalter",
+        "DESCRIPTION": "Shelly-Komponente: Schalter"
+      },
+      "SYS": {
+        "NAME": "System",
+        "DESCRIPTION": "Shelly-Komponente: System"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperatur",
+        "DESCRIPTION": "Shelly-Komponente: Temperatur"
+      },
+      "TEXT": {
+        "NAME": "Virtueller Text",
+        "DESCRIPTION": "Shelly-Komponente: Virtueller Text"
+      },
+      "THERMOSTAT": {
+        "NAME": "Thermostat",
+        "DESCRIPTION": "Shelly-Komponente: Thermostat"
+      },
+      "VOLTMETER": {
+        "NAME": "Spannungsmesser",
+        "DESCRIPTION": "Shelly-Komponente: Spannungsmesser"
+      },
+      "WIFI": {
+        "NAME": "WLAN",
+        "DESCRIPTION": "Shelly-Komponente: WLAN"
+      }
+    },
+    "DP": {
+      "TOTAL_CYCLES": {
+        "NAME": "Schaltzyklen",
+        "DESCRIPTION": "Schaltzyklen"
+      },
+      "ALARM": {
+        "NAME": "Alarm",
+        "DESCRIPTION": "Alarm"
+      },
+      "APPARENT_POWER": {
+        "NAME": "Scheinleistung [VA]",
+        "DESCRIPTION": "Scheinleistung [VA]"
+      },
+      "BATTERY": {
+        "NAME": "Batterie [%]",
+        "DESCRIPTION": "Batterie [%]"
+      },
+      "BATTERY_VOLTAGE": {
+        "NAME": "Batteriespannung [V]",
+        "DESCRIPTION": "Batteriespannung [V]"
+      },
+      "BLUE": {
+        "NAME": "Blau",
+        "DESCRIPTION": "Blau"
+      },
+      "BRIGHTNESS": {
+        "NAME": "Helligkeit [%]",
+        "DESCRIPTION": "Helligkeit [%]"
+      },
+      "CALIBRATE": {
+        "NAME": "Kalibrieren",
+        "DESCRIPTION": "Kalibrieren"
+      },
+      "CLOSE": {
+        "NAME": "Schließen",
+        "DESCRIPTION": "Schließen"
+      },
+      "COLOR_TEMPERATURE": {
+        "NAME": "Farbtemperatur [K]",
+        "DESCRIPTION": "Farbtemperatur [K]"
+      },
+      "COUNTS": {
+        "NAME": "Impulszähler",
+        "DESCRIPTION": "Impulszähler"
+      },
+      "COVER_STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "Zustand"
+      },
+      "CURRENT": {
+        "NAME": "Strom [A]",
+        "DESCRIPTION": "Strom [A]"
+      },
+      "DEVICE_TEMPERATURE": {
+        "NAME": "Gerätetemperatur [°C]",
+        "DESCRIPTION": "Gerätetemperatur [°C]"
+      },
+      "DOOR_OPEN": {
+        "NAME": "Offen",
+        "DESCRIPTION": "Offen"
+      },
+      "ENABLE": {
+        "NAME": "Aktiv",
+        "DESCRIPTION": "Aktiv"
+      },
+      "ENERGY": {
+        "NAME": "Energie [Wh]",
+        "DESCRIPTION": "Energie [Wh]"
+      },
+      "EVENT": {
+        "NAME": "Ereignis",
+        "DESCRIPTION": "Ereignis"
+      },
+      "EVENT_COUNT": {
+        "NAME": "Ereigniszähler",
+        "DESCRIPTION": "Ereigniszähler"
+      },
+      "EXTERNAL_POWER": {
+        "NAME": "Externe Versorgung",
+        "DESCRIPTION": "Externe Versorgung"
+      },
+      "FLOOD": {
+        "NAME": "Wasser",
+        "DESCRIPTION": "Wasser"
+      },
+      "FREQUENCY": {
+        "NAME": "Frequenz [Hz]",
+        "DESCRIPTION": "Frequenz [Hz]"
+      },
+      "GAIN": {
+        "NAME": "Verstärkung [%]",
+        "DESCRIPTION": "Verstärkung [%]"
+      },
+      "GAS_ALARM": {
+        "NAME": "Gasalarm",
+        "DESCRIPTION": "Gasalarm"
+      },
+      "GAS_CONCENTRATION": {
+        "NAME": "Gaskonzentration [ppm]",
+        "DESCRIPTION": "Gaskonzentration [ppm]"
+      },
+      "GREEN": {
+        "NAME": "Grün",
+        "DESCRIPTION": "Grün"
+      },
+      "HAS_TIMER": {
+        "NAME": "Timer aktiv",
+        "DESCRIPTION": "Timer aktiv"
+      },
+      "HAS_UPDATE": {
+        "NAME": "Update verfügbar",
+        "DESCRIPTION": "Update verfügbar"
+      },
+      "HUMIDITY": {
+        "NAME": "Luftfeuchtigkeit [%]",
+        "DESCRIPTION": "Luftfeuchtigkeit [%]"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Helligkeit [lx]",
+        "DESCRIPTION": "Helligkeit [lx]"
+      },
+      "ILLUMINATION": {
+        "NAME": "Lichtstärke",
+        "DESCRIPTION": "Lichtstärke"
+      },
+      "MOTION": {
+        "NAME": "Bewegung",
+        "DESCRIPTION": "Bewegung"
+      },
+      "MUTE": {
+        "NAME": "Stummschalten",
+        "DESCRIPTION": "Stummschalten"
+      },
+      "MUTED": {
+        "NAME": "Stummgeschaltet",
+        "DESCRIPTION": "Stummgeschaltet"
+      },
+      "NEUTRAL_CURRENT": {
+        "NAME": "Neutralleiterstrom [A]",
+        "DESCRIPTION": "Neutralleiterstrom [A]"
+      },
+      "OBJECTS": {
+        "NAME": "Objekte",
+        "DESCRIPTION": "Objekte"
+      },
+      "OPEN": {
+        "NAME": "Öffnen",
+        "DESCRIPTION": "Öffnen"
+      },
+      "OUTPUT": {
+        "NAME": "Ausgang",
+        "DESCRIPTION": "Ausgang"
+      },
+      "OVERPOWER": {
+        "NAME": "Überlast",
+        "DESCRIPTION": "Überlast"
+      },
+      "OVERPOWER_VALUE": {
+        "NAME": "Überlast [W]",
+        "DESCRIPTION": "Überlast [W]"
+      },
+      "OVERTEMPERATURE": {
+        "NAME": "Übertemperatur",
+        "DESCRIPTION": "Übertemperatur"
+      },
+      "PERCENT": {
+        "NAME": "Wert [%]",
+        "DESCRIPTION": "Wert [%]"
+      },
+      "PHASE_A_APPARENT_POWER": {
+        "NAME": "Phase A Scheinleistung [VA]",
+        "DESCRIPTION": "Phase A Scheinleistung [VA]"
+      },
+      "PHASE_A_CURRENT": {
+        "NAME": "Phase A Strom [A]",
+        "DESCRIPTION": "Phase A Strom [A]"
+      },
+      "PHASE_A_ENERGY": {
+        "NAME": "Phase A Energie [Wh]",
+        "DESCRIPTION": "Phase A Energie [Wh]"
+      },
+      "PHASE_A_FREQUENCY": {
+        "NAME": "Phase A Frequenz [Hz]",
+        "DESCRIPTION": "Phase A Frequenz [Hz]"
+      },
+      "PHASE_A_POWER": {
+        "NAME": "Phase A Leistung [W]",
+        "DESCRIPTION": "Phase A Leistung [W]"
+      },
+      "PHASE_A_POWER_FACTOR": {
+        "NAME": "Phase A Leistungsfaktor",
+        "DESCRIPTION": "Phase A Leistungsfaktor"
+      },
+      "PHASE_A_RETURNED_ENERGY": {
+        "NAME": "Phase A eingespeiste Energie [Wh]",
+        "DESCRIPTION": "Phase A eingespeiste Energie [Wh]"
+      },
+      "PHASE_A_VOLTAGE": {
+        "NAME": "Phase A Spannung [V]",
+        "DESCRIPTION": "Phase A Spannung [V]"
+      },
+      "PHASE_B_APPARENT_POWER": {
+        "NAME": "Phase B Scheinleistung [VA]",
+        "DESCRIPTION": "Phase B Scheinleistung [VA]"
+      },
+      "PHASE_B_CURRENT": {
+        "NAME": "Phase B Strom [A]",
+        "DESCRIPTION": "Phase B Strom [A]"
+      },
+      "PHASE_B_ENERGY": {
+        "NAME": "Phase B Energie [Wh]",
+        "DESCRIPTION": "Phase B Energie [Wh]"
+      },
+      "PHASE_B_FREQUENCY": {
+        "NAME": "Phase B Frequenz [Hz]",
+        "DESCRIPTION": "Phase B Frequenz [Hz]"
+      },
+      "PHASE_B_POWER": {
+        "NAME": "Phase B Leistung [W]",
+        "DESCRIPTION": "Phase B Leistung [W]"
+      },
+      "PHASE_B_POWER_FACTOR": {
+        "NAME": "Phase B Leistungsfaktor",
+        "DESCRIPTION": "Phase B Leistungsfaktor"
+      },
+      "PHASE_B_RETURNED_ENERGY": {
+        "NAME": "Phase B eingespeiste Energie [Wh]",
+        "DESCRIPTION": "Phase B eingespeiste Energie [Wh]"
+      },
+      "PHASE_B_VOLTAGE": {
+        "NAME": "Phase B Spannung [V]",
+        "DESCRIPTION": "Phase B Spannung [V]"
+      },
+      "PHASE_C_APPARENT_POWER": {
+        "NAME": "Phase C Scheinleistung [VA]",
+        "DESCRIPTION": "Phase C Scheinleistung [VA]"
+      },
+      "PHASE_C_CURRENT": {
+        "NAME": "Phase C Strom [A]",
+        "DESCRIPTION": "Phase C Strom [A]"
+      },
+      "PHASE_C_ENERGY": {
+        "NAME": "Phase C Energie [Wh]",
+        "DESCRIPTION": "Phase C Energie [Wh]"
+      },
+      "PHASE_C_FREQUENCY": {
+        "NAME": "Phase C Frequenz [Hz]",
+        "DESCRIPTION": "Phase C Frequenz [Hz]"
+      },
+      "PHASE_C_POWER": {
+        "NAME": "Phase C Leistung [W]",
+        "DESCRIPTION": "Phase C Leistung [W]"
+      },
+      "PHASE_C_POWER_FACTOR": {
+        "NAME": "Phase C Leistungsfaktor",
+        "DESCRIPTION": "Phase C Leistungsfaktor"
+      },
+      "PHASE_C_RETURNED_ENERGY": {
+        "NAME": "Phase C eingespeiste Energie [Wh]",
+        "DESCRIPTION": "Phase C eingespeiste Energie [Wh]"
+      },
+      "PHASE_C_VOLTAGE": {
+        "NAME": "Phase C Spannung [V]",
+        "DESCRIPTION": "Phase C Spannung [V]"
+      },
+      "POSITION": {
+        "NAME": "Position [%]",
+        "DESCRIPTION": "Position [%]"
+      },
+      "POWER": {
+        "NAME": "Leistung [W]",
+        "DESCRIPTION": "Leistung [W]"
+      },
+      "POWER_FACTOR": {
+        "NAME": "Leistungsfaktor",
+        "DESCRIPTION": "Leistungsfaktor"
+      },
+      "PRESENCE": {
+        "NAME": "Anwesenheit",
+        "DESCRIPTION": "Anwesenheit"
+      },
+      "REACTIVE_POWER": {
+        "NAME": "Blindleistung [var]",
+        "DESCRIPTION": "Blindleistung [var]"
+      },
+      "REBOOT": {
+        "NAME": "Neustart",
+        "DESCRIPTION": "Neustart"
+      },
+      "RED": {
+        "NAME": "Rot",
+        "DESCRIPTION": "Rot"
+      },
+      "RESTART_REQUIRED": {
+        "NAME": "Neustart nötig",
+        "DESCRIPTION": "Neustart nötig"
+      },
+      "RETURNED_ENERGY": {
+        "NAME": "Eingespeiste Energie [Wh]",
+        "DESCRIPTION": "Eingespeiste Energie [Wh]"
+      },
+      "RSSI": {
+        "NAME": "Signalstärke [dBm]",
+        "DESCRIPTION": "Signalstärke [dBm]"
+      },
+      "SLAT_POSITION": {
+        "NAME": "Lamellenposition [%]",
+        "DESCRIPTION": "Lamellenposition [%]"
+      },
+      "SMOKE": {
+        "NAME": "Rauch",
+        "DESCRIPTION": "Rauch"
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "Zustand"
+      },
+      "STOP": {
+        "NAME": "Stopp",
+        "DESCRIPTION": "Stopp"
+      },
+      "STOP_REASON": {
+        "NAME": "Stoppgrund",
+        "DESCRIPTION": "Stoppgrund"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Zielposition [%]",
+        "DESCRIPTION": "Zielposition [%]"
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Solltemperatur [°C]",
+        "DESCRIPTION": "Solltemperatur [°C]"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperatur [°C]",
+        "DESCRIPTION": "Temperatur [°C]"
+      },
+      "TILT": {
+        "NAME": "Neigung [°]",
+        "DESCRIPTION": "Neigung [°]"
+      },
+      "TOGGLE": {
+        "NAME": "Umschalten",
+        "DESCRIPTION": "Umschalten"
+      },
+      "TOTAL_APPARENT_POWER": {
+        "NAME": "Gesamtscheinleistung [VA]",
+        "DESCRIPTION": "Gesamtscheinleistung [VA]"
+      },
+      "TOTAL_CURRENT": {
+        "NAME": "Gesamtstrom [A]",
+        "DESCRIPTION": "Gesamtstrom [A]"
+      },
+      "TOTAL_ENERGY": {
+        "NAME": "Gesamtenergie [Wh]",
+        "DESCRIPTION": "Gesamtenergie [Wh]"
+      },
+      "TOTAL_POWER": {
+        "NAME": "Gesamtleistung [W]",
+        "DESCRIPTION": "Gesamtleistung [W]"
+      },
+      "TOTAL_RETURNED_ENERGY": {
+        "NAME": "Gesamte eingespeiste Energie [Wh]",
+        "DESCRIPTION": "Gesamte eingespeiste Energie [Wh]"
+      },
+      "TRIGGER": {
+        "NAME": "Auslösen",
+        "DESCRIPTION": "Auslösen"
+      },
+      "UPTIME": {
+        "NAME": "Laufzeit [s]",
+        "DESCRIPTION": "Laufzeit [s]"
+      },
+      "VALUE": {
+        "NAME": "Wert",
+        "DESCRIPTION": "Wert"
+      },
+      "VALVE_POSITION": {
+        "NAME": "Ventilstellung [%]",
+        "DESCRIPTION": "Ventilstellung [%]"
+      },
+      "VIBRATION": {
+        "NAME": "Vibration",
+        "DESCRIPTION": "Vibration"
+      },
+      "VOLTAGE": {
+        "NAME": "Spannung [V]",
+        "DESCRIPTION": "Spannung [V]"
+      },
+      "WHITE": {
+        "NAME": "Weiß",
+        "DESCRIPTION": "Weiß"
+      },
+      "WINDOW_OPEN": {
+        "NAME": "Fenster offen",
+        "DESCRIPTION": "Fenster offen"
+      }
     }
   }
 }

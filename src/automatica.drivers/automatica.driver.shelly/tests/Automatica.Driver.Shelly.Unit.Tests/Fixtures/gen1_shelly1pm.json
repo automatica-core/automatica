@@ -1,0 +1,193 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHSW-PM",
+    "mac": "A4CF12F3D2B1",
+    "auth": false,
+    "fw": "20230913-112003/v1.14.0-gcb84623",
+    "discoverable": true,
+    "longid": 1,
+    "num_outputs": 1,
+    "num_meters": 1
+  },
+  "settings": {
+    "device": {
+      "type": "SHSW-PM",
+      "mac": "A4CF12F3D2B1",
+      "hostname": "shelly1pm-A4CF12F3D2B1",
+      "num_outputs": 1,
+      "num_meters": 1
+    },
+    "name": "Kitchen",
+    "relays": [
+      {
+        "name": "Ceiling",
+        "appliance_type": "lights",
+        "ison": false
+      }
+    ]
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "time": "12:00",
+    "unixtime": 1700000000,
+    "has_update": false,
+    "relays": [
+      {
+        "ison": false,
+        "has_timer": false,
+        "timer_started": 0,
+        "timer_duration": 0,
+        "timer_remaining": 0,
+        "overpower": false,
+        "source": "input"
+      }
+    ],
+    "meters": [
+      {
+        "power": 0.0,
+        "overpower": 0.0,
+        "is_valid": true,
+        "timestamp": 1700000000,
+        "counters": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "total": 12000
+      }
+    ],
+    "inputs": [
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      }
+    ],
+    "temperature": 41.3,
+    "overtemperature": false,
+    "tmp": {
+      "tC": 41.3,
+      "tF": 106.34,
+      "is_valid": true
+    },
+    "temperature_status": "Normal",
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    },
+    "uptime": 3600
+  },
+  "citd": {
+    "blk": [
+      {
+        "I": 1,
+        "D": "relay_0"
+      },
+      {
+        "I": 2,
+        "D": "device"
+      }
+    ],
+    "sen": [
+      {
+        "I": 9103,
+        "T": "EVC",
+        "D": "cfgChanged",
+        "R": "U16",
+        "L": 2
+      },
+      {
+        "I": 1101,
+        "T": "S",
+        "D": "output",
+        "R": "0/1",
+        "L": 1
+      },
+      {
+        "I": 2101,
+        "T": "S",
+        "D": "input",
+        "R": "0/1",
+        "L": 1
+      },
+      {
+        "I": 2102,
+        "T": "EV",
+        "D": "inputEvent",
+        "R": [
+          "S/L",
+          ""
+        ],
+        "L": 1
+      },
+      {
+        "I": 2103,
+        "T": "EVC",
+        "D": "inputEventCnt",
+        "R": "U16",
+        "L": 1
+      },
+      {
+        "I": 4101,
+        "T": "P",
+        "D": "power",
+        "U": "W",
+        "R": [
+          "0/3500",
+          "-1"
+        ],
+        "L": 1
+      },
+      {
+        "I": 4103,
+        "T": "E",
+        "D": "energy",
+        "U": "Wmin",
+        "R": [
+          "U32",
+          "-1"
+        ],
+        "L": 1
+      },
+      {
+        "I": 6102,
+        "T": "A",
+        "D": "overpower",
+        "R": [
+          "0/1",
+          "-1"
+        ],
+        "L": 1
+      },
+      {
+        "I": 3104,
+        "T": "T",
+        "D": "deviceTemp",
+        "U": "C",
+        "R": [
+          "-40/300",
+          "999"
+        ],
+        "L": 2
+      },
+      {
+        "I": 6101,
+        "T": "A",
+        "D": "overtemp",
+        "R": [
+          "0/1",
+          "-1"
+        ],
+        "L": 2
+      }
+    ]
+  }
+}

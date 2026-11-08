@@ -1,0 +1,53 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHTRV-01",
+    "mac": "60A423B1C2D3",
+    "auth": false,
+    "fw": "20220811-152343/v2.1.8@5afc928c",
+    "num_outputs": 0
+  },
+  "settings": {
+    "name": "Bedroom radiator"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "thermostats": [
+      {
+        "pos": 30.0,
+        "target_t": {
+          "enabled": true,
+          "value": 21.5,
+          "value_op": 8.0,
+          "units": "C"
+        },
+        "tmp": {
+          "value": 20.3,
+          "units": "C",
+          "is_valid": true
+        },
+        "schedule": false,
+        "schedule_profile": 1,
+        "boost_minutes": 0,
+        "window_open": false
+      }
+    ],
+    "calibrated": true,
+    "bat": {
+      "value": 80,
+      "voltage": 3.2
+    },
+    "charger": false,
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

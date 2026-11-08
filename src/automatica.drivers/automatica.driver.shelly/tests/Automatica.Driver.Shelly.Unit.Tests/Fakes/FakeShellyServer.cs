@@ -20,7 +20,7 @@ namespace Automatica.Driver.Shelly.Unit.Tests.Fakes
 {
     internal sealed record RecordedRequest(string Method, string Path, string Query, string Body, string Authorization);
 
-    internal sealed record FakeResponse(int Status, string Body, TimeSpan Delay = default)
+    internal sealed record FakeResponse(int Status, string Body, TimeSpan Delay = default, (string Name, string Value)[] Headers = null)
     {
         public static FakeResponse Json(string body) => new(200, body);
     }
@@ -103,6 +103,10 @@ namespace Automatica.Driver.Shelly.Unit.Tests.Fakes
 
             context.Response.StatusCode = response.Status;
             context.Response.ContentType = "application/json";
+            foreach (var (name, value) in response.Headers ?? Array.Empty<(string, string)>())
+            {
+                context.Response.Headers.Append(name, value);
+            }
             await context.Response.WriteAsync(response.Body);
         }
 

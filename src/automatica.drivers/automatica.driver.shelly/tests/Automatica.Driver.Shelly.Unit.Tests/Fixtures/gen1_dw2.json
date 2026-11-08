@@ -1,0 +1,54 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHDW-2",
+    "mac": "3C6105E45E71",
+    "auth": false,
+    "fw": "20230913-112347/v1.14.0-gcb84623",
+    "sleep_mode": true
+  },
+  "settings": {
+    "name": "Terrace door"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "sensor": {
+      "state": "open",
+      "is_valid": true
+    },
+    "lux": {
+      "value": 120,
+      "illumination": "twilight",
+      "is_valid": true
+    },
+    "accel": {
+      "tilt": 0,
+      "vibration": 0
+    },
+    "tmp": {
+      "value": 21.0,
+      "units": "C",
+      "tC": 21.0,
+      "tF": 69.8,
+      "is_valid": true
+    },
+    "bat": {
+      "value": 98,
+      "voltage": 5.9
+    },
+    "act_reasons": [
+      "sensor"
+    ],
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

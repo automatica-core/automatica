@@ -1,0 +1,107 @@
+{
+  "gen": 2,
+  "deviceinfo": {
+    "name": null,
+    "id": "shellypro3em-ec62608a1b2c",
+    "mac": "EC62608A1B2C",
+    "slot": 0,
+    "model": "SPEM-003CEBEU",
+    "gen": 2,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "Pro3EM",
+    "auth_en": false,
+    "auth_domain": null,
+    "profile": "triphase"
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "EC62608A1B2C",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "em:0": {
+      "id": 0,
+      "a_current": 1.2,
+      "a_voltage": 230.1,
+      "a_act_power": 250.3,
+      "a_aprt_power": 270.0,
+      "a_pf": 0.93,
+      "a_freq": 50.0,
+      "b_current": 0.6,
+      "b_voltage": 231.0,
+      "b_act_power": 120.0,
+      "b_aprt_power": 136.0,
+      "b_pf": 0.88,
+      "b_freq": 50.0,
+      "c_current": 0.0,
+      "c_voltage": 229.8,
+      "c_act_power": 0.0,
+      "c_aprt_power": 0.0,
+      "c_pf": 0.0,
+      "c_freq": 50.0,
+      "n_current": null,
+      "total_current": 1.8,
+      "total_act_power": 370.3,
+      "total_aprt_power": 406.0,
+      "user_calibrated_phase": []
+    },
+    "emdata:0": {
+      "id": 0,
+      "a_total_act_energy": 1000.5,
+      "a_total_act_ret_energy": 3.1,
+      "b_total_act_energy": 800.0,
+      "b_total_act_ret_energy": 0.0,
+      "c_total_act_energy": 50.0,
+      "c_total_act_ret_energy": 0.0,
+      "total_act": 1850.5,
+      "total_act_ret": 3.1
+    },
+    "temperature:0": {
+      "id": 0,
+      "tC": 38.1,
+      "tF": 100.6
+    },
+    "eth": {
+      "ip": null
+    }
+  },
+  "config": {
+    "em:0": {
+      "id": 0,
+      "name": null
+    },
+    "sys": {
+      "device": {
+        "name": "Main meter"
+      }
+    }
+  }
+}

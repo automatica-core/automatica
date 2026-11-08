@@ -1,0 +1,110 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHSW-25",
+    "mac": "C45BBE6B1A2C",
+    "auth": false,
+    "fw": "20230913-112003/v1.14.0-gcb84623",
+    "num_outputs": 2,
+    "num_meters": 2,
+    "num_rollers": 1,
+    "mode": "roller"
+  },
+  "settings": {
+    "mode": "roller",
+    "name": "Living room blind",
+    "rollers": [
+      {
+        "name": "Blind"
+      }
+    ]
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "relays": [
+      {
+        "ison": false,
+        "has_timer": false,
+        "overpower": false,
+        "is_valid": true,
+        "source": "input"
+      },
+      {
+        "ison": false,
+        "has_timer": false,
+        "overpower": false,
+        "is_valid": true,
+        "source": "input"
+      }
+    ],
+    "rollers": [
+      {
+        "state": "stop",
+        "power": 0.0,
+        "is_valid": true,
+        "safety_switch": false,
+        "overtemperature": false,
+        "stop_reason": "normal",
+        "last_direction": "open",
+        "current_pos": 55,
+        "calibrating": false,
+        "positioning": true
+      }
+    ],
+    "meters": [
+      {
+        "power": 0.0,
+        "is_valid": true,
+        "timestamp": 0,
+        "counters": [
+          0,
+          0,
+          0
+        ],
+        "total": 600
+      },
+      {
+        "power": 0.0,
+        "is_valid": true,
+        "timestamp": 0,
+        "counters": [
+          0,
+          0,
+          0
+        ],
+        "total": 0
+      }
+    ],
+    "inputs": [
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      },
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      }
+    ],
+    "temperature": 48.2,
+    "overtemperature": false,
+    "tmp": {
+      "tC": 48.2,
+      "tF": 118.8,
+      "is_valid": true
+    },
+    "voltage": 229.3,
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}
