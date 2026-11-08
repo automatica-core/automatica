@@ -113,6 +113,7 @@ namespace Automatica.Core.Runtime.Database
                 context.SaveChanges();
             }
 
+            // the location is read live from the settings cache (automations, shading), a change needs no server reload
             var lat = context.Settings.SingleOrDefault(a => a.ValueKey == "Latitude");
             var longi = context.Settings.SingleOrDefault(a => a.ValueKey == "Longitude");
 
@@ -127,8 +128,8 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 10,
-                    ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.None,
+                    NeedsReloadOnChange = false,
                     CreatedAt = DateTimeOffset.Now,
                     ModifiedAt = DateTimeOffset.Now
                 });
@@ -136,8 +137,8 @@ namespace Automatica.Core.Runtime.Database
             else
             {
                 lat.ValueDouble ??= 0;
-                lat.NeedsReloadOnChange = true;
-                lat.ReloadContext = SettingReloadContext.Server;
+                lat.NeedsReloadOnChange = false;
+                lat.ReloadContext = SettingReloadContext.None;
                 context.Settings.Update(lat);
             }
             if(longi == null)
@@ -150,8 +151,8 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 11,
-                    ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.None,
+                    NeedsReloadOnChange = false,
                     CreatedAt = DateTimeOffset.Now,
                     ModifiedAt = DateTimeOffset.Now
                 });
@@ -159,8 +160,8 @@ namespace Automatica.Core.Runtime.Database
             else
             {
                 longi.ValueDouble ??= 0;
-                longi.NeedsReloadOnChange = true;
-                longi.ReloadContext = SettingReloadContext.Server;
+                longi.NeedsReloadOnChange = false;
+                longi.ReloadContext = SettingReloadContext.None;
                 context.Settings.Update(longi);
             }
 

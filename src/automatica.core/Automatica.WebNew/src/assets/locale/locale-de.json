@@ -103,7 +103,7 @@
       "OUT": "Verkleinern",
       "TO_VIEW": "Standard Zoom"
     },
-    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Änderungen von System Settings benötigen einen Neustart des Servers um wirksam zu werden. Dieser passiert automatisch!",
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Gespeichert, der Server startet kurz neu.",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
@@ -1889,7 +1889,7 @@
       "OPEN_CONFIG": "Zur Konfiguration"
     },
     "STARTING": {
-      "HINT": "Der Server startet neu oder lädt Erweiterungen. Die Seite verbindet sich automatisch wieder."
+      "HINT": "Die Seite verbindet sich automatisch wieder."
     },
     "VISU": {
       "DETAILS": "Details",

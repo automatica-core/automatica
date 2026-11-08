@@ -104,7 +104,7 @@
       "OUT": "Zoom out",
       "TO_VIEW": "Zoom default"
     },
-    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "System settings changes require a reboot. This happens automatically!",
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Saved, the server restarts briefly.",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
@@ -1889,7 +1889,7 @@
       "OPEN_CONFIG": "Open configuration"
     },
     "STARTING": {
-      "HINT": "The server is restarting or loading extensions. The page reconnects on its own."
+      "HINT": "The page reconnects on its own."
     },
     "VISU": {
       "DETAILS": "Details",

@@ -748,7 +748,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
         if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
           await this.nodeInstanceService.saveSetting(prop);
-          this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
+          // most settings apply without a restart (or only reload their own part), only tell the user when the server restarts
+          if (prop.setting.restartsServerOnChange) {
+            this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
+          }
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);

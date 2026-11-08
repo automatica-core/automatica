@@ -264,6 +264,33 @@ namespace Automatica.Core.Tests.Database
         }
 
         [Fact]
+        public void Location_IsSavedWithoutAServerReload_AlsoForAnOlderDatabase()
+        {
+            // automations and shading read the location live, a full server reload for it only blocked the ui
+            using var database = new SqliteTestDatabase(new Dictionary<string, string> { { "server:initial_admin_password", "Location-made-up-Pa55" } });
+            DatabaseInit.EnsureDatabaseCreated(database.Services());
+
+            void AssertNoReload()
+            {
+                using var db = database.CreateContext();
+                foreach (var key in new[] { "Latitude", "Longitude" })
+                {
+                    var setting = db.Settings.Single(a => a.ValueKey == key);
+                    Assert.False(setting.NeedsReloadOnChange, key);
+                    Assert.Equal(SettingReloadContext.None, setting.ReloadContext);
+                }
+            }
+
+            AssertNoReload();
+
+            // the flags an older version seeded
+            database.Execute($"UPDATE Settings SET NeedsReloadOnChange = 1, ReloadContext = {(int)SettingReloadContext.Server} WHERE ValueKey IN ('Latitude', 'Longitude')");
+            DatabaseInit.EnsureDatabaseCreated(database.Services());
+
+            AssertNoReload();
+        }
+
+        [Fact]
         public void WithoutAConfiguredPassword_SaGetsARandomPassword()
         {
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable(DatabaseInit.InitialAdminPasswordEnv)))

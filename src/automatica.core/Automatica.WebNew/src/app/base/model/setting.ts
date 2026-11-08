@@ -2,6 +2,13 @@ import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from 
 import { PropertyTemplateType } from "./property-template";
 import moment from "moment";
 
+export enum SettingReloadContext {
+    None = -1,
+    Server = 0,
+    Recorders = 1,
+    RemoteConnect = 2
+}
+
 @Model()
 export class Setting extends BaseModel {
 
@@ -34,6 +41,17 @@ export class Setting extends BaseModel {
 
     @JsonProperty()
     Meta: string;
+
+    @JsonProperty()
+    NeedsReloadOnChange: boolean;
+
+    @JsonProperty()
+    ReloadContext: SettingReloadContext;
+
+    /** saving a change restarts the whole server (the other contexts only reload their own part) */
+    get restartsServerOnChange(): boolean {
+        return !!this.NeedsReloadOnChange && this.ReloadContext === SettingReloadContext.Server;
+    }
 
     get Value(): any {
         switch (this.Type) {
