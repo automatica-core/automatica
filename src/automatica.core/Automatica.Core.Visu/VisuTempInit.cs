@@ -81,6 +81,18 @@ namespace Automatica.Core.Visu
                 "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             AddCameraControl(factory);
+            AddLightingControllerControl(factory);
+        }
+
+        /// <summary>
+        /// Moods and circuits of a lighting controller logic (P3.Logic.Lightning), driven through its visuState output and command input
+        /// </summary>
+        private void AddLightingControllerControl(VisuMobileTemplateFactory factory)
+        {
+            var lightingController = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.LightingController);
+            factory.CreateVisuMobileTemplate(lightingController, "VISU.OBJECT.LIGHTING_CONTROLLER.NAME", "VISU.OBJECT.LIGHTING_CONTROLLER.DESCRIPTION",
+                "lighting-controller", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(lightingController, factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)

@@ -35,7 +35,10 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("1ccc646b-b384-4753-aba3-a1f8b840fed8")]
         Shutter = 14,
         [VisuMobileObjectTemplateType("3733855a-667d-4cdd-bd43-6a7246046e4d")]
-        Camera = 15
+        Camera = 15,
+        /// <summary>Lighting controller logic (P3.Logic.Lightning): moods and circuits of a room</summary>
+        [VisuMobileObjectTemplateType("3b9e5f7a-2c41-4d8e-a6f3-9e1c7b5d2a23")]
+        LightingController = 29
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

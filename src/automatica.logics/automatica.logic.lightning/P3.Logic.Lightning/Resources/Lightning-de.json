@@ -24,6 +24,565 @@
         "NAME": "Widerholungen",
         "DESCRIPTION": ""
       }
+    },
+    "CIRCUIT_TYPE": {
+      "UNUSED": "Nicht verwendet",
+      "SWITCH": "Schalter (ein/aus)",
+      "DIMMER": "Dimmer (0-100 %)",
+      "RGB": "RGB (#RRGGBB)",
+      "TUNABLE_WHITE": "Tunable White (Helligkeit + Kelvin)"
+    },
+    "PRESENCE_SIMULATION": {
+      "ENABLE": {
+        "NAME": "Anwesenheitssimulation",
+        "DESCRIPTION": "1 = niemand zu Hause: der Baustein schaltet die Lichter im Zeitfenster selbst ein und aus"
+      },
+      "MODE": {
+        "NAME": "Modus Anwesenheitssimulation",
+        "DESCRIPTION": "Aus: nicht Teil der Anwesenheitssimulation. Zufall: min..max Einschaltungen von min..max Minuten. Wiederholen: wiederholt, was vor einer Woche von Hand geschaltet wurde (Zufall, wenn nichts aufgezeichnet ist)",
+        "OFF": "Aus",
+        "RANDOM": "Zufall",
+        "REPLAY": "Letzte Woche wiederholen"
+      },
+      "WINDOW": {
+        "NAME": "Zeitfenster Anwesenheitssimulation",
+        "DESCRIPTION": "Beginn, Ende und Tage der Simulation (Standard 18:00-23:00)"
+      },
+      "MIN_ACTIVATIONS": {
+        "NAME": "Simulation: min. Einschaltungen",
+        "DESCRIPTION": "Pro Zeitfenster"
+      },
+      "MAX_ACTIVATIONS": {
+        "NAME": "Simulation: max. Einschaltungen",
+        "DESCRIPTION": "Pro Zeitfenster"
+      },
+      "MIN_DURATION": {
+        "NAME": "Simulation: min. Dauer [min]",
+        "DESCRIPTION": "Einer Einschaltung"
+      },
+      "MAX_DURATION": {
+        "NAME": "Simulation: max. Dauer [min]",
+        "DESCRIPTION": "Einer Einschaltung"
+      }
+    },
+    "LIGHTING_CONTROLLER": {
+      "NAME": "Lichtsteuerung (Raum)",
+      "DESCRIPTION": "Bis zu 8 Lichtkreise eines Raums mit Stimmungen, Bewegung, Helligkeitsschwelle und Anwesenheitssimulation",
+      "INPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Stimmung +",
+          "DESCRIPTION": "Impuls: nächste Stimmung (eigene Stimmungen, dann alles ein)"
+        },
+        "MOOD_MINUS": {
+          "NAME": "Stimmung -",
+          "DESCRIPTION": "Impuls: vorherige Stimmung"
+        },
+        "ON": {
+          "NAME": "Ein",
+          "DESCRIPTION": "Impuls: alles ein (Stimmung 99)"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Impuls: alles aus (Stimmung 0)"
+        },
+        "MOOD_SELECT": {
+          "NAME": "Stimmung",
+          "DESCRIPTION": "Stimmungsnummer: 0 aus, 1-89 eigene Stimmungen, 99 alles ein"
+        },
+        "MOTION": {
+          "NAME": "Bewegung",
+          "DESCRIPTION": "1 schaltet bei Dunkelheit die Bewegungsstimmung ein, 0 startet die Nachlaufzeit"
+        },
+        "BRIGHTNESS": {
+          "NAME": "Helligkeit [lx]",
+          "DESCRIPTION": "Bewegung schaltet nur unter der Helligkeitsschwelle ein"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Bewegung sperren",
+          "DESCRIPTION": "1 = Bewegung wird ignoriert"
+        },
+        "COMMAND": {
+          "NAME": "Befehl",
+          "DESCRIPTION": "Textbefehle der Visualisierung: mood:N, next, prev, on, off, set:Kreis:Wert, save:new|N:Name, rename:N:Name, delete:N"
+        }
+      },
+      "OUTPUT": {
+        "CIRCUIT1": {
+          "NAME": "Kreis 1"
+        },
+        "CIRCUIT2": {
+          "NAME": "Kreis 2"
+        },
+        "CIRCUIT3": {
+          "NAME": "Kreis 3"
+        },
+        "CIRCUIT4": {
+          "NAME": "Kreis 4"
+        },
+        "CIRCUIT5": {
+          "NAME": "Kreis 5"
+        },
+        "CIRCUIT6": {
+          "NAME": "Kreis 6"
+        },
+        "CIRCUIT7": {
+          "NAME": "Kreis 7"
+        },
+        "CIRCUIT8": {
+          "NAME": "Kreis 8"
+        },
+        "CIRCUIT": {
+          "DESCRIPTION": "Wert des Kreises: true/false (Schalter), 0-100 (Dimmer, Tunable White) oder #RRGGBB (RGB)"
+        },
+        "KELVIN1": {
+          "NAME": "Kelvin 1"
+        },
+        "KELVIN2": {
+          "NAME": "Kelvin 2"
+        },
+        "KELVIN3": {
+          "NAME": "Kelvin 3"
+        },
+        "KELVIN4": {
+          "NAME": "Kelvin 4"
+        },
+        "KELVIN5": {
+          "NAME": "Kelvin 5"
+        },
+        "KELVIN6": {
+          "NAME": "Kelvin 6"
+        },
+        "KELVIN7": {
+          "NAME": "Kelvin 7"
+        },
+        "KELVIN8": {
+          "NAME": "Kelvin 8"
+        },
+        "KELVIN": {
+          "DESCRIPTION": "Farbtemperatur eines Tunable-White-Kreises"
+        },
+        "MOOD": {
+          "NAME": "Aktive Stimmung",
+          "DESCRIPTION": "0 aus, 99 alles ein, -1 von Hand geändert, 1-89 eigene Stimmung"
+        },
+        "ACTIVE": {
+          "NAME": "Licht ein",
+          "DESCRIPTION": "1 solange ein Kreis eingeschaltet ist"
+        },
+        "VISU_STATE": {
+          "NAME": "Visualisierungsstatus",
+          "DESCRIPTION": "JSON für das Visualisierungselement"
+        }
+      },
+      "PARAM": {
+        "CIRCUIT1_TYPE": {
+          "NAME": "Kreis 1 Typ"
+        },
+        "CIRCUIT1_NAME": {
+          "NAME": "Kreis 1 Name"
+        },
+        "CIRCUIT2_TYPE": {
+          "NAME": "Kreis 2 Typ"
+        },
+        "CIRCUIT2_NAME": {
+          "NAME": "Kreis 2 Name"
+        },
+        "CIRCUIT3_TYPE": {
+          "NAME": "Kreis 3 Typ"
+        },
+        "CIRCUIT3_NAME": {
+          "NAME": "Kreis 3 Name"
+        },
+        "CIRCUIT4_TYPE": {
+          "NAME": "Kreis 4 Typ"
+        },
+        "CIRCUIT4_NAME": {
+          "NAME": "Kreis 4 Name"
+        },
+        "CIRCUIT5_TYPE": {
+          "NAME": "Kreis 5 Typ"
+        },
+        "CIRCUIT5_NAME": {
+          "NAME": "Kreis 5 Name"
+        },
+        "CIRCUIT6_TYPE": {
+          "NAME": "Kreis 6 Typ"
+        },
+        "CIRCUIT6_NAME": {
+          "NAME": "Kreis 6 Name"
+        },
+        "CIRCUIT7_TYPE": {
+          "NAME": "Kreis 7 Typ"
+        },
+        "CIRCUIT7_NAME": {
+          "NAME": "Kreis 7 Name"
+        },
+        "CIRCUIT8_TYPE": {
+          "NAME": "Kreis 8 Typ"
+        },
+        "CIRCUIT8_NAME": {
+          "NAME": "Kreis 8 Name"
+        },
+        "CIRCUIT_TYPE": {
+          "DESCRIPTION": "Was am Ausgang des Kreises angeschlossen ist"
+        },
+        "CIRCUIT_NAME": {
+          "DESCRIPTION": "Wird in der Visualisierung angezeigt"
+        },
+        "MOODS": {
+          "NAME": "Stimmungen",
+          "DESCRIPTION": "Anfangsstimmungen, z. B. Lesen:1=100,2=on;Gemütlich:1=30,3=#FF8800,4=40@2700 - sobald in der Visualisierung eine Stimmung gespeichert wird, gelten die gespeicherten"
+        },
+        "MOTION_MOOD": {
+          "NAME": "Bewegungsstimmung",
+          "DESCRIPTION": "Stimmung für Bewegung und Anwesenheitssimulation (99 = alles ein)"
+        },
+        "MOTION_OFF_DELAY": {
+          "NAME": "Nachlaufzeit Bewegung [s]",
+          "DESCRIPTION": "So lange nach Ende der Bewegung aus (0 = nie)"
+        },
+        "MANUAL_OFF_DELAY": {
+          "NAME": "Nachlaufzeit nach Bedienung [s]",
+          "DESCRIPTION": "Gilt stattdessen, wenn von Hand bedient wurde (0 = nie aus)"
+        },
+        "AUTOMATIC_TIMEOUT": {
+          "NAME": "Bewegungssperre nach Aus [s]",
+          "DESCRIPTION": "Nach Ausschalten von Hand wird Bewegung ignoriert, bis so lange keine Bewegung war (0 = nie)"
+        },
+        "BRIGHTNESS_THRESHOLD": {
+          "NAME": "Helligkeitsschwelle [lx]",
+          "DESCRIPTION": "Bewegung schaltet nur darunter ein (0 = immer)"
+        }
+      }
+    },
+    "STAIRWELL_LIGHT_SWITCH": {
+      "NAME": "Treppenlichtschalter",
+      "DESCRIPTION": "Mit jedem Trigger für eine Zeit ein, mit Ausschaltvorwarnung",
+      "INPUT": {
+        "TRIGGER": {
+          "NAME": "Trigger",
+          "DESCRIPTION": "1 = ein für die Einschaltdauer (startet die Zeit neu)"
+        },
+        "ON": {
+          "NAME": "Ein",
+          "DESCRIPTION": "Dauerhaft ein"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Aus, auch bei Dauerlicht"
+        }
+      },
+      "OUTPUT": {
+        "NAME": "Ausgang",
+        "DESCRIPTION": "Das Licht"
+      },
+      "PARAM": {
+        "ON_DURATION": {
+          "NAME": "Einschaltdauer [s]",
+          "DESCRIPTION": ""
+        },
+        "WARNING_TIME": {
+          "NAME": "Ausschaltvorwarnung [s]",
+          "DESCRIPTION": "So lange vor dem Ende blinkt das Licht einmal aus (0 = keine Vorwarnung)"
+        },
+        "WARNING_DURATION": {
+          "NAME": "Dauer Vorwarnung [ms]",
+          "DESCRIPTION": "Wie lange das Licht für die Vorwarnung aus ist"
+        }
+      }
+    },
+    "COMFORT_SWITCH": {
+      "NAME": "Komfortschalter",
+      "DESCRIPTION": "Kurz drücken: für eine Zeit ein / aus, lang drücken: dauerhaft ein, mit Ausschaltvorwarnung",
+      "INPUT": {
+        "TRIGGER": {
+          "NAME": "Taster",
+          "DESCRIPTION": "Taster: kurz drücken schaltet um, lang drücken = dauerhaft ein"
+        },
+        "ON": {
+          "NAME": "Ein",
+          "DESCRIPTION": "Dauerhaft ein"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Aus, auch bei Dauerlicht"
+        }
+      },
+      "OUTPUT": {
+        "NAME": "Ausgang",
+        "DESCRIPTION": "Das Licht"
+      },
+      "PARAM": {
+        "ON_DURATION": {
+          "NAME": "Einschaltdauer [s]",
+          "DESCRIPTION": ""
+        },
+        "WARNING_TIME": {
+          "NAME": "Ausschaltvorwarnung [s]",
+          "DESCRIPTION": "So lange vor dem Ende blinkt das Licht einmal aus (0 = keine Vorwarnung)"
+        },
+        "WARNING_DURATION": {
+          "NAME": "Dauer Vorwarnung [ms]",
+          "DESCRIPTION": "Wie lange das Licht für die Vorwarnung aus ist"
+        },
+        "LONG_CLICK": {
+          "NAME": "Langer Tastendruck [ms]",
+          "DESCRIPTION": "So lange gehalten = dauerhaft ein"
+        }
+      }
+    },
+    "RGB_LIGHTING_CONTROLLER": {
+      "NAME": "RGB-Lichtsteuerung",
+      "DESCRIPTION": "Farbszenen mit +/-, Szenennummer oder direkter Farbe",
+      "INPUT": {
+        "COLOR": {
+          "NAME": "Farbe",
+          "DESCRIPTION": "#RRGGBB, r,g,b in % oder der Loxone-Wert (B·1000000 + G·1000 + R)"
+        },
+        "PLUS": {
+          "NAME": "Szene +",
+          "DESCRIPTION": "Impuls: nächste Szene"
+        },
+        "MINUS": {
+          "NAME": "Szene -",
+          "DESCRIPTION": "Impuls: vorherige Szene"
+        },
+        "SCENE": {
+          "NAME": "Szene",
+          "DESCRIPTION": "0 aus, 1..n Szene, 99 weiß"
+        },
+        "DISABLE": {
+          "NAME": "Sperre",
+          "DESCRIPTION": "1 = alle Eingänge werden ignoriert"
+        },
+        "RESET": {
+          "NAME": "Reset",
+          "DESCRIPTION": "Impuls: aus"
+        },
+        "ALL_ON": {
+          "NAME": "Alles ein",
+          "DESCRIPTION": "Impuls: weiß"
+        }
+      },
+      "OUTPUT": {
+        "RED": {
+          "NAME": "Rot [%]",
+          "DESCRIPTION": ""
+        },
+        "GREEN": {
+          "NAME": "Grün [%]",
+          "DESCRIPTION": ""
+        },
+        "BLUE": {
+          "NAME": "Blau [%]",
+          "DESCRIPTION": ""
+        },
+        "SCENE": {
+          "NAME": "Aktive Szene",
+          "DESCRIPTION": "0 aus, 99 weiß, -1 direkte Farbe"
+        },
+        "COMBINED": {
+          "NAME": "Kombiniert (Loxone)",
+          "DESCRIPTION": "B·1000000 + G·1000 + R, je 0-100"
+        },
+        "HEX": {
+          "NAME": "Farbe #RRGGBB",
+          "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "SCENES": {
+          "NAME": "Szenen",
+          "DESCRIPTION": "Farben getrennt mit ; (#RRGGBB oder r,g,b in %), Szene 1 ist die erste"
+        }
+      }
+    },
+    "CONSTANT_BRIGHTNESS": {
+      "NAME": "Konstantlichtregelung",
+      "DESCRIPTION": "Hält die Raumhelligkeit durch schrittweises Dimmen auf einem Sollwert",
+      "INPUT": {
+        "BRIGHTNESS": {
+          "NAME": "Helligkeit [lx]",
+          "DESCRIPTION": ""
+        },
+        "SET": {
+          "NAME": "Wert setzen",
+          "DESCRIPTION": "Setzt den Dimmwert (0-100)"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Impuls: aus, die Regelung stoppt bis Aktiv wieder 1 wird"
+        },
+        "ACTIVE": {
+          "NAME": "Aktiv",
+          "DESCRIPTION": "1 = Regelung läuft, 0 = aus"
+        }
+      },
+      "OUTPUT": {
+        "LEVEL": {
+          "NAME": "Dimmwert [%]",
+          "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "TARGET": {
+          "NAME": "Sollhelligkeit [lx]",
+          "DESCRIPTION": ""
+        },
+        "HYSTERESIS": {
+          "NAME": "Hysterese [%]",
+          "DESCRIPTION": "Vom Sollwert, innerhalb ändert sich nichts"
+        },
+        "STEP": {
+          "NAME": "Schritt [%]",
+          "DESCRIPTION": "Änderung pro Schritt"
+        },
+        "INTERVAL": {
+          "NAME": "Intervall [s]",
+          "DESCRIPTION": "Zeit zwischen zwei Schritten"
+        }
+      }
+    },
+    "LIGHTING_CENTRAL": {
+      "NAME": "Lichtsteuerung Zentral",
+      "DESCRIPTION": "Steuert mehrere Lichtsteuerungen gemeinsam",
+      "INPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Stimmung +",
+          "DESCRIPTION": ""
+        },
+        "MOOD_MINUS": {
+          "NAME": "Stimmung -",
+          "DESCRIPTION": ""
+        },
+        "MOOD": {
+          "NAME": "Stimmung",
+          "DESCRIPTION": "Stimmungsnummer für alle Räume"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Impuls: alle Räume aus"
+        },
+        "ON": {
+          "NAME": "Ein",
+          "DESCRIPTION": "Impuls: alle Räume ein"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Bewegung sperren",
+          "DESCRIPTION": ""
+        },
+        "ACTIVE1": {
+          "NAME": "Raum 1 Licht ein"
+        },
+        "ACTIVE2": {
+          "NAME": "Raum 2 Licht ein"
+        },
+        "ACTIVE3": {
+          "NAME": "Raum 3 Licht ein"
+        },
+        "ACTIVE4": {
+          "NAME": "Raum 4 Licht ein"
+        },
+        "ACTIVE5": {
+          "NAME": "Raum 5 Licht ein"
+        },
+        "ACTIVE6": {
+          "NAME": "Raum 6 Licht ein"
+        },
+        "ACTIVE7": {
+          "NAME": "Raum 7 Licht ein"
+        },
+        "ACTIVE8": {
+          "NAME": "Raum 8 Licht ein"
+        },
+        "ACTIVE": {
+          "DESCRIPTION": "Den Ausgang 'Licht ein' einer Lichtsteuerung verbinden"
+        }
+      },
+      "OUTPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Stimmung +",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "MOOD_MINUS": {
+          "NAME": "Stimmung -",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "MOOD": {
+          "NAME": "Stimmung",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "OFF": {
+          "NAME": "Aus",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "ON": {
+          "NAME": "Ein",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Bewegung sperren",
+          "DESCRIPTION": "Mit dem gleichen Eingang jeder Lichtsteuerung verbinden"
+        },
+        "ACTIVE_COUNT": {
+          "NAME": "Räume mit Licht",
+          "DESCRIPTION": ""
+        },
+        "ANY_ACTIVE": {
+          "NAME": "Irgendein Licht ein",
+          "DESCRIPTION": ""
+        }
+      }
+    },
+    "HOTEL_LIGHTING_CONTROLLER": {
+      "NAME": "Hotel-Lichtsteuerung",
+      "DESCRIPTION": "Lichtsteuerung mit Schlüsselkarte, Zimmerstatus, Türkontakt und Reinigungsdienst",
+      "INPUT": {
+        "CARD_SWITCH": {
+          "NAME": "Schlüsselkarte",
+          "DESCRIPTION": "1 = Karte gesteckt (Gast im Zimmer)"
+        },
+        "ROOM_STATE": {
+          "NAME": "Zimmerstatus",
+          "DESCRIPTION": "0 nicht gebucht, 1 gebucht, 2 eingecheckt"
+        },
+        "DOOR": {
+          "NAME": "Tür",
+          "DESCRIPTION": "1 = offen: Willkommenslicht ohne Karte"
+        },
+        "SERVICE_BUTTON": {
+          "NAME": "Service-Taster",
+          "DESCRIPTION": "Impuls: Reinigung beginnen / beenden"
+        }
+      },
+      "OUTPUT": {
+        "PRESENCE": {
+          "NAME": "Anwesenheit",
+          "DESCRIPTION": ""
+        },
+        "SERVICE": {
+          "NAME": "Service aktiv",
+          "DESCRIPTION": ""
+        },
+        "SERVICE_DONE": {
+          "NAME": "Service erledigt",
+          "DESCRIPTION": "Impuls, wenn die Reinigung endet"
+        },
+        "ROOM_STATUS": {
+          "NAME": "Zimmerzustand",
+          "DESCRIPTION": "1 frei/nicht gereinigt, 2 belegt/nicht gereinigt, 3 frei/gereinigt, 4 belegt/gereinigt"
+        }
+      },
+      "PARAM": {
+        "LEAVE_TIMEOUT": {
+          "NAME": "Verlassen-Timeout [s]",
+          "DESCRIPTION": "So lange nach Ziehen der Karte aus (0 = nie)"
+        },
+        "SERVICE_DURATION": {
+          "NAME": "Max. Servicedauer [s]",
+          "DESCRIPTION": ""
+        }
+      }
     }
   }
 }

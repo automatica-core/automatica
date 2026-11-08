@@ -26,6 +26,17 @@ namespace P3.Logic.Lightning.Tests.TestSupport
             }
         }
 
+        /// <summary>
+        /// Forgets the dispatch history, the current values (and with them remanent values) stay
+        /// </summary>
+        public void ClearDispatched()
+        {
+            lock (_lock)
+            {
+                _dispatched.Clear();
+            }
+        }
+
         public Task Init(CancellationToken token = default)
         {
             return Task.CompletedTask;

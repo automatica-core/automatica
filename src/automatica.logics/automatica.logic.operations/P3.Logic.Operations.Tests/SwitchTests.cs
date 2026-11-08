@@ -22,7 +22,8 @@ namespace P3.Logic.Operations.Tests
         [Fact]
         public void Factory_HasInputStateAndOutput()
         {
-            Assert.Equal(3, RuleInstance.RuleInterfaceInstance.Count);
+            // input, state, output + PS input and 6 presence simulation parameters
+            Assert.Equal(10, RuleInstance.RuleInterfaceInstance.Count);
             Assert.Equal(SwitchLogicFactory.RuleInput, Switch.InputId);
             Assert.Equal(SwitchLogicFactory.RuleOutput, Switch.OutputId);
             Assert.Equal(Instance.LogicGuid, Switch.Id);

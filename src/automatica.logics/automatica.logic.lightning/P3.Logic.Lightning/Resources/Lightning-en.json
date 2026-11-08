@@ -24,6 +24,565 @@
         "NAME": "Repetitions",
         "DESCRIPTION": ""
       }
+    },
+    "CIRCUIT_TYPE": {
+      "UNUSED": "Unused",
+      "SWITCH": "Switch (on/off)",
+      "DIMMER": "Dimmer (0-100 %)",
+      "RGB": "RGB (#RRGGBB)",
+      "TUNABLE_WHITE": "Tunable white (brightness + Kelvin)"
+    },
+    "PRESENCE_SIMULATION": {
+      "ENABLE": {
+        "NAME": "Presence simulation",
+        "DESCRIPTION": "1 = nobody is home: the block switches the lights on and off by itself inside the time window"
+      },
+      "MODE": {
+        "NAME": "Presence simulation mode",
+        "DESCRIPTION": "Off: not used in the presence simulation. Random: min..max activations of min..max minutes. Replay: repeats what was switched by hand one week ago (random when nothing was recorded)",
+        "OFF": "Off",
+        "RANDOM": "Random",
+        "REPLAY": "Replay last week"
+      },
+      "WINDOW": {
+        "NAME": "Presence simulation time window",
+        "DESCRIPTION": "Start, end and days of the simulation (default 18:00-23:00)"
+      },
+      "MIN_ACTIVATIONS": {
+        "NAME": "Simulation: min. activations",
+        "DESCRIPTION": "Per time window"
+      },
+      "MAX_ACTIVATIONS": {
+        "NAME": "Simulation: max. activations",
+        "DESCRIPTION": "Per time window"
+      },
+      "MIN_DURATION": {
+        "NAME": "Simulation: min. duration [min]",
+        "DESCRIPTION": "Of one activation"
+      },
+      "MAX_DURATION": {
+        "NAME": "Simulation: max. duration [min]",
+        "DESCRIPTION": "Of one activation"
+      }
+    },
+    "LIGHTING_CONTROLLER": {
+      "NAME": "Lighting controller",
+      "DESCRIPTION": "Up to 8 circuits of a room with moods, motion, brightness threshold and presence simulation",
+      "INPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Mood +",
+          "DESCRIPTION": "Pulse: next mood (user moods, then all on)"
+        },
+        "MOOD_MINUS": {
+          "NAME": "Mood -",
+          "DESCRIPTION": "Pulse: previous mood"
+        },
+        "ON": {
+          "NAME": "On",
+          "DESCRIPTION": "Pulse: all on (mood 99)"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Pulse: all off (mood 0)"
+        },
+        "MOOD_SELECT": {
+          "NAME": "Mood",
+          "DESCRIPTION": "Mood number: 0 off, 1-89 user moods, 99 all on"
+        },
+        "MOTION": {
+          "NAME": "Motion",
+          "DESCRIPTION": "1 switches the motion mood on when it is dark, 0 starts the overrun"
+        },
+        "BRIGHTNESS": {
+          "NAME": "Brightness [lx]",
+          "DESCRIPTION": "Motion only switches on below the brightness threshold"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Disable motion",
+          "DESCRIPTION": "1 = motion is ignored"
+        },
+        "COMMAND": {
+          "NAME": "Command",
+          "DESCRIPTION": "Text commands of the visualization: mood:N, next, prev, on, off, set:circuit:value, save:new|N:name, rename:N:name, delete:N"
+        }
+      },
+      "OUTPUT": {
+        "CIRCUIT1": {
+          "NAME": "Circuit 1"
+        },
+        "CIRCUIT2": {
+          "NAME": "Circuit 2"
+        },
+        "CIRCUIT3": {
+          "NAME": "Circuit 3"
+        },
+        "CIRCUIT4": {
+          "NAME": "Circuit 4"
+        },
+        "CIRCUIT5": {
+          "NAME": "Circuit 5"
+        },
+        "CIRCUIT6": {
+          "NAME": "Circuit 6"
+        },
+        "CIRCUIT7": {
+          "NAME": "Circuit 7"
+        },
+        "CIRCUIT8": {
+          "NAME": "Circuit 8"
+        },
+        "CIRCUIT": {
+          "DESCRIPTION": "Value of the circuit: true/false (switch), 0-100 (dimmer, tunable white) or #RRGGBB (RGB)"
+        },
+        "KELVIN1": {
+          "NAME": "Kelvin 1"
+        },
+        "KELVIN2": {
+          "NAME": "Kelvin 2"
+        },
+        "KELVIN3": {
+          "NAME": "Kelvin 3"
+        },
+        "KELVIN4": {
+          "NAME": "Kelvin 4"
+        },
+        "KELVIN5": {
+          "NAME": "Kelvin 5"
+        },
+        "KELVIN6": {
+          "NAME": "Kelvin 6"
+        },
+        "KELVIN7": {
+          "NAME": "Kelvin 7"
+        },
+        "KELVIN8": {
+          "NAME": "Kelvin 8"
+        },
+        "KELVIN": {
+          "DESCRIPTION": "Colour temperature of a tunable white circuit"
+        },
+        "MOOD": {
+          "NAME": "Active mood",
+          "DESCRIPTION": "0 off, 99 all on, -1 changed by hand, 1-89 user mood"
+        },
+        "ACTIVE": {
+          "NAME": "Light on",
+          "DESCRIPTION": "1 while any circuit is on"
+        },
+        "VISU_STATE": {
+          "NAME": "Visualization state",
+          "DESCRIPTION": "JSON for the visualization control"
+        }
+      },
+      "PARAM": {
+        "CIRCUIT1_TYPE": {
+          "NAME": "Circuit 1 type"
+        },
+        "CIRCUIT1_NAME": {
+          "NAME": "Circuit 1 name"
+        },
+        "CIRCUIT2_TYPE": {
+          "NAME": "Circuit 2 type"
+        },
+        "CIRCUIT2_NAME": {
+          "NAME": "Circuit 2 name"
+        },
+        "CIRCUIT3_TYPE": {
+          "NAME": "Circuit 3 type"
+        },
+        "CIRCUIT3_NAME": {
+          "NAME": "Circuit 3 name"
+        },
+        "CIRCUIT4_TYPE": {
+          "NAME": "Circuit 4 type"
+        },
+        "CIRCUIT4_NAME": {
+          "NAME": "Circuit 4 name"
+        },
+        "CIRCUIT5_TYPE": {
+          "NAME": "Circuit 5 type"
+        },
+        "CIRCUIT5_NAME": {
+          "NAME": "Circuit 5 name"
+        },
+        "CIRCUIT6_TYPE": {
+          "NAME": "Circuit 6 type"
+        },
+        "CIRCUIT6_NAME": {
+          "NAME": "Circuit 6 name"
+        },
+        "CIRCUIT7_TYPE": {
+          "NAME": "Circuit 7 type"
+        },
+        "CIRCUIT7_NAME": {
+          "NAME": "Circuit 7 name"
+        },
+        "CIRCUIT8_TYPE": {
+          "NAME": "Circuit 8 type"
+        },
+        "CIRCUIT8_NAME": {
+          "NAME": "Circuit 8 name"
+        },
+        "CIRCUIT_TYPE": {
+          "DESCRIPTION": "What is connected to the circuit output"
+        },
+        "CIRCUIT_NAME": {
+          "DESCRIPTION": "Shown in the visualization"
+        },
+        "MOODS": {
+          "NAME": "Moods",
+          "DESCRIPTION": "Initial moods, e.g. Reading:1=100,2=on;Cosy:1=30,3=#FF8800,4=40@2700 - once a mood is saved in the visualization the saved moods are used"
+        },
+        "MOTION_MOOD": {
+          "NAME": "Motion mood",
+          "DESCRIPTION": "Mood switched on by motion and the presence simulation (99 = all on)"
+        },
+        "MOTION_OFF_DELAY": {
+          "NAME": "Motion overrun [s]",
+          "DESCRIPTION": "Off this long after the motion ends (0 = never)"
+        },
+        "MANUAL_OFF_DELAY": {
+          "NAME": "Overrun after manual use [s]",
+          "DESCRIPTION": "Used instead when the lights were operated by hand (0 = never off)"
+        },
+        "AUTOMATIC_TIMEOUT": {
+          "NAME": "Motion pause after off [s]",
+          "DESCRIPTION": "After switching off by hand motion is ignored until there was no motion for this long (0 = never ignored)"
+        },
+        "BRIGHTNESS_THRESHOLD": {
+          "NAME": "Brightness threshold [lx]",
+          "DESCRIPTION": "Motion switches on only below it (0 = always)"
+        }
+      }
+    },
+    "STAIRWELL_LIGHT_SWITCH": {
+      "NAME": "Stairwell light switch",
+      "DESCRIPTION": "On for a time with every trigger, with switch-off warning",
+      "INPUT": {
+        "TRIGGER": {
+          "NAME": "Trigger",
+          "DESCRIPTION": "1 = on for the on duration (restarts the time)"
+        },
+        "ON": {
+          "NAME": "On",
+          "DESCRIPTION": "Permanently on"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Off, also a permanent light"
+        }
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": "The light"
+      },
+      "PARAM": {
+        "ON_DURATION": {
+          "NAME": "On duration [s]",
+          "DESCRIPTION": ""
+        },
+        "WARNING_TIME": {
+          "NAME": "Switch-off warning [s]",
+          "DESCRIPTION": "This long before the end the light blinks off once (0 = no warning)"
+        },
+        "WARNING_DURATION": {
+          "NAME": "Warning blink [ms]",
+          "DESCRIPTION": "How long the light is off for the warning"
+        }
+      }
+    },
+    "COMFORT_SWITCH": {
+      "NAME": "Comfort switch",
+      "DESCRIPTION": "Short press: on for a time / off, long press: permanently on, with switch-off warning",
+      "INPUT": {
+        "TRIGGER": {
+          "NAME": "Button",
+          "DESCRIPTION": "Push button: short press toggles, long press = permanently on"
+        },
+        "ON": {
+          "NAME": "On",
+          "DESCRIPTION": "Permanently on"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Off, also a permanent light"
+        }
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": "The light"
+      },
+      "PARAM": {
+        "ON_DURATION": {
+          "NAME": "On duration [s]",
+          "DESCRIPTION": ""
+        },
+        "WARNING_TIME": {
+          "NAME": "Switch-off warning [s]",
+          "DESCRIPTION": "This long before the end the light blinks off once (0 = no warning)"
+        },
+        "WARNING_DURATION": {
+          "NAME": "Warning blink [ms]",
+          "DESCRIPTION": "How long the light is off for the warning"
+        },
+        "LONG_CLICK": {
+          "NAME": "Long press [ms]",
+          "DESCRIPTION": "Held this long = permanently on"
+        }
+      }
+    },
+    "RGB_LIGHTING_CONTROLLER": {
+      "NAME": "RGB lighting controller",
+      "DESCRIPTION": "Colour scenes with +/-, scene number or a direct colour",
+      "INPUT": {
+        "COLOR": {
+          "NAME": "Colour",
+          "DESCRIPTION": "#RRGGBB, r,g,b in % or the Loxone value (B·1000000 + G·1000 + R)"
+        },
+        "PLUS": {
+          "NAME": "Scene +",
+          "DESCRIPTION": "Pulse: next scene"
+        },
+        "MINUS": {
+          "NAME": "Scene -",
+          "DESCRIPTION": "Pulse: previous scene"
+        },
+        "SCENE": {
+          "NAME": "Scene",
+          "DESCRIPTION": "0 off, 1..n scene, 99 white"
+        },
+        "DISABLE": {
+          "NAME": "Disable",
+          "DESCRIPTION": "1 = all inputs are ignored"
+        },
+        "RESET": {
+          "NAME": "Reset",
+          "DESCRIPTION": "Pulse: off"
+        },
+        "ALL_ON": {
+          "NAME": "All on",
+          "DESCRIPTION": "Pulse: white"
+        }
+      },
+      "OUTPUT": {
+        "RED": {
+          "NAME": "Red [%]",
+          "DESCRIPTION": ""
+        },
+        "GREEN": {
+          "NAME": "Green [%]",
+          "DESCRIPTION": ""
+        },
+        "BLUE": {
+          "NAME": "Blue [%]",
+          "DESCRIPTION": ""
+        },
+        "SCENE": {
+          "NAME": "Active scene",
+          "DESCRIPTION": "0 off, 99 white, -1 direct colour"
+        },
+        "COMBINED": {
+          "NAME": "Combined (Loxone)",
+          "DESCRIPTION": "B·1000000 + G·1000 + R, each 0-100"
+        },
+        "HEX": {
+          "NAME": "Colour #RRGGBB",
+          "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "SCENES": {
+          "NAME": "Scenes",
+          "DESCRIPTION": "Colours separated by ; (#RRGGBB or r,g,b in %), scene 1 is the first"
+        }
+      }
+    },
+    "CONSTANT_BRIGHTNESS": {
+      "NAME": "Constant brightness controller",
+      "DESCRIPTION": "Keeps the room brightness at a target by dimming in steps",
+      "INPUT": {
+        "BRIGHTNESS": {
+          "NAME": "Brightness [lx]",
+          "DESCRIPTION": ""
+        },
+        "SET": {
+          "NAME": "Set level",
+          "DESCRIPTION": "Forces the level (0-100)"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Pulse: off, the control stops until Active rises again"
+        },
+        "ACTIVE": {
+          "NAME": "Active",
+          "DESCRIPTION": "1 = control runs, 0 = off"
+        }
+      },
+      "OUTPUT": {
+        "LEVEL": {
+          "NAME": "Level [%]",
+          "DESCRIPTION": ""
+        }
+      },
+      "PARAM": {
+        "TARGET": {
+          "NAME": "Target brightness [lx]",
+          "DESCRIPTION": ""
+        },
+        "HYSTERESIS": {
+          "NAME": "Hysteresis [%]",
+          "DESCRIPTION": "Of the target, inside it nothing changes"
+        },
+        "STEP": {
+          "NAME": "Step [%]",
+          "DESCRIPTION": "Level change per step"
+        },
+        "INTERVAL": {
+          "NAME": "Interval [s]",
+          "DESCRIPTION": "Time between two steps"
+        }
+      }
+    },
+    "LIGHTING_CENTRAL": {
+      "NAME": "Lighting central",
+      "DESCRIPTION": "Controls many lighting controllers together",
+      "INPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Mood +",
+          "DESCRIPTION": ""
+        },
+        "MOOD_MINUS": {
+          "NAME": "Mood -",
+          "DESCRIPTION": ""
+        },
+        "MOOD": {
+          "NAME": "Mood",
+          "DESCRIPTION": "Mood number for all rooms"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Pulse: all rooms off"
+        },
+        "ON": {
+          "NAME": "On",
+          "DESCRIPTION": "Pulse: all rooms on"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Disable motion",
+          "DESCRIPTION": ""
+        },
+        "ACTIVE1": {
+          "NAME": "Room 1 light on"
+        },
+        "ACTIVE2": {
+          "NAME": "Room 2 light on"
+        },
+        "ACTIVE3": {
+          "NAME": "Room 3 light on"
+        },
+        "ACTIVE4": {
+          "NAME": "Room 4 light on"
+        },
+        "ACTIVE5": {
+          "NAME": "Room 5 light on"
+        },
+        "ACTIVE6": {
+          "NAME": "Room 6 light on"
+        },
+        "ACTIVE7": {
+          "NAME": "Room 7 light on"
+        },
+        "ACTIVE8": {
+          "NAME": "Room 8 light on"
+        },
+        "ACTIVE": {
+          "DESCRIPTION": "Link the 'Light on' output of a lighting controller"
+        }
+      },
+      "OUTPUT": {
+        "MOOD_PLUS": {
+          "NAME": "Mood +",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "MOOD_MINUS": {
+          "NAME": "Mood -",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "MOOD": {
+          "NAME": "Mood",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "OFF": {
+          "NAME": "Off",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "ON": {
+          "NAME": "On",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "DISABLE_MOTION": {
+          "NAME": "Disable motion",
+          "DESCRIPTION": "Link to the same input of every lighting controller"
+        },
+        "ACTIVE_COUNT": {
+          "NAME": "Rooms with light",
+          "DESCRIPTION": ""
+        },
+        "ANY_ACTIVE": {
+          "NAME": "Any light on",
+          "DESCRIPTION": ""
+        }
+      }
+    },
+    "HOTEL_LIGHTING_CONTROLLER": {
+      "NAME": "Hotel lighting controller",
+      "DESCRIPTION": "Lighting controller with key card, room state, door contact and cleaning service",
+      "INPUT": {
+        "CARD_SWITCH": {
+          "NAME": "Key card",
+          "DESCRIPTION": "1 = card inserted (guest in the room)"
+        },
+        "ROOM_STATE": {
+          "NAME": "Room state",
+          "DESCRIPTION": "0 not booked, 1 booked, 2 checked in"
+        },
+        "DOOR": {
+          "NAME": "Door",
+          "DESCRIPTION": "1 = open: welcome light without card"
+        },
+        "SERVICE_BUTTON": {
+          "NAME": "Service button",
+          "DESCRIPTION": "Pulse: start / end cleaning"
+        }
+      },
+      "OUTPUT": {
+        "PRESENCE": {
+          "NAME": "Presence",
+          "DESCRIPTION": ""
+        },
+        "SERVICE": {
+          "NAME": "Service active",
+          "DESCRIPTION": ""
+        },
+        "SERVICE_DONE": {
+          "NAME": "Service done",
+          "DESCRIPTION": "Pulse when the cleaning ends"
+        },
+        "ROOM_STATUS": {
+          "NAME": "Room status",
+          "DESCRIPTION": "1 vacant/not cleaned, 2 occupied/not cleaned, 3 vacant/cleaned, 4 occupied/cleaned"
+        }
+      },
+      "PARAM": {
+        "LEAVE_TIMEOUT": {
+          "NAME": "Leave timeout [s]",
+          "DESCRIPTION": "Off this long after the card was removed (0 = never)"
+        },
+        "SERVICE_DURATION": {
+          "NAME": "Max. service duration [s]",
+          "DESCRIPTION": ""
+        }
+      }
     }
   }
 }

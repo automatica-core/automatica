@@ -248,6 +248,39 @@
           "DESCRIPTION": "Lamellenposition in Prozent (0 waagrecht, 100 geschlossen)"
         }
       }
+    },
+    "PRESENCE_SIMULATION": {
+      "ENABLE": {
+        "NAME": "Anwesenheitssimulation (PS)",
+        "DESCRIPTION": "1 aktiviert die Anwesenheitssimulation (z. B. mit einem 'Abwesend'-Merker verknüpft); 0 beendet sie und schaltet einmal aus"
+      },
+      "MODE": {
+        "NAME": "Modus Anwesenheitssimulation",
+        "DESCRIPTION": "Aus: nicht in der Anwesenheitssimulation. Zufall: zufällig oft und zufällig lange innerhalb des Zeitfensters. Wiedergabe: schaltet so, wie vor einer Woche von Hand geschaltet wurde (Zufall, wenn damals nichts aufgezeichnet wurde)",
+        "OFF": "Aus",
+        "RANDOM": "Zufall",
+        "REPLAY": "Wiedergabe"
+      },
+      "WINDOW": {
+        "NAME": "Zeitfenster Anwesenheitssimulation",
+        "DESCRIPTION": "Tage und Zeitfenster, in denen die Anwesenheitssimulation schalten darf"
+      },
+      "MIN_ACTIVATIONS": {
+        "NAME": "Min. Aktivierungen",
+        "DESCRIPTION": "Mindestanzahl der Einschaltungen pro Zeitfenster"
+      },
+      "MAX_ACTIVATIONS": {
+        "NAME": "Max. Aktivierungen",
+        "DESCRIPTION": "Höchstanzahl der Einschaltungen pro Zeitfenster"
+      },
+      "MIN_DURATION": {
+        "NAME": "Min. Dauer [min]",
+        "DESCRIPTION": "Minimale Dauer einer Einschaltung in Minuten"
+      },
+      "MAX_DURATION": {
+        "NAME": "Max. Dauer [min]",
+        "DESCRIPTION": "Maximale Dauer einer Einschaltung in Minuten"
+      }
     }
   }
 }

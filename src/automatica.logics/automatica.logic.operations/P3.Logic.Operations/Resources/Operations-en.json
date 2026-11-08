@@ -248,6 +248,39 @@
           "DESCRIPTION": "Slat position in percent (0 horizontal, 100 closed)"
         }
       }
+    },
+    "PRESENCE_SIMULATION": {
+      "ENABLE": {
+        "NAME": "Presence simulation (PS)",
+        "DESCRIPTION": "1 enables the presence simulation (e.g. linked to an 'away' flag); 0 stops it and switches off once"
+      },
+      "MODE": {
+        "NAME": "Presence simulation mode",
+        "DESCRIPTION": "Off: not used in the presence simulation. Random: a random number of activations of random length inside the window. Replay: switches as it was switched by hand one week ago (random when nothing was recorded then)",
+        "OFF": "Off",
+        "RANDOM": "Random",
+        "REPLAY": "Replay"
+      },
+      "WINDOW": {
+        "NAME": "Presence simulation time",
+        "DESCRIPTION": "Days and time window in which the presence simulation may switch"
+      },
+      "MIN_ACTIVATIONS": {
+        "NAME": "Min. activations",
+        "DESCRIPTION": "Minimum number of times the output is switched on per window"
+      },
+      "MAX_ACTIVATIONS": {
+        "NAME": "Max. activations",
+        "DESCRIPTION": "Maximum number of times the output is switched on per window"
+      },
+      "MIN_DURATION": {
+        "NAME": "Min. duration [min]",
+        "DESCRIPTION": "Minimum duration of one activation in minutes"
+      },
+      "MAX_DURATION": {
+        "NAME": "Max. duration [min]",
+        "DESCRIPTION": "Maximum duration of one activation in minutes"
+      }
     }
   }
 }

@@ -356,6 +356,10 @@ function holeValues(hole, file, files, index) {
             if (values.length > 0) return values.map(transform);
         }
     }
+
+    // const string Prefix = "LIGHTNING.LIGHTING_CONTROLLER"; in the same file
+    const constant = new RegExp(`\\bconst\\s+string\\s+${expr}\\s*=\\s*"([^"\\\\]*)"\\s*;`).exec(file.source);
+    if (constant) return [transform(constant[1])];
     return null;
 }
 

@@ -78,6 +78,10 @@
             "CAMERA": {
                 "NAME": "Kamera",
                 "DESCRIPTION": "Live-Bild einer Kamera (Kamera-Treiber)"
+            },
+            "LIGHTING_CONTROLLER": {
+                "NAME": "Lichtsteuerung",
+                "DESCRIPTION": "Stimmungen und Lichtkreise eines Raums (Logik Lichtsteuerung)"
             }
         },
         "CATEGORY": {

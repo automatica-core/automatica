@@ -1,0 +1,216 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.lc-popup {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.lc-section {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.lc-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.lc-sub {
+    font-size: var(--text-xs);
+    color: var(--muted);
+}
+
+.lc-hint {
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
+// mood chips: the active one in lamp colors
+.lc-moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.lc-mood {
+    appearance: none;
+    margin: 0;
+    min-height: 36px;
+    padding: 0 var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface-2);
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--lamp);
+    }
+
+    &.is-active {
+        background: var(--lamp);
+        border-color: var(--lamp);
+        color: var(--on-lamp);
+        font-weight: 600;
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+}
+
+.lc-circuit {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+}
+
+.lc-circuit-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    // the switch button is full width by itself (:host width 100%), here it shares the row with the name
+    > visu-component-switch-button {
+        flex: 0 0 45%;
+        width: 45%;
+    }
+}
+
+.lc-circuit-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.lc-swatch {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+}
+
+.lc-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.lc-color {
+    width: 48px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    cursor: pointer;
+}
+
+.lc-kelvin {
+    display: grid;
+    gap: var(--space-1);
+}
+
+// warm to cold white along the color temperature slider
+.lc-kelvin-slider ::ng-deep .dx-slider-bar {
+    background: linear-gradient(90deg, #ffb46b, #fff4e5, #cfe0ff);
+}
+
+.lc-input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+
+    &:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: -1px;
+    }
+}
+
+.lc-btn {
+    appearance: none;
+    flex: none;
+    height: 36px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &.is-primary:not(:disabled) {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on-accent);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+}
+
+.lc-mood-edit {
+    min-height: 36px;
+}
+
+.lc-mood-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lc-icon-btn {
+    appearance: none;
+    flex: none;
+    width: 34px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &.is-danger:hover:not(:disabled) {
+        border-color: var(--bad);
+        color: var(--bad);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+}

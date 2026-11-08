@@ -22,6 +22,7 @@ import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
+import { LightingControllerComponent } from "./lighting-controller/lighting-controller.component";
 
 @Component({
     selector: "visu-component",
@@ -122,6 +123,10 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "camera": {
         this.component = CameraComponent;
+        break;
+      }
+      case "lighting-controller": {
+        this.component = LightingControllerComponent;
         break;
       }
       

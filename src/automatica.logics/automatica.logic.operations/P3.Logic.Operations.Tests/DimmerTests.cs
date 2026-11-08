@@ -25,8 +25,9 @@ namespace P3.Logic.Operations.Tests
         public void Factory_Templates_HaveThreeInputsAndTwoOutputs()
         {
             var template = Factory.GetById(Instance.LogicGuid);
-            Assert.Equal(5, template.RuleInterfaceTemplate.Count);
-            Assert.Equal(5, RuleInstance.RuleInterfaceInstance.Count);
+            // 3 inputs, 2 outputs + PS input and 6 presence simulation parameters
+            Assert.Equal(12, template.RuleInterfaceTemplate.Count);
+            Assert.Equal(12, RuleInstance.RuleInterfaceInstance.Count);
             Assert.NotNull(GetLogicInterfaceByTemplate(DimmerLogicFactory.RuleInputState));
             Assert.NotNull(GetLogicInterfaceByTemplate(DimmerLogicFactory.RuleInputValue));
             Assert.NotNull(GetLogicInterfaceByTemplate(DimmerLogicFactory.RuleInputReset));

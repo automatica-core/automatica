@@ -1,0 +1,109 @@
+<app-visualization-control [hint]="displayText" [state]="moodName(state.mood)" [icon]="icon" [location]="location"
+  [pressable]="true" [pressed]="isOn" [active]="isOn" [level]="isOn ? level : 0" [disabled]="!commandInput" [hasPopup]="true"
+  (press)="toggle()">
+
+  <div popup class="lc-popup">
+    @if (state.simulation) {
+      <div class="lc-hint"><fa-icon icon="house-user"></fa-icon> {{ 'UI.VISU.LIGHTING_SIMULATION' | translateAsync }}</div>
+    }
+
+    <section class="lc-section" [attr.aria-label]="'UI.VISU.LIGHTING_MOODS' | translateAsync">
+      <div class="lc-label">{{ 'UI.VISU.LIGHTING_MOODS' | translateAsync }}</div>
+      <div class="lc-moods">
+        <button type="button" class="lc-mood" [class.is-active]="state.mood === AllOn" [attr.aria-pressed]="state.mood === AllOn"
+          [disabled]="!commandInput" (click)="selectMood(AllOn)">{{ 'UI.VISU.LIGHTING_ALL_ON' | translateAsync }}</button>
+        @for (mood of userMoods; track mood.id) {
+          <button type="button" class="lc-mood" [class.is-active]="state.mood === mood.id" [attr.aria-pressed]="state.mood === mood.id"
+            [disabled]="!commandInput" (click)="selectMood(mood.id)">{{ moodName(mood.id) }}</button>
+        }
+        <button type="button" class="lc-mood" [class.is-active]="state.mood === AllOff" [attr.aria-pressed]="state.mood === AllOff"
+          [disabled]="!commandInput" (click)="selectMood(AllOff)">{{ 'UI.VISU.LIGHTING_ALL_OFF' | translateAsync }}</button>
+      </div>
+    </section>
+
+    <section class="lc-section" [attr.aria-label]="'UI.VISU.LIGHTING_CIRCUITS' | translateAsync">
+      <div class="lc-label">{{ 'UI.VISU.LIGHTING_CIRCUITS' | translateAsync }}</div>
+      @for (circuit of state.circuits; track circuit.index) {
+        <div class="lc-circuit">
+          <div class="lc-circuit-head">
+            @if (circuit.type === CircuitType.Rgb) {
+              <span class="lc-swatch" [style.background]="circuitSwatch(circuit)" aria-hidden="true"></span>
+            }
+            <span class="lc-circuit-name">{{ circuitName(circuit) }}</span>
+            <visu-component-switch-button [state]="circuit.on" (stateChanged)="switchCircuit(circuit, $event)"
+              [disabled]="!commandInput"></visu-component-switch-button>
+          </div>
+
+          @if (circuit.type !== CircuitType.Switch) {
+            <visu-component-slider [state]="circuit.level" (stateChanged)="levelChanged(circuit, $event)"></visu-component-slider>
+          }
+
+          @if (circuit.type === CircuitType.Rgb) {
+            <label class="lc-row">
+              <span class="lc-sub">{{ 'UI.VISU.LIGHTING_COLOR' | translateAsync }}</span>
+              <input type="color" class="lc-color" [value]="circuit.color.toLowerCase()" [disabled]="!commandInput"
+                (change)="colorChanged(circuit, $any($event.target).value)">
+            </label>
+          }
+
+          @if (circuit.type === CircuitType.TunableWhite) {
+            <div class="lc-kelvin">
+              <span class="lc-sub">{{ 'UI.VISU.LIGHTING_KELVIN' | translateAsync }} · {{ circuit.kelvin }} K</span>
+              <dx-slider class="lc-kelvin-slider" [min]="MinKelvin" [max]="MaxKelvin" [step]="100" [value]="circuit.kelvin"
+                valueChangeMode="onHandleRelease" [disabled]="!commandInput"
+                (onValueChanged)="$event.event && kelvinChanged(circuit, $event.value)"></dx-slider>
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="lc-hint">{{ 'UI.VISU.LIGHTING_NO_CIRCUITS' | translateAsync }}</div>
+      }
+    </section>
+
+    <section class="lc-section">
+      <div class="lc-label">{{ 'UI.VISU.LIGHTING_SAVE_MOOD' | translateAsync }}</div>
+      <form class="lc-row" (submit)="$event.preventDefault(); saveNewMood()">
+        <input type="text" class="lc-input" name="newMood" maxlength="40" [(ngModel)]="newMoodName"
+          [attr.aria-label]="'UI.VISU.LIGHTING_MOOD_NAME' | translateAsync" [placeholder]="'UI.VISU.LIGHTING_MOOD_NAME' | translateAsync"
+          [disabled]="!commandInput">
+        <button type="submit" class="lc-btn is-primary" [disabled]="!commandInput || !newMoodName.trim()">
+          <fa-icon icon="floppy-disk"></fa-icon> {{ 'UI.VISU.LIGHTING_SAVE' | translateAsync }}
+        </button>
+      </form>
+
+      @for (mood of userMoods; track mood.id) {
+        <div class="lc-row lc-mood-edit">
+          @if (renamingId === mood.id) {
+            <input type="text" class="lc-input" maxlength="40" [(ngModel)]="renameText" [attr.aria-label]="'UI.VISU.LIGHTING_MOOD_NAME' | translateAsync"
+              (keydown.enter)="confirmRename(mood)" (keydown.escape)="cancelRename()">
+            <button type="button" class="lc-icon-btn" (click)="confirmRename(mood)"
+              [attr.aria-label]="'UI.VISU.LIGHTING_SAVE' | translateAsync" [attr.title]="'UI.VISU.LIGHTING_SAVE' | translateAsync">
+              <fa-icon icon="check"></fa-icon>
+            </button>
+            <button type="button" class="lc-icon-btn" (click)="cancelRename()"
+              [attr.aria-label]="'UI.VISU.LIGHTING_CANCEL' | translateAsync" [attr.title]="'UI.VISU.LIGHTING_CANCEL' | translateAsync">
+              <fa-icon icon="xmark"></fa-icon>
+            </button>
+          } @else {
+            <span class="lc-mood-name">{{ moodName(mood.id) }}</span>
+            <button type="button" class="lc-icon-btn" (click)="overwriteMood(mood)" [disabled]="!commandInput"
+              [attr.aria-label]="('UI.VISU.LIGHTING_OVERWRITE' | translateAsync) + ': ' + moodName(mood.id)"
+              [attr.title]="'UI.VISU.LIGHTING_OVERWRITE' | translateAsync">
+              <fa-icon icon="floppy-disk"></fa-icon>
+            </button>
+            <button type="button" class="lc-icon-btn" (click)="startRename(mood)" [disabled]="!commandInput"
+              [attr.aria-label]="('UI.VISU.LIGHTING_RENAME' | translateAsync) + ': ' + moodName(mood.id)"
+              [attr.title]="'UI.VISU.LIGHTING_RENAME' | translateAsync">
+              <fa-icon icon="pen"></fa-icon>
+            </button>
+            <button type="button" class="lc-icon-btn is-danger" (click)="deleteMood(mood)" [disabled]="!commandInput"
+              [attr.aria-label]="('UI.VISU.LIGHTING_DELETE' | translateAsync) + ': ' + moodName(mood.id)"
+              [attr.title]="'UI.VISU.LIGHTING_DELETE' | translateAsync">
+              <fa-icon icon="trash"></fa-icon>
+            </button>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</app-visualization-control>

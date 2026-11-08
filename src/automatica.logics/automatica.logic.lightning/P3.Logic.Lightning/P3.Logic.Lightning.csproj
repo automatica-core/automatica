@@ -21,4 +21,7 @@
 	  <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2049" />
 	  <PackageReference Include="Microsoft.Build.Framework" Version="18.11.0" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="P3.Logic.Lightning.Tests" />
+  </ItemGroup>
 </Project>
