@@ -10,7 +10,8 @@ namespace P3.Logic.Surveillance.WindowMonitor
 
         public override Guid LogicGuid => new Guid("b664d32f-3b21-40b4-80a8-608491e07a5f");
 
-        public override Version LogicVersion => new Version(0, 0, 0, 4);
+        // the core rewrites the templates only when this goes up. 0.1.0.0: description and visu name keys
+        public override Version LogicVersion => new Version(0, 1, 0, 0);
 
         public override ILogic CreateLogicInstance(ILogicContext context)
         {

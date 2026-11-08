@@ -311,7 +311,7 @@ namespace P3.Logic.Messenger.Tests
 
             Assert.Equal("Messenger", factory.LogicName);
             Assert.Equal(new Guid("215efbd7-95e6-4451-9837-612010f493a6"), factory.LogicGuid);
-            Assert.Equal(new Version(0, 1, 0, 1), factory.LogicVersion);
+            Assert.Equal(new Version(0, 2, 0, 0), factory.LogicVersion);
         }
 
         [Fact]

@@ -44,7 +44,8 @@ namespace P3.Driver.MBusDriverFactory
 
         public override string ImageName => "automaticacore/plugin-p3.driver.mbus";
         public override string DriverName => "MBus";
-        public override Version DriverVersion => new Version(0, 1, 0, 1);
+        // the core rewrites the templates only when this goes up. 0.2.0.0: description keys
+        public override Version DriverVersion => new Version(0, 2, 0, 0);
         public override Guid DriverGuid => _mbusUdpNode;
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)

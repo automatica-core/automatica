@@ -9,7 +9,8 @@ namespace P3.Logic.Operations.Gauge.EasyCircular
     {
         public override string LogicName => "P3.Logic.Operations.Gauge.EasyCircular";
         public override Guid LogicGuid => new Guid("7d26048b-ff5a-4314-a092-1f55e881d87c");
-        public override Version LogicVersion => new Version(0, 0, 0, 1);
+        // the core rewrites the templates only when this goes up. 0.1.0.0: gauge type parameter keys
+        public override Version LogicVersion => new Version(0, 1, 0, 0);
 
         public override bool InDevelopmentMode => true;
 

@@ -12,7 +12,8 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         public override Guid DriverGuid => new Guid("7284093b-d1a0-4b9e-84ba-1f031f518af8");
 
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        // the core rewrites the templates only when this goes up. 1.1.0.0: ETH and ADA interface names
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.blockchain.ticker";
 

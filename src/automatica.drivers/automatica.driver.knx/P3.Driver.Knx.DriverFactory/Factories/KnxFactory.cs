@@ -14,7 +14,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(2, 2, 0, 2);
+        // the core rewrites the templates only when this goes up. 2.3.0.0: DPT catalog, DPT 3 type and date node data type fixes
+        public override Version DriverVersion => new Version(2, 3, 0, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");

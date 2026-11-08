@@ -16,7 +16,8 @@ namespace P3.Driver.ModBusDriverFactory
         public override Guid DriverGuid => ModBusMasterTcpGuid;
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
 
-        public override Version DriverVersion => new Version(1, 2, 0, 3);
+        // the core rewrites the templates only when this goes up. 1.3.0.0: device and attribute interface names
+        public override Version DriverVersion => new Version(1, 3, 0, 0);
 
         protected override void InitDriverTemplates(INodeTemplateFactory factory)
         {

@@ -9,7 +9,8 @@ namespace P3.Driver.Automatica.Remote
     public class AutomaticaRemoteDriverFactory : DriverFactory
     {
         public override string DriverName => "Automatica.Remote.Driver";
-        public override Version DriverVersion => new Version(0, 1, 0, 9);
+        // the core rewrites the templates only when this goes up. 0.2.0.0: translated names and descriptions
+        public override Version DriverVersion => new Version(0, 2, 0, 0);
 
         private static readonly Guid IpProperty = new Guid("91119590-cae6-489b-9764-9166820d31f8");
         private static readonly Guid ScanProperty = new Guid("1c1d45f4-8fe0-4a3d-b703-238522ea03d9");

@@ -14,7 +14,8 @@ namespace P3.Driver.OmsDriverFactory
         public override Guid DriverGuid => DeviceDriverGuid;
 
         public override string ImageName => "automaticacore/plugin-p3.driver.oms";
-        public override Version DriverVersion => new Version(0, 1, 0, 2);
+        // the core rewrites the templates only when this goes up. 0.2.0.0: description keys
+        public override Version DriverVersion => new Version(0, 2, 0, 0);
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
             var interfaceGuid = new Guid("49be612a-3331-454c-8027-3db1b3674024");

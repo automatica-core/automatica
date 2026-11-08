@@ -10,7 +10,8 @@ namespace P3.Logic.Operations.Gauge.RangeCircular
     {
         public override string LogicName => "P3.Logic.Operations.Gauge.RangeCircular";
         public override Guid LogicGuid => new Guid("d509db23-fa64-4496-b3ee-2c0b6dff0abd");
-        public override Version LogicVersion => new Version(0, 0, 0, 1);
+        // the core rewrites the templates only when this goes up. 0.1.0.0: gauge type parameter keys
+        public override Version LogicVersion => new Version(0, 1, 0, 0);
 
         public override bool InDevelopmentMode => true;
 

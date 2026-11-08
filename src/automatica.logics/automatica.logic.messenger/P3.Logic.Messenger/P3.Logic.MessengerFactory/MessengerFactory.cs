@@ -12,7 +12,8 @@ namespace P3.Logic.Messenger
 
         public override Guid LogicGuid => new Guid("215efbd7-95e6-4451-9837-612010f493a6");
 
-        public override Version LogicVersion => new Version(0, 1, 0, 1);
+        // the core rewrites the templates only when this goes up. 0.2.0.0: cloud email body template parameter
+        public override Version LogicVersion => new Version(0, 2, 0, 0);
 
         public override bool InDevelopmentMode => true;
 

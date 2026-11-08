@@ -11,7 +11,8 @@ namespace P3.Driver.VkingBms.DriverFactory
     {
         public override string DriverName => "VkingBms";
         public override Guid DriverGuid => new Guid("ad95d8f8-7393-4631-afba-7e241f1ecdd4");
-        public override Version DriverVersion => new Version(0, 2, 0, 5);
+        // the core rewrites the templates only when this goes up. 0.3.0.0: description keys
+        public override Version DriverVersion => new Version(0, 3, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.vking-bms";
         public Guid PackInterface => DriverGuid;

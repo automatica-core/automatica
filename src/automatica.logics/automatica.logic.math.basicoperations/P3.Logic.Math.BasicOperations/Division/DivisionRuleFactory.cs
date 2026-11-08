@@ -15,7 +15,8 @@ namespace P3.Logic.Math.BasicOperations.Division
         public static readonly Guid RuleOutput = new Guid("538c6157-2c0a-4f90-ba62-57038abac838");
 
         public override string LogicName => "Math.Divison";
-        public override Version LogicVersion => new Version(2, 0, 0, 0);
+        // the core rewrites the templates only when this goes up. 2.1.0.0: description key
+        public override Version LogicVersion => new Version(2, 1, 0, 0);
         public override Guid LogicGuid => new Guid("151ee36d-680a-4978-b51f-a099e8f94895");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
