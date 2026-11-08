@@ -62,7 +62,7 @@ const ROW_H = 22;
 const BODY_PAD = 6;
 const DP_H = 30;
 const DP_MIN_W = 150;
-const DP_MAX_W = 260;
+const DP_MAX_W = 340;
 const GRID = 10;
 
 // The stored X/Y come from the draw2d editor, whose blocks were 100px wide. The new blocks are wider,
@@ -528,7 +528,11 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     if (typeof value === "object") {
       return "{…}";
     }
-    const text = String(value);
+    let text = String(value);
+    // a number sent as text (some drivers do) is rounded like a number
+    if (/^-?\d+\.\d{3,}$/.test(text)) {
+      text = Number(text).toFixed(2);
+    }
     return text.length > 14 ? text.substring(0, 13) + "…" : text;
   }
 
@@ -903,8 +907,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     } else {
       text = (name?.length ?? 0) * 7;
     }
-    // badge + gaps + value column
-    return Math.min(DP_MAX_W, Math.max(DP_MIN_W, Math.ceil(text) + 112));
+    // padding (24) + type badge (~34) + two gaps (16) + room for the value readout (~76): the name keeps its width
+    return Math.min(DP_MAX_W, Math.max(DP_MIN_W, Math.ceil(text) + 150));
   }
 
   // ---------- zoom / view ----------

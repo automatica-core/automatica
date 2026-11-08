@@ -298,7 +298,7 @@ describe("RuleEditorComponent", () => {
       const dp = addDataPoint("A very very long data point name that never fits into one block", NodeDataTypeEnum.Boolean);
       await create();
 
-      expect(nodeOf(dp).w).toBe(260);
+      expect(nodeOf(dp).w).toBe(340);
     });
 
     it("titles_RuleAndDataPoint_ShowNameTemplateAndFullName", async () => {
@@ -1720,7 +1720,9 @@ describe("RuleEditorComponent", () => {
         [{ a: 1 }, "{…}"],
         ["short text", "short text"],
         ["fourteen chars", "fourteen chars"],
-        ["fifteen chars!!", "fifteen chars…"]
+        ["fifteen chars!!", "fifteen chars…"],
+        ["75937.51123456", "75937.51"],
+        ["1.5", "1.5"]
       ];
 
       for (const [raw, shown] of cases) {

@@ -14,13 +14,12 @@
   <dx-tree-list height="100%" #tree itemsExpr="Children" id="config"
     [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
     [expandedRowKeys]="expandedRowKeys"
-    (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="true"
+    (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="false"
     [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false"
     [showColumnHeaders]="false" [showBorders]="false" [hoverStateEnabled]="true" [showRowLines]="false">
 
+    <!-- one column: the name takes the free width, the live value sits at its right end -->
     <dxi-column dataField="DisplayName" [renderAsync]="false" cellTemplate="cellTemplate"></dxi-column>
-    <dxi-column dataField="Value" [renderAsync]="true" cellTemplate="valueTemplate" width="30%" alignment="right"
-      cssClass="tree-value"></dxi-column>
 
     <dxo-search-panel [visible]="true" width="100%" [placeholder]="'UI.CONFIG.SEARCH' | translateAsync"></dxo-search-panel>
 
@@ -42,7 +41,7 @@
           <fa-icon [icon]="['fas', data.data.Icon]" [fixedWidth]="true" class="tree-icon"
             [class.disabled]="data.data.IsAnyDisabled"></fa-icon>
 
-          <span class="tree-name" id="{{ data.data.Id }}">{{ data.value }}</span>
+          <span class="tree-name" id="{{ data.data.Id }}" [title]="data.value">{{ data.value }}</span>
           <span class="tree-state">
             @if (data.data.Validate) {
               @if (data.data.IsAnyDisabled) {
@@ -124,22 +123,12 @@
     }
   }
 </span>
+@if (!data.data.IsAnyDisabled && treeValue(data.data); as value) {
+  <span class="tree-value mono" [title]="value">{{ value }}</span>
+}
 </div>
 </div>
 </div>
 
-<div *dxTemplate="let data of 'valueTemplate'" cellTemplate="valueTemplate">
-  <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
-    <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
-      @if (!data.data.IsAnyDisabled) {
-        @if (data.data.NodeTemplate && data.data.NodeTemplate.This2NodeDataType == NodeDataTypeEnum.WindowState) {
-          <span class="mono" id="{{ data.data.Id }}">{{WindowState[data.value]}}</span>
-        } @else {
-          <span class="mono" id="{{ data.data.Id }}">{{data.value}}</span>
-        }
-      }
-    </div>
-  </div>
-</div>
 </dx-tree-list>
 </div>

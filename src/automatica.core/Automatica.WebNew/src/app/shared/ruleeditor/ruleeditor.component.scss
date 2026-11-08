@@ -204,16 +204,7 @@
     }
 
     .value {
-        flex: none;
-        color: var(--muted);
-        font-size: 11px;
         max-width: 64px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        &:empty {
-            display: none;
-        }
     }
 }
 
@@ -247,16 +238,7 @@
     }
 
     .value {
-        flex: none;
-        font-size: 11px;
-        color: var(--fg);
-        max-width: 72px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        &:empty {
-            display: none;
-        }
+        max-width: 96px;
     }
 
     .port {
@@ -270,6 +252,28 @@
         &.out {
             right: 0;
         }
+    }
+}
+
+// the live value of a port: a rounded readout in the kind's colour, so it never reads as part of the name
+// (the type badge is the square chip, the value the round one)
+.value {
+    flex: none;
+    min-width: 0;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 16px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--fg);
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--kind, var(--muted)) 45%, transparent);
+
+    &:empty {
+        display: none;
     }
 }
 

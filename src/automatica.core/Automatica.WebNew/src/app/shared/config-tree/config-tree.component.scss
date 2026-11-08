@@ -39,11 +39,30 @@
     flex: none;
 }
 
+// the name takes all free width and gives way first; the value keeps its own width up to its cap
 .tree-name {
+    flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+// the live value: a mono readout pill at the right end, not text in the name's style
+.tree-value {
+    flex: none;
+    max-width: 40%;
+    margin-left: auto;
+    padding: 0 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .tree-state {
@@ -87,10 +106,5 @@
         border: 0;
         padding-top: 5px;
         padding-bottom: 5px;
-    }
-
-    .dx-treelist .dx-data-row > td.tree-value {
-        color: var(--muted);
-        font-size: var(--text-xs);
     }
 }

@@ -204,6 +204,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     return rowData.Value;
   }
 
+  /** the live value shown at the right end of a row, "" when there is none */
+  treeValue(row: any): string {
+    return formatTreeValue(row?.Value, row?.NodeTemplate?.This2NodeDataType);
+  }
+
   getDisplayName = (rowData: ITreeNode) => {
     const instance = this.nodeInstanceService.getNodeInstance(rowData.Id);
 
@@ -676,4 +681,21 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     // }
   }
 
+}
+
+/** a tree row's value as text: window states by name, fractions rounded to two places, "" for nothing */
+export function formatTreeValue(value: any, dataType?: NodeDataTypeEnum): string {
+  if (value === undefined || value === null || value === "") {
+    return "";
+  }
+  if (dataType === NodeDataTypeEnum.WindowState) {
+    return WindowState[value] ?? String(value);
+  }
+  if (typeof value === "number" && !Number.isInteger(value)) {
+    return String(Math.round(value * 100) / 100);
+  }
+  if (typeof value === "object") {
+    return "{…}";
+  }
+  return String(value);
 }

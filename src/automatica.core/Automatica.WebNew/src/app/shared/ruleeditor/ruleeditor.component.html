@@ -38,12 +38,12 @@
                 (pointerdown)="onPortPointerDown($event, port)"></span>
               <span class="label" [class.inverted]="inverted(port)" [title]="'UI.LOGIC.INVERT_HINT' | translateAsync"
                 (pointerdown)="$event.stopPropagation()" (click)="toggleInvert($event, port)">{{ portLabel(port) }}</span>
-              <span class="value mono">{{ value(port) }}</span>
+              <span class="value mono" [attr.data-kind]="port.kind" [title]="value(port)">{{ value(port) }}</span>
             </div>
           }
           @for (port of node.outputs; track port.id) {
             <div class="row out" [style.top.px]="headHeight + bodyPad + port.row * rowHeight" [style.height.px]="rowHeight">
-              <span class="value mono">{{ value(port) }}</span>
+              <span class="value mono" [attr.data-kind]="port.kind" [title]="value(port)">{{ value(port) }}</span>
               <span class="label" [class.inverted]="inverted(port)" [title]="'UI.LOGIC.INVERT_HINT' | translateAsync"
                 (pointerdown)="$event.stopPropagation()" (click)="toggleInvert($event, port)">{{ portLabel(port) }}</span>
               <span class="port" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
@@ -67,7 +67,7 @@
           <span class="badge mono" [attr.data-kind]="(node.outputs[0] ?? node.inputs[0])?.kind">{{ node.dataType }}</span>
           <span class="name" [class.inverted]="node.model.Inverted">{{ title(node) }}</span>
           @if (node.outputs[0] ?? node.inputs[0]; as port) {
-            <span class="value mono">{{ value(port) }}</span>
+            <span class="value mono" [attr.data-kind]="port.kind" [title]="value(port)">{{ value(port) }}</span>
           }
           @for (port of node.outputs; track port.id) {
             <span class="port out" [attr.data-port]="port.id" [attr.data-kind]="port.kind"
