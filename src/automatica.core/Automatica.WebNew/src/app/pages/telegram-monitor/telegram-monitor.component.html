@@ -65,6 +65,8 @@
         <span>{{ 'UI.TELEGRAM.EMPTY_HINT' | translateAsync }}</span>
         <a class="link" routerLink="/admin/config">{{ 'UI.TELEGRAM.OPEN_CONFIG' | translateAsync }}</a>
       </div>
+    } @else {
+      <app-skeleton variant="table" [columns]="6" [rows]="8"></app-skeleton>
     }
   </div>
 </div>

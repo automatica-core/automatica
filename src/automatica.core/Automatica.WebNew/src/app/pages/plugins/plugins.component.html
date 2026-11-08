@@ -43,7 +43,9 @@
   </div>
 
   <div class="panel list">
-    @if (loadError) {
+    @if (!loaded || (isLoading && plugins.length === 0)) {
+      <app-skeleton variant="list" [rows]="8"></app-skeleton>
+    } @else if (loadError) {
       <div class="empty-state">
         <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
         <b>{{ 'UI.PLUGINS.LOAD_FAILED' | translateAsync }}</b>

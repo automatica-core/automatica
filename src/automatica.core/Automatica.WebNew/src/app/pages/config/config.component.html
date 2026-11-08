@@ -6,14 +6,14 @@
 
         <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
             <as-split-area [size]="62">
-                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading">
+                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading" [loaded]="loaded">
                 </p3-config-tree>
             </as-split-area>
             <as-split-area [size]="38" [minSize]="22">
                 <p3-propertyeditor height="100%" #propertyEditor (validate)="validate($event)" (fileUploaded)="fileUploaded($event)"
                     (scan)="scan($event)" [userGroups]="userGroups" [item]="selectedItem"
                     [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
-                    (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading"></p3-propertyeditor>
+                    (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading" [loaded]="loaded"></p3-propertyeditor>
             </as-split-area>
         </as-split>
     </div>

@@ -24,7 +24,7 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
   groups: CategoryGroup[] = [];
   categories: CategoryInstance[] = [];
   selectedNode: CategoryInstance = void 0;
-
+  loaded = false;
 
   menuItems: CustomMenuItem[] = [];
   userGroups: any;
@@ -57,6 +57,7 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     } catch (error) {
       this.handleError(error);
     } finally {
+      this.loaded = true;
       loadingDone();
     }
   }

@@ -728,6 +728,7 @@
     "TIME_START_BEFORE_END": "Starttime must be before endtime"
   },
   "UI": {
+    "LOADING": "Loading …",
     "NAV": {
       "OVERVIEW": "Overview",
       "OPERATE": "Operate",

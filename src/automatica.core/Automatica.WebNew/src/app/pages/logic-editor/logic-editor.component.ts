@@ -49,6 +49,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   public pages: RulePage[] = [];
   public pagesDataSource: DataSource = void 0;
   ruleTemplates: RuleTemplate[];
+
+  // true once the first load finished (also on error), until then tree, page list and inspector show skeletons
+  loaded = false;
   linkableNodes: NodeInstance[] = [];
 
   selectedPage: RulePage = void 0;
@@ -194,6 +197,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
 
     this.isLoading = false;
+    this.loaded = true;
     this.changeRef.detectChanges();
   }
 

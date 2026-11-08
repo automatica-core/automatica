@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from "@angular/core";
 import { faClock, faFile, faFolder, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { faLaptopArrowDown, faObjectUnion, faTty, faUsbDrive, faVrCardboard, faWavePulse, fad } from "@fortawesome/pro-duotone-svg-icons";
 import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank, faEthernet } from "@fortawesome/pro-solid-svg-icons";
@@ -8,7 +8,6 @@ import { NotifyService } from "./services/notify.service";
 import { L10nTranslationService, L10nLocale } from "angular-l10n";
 import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
-import { DxLoadPanelComponent } from "devextreme-angular";
 import { ThemeService } from "./services/theme.service";
 import { Router } from "@angular/router";
 
@@ -23,8 +22,8 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   title = "automatica-web";
 
-  @ViewChild("loadPanel", { static: true })
-  dxLoadPanel: DxLoadPanelComponent;
+  // true while any operation holds a loading reference (AppService.beginLoading / isLoading)
+  busy = false;
 
   constructor(appService: AppService,
     notify: NotifyService,
@@ -117,11 +116,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.themeService.applyTheme();
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
-      if (v) {
-        this.dxLoadPanel.instance.show();
-      } else {
-        this.dxLoadPanel.instance.hide();
-      }
+      this.busy = v;
     });
   }
 

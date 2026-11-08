@@ -26,6 +26,9 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   templates: AreaTemplate[] = [];
   instances: AreaInstance[] = [];
 
+  // true once the first load finished (also on error), until then tree and inspector show skeletons
+  loaded = false;
+
   @ViewChild("tree")
   tree: DxTreeListComponent;
 
@@ -120,6 +123,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       this.handleError(error);
     } finally {
+      this.loaded = true;
       loadingDone();
     }
   }

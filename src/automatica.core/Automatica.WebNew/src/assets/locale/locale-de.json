@@ -728,6 +728,7 @@
     "TIME_START_BEFORE_END": "Startzeit darf nicht nach der Endzeit sein"
   },
   "UI": {
+    "LOADING": "Wird geladen …",
     "NAV": {
       "OVERVIEW": "Übersicht",
       "OPERATE": "Bedienen",

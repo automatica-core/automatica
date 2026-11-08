@@ -34,6 +34,9 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
   pages: VisuPage[] = [];
 
+  // true once the first load finished (also on error), until then pages and inspector show skeletons
+  loaded = false;
+
   public templates: VisuObjectTemplate[] = [];
 
   private _selectedItem: IPropertyModel;
@@ -243,6 +246,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
       this.handleError(error);
     } finally {
       // the spinner must go away on errors too, it is modal
+      this.loaded = true;
       loadingDone();
     }
   }

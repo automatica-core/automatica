@@ -1,1 +1,1 @@
-@if (page) {<app-visualization-container [page]="page" [pageGroupType]="pageGroupType" [items]="page.VisuObjectInstances"></app-visualization-container>}
+@if (page) {<app-visualization-container [page]="page" [pageGroupType]="pageGroupType" [items]="page.VisuObjectInstances"></app-visualization-container>} @else if (!loaded) {<div class="page-skeleton"><app-skeleton variant="cards" [rows]="8"></app-skeleton></div>}

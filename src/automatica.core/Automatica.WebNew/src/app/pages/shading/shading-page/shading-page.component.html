@@ -455,6 +455,17 @@
         </div>
       </div>
     }
+  } @else if (!loaded) {
+    <div class="overview">
+      <div class="panel compass-panel">
+        <app-skeleton variant="lines" [rows]="6"></app-skeleton>
+      </div>
+      <div class="side">
+        <div class="panel">
+          <app-skeleton variant="list" [rows]="5"></app-skeleton>
+        </div>
+      </div>
+    </div>
   }
 </div>
 

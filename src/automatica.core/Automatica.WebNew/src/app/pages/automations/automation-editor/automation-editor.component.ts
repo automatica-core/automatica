@@ -35,6 +35,8 @@ export class AutomationEditorComponent extends BaseComponent implements OnInit, 
     id: string | undefined;
     loaded = false;
     notFound = false;
+    /** the last load threw: no skeleton then, the error was already shown */
+    loadFailed = false;
     tab: EditorTab = "rule";
 
     name = "";
@@ -148,6 +150,7 @@ export class AutomationEditorComponent extends BaseComponent implements OnInit, 
         const done = this.appService.beginLoading();
         this.loaded = false;
         this.notFound = false;
+        this.loadFailed = false;
         try {
             let all: AutomationDto[] = [];
             try {
@@ -172,6 +175,7 @@ export class AutomationEditorComponent extends BaseComponent implements OnInit, 
             this.apply(dto);
             this.loaded = true;
         } catch (error) {
+            this.loadFailed = true;
             this.handleError(error);
         } finally {
             done();

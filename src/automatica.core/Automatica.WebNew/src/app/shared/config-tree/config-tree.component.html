@@ -1,5 +1,10 @@
 <div class="config-tree h-100">
-
+  <!-- the tree list stays in the DOM (load() expands rows through it), the skeleton covers it until the config is there -->
+  @if (!loaded && !nodeInstanceService.nodeInstanceList) {
+    <div class="tree-skeleton">
+      <app-skeleton variant="tree" [rows]="12"></app-skeleton>
+    </div>
+  }
 
   <dx-context-menu #contextMenu target="#config" activeStateEnabled="false" hideOnOutsideClick="true"
     onHiding="onContextMenuHiding($event)" (onItemClick)="onContextMenuClick($event)">
@@ -137,6 +142,3 @@
 </div>
 </dx-tree-list>
 </div>
-<!-- <dx-load-panel #loadPanel *ngIf="showLoadingPanel" shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#main' }"
-[(visible)]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
-</dx-load-panel> -->

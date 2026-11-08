@@ -16,20 +16,26 @@
           <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
             <div *dxTemplate>
               <p3-config-tree class="h-100" #configTree (onNodeSelect)="nodeSelect($event)"
-                [isLoading]="isLoading" [loadLogicNodeInstances]="true"
+                [isLoading]="isLoading" [loaded]="loaded" [loadLogicNodeInstances]="true"
                 (onLogicNodeInstanceRemoved)="onLogicNodeInstanceRemoved($event)">
               </p3-config-tree>
             </div>
           </dxi-item>
           <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
             <div *dxTemplate>
-              <dx-list #logicPagesList [dataSource]="pagesDataSource" [selectedItems]="[selectedPage]"
-                height="100%" selectionMode="single"
-                (onSelectionChanged)="onTabSelectionChanged($event)">
-                <div *dxTemplate="let page of 'item'">
-                  <span>{{page.Name}}</span>
+              @if (!loaded) {
+                <div class="pages-skeleton">
+                  <app-skeleton variant="lines" [rows]="6"></app-skeleton>
                 </div>
-              </dx-list>
+              } @else {
+                <dx-list #logicPagesList [dataSource]="pagesDataSource" [selectedItems]="[selectedPage]"
+                  height="100%" selectionMode="single"
+                  (onSelectionChanged)="onTabSelectionChanged($event)">
+                  <div *dxTemplate="let page of 'item'">
+                    <span>{{page.Name}}</span>
+                  </div>
+                </dx-list>
+              }
             </div>
           </dxi-item>
           <div *dxTemplate="let item of 'title'">
@@ -71,7 +77,7 @@
           (fileUploaded)="fileUploaded($event)" [userGroups]="userGroups" [item]="selectedItem"
           [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
           (saveLearnedNodes)="saveLearnedNodes($event)" (unselectItem)="unselectItem()" (onChanged)="onPropertyChanged($event)"
-        [isLoading]="isLoading"></p3-propertyeditor>
+        [isLoading]="isLoading" [loaded]="loaded"></p3-propertyeditor>
       </as-split-area>
 
     </as-split>

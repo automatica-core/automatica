@@ -41,6 +41,9 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   // bumped by every page load, a response for an older load is dropped (tap page A, then B)
   private loadSequence = 0;
 
+  // true once a page arrived or loading it failed, until then a skeleton stands in for the tiles
+  loaded = false;
+
   constructor(private visuService: VisuService,
     private route: ActivatedRoute,
     notify: NotifyService,
@@ -100,6 +103,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
             try {
               await this.loadPageById(id, type);
             } catch (error) {
+              this.loaded = true;
               this.handleError(error);
             }
 
@@ -108,6 +112,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
       }
     } catch (error) {
+      this.loaded = true;
       this.handleError(error);
     } finally {
       loadingDone();
@@ -193,6 +198,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     } else if (data instanceof VisuPage) {
       this.page = data;
     }
+    this.loaded = true;
   }
 
   private getAndSetProperty(instance: VisuObjectInstance, property: string, value: any) {

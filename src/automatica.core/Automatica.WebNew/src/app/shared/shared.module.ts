@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { SkeletonModule } from "./skeleton/skeleton.module";
 import { CommonModule, NgSwitch } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
@@ -18,6 +19,7 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
 
 @NgModule({
     imports: [
+        SkeletonModule,
         FormsModule,
         CommonModule,
 
@@ -61,6 +63,7 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         VisuPageListComponent,
         NodeInstanceImportComponent],
     exports: [
+        SkeletonModule,
         PropertyEditorComponent,
         ConfigMenuComponent,
         ConfigTreeComponent,

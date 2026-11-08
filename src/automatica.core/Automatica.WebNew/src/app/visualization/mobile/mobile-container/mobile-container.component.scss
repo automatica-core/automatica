@@ -2,3 +2,9 @@
     display: block;
     height: 100%;
 }
+
+.page-skeleton {
+    height: 100%;
+    overflow: hidden;
+    padding: var(--space-4);
+}

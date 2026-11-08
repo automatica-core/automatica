@@ -78,6 +78,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   loadOnInit = false;
 
+  // set by the host page once its first load finished (also on error), hides the skeleton even when no config came back
+  @Input()
+  loaded = false;
+
   constructor(
     private configService: ConfigService,
     public nodeInstanceService: LogicEditorInstanceService,

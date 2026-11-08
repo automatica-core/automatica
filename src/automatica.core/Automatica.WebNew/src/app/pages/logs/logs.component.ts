@@ -68,6 +68,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   stop: boolean = true;
 
   logFileTree: LogFile[];
+  loaded = false;
 
   logLevels: { key: number, name: string }[] = [];
   logLevelsDataSource;
@@ -187,6 +188,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     } catch (error) {
       this.handleError(error);
     } finally {
+      this.loaded = true;
       loadingDone();
     }
   }

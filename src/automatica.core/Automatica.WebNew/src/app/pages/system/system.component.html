@@ -54,6 +54,10 @@
           <dd class="mono">{{ updateVersion }}</dd>
         }
       </dl>
+      @if (!updateChecked) {
+        <!-- the update check asks the cloud and can take a while, the installed version is already known -->
+        <app-skeleton variant="lines" [rows]="1"></app-skeleton>
+      }
 
       @if (update) {
         @if (fileMax && !alreadyDownloaded) {
@@ -106,7 +110,9 @@
         }
       </div>
 
-      @if (licenseInfo) {
+      @if (!licenseLoaded) {
+        <app-skeleton variant="lines" [rows]="5"></app-skeleton>
+      } @else if (licenseInfo) {
         <dl class="kv">
           <dt>{{ 'UI.SYSTEM.CUSTOMER' | translateAsync }}</dt>
           <dd>
@@ -146,7 +152,7 @@
             <dd class="mono small">{{ licenseInfo.id }}</dd>
           }
         </dl>
-      } @else if (licenseLoaded) {
+      } @else {
         <div class="empty-state compact">
           <fa-icon class="icon" [icon]="['fas', 'id-card']"></fa-icon>
           <b>{{ 'SYSTEM.NO_LICENSE_FOUND' | translateAsync }}</b>

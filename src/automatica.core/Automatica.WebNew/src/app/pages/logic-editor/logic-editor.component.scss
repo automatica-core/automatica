@@ -5,6 +5,11 @@
     min-height: 0;
 }
 
+.pages-skeleton {
+    overflow: hidden;
+    padding: var(--space-3);
+}
+
 // one tab per logic page, the page list on the left does the same
 .page-tabs {
     flex: none;
