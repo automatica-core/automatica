@@ -69,6 +69,7 @@ namespace Automatica.Core.WebApi.Tests.Http
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetAllByArea)}",
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetPage)}",
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.GetBlinds)}",
+            $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.GetState)}",
         };
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace Automatica.Core.WebApi.Tests.Http
         {
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.SetAutomatic)}",
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.Resume)}",
+            // arming, disarming and acknowledging the security logics (alarms, access controller)
+            $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.Command)}",
         };
 
         private readonly WebApiHost _host;

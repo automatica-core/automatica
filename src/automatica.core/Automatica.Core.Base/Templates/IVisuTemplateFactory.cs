@@ -35,7 +35,13 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("1ccc646b-b384-4753-aba3-a1f8b840fed8")]
         Shutter = 14,
         [VisuMobileObjectTemplateType("3733855a-667d-4cdd-bd43-6a7246046e4d")]
-        Camera = 15
+        Camera = 15,
+        /// <summary>
+        /// Arming / acknowledging tile of the security logics (burglar, fire/water, emergency alarm, access controller),
+        /// commands go through the authorised webapi/security-visu
+        /// </summary>
+        [VisuMobileObjectTemplateType("1c31ad2e-2a07-4691-b799-6771398b83bd")]
+        Security = 26
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

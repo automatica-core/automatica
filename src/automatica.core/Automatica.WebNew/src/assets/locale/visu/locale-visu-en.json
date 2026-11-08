@@ -78,6 +78,10 @@
             "CAMERA": {
                 "NAME": "Camera",
                 "DESCRIPTION": "Live picture of a camera (camera driver)"
+            },
+            "SECURITY": {
+                "NAME": "Security",
+                "DESCRIPTION": "Arm, acknowledge and log of an alarm or access logic"
             }
         },
         "CATEGORY": {

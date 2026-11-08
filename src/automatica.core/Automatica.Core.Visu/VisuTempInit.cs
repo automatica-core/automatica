@@ -81,6 +81,18 @@ namespace Automatica.Core.Visu
                 "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             AddCameraControl(factory);
+            AddSecurityControl(factory);
+        }
+
+        /// <summary>
+        /// State and commands (arm, disarm, acknowledge...) of a security logic, through webapi/security-visu
+        /// </summary>
+        private void AddSecurityControl(VisuMobileTemplateFactory factory)
+        {
+            var security = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Security);
+            factory.CreateVisuMobileTemplate(security, "VISU.OBJECT.SECURITY.NAME", "VISU.OBJECT.SECURITY.DESCRIPTION", "security",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(security, factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)
