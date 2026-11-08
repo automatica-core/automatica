@@ -23,7 +23,15 @@ namespace Automatica.Core.Runtime.Core.Plugins
         private readonly AssemblyDependencyResolver? _resolver;
         private readonly string? _sharedRoot;
 
+        /// <summary>
+        /// The plugin directory (the key of the context)
+        /// </summary>
         public string Folder { get; }
+
+        /// <summary>
+        /// The directory the assemblies are loaded from: the plugin directory, or a copy of it when the plugin is loaded again in the same process (see <see cref="PluginLoadContexts"/>)
+        /// </summary>
+        public string LoadFolder { get; }
 
         /// <summary>
         /// Native libraries can not be unloaded, a plugin that loaded one is updated with a restart
@@ -32,11 +40,13 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         /// <param name="folder">the plugin directory</param>
         /// <param name="sharedRoot">the directory with all plugin directories, searched for libraries the plugin does not ship</param>
-        public PluginLoadContext(string folder, string? sharedRoot = null) : base($"plugin:{Path.GetFileName(folder)}", isCollectible: true)
+        /// <param name="loadFolder">a copy of the plugin directory to load the assemblies from, null to load them from <paramref name="folder"/></param>
+        public PluginLoadContext(string folder, string? sharedRoot = null, string? loadFolder = null) : base($"plugin:{Path.GetFileName(folder)}", isCollectible: true)
         {
             Folder = folder;
+            LoadFolder = loadFolder ?? folder;
             _sharedRoot = sharedRoot;
-            _resolver = CreateResolver(folder);
+            _resolver = CreateResolver(LoadFolder);
         }
 
         private static AssemblyDependencyResolver? CreateResolver(string folder)
@@ -74,7 +84,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             var path = _resolver?.ResolveAssemblyToPath(assemblyName);
             if (path == null)
             {
-                var candidate = Path.Combine(Folder, assemblyName.Name + ".dll");
+                var candidate = Path.Combine(LoadFolder, assemblyName.Name + ".dll");
                 if (File.Exists(candidate))
                 {
                     path = candidate;
@@ -139,13 +149,34 @@ namespace Automatica.Core.Runtime.Core.Plugins
         }
 
         /// <summary>
-        /// Loads an assembly of the plugin directory, an assembly with the same name that is already loaded is returned instead
+        /// Loads an assembly of the plugin directory (from <see cref="LoadFolder"/>), an assembly with the same name that is already loaded is returned instead
         /// </summary>
         public Assembly LoadPluginAssembly(string file)
         {
             var name = AssemblyName.GetAssemblyName(file);
             var loaded = Assemblies.FirstOrDefault(a => string.Equals(a.GetName().Name, name.Name, StringComparison.OrdinalIgnoreCase));
-            return loaded ?? LoadFromAssemblyPath(file);
+            return loaded ?? LoadFromAssemblyPath(ToLoadPath(file));
+        }
+
+        /// <summary>
+        /// The path of a file of the plugin directory in <see cref="LoadFolder"/>
+        /// </summary>
+        internal string ToLoadPath(string file)
+        {
+            if (LoadFolder == Folder)
+            {
+                return file;
+            }
+
+            var relative = Path.GetRelativePath(Path.GetFullPath(Folder), Path.GetFullPath(file));
+            if (relative.StartsWith("..", StringComparison.Ordinal) || Path.IsPathRooted(relative))
+            {
+                // not a file of the plugin directory
+                return file;
+            }
+
+            var copy = Path.Combine(LoadFolder, relative);
+            return File.Exists(copy) ? copy : file;
         }
 
         public bool Owns(object? instance)
@@ -181,12 +212,39 @@ namespace Automatica.Core.Runtime.Core.Plugins
     }
 
     /// <summary>
-    /// The load contexts of the loaded plugins, by plugin directory
+    /// The load contexts of the loaded plugins, by plugin directory.
+    /// The first load of a plugin directory loads its files in place. A directory that was loaded before in this process (a plugin update
+    /// without a restart) is loaded from a fresh copy: as long as the old context is not collected (a static event, a thread that did not
+    /// stop,...) the runtime returns the old image for a path it already loaded, even if the file was replaced (seen on linux), and the old
+    /// version would keep running. The copies of earlier processes are deleted when the first copy is made.
     /// </summary>
     internal static class PluginLoadContexts
     {
-        private static readonly ConcurrentDictionary<string, PluginLoadContext> Contexts =
-            new(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+        internal const string CopyDirectoryName = "plugin-load";
+
+        private static readonly StringComparer PathComparer = OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
+        private static readonly ConcurrentDictionary<string, PluginLoadContext> Contexts = new(PathComparer);
+        private static readonly ConcurrentDictionary<string, byte> LoadedBefore = new(PathComparer);
+        private static readonly object CreateLock = new();
+        private static readonly Lazy<string> ProcessRunName = new(() =>
+            $"{System.Diagnostics.Process.GetCurrentProcess().StartTime.ToUniversalTime().Ticks}-{Environment.ProcessId}");
+
+        private static string? _processCopyRoot;
+
+        /// <summary>
+        /// The directory for the copies of all processes, null for the staging directory (tests use their own)
+        /// </summary>
+        internal static string? CopyRoot
+        {
+            get => _copyRoot;
+            set
+            {
+                _copyRoot = value;
+                _processCopyRoot = null;
+            }
+        }
+
+        private static string? _copyRoot;
 
         public static string Normalize(string folder)
         {
@@ -195,7 +253,114 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         public static PluginLoadContext GetOrCreate(string folder)
         {
-            return Contexts.GetOrAdd(Normalize(folder), f => new PluginLoadContext(f, SharedRoot(f)));
+            var key = Normalize(folder);
+            if (Contexts.TryGetValue(key, out var existing))
+            {
+                return existing;
+            }
+
+            lock (CreateLock)
+            {
+                if (Contexts.TryGetValue(key, out existing))
+                {
+                    return existing;
+                }
+
+                var loadFolder = LoadedBefore.ContainsKey(key) ? CopyForReload(key) : null;
+                var context = new PluginLoadContext(key, SharedRoot(key), loadFolder);
+                Contexts[key] = context;
+                LoadedBefore[key] = 0;
+                return context;
+            }
+        }
+
+        /// <returns>a fresh copy of the plugin directory, null (load in place) if it could not be copied</returns>
+        private static string? CopyForReload(string folder)
+        {
+            string? copy = null;
+            try
+            {
+                copy = Path.Combine(GetProcessCopyRoot(), $"{Path.GetFileName(folder)}-{Guid.NewGuid():N}");
+                CopyDirectory(folder, copy);
+                return copy;
+            }
+            catch (Exception)
+            {
+                TryDelete(copy);
+                return null;
+            }
+        }
+
+        private static string GetProcessCopyRoot()
+        {
+            if (_processCopyRoot != null && Directory.Exists(_processCopyRoot))
+            {
+                return _processCopyRoot;
+            }
+
+            var root = CopyRoot ?? ServerInfo.EnsurePrivateDirectory(Path.Combine(ServerInfo.GetStagingDirectory(), CopyDirectoryName));
+            Directory.CreateDirectory(root);
+            DeleteCopiesOfEarlierProcesses(root, ProcessRunName.Value);
+
+            _processCopyRoot = Path.Combine(root, ProcessRunName.Value);
+            Directory.CreateDirectory(_processCopyRoot);
+            return _processCopyRoot;
+        }
+
+        /// <summary>
+        /// Deletes the copies of processes that started before this one ("&lt;start ticks&gt;-&lt;pid&gt;")
+        /// </summary>
+        internal static void DeleteCopiesOfEarlierProcesses(string root, string processRunName)
+        {
+            if (!TryParseStart(processRunName, out var ownStart))
+            {
+                return;
+            }
+
+            foreach (var directory in Directory.GetDirectories(root))
+            {
+                var name = Path.GetFileName(directory);
+                if (name != processRunName && TryParseStart(name, out var start) && start < ownStart)
+                {
+                    TryDelete(directory);
+                }
+            }
+        }
+
+        private static bool TryParseStart(string name, out long start)
+        {
+            var dash = name.IndexOf('-');
+            start = 0;
+            return dash > 0 && long.TryParse(name[..dash], out start);
+        }
+
+        private static void CopyDirectory(string source, string target)
+        {
+            Directory.CreateDirectory(target);
+            foreach (var file in Directory.GetFiles(source))
+            {
+                File.Copy(file, Path.Combine(target, Path.GetFileName(file)));
+            }
+
+            foreach (var directory in Directory.GetDirectories(source))
+            {
+                CopyDirectory(directory, Path.Combine(target, Path.GetFileName(directory)));
+            }
+        }
+
+        private static void TryDelete(string? directory)
+        {
+            try
+            {
+                if (directory != null && Directory.Exists(directory))
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
+            catch (Exception)
+            {
+                // still in use (windows), deleted by the next process
+            }
         }
 
         /// <summary>

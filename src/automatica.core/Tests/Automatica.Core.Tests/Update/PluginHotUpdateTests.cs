@@ -27,6 +27,14 @@ namespace Automatica.Core.Tests.Update
 
         private readonly string _root = Path.Combine(Path.GetTempPath(), "automatica-hot-update-" + Guid.NewGuid().ToString("N"));
 
+        private string CopyRoot => Path.Combine(_root, "copies");
+
+        public PluginHotUpdateTests()
+        {
+            // the copies of reloaded plugins, not in the staging directory of the test run
+            PluginLoadContexts.CopyRoot = CopyRoot;
+        }
+
         public void Dispose()
         {
             try
@@ -79,6 +87,107 @@ namespace Automatica.Core.Tests.Update
             Assert.Equal("helper v2", result.Helper);
 
             PluginLoadContexts.Unload(folder);
+        }
+
+        [Fact]
+        public void Reload_IsLoadedFromACopy_OfTheWholePluginDirectory()
+        {
+            var folder = BuildPlugin("v1");
+            Directory.CreateDirectory(Path.Combine(folder, "runtimes", "linux-x64", "native"));
+            File.WriteAllText(Path.Combine(folder, "runtimes", "linux-x64", "native", "lib.so"), "native");
+
+            var first = PluginLoadContexts.GetOrCreate(folder);
+            Assert.Equal(first.Folder, first.LoadFolder);
+            // copied whether or not the old context is collected
+            PluginLoadContexts.Unload(folder);
+
+            var second = PluginLoadContexts.GetOrCreate(folder);
+            Assert.Equal(PluginLoadContexts.Normalize(folder), second.Folder);
+            Assert.NotEqual(second.Folder, second.LoadFolder);
+            Assert.StartsWith(Path.GetFullPath(CopyRoot), Path.GetFullPath(second.LoadFolder));
+            Assert.True(File.Exists(Path.Combine(second.LoadFolder, PluginName + ".dll")));
+            Assert.True(File.Exists(Path.Combine(second.LoadFolder, "runtimes", "linux-x64", "native", "lib.so")));
+            Assert.Equal(Path.Combine(second.LoadFolder, PluginName + ".dll"), second.ToLoadPath(Path.Combine(folder, PluginName + ".dll")));
+            // a file outside the plugin directory is not mapped
+            var outside = Path.Combine(_root, "other.dll");
+            Assert.Equal(outside, second.ToLoadPath(outside));
+
+            PluginLoadContexts.Unload(folder);
+        }
+
+        [Fact]
+        public void Reload_WhileTheOldVersionIsStillReferenced_LoadsTheNewVersion()
+        {
+            var folder = BuildPlugin("v1");
+            Assert.Equal("v1", Invoke(folder).Version);
+            Assert.True(PluginUpdater.WaitForUnload(PluginLoadContexts.Unload(folder), 20));
+
+            BuildPlugin("v2");
+            var (version, keep) = LoadAndKeep(folder);
+            Assert.Equal("v2", version);
+
+            // the old version can not be unloaded, e.g. a static event still holds it (seen on the NAS for Time, Operations and TextToSpeech)
+            var unloaded = PluginLoadContexts.Unload(folder);
+            Assert.False(PluginUpdater.WaitForUnload(unloaded, 3));
+
+            // the reloaded version was loaded from a copy: the installer can replace the plugin directory
+            BuildPlugin("v3");
+            var result = Invoke(folder);
+            Assert.Equal("v3", result.Version);
+            Assert.Equal("helper v3", result.Helper);
+
+            GC.KeepAlive(keep);
+            PluginLoadContexts.Unload(folder);
+        }
+
+        [Fact]
+        public void Reload_AfterTheFilesWereReplaced_WhileTheFirstVersionIsStillReferenced_LoadsTheNewVersion()
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                // windows locks the files of the first (in place) load, the update waits for the unload there
+                return;
+            }
+
+            var folder = BuildPlugin("v1");
+            var (version, keep) = LoadAndKeep(folder);
+            Assert.Equal("v1", version);
+            PluginLoadContexts.Unload(folder);
+
+            // like the installer: delete the directory and copy the new files
+            Directory.Delete(folder, true);
+            BuildPlugin("v2");
+
+            // without the copy the runtime returns the cached v1 image for the same path
+            Assert.Equal("v2", Invoke(folder).Version);
+
+            GC.KeepAlive(keep);
+            PluginLoadContexts.Unload(folder);
+        }
+
+        [Fact]
+        public void CopiesOfEarlierProcesses_AreDeleted_OwnAndLaterOnesAreKept()
+        {
+            var root = CreateFolder("copies-cleanup");
+            foreach (var name in new[] { "100-1", "200-2", "300-3", "foreign" })
+            {
+                Directory.CreateDirectory(Path.Combine(root, name, "Time-1"));
+            }
+
+            PluginLoadContexts.DeleteCopiesOfEarlierProcesses(root, "200-2");
+
+            Assert.Equal(new[] { "200-2", "300-3", "foreign" }, Directory.GetDirectories(root).Select(Path.GetFileName).OrderBy(a => a).ToArray());
+        }
+
+        // keeps an instance of the plugin, so its context can not be collected
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static (string Version, object Instance) LoadAndKeep(string folder)
+        {
+            var context = PluginLoadContexts.GetOrCreate(folder);
+            var assembly = context.LoadPluginAssembly(Path.Combine(folder, PluginName + ".dll"));
+            var type = assembly.GetType("HotUpdate.Instance")!;
+            var instance = Activator.CreateInstance(type)!;
+            return ((string)type.GetMethod("Version")!.Invoke(instance, null)!, instance);
         }
 
         [Fact]
@@ -296,6 +405,11 @@ namespace HotUpdate
         public static string Version() => ""{version}"";
         public static string Helper() => HotUpdate.Helper.Text();
         public static System.Type CoreType() => typeof(Automatica.Core.Base.Common.ServerInfo);
+    }}
+
+    public class Instance
+    {{
+        public string Version() => ""{version}"";
     }}
 }}", Path.Combine(folder, PluginName + ".dll"), helperPath);
 
