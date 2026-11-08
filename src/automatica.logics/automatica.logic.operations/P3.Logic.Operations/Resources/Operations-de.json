@@ -248,6 +248,70 @@
           "DESCRIPTION": "Lamellenposition in Prozent (0 waagrecht, 100 geschlossen)"
         }
       }
+    },
+    "ENERGY": { "NAME": "Energiemanagement" },
+    "ENERGY_MANAGER": {
+      "NAME": "Energiemanager",
+      "DESCRIPTION": "Nutzt den PV-Überschuss: schaltet bis zu 12 Verbraucher nach Priorität ein und aus, mit Hysterese, Verzögerungen und Mindestlaufzeiten. Analoge Verbraucher erhalten einen Leistungssollwert.",
+      "INPUT": {
+        "GRID": { "DESCRIPTION": "Netzleistung in kW: + Bezug, - Einspeisung (siehe \"Netz invertieren\")" },
+        "SURPLUS": { "DESCRIPTION": "Überschuss in kW (+ = Überschuss), gemessen mit laufenden Verbrauchern. Wird statt der Netzleistung verwendet" },
+        "BATTERY": { "DESCRIPTION": "Batterieleistung in kW: + Laden, - Entladen. Ab dem Mindest-SoC wird die Ladeleistung für Verbraucher genutzt" },
+        "SOC": { "DESCRIPTION": "Ladezustand der Batterie in %" },
+        "ENABLE": { "DESCRIPTION": "0 schaltet alle automatischen Verbraucher aus (nicht verbunden = 1)" },
+        "LOAD": { "MANUAL": { "DESCRIPTION": "1 = Verbraucher mit voller Leistung ein (Hand), außerhalb des Budgets" }, "LOCK": { "DESCRIPTION": "1 = Verbraucher aus und gesperrt (hat Vorrang vor Hand)" } }
+      },
+      "OUTPUT": {
+        "AVAILABLE": { "DESCRIPTION": "Für die Verbraucher verfügbare Leistung in kW (Überschuss - Reserve + deren eigene Leistung)" },
+        "ALLOCATED": { "DESCRIPTION": "Leistung in kW der Verbraucher, die der Manager betreibt" },
+        "LOAD": { "SWITCH": { "DESCRIPTION": "Verbraucher ein/aus" }, "SETPOINT": { "DESCRIPTION": "Leistungssollwert in kW (analoge Verbraucher zwischen Einschalt- und Maximalleistung, 0 = aus)" } }
+      },
+      "INVERT_GRID": { "NAME": "Netz invertieren", "DESCRIPTION": "Ein: positive Netzleistung bedeutet Einspeisung" },
+      "RESERVE": { "NAME": "Reserve (kW)", "DESCRIPTION": "Leistung, die als Puffer bleibt und nie an Verbraucher geht" },
+      "HYSTERESIS": { "NAME": "Hysterese (kW)", "DESCRIPTION": "Ein Verbraucher schaltet bei Einschaltleistung + Hysterese ein, Verbraucher werden abgeworfen, wenn der Bezug die Hysterese übersteigt" },
+      "ON_DELAY": { "NAME": "Einschaltverzögerung (s)", "DESCRIPTION": "So lange muss der Überschuss anliegen, bevor ein Verbraucher einschaltet, auch der Abstand zwischen zwei Einschaltungen" },
+      "OFF_DELAY": { "NAME": "Ausschaltverzögerung (s)", "DESCRIPTION": "So lange muss der Bezug anliegen, bevor Verbraucher abgeworfen werden" },
+      "MODULATION_INTERVAL": { "NAME": "Modulationsintervall (s)", "DESCRIPTION": "Analoge Sollwerte steigen höchstens einmal pro Intervall, sie sinken sofort" },
+      "MIN_SOC": { "NAME": "Mindest-SoC Batterie (%)", "DESCRIPTION": "Unter diesem Ladezustand lädt zuerst die Batterie und kein Verbraucher wird eingeschaltet" },
+      "LOAD": {
+        "PRIORITY": { "DESCRIPTION": "1 = höchste Priorität" },
+        "ON_POWER": { "DESCRIPTION": "Leistung des Verbrauchers in kW (analog: Mindestleistung). 0 = nicht verwendet" },
+        "MAX_POWER": { "DESCRIPTION": "Maximale Leistung in kW (nur analoge Verbraucher)" },
+        "TYPE": { "DESCRIPTION": "Digital: ein/aus. Analog: ein/aus und Leistungssollwert", "DIGITAL": "Digital", "ANALOG": "Analog" },
+        "MIN_ON": { "DESCRIPTION": "Mindesteinschaltzeit in Sekunden" },
+        "MIN_OFF": { "DESCRIPTION": "Mindestausschaltzeit in Sekunden" }
+      },
+      "LOAD_1": { "PRIORITY": { "NAME": "Verbraucher 1: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 1: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 1: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 1: Typ" }, "MIN_ON": { "NAME": "Verbraucher 1: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 1: Mindestausschaltzeit (s)" } },
+      "LOAD_2": { "PRIORITY": { "NAME": "Verbraucher 2: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 2: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 2: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 2: Typ" }, "MIN_ON": { "NAME": "Verbraucher 2: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 2: Mindestausschaltzeit (s)" } },
+      "LOAD_3": { "PRIORITY": { "NAME": "Verbraucher 3: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 3: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 3: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 3: Typ" }, "MIN_ON": { "NAME": "Verbraucher 3: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 3: Mindestausschaltzeit (s)" } },
+      "LOAD_4": { "PRIORITY": { "NAME": "Verbraucher 4: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 4: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 4: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 4: Typ" }, "MIN_ON": { "NAME": "Verbraucher 4: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 4: Mindestausschaltzeit (s)" } },
+      "LOAD_5": { "PRIORITY": { "NAME": "Verbraucher 5: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 5: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 5: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 5: Typ" }, "MIN_ON": { "NAME": "Verbraucher 5: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 5: Mindestausschaltzeit (s)" } },
+      "LOAD_6": { "PRIORITY": { "NAME": "Verbraucher 6: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 6: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 6: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 6: Typ" }, "MIN_ON": { "NAME": "Verbraucher 6: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 6: Mindestausschaltzeit (s)" } },
+      "LOAD_7": { "PRIORITY": { "NAME": "Verbraucher 7: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 7: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 7: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 7: Typ" }, "MIN_ON": { "NAME": "Verbraucher 7: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 7: Mindestausschaltzeit (s)" } },
+      "LOAD_8": { "PRIORITY": { "NAME": "Verbraucher 8: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 8: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 8: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 8: Typ" }, "MIN_ON": { "NAME": "Verbraucher 8: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 8: Mindestausschaltzeit (s)" } },
+      "LOAD_9": { "PRIORITY": { "NAME": "Verbraucher 9: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 9: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 9: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 9: Typ" }, "MIN_ON": { "NAME": "Verbraucher 9: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 9: Mindestausschaltzeit (s)" } },
+      "LOAD_10": { "PRIORITY": { "NAME": "Verbraucher 10: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 10: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 10: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 10: Typ" }, "MIN_ON": { "NAME": "Verbraucher 10: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 10: Mindestausschaltzeit (s)" } },
+      "LOAD_11": { "PRIORITY": { "NAME": "Verbraucher 11: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 11: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 11: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 11: Typ" }, "MIN_ON": { "NAME": "Verbraucher 11: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 11: Mindestausschaltzeit (s)" } },
+      "LOAD_12": { "PRIORITY": { "NAME": "Verbraucher 12: Priorität" }, "ON_POWER": { "NAME": "Verbraucher 12: Einschaltleistung (kW)" }, "MAX_POWER": { "NAME": "Verbraucher 12: Maximalleistung (kW)" }, "TYPE": { "NAME": "Verbraucher 12: Typ" }, "MIN_ON": { "NAME": "Verbraucher 12: Mindesteinschaltzeit (s)" }, "MIN_OFF": { "NAME": "Verbraucher 12: Mindestausschaltzeit (s)" } }
+    },
+    "LOAD_MANAGER": {
+      "NAME": "Lastmanager",
+      "DESCRIPTION": "Überlastschutz: sperrt bis zu 8 Verbraucher nach Priorität, solange die Gesamtleistung über der Maximalleistung liegt, und gibt sie verzögert wieder frei.",
+      "INPUT": { "POWER": { "DESCRIPTION": "Gesamtleistung in kW" }, "STATUS": { "DESCRIPTION": "Status des Verbrauchers: 1 = läuft, 0 = inaktiv (inaktive werden nicht abgeworfen). Nicht verbunden = läuft" } },
+      "OUTPUT": { "OVERLOAD": { "DESCRIPTION": "1, solange die Gesamtleistung über der Maximalleistung liegt" }, "RESERVE": { "DESCRIPTION": "Leistung in kW bis zur Maximalleistung (negativ = Überlast)" }, "LOCK": { "DESCRIPTION": "1 = Verbraucher gesperrt (abgeworfen)" } },
+      "MAX_POWER": { "NAME": "Maximalleistung (kW)", "DESCRIPTION": "Maximale Gesamtleistung, kann verbunden werden" },
+      "HYSTERESIS": { "NAME": "Hysterese (kW)", "DESCRIPTION": "Ein Verbraucher wird nur freigegeben, wenn Gesamtleistung plus seine Leistung so weit unter der Maximalleistung bleibt" },
+      "SHED_DELAY": { "NAME": "Abwurfverzögerung (s)", "DESCRIPTION": "So lange muss die Überlast anliegen, bevor Verbraucher gesperrt werden" },
+      "RELEASE_DELAY": { "NAME": "Freigabeverzögerung (s)", "DESCRIPTION": "So lange muss die Leistung niedrig genug bleiben, bevor der nächste Verbraucher freigegeben wird" },
+      "LOAD": { "PRIORITY": { "DESCRIPTION": "1 = höchste Priorität, wird zuletzt abgeworfen" }, "POWER": { "DESCRIPTION": "Leistung des Verbrauchers in kW. 0 = nicht verwendet" } },
+      "LOAD_1": { "PRIORITY": { "NAME": "Verbraucher 1: Priorität" }, "POWER": { "NAME": "Verbraucher 1: Leistung (kW)" } },
+      "LOAD_2": { "PRIORITY": { "NAME": "Verbraucher 2: Priorität" }, "POWER": { "NAME": "Verbraucher 2: Leistung (kW)" } },
+      "LOAD_3": { "PRIORITY": { "NAME": "Verbraucher 3: Priorität" }, "POWER": { "NAME": "Verbraucher 3: Leistung (kW)" } },
+      "LOAD_4": { "PRIORITY": { "NAME": "Verbraucher 4: Priorität" }, "POWER": { "NAME": "Verbraucher 4: Leistung (kW)" } },
+      "LOAD_5": { "PRIORITY": { "NAME": "Verbraucher 5: Priorität" }, "POWER": { "NAME": "Verbraucher 5: Leistung (kW)" } },
+      "LOAD_6": { "PRIORITY": { "NAME": "Verbraucher 6: Priorität" }, "POWER": { "NAME": "Verbraucher 6: Leistung (kW)" } },
+      "LOAD_7": { "PRIORITY": { "NAME": "Verbraucher 7: Priorität" }, "POWER": { "NAME": "Verbraucher 7: Leistung (kW)" } },
+      "LOAD_8": { "PRIORITY": { "NAME": "Verbraucher 8: Priorität" }, "POWER": { "NAME": "Verbraucher 8: Leistung (kW)" } }
     }
   }
 }

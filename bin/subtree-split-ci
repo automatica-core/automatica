@@ -91,6 +91,8 @@ remote automatica.driver.gardena git@github.com:automatica-core/automatica.drive
 remote automatica.driver.automower git@github.com:automatica-core/automatica.driver.automower.git
 remote automatica.driver.navimow git@github.com:automatica-core/automatica.driver.navimow.git
 remote automatica.driver.bmwcardata git@github.com:automatica-core/automatica.driver.bmwcardata.git
+remote automatica.driver.powerwall git@github.com:automatica-core/automatica.driver.powerwall.git
+remote automatica.driver.spotprice git@github.com:automatica-core/automatica.driver.spotprice.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -152,6 +154,8 @@ split src/automatica.drivers/automatica.driver.gardena automatica.driver.gardena
 split src/automatica.drivers/automatica.driver.automower automatica.driver.automower
 split src/automatica.drivers/automatica.driver.navimow automatica.driver.navimow
 split src/automatica.drivers/automatica.driver.bmwcardata automatica.driver.bmwcardata
+split src/automatica.drivers/automatica.driver.powerwall automatica.driver.powerwall
+split src/automatica.drivers/automatica.driver.spotprice automatica.driver.spotprice
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations

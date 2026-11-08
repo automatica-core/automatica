@@ -248,6 +248,70 @@
           "DESCRIPTION": "Slat position in percent (0 horizontal, 100 closed)"
         }
       }
+    },
+    "ENERGY": { "NAME": "Energy management" },
+    "ENERGY_MANAGER": {
+      "NAME": "Energy manager",
+      "DESCRIPTION": "Uses the PV surplus: switches up to 12 loads on and off by priority, with hysteresis, delays and minimum on/off times. Analog loads get a power setpoint.",
+      "INPUT": {
+        "GRID": { "DESCRIPTION": "Grid power in kW: + import, - export (see \"Invert grid\")" },
+        "SURPLUS": { "DESCRIPTION": "Surplus in kW (+ = surplus), measured with the managed loads running. Used instead of the grid power" },
+        "BATTERY": { "DESCRIPTION": "Battery power in kW: + charging, - discharging. At or above the minimum SoC the charging power is used for loads" },
+        "SOC": { "DESCRIPTION": "Battery state of charge in %" },
+        "ENABLE": { "DESCRIPTION": "0 switches all automatic loads off (unlinked = 1)" },
+        "LOAD": { "MANUAL": { "DESCRIPTION": "1 = load on at full power (manual), outside the manager's budget" }, "LOCK": { "DESCRIPTION": "1 = load off and locked (wins over manual)" } }
+      },
+      "OUTPUT": {
+        "AVAILABLE": { "DESCRIPTION": "Power in kW available for the managed loads (surplus - reserve + their own power)" },
+        "ALLOCATED": { "DESCRIPTION": "Power in kW of the loads the manager runs" },
+        "LOAD": { "SWITCH": { "DESCRIPTION": "Load on/off" }, "SETPOINT": { "DESCRIPTION": "Power setpoint in kW (analog loads between switch-on and max power, 0 = off)" } }
+      },
+      "INVERT_GRID": { "NAME": "Invert grid", "DESCRIPTION": "On: positive grid power means export" },
+      "RESERVE": { "NAME": "Reserve (kW)", "DESCRIPTION": "Power kept as a buffer, never given to loads" },
+      "HYSTERESIS": { "NAME": "Hysteresis (kW)", "DESCRIPTION": "A load switches on with switch-on power + hysteresis spare, loads are shed when the import exceeds the hysteresis" },
+      "ON_DELAY": { "NAME": "Switch-on delay (s)", "DESCRIPTION": "How long the surplus must last before a load switches on, also the time between two switch-ons" },
+      "OFF_DELAY": { "NAME": "Switch-off delay (s)", "DESCRIPTION": "How long the import must last before loads are shed" },
+      "MODULATION_INTERVAL": { "NAME": "Modulation interval (s)", "DESCRIPTION": "Analog setpoints rise at most once per interval, they drop at once" },
+      "MIN_SOC": { "NAME": "Minimum battery SoC (%)", "DESCRIPTION": "Below this SoC the battery charges first and no load is switched on" },
+      "LOAD": {
+        "PRIORITY": { "DESCRIPTION": "1 = highest priority" },
+        "ON_POWER": { "DESCRIPTION": "Power of the load in kW (analog loads: minimum power). 0 = load not used" },
+        "MAX_POWER": { "DESCRIPTION": "Maximum power in kW (analog loads only)" },
+        "TYPE": { "DESCRIPTION": "Digital: on/off. Analog: on/off and a power setpoint", "DIGITAL": "Digital", "ANALOG": "Analog" },
+        "MIN_ON": { "DESCRIPTION": "Minimum on time in seconds" },
+        "MIN_OFF": { "DESCRIPTION": "Minimum off time in seconds" }
+      },
+      "LOAD_1": { "PRIORITY": { "NAME": "Load 1: priority" }, "ON_POWER": { "NAME": "Load 1: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 1: max power (kW)" }, "TYPE": { "NAME": "Load 1: type" }, "MIN_ON": { "NAME": "Load 1: min on time (s)" }, "MIN_OFF": { "NAME": "Load 1: min off time (s)" } },
+      "LOAD_2": { "PRIORITY": { "NAME": "Load 2: priority" }, "ON_POWER": { "NAME": "Load 2: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 2: max power (kW)" }, "TYPE": { "NAME": "Load 2: type" }, "MIN_ON": { "NAME": "Load 2: min on time (s)" }, "MIN_OFF": { "NAME": "Load 2: min off time (s)" } },
+      "LOAD_3": { "PRIORITY": { "NAME": "Load 3: priority" }, "ON_POWER": { "NAME": "Load 3: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 3: max power (kW)" }, "TYPE": { "NAME": "Load 3: type" }, "MIN_ON": { "NAME": "Load 3: min on time (s)" }, "MIN_OFF": { "NAME": "Load 3: min off time (s)" } },
+      "LOAD_4": { "PRIORITY": { "NAME": "Load 4: priority" }, "ON_POWER": { "NAME": "Load 4: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 4: max power (kW)" }, "TYPE": { "NAME": "Load 4: type" }, "MIN_ON": { "NAME": "Load 4: min on time (s)" }, "MIN_OFF": { "NAME": "Load 4: min off time (s)" } },
+      "LOAD_5": { "PRIORITY": { "NAME": "Load 5: priority" }, "ON_POWER": { "NAME": "Load 5: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 5: max power (kW)" }, "TYPE": { "NAME": "Load 5: type" }, "MIN_ON": { "NAME": "Load 5: min on time (s)" }, "MIN_OFF": { "NAME": "Load 5: min off time (s)" } },
+      "LOAD_6": { "PRIORITY": { "NAME": "Load 6: priority" }, "ON_POWER": { "NAME": "Load 6: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 6: max power (kW)" }, "TYPE": { "NAME": "Load 6: type" }, "MIN_ON": { "NAME": "Load 6: min on time (s)" }, "MIN_OFF": { "NAME": "Load 6: min off time (s)" } },
+      "LOAD_7": { "PRIORITY": { "NAME": "Load 7: priority" }, "ON_POWER": { "NAME": "Load 7: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 7: max power (kW)" }, "TYPE": { "NAME": "Load 7: type" }, "MIN_ON": { "NAME": "Load 7: min on time (s)" }, "MIN_OFF": { "NAME": "Load 7: min off time (s)" } },
+      "LOAD_8": { "PRIORITY": { "NAME": "Load 8: priority" }, "ON_POWER": { "NAME": "Load 8: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 8: max power (kW)" }, "TYPE": { "NAME": "Load 8: type" }, "MIN_ON": { "NAME": "Load 8: min on time (s)" }, "MIN_OFF": { "NAME": "Load 8: min off time (s)" } },
+      "LOAD_9": { "PRIORITY": { "NAME": "Load 9: priority" }, "ON_POWER": { "NAME": "Load 9: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 9: max power (kW)" }, "TYPE": { "NAME": "Load 9: type" }, "MIN_ON": { "NAME": "Load 9: min on time (s)" }, "MIN_OFF": { "NAME": "Load 9: min off time (s)" } },
+      "LOAD_10": { "PRIORITY": { "NAME": "Load 10: priority" }, "ON_POWER": { "NAME": "Load 10: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 10: max power (kW)" }, "TYPE": { "NAME": "Load 10: type" }, "MIN_ON": { "NAME": "Load 10: min on time (s)" }, "MIN_OFF": { "NAME": "Load 10: min off time (s)" } },
+      "LOAD_11": { "PRIORITY": { "NAME": "Load 11: priority" }, "ON_POWER": { "NAME": "Load 11: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 11: max power (kW)" }, "TYPE": { "NAME": "Load 11: type" }, "MIN_ON": { "NAME": "Load 11: min on time (s)" }, "MIN_OFF": { "NAME": "Load 11: min off time (s)" } },
+      "LOAD_12": { "PRIORITY": { "NAME": "Load 12: priority" }, "ON_POWER": { "NAME": "Load 12: switch-on power (kW)" }, "MAX_POWER": { "NAME": "Load 12: max power (kW)" }, "TYPE": { "NAME": "Load 12: type" }, "MIN_ON": { "NAME": "Load 12: min on time (s)" }, "MIN_OFF": { "NAME": "Load 12: min off time (s)" } }
+    },
+    "LOAD_MANAGER": {
+      "NAME": "Load manager",
+      "DESCRIPTION": "Overload protection: locks up to 8 loads by priority while the total power is above max power, and releases them again with a delay.",
+      "INPUT": { "POWER": { "DESCRIPTION": "Total power in kW" }, "STATUS": { "DESCRIPTION": "Load status: 1 = running, 0 = idle (idle loads are not shed). Unlinked = running" } },
+      "OUTPUT": { "OVERLOAD": { "DESCRIPTION": "1 while the total power is above max power" }, "RESERVE": { "DESCRIPTION": "Power in kW left until max power (negative = overload)" }, "LOCK": { "DESCRIPTION": "1 = load locked (shed)" } },
+      "MAX_POWER": { "NAME": "Max power (kW)", "DESCRIPTION": "Maximum total power, can be linked" },
+      "HYSTERESIS": { "NAME": "Hysteresis (kW)", "DESCRIPTION": "A load is released only if the total power plus its power stays this far below max power" },
+      "SHED_DELAY": { "NAME": "Shed delay (s)", "DESCRIPTION": "How long an overload must last before loads are locked" },
+      "RELEASE_DELAY": { "NAME": "Release delay (s)", "DESCRIPTION": "How long the power must stay low enough before the next load is released" },
+      "LOAD": { "PRIORITY": { "DESCRIPTION": "1 = highest priority, shed last" }, "POWER": { "DESCRIPTION": "Power of the load in kW. 0 = load not used" } },
+      "LOAD_1": { "PRIORITY": { "NAME": "Load 1: priority" }, "POWER": { "NAME": "Load 1: power (kW)" } },
+      "LOAD_2": { "PRIORITY": { "NAME": "Load 2: priority" }, "POWER": { "NAME": "Load 2: power (kW)" } },
+      "LOAD_3": { "PRIORITY": { "NAME": "Load 3: priority" }, "POWER": { "NAME": "Load 3: power (kW)" } },
+      "LOAD_4": { "PRIORITY": { "NAME": "Load 4: priority" }, "POWER": { "NAME": "Load 4: power (kW)" } },
+      "LOAD_5": { "PRIORITY": { "NAME": "Load 5: priority" }, "POWER": { "NAME": "Load 5: power (kW)" } },
+      "LOAD_6": { "PRIORITY": { "NAME": "Load 6: priority" }, "POWER": { "NAME": "Load 6: power (kW)" } },
+      "LOAD_7": { "PRIORITY": { "NAME": "Load 7: priority" }, "POWER": { "NAME": "Load 7: power (kW)" } },
+      "LOAD_8": { "PRIORITY": { "NAME": "Load 8: priority" }, "POWER": { "NAME": "Load 8: power (kW)" } }
     }
   }
 }

@@ -36,6 +36,10 @@ Here is a list of all built-in available drivers.
 * [OpenWeatherMap](./automatica.driver.openweathermap.driver)
 * [Segway Navimow](./automatica.driver.navimow)
     * Navimow robot mowers (cloud)
+* [Spot price](./automatica.driver.spotprice)
+    * Day-ahead electricity prices (aWATTar, ENTSO-E) and cheapest-hours outputs
+* [Tesla Powerwall](./automatica.driver.powerwall)
+    * Tesla Powerwall 2 / Powerwall+ (local gateway API)
 * [Tesla](./automatica.driver.tesla)
     * Tesla cars (Fleet API)
 * [Times](./automatica.driver.times)

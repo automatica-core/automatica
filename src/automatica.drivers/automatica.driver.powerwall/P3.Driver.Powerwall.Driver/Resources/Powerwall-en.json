@@ -1,0 +1,28 @@
+{
+  "POWERWALL": {
+    "NAME": "Tesla Powerwall",
+    "DESCRIPTION": "Tesla Powerwall through the local API of the Backup Gateway 2 (LAN)",
+    "HOST": { "NAME": "Gateway address", "DESCRIPTION": "IP address or host name of the Backup Gateway, e.g. 192.168.1.50 (https is used)" },
+    "PASSWORD": { "NAME": "Customer password", "DESCRIPTION": "Password of the customer login of the gateway (by default the last 5 characters of the gateway serial number)" },
+    "EMAIL": { "NAME": "E-mail", "DESCRIPTION": "Optional. Sent with the login, the gateway does not check it" },
+    "POLL": { "NAME": "Polling interval [s]", "DESCRIPTION": "How often meters, SoC, grid status and operation settings are read" },
+    "ALLOW_WRITES": { "NAME": "Allow writing mode and reserve", "DESCRIPTION": "Off by default. Current gateway firmware refuses operation changes for the customer login (403), the driver then logs an error and keeps the gateway's values" },
+    "FINGERPRINT": { "NAME": "Certificate fingerprint (SHA-256)", "DESCRIPTION": "The gateway uses a self-signed certificate. Empty = the first certificate is trusted and stored here; afterwards only this certificate is accepted. Clear it after the gateway got a new certificate" },
+    "CONNECTED": { "NAME": "Connected", "DESCRIPTION": "The last poll reached the gateway" },
+    "GRID_POWER": { "NAME": "Grid power [kW]", "DESCRIPTION": "+ import, - export" },
+    "SOLAR_POWER": { "NAME": "Solar power [kW]", "DESCRIPTION": "PV production" },
+    "BATTERY_POWER": { "NAME": "Battery power [kW]", "DESCRIPTION": "+ charging, - discharging" },
+    "LOAD_POWER": { "NAME": "House consumption [kW]", "DESCRIPTION": "Power of the house loads" },
+    "SOC": { "NAME": "State of charge [%]", "DESCRIPTION": "As shown in the Tesla app (the gateway's own 5 % reserve is not counted)" },
+    "GRID_STATUS": { "NAME": "Grid status", "DESCRIPTION": "SystemGridConnected, SystemIslandedActive, SystemTransitionToGrid, ..." },
+    "GRID_CONNECTED": { "NAME": "Grid connected", "DESCRIPTION": "false during a grid outage (backup operation)" },
+    "OPERATION_MODE": { "NAME": "Operation mode", "DESCRIPTION": "self_consumption (self-powered), autonomous (time-based control) or backup. Writable when allowed in the driver settings" },
+    "BACKUP_RESERVE": { "NAME": "Backup reserve [%]", "DESCRIPTION": "Reserve for grid outages, app scale. Writable when allowed in the driver settings" },
+    "GRID_IMPORT_ENERGY": { "NAME": "Grid import [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" },
+    "GRID_EXPORT_ENERGY": { "NAME": "Grid export [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" },
+    "SOLAR_ENERGY": { "NAME": "Solar energy [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" },
+    "BATTERY_CHARGE_ENERGY": { "NAME": "Battery charged [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" },
+    "BATTERY_DISCHARGE_ENERGY": { "NAME": "Battery discharged [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" },
+    "LOAD_ENERGY": { "NAME": "House consumption [kWh]", "DESCRIPTION": "Lifetime counter of the gateway" }
+  }
+}
