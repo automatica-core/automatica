@@ -33,8 +33,8 @@
     <InternalsVisibleTo Include="P3.Logic.Operations.Tests" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Control" Version="10.0.0.2068" />
-    <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2068" />
+    <PackageReference Include="Automatica.Core.Control" Version="10.0.0.2105" />
+    <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2105" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="P3.Logic.Operations.Tests" />
