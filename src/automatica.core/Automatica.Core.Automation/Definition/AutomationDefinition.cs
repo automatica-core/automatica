@@ -182,6 +182,7 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(ControlCondition), "control")]
     [JsonDerivedType(typeof(TriggeredByCondition), "trigger")]
     [JsonDerivedType(typeof(ShadingCondition), "shading")]
+    [JsonDerivedType(typeof(OperatingModeCondition), "operatingMode")]
     public abstract class ConditionDefinition
     {
         /// <summary>
@@ -276,6 +277,16 @@ namespace Automatica.Core.Automation.Definition
     {
         public Guid Control { get; set; }
         public bool Shading { get; set; } = true;
+    }
+
+    /// <summary>
+    /// A system operating mode (public holiday, vacation, school holidays, custom) is (or is not) active today. Checked again every minute,
+    /// so a conditions trigger fires when the mode starts or ends.
+    /// </summary>
+    public sealed class OperatingModeCondition : ConditionDefinition
+    {
+        public string Mode { get; set; }
+        public bool Active { get; set; } = true;
     }
 
     #endregion

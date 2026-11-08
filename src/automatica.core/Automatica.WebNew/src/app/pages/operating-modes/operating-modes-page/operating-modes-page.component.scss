@@ -1,0 +1,200 @@
+@use "../../plugins/list";
+@use "../../shading/shading";
+
+// Only tokens from src/tokens.scss.
+
+:host {
+    display: block;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.page {
+    height: auto;
+    min-height: 100%;
+}
+
+.head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.intro {
+    margin: 0 0 var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-sm);
+    max-width: 80ch;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+    gap: var(--space-4);
+    align-items: start;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.chip {
+    display: inline-grid;
+    gap: 1px;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    font-size: var(--text-sm);
+    min-width: 0;
+
+    small {
+        color: var(--muted);
+        font-size: var(--text-xs);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 28ch;
+    }
+
+    &.on {
+        background: var(--accent-soft);
+        border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+
+        b {
+            color: var(--accent);
+        }
+    }
+}
+
+.days,
+.holidays {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-1);
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        min-height: 36px;
+        padding: var(--space-1) 0;
+        border-top: 1px solid var(--line);
+        font-size: var(--text-sm);
+
+        &:first-child {
+            border-top: 0;
+        }
+    }
+
+    .date {
+        flex: none;
+        min-width: 9ch;
+        color: var(--muted);
+    }
+}
+
+.day-modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    min-width: 0;
+}
+
+.holidays {
+    max-height: 420px;
+    overflow: auto;
+
+    li.off span:not(.date) {
+        color: var(--muted);
+        text-decoration: line-through;
+    }
+}
+
+.rows {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.row {
+    display: grid;
+    gap: var(--space-3);
+    align-items: end;
+    padding: var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    min-width: 0;
+
+    &.off {
+        opacity: 0.6;
+    }
+
+    .act {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+.mode-row {
+    grid-template-columns: minmax(0, 1.4fr) 110px auto auto;
+
+    .name {
+        font-weight: 600;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+    }
+
+    .key {
+        font-size: var(--text-xs);
+        color: var(--muted);
+    }
+
+    @media (max-width: 599.98px) {
+        grid-template-columns: minmax(0, 1fr) 110px;
+
+        .act {
+            grid-column: 1 / -1;
+        }
+    }
+}
+
+.period-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    .checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        align-items: center;
+        min-height: 36px;
+    }
+
+    .act {
+        align-self: center;
+    }
+}
+
+.add-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+
+    .grow {
+        flex: 1 1 200px;
+        min-width: 0;
+    }
+}

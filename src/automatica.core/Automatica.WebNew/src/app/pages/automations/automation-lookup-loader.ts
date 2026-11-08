@@ -6,6 +6,9 @@ import { CategoryService } from "src/app/services/categories.service";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { AutomationDto } from "src/app/base/model/automations/automation-dto";
 import { AutomationLookups } from "./automation-lookups";
+import { OperatingModesService } from "src/app/services/operating-modes.service";
+import { operatingModeName } from "src/app/base/model/operating-modes/operating-modes";
+import { L10nTranslationService } from "angular-l10n";
 
 /**
  * Loads the datapoints (with live values, through LogicEditorInstanceService), controls, areas and categories the
@@ -19,7 +22,9 @@ export class AutomationLookupLoader {
         private controlsService: ControlsService,
         private areaService: AreaService,
         private categoryService: CategoryService,
-        private dataHub: DataHubService) {
+        private dataHub: DataHubService,
+        private operatingModesService: OperatingModesService,
+        private translate: L10nTranslationService) {
     }
 
     async load(lookups: AutomationLookups, automations: AutomationDto[] = []): Promise<void> {
@@ -33,11 +38,12 @@ export class AutomationLookupLoader {
             }
         };
 
-        const [, controls, areas, categories] = await Promise.all([
+        const [, controls, areas, categories, modes] = await Promise.all([
             safe(this.nodeInstanceService.load()),
             safe(this.controlsService.getAll()),
             safe(this.areaService.getAllAreaInstances()),
-            safe(this.categoryService.getAllCategoryInstances())
+            safe(this.categoryService.getAllCategoryInstances()),
+            safe(this.operatingModesService.getState())
         ]);
 
         lookups.setNodeResolver(id => this.nodeInstanceService.hasNodeInstance(id) ? this.nodeInstanceService.getNodeInstance(id) : void 0);
@@ -45,6 +51,7 @@ export class AutomationLookupLoader {
         lookups.setAreas(areas || []);
         lookups.setCategories(categories || []);
         lookups.setAutomations(automations);
+        lookups.setOperatingModes((modes?.modes || []).map(m => ({ id: m.key, name: operatingModeName(m, m.key, k => this.translate.translate(k)) })));
 
         if (failures.length) {
             // names are a convenience, the page still works with ids

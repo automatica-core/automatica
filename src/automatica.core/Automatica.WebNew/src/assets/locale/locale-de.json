@@ -11,7 +11,8 @@
     "SETTINGS": "Server Einstellungen",
     "REMOTE": "Remote Server Einstellungen",
     "MCP": "KI-Assistent (MCP)",
-    "SMTP": "E-Mail-Server (SMTP)"
+    "SMTP": "E-Mail-Server (SMTP)",
+    "OPERATING_MODES": "Betriebsmodi"
   },
   "COMMON": {
     "LOG": "Log",
@@ -778,6 +779,7 @@
       "LOGIC": "Logik",
       "AUTOMATIONS": "Automationen",
       "SHADING": "Beschattung",
+      "OPERATING_MODES": "Betriebsmodi",
       "VISU_EDITOR": "Visu-Editor",
       "DEVICES": "Geräte & Datenpunkte",
       "AREAS": "Bereiche",
@@ -1013,6 +1015,8 @@
           "CONTROL_HINT": "ein Schalter oder Dimmer ist ein oder aus",
           "SHADING": "Automatische Beschattung",
           "SHADING_HINT": "ein Behang ist gerade beschattet oder nicht",
+          "OPERATINGMODE": "Betriebsmodus",
+          "OPERATINGMODE_HINT": "Feiertag, Urlaub oder ein eigener Modus ist heute aktiv",
           "TRIGGER": "Gestartet durch Auslöser",
           "TRIGGER_HINT": "welcher Auslöser die Regel gestartet hat"
         },
@@ -1049,6 +1053,8 @@
         "SHADING_AUTOMATIC": "Automatische Beschattung",
         "SHADING_CONDITION_HINT": "Beschattet heißt, die Automatik hat den Behang wegen der Sonne heruntergefahren. Wird jede Minute neu geprüft.",
         "SHADING_ACTION_HINT": "Behänge einzeln wählen oder alle Behänge eines Bereichs oder einer Kategorie. Einschalten beendet auch eine manuelle Übersteuerung.",
+        "OPERATING_MODE": "Betriebsmodus",
+        "OPERATING_MODE_HINT": "Betriebsmodi und ihre Zeiten werden auf der Seite Betriebsmodi eingerichtet. Wird jede Minute neu geprüft.",
         "DATAPOINT": "Datenpunkt",
         "PICK_DATAPOINT": "Datenpunkt auswählen",
         "VALUE": "Wert",
@@ -1180,6 +1186,10 @@
         "ON": "beschattet",
         "OFF": "beschattet nicht"
       },
+      "MODE_STATE": {
+        "ON": "ist heute aktiv",
+        "OFF": "ist heute nicht aktiv"
+      },
       "ENABLE_OPT": {
         "ON": "Einschalten",
         "OFF": "Ausschalten"
@@ -1288,6 +1298,8 @@
         "C_CTRL_OFF": "{{ control }} ausgeschaltet ist",
         "C_SHADING_ON": "die automatische Beschattung von {{ control }} beschattet",
         "C_SHADING_OFF": "die automatische Beschattung von {{ control }} beschattet nicht",
+        "C_MODE_ON": "der Betriebsmodus {{ mode }} aktiv ist",
+        "C_MODE_OFF": "der Betriebsmodus {{ mode }} nicht aktiv ist",
         "C_TRIGGER": "die Regel durch {{ id }} gestartet wurde",
         "A_CTRL_ON": "{{ control }} einschalten",
         "A_CTRL_OFF": "{{ control }} ausschalten",
@@ -1347,6 +1359,7 @@
         "RECIPIENTMISSING": "Gib mindestens eine E-Mail-Adresse ein.",
         "INVALIDMAILADDRESS": "Keine gültige E-Mail-Adresse.",
         "SHADINGNOTCONFIGURED": "Der Behang ist auf der Seite Beschattung nicht eingerichtet.",
+        "OPERATINGMODENOTFOUND": "Den Betriebsmodus gibt es nicht (mehr).",
         "NEGATIVEDURATION": "Eine Dauer darf nicht negativ sein.",
         "LOCATIONMISSING": "Sonnenzeiten brauchen den Standort (Breiten- und Längengrad) in den Einstellungen.",
         "SELFREFERENCE": "Die Regel verweist auf sich selbst.",
@@ -1712,6 +1725,101 @@
         "M10": "Oktober",
         "M11": "November",
         "M12": "Dezember"
+      }
+    },
+    "OPERATING_MODES": {
+      "TITLE": "Betriebsmodi",
+      "INTRO": "Betriebsmodi sagen, was für ein Tag ist: Feiertag, Urlaub, Schulferien oder ein eigener Modus. Wecker, die Logikbausteine Impuls um und Betriebsmodus sowie die Automationen verwenden sie.",
+      "LOAD_FAILED": "Die Betriebsmodi konnten nicht geladen werden.",
+      "SAVED": "Betriebsmodi gespeichert",
+      "RESET": "Änderungen verwerfen",
+      "TODAY": {
+        "TITLE": "Heute aktiv",
+        "NONE": "Heute ist kein Betriebsmodus aktiv."
+      },
+      "UPCOMING": {
+        "TITLE": "Nächste 4 Wochen",
+        "HINT": "Tage mit aktivem Betriebsmodus, aus den gespeicherten Einstellungen.",
+        "NONE": "Kein Betriebsmodus in den nächsten 4 Wochen."
+      },
+      "MODES": {
+        "TITLE": "Modi",
+        "HINT": "Höhere Priorität kommt zuerst. Manuell Ein/Aus gilt für jeden Tag, bis wieder Kalender gewählt wird.",
+        "NAME": "Name",
+        "PRIORITY": "Priorität",
+        "STATE": "Zustand",
+        "NEW": "Neuer Modus, z. B. Homeoffice",
+        "ADD": "Modus hinzufügen",
+        "DELETE": "Modus und seine Zeiten löschen"
+      },
+      "MANUAL": {
+        "AUTO": "Kalender",
+        "ON": "Ein",
+        "OFF": "Aus"
+      },
+      "MODE": {
+        "PUBLIC_HOLIDAY": "Feiertag",
+        "VACATION": "Urlaub",
+        "SCHOOL_HOLIDAYS": "Schulferien"
+      },
+      "HOLIDAYS": {
+        "TITLE": "Feiertage",
+        "HINT": "Schaltet den Modus Feiertag an den Feiertagen eines Landes ein. Feiertage abwählen, die keine freien Tage sind.",
+        "COUNTRY": "Land",
+        "REGION": "Region",
+        "NONE": "Keine",
+        "ALL_REGIONS": "Nur landesweite"
+      },
+      "PERIODS": {
+        "TITLE": "Betriebszeiten",
+        "HINT": "Zeiträume, in denen ein Modus aktiv ist, beide Tage inklusive. Jährlich wiederholt Tag und Monat jedes Jahr.",
+        "NAME": "Name",
+        "MODE": "Modus",
+        "START": "Von",
+        "END": "Bis",
+        "YEARLY": "Jährlich",
+        "ENABLED": "Aktiv",
+        "ADD": "Zeit hinzufügen",
+        "DELETE": "Zeit löschen",
+        "EMPTY": "Noch keine Betriebszeiten.",
+        "INVALID": "Jede Betriebszeit braucht einen Modus, einen Beginn und ein Ende."
+      },
+      "REASON": {
+        "MANUAL": "manuell eingeschaltet",
+        "PERIOD": "Betriebszeit"
+      },
+      "HOLIDAY": {
+        "NEW_YEAR": "Neujahr",
+        "EPIPHANY": "Heilige Drei Könige",
+        "GOOD_FRIDAY": "Karfreitag",
+        "EASTER_SUNDAY": "Ostersonntag",
+        "EASTER_MONDAY": "Ostermontag",
+        "LABOUR_DAY": "Staatsfeiertag / Tag der Arbeit",
+        "ASCENSION": "Christi Himmelfahrt",
+        "WHIT_SUNDAY": "Pfingstsonntag",
+        "WHIT_MONDAY": "Pfingstmontag",
+        "CORPUS_CHRISTI": "Fronleichnam",
+        "ASSUMPTION": "Mariä Himmelfahrt",
+        "ALL_SAINTS": "Allerheiligen",
+        "IMMACULATE_CONCEPTION": "Mariä Empfängnis",
+        "CHRISTMAS_EVE": "Heiliger Abend",
+        "CHRISTMAS": "Christtag",
+        "ST_STEPHEN": "Stefanitag",
+        "NEW_YEARS_EVE": "Silvester",
+        "NATIONAL_DAY_AT": "Nationalfeiertag",
+        "WOMENS_DAY": "Internationaler Frauentag",
+        "CHILDRENS_DAY": "Weltkindertag",
+        "GERMAN_UNITY": "Tag der Deutschen Einheit",
+        "REFORMATION_DAY": "Reformationstag",
+        "REPENTANCE_DAY": "Buß- und Bettag",
+        "BERCHTOLDS_DAY": "Berchtoldstag",
+        "NATIONAL_DAY_CH": "Bundesfeiertag",
+        "CANDLEMAS": "Mariä Lichtmess",
+        "ST_JOSEPH": "Josefstag",
+        "NATIONAL_DAY_LI": "Staatsfeiertag",
+        "NATIVITY_OF_MARY": "Mariä Geburt",
+        "LIBERATION_DAY_IT": "Tag der Befreiung",
+        "REPUBLIC_DAY_IT": "Tag der Republik"
       }
     },
     "PAGES": {
@@ -2111,6 +2219,35 @@
       "SECURITY_SAVE": "Speichern",
       "SECURITY_ADD_USER": "Benutzer hinzufügen",
       "SECURITY_LOG": "Protokoll",
+      "ALARM_CLOCK": {
+        "NEXT": "Nächster Wecker",
+        "NONE": "Kein Wecker",
+        "RINGING": "Wecker!",
+        "SNOOZING": "Schlummern bis {{ time }}",
+        "SNOOZE": "Schlummern",
+        "CONFIRM": "Aus",
+        "EDIT": "Wecker bearbeiten",
+        "ADD": "Wecker hinzufügen",
+        "DELETE": "Wecker löschen",
+        "NAME": "Name",
+        "TIME": "Uhrzeit",
+        "ENABLED": "Ein",
+        "DAYS": "Tage",
+        "MODES": "Nur bei Betriebsmodi",
+        "MODES_HINT": "Ein Wecker mit Betriebsmodi läutet nur an Tagen mit einem davon (statt der Wochentags-Wecker).",
+        "SUPPRESSED": "Heute kein Wecker ({{ modes }})",
+        "SAVE": "Speichern",
+        "SAVED": "Wecker gespeichert",
+        "FAILED": "Die Wecker konnten nicht gespeichert werden."
+      },
+      "PULSE_AT": {
+        "NEXT": "Nächster Impuls",
+        "NONE": "Kein Impuls geplant",
+        "TIME": "Uhrzeit",
+        "SAVE": "Speichern",
+        "SAVED": "Uhrzeit gespeichert",
+        "FAILED": "Die Uhrzeit konnte nicht gespeichert werden."
+      },
       "OPEN_PAGE": "Öffnen",
       "REFRESH": "Aktualisieren",
       "NOTHING_PLAYING": "Keine Wiedergabe",

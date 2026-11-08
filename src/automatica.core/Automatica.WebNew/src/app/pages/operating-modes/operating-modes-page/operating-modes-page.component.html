@@ -1,0 +1,187 @@
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.OPERATING_MODES.TITLE' | translateAsync }}</h1>
+    @if (dirty) {
+      <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button icon="refresh" stylingMode="text" [hint]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      @if (loaded && configuration) {
+        <dx-button icon="undo" stylingMode="text" [hint]="'UI.OPERATING_MODES.RESET' | translateAsync" [disabled]="!dirty" (onClick)="reset()"></dx-button>
+        <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync" [disabled]="saving || !dirty" (onClick)="save()"></dx-button>
+      }
+    </div>
+  </div>
+
+  @if (loadError) {
+    <div class="panel">
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
+        <b>{{ 'UI.OPERATING_MODES.LOAD_FAILED' | translateAsync }}</b>
+        <span class="mono">{{ loadError }}</span>
+        <dx-button icon="refresh" [text]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      </div>
+    </div>
+  } @else if (loaded && configuration) {
+    <p class="intro">{{ 'UI.OPERATING_MODES.INTRO' | translateAsync }}</p>
+
+    <div class="grid">
+      <!-- ================= today and the next weeks ================= -->
+      <section class="panel">
+        <div class="block">
+          <h3><fa-icon icon="calendar-day"></fa-icon>{{ 'UI.OPERATING_MODES.TODAY.TITLE' | translateAsync }}</h3>
+          <div class="chips">
+            @for (m of activeToday?.modes ?? []; track m.key) {
+              <span class="chip on" [attr.title]="m.why"><b>{{ m.name }}</b><small>{{ m.why }}</small></span>
+            } @empty {
+              <span class="muted">{{ 'UI.OPERATING_MODES.TODAY.NONE' | translateAsync }}</span>
+            }
+          </div>
+        </div>
+        <div class="block">
+          <h3><fa-icon icon="calendar-days"></fa-icon>{{ 'UI.OPERATING_MODES.UPCOMING.TITLE' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.OPERATING_MODES.UPCOMING.HINT' | translateAsync }}</p>
+          <ul class="days">
+            @for (d of upcoming; track d.date) {
+              @if (!d.today) {
+                <li>
+                  <span class="mono date">{{ d.label }}</span>
+                  <span class="day-modes">
+                    @for (m of d.modes; track m.key) {
+                      <span class="chip"><b>{{ m.name }}</b><small>{{ m.why }}</small></span>
+                    }
+                  </span>
+                </li>
+              }
+            }
+          </ul>
+          @if (upcoming.length <= 1) {
+            <span class="muted">{{ 'UI.OPERATING_MODES.UPCOMING.NONE' | translateAsync }}</span>
+          }
+        </div>
+      </section>
+
+      <!-- ================= modes ================= -->
+      <section class="panel">
+        <div class="block">
+          <h3><fa-icon icon="layer-group"></fa-icon>{{ 'UI.OPERATING_MODES.MODES.TITLE' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.OPERATING_MODES.MODES.HINT' | translateAsync }}</p>
+          <div class="rows">
+            @for (mode of sortedModes; track mode.key) {
+              <div class="row mode-row">
+                <div class="fld">
+                  @if (isBuiltIn(mode)) {
+                    <span class="name">{{ modeName(mode.key) }}</span>
+                  } @else {
+                    <dx-text-box [(value)]="mode.name" [inputAttr]="{ 'aria-label': ('UI.OPERATING_MODES.MODES.NAME' | translateAsync) }"></dx-text-box>
+                  }
+                  <span class="mono key">{{ mode.key }}</span>
+                </div>
+                <div class="fld prio">
+                  <label>{{ 'UI.OPERATING_MODES.MODES.PRIORITY' | translateAsync }}</label>
+                  <dx-number-box [(value)]="mode.priority" [min]="0" [max]="1000" [showSpinButtons]="true"></dx-number-box>
+                </div>
+                <div class="fld">
+                  <label>{{ 'UI.OPERATING_MODES.MODES.STATE' | translateAsync }}</label>
+                  <div class="seg" role="radiogroup">
+                    @for (item of manualItems; track item.value) {
+                      <button type="button" role="radio" [class.on]="manualOf(mode) === item.value" [attr.aria-checked]="manualOf(mode) === item.value"
+                        (click)="setManual(mode, item.value)">{{ item.key | translateAsync }}</button>
+                    }
+                  </div>
+                </div>
+                <div class="act">
+                  @if (!isBuiltIn(mode)) {
+                    <dx-button icon="trash" stylingMode="text" [hint]="'UI.OPERATING_MODES.MODES.DELETE' | translateAsync" (onClick)="removeMode(mode)"></dx-button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          <div class="add-row">
+            <dx-text-box class="grow" [(value)]="newModeName" valueChangeEvent="input" [placeholder]="'UI.OPERATING_MODES.MODES.NEW' | translateAsync"
+              (onEnterKey)="addMode()"></dx-text-box>
+            <dx-button icon="add" [text]="'UI.OPERATING_MODES.MODES.ADD' | translateAsync" [disabled]="!canAddMode" (onClick)="addMode()"></dx-button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= public holidays ================= -->
+      <section class="panel">
+        <div class="block">
+          <h3><fa-icon icon="flag"></fa-icon>{{ 'UI.OPERATING_MODES.HOLIDAYS.TITLE' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.OPERATING_MODES.HOLIDAYS.HINT' | translateAsync }}</p>
+          <div class="fields">
+            <div class="fld">
+              <label>{{ 'UI.OPERATING_MODES.HOLIDAYS.COUNTRY' | translateAsync }}</label>
+              <dx-select-box [items]="countryItems" valueExpr="code" displayExpr="name" [value]="configuration.country"
+                (onValueChanged)="countryChanged($event.value)"></dx-select-box>
+            </div>
+            @if (country?.regions?.length) {
+              <div class="fld">
+                <label>{{ 'UI.OPERATING_MODES.HOLIDAYS.REGION' | translateAsync }}</label>
+                <dx-select-box [items]="regionItems" valueExpr="code" displayExpr="name" [value]="configuration.region"
+                  (onValueChanged)="regionChanged($event.value)"></dx-select-box>
+              </div>
+            }
+          </div>
+          @if (configuration.country) {
+            <ul class="holidays">
+              @for (h of holidays; track h.key + h.date) {
+                <li [class.off]="!holidayEnabled(h)">
+                  <dx-check-box [value]="holidayEnabled(h)" (onValueChanged)="setHolidayEnabled(h, $event.value)"
+                    [elementAttr]="{ 'aria-label': holidayName(h.key) }"></dx-check-box>
+                  <span class="mono date">{{ holidayDate(h) }}</span>
+                  <span>{{ holidayName(h.key) }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </section>
+
+      <!-- ================= operating times ================= -->
+      <section class="panel">
+        <div class="block">
+          <h3><fa-icon icon="calendar-week"></fa-icon>{{ 'UI.OPERATING_MODES.PERIODS.TITLE' | translateAsync }}</h3>
+          <p class="hint">{{ 'UI.OPERATING_MODES.PERIODS.HINT' | translateAsync }}</p>
+          <div class="rows">
+            @for (p of configuration.periods; track $index) {
+              <div class="row period-row" [class.off]="!p.enabled">
+                <div class="fld">
+                  <label>{{ 'UI.OPERATING_MODES.PERIODS.NAME' | translateAsync }}</label>
+                  <dx-text-box [(value)]="p.name"></dx-text-box>
+                </div>
+                <div class="fld">
+                  <label>{{ 'UI.OPERATING_MODES.PERIODS.MODE' | translateAsync }}</label>
+                  <dx-select-box [items]="modeItems" valueExpr="key" displayExpr="name" [(value)]="p.mode"></dx-select-box>
+                </div>
+                <div class="fld">
+                  <label>{{ 'UI.OPERATING_MODES.PERIODS.START' | translateAsync }}</label>
+                  <dx-date-box type="date" dateSerializationFormat="yyyy-MM-dd" [(value)]="p.start"></dx-date-box>
+                </div>
+                <div class="fld">
+                  <label>{{ 'UI.OPERATING_MODES.PERIODS.END' | translateAsync }}</label>
+                  <dx-date-box type="date" dateSerializationFormat="yyyy-MM-dd" [(value)]="p.end" [min]="p.start"></dx-date-box>
+                </div>
+                <div class="checks">
+                  <dx-check-box [(value)]="p.yearly" [text]="'UI.OPERATING_MODES.PERIODS.YEARLY' | translateAsync"></dx-check-box>
+                  <dx-check-box [(value)]="p.enabled" [text]="'UI.OPERATING_MODES.PERIODS.ENABLED' | translateAsync"></dx-check-box>
+                </div>
+                <div class="act">
+                  <dx-button icon="trash" stylingMode="text" [hint]="'UI.OPERATING_MODES.PERIODS.DELETE' | translateAsync" (onClick)="removePeriod(p)"></dx-button>
+                </div>
+              </div>
+            } @empty {
+              <span class="muted">{{ 'UI.OPERATING_MODES.PERIODS.EMPTY' | translateAsync }}</span>
+            }
+          </div>
+          <div class="add-row">
+            <dx-button icon="add" [text]="'UI.OPERATING_MODES.PERIODS.ADD' | translateAsync" (onClick)="addPeriod()"></dx-button>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+</div>

@@ -76,6 +76,11 @@ namespace Automatica.Core.Automation.Engine
         Task<bool> SetShadingAsync(Guid controlId, bool enabled, CancellationToken token);
 
         /// <summary>
+        /// Whether the operating mode <paramref name="mode"/> is active today, null when the mode does not exist
+        /// </summary>
+        bool? IsOperatingModeActive(string mode) => null;
+
+        /// <summary>
         /// Local time of <paramref name="sunEvent"/> on <paramref name="date"/>, null when the sun does not rise/set that day
         /// </summary>
         DateTimeOffset? GetSunTime(DateOnly date, SunEvent sunEvent);

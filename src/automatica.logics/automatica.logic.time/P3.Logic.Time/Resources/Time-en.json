@@ -265,6 +265,202 @@
         "NAME": "Level 2",
         "DESCRIPTION": "Target value while S is 1"
       }
+    },
+    "ALARM_CLOCK": {
+      "NAME": "Alarm clock",
+      "DESCRIPTION": "Alarm times per weekday and per operating mode (public holiday, vacation, ...), with snooze and pre-alarm. Entries for an active operating mode replace the weekday entries. The alarm times can be edited in the visualization",
+      "CONFIRM": {
+        "DESCRIPTION": "Confirms (ends) the alarm"
+      },
+      "SNOOZE": {
+        "DESCRIPTION": "Starts the snooze: buzzer off for the snooze duration, another pulse restarts it"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 disables all alarms"
+      },
+      "TOGGLE": {
+        "DESCRIPTION": "Switches the default alarm on/off, ends a running alarm"
+      },
+      "SET": {
+        "DESCRIPTION": "Sets the time of the default alarm in minutes after midnight (360 = 06:00)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Ends a running alarm and resets the outputs"
+      },
+      "ALARM_START": {
+        "DESCRIPTION": "Pulse when the alarm starts"
+      },
+      "ALARM_END": {
+        "DESCRIPTION": "Pulse when the alarm ends"
+      },
+      "BUZZER": {
+        "DESCRIPTION": "1 while the alarm sounds, 0 during the snooze"
+      },
+      "ALARM": {
+        "DESCRIPTION": "1 while the alarm is active (also during the snooze)"
+      },
+      "PRE_ALARM": {
+        "DESCRIPTION": "Pulse the pre-alarm time before the alarm"
+      },
+      "SNOOZE_REMAINING": {
+        "DESCRIPTION": "Remaining snooze time [s]"
+      },
+      "DEFAULT_ENABLED": {
+        "DESCRIPTION": "1 while the default alarm is switched on"
+      },
+      "NEXT_ALARM": {
+        "DESCRIPTION": "Date and time of the next alarm"
+      },
+      "ENTRIES": {
+        "DESCRIPTION": "Current alarm entries (JSON)"
+      },
+      "MAX_DURATION": {
+        "NAME": "Maximum alarm duration [s]",
+        "DESCRIPTION": "Ends the alarm after this time (with confirmation required the snooze starts instead), 0 = until confirmed"
+      },
+      "PRE_ALARM_TIME": {
+        "NAME": "Pre-alarm time [s]",
+        "DESCRIPTION": "Time before the alarm when the pre-alarm pulses, 0 = off"
+      },
+      "SNOOZE_DURATION": {
+        "NAME": "Snooze duration [s]",
+        "DESCRIPTION": "Time until the alarm sounds again"
+      },
+      "CONFIRM_REQUIRED": {
+        "NAME": "Confirmation required",
+        "DESCRIPTION": "After the maximum alarm duration the snooze starts automatically until the alarm is confirmed"
+      },
+      "SUPPRESS_MODES": {
+        "NAME": "No weekday alarms during",
+        "DESCRIPTION": "Operating modes (comma separated keys) on which the weekday alarms do not ring, unless an entry for that mode exists"
+      },
+      "ALARMS": {
+        "NAME": "Alarm entries",
+        "DESCRIPTION": "Alarm times as JSON: [{\"name\":\"\",\"time\":\"06:30\",\"enabled\":true,\"days\":[1,2,3,4,5],\"modes\":[\"vacation\"]}], days 0 = Sunday. Easiest to edit in the visualization"
+      }
+    },
+    "PULSE_AT": {
+      "NAME": "Pulse at",
+      "DESCRIPTION": "Pulse at a time of day, at sunrise/sunset/dawn/dusk or every minute, hour, day, week, month or year. The time can be changed in the visualization. Sun events use the server location",
+      "OFF": {
+        "DESCRIPTION": "1 locks the block (output 0, no pulses)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 for the on-duration at the selected time"
+      },
+      "NEXT": {
+        "DESCRIPTION": "Date and time of the next pulse"
+      },
+      "TYPE": {
+        "NAME": "Pulse",
+        "DESCRIPTION": "When the pulse is sent",
+        "TIME": "Time of day",
+        "SUNRISE": "Sunrise",
+        "SUNSET": "Sunset",
+        "DAWN": "Dawn",
+        "DUSK": "Dusk",
+        "MINUTE": "Every minute",
+        "HOUR": "Every hour",
+        "DAY": "Every day (midnight)",
+        "WEEK": "Every week (Monday 00:00)",
+        "MONTH": "Every month (1st, 00:00)",
+        "YEAR": "Every year (1 January)"
+      },
+      "TIME": {
+        "NAME": "Time",
+        "DESCRIPTION": "Time of day hh:mm:ss (pulse type time of day)"
+      },
+      "OFFSET": {
+        "NAME": "Offset [min]",
+        "DESCRIPTION": "Shifts sun events, negative = before"
+      },
+      "ONE_TIME": {
+        "NAME": "One-time pulse",
+        "DESCRIPTION": "Pulses only on the date below (time of day and sun events)"
+      },
+      "DATE": {
+        "NAME": "Date",
+        "DESCRIPTION": "Date of the one-time pulse, yyyy-MM-dd"
+      },
+      "DURATION": {
+        "NAME": "On-duration [s]",
+        "DESCRIPTION": "How long the output stays 1"
+      }
+    },
+    "RUNTIME_COUNTER": {
+      "NAME": "Runtime counter",
+      "DESCRIPTION": "Counts the operating time while enabled (e.g. operating hours of a pump) and signals when the maintenance interval is reached. The counters survive restarts",
+      "ENABLE": {
+        "DESCRIPTION": "Counts while 1"
+      },
+      "RESET_MAINTENANCE": {
+        "DESCRIPTION": "Starts a new maintenance interval"
+      },
+      "RESET_TOTAL": {
+        "DESCRIPTION": "Resets the total operating time and the maintenance interval"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 pauses the counting"
+      },
+      "MAINTENANCE": {
+        "DESCRIPTION": "1 when the maintenance interval is reached"
+      },
+      "TOTAL": {
+        "DESCRIPTION": "Total operating time (time unit)"
+      },
+      "LAST_START": {
+        "DESCRIPTION": "Date and time of the last start"
+      },
+      "REMAINING": {
+        "DESCRIPTION": "Time left until maintenance (time unit)"
+      },
+      "UNIT": {
+        "NAME": "Time unit",
+        "DESCRIPTION": "Unit of the outputs total and remaining time",
+        "SECONDS": "Seconds",
+        "MINUTES": "Minutes",
+        "HOURS": "Hours",
+        "DAYS": "Days"
+      },
+      "INTERVAL": {
+        "NAME": "Maintenance interval [h]",
+        "DESCRIPTION": "Operating hours between two maintenances, 0 = not used"
+      }
+    },
+    "RANDOM_CONTROLLER": {
+      "NAME": "Random controller",
+      "DESCRIPTION": "Switches on and off at random intervals while enabled, e.g. for presence simulation",
+      "ENABLE": {
+        "DESCRIPTION": "Runs while 1, 0 stops and switches off"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Random output"
+      },
+      "MAX_ON_DELAY": {
+        "NAME": "Maximum switch-on delay [s]",
+        "DESCRIPTION": "Longest time before switching on (off phase)"
+      },
+      "MAX_OFF_DELAY": {
+        "NAME": "Maximum switch-off delay [s]",
+        "DESCRIPTION": "Longest time before switching off (on phase)"
+      }
+    },
+    "OPERATING_MODE": {
+      "NAME": "Operating mode",
+      "DESCRIPTION": "1 while a system operating mode (public holiday, vacation, school holidays or a custom mode) is active. The modes and their periods are set up under Operating modes in the administration",
+      "ON": {
+        "DESCRIPTION": "1 switches the mode on, 0 hands it back to the operating times"
+      },
+      "ACTIVE": {
+        "DESCRIPTION": "1 while the mode is active"
+      },
+      "MODES": {
+        "DESCRIPTION": "All active modes, comma separated (highest priority first)"
+      },
+      "MODE": {
+        "NAME": "Mode",
+        "DESCRIPTION": "Key of the operating mode: public-holiday, vacation, school-holidays or the key of a custom mode"
+      }
     }
   }
 }

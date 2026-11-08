@@ -1,0 +1,36 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.pulse-editor {
+    display: grid;
+    gap: var(--space-2);
+
+    .lbl {
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+    }
+}
+
+.pulse-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.pulse-time {
+    font: inherit;
+    font-family: var(--font-data);
+    font-size: var(--text-lg);
+    min-height: 40px;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+}

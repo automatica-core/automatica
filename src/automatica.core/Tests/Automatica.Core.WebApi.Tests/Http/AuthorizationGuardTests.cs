@@ -72,6 +72,7 @@ namespace Automatica.Core.WebApi.Tests.Http
             // automations an admin released for the visualization: every signed-in user sees them
             $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.GetAll)}",
             $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.GetState)}",
+            $"{nameof(OperatingModesVisuController)}.{nameof(OperatingModesVisuController.GetState)}",
         };
 
         /// <summary>
@@ -88,6 +89,7 @@ namespace Automatica.Core.WebApi.Tests.Http
             $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.SetEnabled)}",
             // arming, disarming and acknowledging the security logics (alarms, access controller)
             $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.Command)}",
+            $"{nameof(OperatingModesVisuController)}.{nameof(OperatingModesVisuController.SetManual)}",
         };
 
         private readonly WebApiHost _host;

@@ -31,6 +31,8 @@ import { ClimateCentralComponent } from "./climate/climate-central.component";
 import { StatusComponent } from "./text-status/status/status.component";
 import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
 import { TrackerComponent } from "./text-status/tracker/tracker.component";
+import { ALARM_CLOCK_TEMPLATE, AlarmClockComponent } from "./alarm-clock/alarm-clock.component";
+import { PULSE_AT_TEMPLATE, PulseAtComponent } from "./pulse-at/pulse-at.component";
 
 /** tiles of the status, status monitor and tracker logics; they need the values of that logic */
 const TEXT_STATUS_TILES: { [key: string]: Type<BaseMobileComponent> } = {
@@ -88,6 +90,13 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       editMode: this.editMode,
       pageGroupType: this.pageGroupType
     };
+
+    // logic blocks with their own tile (frontend only: chosen by the logic template, not by a visu template)
+    const logicTile = this.logicTile();
+    if (logicTile) {
+      this.component = logicTile;
+      return;
+    }
 
     switch (this.item.VisuObjectTemplate.Key) {
       case "label": {
@@ -197,6 +206,21 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         }
         break;
       }
+    }
+  }
+
+  private logicTile(): Type<BaseMobileComponent> | undefined {
+    if (this.item.type !== VisuObjectSourceType.RuleInstance || !(this.item.objectType instanceof RuleInstance)) {
+      return void 0;
+    }
+    const template = (this.item.objectType.This2RuleTemplate || this.item.objectType.RuleTemplate?.ObjId || "").toLowerCase();
+    switch (template) {
+      case ALARM_CLOCK_TEMPLATE:
+        return AlarmClockComponent;
+      case PULSE_AT_TEMPLATE:
+        return PulseAtComponent;
+      default:
+        return void 0;
     }
   }
 

@@ -47,6 +47,7 @@ using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.Runtime.Recorder.Abstraction;
 using Automatica.Core.Base.Calendar;
 using Automatica.Core.Notification;
+using Automatica.Core.Internals.OperatingModes;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -77,6 +78,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILogicEngineDispatcher _logicEngineDispatcher;
         private readonly IAutomationEngine _automationEngine;
         private readonly IShadingEngine _shadingEngine;
+        private readonly IOperatingModeService _operatingModes;
         private RunState _runState;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
@@ -184,6 +186,7 @@ namespace Automatica.Core.Runtime.Core
             _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
             _automationEngine = services.GetRequiredService<IAutomationEngine>();
             _shadingEngine = services.GetRequiredService<IShadingEngine>();
+            _operatingModes = services.GetRequiredService<IOperatingModeService>();
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
@@ -255,6 +258,9 @@ namespace Automatica.Core.Runtime.Core
                             _logger.LogError(e, "Could not restore remanent values");
                         }
                     });
+
+                    // before the logics: alarm clocks and other time blocks read the operating modes when they start
+                    await timer.Measure("operating modes", StartOperatingModes);
 
                     await ConfigureAndStart(timer);
 
@@ -401,6 +407,31 @@ namespace Automatica.Core.Runtime.Core
             {
                 // automations must never keep the server from starting
                 _logger.LogError(e, "Error starting the automations");
+            }
+        }
+
+        private async Task StartOperatingModes()
+        {
+            try
+            {
+                await _operatingModes.StartAsync();
+            }
+            catch (Exception e)
+            {
+                // the operating modes must never keep the server from starting
+                _logger.LogError(e, "Error starting the operating modes");
+            }
+        }
+
+        private async Task StopOperatingModes()
+        {
+            try
+            {
+                await _operatingModes.StopAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error stopping the operating modes");
             }
         }
 
@@ -619,6 +650,7 @@ namespace Automatica.Core.Runtime.Core
             // automations, links and logics first, otherwise values are still dispatched into the stopped drivers
             await StopShading();
             await StopAutomations();
+            await StopOperatingModes();
             await StopLogicEngine();
 
             // StopDriver removes the driver from the store, Stopped() has to be called on a snapshot

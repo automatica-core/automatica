@@ -265,6 +265,202 @@
         "NAME": "Stufe 2",
         "DESCRIPTION": "Zielwert solange S 1 ist"
       }
+    },
+    "ALARM_CLOCK": {
+      "NAME": "Wecker",
+      "DESCRIPTION": "Weckzeiten pro Wochentag und pro Betriebsmodus (Feiertag, Urlaub, ...), mit Schlummern und Vorwecken. Einträge für einen aktiven Betriebsmodus ersetzen die Wochentags-Einträge. Die Weckzeiten können in der Visualisierung bearbeitet werden",
+      "CONFIRM": {
+        "DESCRIPTION": "Bestätigt (beendet) den Alarm"
+      },
+      "SNOOZE": {
+        "DESCRIPTION": "Startet das Schlummern: Summer für die Schlummerdauer aus, ein weiterer Impuls startet sie neu"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 deaktiviert alle Weckzeiten"
+      },
+      "TOGGLE": {
+        "DESCRIPTION": "Schaltet den Standardwecker ein/aus, beendet einen laufenden Alarm"
+      },
+      "SET": {
+        "DESCRIPTION": "Setzt die Zeit des Standardweckers in Minuten nach Mitternacht (360 = 06:00)"
+      },
+      "OFF": {
+        "DESCRIPTION": "Beendet einen laufenden Alarm und setzt die Ausgänge zurück"
+      },
+      "ALARM_START": {
+        "DESCRIPTION": "Impuls bei Alarmbeginn"
+      },
+      "ALARM_END": {
+        "DESCRIPTION": "Impuls bei Alarmende"
+      },
+      "BUZZER": {
+        "DESCRIPTION": "1 solange der Alarm ertönt, 0 während des Schlummerns"
+      },
+      "ALARM": {
+        "DESCRIPTION": "1 solange der Alarm aktiv ist (auch während des Schlummerns)"
+      },
+      "PRE_ALARM": {
+        "DESCRIPTION": "Impuls um die Vorweckzeit vor dem Alarm"
+      },
+      "SNOOZE_REMAINING": {
+        "DESCRIPTION": "Verbleibende Schlummerzeit [s]"
+      },
+      "DEFAULT_ENABLED": {
+        "DESCRIPTION": "1 solange der Standardwecker eingeschaltet ist"
+      },
+      "NEXT_ALARM": {
+        "DESCRIPTION": "Datum und Uhrzeit des nächsten Alarms"
+      },
+      "ENTRIES": {
+        "DESCRIPTION": "Aktuelle Weckzeiten (JSON)"
+      },
+      "MAX_DURATION": {
+        "NAME": "Maximale Alarmdauer [s]",
+        "DESCRIPTION": "Beendet den Alarm nach dieser Zeit (mit Bestätigung erforderlich startet stattdessen das Schlummern), 0 = bis zur Bestätigung"
+      },
+      "PRE_ALARM_TIME": {
+        "NAME": "Vorweckzeit [s]",
+        "DESCRIPTION": "Zeit vor dem Alarm, zu der der Vorwecker pulst, 0 = aus"
+      },
+      "SNOOZE_DURATION": {
+        "NAME": "Schlummerdauer [s]",
+        "DESCRIPTION": "Zeit bis der Alarm wieder ertönt"
+      },
+      "CONFIRM_REQUIRED": {
+        "NAME": "Bestätigung erforderlich",
+        "DESCRIPTION": "Nach der maximalen Alarmdauer startet automatisch das Schlummern, bis der Alarm bestätigt wird"
+      },
+      "SUPPRESS_MODES": {
+        "NAME": "Keine Wochentags-Weckzeiten bei",
+        "DESCRIPTION": "Betriebsmodi (Schlüssel mit Komma getrennt), an denen die Wochentags-Weckzeiten nicht läuten, außer es gibt einen Eintrag für diesen Modus"
+      },
+      "ALARMS": {
+        "NAME": "Weckzeiten",
+        "DESCRIPTION": "Weckzeiten als JSON: [{\"name\":\"\",\"time\":\"06:30\",\"enabled\":true,\"days\":[1,2,3,4,5],\"modes\":[\"vacation\"]}], Tage 0 = Sonntag. Am einfachsten in der Visualisierung bearbeiten"
+      }
+    },
+    "PULSE_AT": {
+      "NAME": "Impuls um",
+      "DESCRIPTION": "Impuls zu einer Uhrzeit, bei Sonnenaufgang/-untergang/Morgen-/Abenddämmerung oder jede Minute, Stunde, Tag, Woche, Monat oder Jahr. Die Uhrzeit kann in der Visualisierung geändert werden. Sonnenereignisse verwenden den Standort des Servers",
+      "OFF": {
+        "DESCRIPTION": "1 sperrt den Baustein (Ausgang 0, keine Impulse)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 für die Einschaltdauer zum gewählten Zeitpunkt"
+      },
+      "NEXT": {
+        "DESCRIPTION": "Datum und Uhrzeit des nächsten Impulses"
+      },
+      "TYPE": {
+        "NAME": "Impuls",
+        "DESCRIPTION": "Wann der Impuls gesendet wird",
+        "TIME": "Uhrzeit",
+        "SUNRISE": "Sonnenaufgang",
+        "SUNSET": "Sonnenuntergang",
+        "DAWN": "Morgendämmerung",
+        "DUSK": "Abenddämmerung",
+        "MINUTE": "Jede Minute",
+        "HOUR": "Jede Stunde",
+        "DAY": "Jeden Tag (Mitternacht)",
+        "WEEK": "Jede Woche (Montag 00:00)",
+        "MONTH": "Jeden Monat (1., 00:00)",
+        "YEAR": "Jedes Jahr (1. Jänner)"
+      },
+      "TIME": {
+        "NAME": "Uhrzeit",
+        "DESCRIPTION": "Uhrzeit hh:mm:ss (Impulsart Uhrzeit)"
+      },
+      "OFFSET": {
+        "NAME": "Versatz [min]",
+        "DESCRIPTION": "Verschiebt Sonnenereignisse, negativ = davor"
+      },
+      "ONE_TIME": {
+        "NAME": "Einmaliger Impuls",
+        "DESCRIPTION": "Impuls nur am unten gesetzten Datum (Uhrzeit und Sonnenereignisse)"
+      },
+      "DATE": {
+        "NAME": "Datum",
+        "DESCRIPTION": "Datum des einmaligen Impulses, yyyy-MM-dd"
+      },
+      "DURATION": {
+        "NAME": "Einschaltdauer [s]",
+        "DESCRIPTION": "Wie lange der Ausgang 1 bleibt"
+      }
+    },
+    "RUNTIME_COUNTER": {
+      "NAME": "Betriebsstundenzähler",
+      "DESCRIPTION": "Zählt die Betriebszeit solange aktiviert (z. B. Betriebsstunden einer Pumpe) und meldet, wenn das Wartungsintervall erreicht ist. Die Zähler bleiben über Neustarts erhalten",
+      "ENABLE": {
+        "DESCRIPTION": "Zählt solange 1"
+      },
+      "RESET_MAINTENANCE": {
+        "DESCRIPTION": "Startet ein neues Wartungsintervall"
+      },
+      "RESET_TOTAL": {
+        "DESCRIPTION": "Setzt die gesamte Betriebszeit und das Wartungsintervall zurück"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 pausiert das Zählen"
+      },
+      "MAINTENANCE": {
+        "DESCRIPTION": "1 wenn das Wartungsintervall erreicht ist"
+      },
+      "TOTAL": {
+        "DESCRIPTION": "Gesamte Betriebszeit (Zeiteinheit)"
+      },
+      "LAST_START": {
+        "DESCRIPTION": "Datum und Uhrzeit des letzten Starts"
+      },
+      "REMAINING": {
+        "DESCRIPTION": "Restzeit bis zur Wartung (Zeiteinheit)"
+      },
+      "UNIT": {
+        "NAME": "Zeiteinheit",
+        "DESCRIPTION": "Einheit der Ausgänge Gesamtzeit und Restzeit",
+        "SECONDS": "Sekunden",
+        "MINUTES": "Minuten",
+        "HOURS": "Stunden",
+        "DAYS": "Tage"
+      },
+      "INTERVAL": {
+        "NAME": "Wartungsintervall [h]",
+        "DESCRIPTION": "Betriebsstunden zwischen zwei Wartungen, 0 = nicht verwendet"
+      }
+    },
+    "RANDOM_CONTROLLER": {
+      "NAME": "Zufallsgenerator",
+      "DESCRIPTION": "Schaltet solange aktiviert in zufälligen Abständen ein und aus, z. B. für die Anwesenheitssimulation",
+      "ENABLE": {
+        "DESCRIPTION": "Läuft solange 1, 0 stoppt und schaltet aus"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Zufallsausgang"
+      },
+      "MAX_ON_DELAY": {
+        "NAME": "Maximale Einschaltverzögerung [s]",
+        "DESCRIPTION": "Längste Zeit bis zum Einschalten (Aus-Phase)"
+      },
+      "MAX_OFF_DELAY": {
+        "NAME": "Maximale Ausschaltverzögerung [s]",
+        "DESCRIPTION": "Längste Zeit bis zum Ausschalten (Ein-Phase)"
+      }
+    },
+    "OPERATING_MODE": {
+      "NAME": "Betriebsmodus",
+      "DESCRIPTION": "1 solange ein Betriebsmodus des Systems (Feiertag, Urlaub, Schulferien oder ein eigener Modus) aktiv ist. Die Modi und ihre Zeiträume werden in der Administration unter Betriebsmodi eingerichtet",
+      "ON": {
+        "DESCRIPTION": "1 schaltet den Modus ein, 0 gibt ihn an die Betriebszeiten zurück"
+      },
+      "ACTIVE": {
+        "DESCRIPTION": "1 solange der Modus aktiv ist"
+      },
+      "MODES": {
+        "DESCRIPTION": "Alle aktiven Modi mit Komma getrennt (höchste Priorität zuerst)"
+      },
+      "MODE": {
+        "NAME": "Modus",
+        "DESCRIPTION": "Schlüssel des Betriebsmodus: public-holiday, vacation, school-holidays oder der Schlüssel eines eigenen Modus"
+      }
     }
   }
 }

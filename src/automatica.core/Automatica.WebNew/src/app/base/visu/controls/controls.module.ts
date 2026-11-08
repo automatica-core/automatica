@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule, DxPopupModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule, DxPopupModule, DxTagBoxModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -36,6 +36,8 @@ import { LightingControllerComponent } from "./lighting-controller/lighting-cont
 import { GarageComponent } from "./garage/garage.component";
 import { MediaControllerComponent } from "./media-controller/media-controller.component";
 import { IrrigationComponent } from "./irrigation/irrigation.component";
+import { AlarmClockComponent } from "./alarm-clock/alarm-clock.component";
+import { PulseAtComponent } from "./pulse-at/pulse-at.component";
 
 @NgModule({
   imports: [
@@ -65,7 +67,8 @@ import { IrrigationComponent } from "./irrigation/irrigation.component";
     DxNumberBoxModule,
     DxLinearGaugeModule,
     DxCircularGaugeModule,
-    DxPopupModule
+    DxPopupModule,
+    DxTagBoxModule
   ],
   declarations: [
     VisuItemComponent,
@@ -94,7 +97,9 @@ import { IrrigationComponent } from "./irrigation/irrigation.component";
     LightingControllerComponent,
     GarageComponent,
     MediaControllerComponent,
-    IrrigationComponent
+    IrrigationComponent,
+    AlarmClockComponent,
+    PulseAtComponent
   ],
   exports: [
     VisuItemComponent

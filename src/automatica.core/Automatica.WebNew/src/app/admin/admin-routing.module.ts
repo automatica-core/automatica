@@ -19,6 +19,7 @@ import { VisualisationEditComponent } from "../pages/visualisation-edit/visualis
 import { AutomationsListComponent } from "../pages/automations/automations-list/automations-list.component";
 import { AutomationEditorComponent } from "../pages/automations/automation-editor/automation-editor.component";
 import { ShadingPageComponent } from "../pages/shading/shading-page/shading-page.component";
+import { OperatingModesPageComponent } from "../pages/operating-modes/operating-modes-page/operating-modes-page.component";
 
 const routes: Routes =[
     {
@@ -48,6 +49,9 @@ const routes: Routes =[
     }, {
         path: "shading",
         component: ShadingPageComponent
+    }, {
+        path: "operating-modes",
+        component: OperatingModesPageComponent
     }, {
         path: "visualisation",
         component: VisualisationEditComponent,

@@ -1,0 +1,52 @@
+<app-visualization-control [hint]="displayText" [state]="stateText" [value]="nextText" [subValue]="'UI.VISU.ALARM_CLOCK.NEXT' | translateAsync"
+  [icon]="['fas', 'alarm-clock']" [location]="location" [active]="alarmActive" [hasPopup]="!editMode && !!alarmsParamPresent"
+  (onPopupShowing)="onPopupShowing()">
+
+  @if (alarmActive) {
+    <div control class="alarm-row">
+      <button type="button" class="alarm-btn" (click)="snooze()" [disabled]="!snoozeInput">
+        <fa-icon icon="moon"></fa-icon><span>{{ 'UI.VISU.ALARM_CLOCK.SNOOZE' | translateAsync }}</span>
+      </button>
+      <button type="button" class="alarm-btn stop" (click)="confirm()" [disabled]="!confirmInput">
+        <fa-icon icon="check"></fa-icon><span>{{ 'UI.VISU.ALARM_CLOCK.CONFIRM' | translateAsync }}</span>
+      </button>
+    </div>
+  }
+
+  <div popup class="alarm-editor">
+    @for (entry of edit; track entry.id) {
+      <div class="alarm-entry" [class.off]="!entry.enabled">
+        <div class="alarm-line">
+          <input class="alarm-time" type="time" [(ngModel)]="entry.time" [attr.aria-label]="'UI.VISU.ALARM_CLOCK.TIME' | translateAsync" />
+          <input class="alarm-name" type="text" [(ngModel)]="entry.name" [placeholder]="'UI.VISU.ALARM_CLOCK.NAME' | translateAsync"
+            [attr.aria-label]="'UI.VISU.ALARM_CLOCK.NAME' | translateAsync" />
+          <dx-switch [(value)]="entry.enabled" [elementAttr]="{ 'aria-label': ('UI.VISU.ALARM_CLOCK.ENABLED' | translateAsync) }"></dx-switch>
+          <button type="button" class="icon-btn" (click)="remove(entry)" [attr.aria-label]="'UI.VISU.ALARM_CLOCK.DELETE' | translateAsync"
+            [attr.title]="'UI.VISU.ALARM_CLOCK.DELETE' | translateAsync">
+            <fa-icon icon="trash"></fa-icon>
+          </button>
+        </div>
+        <div class="alarm-days" role="group" [attr.aria-label]="'UI.VISU.ALARM_CLOCK.DAYS' | translateAsync">
+          @for (day of week; track day) {
+            <button type="button" [class.on]="hasDay(entry, day)" [attr.aria-pressed]="hasDay(entry, day)" (click)="toggleDay(entry, day)">{{ dayName(day) }}</button>
+          }
+        </div>
+        @if (modeItems.length) {
+          <div class="alarm-modes">
+            <span class="lbl">{{ 'UI.VISU.ALARM_CLOCK.MODES' | translateAsync }}</span>
+            <dx-tag-box [items]="modeItems" valueExpr="key" displayExpr="name" [(value)]="entry.modes" [showSelectionControls]="true"
+              applyValueMode="instantly"></dx-tag-box>
+          </div>
+        }
+      </div>
+    }
+    @if (modeItems.length) {
+      <p class="alarm-hint">{{ 'UI.VISU.ALARM_CLOCK.MODES_HINT' | translateAsync }}</p>
+    }
+    <div class="alarm-actions">
+      <dx-button icon="add" [text]="'UI.VISU.ALARM_CLOCK.ADD' | translateAsync" (onClick)="add()"></dx-button>
+      <span class="spacer"></span>
+      <dx-button type="default" icon="save" [text]="'UI.VISU.ALARM_CLOCK.SAVE' | translateAsync" [disabled]="saving || !editDirty" (onClick)="save()"></dx-button>
+    </div>
+  </div>
+</app-visualization-control>

@@ -93,6 +93,15 @@ namespace Automatica.Core.Automation.Engine
                         message = "Blind has no automatic shading";
                     }
                     break;
+                case OperatingModeCondition operatingMode:
+                    var modeActive = _environment.IsOperatingModeActive(operatingMode.Mode);
+                    value = modeActive;
+                    passed = modeActive.HasValue && modeActive.Value == operatingMode.Active;
+                    if (!modeActive.HasValue)
+                    {
+                        message = "Operating mode not found";
+                    }
+                    break;
                 case TriggeredByCondition triggeredBy:
                     value = context.TriggerId;
                     passed = !string.IsNullOrEmpty(triggeredBy.TriggerId) && string.Equals(triggeredBy.TriggerId, context.TriggerId, StringComparison.Ordinal);
@@ -224,6 +233,7 @@ namespace Automatica.Core.Automation.Engine
                 case TimeCondition:
                 case SunCondition:
                 case ShadingCondition:
+                case OperatingModeCondition:
                     timeBased = true;
                     break;
             }

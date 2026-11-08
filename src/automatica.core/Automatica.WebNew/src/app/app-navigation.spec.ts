@@ -20,6 +20,7 @@ describe("app navigation", () => {
       "/admin/logic-editor",
       "/admin/automations",
       "/admin/shading",
+      "/admin/operating-modes",
       "/admin/config",
       "/admin/area-config",
       "/admin/category-config",

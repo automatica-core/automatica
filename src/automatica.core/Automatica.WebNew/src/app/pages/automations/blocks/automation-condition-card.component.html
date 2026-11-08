@@ -109,6 +109,22 @@
           </div>
         </div>
       }
+      @case ('operatingMode') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.OPERATING_MODE' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.operatingModes" valueExpr="id" displayExpr="name" [searchEnabled]="true" [acceptCustomValue]="false"
+              [(value)]="condition.mode"></dx-select-box>
+          </div>
+          <div class="fld">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.STATE' | translateAsync }}</span>
+            <dx-select-box [items]="modeStateItems" valueExpr="value" [displayExpr]="ctx.optionText" [(value)]="condition.active"></dx-select-box>
+          </div>
+          <div class="fld wide">
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.OPERATING_MODE_HINT' | translateAsync }}</span>
+          </div>
+        </div>
+      }
       @case ('trigger') {
         <div class="fields">
           <div class="fld">

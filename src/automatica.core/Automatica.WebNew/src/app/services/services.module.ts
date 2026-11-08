@@ -30,6 +30,7 @@ import { ControlsService } from "./controls.service";
 import { AutomationsService } from "./automations.service";
 import { ShadingService } from "./shading.service";
 import { SecurityVisuService } from "./security-visu.service";
+import { OperatingModesService } from "./operating-modes.service";
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { SecurityVisuService } from "./security-visu.service";
     ControlsService,
     AutomationsService,
     ShadingService,
-    SecurityVisuService
+    SecurityVisuService,
+    OperatingModesService
 
   ]
 })

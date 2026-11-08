@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatica.Core.Automation;
 using Automatica.Core.Shading;
+using Automatica.Core.Internals.OperatingModes;
 using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.Common;
@@ -132,6 +133,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<ILogicEngineDispatcher, LogicEngineDispatcher>();
                 services.AddAutomations();
                 services.AddShading();
+                services.AddSingleton<IOperatingModeService, OperatingModeService>();
 
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 

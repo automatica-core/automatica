@@ -13,6 +13,7 @@ using Automatica.Core.Notification;
 using Microsoft.Extensions.Logging;
 using Innovative.SolarCalculator;
 using Automatica.Core.Shading.Engine;
+using Automatica.Core.Internals.OperatingModes;
 
 namespace Automatica.Core.Automation.Engine
 {
@@ -35,12 +36,14 @@ namespace Automatica.Core.Automation.Engine
         private readonly IServerCloudApi _cloudApi;
         private readonly IRemanentHandler _remanentHandler;
         private readonly IShadingEngine _shadingEngine;
+        private readonly IOperatingModeService _operatingModes;
         private readonly ILogger<CoreAutomationEnvironment> _logger;
 
         public CoreAutomationEnvironment(IDispatcher dispatcher, IDriverNodesStore driverNodesStore, INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache, ILogicInstanceCache logicInstanceCache, IAreaCache areaCache,
             ICategoryCache categoryCache, IControlCache controlCache, ISettingsCache settingsCache, INotificationManager notificationManager,
-            IServerCloudApi cloudApi, IRemanentHandler remanentHandler, IShadingEngine shadingEngine, ILogger<CoreAutomationEnvironment> logger)
+            IServerCloudApi cloudApi, IRemanentHandler remanentHandler, IShadingEngine shadingEngine, ILogger<CoreAutomationEnvironment> logger,
+            IOperatingModeService operatingModes = null)
         {
             _dispatcher = dispatcher;
             _driverNodesStore = driverNodesStore;
@@ -55,6 +58,7 @@ namespace Automatica.Core.Automation.Engine
             _cloudApi = cloudApi;
             _remanentHandler = remanentHandler;
             _shadingEngine = shadingEngine;
+            _operatingModes = operatingModes;
             _logger = logger;
         }
 
@@ -252,6 +256,15 @@ namespace Automatica.Core.Automation.Engine
             }
 
             return new DateTimeOffset(local, Time.LocalTimeZone.GetUtcOffset(local));
+        }
+
+        public bool? IsOperatingModeActive(string mode)
+        {
+            if (_operatingModes == null || !_operatingModes.ModeExists(mode))
+            {
+                return null;
+            }
+            return _operatingModes.IsActive(mode);
         }
 
         public bool? IsShading(Guid controlId)

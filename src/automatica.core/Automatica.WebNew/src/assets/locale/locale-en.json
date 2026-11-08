@@ -11,7 +11,8 @@
     "SETTINGS": "Server Settings",
     "REMOTE": "Remote Server Settings",
     "MCP": "AI Assistant (MCP)",
-    "SMTP": "Email server (SMTP)"
+    "SMTP": "Email server (SMTP)",
+    "OPERATING_MODES": "Operating Modes"
   },
   "COMMON": {
     "LOG": "Log",
@@ -778,6 +779,7 @@
       "LOGIC": "Logic",
       "AUTOMATIONS": "Automations",
       "SHADING": "Shading",
+      "OPERATING_MODES": "Operating modes",
       "VISU_EDITOR": "Visu editor",
       "DEVICES": "Devices & data points",
       "AREAS": "Areas",
@@ -1013,6 +1015,8 @@
           "CONTROL_HINT": "a switch or dimmer is on or off",
           "SHADING": "Automatic shading",
           "SHADING_HINT": "a blind is shaded right now or not",
+          "OPERATINGMODE": "Operating mode",
+          "OPERATINGMODE_HINT": "public holiday, vacation or an own mode is active today",
           "TRIGGER": "Started by trigger",
           "TRIGGER_HINT": "which trigger started the rule"
         },
@@ -1049,6 +1053,8 @@
         "SHADING_AUTOMATIC": "Automatic shading",
         "SHADING_CONDITION_HINT": "Shading means the automatic has lowered the blind because of the sun. Checked again every minute.",
         "SHADING_ACTION_HINT": "Pick blinds one by one, or all blinds of an area or category. Switching on also ends a manual override.",
+        "OPERATING_MODE": "Operating mode",
+        "OPERATING_MODE_HINT": "Operating modes and their times are set up on the Operating modes page. Checked again every minute.",
         "DATAPOINT": "Datapoint",
         "PICK_DATAPOINT": "Select a datapoint",
         "VALUE": "Value",
@@ -1180,6 +1186,10 @@
         "ON": "is shading",
         "OFF": "is not shading"
       },
+      "MODE_STATE": {
+        "ON": "is active today",
+        "OFF": "is not active today"
+      },
       "ENABLE_OPT": {
         "ON": "Switch on",
         "OFF": "Switch off"
@@ -1288,6 +1298,8 @@
         "C_CTRL_OFF": "{{ control }} is off",
         "C_SHADING_ON": "the automatic shading of {{ control }} is shading",
         "C_SHADING_OFF": "the automatic shading of {{ control }} is not shading",
+        "C_MODE_ON": "the operating mode {{ mode }} is active",
+        "C_MODE_OFF": "the operating mode {{ mode }} is not active",
         "C_TRIGGER": "the rule was started by {{ id }}",
         "A_CTRL_ON": "turn on {{ control }}",
         "A_CTRL_OFF": "turn off {{ control }}",
@@ -1347,6 +1359,7 @@
         "RECIPIENTMISSING": "Enter at least one email address.",
         "INVALIDMAILADDRESS": "Not a valid email address.",
         "SHADINGNOTCONFIGURED": "The blind is not set up on the shading page.",
+        "OPERATINGMODENOTFOUND": "The operating mode does not exist (anymore).",
         "NEGATIVEDURATION": "A duration must not be negative.",
         "LOCATIONMISSING": "Sun times need the location (latitude and longitude) in the settings.",
         "SELFREFERENCE": "The rule refers to itself.",
@@ -1712,6 +1725,101 @@
         "M10": "October",
         "M11": "November",
         "M12": "December"
+      }
+    },
+    "OPERATING_MODES": {
+      "TITLE": "Operating modes",
+      "INTRO": "Operating modes say what kind of day it is: public holiday, vacation, school holidays or an own mode. Alarm clocks, the Pulse at and Operating mode logic blocks and the automations use them.",
+      "LOAD_FAILED": "The operating modes could not be loaded.",
+      "SAVED": "Operating modes saved",
+      "RESET": "Discard changes",
+      "TODAY": {
+        "TITLE": "Active today",
+        "NONE": "No operating mode is active today."
+      },
+      "UPCOMING": {
+        "TITLE": "Next 4 weeks",
+        "HINT": "Days with an active operating mode, from the saved settings.",
+        "NONE": "No operating mode in the next 4 weeks."
+      },
+      "MODES": {
+        "TITLE": "Modes",
+        "HINT": "Higher priority comes first. Manual on/off applies to every day until it is set back to Calendar.",
+        "NAME": "Name",
+        "PRIORITY": "Priority",
+        "STATE": "State",
+        "NEW": "New mode, e.g. Home office",
+        "ADD": "Add mode",
+        "DELETE": "Delete mode and its times"
+      },
+      "MANUAL": {
+        "AUTO": "Calendar",
+        "ON": "On",
+        "OFF": "Off"
+      },
+      "MODE": {
+        "PUBLIC_HOLIDAY": "Public holiday",
+        "VACATION": "Vacation",
+        "SCHOOL_HOLIDAYS": "School holidays"
+      },
+      "HOLIDAYS": {
+        "TITLE": "Public holidays",
+        "HINT": "Turns the mode Public holiday on for the holidays of a country. Untick holidays that are not days off for you.",
+        "COUNTRY": "Country",
+        "REGION": "Region",
+        "NONE": "None",
+        "ALL_REGIONS": "Country wide only"
+      },
+      "PERIODS": {
+        "TITLE": "Operating times",
+        "HINT": "Periods in which a mode is active, both days included. Every year repeats day and month each year.",
+        "NAME": "Name",
+        "MODE": "Mode",
+        "START": "From",
+        "END": "To",
+        "YEARLY": "Every year",
+        "ENABLED": "Active",
+        "ADD": "Add time",
+        "DELETE": "Delete time",
+        "EMPTY": "No operating times yet.",
+        "INVALID": "Every operating time needs a mode, a start and an end."
+      },
+      "REASON": {
+        "MANUAL": "switched on by hand",
+        "PERIOD": "operating time"
+      },
+      "HOLIDAY": {
+        "NEW_YEAR": "New Year's Day",
+        "EPIPHANY": "Epiphany",
+        "GOOD_FRIDAY": "Good Friday",
+        "EASTER_SUNDAY": "Easter Sunday",
+        "EASTER_MONDAY": "Easter Monday",
+        "LABOUR_DAY": "Labour Day",
+        "ASCENSION": "Ascension Day",
+        "WHIT_SUNDAY": "Whit Sunday",
+        "WHIT_MONDAY": "Whit Monday",
+        "CORPUS_CHRISTI": "Corpus Christi",
+        "ASSUMPTION": "Assumption Day",
+        "ALL_SAINTS": "All Saints' Day",
+        "IMMACULATE_CONCEPTION": "Immaculate Conception",
+        "CHRISTMAS_EVE": "Christmas Eve",
+        "CHRISTMAS": "Christmas Day",
+        "ST_STEPHEN": "St. Stephen's Day",
+        "NEW_YEARS_EVE": "New Year's Eve",
+        "NATIONAL_DAY_AT": "Austrian National Day",
+        "WOMENS_DAY": "International Women's Day",
+        "CHILDRENS_DAY": "World Children's Day",
+        "GERMAN_UNITY": "German Unity Day",
+        "REFORMATION_DAY": "Reformation Day",
+        "REPENTANCE_DAY": "Day of Repentance and Prayer",
+        "BERCHTOLDS_DAY": "Berchtold's Day",
+        "NATIONAL_DAY_CH": "Swiss National Day",
+        "CANDLEMAS": "Candlemas",
+        "ST_JOSEPH": "St. Joseph's Day",
+        "NATIONAL_DAY_LI": "National Day of Liechtenstein",
+        "NATIVITY_OF_MARY": "Nativity of Mary",
+        "LIBERATION_DAY_IT": "Liberation Day",
+        "REPUBLIC_DAY_IT": "Republic Day"
       }
     },
     "PAGES": {
@@ -2111,6 +2219,35 @@
       "SECURITY_SAVE": "Save",
       "SECURITY_ADD_USER": "Add user",
       "SECURITY_LOG": "Log",
+      "ALARM_CLOCK": {
+        "NEXT": "Next alarm",
+        "NONE": "No alarm",
+        "RINGING": "Alarm!",
+        "SNOOZING": "Snoozing until {{ time }}",
+        "SNOOZE": "Snooze",
+        "CONFIRM": "Stop",
+        "EDIT": "Edit alarms",
+        "ADD": "Add alarm",
+        "DELETE": "Delete alarm",
+        "NAME": "Name",
+        "TIME": "Time",
+        "ENABLED": "On",
+        "DAYS": "Days",
+        "MODES": "Only on operating modes",
+        "MODES_HINT": "An alarm with operating modes rings only on days with one of them (instead of the weekday alarms).",
+        "SUPPRESSED": "Today no alarm ({{ modes }})",
+        "SAVE": "Save",
+        "SAVED": "Alarms saved",
+        "FAILED": "The alarms could not be saved."
+      },
+      "PULSE_AT": {
+        "NEXT": "Next pulse",
+        "NONE": "No pulse planned",
+        "TIME": "Time",
+        "SAVE": "Save",
+        "SAVED": "Time saved",
+        "FAILED": "The time could not be saved."
+      },
       "OPEN_PAGE": "Open",
       "REFRESH": "Refresh",
       "NOTHING_PLAYING": "Nothing playing",
