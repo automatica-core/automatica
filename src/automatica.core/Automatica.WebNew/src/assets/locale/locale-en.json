@@ -2005,7 +2005,17 @@
       "PLAY_PAUSE": "Play / pause",
       "PLAY": "Play",
       "PAUSE": "Pause",
-      "VOLUME": "Volume"
+      "VOLUME": "Volume",
+      "STATUS_OBJECTS": "Objects",
+      "STATUS_ACTIVITY": "Activity",
+      "STATUS_NO_OBJECTS": "No objects reported yet",
+      "STATUS_NO_ACTIVITY": "No changes since the start",
+      "STATUS_OTHER": "Other",
+      "STATUS_ALL_FINE": "Nothing to report",
+      "STATUS_NO_STATUS": "No status yet",
+      "TRACKER_EMPTY": "No entries",
+      "TRACKER_COUNT": "{{ count }} entries",
+      "TRACKER_ENTRIES": "Entries"
     }
   }
 }

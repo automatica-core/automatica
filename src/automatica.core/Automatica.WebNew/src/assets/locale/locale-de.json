@@ -2005,7 +2005,17 @@
       "PLAY_PAUSE": "Wiedergabe / Pause",
       "PLAY": "Wiedergabe",
       "PAUSE": "Pause",
-      "VOLUME": "Lautstärke"
+      "VOLUME": "Lautstärke",
+      "STATUS_OBJECTS": "Objekte",
+      "STATUS_ACTIVITY": "Aktivität",
+      "STATUS_NO_OBJECTS": "Noch keine Objekte gemeldet",
+      "STATUS_NO_ACTIVITY": "Keine Änderungen seit dem Start",
+      "STATUS_OTHER": "Andere",
+      "STATUS_ALL_FINE": "Nichts zu melden",
+      "STATUS_NO_STATUS": "Noch kein Status",
+      "TRACKER_EMPTY": "Keine Einträge",
+      "TRACKER_COUNT": "{{ count }} Einträge",
+      "TRACKER_ENTRIES": "Einträge"
     }
   }
 }

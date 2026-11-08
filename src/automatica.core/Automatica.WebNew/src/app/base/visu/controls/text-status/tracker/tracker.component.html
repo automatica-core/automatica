@@ -1,0 +1,22 @@
+<app-visualization-control icon="clipboard-list" [hint]="displayText" [location]="location"
+  [state]="latest ? time(latest.time) : undefined"
+  [value]="latest?.text"
+  [subValue]="latest ? countText : ('UI.VISU.TRACKER_EMPTY' | translateAsync)"
+  [hasPopup]="true" (onPopupShowing)="onPopupShowing()">
+
+  <div popup class="tr-popup">
+    <h3 class="tr-heading">{{ 'UI.VISU.TRACKER_ENTRIES' | translateAsync }}</h3>
+    @if (entries.length === 0) {
+      <p class="tr-empty">{{ 'UI.VISU.TRACKER_EMPTY' | translateAsync }}</p>
+    } @else {
+      <ol class="tr-list">
+        @for (entry of entries; track $index) {
+          <li>
+            <time class="tr-time" [attr.datetime]="entry.time" [attr.title]="fullTime(entry.time)">{{ time(entry.time) }}</time>
+            <span class="tr-text">{{ entry.text }}</span>
+          </li>
+        }
+      </ol>
+    }
+  </div>
+</app-visualization-control>

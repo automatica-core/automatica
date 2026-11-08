@@ -25,6 +25,9 @@ import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.co
 import { ShutterComponent } from "./shutter/shutter.component";
 import { CameraComponent } from "./camera/camera.component";
 import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
+import { StatusComponent } from "./text-status/status/status.component";
+import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
+import { TrackerComponent } from "./text-status/tracker/tracker.component";
 
 @NgModule({
   imports: [
@@ -72,7 +75,10 @@ import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
     ThreeRangeGaugeComponent,
     ShutterComponent,
     CameraComponent,
-    EnergyFlowComponent
+    EnergyFlowComponent,
+    StatusComponent,
+    StatusMonitorComponent,
+    TrackerComponent
   ],
   exports: [
     VisuItemComponent

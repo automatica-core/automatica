@@ -37,7 +37,23 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("3733855a-667d-4cdd-bd43-6a7246046e4d")]
         Camera = 15,
         [VisuMobileObjectTemplateType("8f0c6d1e-3b7a-4c52-9e41-6a2d5f8b9c03")]
-        EnergyFlow = 16
+        EnergyFlow = 16,
+        // 17..22 and 26 are claimed by other features in progress (room controller, garage, security, ...); keep the numbers unique
+        /// <summary>
+        /// Status text, icon and color of the status logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("5d2f7a1c-8e34-4b6a-9c1d-2f7e3a9b4c17")]
+        Status = 23,
+        /// <summary>
+        /// Counts per state, objects and activity log of the status monitor logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("6e3a8b2d-9f45-4c7b-8d2e-3a8f4b0c5d18")]
+        StatusMonitor = 24,
+        /// <summary>
+        /// Event log of the tracker logic (string operations plugin)
+        /// </summary>
+        [VisuMobileObjectTemplateType("7f4b9c3e-0a56-4d8c-9e3f-4b9a5c1d6e19")]
+        Tracker = 25
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

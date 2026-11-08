@@ -82,6 +82,7 @@ namespace Automatica.Core.Visu
 
             AddCameraControl(factory);
             AddEnergyFlowControl(factory);
+            AddTextStatusControls(factory);
         }
 
         /// <summary>
@@ -93,6 +94,27 @@ namespace Automatica.Core.Visu
             factory.CreateVisuMobileTemplate(energyFlow, "VISU.OBJECT.ENERGY_FLOW.NAME", "VISU.OBJECT.ENERGY_FLOW.DESCRIPTION", "energy-flow",
                 "VISU.CATEGORY.COMMON.NAME", 2, 2, true);
             AddCommonProperty(energyFlow, factory);
+        }
+
+        /// <summary>
+        /// Tiles of the status, status monitor and tracker logics of the string operations plugin
+        /// </summary>
+        private void AddTextStatusControls(VisuMobileTemplateFactory factory)
+        {
+            var status = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Status);
+            factory.CreateVisuMobileTemplate(status, "VISU.OBJECT.STATUS.NAME", "VISU.OBJECT.STATUS.DESCRIPTION", "status",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(status, factory);
+
+            var statusMonitor = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.StatusMonitor);
+            factory.CreateVisuMobileTemplate(statusMonitor, "VISU.OBJECT.STATUS_MONITOR.NAME", "VISU.OBJECT.STATUS_MONITOR.DESCRIPTION", "status-monitor",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(statusMonitor, factory);
+
+            var tracker = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Tracker);
+            factory.CreateVisuMobileTemplate(tracker, "VISU.OBJECT.TRACKER.NAME", "VISU.OBJECT.TRACKER.DESCRIPTION", "tracker",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(tracker, factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)
