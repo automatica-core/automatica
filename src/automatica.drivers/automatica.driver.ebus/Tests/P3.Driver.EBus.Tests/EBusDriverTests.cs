@@ -224,6 +224,21 @@ namespace P3.Driver.EBus.Tests
             }
         }
 
+        [Fact]
+        public void Manifest_ShipsTheProtocolLibrary()
+        {
+            // the plugin package only contains the output and the listed dependencies, without the protocol library the server cannot create the templates
+            var factory = typeof(EBusFactory.EBusFactory).Assembly;
+            using var stream = factory.GetManifestResourceStream("P3.Driver.EBusFactory.automatica-manifest.json");
+            using var json = JsonDocument.Parse(stream!);
+            var dependencies = json.RootElement.GetProperty("Automatica").GetProperty("Dependencies").EnumerateArray().Select(a => a.GetString()).ToList();
+
+            var ownLibraries = factory.GetReferencedAssemblies().Where(a => a.Name!.StartsWith("P3.Driver.EBus")).Select(a => $"{a.Name}.dll").ToList();
+
+            Assert.Contains("P3.Driver.EBus.dll", ownLibraries);
+            Assert.All(ownLibraries, library => Assert.Contains(library, dependencies));
+        }
+
         public class Recorder : DispatchProxy
         {
             public Action<string, object[]> OnCall { get; set; }
