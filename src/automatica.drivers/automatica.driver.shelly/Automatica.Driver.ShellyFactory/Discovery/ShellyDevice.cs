@@ -36,4 +36,9 @@
         public string IpAddress { get;  }
 
     }
+
+    /// <summary>
+    /// A Shelly found by mDNS: <see cref="Id"/> is the announced name (shellyplus1pm-a8032ab12345, shelly1-A4CF12F3D2B1), it ends with the MAC.
+    /// </summary>
+    public sealed record ShellyDiscoveredHost(string Id, string IpAddress, int? Generation);
 }

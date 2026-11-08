@@ -1,0 +1,82 @@
+{
+  "gen": 2,
+  "deviceinfo": {
+    "name": null,
+    "id": "shellyplusht-c049ef8b1d2e",
+    "mac": "C049EF8B1D2E",
+    "slot": 0,
+    "model": "SNSN-0013A",
+    "gen": 2,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "PlusHT",
+    "auth_en": false,
+    "auth_domain": null
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": true
+    },
+    "sys": {
+      "mac": "C049EF8B1D2E",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {},
+      "wakeup_reason": {
+        "boot": "deepsleep_wake",
+        "cause": "periodic"
+      },
+      "wakeup_period": 7200
+    },
+    "temperature:0": {
+      "id": 0,
+      "tC": 22.4,
+      "tF": 72.3
+    },
+    "humidity:0": {
+      "id": 0,
+      "rh": 45.6
+    },
+    "devicepower:0": {
+      "id": 0,
+      "battery": {
+        "V": 5.6,
+        "percent": 87
+      },
+      "external": {
+        "present": false
+      }
+    },
+    "ht_ui": {}
+  },
+  "config": {
+    "sys": {
+      "device": {
+        "name": "Nursery"
+      }
+    }
+  }
+}

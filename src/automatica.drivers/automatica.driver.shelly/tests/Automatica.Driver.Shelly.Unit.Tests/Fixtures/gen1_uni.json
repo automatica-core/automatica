@@ -1,0 +1,77 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHUNI-1",
+    "mac": "E09806A1B2C3",
+    "auth": false,
+    "fw": "20230913-114008/v1.14.0-gcb84623",
+    "num_outputs": 2
+  },
+  "settings": {
+    "name": "Garage",
+    "relays": [
+      {
+        "name": "Gate"
+      },
+      {
+        "name": null
+      }
+    ]
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "relays": [
+      {
+        "ison": false,
+        "has_timer": false,
+        "source": "input"
+      },
+      {
+        "ison": true,
+        "has_timer": false,
+        "source": "http"
+      }
+    ],
+    "inputs": [
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      },
+      {
+        "input": 1,
+        "event": "",
+        "event_cnt": 0
+      }
+    ],
+    "adcs": [
+      {
+        "voltage": 12.1
+      }
+    ],
+    "ext_temperature": {
+      "0": {
+        "hwID": "28aa1b2c3d4e5f60",
+        "tC": 22.1,
+        "tF": 71.8
+      }
+    },
+    "ext_humidity": {
+      "0": {
+        "hwID": "000000000000",
+        "hum": 40.1
+      }
+    },
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

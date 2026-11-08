@@ -1,0 +1,169 @@
+{
+  "gen": 3,
+  "deviceinfo": {
+    "name": null,
+    "id": "shelly1pmg3-e4b063a1b2c3",
+    "mac": "E4B063A1B2C3",
+    "slot": 0,
+    "model": "S3SW-001P16EU",
+    "gen": 3,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "S1PMG3",
+    "auth_en": false,
+    "auth_domain": null
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "E4B063A1B2C3",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "switch:0": {
+      "id": 0,
+      "source": "init",
+      "output": false,
+      "apower": 0.0,
+      "voltage": 230.0,
+      "freq": 50.0,
+      "current": 0.0,
+      "pf": 0.0,
+      "aenergy": {
+        "total": 0.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "ret_aenergy": {
+        "total": 0.0,
+        "by_minute": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minute_ts": 1700000000
+      },
+      "temperature": {
+        "tC": 40.0,
+        "tF": 104.0
+      }
+    },
+    "input:0": {
+      "id": 0,
+      "state": false
+    },
+    "blugw": {},
+    "bthomedevice:200": {
+      "id": 200,
+      "rssi": -70,
+      "battery": 95,
+      "packet_id": 12,
+      "last_updated_ts": 1700000000
+    },
+    "bthomedevice:201": {
+      "id": 201,
+      "rssi": -80,
+      "battery": 100,
+      "packet_id": 3,
+      "last_updated_ts": 1700000000
+    },
+    "bthomesensor:200": {
+      "id": 200,
+      "value": 22.3,
+      "last_updated_ts": 1700000000
+    },
+    "bthomesensor:201": {
+      "id": 201,
+      "value": 55,
+      "last_updated_ts": 1700000000
+    },
+    "bthomesensor:202": {
+      "id": 202,
+      "value": true,
+      "last_updated_ts": 1700000000
+    },
+    "bthomesensor:203": {
+      "id": 203,
+      "value": 1,
+      "last_updated_ts": 1700000000
+    }
+  },
+  "config": {
+    "bthomedevice:200": {
+      "id": 200,
+      "addr": "7c:c6:b6:61:e8:e3",
+      "name": "BLU H&T bath",
+      "key": null,
+      "meta": {}
+    },
+    "bthomedevice:201": {
+      "id": 201,
+      "addr": "38:39:8f:70:b1:a2",
+      "name": null,
+      "key": null,
+      "meta": {}
+    },
+    "bthomesensor:200": {
+      "id": 200,
+      "addr": "7c:c6:b6:61:e8:e3",
+      "name": null,
+      "obj_id": 69,
+      "idx": 0,
+      "meta": {}
+    },
+    "bthomesensor:201": {
+      "id": 201,
+      "addr": "7c:c6:b6:61:e8:e3",
+      "name": null,
+      "obj_id": 46,
+      "idx": 0,
+      "meta": {}
+    },
+    "bthomesensor:202": {
+      "id": 202,
+      "addr": "38:39:8f:70:b1:a2",
+      "name": "Terrace window",
+      "obj_id": 45,
+      "idx": 0,
+      "meta": {}
+    },
+    "bthomesensor:203": {
+      "id": 203,
+      "addr": "38:39:8f:70:b1:a2",
+      "name": null,
+      "obj_id": 58,
+      "idx": 0,
+      "meta": {}
+    }
+  }
+}
