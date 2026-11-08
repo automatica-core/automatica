@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule, DxPopupModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule, DxPopupModule, DxTagBoxModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -32,6 +32,12 @@ import { RoomControllerComponent } from "./room-controller/room-controller.compo
 import { ClimateUnitComponent } from "./climate/climate-unit.component";
 import { ClimateCentralComponent } from "./climate/climate-central.component";
 import { SecurityComponent } from "./security/security.component";
+import { LightingControllerComponent } from "./lighting-controller/lighting-controller.component";
+import { GarageComponent } from "./garage/garage.component";
+import { MediaControllerComponent } from "./media-controller/media-controller.component";
+import { IrrigationComponent } from "./irrigation/irrigation.component";
+import { AlarmClockComponent } from "./alarm-clock/alarm-clock.component";
+import { PulseAtComponent } from "./pulse-at/pulse-at.component";
 
 @NgModule({
   imports: [
@@ -61,7 +67,8 @@ import { SecurityComponent } from "./security/security.component";
     DxNumberBoxModule,
     DxLinearGaugeModule,
     DxCircularGaugeModule,
-    DxPopupModule
+    DxPopupModule,
+    DxTagBoxModule
   ],
   declarations: [
     VisuItemComponent,
@@ -86,7 +93,13 @@ import { SecurityComponent } from "./security/security.component";
     RoomControllerComponent,
     ClimateUnitComponent,
     ClimateCentralComponent,
-    SecurityComponent
+    SecurityComponent,
+    LightingControllerComponent,
+    GarageComponent,
+    MediaControllerComponent,
+    IrrigationComponent,
+    AlarmClockComponent,
+    PulseAtComponent
   ],
   exports: [
     VisuItemComponent

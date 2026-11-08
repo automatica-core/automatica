@@ -54,8 +54,8 @@ RUN apt install curl -y
 
 # frp for Remote Connect. Bump deliberately: version plus the sha256 from that release's
 # frp_sha256_checksums.txt. Keep it compatible with the frps version on the cloud tunnel server.
-ARG FRP_VERSION=0.71.1
-ARG FRP_SHA256=8eb6fe66a3b36db24ca0de44fb01e6742d0ff60e30f462c9662f41813bbf4376
+ARG FRP_VERSION=0.72.0
+ARG FRP_SHA256=d0531b20c7fef4c7d2efb281931e62f0612bb7f0de62d200fa9020fd58d319ca
 RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_arm.tar.gz \
  && echo "${FRP_SHA256}  frp.tgz" | sha256sum -c - \
  && tar xzf frp.tgz \

@@ -61,6 +61,8 @@ export function newCondition(type: ConditionType): ConditionDefinition {
             return { type };
         case "shading":
             return { type, shading: true };
+        case "operatingMode":
+            return { type, mode: "public-holiday", active: true };
     }
 }
 
@@ -111,7 +113,8 @@ const CONDITION_ICONS: Record<ConditionType, string> = {
     sun: "sun",
     control: "toggle-on",
     trigger: "bolt",
-    shading: "sun"
+    shading: "sun",
+    operatingMode: "calendar-days"
 };
 
 const ACTION_ICONS: Record<ActionType, string> = {

@@ -1,0 +1,99 @@
+<app-visualization-control [hint]="displayText" [location]="location" icon="tv" [active]="power" [pressable]="true"
+  [pressed]="power" [disabled]="locked" [hasPopup]="true" (press)="togglePower()"
+  [state]="power ? modeName : ('UI.VISU.MEDIA_CONTROLLER.OFF' | translateAsync)"
+  [subValue]="power && volume !== undefined ? ('UI.VISU.VOLUME' | translateAsync) + ' ' + volume + ' %' : ''">
+
+  <div popup class="remote">
+    @if (locked) {
+      <div class="remote-locked"><fa-icon icon="lock"></fa-icon> {{ 'UI.VISU.MEDIA_CONTROLLER.LOCKED' | translateAsync }}</div>
+    }
+
+    <div class="remote-modes" role="radiogroup" [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.MODES' | translateAsync">
+      <button type="button" class="remote-btn is-power" [class.is-on]="power" (click)="togglePower()" [disabled]="locked"
+        [attr.aria-pressed]="power" [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.POWER' | translateAsync"
+        [attr.title]="'UI.VISU.MEDIA_CONTROLLER.POWER' | translateAsync">
+        <fa-icon icon="power-off"></fa-icon>
+      </button>
+      @for (m of modes; track m.mode) {
+        <button type="button" class="remote-chip" role="radio" [class.is-on]="m.mode === mode" [attr.aria-checked]="m.mode === mode"
+          (click)="selectMode(m.mode)" [disabled]="locked">
+          {{ m.name || (('UI.VISU.MEDIA_CONTROLLER.MODE' | translateAsync) + ' ' + m.mode) }}
+        </button>
+      }
+    </div>
+
+    @if (has('volume')) {
+      <div class="remote-row">
+        <span class="remote-label">{{ 'UI.VISU.VOLUME' | translateAsync }}</span>
+        <button type="button" class="remote-btn" (click)="key('volumeDown')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.VOLUME_DOWN' | translateAsync"><fa-icon icon="volume-low"></fa-icon></button>
+        <input type="range" class="remote-range" min="0" max="100" step="1" [value]="volume ?? 0" (change)="setVolume($event)"
+          [disabled]="locked || !power" [attr.aria-label]="'UI.VISU.VOLUME' | translateAsync">
+        <button type="button" class="remote-btn" (click)="key('volumeUp')" [disabled]="locked"
+          [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.VOLUME_UP' | translateAsync"><fa-icon icon="volume-high"></fa-icon></button>
+        <button type="button" class="remote-btn" (click)="key('mute')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.MUTE' | translateAsync"><fa-icon icon="volume-xmark"></fa-icon></button>
+      </div>
+    }
+
+    @if (has('channel')) {
+      <div class="remote-row">
+        <span class="remote-label">{{ 'UI.VISU.MEDIA_CONTROLLER.CHANNEL' | translateAsync }}</span>
+        <button type="button" class="remote-btn" (click)="key('channelDown')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.CHANNEL_DOWN' | translateAsync"><fa-icon icon="minus"></fa-icon></button>
+        <span class="remote-value">{{ channel ?? '–' }}</span>
+        <button type="button" class="remote-btn" (click)="key('channelUp')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.CHANNEL_UP' | translateAsync"><fa-icon icon="plus"></fa-icon></button>
+        <button type="button" class="remote-btn" [class.is-on]="showNumpad" (click)="showNumpad = !showNumpad" [disabled]="locked || !power"
+          [attr.aria-expanded]="showNumpad" [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.NUMPAD' | translateAsync"
+          [attr.title]="'UI.VISU.MEDIA_CONTROLLER.NUMPAD' | translateAsync"><fa-icon icon="hashtag"></fa-icon></button>
+      </div>
+      @if (showNumpad && power) {
+        <div class="remote-numpad">
+          @for (d of digits; track d) {
+            <button type="button" class="remote-btn" [class.is-zero]="d === 0" (click)="digit(d)" [disabled]="locked">{{ d }}</button>
+          }
+        </div>
+      }
+    }
+
+    @if (has('navigation')) {
+      <div class="remote-nav">
+        <div class="remote-dpad">
+          <button type="button" class="remote-btn up" (click)="key('navUp')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.UP' | translateAsync"><fa-icon icon="chevron-up"></fa-icon></button>
+          <button type="button" class="remote-btn left" (click)="key('navLeft')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.LEFT' | translateAsync"><fa-icon icon="chevron-left"></fa-icon></button>
+          <button type="button" class="remote-btn ok" (click)="key('navOk')" [disabled]="locked || !power">OK</button>
+          <button type="button" class="remote-btn right" (click)="key('navRight')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.RIGHT' | translateAsync"><fa-icon icon="chevron-right"></fa-icon></button>
+          <button type="button" class="remote-btn down" (click)="key('navDown')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.DOWN' | translateAsync"><fa-icon icon="chevron-down"></fa-icon></button>
+        </div>
+        <div class="remote-side">
+          <button type="button" class="remote-btn" (click)="key('back')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.BACK' | translateAsync" [attr.title]="'UI.VISU.MEDIA_CONTROLLER.BACK' | translateAsync">
+            <fa-icon icon="arrow-left"></fa-icon></button>
+          <button type="button" class="remote-btn" (click)="key('home')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.HOME' | translateAsync" [attr.title]="'UI.VISU.MEDIA_CONTROLLER.HOME' | translateAsync">
+            <fa-icon icon="house"></fa-icon></button>
+          <button type="button" class="remote-btn" (click)="key('menu')" [disabled]="locked || !power"
+            [attr.aria-label]="'UI.VISU.MEDIA_CONTROLLER.MENU' | translateAsync" [attr.title]="'UI.VISU.MEDIA_CONTROLLER.MENU' | translateAsync">
+            <fa-icon icon="bars"></fa-icon></button>
+        </div>
+      </div>
+    }
+
+    @if (has('playback')) {
+      <div class="remote-row is-center">
+        <button type="button" class="remote-btn" (click)="key('previous')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.PREVIOUS' | translateAsync"><fa-icon icon="backward-step"></fa-icon></button>
+        <button type="button" class="remote-btn is-wide" (click)="key('playPause')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.PLAY_PAUSE' | translateAsync"><fa-icon icon="play"></fa-icon><fa-icon icon="pause"></fa-icon></button>
+        <button type="button" class="remote-btn" (click)="key('next')" [disabled]="locked || !power"
+          [attr.aria-label]="'UI.VISU.NEXT' | translateAsync"><fa-icon icon="forward-step"></fa-icon></button>
+      </div>
+    }
+  </div>
+
+</app-visualization-control>

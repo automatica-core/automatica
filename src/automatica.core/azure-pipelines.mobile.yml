@@ -1,0 +1,173 @@
+# Android and iOS apps. Runs only when the frontend changes; the core build (automatica.core, def 12) does not
+# build the apps any more.
+#
+# Pipeline variables to set as secrets on this pipeline:
+#   DEVEXPRESS_LICENSE           DevExtreme license key, the frontend build writes it into src/devextreme-license.ts
+#   ANDROID_KEYSTORE_PASSWORD    password of the android.jks secure file (store and key0 key use the same one)
+# Optional:
+#   GITHUB_TOKEN                 lets the Gradle download fallback use the GitHub API without the anonymous rate limit
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - develop
+      - features/*
+  paths:
+    include:
+      - Automatica.WebNew
+      - azure-pipelines.mobile.yml
+      - CI/seed-gradle-wrapper.sh
+
+pr: none
+
+variables:
+  - group: automatica.core.8
+  - name: webDir
+    value: $(Build.SourcesDirectory)/Automatica.WebNew
+  - name: npmFeed
+    value: e4041fe1-194b-4bf6-a207-cf62a2ed06fd
+  - name: NODE_OPTIONS
+    value: --max_old_space_size=4096
+
+jobs:
+  - job: android
+    displayName: Build Android
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      gradleWrapperProps: Automatica.WebNew/android/gradle/wrapper/gradle-wrapper.properties
+      gradleDistCache: $(Pipeline.Workspace)/.gradle-dist
+    steps:
+      - checkout: self
+        fetchDepth: 1
+
+      - task: NodeTool@0
+        displayName: Use Node 24
+        inputs:
+          versionSpec: 24.x
+
+      - task: Npm@1
+        displayName: npm ci
+        inputs:
+          command: ci
+          workingDir: $(webDir)
+          customRegistry: useFeed
+          customFeed: $(npmFeed)
+
+      - script: npm run build-prod
+        displayName: Build frontend
+        workingDirectory: $(webDir)
+        env:
+          DevExpress_License: $(DEVEXPRESS_LICENSE)
+
+      - script: npx cap sync android
+        displayName: cap sync android
+        workingDirectory: $(webDir)
+
+      - task: JavaToolInstaller@0
+        displayName: Use Java 21
+        inputs:
+          versionSpec: '21'
+          jdkArchitectureOption: x64
+          jdkSourceOption: PreInstalled
+
+      - task: Cache@2
+        displayName: Cache Gradle distribution
+        inputs:
+          key: 'gradle-dist | "$(Agent.OS)" | $(gradleWrapperProps)'
+          path: $(gradleDistCache)
+
+      - script: bash CI/seed-gradle-wrapper.sh "$(gradleWrapperProps)" "$(gradleDistCache)"
+        displayName: Get Gradle distribution
+        env:
+          GITHUB_TOKEN: $(GITHUB_TOKEN)
+
+      - script: ./gradlew build :app:bundleRelease -PversionCode=$(Build.BuildId) -PversionName=$(AUTOMATICA_SEM_VERSION) --no-daemon
+        displayName: gradlew build + bundleRelease
+        workingDirectory: Automatica.WebNew/android
+        env:
+          GRADLE_OPTS: -Xmx1024m
+
+      - task: AndroidSigning@3
+        displayName: Sign and align APKs
+        inputs:
+          apkFiles: Automatica.WebNew/android/app/build/outputs/apk/**/*.apk
+          apksign: true
+          apksignerKeystoreFile: android.jks
+          apksignerKeystorePassword: $(ANDROID_KEYSTORE_PASSWORD)
+          apksignerKeystoreAlias: key0
+          apksignerKeyPassword: $(ANDROID_KEYSTORE_PASSWORD)
+          apksignerArguments: --verbose
+          zipalign: true
+
+      - task: AndroidSigning@3
+        displayName: Sign and align AABs
+        inputs:
+          apkFiles: Automatica.WebNew/android/app/build/outputs/**/*.aab
+          apksign: true
+          apksignerKeystoreFile: android.jks
+          apksignerKeystorePassword: $(ANDROID_KEYSTORE_PASSWORD)
+          apksignerKeystoreAlias: key0
+          apksignerKeyPassword: $(ANDROID_KEYSTORE_PASSWORD)
+          apksignerArguments: --min-sdk-version 26 --verbose
+          zipalign: true
+
+      - task: CopyFiles@2
+        displayName: Copy APK and AAB files
+        inputs:
+          SourceFolder: Automatica.WebNew/android/app/build/outputs
+          Contents: |
+            **/*.apk
+            **/*.aab
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: android'
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: android
+
+  - job: ios
+    displayName: Build iOS
+    pool:
+      vmImage: macOS-latest
+    steps:
+      - checkout: self
+        fetchDepth: 1
+
+      - task: NodeTool@0
+        displayName: Use Node 24
+        inputs:
+          versionSpec: 24.x
+
+      - task: Npm@1
+        displayName: npm ci
+        inputs:
+          command: ci
+          workingDir: $(webDir)
+          customRegistry: useFeed
+          customFeed: $(npmFeed)
+
+      - script: npm run build-prod
+        displayName: Build frontend
+        workingDirectory: $(webDir)
+        env:
+          DevExpress_License: $(DEVEXPRESS_LICENSE)
+
+      # also runs pod install for ios/App/Podfile
+      - script: npx cap sync ios
+        displayName: cap sync ios
+        workingDirectory: $(webDir)
+
+      # unsigned build: checks that the app compiles, there is no signing setup for an .ipa yet
+      - task: Xcode@5
+        displayName: Xcode build
+        inputs:
+          actions: build
+          xcWorkspacePath: Automatica.WebNew/ios/App/App.xcworkspace
+          scheme: App
+          configuration: Release
+          sdk: iphoneos
+          signingOption: nosign
+          useXcpretty: true

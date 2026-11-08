@@ -151,6 +151,16 @@ namespace Automatica.Core.Automation.Engine
                 case ShadingCondition shading:
                     ShadingBlind(shading.Control, path);
                     break;
+                case OperatingModeCondition operatingMode:
+                    if (string.IsNullOrWhiteSpace(operatingMode.Mode))
+                    {
+                        Error(path, "valueMissing");
+                    }
+                    else if (_environment.IsOperatingModeActive(operatingMode.Mode) == null)
+                    {
+                        Error(path, "operatingModeNotFound", operatingMode.Mode);
+                    }
+                    break;
                 case TriggeredByCondition triggeredBy when string.IsNullOrWhiteSpace(triggeredBy.TriggerId):
                     Error(path, "valueMissing");
                     break;

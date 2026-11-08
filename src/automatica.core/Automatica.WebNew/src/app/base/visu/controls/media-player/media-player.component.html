@@ -1,4 +1,7 @@
-<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false">
+<app-visualization-control #ctrl [width]="2" [useFullContainer]="true" [showIcon]="false" [hasPopup]="stations.length > 0"
+  [hint]="displayText" [location]="location" [icon]="'radio'"
+  [state]="currentStation?.name || ('UI.VISU.RADIO_STATIONS' | translateAsync)"
+  (onPopupShowing)="loadStations()">
   <div control_full class="media" [class.has-art]="!!albumArt" [class.is-playing]="isPlaying" role="group"
     [attr.aria-label]="displayText">
     @if (albumArt) {
@@ -35,6 +38,13 @@
         [attr.aria-label]="'UI.VISU.NEXT' | translateAsync" [attr.title]="'UI.VISU.NEXT' | translateAsync">
         <fa-icon icon="forward-step"></fa-icon>
       </button>
+      @if (stations.length > 0) {
+        <button type="button" class="media-btn" [class.is-on]="!!currentStation" (click)="ctrl.openPopup($event)"
+          aria-haspopup="dialog" [attr.aria-label]="'UI.VISU.RADIO_STATIONS' | translateAsync"
+          [attr.title]="('UI.VISU.RADIO_STATIONS' | translateAsync) + (currentStation ? ': ' + currentStation.name : '')">
+          <fa-icon icon="radio"></fa-icon>
+        </button>
+      }
 
       <div class="media-volume">
         <fa-icon icon="volume-low" aria-hidden="true"></fa-icon>
@@ -45,5 +55,15 @@
         </dx-slider>
       </div>
     </div>
+  </div>
+
+  <div popup class="media-stations" role="list" [attr.aria-label]="'UI.VISU.RADIO_STATIONS' | translateAsync">
+    @for (station of stations; track station.id) {
+      <button type="button" role="listitem" class="media-station" [class.is-on]="station === currentStation"
+        [attr.aria-current]="station === currentStation ? 'true' : null" (click)="selectStation(station)">
+        <fa-icon [icon]="station === currentStation && isPlaying ? 'volume-high' : 'radio'" aria-hidden="true"></fa-icon>
+        <span class="media-station-name">{{ station.name }}</span>
+      </button>
+    }
   </div>
 </app-visualization-control>

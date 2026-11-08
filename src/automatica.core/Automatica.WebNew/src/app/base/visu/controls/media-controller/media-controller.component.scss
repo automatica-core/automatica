@@ -1,0 +1,180 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.remote {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.remote-locked {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.remote-modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.remote-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    &.is-center {
+        justify-content: center;
+    }
+}
+
+.remote-label {
+    flex: 1;
+    min-width: 0;
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
+.remote-value {
+    min-width: 3ch;
+    text-align: center;
+    font-family: var(--font-data, inherit);
+    font-weight: 600;
+}
+
+.remote-range {
+    flex: 2;
+    min-width: 60px;
+    accent-color: var(--accent);
+}
+
+.remote-btn,
+.remote-chip {
+    appearance: none;
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:active:not(:disabled) {
+        background: var(--accent-soft);
+    }
+
+    &.is-on {
+        background: var(--accent-fill);
+        border-color: var(--accent);
+        color: var(--on-accent);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+}
+
+.remote-btn {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    &.is-wide {
+        width: 64px;
+    }
+
+    &.is-power.is-on {
+        background: color-mix(in srgb, var(--lamp) 22%, var(--surface-2));
+        border-color: var(--lamp);
+        color: var(--fg);
+    }
+}
+
+.remote-chip {
+    height: 40px;
+    padding: 0 var(--space-3);
+}
+
+.remote-numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 56px);
+    gap: var(--space-2);
+    justify-content: center;
+
+    .remote-btn {
+        width: 56px;
+        font-size: var(--text-md, 16px);
+        font-weight: 600;
+    }
+
+    .is-zero {
+        grid-column: 2;
+    }
+}
+
+.remote-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4, 24px);
+}
+
+.remote-dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    gap: 4px;
+
+    .remote-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .up {
+        grid-area: 1 / 2;
+    }
+
+    .left {
+        grid-area: 2 / 1;
+    }
+
+    .ok {
+        grid-area: 2 / 2;
+        border-radius: 50%;
+        font-weight: 600;
+    }
+
+    .right {
+        grid-area: 2 / 3;
+    }
+
+    .down {
+        grid-area: 3 / 2;
+    }
+}
+
+.remote-side {
+    display: grid;
+    gap: var(--space-2);
+}

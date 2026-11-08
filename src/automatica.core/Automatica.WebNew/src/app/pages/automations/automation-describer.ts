@@ -374,6 +374,8 @@ export class AutomationDescriber {
                 return this.s("C_TRIGGER", { id: condition.triggerId || this.t("VALUE.UNSET") }, html);
             case "shading":
                 return this.s(condition.shading ? "C_SHADING_ON" : "C_SHADING_OFF", { control: this.controlLabel(condition.control) }, html);
+            case "operatingMode":
+                return this.s(condition.active ? "C_MODE_ON" : "C_MODE_OFF", { mode: this.lookups.operatingModeName(condition.mode) ?? condition.mode ?? this.t("VALUE.UNSET") }, html);
         }
         return this.typeLabel("condition", (condition as any).type ?? "");
     }

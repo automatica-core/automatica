@@ -281,7 +281,8 @@ namespace Automatica.Core.Internals.Templates
             string key,
             Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
         {
-            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
+            // the key, not the name: visu tiles, GetDataForVisu and automations look parameters up by key
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
                 defaultValue, false);
         }
 

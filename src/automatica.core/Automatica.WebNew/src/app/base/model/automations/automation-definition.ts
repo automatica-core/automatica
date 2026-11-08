@@ -89,9 +89,9 @@ export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | Co
 
 // ---------- conditions ----------
 
-export type ConditionType = "group" | "datapoint" | "time" | "sun" | "control" | "trigger" | "shading";
+export type ConditionType = "group" | "datapoint" | "time" | "sun" | "control" | "trigger" | "shading" | "operatingMode";
 /** the leaf types, a group is added with its own button */
-export const CONDITION_TYPES: ConditionType[] = ["datapoint", "time", "sun", "control", "shading", "trigger"];
+export const CONDITION_TYPES: ConditionType[] = ["datapoint", "time", "sun", "control", "shading", "operatingMode", "trigger"];
 
 export type GroupOperator = "all" | "any" | "not";
 export const GROUP_OPERATORS: GroupOperator[] = ["all", "any", "not"];
@@ -153,8 +153,15 @@ export interface ShadingCondition {
     shading: boolean;
 }
 
+/** an operating mode (public holiday, vacation, own modes) is (or is not) active today */
+export interface OperatingModeCondition {
+    type: "operatingMode";
+    mode?: string;
+    active: boolean;
+}
+
 export type ConditionDefinition = ConditionGroup | DatapointCondition | TimeCondition | SunCondition | ControlCondition | TriggeredByCondition
-    | ShadingCondition;
+    | ShadingCondition | OperatingModeCondition;
 
 // ---------- actions ----------
 

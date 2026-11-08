@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using P3.Driver.Sonos.Models;
 using P3.Driver.Sonos.Upnp.Services;
@@ -13,6 +14,24 @@ namespace P3.Driver.Sonos
         private readonly IContentDirectoryService _contentDirectoryService;
         // plain '&': the SOAP request builder XML-escapes argument values (SecurityElement.Escape)
         public const string TuneInMediaUrl = "x-sonosapi-stream:{0}?sid=254&flags=32";
+
+        /// <summary>
+        /// The media url of a radio station: a TuneIn id ("s8007", or just the number) becomes a TuneIn stream,
+        /// anything with a scheme (x-rincon-mp3radio://, http://, x-sonosapi-stream:...) is played as it is
+        /// </summary>
+        public static string RadioStationUrl(string station)
+        {
+            station = (station ?? "").Trim();
+            if (station.Contains(':'))
+            {
+                return station;
+            }
+            if (station.Length > 0 && station.All(char.IsDigit))
+            {
+                station = "s" + station;
+            }
+            return string.Format(TuneInMediaUrl, station);
+        }
 
         public SonosController(IAvTransportService avTransportService,
             IRenderingControlService renderingControlService,

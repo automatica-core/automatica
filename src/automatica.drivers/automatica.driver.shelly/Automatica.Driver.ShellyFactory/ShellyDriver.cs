@@ -341,6 +341,12 @@ namespace Automatica.Driver.ShellyFactory
                 {
                     return await ShellyNodeBuilder.ProbeAsync(DriverContext.NodeTemplateFactory, address, credentials, DriverContext.Logger, token, ProbeTimeout);
                 }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    // one address that misbehaves must not fail the whole scan
+                    DriverContext.Logger.LogWarning(e, $"Could not probe {address}");
+                    return null;
+                }
                 finally
                 {
                     limit.Release();

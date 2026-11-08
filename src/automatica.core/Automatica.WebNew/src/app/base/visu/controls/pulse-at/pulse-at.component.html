@@ -1,0 +1,12 @@
+<app-visualization-control [hint]="displayText" [value]="nextText" [subValue]="'UI.VISU.PULSE_AT.NEXT' | translateAsync"
+  [icon]="['fas', 'clock']" [location]="location" [active]="pulse" [hasPopup]="!editMode && editable" (onPopupShowing)="onPopupShowing()">
+
+  <div popup class="pulse-editor">
+    <label class="lbl" for="pulse-time-{{ item.ObjId }}">{{ 'UI.VISU.PULSE_AT.TIME' | translateAsync }}</label>
+    <div class="pulse-line">
+      <input id="pulse-time-{{ item.ObjId }}" class="pulse-time" type="time" [(ngModel)]="editTime" />
+      <dx-button type="default" icon="save" [text]="'UI.VISU.PULSE_AT.SAVE' | translateAsync"
+        [disabled]="saving || !editTime || editTime === time.substring(0, 5)" (onClick)="save()"></dx-button>
+    </div>
+  </div>
+</app-visualization-control>

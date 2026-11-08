@@ -1,4 +1,222 @@
 ﻿{
+  "SONOS_AUDIO_CENTRAL": {
+    "NAME": "Audio Zentrale",
+    "DESCRIPTION": "Steuert mehrere Sonos Control Bausteine gemeinsam: Ein/Aus, Lautstärke (behält das Verhältnis zwischen den Playern), Favoriten, Klingel- und Alarmton",
+    "INPUT": {
+      "TOGGLE": {
+        "NAME": "Zone umschalten (TgZ)",
+        "DESCRIPTION": "Impuls: schaltet alle Player aus wenn einer spielt, sonst ein"
+      },
+      "ON": {
+        "NAME": "Zone ein (Zon)",
+        "DESCRIPTION": "Impuls: alle Player spielen"
+      },
+      "OFF": {
+        "NAME": "Zone aus (Zoff)",
+        "DESCRIPTION": "Impuls: alle Player pausieren"
+      },
+      "VOLUME_UP": {
+        "NAME": "Lautstärke + (V+)",
+        "DESCRIPTION": "Impuls: alle Player lauter"
+      },
+      "VOLUME_DOWN": {
+        "NAME": "Lautstärke - (V-)",
+        "DESCRIPTION": "Impuls: alle Player leiser"
+      },
+      "VOLUME": {
+        "NAME": "Lautstärke (V)",
+        "DESCRIPTION": "Setzt die Lautstärke in %; die lautesten Player bekommen diesen Wert, die anderen behalten ihr Verhältnis"
+      },
+      "NEXT_FAVORITE": {
+        "NAME": "Nächster Favorit (S+)",
+        "DESCRIPTION": "Impuls: spielt den nächsten Radiosender der Favoriten"
+      },
+      "PLAY": {
+        "NAME": "Wiedergabe",
+        "DESCRIPTION": "Impuls"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Impuls"
+      },
+      "NEXT": {
+        "NAME": "Nächster Titel",
+        "DESCRIPTION": "Impuls"
+      },
+      "PREVIOUS": {
+        "NAME": "Vorheriger Titel",
+        "DESCRIPTION": "Impuls"
+      },
+      "BELL": {
+        "NAME": "Klingel",
+        "DESCRIPTION": "Impuls: spielt den Klingelton auf allen Playern"
+      },
+      "ALARM": {
+        "NAME": "Alarm",
+        "DESCRIPTION": "Impuls: spielt den Alarmton auf allen Playern"
+      },
+      "LOCK": {
+        "NAME": "Aus / Sperre (Off)",
+        "DESCRIPTION": "1: pausiert alle Player und sperrt die Zentrale, 0: gibt sie frei"
+      },
+      "DISABLE_PERIPHERY": {
+        "NAME": "Peripherie sperren (DisPc)",
+        "DESCRIPTION": "1: ignoriert die Befehlseingänge von Verknüpfungen (Kindersicherung); die Visualisierung geht weiter"
+      },
+      "PLAYING1": {
+        "NAME": "Spielt Player 1",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 1 verknüpfen"
+      },
+      "PLAYING2": {
+        "NAME": "Spielt Player 2",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 2 verknüpfen"
+      },
+      "PLAYING3": {
+        "NAME": "Spielt Player 3",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 3 verknüpfen"
+      },
+      "PLAYING4": {
+        "NAME": "Spielt Player 4",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 4 verknüpfen"
+      },
+      "PLAYING5": {
+        "NAME": "Spielt Player 5",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 5 verknüpfen"
+      },
+      "PLAYING6": {
+        "NAME": "Spielt Player 6",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 6 verknüpfen"
+      },
+      "PLAYING7": {
+        "NAME": "Spielt Player 7",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 7 verknüpfen"
+      },
+      "PLAYING8": {
+        "NAME": "Spielt Player 8",
+        "DESCRIPTION": "Mit dem Play-Ausgang von Sonos Control Baustein 8 verknüpfen"
+      },
+      "PLAYER_VOLUME1": {
+        "NAME": "Lautstärke Player 1",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 1 verknüpfen"
+      },
+      "PLAYER_VOLUME2": {
+        "NAME": "Lautstärke Player 2",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 2 verknüpfen"
+      },
+      "PLAYER_VOLUME3": {
+        "NAME": "Lautstärke Player 3",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 3 verknüpfen"
+      },
+      "PLAYER_VOLUME4": {
+        "NAME": "Lautstärke Player 4",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 4 verknüpfen"
+      },
+      "PLAYER_VOLUME5": {
+        "NAME": "Lautstärke Player 5",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 5 verknüpfen"
+      },
+      "PLAYER_VOLUME6": {
+        "NAME": "Lautstärke Player 6",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 6 verknüpfen"
+      },
+      "PLAYER_VOLUME7": {
+        "NAME": "Lautstärke Player 7",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 7 verknüpfen"
+      },
+      "PLAYER_VOLUME8": {
+        "NAME": "Lautstärke Player 8",
+        "DESCRIPTION": "Mit dem Lautstärke-Ausgang von Sonos Control Baustein 8 verknüpfen"
+      }
+    },
+    "OUTPUT": {
+      "PLAY": {
+        "NAME": "Wiedergabe / Pause",
+        "DESCRIPTION": "1 Wiedergabe, 0 Pause (mit dem Play/Pause-Eingang der Player verknüpfen)"
+      },
+      "VOLUME": {
+        "NAME": "Lautstärke",
+        "DESCRIPTION": "Die gleiche Lautstärke für alle Player"
+      },
+      "VOLUME_UP": {
+        "NAME": "Lautstärke +",
+        "DESCRIPTION": "Sendet 1 bei jedem Lauter-Befehl"
+      },
+      "VOLUME_DOWN": {
+        "NAME": "Lautstärke -",
+        "DESCRIPTION": "Sendet 1 bei jedem Leiser-Befehl"
+      },
+      "NEXT": {
+        "NAME": "Nächster Titel",
+        "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+      },
+      "PREVIOUS": {
+        "NAME": "Vorheriger Titel",
+        "DESCRIPTION": "Sendet 1 bei jedem Befehl"
+      },
+      "RADIO_STATION": {
+        "NAME": "Radiosender",
+        "DESCRIPTION": "Sender des gewählten Favoriten (mit dem Radiosender-Eingang der Sonos-Control-Bausteine oder der Sonos-Geräte verknüpfen)"
+      },
+      "SOUND_URL": {
+        "NAME": "Ton-URL",
+        "DESCRIPTION": "URL des Klingel- oder Alarmtons (mit dem Ton-URL-Eingang der Player verknüpfen)"
+      },
+      "SOUND_TRIGGER": {
+        "NAME": "Ton abspielen",
+        "DESCRIPTION": "Sendet 1 nach der Ton-URL (mit dem Ton-abspielen-Eingang der Player verknüpfen)"
+      },
+      "PLAYER_VOLUME1": {
+        "NAME": "Lautstärke Player 1",
+        "DESCRIPTION": "Lautstärke für Player 1, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME2": {
+        "NAME": "Lautstärke Player 2",
+        "DESCRIPTION": "Lautstärke für Player 2, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME3": {
+        "NAME": "Lautstärke Player 3",
+        "DESCRIPTION": "Lautstärke für Player 3, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME4": {
+        "NAME": "Lautstärke Player 4",
+        "DESCRIPTION": "Lautstärke für Player 4, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME5": {
+        "NAME": "Lautstärke Player 5",
+        "DESCRIPTION": "Lautstärke für Player 5, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME6": {
+        "NAME": "Lautstärke Player 6",
+        "DESCRIPTION": "Lautstärke für Player 6, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME7": {
+        "NAME": "Lautstärke Player 7",
+        "DESCRIPTION": "Lautstärke für Player 7, die das Verhältnis zwischen den Playern behält"
+      },
+      "PLAYER_VOLUME8": {
+        "NAME": "Lautstärke Player 8",
+        "DESCRIPTION": "Lautstärke für Player 8, die das Verhältnis zwischen den Playern behält"
+      },
+      "ACTIVE_COUNT": {
+        "NAME": "Aktive Player (Na)",
+        "DESCRIPTION": "Anzahl der spielenden Player"
+      }
+    },
+    "PARAM": {
+      "FAVORITES": {
+        "NAME": "Favoriten",
+        "DESCRIPTION": "Radiosender für S+, mit ; getrennt (TuneIn-Ids wie s8007)"
+      },
+      "BELL_URL": {
+        "NAME": "Klingelton-URL",
+        "DESCRIPTION": "MP3, das die Player für die Klingel spielen"
+      },
+      "ALARM_URL": {
+        "NAME": "Alarmton-URL",
+        "DESCRIPTION": "MP3, das die Player für den Alarm spielen"
+      }
+    }
+  },
   "SONOS_CONTROL": {
     "NAME": "Sonos Steuerung",
     "DESCRIPTION": "Steuert eine Sonos Wireless Lautsprecher",
@@ -33,6 +251,10 @@
     "PREV": {
       "NAME": "Previous",
       "DESCRIPTION": ""
+    },
+    "RADIO_STATIONS": {
+      "NAME": "Radiosender",
+      "DESCRIPTION": "Senderliste für die Visu-Kachel: Name=Sender;Name=Sender. Ein Sender ist eine TuneIn-ID (z. B. s8007, aus der tunein.com-Adresse des Senders) oder eine Stream-URL (z. B. x-rincon-mp3radio://host/stream); in der Visu ausgewählt, wird er über den Radiosender-Ausgang gespielt"
     },
     "RADIO_STATION": {
       "NAME": "Radiosender",

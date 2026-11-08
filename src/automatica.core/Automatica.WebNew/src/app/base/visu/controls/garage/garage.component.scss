@@ -1,0 +1,146 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.garage-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.garage-spacer {
+    flex: 1;
+}
+
+.garage-lock {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.garage-btn {
+    appearance: none;
+    flex: none;
+    width: 34px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    cursor: pointer;
+
+    &.is-large {
+        width: auto;
+        height: 40px;
+        padding: 0 var(--space-3);
+    }
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:active:not(:disabled) {
+        background: var(--accent-soft);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+}
+
+.garage-popup {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.garage-door {
+    width: 100%;
+    max-width: 320px;
+    justify-self: center;
+
+    .ground {
+        stroke: var(--line);
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .frame {
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 2;
+        stroke-linejoin: round;
+    }
+
+    .opening {
+        fill: var(--surface-2);
+    }
+
+    .door {
+        fill: color-mix(in srgb, var(--accent) 22%, var(--surface));
+        stroke: var(--accent);
+        stroke-width: 1.5;
+    }
+
+    .seam {
+        stroke: color-mix(in srgb, var(--accent) 55%, transparent);
+        stroke-width: 1;
+    }
+
+    .post {
+        fill: var(--muted);
+        rx: 1.5;
+    }
+
+    .door,
+    .seam,
+    .panel {
+        transition: all 0.25s linear;
+    }
+
+    &.is-moving .door {
+        stroke-dasharray: 4 2;
+    }
+}
+
+.garage-locked {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.garage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+
+    .garage-btn {
+        flex: 1 1 auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .garage-door {
+        .door,
+        .seam,
+        .panel {
+            transition: none;
+        }
+    }
+}

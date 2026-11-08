@@ -176,4 +176,15 @@ export class AutomationLookups {
     automationName(id: string): string | undefined {
         return this.automationMap.get(key(id))?.name;
     }
+
+    /** operating modes (public holiday, vacation, own modes): id = mode key, name = display name */
+    operatingModes: NamedOption[] = [];
+
+    setOperatingModes(modes: NamedOption[]) {
+        this.operatingModes = [...(modes || [])];
+    }
+
+    operatingModeName(mode: string | undefined): string | undefined {
+        return this.operatingModes.find(a => a.id === mode)?.name;
+    }
 }

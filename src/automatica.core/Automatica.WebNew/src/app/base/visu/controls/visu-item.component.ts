@@ -22,6 +22,7 @@ import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
+import { LightingControllerComponent } from "./lighting-controller/lighting-controller.component";
 import { SecurityComponent } from "./security/security.component";
 import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
 import { RoomControllerComponent } from "./room-controller/room-controller.component";
@@ -30,6 +31,8 @@ import { ClimateCentralComponent } from "./climate/climate-central.component";
 import { StatusComponent } from "./text-status/status/status.component";
 import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
 import { TrackerComponent } from "./text-status/tracker/tracker.component";
+import { ALARM_CLOCK_TEMPLATE, AlarmClockComponent } from "./alarm-clock/alarm-clock.component";
+import { PULSE_AT_TEMPLATE, PulseAtComponent } from "./pulse-at/pulse-at.component";
 
 /** tiles of the status, status monitor and tracker logics; they need the values of that logic */
 const TEXT_STATUS_TILES: { [key: string]: Type<BaseMobileComponent> } = {
@@ -37,6 +40,9 @@ const TEXT_STATUS_TILES: { [key: string]: Type<BaseMobileComponent> } = {
   "status-monitor": StatusMonitorComponent,
   "tracker": TrackerComponent
 };
+import { GarageComponent } from "./garage/garage.component";
+import { MediaControllerComponent } from "./media-controller/media-controller.component";
+import { IrrigationComponent } from "./irrigation/irrigation.component";
 
 @Component({
     selector: "visu-component",
@@ -84,6 +90,13 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       editMode: this.editMode,
       pageGroupType: this.pageGroupType
     };
+
+    // logic blocks with their own tile (frontend only: chosen by the logic template, not by a visu template)
+    const logicTile = this.logicTile();
+    if (logicTile) {
+      this.component = logicTile;
+      return;
+    }
 
     switch (this.item.VisuObjectTemplate.Key) {
       case "label": {
@@ -166,6 +179,23 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         this.component = SecurityComponent;
         break;
       }
+      case "lighting-controller": {
+        this.component = LightingControllerComponent;
+        break;
+      }
+      // tiles of logic blocks: they need the values of their logic
+      case "garage": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? GarageComponent : LabelComponent;
+        break;
+      }
+      case "media-controller": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? MediaControllerComponent : LabelComponent;
+        break;
+      }
+      case "irrigation": {
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? IrrigationComponent : LabelComponent;
+        break;
+      }
       
       default: {
 
@@ -176,6 +206,21 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         }
         break;
       }
+    }
+  }
+
+  private logicTile(): Type<BaseMobileComponent> | undefined {
+    if (this.item.type !== VisuObjectSourceType.RuleInstance || !(this.item.objectType instanceof RuleInstance)) {
+      return void 0;
+    }
+    const template = (this.item.objectType.This2RuleTemplate || this.item.objectType.RuleTemplate?.ObjId || "").toLowerCase();
+    switch (template) {
+      case ALARM_CLOCK_TEMPLATE:
+        return AlarmClockComponent;
+      case PULSE_AT_TEMPLATE:
+        return PulseAtComponent;
+      default:
+        return void 0;
     }
   }
 

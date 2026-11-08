@@ -58,6 +58,13 @@ namespace Automatica.Core.Tests.Automation
             return Task.FromResult(true);
         }
 
+        /// <summary>
+        /// Operating modes: key → active today (missing = mode does not exist)
+        /// </summary>
+        public ConcurrentDictionary<string, bool> OperatingModes { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+        public bool? IsOperatingModeActive(string mode) => mode != null && OperatingModes.TryGetValue(mode, out var active) ? active : null;
+
         public Guid AddNode(string name, AutomationValueType type = AutomationValueType.Boolean, bool readable = true, bool writeable = true, object value = null)
         {
             var id = Guid.NewGuid();

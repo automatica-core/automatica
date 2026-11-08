@@ -8,6 +8,7 @@ import { ConfigService } from 'src/app/services/config.service';
 import { NotifyService } from 'src/app/services/notify.service';
 import { LogicInstanceVisuService } from 'src/app/services/logic-visu.service';
 import { BaseMobileRuleComponent } from '../../base-mobile-rule-component';
+import { RadioStationItem, currentRadioStation, radioStations } from './radio-stations';
 
 @Component({
     selector: 'app-media-player',
@@ -95,9 +96,48 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   ngOnDestroy(): void {
     this.baseOnDestroy();
   }
-  ngOnInit(): void {
+  /** the station list of the logic (parameter "radio stations"), switchable in the popup */
+  stations: RadioStationItem[] = [];
+  /** id (or name) of the station played last */
+  currentStationValue: string;
+  private loadingStations = false;
+
+  get currentStation(): RadioStationItem | undefined {
+    return currentRadioStation(this.stations, this.currentStationValue ?? this._radioStation);
+  }
+
+  async loadStations() {
+    if (this.loadingStations || !this.ruleInstance?.ObjId) {
+      return;
+    }
+    this.loadingStations = true;
+    try {
+      const data: any = await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
+      this.stations = radioStations(data?.radioStations);
+      if (data?.radioStation) {
+        this.currentStationValue = data.radioStation;
+      }
+    } catch (error) {
+      console.error("could not load the radio stations", error);
+    } finally {
+      this.loadingStations = false;
+    }
+  }
+
+  /** the logic sends the station and starts playing */
+  selectStation(station: RadioStationItem) {
+    if (!this.radioStationState) {
+      return;
+    }
+    this.currentStationValue = station.id;
+    this.isPlaying = true;
+    this.dataHub.setValue(this.radioStationState.ObjId, station.id);
+  }
+
+  async ngOnInit(): Promise<void> {
     this.baseOnInit();
-    super.mobileRuleInit();
+    await super.mobileRuleInit();
+    this.loadStations();
 
     this.playPauseState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "play_pause");
     this.volumeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "volume");
@@ -139,6 +179,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     } else if (interfaceId == this.radioStationState.ObjId) {
       // value comes from the hub, don't write it back
       this._radioStation = value;
+      this.currentStationValue = value;
     } else if (this.titleState && interfaceId == this.titleState.ObjId) {
       if (!value?.includes("tunein.com")) {
         this.title = value;
