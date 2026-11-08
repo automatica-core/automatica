@@ -238,12 +238,57 @@ namespace Automatica.Core.Runtime.IO
 
             foreach (var logicInterface in logicInterfaces)
             {
-                // tracked like the links, otherwise every reload adds another visualization callback per interface
-                await Register(Guid.Empty, DispatchableType.Visualization, logicInterface.ObjId, logicInterface.ObjId,
-                    (dispatchable, o) => ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface));
+                await RegisterVisualization(logicInterface);
             }
 
             return true;
+        }
+
+        public async Task RegisterLogicInterfaces(RuleInstance logicInstance)
+        {
+            if (logicInstance?.RuleInterfaceInstance == null)
+            {
+                return;
+            }
+
+            foreach (var logicInterface in logicInstance.RuleInterfaceInstance)
+            {
+                await RegisterVisualization(_logicInterfaceInstanceCache.Get(logicInterface.ObjId) ?? logicInterface);
+            }
+        }
+
+        /// <summary>
+        /// Values the visualization writes to a logic interface (inputs and parameters) go to the logic. Tracked like the links
+        /// (so a reload or <see cref="Unlink"/> removes it) and registered once per interface.
+        /// </summary>
+        private async Task RegisterVisualization(RuleInterfaceInstance logicInterface)
+        {
+            var interfaceId = logicInterface.ObjId;
+            lock (_registrationsLock)
+            {
+                if (_dispatchRegistrations.Any(a => a.Link == Guid.Empty && a.Type == DispatchableType.Visualization && a.Id == interfaceId))
+                {
+                    return;
+                }
+            }
+
+            var token = await _dispatcher.Subscribe(DispatchableType.Visualization, interfaceId, (dispatchable, o) =>
+            {
+                // the cached interface, the logic may have been reloaded since the registration
+                var current = _logicInterfaceInstanceCache.Get(interfaceId) ?? logicInterface;
+                return ValueDispatchToRule(dispatchable, o, current.This2RuleInstance, current);
+            });
+
+            lock (_registrationsLock)
+            {
+                // two registrations raced: keep the first one
+                if (_dispatchRegistrations.Any(a => a.Link == Guid.Empty && a.Type == DispatchableType.Visualization && a.Id == interfaceId))
+                {
+                    token.Dispose();
+                    return;
+                }
+                _dispatchRegistrations.Add(new DispatchRegistration(Guid.Empty, DispatchableType.Visualization, interfaceId, interfaceId, token));
+            }
         }
 
         /// <summary>
