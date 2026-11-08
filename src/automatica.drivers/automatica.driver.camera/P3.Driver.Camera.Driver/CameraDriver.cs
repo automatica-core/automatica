@@ -177,15 +177,27 @@ namespace P3.Driver.Camera.Driver
                 node.Name = string.IsNullOrEmpty(label) ? camera.Host : $"{label} ({camera.Host})";
                 node.SetProperty(CameraDriverFactory.HostKey, camera.Host);
                 node.SetProperty(CameraDriverFactory.OnvifPortKey, camera.Port);
-                foreach (var template in CameraDriverFactory.CameraValueTemplates)
-                {
-                    node.InverseThis2ParentNodeInstanceNavigation.Add(DriverContext.NodeTemplateFactory.CreateNodeInstance(template));
-                }
+                AddMissingValueNodes(node);
                 result.Add(node);
             }
 
             DriverContext.Logger.LogInformation($"Scan found {result.Count} new ONVIF camera(s)");
             return result;
+        }
+
+        /// <summary>
+        /// Adds the Online, Motion and Person nodes a camera does not have yet. The core already creates them with the
+        /// camera (their templates are created by default), other factories do not.
+        /// </summary>
+        internal void AddMissingValueNodes(NodeInstance camera)
+        {
+            foreach (var template in CameraDriverFactory.CameraValueTemplates)
+            {
+                if (camera.InverseThis2ParentNodeInstanceNavigation.All(c => c.This2NodeTemplate != template))
+                {
+                    camera.InverseThis2ParentNodeInstanceNavigation.Add(DriverContext.NodeTemplateFactory.CreateNodeInstance(template));
+                }
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

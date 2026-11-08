@@ -406,6 +406,21 @@ namespace P3.Driver.Camera.Tests
         }
 
         [Fact]
+        public async Task AddMissingValueNodes_KeepsTheNodesTheCoreAlreadyCreated()
+        {
+            var setup = await StartAsync(CreateRoot());
+            // the core creates the default children together with the camera
+            var camera = CreateNodeInstance(CameraDriverFactory.CameraTemplate);
+            camera.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(CameraDriverFactory.OnlineTemplate));
+            camera.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(CameraDriverFactory.MotionTemplate));
+
+            setup.Driver.AddMissingValueNodes(camera);
+
+            Assert.Equal(CameraDriverFactory.CameraValueTemplates.OrderBy(t => t),
+                camera.InverseThis2ParentNodeInstanceNavigation.Select(c => c.This2NodeTemplate!.Value).OrderBy(t => t));
+        }
+
+        [Fact]
         public void CameraStreams_NamesMatchTheCoreContract()
         {
             var id = Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e");
