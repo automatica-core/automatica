@@ -199,10 +199,15 @@ namespace P3.Driver.Sonos.Upnp.Services
             return metadata;
         }
 
-        public async Task SetMediaUrl(string url)
+        public Task SetMediaUrl(string url)
         {
-            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata("", "65031"));
-            var xml = await _upnpClient.InvokeFuncWithResultAsync("SetAVTransportURI",
+            return SetMediaUrl(url, GetRadioMetadata("", "65031"));
+        }
+
+        public async Task SetMediaUrl(string url, string metadata)
+        {
+            var uriMetadata = new UpnpArgument("CurrentURIMetaData", metadata ?? "");
+            await _upnpClient.InvokeFuncWithResultAsync("SetAVTransportURI",
                 new List<UpnpArgument>()
                     {new UpnpArgument("InstanceID", 0), new UpnpArgument("CurrentURI", url), uriMetadata});
         }

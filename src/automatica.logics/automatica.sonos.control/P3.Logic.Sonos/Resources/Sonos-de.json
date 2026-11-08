@@ -205,7 +205,7 @@
     "PARAM": {
       "FAVORITES": {
         "NAME": "Favoriten",
-        "DESCRIPTION": "Radiosender für S+, mit ; getrennt (TuneIn-Ids wie s8007)"
+        "DESCRIPTION": "Radiosender für S+, aus der Senderliste des Servers (ältere Einträge wie die TuneIn-ID s8007 funktionieren weiter)"
       },
       "BELL_URL": {
         "NAME": "Klingelton-URL",
@@ -254,11 +254,11 @@
     },
     "RADIO_STATIONS": {
       "NAME": "Radiosender",
-      "DESCRIPTION": "Senderliste für die Visu-Kachel: Name=Sender;Name=Sender. Ein Sender ist eine TuneIn-ID (z. B. s8007, aus der tunein.com-Adresse des Senders) oder eine Stream-URL (z. B. x-rincon-mp3radio://host/stream); in der Visu ausgewählt, wird er über den Radiosender-Ausgang gespielt"
+      "DESCRIPTION": "Sender für die Visu-Kachel, aus der Senderliste des Servers (eigene Sender unter Konfiguration > Radiosender); in der Visu ausgewählt, wird er über den Radiosender-Ausgang gespielt. Ältere Listen (Name=TuneIn-ID oder Stream-URL) funktionieren weiter"
     },
     "RADIO_STATION": {
       "NAME": "Radiosender",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "Der Sender für Play (Standard), aus der Senderliste des Servers"
     },
     "PLAY_OUTPUT_STATE": {
       "NAME": "Play",

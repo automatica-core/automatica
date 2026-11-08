@@ -7,7 +7,7 @@ namespace P3.Logic.Sonos.SonosControl;
 
 public class SonosControlLogicFactory : LogicFactory
 {
-    public override Version LogicVersion => new Version(1, 2, 0, 2);
+    public override Version LogicVersion => new Version(1, 3, 0, 0);
 
     public override bool InDevelopmentMode => true;
 
@@ -65,7 +65,15 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid PlayMediaUrlOutput = new Guid("9dc39aa4-4f48-4ca8-b575-8425bd542984");
 
     public static readonly long DefaultVolume = 10;
-    public static readonly string DefaultRadioStation = "s8007";
+    /// <summary>
+    /// Ö3, a station key of the core's station catalog (the Sonos driver translates it)
+    /// </summary>
+    public static readonly string DefaultRadioStation = "at-oe3";
+
+    /// <summary>
+    /// Meta of a station picker that takes one station
+    /// </summary>
+    public const string SingleStationMeta = "SINGLE";
 
 
     public override void InitTemplates(ILogicTemplateFactory factory)
@@ -73,7 +81,7 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicTemplate(LogicGuid, "SONOS_CONTROL.NAME", "SONOS_CONTROL.DESCRIPTION", "sonos.control", "SONOS_CONTROL.GROUP.NAME", 100, 100);
 
         factory.CreateParameterLogicInterfaceTemplate(RadioStation, "SONOS_CONTROL.RADIO_STATION.NAME",
-            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", LogicGuid, 1, RuleInterfaceParameterDataType.Text, DefaultRadioStation);
+            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", "SONOS_CONTROL.RADIO_STATION.NAME", LogicGuid, 1, RuleInterfaceParameterDataType.RadioStations, DefaultRadioStation, false, SingleStationMeta);
         factory.CreateParameterLogicInterfaceTemplate(VolumeOnPlay, "SONOS_CONTROL.VOLUME_ON_START.NAME",
             "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", LogicGuid, 2, RuleInterfaceParameterDataType.Integer, DefaultVolume);
         factory.CreateParameterLogicInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
@@ -87,9 +95,9 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.PLAY_SOUND_VOLUME.DESCRIPTION", LogicGuid, 6, RuleInterfaceParameterDataType.Integer, 50, true);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundEnabled, "SONOS_CONTROL.PLAY_SOUND_ENABLED.NAME",
             "SONOS_CONTROL.PLAY_SOUND_ENABLED.DESCRIPTION", LogicGuid, 7, RuleInterfaceParameterDataType.Bool, true, true);
-        // "Name=station;Name=station", shown as station buttons on the visu tile
+        // station keys of the core's catalog ("at-oe3;de-1live", older lists "Name=station;Name=station"), shown as station buttons on the visu tile
         factory.CreateParameterLogicInterfaceTemplate(RadioStations, "SONOS_CONTROL.RADIO_STATIONS.NAME",
-            "SONOS_CONTROL.RADIO_STATIONS.DESCRIPTION", LogicGuid, 8, RuleInterfaceParameterDataType.Text, "");
+            "SONOS_CONTROL.RADIO_STATIONS.DESCRIPTION", "SONOS_CONTROL.RADIO_STATIONS.NAME", LogicGuid, 8, RuleInterfaceParameterDataType.RadioStations, "", false, "");
 
         factory.CreateLogicInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", "play_pause", LogicGuid, LogicInterfaceDirection.Input, 0, 0, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlayDefaultTrigger, "SONOS_CONTROL.PLAY_DEFAULT.NAME", "SONOS_CONTROL.PLAY_DEFAULT.DESCRIPTION", "play_default", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);

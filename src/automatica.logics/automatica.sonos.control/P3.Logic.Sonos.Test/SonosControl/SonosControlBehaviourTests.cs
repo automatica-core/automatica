@@ -460,6 +460,43 @@ public class SonosControlBehaviourTests : LogicTest<SonosControlLogicFactory>
         Assert.Equal("s8235", data["radioStation"]);
     }
 
+    [Fact]
+    public void VisuData_StationKeys_HaveTheNameAndLogoOfTheCatalog()
+    {
+        Param(SonosControlLogicFactory.RadioStations, "at-fm4;de-1live;Mine=s8007;unknown-key");
+
+        var data = (IDictionary<string, object>)Logic.GetDataForVisu();
+        var stations = (IList<Dictionary<string, object>>)data["radioStations"];
+
+        Assert.Equal(new[] { "FM4", "1LIVE", "Mine", "unknown-key" }, stations.Select(a => a["name"]));
+        Assert.Equal(new[] { "at-fm4", "de-1live", "s8007", "unknown-key" }, stations.Select(a => a["id"]));
+        Assert.NotNull(stations[0]["logo"]);
+        Assert.Null(stations[2]["logo"]);
+    }
+
+    [Fact]
+    public void RadioStationInput_NameOfACatalogStation_SendsItsKey()
+    {
+        Param(SonosControlLogicFactory.RadioStations, "at-oe3;at-fm4");
+
+        var result = ToMap(In(SonosControlLogicFactory.RadioStationInput, "fm4"));
+
+        Assert.Equal("at-fm4", result[SonosControlLogicFactory.RadioStationOutputValue]);
+    }
+
+    [Fact]
+    public void Factory_StationParameters_AreStationPickers()
+    {
+
+        var station = RuleInstance.RuleInterfaceInstance.Single(a => a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStation);
+        var list = RuleInstance.RuleInterfaceInstance.Single(a => a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations);
+
+        Assert.Equal(Automatica.Core.EF.Models.RuleInterfaceParameterDataType.RadioStations, station.This2RuleInterfaceTemplateNavigation.ParameterDataType);
+        Assert.Equal(SonosControlLogicFactory.SingleStationMeta, station.This2RuleInterfaceTemplateNavigation.Meta);
+        Assert.Equal("at-oe3", station.Value);
+        Assert.Equal(Automatica.Core.EF.Models.RuleInterfaceParameterDataType.RadioStations, list.This2RuleInterfaceTemplateNavigation.ParameterDataType);
+    }
+
     [Theory]
     [InlineData(null, new string[0], new string[0])]
     [InlineData("s8007", new[] { "s8007" }, new[] { "s8007" })]

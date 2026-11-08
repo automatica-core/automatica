@@ -42,5 +42,10 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         Task SetTuneInRadio(int radioId);
         Task SetMediaUrl(string url);
+
+        /// <summary>
+        /// Sets the transport uri with its DIDL metadata (e.g. a radio station with its name)
+        /// </summary>
+        Task SetMediaUrl(string url, string metadata);
     }
 }

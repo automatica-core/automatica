@@ -174,7 +174,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations)
         {
-            _radioStations = RadioStation.ParseList(Convert.ToString(value));
+            _radioStations = RadioStation.ParseList(Convert.ToString(value), Context.RadioStations);
         }
         base.ParameterValueChanged(instance, source, value);
     }
@@ -195,7 +195,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         // blocks created before the station list have no such parameter
         _radioStations = RadioStation.ParseList(Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations)?.ValueString);
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStations)?.ValueString, Context.RadioStations);
 
         return base.Start(instance, token);
     }
@@ -398,7 +398,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             }
         }
 
-        ret["radioStations"] = _radioStations.Select(a => new Dictionary<string, object> { ["name"] = a.Name, ["id"] = a.Id }).ToList();
+        ret["radioStations"] = _radioStations.Select(a => new Dictionary<string, object> { ["name"] = a.Name, ["id"] = a.Id, ["logo"] = a.Logo }).ToList();
         ret["radioStation"] = _currentStation;
         return ret;
     }

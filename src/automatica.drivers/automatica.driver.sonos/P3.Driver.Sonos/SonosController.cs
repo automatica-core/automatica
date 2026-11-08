@@ -202,6 +202,14 @@ namespace P3.Driver.Sonos
             await _avTransportService.SetMediaUrl(url);
         }
 
+        /// <summary>
+        /// Plays a radio station (see <see cref="SonosRadio.ForStation"/>) with its name as metadata
+        /// </summary>
+        public async Task SetRadioAsync(SonosRadioMedia media)
+        {
+            await _avTransportService.SetMediaUrl(media.Uri, media.Metadata);
+        }
+
 
         public Task<GetMediaInfoResponse> GetMediaInfoAsync()
         {

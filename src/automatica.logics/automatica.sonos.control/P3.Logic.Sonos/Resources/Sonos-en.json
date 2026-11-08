@@ -205,7 +205,7 @@
     "PARAM": {
       "FAVORITES": {
         "NAME": "Favorites",
-        "DESCRIPTION": "Radio stations for S+, separated by ; (TuneIn ids like s8007)"
+        "DESCRIPTION": "Radio stations for S+, from the station list of the server (older entries like the TuneIn id s8007 keep working)"
       },
       "BELL_URL": {
         "NAME": "Bell sound URL",
@@ -254,11 +254,11 @@
     },
     "RADIO_STATIONS": {
       "NAME": "Radio stations",
-      "DESCRIPTION": "Station list for the visu tile: Name=station;Name=station. A station is a TuneIn id (e.g. s8007, from the tunein.com address of the station) or a stream url (e.g. x-rincon-mp3radio://host/stream); selecting it in the visu plays it via the radio station output"
+      "DESCRIPTION": "Stations for the visu tile, from the station list of the server (own stations under Configure > Radio stations); selecting one in the visu plays it via the radio station output. Older lists (Name=TuneIn id or stream url) keep working"
     },
     "RADIO_STATION": {
-      "NAME": "Radio Station ID",
-      "DESCRIPTION": ""
+      "NAME": "Radio station",
+      "DESCRIPTION": "The station for play (default), from the station list of the server"
     },
     "PLAY_OUTPUT_STATE": {
       "NAME": "Play",

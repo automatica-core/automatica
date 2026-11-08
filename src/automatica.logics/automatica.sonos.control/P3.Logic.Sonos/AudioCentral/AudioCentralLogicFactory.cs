@@ -60,6 +60,11 @@ namespace P3.Logic.Sonos.AudioCentral
         public static readonly Guid OutputPlayerVolume8 = new Guid("ce259985-6c40-5fef-83b7-8d767647532a");
         public static readonly Guid OutputActiveCount = new Guid("1dd94fca-2f2d-505d-9b54-8f4cfa92b85c");
         public static readonly Guid ParamFavorites = new Guid("75196a9d-fb7c-549f-9f64-cf478ff1a059");
+
+        /// <summary>
+        /// Ö3, FM4 and Ö1: station keys of the core's station catalog (older TuneIn ids such as s8007 keep working)
+        /// </summary>
+        public const string DefaultFavorites = "at-oe3;at-fm4;at-oe1";
         public static readonly Guid ParamBellUrl = new Guid("571afa9a-c4d4-5770-ab99-c2f0493f699b");
         public static readonly Guid ParamAlarmUrl = new Guid("58f9fb2a-20a9-5adc-9f70-8499f7eab24b");
 
@@ -69,7 +74,7 @@ namespace P3.Logic.Sonos.AudioCentral
 
         public override string LogicName => "SonosAudioCentral";
         public override Guid LogicGuid => new Guid("0e77c46d-998e-56db-9a98-95c64ee73950");
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        public override Version LogicVersion => new Version(1, 1, 0, 0);
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -124,7 +129,7 @@ namespace P3.Logic.Sonos.AudioCentral
             factory.CreateLogicInterfaceTemplate(OutputPlayerVolume7, "SONOS_AUDIO_CENTRAL.OUTPUT.PLAYER_VOLUME7.NAME", "SONOS_AUDIO_CENTRAL.OUTPUT.PLAYER_VOLUME7.DESCRIPTION", "playerVolumeOutput7", LogicGuid, LogicInterfaceDirection.Output, 0, 16);
             factory.CreateLogicInterfaceTemplate(OutputPlayerVolume8, "SONOS_AUDIO_CENTRAL.OUTPUT.PLAYER_VOLUME8.NAME", "SONOS_AUDIO_CENTRAL.OUTPUT.PLAYER_VOLUME8.DESCRIPTION", "playerVolumeOutput8", LogicGuid, LogicInterfaceDirection.Output, 0, 17);
             factory.CreateLogicInterfaceTemplate(OutputActiveCount, "SONOS_AUDIO_CENTRAL.OUTPUT.ACTIVE_COUNT.NAME", "SONOS_AUDIO_CENTRAL.OUTPUT.ACTIVE_COUNT.DESCRIPTION", "activeCount", LogicGuid, LogicInterfaceDirection.Output, 0, 18);
-            factory.CreateParameterLogicInterfaceTemplate(ParamFavorites, "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.NAME", "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.DESCRIPTION", "favorites", LogicGuid, 1, RuleInterfaceParameterDataType.Text, "s8007;s8235;s8514", false);
+            factory.CreateParameterLogicInterfaceTemplate(ParamFavorites, "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.NAME", "SONOS_AUDIO_CENTRAL.PARAM.FAVORITES.DESCRIPTION", "favorites", LogicGuid, 1, RuleInterfaceParameterDataType.RadioStations, DefaultFavorites, false);
             factory.CreateParameterLogicInterfaceTemplate(ParamBellUrl, "SONOS_AUDIO_CENTRAL.PARAM.BELL_URL.NAME", "SONOS_AUDIO_CENTRAL.PARAM.BELL_URL.DESCRIPTION", "bellUrl", LogicGuid, 2, RuleInterfaceParameterDataType.Text, "", false);
             factory.CreateParameterLogicInterfaceTemplate(ParamAlarmUrl, "SONOS_AUDIO_CENTRAL.PARAM.ALARM_URL.NAME", "SONOS_AUDIO_CENTRAL.PARAM.ALARM_URL.DESCRIPTION", "alarmUrl", LogicGuid, 3, RuleInterfaceParameterDataType.Text, "", false);
         }

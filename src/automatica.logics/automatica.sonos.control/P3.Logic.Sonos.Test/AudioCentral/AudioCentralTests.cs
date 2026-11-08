@@ -11,7 +11,8 @@ namespace P3.Logic.Sonos.Tests.AudioCentral
             Assert.Equal(8, F.InputPlayings.Length);
             Assert.Equal(8, F.InputPlayerVolumes.Length);
             Assert.Equal(8, F.OutputPlayerVolumes.Length);
-            Assert.Equal("s8007;s8235;s8514", Interface(F.ParamFavorites).Value);
+            Assert.Equal("at-oe3;at-fm4;at-oe1", Interface(F.ParamFavorites).Value);
+            Assert.Equal(Automatica.Core.EF.Models.RuleInterfaceParameterDataType.RadioStations, Interface(F.ParamFavorites).This2RuleInterfaceTemplateNavigation.ParameterDataType);
         }
 
         [Fact]
