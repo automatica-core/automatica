@@ -847,6 +847,10 @@
       "ALIGN_BOTTOM": "Untere Kanten ausrichten",
       "DISTRIBUTE_H": "Horizontal verteilen (ab 3 Bausteinen)",
       "DISTRIBUTE_V": "Vertikal verteilen (ab 3 Bausteinen)",
+      "BLOCK_PICKER": "Logikbaustein hinzufügen",
+      "BLOCK_SEARCH": "Bausteine suchen",
+      "BLOCK_NONE": "Kein Baustein passt zur Suche",
+      "BLOCK_KEYS": "↑ ↓ wählen · Enter hinzufügen · Esc schließen",
       "SELECT_HINT": "Umschalt/Strg + Klick nimmt einen Baustein in die Auswahl, Umschalt/Strg + Ziehen auf der Fläche wählt mit einem Rahmen aus, Strg + A wählt alles. Gezogene Bausteine rasten an den Kanten anderer Bausteine und an verbundenen Ports ein; mit gedrückter Alt-Taste frei platzieren."
     },
     "AUTOMATIONS": {

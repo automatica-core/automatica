@@ -1,0 +1,46 @@
+<div class="panel" role="dialog" [attr.aria-label]="'UI.LOGIC.BLOCK_PICKER' | translateAsync"
+  [style.top.px]="top" [style.left.px]="left" [style.width.px]="width" [style.max-height.px]="maxHeight">
+  <label class="search">
+    <fa-icon icon="magnifying-glass"></fa-icon>
+    <input #search type="search" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list"
+      aria-controls="logic-block-list" [attr.aria-activedescendant]="results.length ? 'logic-block-' + active : null"
+      [placeholder]="'UI.LOGIC.BLOCK_SEARCH' | translateAsync" [value]="query"
+      (input)="onInput($any($event.target).value)" (keydown)="onKeyDown($event)" />
+  </label>
+
+  <div #list class="list" id="logic-block-list" role="listbox">
+    @if (groups.length > 0) {
+      @for (group of groups; track group.name) {
+        <div class="group" role="presentation">{{ group.name }}</div>
+        @for (entry of group.items; track entry.template.ObjId) {
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: entry, index: indexOf(entry) }"></ng-container>
+        }
+      }
+    } @else {
+      @for (entry of results; track entry.template.ObjId; let i = $index) {
+        <ng-container *ngTemplateOutlet="row; context: { $implicit: entry, index: i, showGroup: true }"></ng-container>
+      }
+      @if (results.length === 0) {
+        <div class="none">{{ 'UI.LOGIC.BLOCK_NONE' | translateAsync }}</div>
+      }
+    }
+  </div>
+
+  <div class="foot">{{ 'UI.LOGIC.BLOCK_KEYS' | translateAsync }}</div>
+</div>
+
+<ng-template #row let-entry let-index="index" let-showGroup="showGroup">
+  <div class="item" role="option" [id]="'logic-block-' + index" [attr.data-index]="index"
+    [class.active]="index === active" [attr.aria-selected]="index === active"
+    (pointerenter)="active = index" (click)="choose(entry)">
+    <div class="line">
+      <span class="name">{{ entry.name }}</span>
+      @if (showGroup && entry.group) {
+        <span class="tag">{{ entry.group }}</span>
+      }
+    </div>
+    @if (entry.description) {
+      <div class="desc" [title]="entry.description">{{ entry.description }}</div>
+    }
+  </div>
+</ng-template>

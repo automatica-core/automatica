@@ -101,13 +101,18 @@ export class ConfigMenuComponent implements OnInit, OnDestroy {
     command: (event) => { this.delete(); }
   }
 
+  /** opens the searchable block list instead of a submenu, the block list is too long to scan by group */
   menuRules: CustomMenuItem = {
     id: "rules",
     label: "Rules",
     icon: "fa-add",
     disabled: false,
-    items: []
+    items: undefined,
+    command: (event) => { this.toggleBlockPicker(event?.itemElement); }
   };
+
+  /** the menu item the open block list hangs under */
+  blockPickerAnchor: HTMLElement;
 
   menuRulePages: CustomMenuItem = {
     id: "rulePages",
@@ -201,6 +206,23 @@ export class ConfigMenuComponent implements OnInit, OnDestroy {
 
   restart() {
     this.onRestart.emit();
+  }
+
+  toggleBlockPicker(element: any) {
+    // DevExtreme hands the item element over as an HTMLElement (or a jQuery-like wrapper in older versions)
+    const anchor: HTMLElement = element?.nodeType ? element : element?.[0] ?? element?.get?.(0);
+    this.blockPickerAnchor = this.blockPickerAnchor || !anchor ? void 0 : anchor;
+    this.changeRef.markForCheck();
+  }
+
+  closeBlockPicker() {
+    this.blockPickerAnchor = void 0;
+    this.changeRef.markForCheck();
+  }
+
+  addRuleFromPicker(template: RuleTemplate) {
+    this.closeBlockPicker();
+    this.onAddRule.emit(template);
   }
 
   delete() {
@@ -349,39 +371,6 @@ export class ConfigMenuComponent implements OnInit, OnDestroy {
     if (this.showRuleMenu) {
 
       this.menuItems.push(this.menuRulePages);
-
-      const map = new Map<string, RuleTemplate[]>();
-      for (const x of this.ruleTemplates) {
-        if (!map.has(x.Group)) {
-          map.set(x.Group, []);
-        }
-        map.get(x.Group).push(x);
-      }
-
-      map.forEach((value: RuleTemplate[], key: string) => {
-
-        const gItem: CustomMenuItem = {
-          id: "ruleGroup",
-          label: this.translate.translate(key),
-          icon: "fa-plus",
-          disabled: false,
-          items: []
-        };
-        for (const x of value) {
-          const ruleItem: CustomMenuItem = {
-            id: "rule",
-            label: this.translate.translate(x.Name),
-            icon: "fa-plus",
-            disabled: false,
-            command: (event) => this.onAddRule.emit(x)
-          };
-
-          gItem.items.push(ruleItem);
-        }
-
-        this.menuRules.items.push(gItem);
-
-      });
       this.menuItems.push(this.menuRules);
 
       this.zoomIn.label = this.translate.translate("COMMON.ZOOM.IN");

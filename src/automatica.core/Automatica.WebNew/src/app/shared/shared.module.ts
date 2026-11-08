@@ -7,6 +7,7 @@ import { ConfigTreeComponent } from "./config-tree/config-tree.component";
 import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
+import { LogicBlockPickerComponent } from "./logic-block-picker/logic-block-picker.component";
 import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule, DxTagBoxModule } from "devextreme-angular";
 import { RadioStationPickerComponent } from "./radio-station-picker/radio-station-picker.component";
 import { DndModule } from "p3root-angular-dnd";
@@ -59,6 +60,7 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
     declarations: [
         PropertyEditorComponent,
         ConfigMenuComponent,
+        LogicBlockPickerComponent,
         ConfigTreeComponent,
         RuleEditorComponent,
         NodeValueSelectorComponent,
