@@ -9,8 +9,12 @@
   <div class="tiles">
     <a class="panel tile" routerLink="/admin/system">
       <span class="eyebrow">{{ 'UI.HOME.SERVER' | translateAsync }}</span>
-      <span class="value"><span class="status-dot" [ngClass]="serverTone"></span>{{ serverStateKey | translateAsync }}</span>
-      <span class="sub">{{ 'COMMON.VERSION' | translateAsync }} <span class="mono">{{ version?.version || '–' }}</span></span>
+      @if (serverState === undefined && !serverStateFailed) {
+        <app-skeleton variant="lines" [rows]="2"></app-skeleton>
+      } @else {
+        <span class="value"><span class="status-dot" [ngClass]="serverTone"></span>{{ serverStateKey | translateAsync }}</span>
+        <span class="sub">{{ 'COMMON.VERSION' | translateAsync }} <span class="mono">{{ version?.version || '–' }}</span></span>
+      }
     </a>
 
     <a class="panel tile" routerLink="/admin/config">
@@ -18,7 +22,7 @@
       @if (driversFailed) {
         <span class="value"><span class="status-dot bad"></span>{{ 'UI.HOME.NOT_AVAILABLE' | translateAsync }}</span>
       } @else if (!driversLoaded) {
-        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+        <app-skeleton variant="lines" [rows]="2"></app-skeleton>
       } @else {
         <span class="value"><span class="status-dot" [ngClass]="driverTone"></span>{{ 'UI.HOME.DRIVERS_RUNNING' | translateAsync: { count: driversRunning } }}</span>
         <span class="sub">
@@ -37,7 +41,7 @@
       @if (satellitesFailed) {
         <span class="value"><span class="status-dot bad"></span>{{ 'UI.HOME.NOT_AVAILABLE' | translateAsync }}</span>
       } @else if (!satellitesLoaded) {
-        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+        <app-skeleton variant="lines" [rows]="2"></app-skeleton>
       } @else {
         <span class="value"><span class="status-dot" [ngClass]="satelliteTone"></span>{{ 'UI.HOME.SATELLITES_ONLINE' | translateAsync: { count: satellitesOnline } }}</span>
         <span class="sub">{{ 'UI.HOME.SATELLITES_OFFLINE' | translateAsync: { count: satellitesOffline } }}</span>
@@ -50,7 +54,7 @@
         <span class="value"><span class="status-dot warn"></span>{{ 'UI.HOME.CLOUD_UNREACHABLE' | translateAsync }}</span>
         <span class="sub">{{ 'UI.HOME.CLOUD_UNREACHABLE_HINT' | translateAsync }}</span>
       } @else if (!pluginsLoaded) {
-        <span class="value"><span class="status-dot off"></span>{{ 'UI.HOME.LOADING' | translateAsync }}</span>
+        <app-skeleton variant="lines" [rows]="2"></app-skeleton>
       } @else {
         <span class="value"><span class="status-dot" [ngClass]="pluginTone"></span>
           @if (pluginUpdates > 0) {
@@ -71,12 +75,16 @@
 
     <a class="panel tile" routerLink="/admin/system">
       <span class="eyebrow">{{ 'SYSTEM.LICENSE' | translateAsync }}</span>
-      <span class="value"><span class="status-dot" [ngClass]="licenseTone"></span>{{ licenseStateKey | translateAsync }}</span>
-      @if (licenseInfo) {
-        <span class="sub">
-          {{ licenseInfo.type }}
-          @if (licenseInfo.expiration) { · {{ 'UI.HOME.LICENSE_UNTIL' | translateAsync: { date: formatDate(licenseInfo.expiration) } }} }
-        </span>
+      @if (!licenseLoaded) {
+        <app-skeleton variant="lines" [rows]="2"></app-skeleton>
+      } @else {
+        <span class="value"><span class="status-dot" [ngClass]="licenseTone"></span>{{ licenseStateKey | translateAsync }}</span>
+        @if (licenseInfo) {
+          <span class="sub">
+            {{ licenseInfo.type }}
+            @if (licenseInfo.expiration) { · {{ 'UI.HOME.LICENSE_UNTIL' | translateAsync: { date: formatDate(licenseInfo.expiration) } }} }
+          </span>
+        }
       }
     </a>
   </div>
@@ -90,7 +98,7 @@
       @if (errorsFailed) {
         <div class="empty-state compact"><span>{{ 'UI.HOME.ERRORS_UNAVAILABLE' | translateAsync }}</span></div>
       } @else if (!errorsLoaded) {
-        <div class="empty-state compact"><span>{{ 'UI.HOME.LOADING' | translateAsync }}</span></div>
+        <app-skeleton variant="list" [rows]="4"></app-skeleton>
       } @else {
         <ul class="errors">
           @for (e of recentErrors; track $index) {
@@ -118,7 +126,7 @@
         <a class="link" routerLink="/admin/config">{{ 'UI.HOME.OPEN_CONFIG' | translateAsync }}</a>
       </div>
       @if (!driversLoaded) {
-        <div class="empty-state compact"><span>{{ 'UI.HOME.LOADING' | translateAsync }}</span></div>
+        <app-skeleton variant="list" [rows]="3"></app-skeleton>
       } @else {
         <ul class="errors">
           @for (d of driverProblems.slice(0, 6); track $index) {

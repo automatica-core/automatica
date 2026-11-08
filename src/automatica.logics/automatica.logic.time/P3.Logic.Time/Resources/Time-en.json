@@ -106,6 +106,126 @@
         "NAME": "Long press [ms]",
         "DESCRIPTION": "Hold time for a long press, 0 = off (for buttons that send no release)"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 resets the output and locks the block until Off is 0 again"
+      }
+    },
+    "ON_OFF_DELAY": {
+      "NAME": "Switch-on and -off delay",
+      "DESCRIPTION": "The output follows the input, switching on after the on delay and off after the off delay",
+      "TRIGGER": {
+        "DESCRIPTION": "Input signal"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Delayed input signal"
+      },
+      "ON": {
+        "NAME": "On delay [s]",
+        "DESCRIPTION": "Time the input must be 1 before the output switches on"
+      },
+      "OFF": {
+        "NAME": "Off delay [s]",
+        "DESCRIPTION": "Time the input must be 0 before the output switches off"
+      }
+    },
+    "SAVING_ON_DELAY": {
+      "NAME": "Saving switch-on delay",
+      "DESCRIPTION": "A pulse at the input switches the output on after the delay; it stays on until Off",
+      "TRIGGER": {
+        "DESCRIPTION": "Pulse starts the delay"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 from the end of the delay until Off"
+      },
+      "DELAY": {
+        "NAME": "Delay [s]",
+        "DESCRIPTION": "Time from the pulse until the output switches on"
+      }
+    },
+    "EDGE_WIPING_RELAY": {
+      "NAME": "Edge-triggered wiping relay",
+      "DESCRIPTION": "Every pulse at the input sends a fixed number of pulses at the output",
+      "TRIGGER": {
+        "DESCRIPTION": "Pulse starts the pulse train (again)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Pulse train"
+      },
+      "ON": {
+        "NAME": "On time [s]",
+        "DESCRIPTION": "Length of each pulse, at least 0.1 s"
+      },
+      "OFF": {
+        "NAME": "Off time [s]",
+        "DESCRIPTION": "Pause between two pulses, at least 0.1 s"
+      },
+      "CYCLES": {
+        "NAME": "Cycles",
+        "DESCRIPTION": "Number of pulses per input pulse"
+      }
+    },
+    "DELAYED_PULSE": {
+      "NAME": "Delayed pulse",
+      "DESCRIPTION": "A pulse at the input sends a pulse at the output after the delay",
+      "TRIGGER": {
+        "DESCRIPTION": "Pulse starts the delay, another pulse during the delay restarts it"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Delayed pulse"
+      },
+      "DELAY": {
+        "NAME": "Delay [s]",
+        "DESCRIPTION": "Time from the input pulse to the output pulse"
+      },
+      "PULSE": {
+        "NAME": "Pulse length [s]",
+        "DESCRIPTION": "Length of the output pulse, at least 0.1 s"
+      }
+    },
+    "PWM": {
+      "NAME": "Pulse width modulation",
+      "DESCRIPTION": "Turns an analog value 0..10 into an on/off signal with that duty cycle",
+      "VALUE": {
+        "DESCRIPTION": "Duty cycle 0..10 (0 = always off, 10 = always on)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Pulse width modulated output"
+      },
+      "PERIOD": {
+        "NAME": "Period [s]",
+        "DESCRIPTION": "Length of one on/off cycle, at least 0.1 s"
+      }
+    },
+    "RAMP": {
+      "NAME": "Ramp controller",
+      "DESCRIPTION": "Moves the output step by step every 100 ms towards one of two levels",
+      "SELECT": {
+        "DESCRIPTION": "0 = level 1, 1 = level 2"
+      },
+      "STOP": {
+        "DESCRIPTION": "1 sets the output to the start value and holds it"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Current value"
+      },
+      "START": {
+        "NAME": "Start value",
+        "DESCRIPTION": "Value at the start and while Stop is 1"
+      },
+      "STEP": {
+        "NAME": "Step size",
+        "DESCRIPTION": "Change per 100 ms, 0 = jump to the level"
+      },
+      "LEVEL1": {
+        "NAME": "Level 1",
+        "DESCRIPTION": "Target value while S is 0"
+      },
+      "LEVEL2": {
+        "NAME": "Level 2",
+        "DESCRIPTION": "Target value while S is 1"
+      }
     }
   }
 }

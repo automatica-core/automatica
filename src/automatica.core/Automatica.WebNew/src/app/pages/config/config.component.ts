@@ -40,6 +40,9 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
+  // true once the first load finished (also on error), until then tree and inspector show skeletons
+  loaded = false;
+
   constructor(private configService: ConfigService,
     private dataHub: DataHubService,
     private notify: NotifyService,
@@ -77,6 +80,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     }
 
     this.isLoading = false;
+    this.loaded = true;
   }
 
   async ngOnInit() {

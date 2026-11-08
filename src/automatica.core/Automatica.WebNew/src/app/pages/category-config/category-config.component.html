@@ -4,46 +4,50 @@
         <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
             <as-split-area [size]="62">
                 <div class="h-100">
-                    <dx-data-grid [dataSource]="categories" height="100%" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                        (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
-                        (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
-                        (onInitialized)="onInitialized($event)" (onCellPrepared)="onCellPrepared($event)">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                            <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
-                                deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
-                                cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
-                        </dxo-editing>
-                        <dxo-selection mode="single"></dxo-selection>
+                    @if (!loaded) {
+                        <app-skeleton variant="table" [columns]="5" [rows]="8"></app-skeleton>
+                    } @else {
+                        <dx-data-grid [dataSource]="categories" height="100%" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+                            (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
+                            (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
+                            (onInitialized)="onInitialized($event)" (onCellPrepared)="onCellPrepared($event)">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
+                                <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
+                                    deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
+                                    cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
+                            </dxo-editing>
+                            <dxo-selection mode="single"></dxo-selection>
 
-                        <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-                        </dxi-column>
+                            <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                            <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
+                            </dxi-column>
 
-                        <dxi-column dataField="This2CategoryGroup" caption="{{ 'COMMON.GROUP' | translateAsync }}">
-                            <dxo-lookup [dataSource]="groups" displayExpr="DisplayName" valueExpr="ObjId">
-                            </dxo-lookup>
-                        </dxi-column>
+                            <dxi-column dataField="This2CategoryGroup" caption="{{ 'COMMON.GROUP' | translateAsync }}">
+                                <dxo-lookup [dataSource]="groups" displayExpr="DisplayName" valueExpr="ObjId">
+                                </dxo-lookup>
+                            </dxi-column>
 
-                        <dxi-column [showEditorAlways]="true" dataField="Color"
-                            caption="{{ 'COMMON.PROPERTY.COLOR.NAME' | translateAsync }}"
-                            editCellTemplate="colorBoxTemplate">
-                        </dxi-column>
+                            <dxi-column [showEditorAlways]="true" dataField="Color"
+                                caption="{{ 'COMMON.PROPERTY.COLOR.NAME' | translateAsync }}"
+                                editCellTemplate="colorBoxTemplate">
+                            </dxi-column>
 
-                        <dxi-column dataField="Icon" caption="{{ 'COMMON.PROPERTY.AREA_ICON.NAME' | translateAsync }}"
-                            cellTemplate="iconTemplate">
-                        </dxi-column>
+                            <dxi-column dataField="Icon" caption="{{ 'COMMON.PROPERTY.AREA_ICON.NAME' | translateAsync }}"
+                                cellTemplate="iconTemplate">
+                            </dxi-column>
 
-                        <div *dxTemplate="let data of 'iconTemplate'" cellTemplate="iconTemplate">
-                            <i class="{{ data.data.Icon }}"></i>
-                            <span id="{{ data.data.Id }}"> {{data.value}}</span>
-                        </div>
+                            <div *dxTemplate="let data of 'iconTemplate'" cellTemplate="iconTemplate">
+                                <i class="{{ data.data.Icon }}"></i>
+                                <span id="{{ data.data.Id }}"> {{data.value}}</span>
+                            </div>
 
-                        <div *dxTemplate="let data of 'colorBoxTemplate'">
-                            <dx-color-box [(value)]="data.value" [editAlphaChannel]="true"
-                                (onValueChanged)="colorBoxOnValueChanged($event, data)"></dx-color-box>
-                        </div>
-                    </dx-data-grid>
+                            <div *dxTemplate="let data of 'colorBoxTemplate'">
+                                <dx-color-box [(value)]="data.value" [editAlphaChannel]="true"
+                                    (onValueChanged)="colorBoxOnValueChanged($event, data)"></dx-color-box>
+                            </div>
+                        </dx-data-grid>
+                    }
                 </div>
             </as-split-area>
             <as-split-area [size]="38" [minSize]="22">

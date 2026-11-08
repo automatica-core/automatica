@@ -1,1 +1,51 @@
 // safe areas are handled by the layout and header (styles.scss --app-safe-*)
+// thin indeterminate bar at the top while background work runs (replaces the blocking load panel)
+.app-progress {
+    position: fixed;
+    top: var(--app-safe-top, 0px);
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 2000;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &.on {
+        opacity: 1;
+    }
+
+    span {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 40%;
+        background: var(--accent);
+        border-radius: 0 2px 2px 0;
+        animation: app-progress 1.2s ease-in-out infinite;
+    }
+
+    &:not(.on) span {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes app-progress {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(250%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-progress span {
+        width: 100%;
+        animation: none;
+        opacity: 0.6;
+    }
+}

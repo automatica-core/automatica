@@ -212,6 +212,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   calendarEditSource: IPropertyModel;
   availableControlsList: Control[];
 
+  // false while the host page is still loading its first data: a form skeleton instead of the "select an item" hint
+  @Input()
+  loaded = true;
+
   @Input()
   set item(value: IPropertyModel) {
     this._item = value;

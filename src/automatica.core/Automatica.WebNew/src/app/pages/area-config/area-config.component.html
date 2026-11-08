@@ -22,35 +22,41 @@
     <as-split [direction]="viewport.splitDirection" class="workspace" [gutterSize]="6">
       <as-split-area [size]="62">
         <div class="h-100">
-          <dx-tree-list #tree height="100%" itemsExpr="InverseThis2ParentNavigation" id="config" [dataSource]="instances"
-            keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true"
-            [showColumnLines]="false" (onContextMenuPreparing)="onContextMenuPreparing($event)"
-            (onSelectionChanged)="selectionChanged($event)">
-            <dxo-state-storing [enabled]="true" type="localStorage"
-            storageKey="automaticaAreaTree"></dxo-state-storing>
-
-            <dxo-selection mode="single"></dxo-selection>
-
-            <dxi-column dataField="Name" cellTemplate="cellTemplate"
-            caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-            <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-            </dxi-column>
-
-            <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaAreaInstances">
-            </dxo-state-storing>
-
-            <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
-              <div [ngClass]="{'isDirty': data.data.isNewObject || data.data.isDirty}">
-                <fa-icon [icon]="data.data.Icon"></fa-icon>
-                <span id="{{ data.data.Id }}"> {{data.value}}</span>
-              </div>
+          @if (!loaded) {
+            <div class="tree-skeleton">
+              <app-skeleton variant="tree" [rows]="10"></app-skeleton>
             </div>
+          } @else {
+            <dx-tree-list #tree height="100%" itemsExpr="InverseThis2ParentNavigation" id="config" [dataSource]="instances"
+              keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true"
+              [showColumnLines]="false" (onContextMenuPreparing)="onContextMenuPreparing($event)"
+              (onSelectionChanged)="selectionChanged($event)">
+              <dxo-state-storing [enabled]="true" type="localStorage"
+              storageKey="automaticaAreaTree"></dxo-state-storing>
 
-          </dx-tree-list>
+              <dxo-selection mode="single"></dxo-selection>
+
+              <dxi-column dataField="Name" cellTemplate="cellTemplate"
+              caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+              <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
+              </dxi-column>
+
+              <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaAreaInstances">
+              </dxo-state-storing>
+
+              <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+                <div [ngClass]="{'isDirty': data.data.isNewObject || data.data.isDirty}">
+                  <fa-icon [icon]="data.data.Icon"></fa-icon>
+                  <span id="{{ data.data.Id }}"> {{data.value}}</span>
+                </div>
+              </div>
+
+            </dx-tree-list>
+          }
         </div>
       </as-split-area>
       <as-split-area [size]="38" [minSize]="22">
-        <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups"
+        <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" [loaded]="loaded"
         (onChanged)="onChanged($event)"></p3-propertyeditor>
       </as-split-area>
     </as-split>

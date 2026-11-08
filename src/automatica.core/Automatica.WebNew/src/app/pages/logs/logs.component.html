@@ -38,7 +38,9 @@
         <dxi-item title="UI.LOGS.TAB_FILES" icon="file-lines">
           <div *dxTemplate>
             <div class="tab-fill">
-              @if (logFileTree) {
+              @if (!loaded) {
+                <app-skeleton variant="tree" [rows]="8"></app-skeleton>
+              } @else if (logFileTree) {
                 <dx-tree-list [dataSource]="logFileTree"
                   itemsExpr="children" dataStructure="tree" keyExpr="key" [showRowLines]="false"
                   [showBorders]="false" [columnAutoWidth]="true" [expandedRowKeys]="[0, 1]" [showColumnHeaders]="false"
@@ -61,31 +63,35 @@
         <dxi-item title="UI.LOGS.TAB_LEVELS" icon="sliders">
           <div *dxTemplate>
             <div class="tab-fill">
-              <dx-data-grid [height]="'100%'" [dataSource]="loggerDataSource"
-                keyExpr="facility" [showBorders]="false" [allowColumnResizing]="true">
+              @if (!loaded) {
+                <app-skeleton variant="table" [columns]="2" [rows]="8"></app-skeleton>
+              } @else {
+                <dx-data-grid [height]="'100%'" [dataSource]="loggerDataSource"
+                  keyExpr="facility" [showBorders]="false" [allowColumnResizing]="true">
 
-                <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false" [allowDeleting]="false">
-                </dxo-editing>
-                <dxo-filter-row [visible]="true"></dxo-filter-row>
-                <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                  <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false" [allowDeleting]="false">
+                  </dxo-editing>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc" cssClass="mono-cell"
-                  [caption]="'UI.LOGS.SOURCE' | translateAsync"></dxi-column>
-                <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName" [caption]="'UI.LOGS.LEVEL' | translateAsync"
-                  cellTemplate="logLevelCell" editCellTemplate="logLevelEditor" [width]="130"></dxi-column>
+                  <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc" cssClass="mono-cell"
+                    [caption]="'UI.LOGS.SOURCE' | translateAsync"></dxi-column>
+                  <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName" [caption]="'UI.LOGS.LEVEL' | translateAsync"
+                    cellTemplate="logLevelCell" editCellTemplate="logLevelEditor" [width]="130"></dxi-column>
 
-                <div *dxTemplate="let cellInfo of 'logLevelCell'">
-                  <span class="pill" [ngClass]="levelTone(cellInfo.data.logLevel)">{{ cellInfo.value }}</span>
-                </div>
-                <div *dxTemplate="let cellInfo of 'logLevelEditor'">
-                  <dx-select-box [value]="cellInfo.data.logLevel" [dataSource]="logLevelsDataSource"
-                    displayExpr="name" valueExpr="key"
-                    (onValueChanged)="cellInfo.setValue($event.value)"
-                    (onSelectionChanged)="cellInfo.component.updateDimensions()">
-                  </dx-select-box>
-                </div>
-              </dx-data-grid>
+                  <div *dxTemplate="let cellInfo of 'logLevelCell'">
+                    <span class="pill" [ngClass]="levelTone(cellInfo.data.logLevel)">{{ cellInfo.value }}</span>
+                  </div>
+                  <div *dxTemplate="let cellInfo of 'logLevelEditor'">
+                    <dx-select-box [value]="cellInfo.data.logLevel" [dataSource]="logLevelsDataSource"
+                      displayExpr="name" valueExpr="key"
+                      (onValueChanged)="cellInfo.setValue($event.value)"
+                      (onSelectionChanged)="cellInfo.component.updateDimensions()">
+                    </dx-select-box>
+                  </div>
+                </dx-data-grid>
+              }
             </div>
           </div>
         </dxi-item>

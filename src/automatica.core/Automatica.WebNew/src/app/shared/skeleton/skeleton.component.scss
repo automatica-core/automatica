@@ -1,0 +1,166 @@
+:host {
+    display: block;
+    width: 100%;
+    // mixed from the text color so the blocks read on light and dark surfaces alike
+    --sk-base: color-mix(in srgb, var(--fg) 9%, var(--surface));
+    --sk-shine: color-mix(in srgb, var(--fg) 17%, var(--surface));
+}
+
+// screen readers announce "loading" once, the blocks themselves are hidden from them
+.sk-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.sk-bar,
+.sk-icon,
+.sk-pill,
+.sk-input {
+    display: block;
+    background: linear-gradient(90deg, var(--sk-base) 0%, var(--sk-shine) 50%, var(--sk-base) 100%);
+    background-size: 200% 100%;
+    animation: sk-shimmer 1.4s ease-in-out infinite;
+}
+
+.sk-bar {
+    height: 12px;
+    border-radius: 4px;
+    max-width: 100%;
+}
+
+.sk-bar-sm {
+    height: 9px;
+    opacity: 0.75;
+}
+
+.sk-icon {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+}
+
+.sk-icon-sm {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.sk-pill {
+    flex: none;
+    width: 72px;
+    height: 22px;
+    border-radius: 11px;
+}
+
+.sk-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 36px;
+    padding: var(--space-2) var(--space-1);
+}
+
+// list: same rhythm as the .li rows of the pages
+.sk-li {
+    min-height: 56px;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.sk-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+// table
+:host([data-variant="table"]) .sk-row {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--line);
+}
+
+.sk-head {
+    background: var(--surface-2);
+}
+
+.sk-cell {
+    flex: 1;
+    min-width: 0;
+}
+
+// tree
+:host([data-variant="tree"]) .sk-row {
+    gap: var(--space-2);
+    min-height: 30px;
+    padding-top: var(--space-1);
+    padding-bottom: var(--space-1);
+}
+
+// form
+.sk-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-1);
+}
+
+.sk-input {
+    height: 36px;
+    border-radius: var(--radius-sm);
+}
+
+// cards
+.sk-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-4);
+}
+
+.sk-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-height: 120px;
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+}
+
+// lines
+:host([data-variant="lines"]) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+}
+
+@keyframes sk-shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sk-bar,
+    .sk-icon,
+    .sk-pill,
+    .sk-input {
+        animation: none;
+    }
+}

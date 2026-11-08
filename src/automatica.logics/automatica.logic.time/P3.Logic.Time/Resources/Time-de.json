@@ -106,6 +106,126 @@
         "NAME": "Langer Druck [ms]",
         "DESCRIPTION": "Haltezeit für einen langen Tastendruck, 0 = aus (für Taster ohne Loslass-Telegramm)"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 setzt den Ausgang zurück und sperrt den Baustein, bis Off wieder 0 ist"
+      }
+    },
+    "ON_OFF_DELAY": {
+      "NAME": "Ein- und Ausschaltverzögerung",
+      "DESCRIPTION": "Der Ausgang folgt dem Eingang, er schaltet nach der Einschaltverzögerung ein und nach der Ausschaltverzögerung aus",
+      "TRIGGER": {
+        "DESCRIPTION": "Eingangssignal"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Verzögertes Eingangssignal"
+      },
+      "ON": {
+        "NAME": "Einschaltverzögerung [s]",
+        "DESCRIPTION": "So lange muss der Eingang 1 sein, bis der Ausgang einschaltet"
+      },
+      "OFF": {
+        "NAME": "Ausschaltverzögerung [s]",
+        "DESCRIPTION": "So lange muss der Eingang 0 sein, bis der Ausgang ausschaltet"
+      }
+    },
+    "SAVING_ON_DELAY": {
+      "NAME": "Speichernde Einschaltverzögerung",
+      "DESCRIPTION": "Ein Impuls am Eingang schaltet den Ausgang nach der Verzögerung ein, er bleibt bis Off eingeschaltet",
+      "TRIGGER": {
+        "DESCRIPTION": "Impuls startet die Verzögerung"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 ab Ende der Verzögerung bis Off"
+      },
+      "DELAY": {
+        "NAME": "Verzögerung [s]",
+        "DESCRIPTION": "Zeit vom Impuls bis zum Einschalten"
+      }
+    },
+    "EDGE_WIPING_RELAY": {
+      "NAME": "Flankengesteuertes Wischrelais",
+      "DESCRIPTION": "Jeder Impuls am Eingang erzeugt eine feste Anzahl Impulse am Ausgang",
+      "TRIGGER": {
+        "DESCRIPTION": "Impuls startet die Impulsfolge (neu)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Impulsfolge"
+      },
+      "ON": {
+        "NAME": "Einzeit [s]",
+        "DESCRIPTION": "Länge jedes Impulses, mindestens 0,1 s"
+      },
+      "OFF": {
+        "NAME": "Auszeit [s]",
+        "DESCRIPTION": "Pause zwischen zwei Impulsen, mindestens 0,1 s"
+      },
+      "CYCLES": {
+        "NAME": "Zyklen",
+        "DESCRIPTION": "Anzahl Impulse pro Eingangsimpuls"
+      }
+    },
+    "DELAYED_PULSE": {
+      "NAME": "Verzögerter Impuls",
+      "DESCRIPTION": "Ein Impuls am Eingang erzeugt nach der Verzögerung einen Impuls am Ausgang",
+      "TRIGGER": {
+        "DESCRIPTION": "Impuls startet die Verzögerung, ein weiterer Impuls während der Verzögerung startet sie neu"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Verzögerter Impuls"
+      },
+      "DELAY": {
+        "NAME": "Verzögerung [s]",
+        "DESCRIPTION": "Zeit vom Eingangsimpuls bis zum Ausgangsimpuls"
+      },
+      "PULSE": {
+        "NAME": "Impulslänge [s]",
+        "DESCRIPTION": "Länge des Ausgangsimpulses, mindestens 0,1 s"
+      }
+    },
+    "PWM": {
+      "NAME": "Pulsweitenmodulation",
+      "DESCRIPTION": "Wandelt einen Analogwert 0..10 in ein Ein/Aus-Signal mit diesem Tastverhältnis",
+      "VALUE": {
+        "DESCRIPTION": "Tastverhältnis 0..10 (0 = immer aus, 10 = immer ein)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Pulsweitenmodulierter Ausgang"
+      },
+      "PERIOD": {
+        "NAME": "Periode [s]",
+        "DESCRIPTION": "Länge eines Ein/Aus-Zyklus, mindestens 0,1 s"
+      }
+    },
+    "RAMP": {
+      "NAME": "Rampenregler",
+      "DESCRIPTION": "Bewegt den Ausgang alle 100 ms schrittweise zu einer von zwei Stufen",
+      "SELECT": {
+        "DESCRIPTION": "0 = Stufe 1, 1 = Stufe 2"
+      },
+      "STOP": {
+        "DESCRIPTION": "1 setzt den Ausgang auf den Startwert und hält ihn"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Aktueller Wert"
+      },
+      "START": {
+        "NAME": "Startwert",
+        "DESCRIPTION": "Wert beim Start und solange Stop 1 ist"
+      },
+      "STEP": {
+        "NAME": "Schrittweite",
+        "DESCRIPTION": "Änderung pro 100 ms, 0 = direkt auf die Stufe"
+      },
+      "LEVEL1": {
+        "NAME": "Stufe 1",
+        "DESCRIPTION": "Zielwert solange S 0 ist"
+      },
+      "LEVEL2": {
+        "NAME": "Stufe 2",
+        "DESCRIPTION": "Zielwert solange S 1 ist"
+      }
     }
   }
 }

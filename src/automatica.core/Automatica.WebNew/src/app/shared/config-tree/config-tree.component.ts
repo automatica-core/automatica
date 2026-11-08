@@ -78,6 +78,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   loadOnInit = false;
 
+  // set by the host page once its first load finished (also on error), hides the skeleton even when no config came back
+  @Input()
+  loaded = false;
+
   constructor(
     private configService: ConfigService,
     public nodeInstanceService: LogicEditorInstanceService,
@@ -499,10 +503,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  onContextMenuHiding() {
-    this.contextMenu.instance.option({ items: null, target: "#config" });
-  }
-
   onItemContextMenu() {
     this.contextMenu.instance.hide();
   }
@@ -516,6 +516,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     if (!$event.row) {
       return;
     }
+
+    // no browser menu in the tree, our menu is shown once the supported templates are loaded
+    $event.event?.preventDefault();
 
     this.popoverVisible = false;
     const that = this;
@@ -578,7 +581,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
 
     if (items.length > 0) {
-      this.contextMenu.instance.option({ items: items, target: $event.event });
+      // shown at the mouse position. The event must not be the menu's target: DevExtreme 26 throws E0025 when it detaches
+      // its show handler from an event, and the menu never opens
+      this.contextMenu.instance.option({ items: items, position: { my: "left top", at: "left top", of: $event.event } });
       await this.contextMenu.instance.show();
     }
   }

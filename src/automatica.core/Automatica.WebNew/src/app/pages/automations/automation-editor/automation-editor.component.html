@@ -188,6 +188,22 @@
         </div>
       }
     </div>
+  } @else if (!loadFailed) {
+    <div class="ed">
+      <div class="main">
+        <div class="panel settings">
+          <app-skeleton variant="form" [rows]="4"></app-skeleton>
+        </div>
+        <div class="panel">
+          <app-skeleton variant="list" [rows]="3"></app-skeleton>
+        </div>
+      </div>
+      <aside class="side">
+        <div class="panel card">
+          <app-skeleton variant="lines" [rows]="4"></app-skeleton>
+        </div>
+      </aside>
+    </div>
   }
 </div>
 

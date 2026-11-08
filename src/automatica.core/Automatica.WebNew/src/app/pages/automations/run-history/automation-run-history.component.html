@@ -24,6 +24,8 @@
             <b>{{ 'UI.AUTOMATIONS.HISTORY.EMPTY' | translateAsync }}</b>
             <span>{{ 'UI.AUTOMATIONS.HISTORY.EMPTY_HINT' | translateAsync }}</span>
           </div>
+        } @else {
+          <app-skeleton variant="list" [rows]="6"></app-skeleton>
         }
       }
     </div>
@@ -62,6 +64,8 @@
       </ol>
     } @else if (runs.length) {
       <div class="empty-state"><span>{{ 'UI.AUTOMATIONS.HISTORY.SELECT' | translateAsync }}</span></div>
+    } @else if (!loaded) {
+      <app-skeleton variant="lines" [rows]="6"></app-skeleton>
     }
   </div>
 </div>

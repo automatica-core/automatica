@@ -5,6 +5,16 @@
 
 .config-tree {
     height: 100%;
+    position: relative;
+}
+
+.tree-skeleton {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: var(--space-2);
+    overflow: hidden;
+    background: var(--surface);
 }
 
 .tree-cell {

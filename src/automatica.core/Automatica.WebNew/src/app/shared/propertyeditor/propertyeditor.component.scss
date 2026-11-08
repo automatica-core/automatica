@@ -54,6 +54,13 @@
     min-height: 0;
 }
 
+.insp-skeleton {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: var(--space-3) var(--space-4);
+}
+
 .insp-foot {
     flex: none;
     display: flex;

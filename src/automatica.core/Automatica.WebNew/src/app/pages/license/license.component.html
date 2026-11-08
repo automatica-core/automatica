@@ -57,13 +57,19 @@
           <b>{{ 'SYSTEM.NO_LICENSE_FOUND' | translateAsync }}</b>
           <span>{{ 'UI.LICENSE.EMPTY_HINT' | translateAsync }}</span>
         </div>
+      } @else {
+        <app-skeleton variant="lines" [rows]="5"></app-skeleton>
       }
     </section>
 
     <section class="panel card editor" [attr.aria-label]="'UI.LICENSE.TEXT' | translateAsync">
       <span class="eyebrow">{{ 'UI.LICENSE.TEXT' | translateAsync }}</span>
-      <dx-text-area class="lic-text" [(value)]="license" valueChangeEvent="input" [height]="360"
-        [placeholder]="'UI.LICENSE.PLACEHOLDER' | translateAsync" [spellcheck]="false"></dx-text-area>
+      @if (!loaded) {
+        <app-skeleton variant="lines" [rows]="10"></app-skeleton>
+      } @else {
+        <dx-text-area class="lic-text" [(value)]="license" valueChangeEvent="input" [height]="360"
+          [placeholder]="'UI.LICENSE.PLACEHOLDER' | translateAsync" [spellcheck]="false"></dx-text-area>
+      }
     </section>
   </div>
 </div>

@@ -97,6 +97,82 @@
         "NAME": "OFF threshold",
         "DESCRIPTION": "The output switches off when this value is reached"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 resets the output and locks the block until Off is 0 again"
+      }
+    },
+    "VALUE_MONITOR": {
+      "NAME": "Analog value monitor",
+      "DESCRIPTION": "Reports when the value leaves the tolerance band between the lower and the upper threshold",
+      "VALUE": {
+        "DESCRIPTION": "Value to monitor"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 while the value is outside the tolerance band"
+      },
+      "UPPER": {
+        "NAME": "Upper threshold",
+        "DESCRIPTION": "Above this value the output is 1"
+      },
+      "LOWER": {
+        "NAME": "Lower threshold",
+        "DESCRIPTION": "Below this value the output is 1"
+      }
+    },
+    "COMPARATOR": {
+      "NAME": "Comparator",
+      "DESCRIPTION": "Switches on when V1 - V2 rises above the on value and off when it falls below the off value",
+      "VALUE1": {
+        "DESCRIPTION": "Value 1"
+      },
+      "VALUE2": {
+        "DESCRIPTION": "Value 2, subtracted from value 1"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 when the difference was exceeded"
+      },
+      "ON": {
+        "NAME": "On value",
+        "DESCRIPTION": "Difference above which the output switches on"
+      },
+      "OFF": {
+        "NAME": "Off value",
+        "DESCRIPTION": "Difference below which the output switches off"
+      }
+    },
+    "VALUE_VALIDATOR": {
+      "NAME": "Value validator",
+      "DESCRIPTION": "Passes only valid values: numbers within the range that change often enough. Invalid values are dropped and set E",
+      "VALUE": {
+        "DESCRIPTION": "Value to validate"
+      },
+      "ENABLE": {
+        "DESCRIPTION": "0 ignores the input; each 1 waits the delay once (unused = always enabled)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Last valid value"
+      },
+      "ERROR": {
+        "DESCRIPTION": "1 while the value is invalid or did not change within the minimum change interval"
+      },
+      "CHANGE_INTERVAL": {
+        "NAME": "Minimum change interval [s]",
+        "DESCRIPTION": "The value must change within this time, 0 = not checked"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Smallest valid value"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Largest valid value"
+      },
+      "DELAY": {
+        "NAME": "Delay [s]",
+        "DESCRIPTION": "Wait time after Enable = 1 before values reach the output"
+      }
     }
   }
 }

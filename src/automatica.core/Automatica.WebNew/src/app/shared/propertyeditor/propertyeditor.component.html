@@ -19,6 +19,10 @@
         }
       </div>
     </header>
+  } @else if (!loaded) {
+    <div class="insp-skeleton">
+      <app-skeleton variant="form" [rows]="7"></app-skeleton>
+    </div>
   } @else {
     <div class="empty-state">
       <fa-icon icon="hand-pointer" class="icon"></fa-icon>

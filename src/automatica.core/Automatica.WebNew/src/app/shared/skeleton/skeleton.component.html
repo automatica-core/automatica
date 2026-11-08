@@ -1,0 +1,61 @@
+<span class="sk-label">{{ 'UI.LOADING' | translateAsync }}</span>
+@switch (variant) {
+  @case ('table') {
+    <div class="sk-row sk-head" aria-hidden="true">
+      @for (c of columnItems; track c) {
+        <span class="sk-cell"><span class="sk-bar sk-bar-sm" [style.width]="width(c, 3)"></span></span>
+      }
+    </div>
+    @for (r of rowItems; track r) {
+      <div class="sk-row" aria-hidden="true">
+        @for (c of columnItems; track c) {
+          <span class="sk-cell"><span class="sk-bar" [style.width]="width(r, c)"></span></span>
+        }
+      </div>
+    }
+  }
+  @case ('tree') {
+    @for (r of rowItems; track r) {
+      <div class="sk-row" aria-hidden="true" [style.padding-left.px]="indent(r) * 20 + 4">
+        <span class="sk-icon sk-icon-sm"></span>
+        <span class="sk-bar" [style.width]="width(r)" style="max-width: 220px"></span>
+      </div>
+    }
+  }
+  @case ('form') {
+    @for (r of rowItems; track r) {
+      <div class="sk-field" aria-hidden="true">
+        <span class="sk-bar sk-bar-sm" [style.width]="width(r, 5)" style="max-width: 160px"></span>
+        <span class="sk-input"></span>
+      </div>
+    }
+  }
+  @case ('cards') {
+    <div class="sk-cards" aria-hidden="true">
+      @for (r of rowItems; track r) {
+        <div class="sk-card">
+          <span class="sk-icon"></span>
+          <span class="sk-bar" [style.width]="width(r)"></span>
+          <span class="sk-bar sk-bar-sm" [style.width]="width(r, 4)"></span>
+        </div>
+      }
+    </div>
+  }
+  @case ('lines') {
+    @for (r of rowItems; track r) {
+      <span class="sk-bar sk-line" aria-hidden="true" [style.width]="r === rowItems.length - 1 ? '45%' : width(r, 2)"></span>
+    }
+  }
+  @default {
+    @for (r of rowItems; track r) {
+      <div class="sk-row sk-li" aria-hidden="true">
+        <span class="sk-icon"></span>
+        <span class="sk-text">
+          <span class="sk-bar" [style.width]="width(r)"></span>
+          <span class="sk-bar sk-bar-sm" [style.width]="width(r, 6)"></span>
+        </span>
+        <span class="sk-pill"></span>
+      </div>
+    }
+  }
+}

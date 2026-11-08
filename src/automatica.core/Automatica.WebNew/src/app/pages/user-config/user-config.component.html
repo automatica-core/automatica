@@ -36,6 +36,8 @@
                 <span>{{ 'UI.PAGES.NO_MATCH_HINT' | translateAsync }}</span>
               }
             </div>
+          } @else {
+            <app-skeleton variant="list" [rows]="8"></app-skeleton>
           }
         }
       </div>
