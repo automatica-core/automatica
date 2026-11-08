@@ -1,0 +1,71 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.climate-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+// the target temperature between the buttons
+.climate-target {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-sm);
+    color: var(--fg);
+
+    small {
+        margin-left: 2px;
+        color: var(--muted);
+    }
+}
+
+.climate-btn {
+    appearance: none;
+    flex: none;
+    width: 34px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--accent);
+    }
+
+    &:active:not(:disabled) {
+        background: var(--accent-soft);
+    }
+
+    &:disabled {
+        color: var(--muted);
+        cursor: default;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+
+    // power on / boost on
+    &.is-on {
+        color: var(--lamp);
+        border-color: color-mix(in srgb, var(--lamp) 50%, var(--line));
+        background: color-mix(in srgb, var(--lamp) 12%, var(--surface-2));
+    }
+}

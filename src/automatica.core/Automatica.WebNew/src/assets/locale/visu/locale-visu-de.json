@@ -94,6 +94,18 @@
             "TRACKER": {
                 "NAME": "Tracker",
                 "DESCRIPTION": "Ereignisprotokoll mit Zeitstempel (Tracker-Logik)"
+            },
+            "ROOM_CONTROLLER": {
+                "NAME": "Raumregler",
+                "DESCRIPTION": "Ist- und Solltemperatur eines Raums, wärmer / kühler"
+            },
+            "CLIMATE_UNIT": {
+                "NAME": "Klimagerät",
+                "DESCRIPTION": "Klimagerät oder Fan Coil: Temperatur, Sollwert, Modus und Lüfter"
+            },
+            "CLIMATE_CENTRAL": {
+                "NAME": "Klimazentrale",
+                "DESCRIPTION": "Heiz-/Kühlquelle, HVAC, Zentrale oder Mischventil: Status und Last"
             }
         },
         "CATEGORY": {

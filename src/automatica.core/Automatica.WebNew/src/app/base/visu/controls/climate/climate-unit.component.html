@@ -1,0 +1,29 @@
+<app-visualization-control [hint]="displayText" [location]="location" [icon]="unitIcon" [value]="currentText" unit="°C"
+  [state]="stateText" [subValue]="subText" [active]="active">
+
+  <div control class="climate-row">
+    <button type="button" class="climate-btn" (click)="adjust(-1)" [disabled]="!canAdjust"
+      [attr.aria-label]="('UI.VISU.ROOM_COOLER' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.ROOM_COOLER' | translateAsync">
+      <fa-icon icon="minus"></fa-icon>
+    </button>
+    <span class="climate-target" aria-live="polite">{{ targetText }}<small>°C</small></span>
+    <button type="button" class="climate-btn" (click)="adjust(1)" [disabled]="!canAdjust"
+      [attr.aria-label]="('UI.VISU.ROOM_WARMER' | translateAsync) + ': ' + displayText" [attr.title]="'UI.VISU.ROOM_WARMER' | translateAsync">
+      <fa-icon icon="plus"></fa-icon>
+    </button>
+    @if (kind === 'ac') {
+      <button type="button" class="climate-btn" [class.is-on]="active" (click)="togglePower()" [disabled]="busy"
+        [attr.aria-pressed]="active" [attr.aria-label]="('UI.VISU.CLIMATE_POWER' | translateAsync) + ': ' + displayText"
+        [attr.title]="'UI.VISU.CLIMATE_POWER' | translateAsync">
+        <fa-icon icon="power-off"></fa-icon>
+      </button>
+    } @else {
+      <button type="button" class="climate-btn" [class.is-on]="boostOn" (click)="toggleBoost()" [disabled]="busy"
+        [attr.aria-pressed]="boostOn" [attr.aria-label]="('UI.VISU.CLIMATE_BOOST' | translateAsync) + ': ' + displayText"
+        [attr.title]="'UI.VISU.CLIMATE_BOOST' | translateAsync">
+        <fa-icon icon="wind"></fa-icon>
+      </button>
+    }
+  </div>
+
+</app-visualization-control>

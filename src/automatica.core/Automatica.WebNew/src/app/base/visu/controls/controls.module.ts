@@ -28,6 +28,9 @@ import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
 import { StatusComponent } from "./text-status/status/status.component";
 import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
 import { TrackerComponent } from "./text-status/tracker/tracker.component";
+import { RoomControllerComponent } from "./room-controller/room-controller.component";
+import { ClimateUnitComponent } from "./climate/climate-unit.component";
+import { ClimateCentralComponent } from "./climate/climate-central.component";
 
 @NgModule({
   imports: [
@@ -78,7 +81,10 @@ import { TrackerComponent } from "./text-status/tracker/tracker.component";
     EnergyFlowComponent,
     StatusComponent,
     StatusMonitorComponent,
-    TrackerComponent
+    TrackerComponent,
+    RoomControllerComponent,
+    ClimateUnitComponent,
+    ClimateCentralComponent
   ],
   exports: [
     VisuItemComponent

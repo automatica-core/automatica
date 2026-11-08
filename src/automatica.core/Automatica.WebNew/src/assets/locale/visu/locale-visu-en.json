@@ -94,6 +94,18 @@
             "TRACKER": {
                 "NAME": "Tracker",
                 "DESCRIPTION": "Event log with time stamps (tracker logic)"
+            },
+            "ROOM_CONTROLLER": {
+                "NAME": "Room controller",
+                "DESCRIPTION": "Current and target temperature of a room, warmer / cooler"
+            },
+            "CLIMATE_UNIT": {
+                "NAME": "Climate unit",
+                "DESCRIPTION": "AC unit or fan coil: temperature, target, mode and fan"
+            },
+            "CLIMATE_CENTRAL": {
+                "NAME": "Climate central",
+                "DESCRIPTION": "Heating / cooling source, HVAC, central or mixing valve: state and load"
             }
         },
         "CATEGORY": {

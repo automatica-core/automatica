@@ -23,6 +23,9 @@ import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
 import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
+import { RoomControllerComponent } from "./room-controller/room-controller.component";
+import { ClimateUnitComponent } from "./climate/climate-unit.component";
+import { ClimateCentralComponent } from "./climate/climate-central.component";
 import { StatusComponent } from "./text-status/status/status.component";
 import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
 import { TrackerComponent } from "./text-status/tracker/tracker.component";
@@ -144,6 +147,18 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       case "status-monitor":
       case "tracker": {
         this.component = this.item.type === VisuObjectSourceType.RuleInstance ? TEXT_STATUS_TILES[this.item.VisuObjectTemplate.Key] : LabelComponent;
+        break;
+      }
+      case "room-controller": {
+        this.component = RoomControllerComponent;
+        break;
+      }
+      case "climate-unit": {
+        this.component = ClimateUnitComponent;
+        break;
+      }
+      case "climate-central": {
+        this.component = ClimateCentralComponent;
         break;
       }
       

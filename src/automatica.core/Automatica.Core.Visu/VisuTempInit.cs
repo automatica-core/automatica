@@ -83,6 +83,7 @@ namespace Automatica.Core.Visu
             AddCameraControl(factory);
             AddEnergyFlowControl(factory);
             AddTextStatusControls(factory);
+            AddRoomControllerControl(factory);
         }
 
         /// <summary>
@@ -115,6 +116,27 @@ namespace Automatica.Core.Visu
             factory.CreateVisuMobileTemplate(tracker, "VISU.OBJECT.TRACKER.NAME", "VISU.OBJECT.TRACKER.DESCRIPTION", "tracker",
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
             AddCommonProperty(tracker, factory);
+        }
+
+        /// <summary>
+        /// Default tile of the intelligent room controller logic (P3.Logic.Operations, Climate)
+        /// </summary>
+        private void AddRoomControllerControl(VisuMobileTemplateFactory factory)
+        {
+            var roomController = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.RoomController);
+            factory.CreateVisuMobileTemplate(roomController, "VISU.OBJECT.ROOM_CONTROLLER.NAME", "VISU.OBJECT.ROOM_CONTROLLER.DESCRIPTION",
+                "room-controller", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(roomController, factory);
+
+            var climateUnit = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ClimateUnit);
+            factory.CreateVisuMobileTemplate(climateUnit, "VISU.OBJECT.CLIMATE_UNIT.NAME", "VISU.OBJECT.CLIMATE_UNIT.DESCRIPTION",
+                "climate-unit", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(climateUnit, factory);
+
+            var climateCentral = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ClimateCentral);
+            factory.CreateVisuMobileTemplate(climateCentral, "VISU.OBJECT.CLIMATE_CENTRAL.NAME", "VISU.OBJECT.CLIMATE_CENTRAL.DESCRIPTION",
+                "climate-central", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(climateCentral, factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)

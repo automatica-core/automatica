@@ -53,7 +53,22 @@ namespace Automatica.Core.Base.Templates
         /// Event log of the tracker logic (string operations plugin)
         /// </summary>
         [VisuMobileObjectTemplateType("7f4b9c3e-0a56-4d8c-9e3f-4b9a5c1d6e19")]
-        Tracker = 25
+        Tracker = 25,
+        /// <summary>
+        /// Intelligent room controller (climate logic): current / target temperature, mode, +/- for the comfort temperature
+        /// </summary>
+        [VisuMobileObjectTemplateType("5b0f3c1e-8d2a-4f6b-9c47-1e2d3a4b5c6d")]
+        RoomController = 17,
+        /// <summary>
+        /// Climate unit (AC unit, fan coil unit): current / target temperature, mode, fan, on/off
+        /// </summary>
+        [VisuMobileObjectTemplateType("2d6e9a41-7c3b-4f85-a1d2-6b9e0c4f7a28")]
+        ClimateUnit = 27,
+        /// <summary>
+        /// Central climate source (heating/cooling controller, HVAC, AC / fan coil central, mixing valve): read-only state
+        /// </summary>
+        [VisuMobileObjectTemplateType("3e7fab52-8d4c-4096-b2e3-7cafd15081b9")]
+        ClimateCentral = 28
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

@@ -23,6 +23,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Operations-de.json" />
     <EmbeddedResource Include="Resources\Operations-en.json" />
+    <EmbeddedResource Include="Resources\Climate-de.json" />
+    <EmbeddedResource Include="Resources\Climate-en.json" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="P3.Logic.Operations.Tests" />
