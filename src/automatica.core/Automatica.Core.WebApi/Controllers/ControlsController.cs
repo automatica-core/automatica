@@ -32,6 +32,9 @@ namespace Automatica.Core.WebApi.Controllers
                 case IBlind:
                     Type = "blind";
                     break;
+                case IMediaPlayer:
+                    Type = "media-player";
+                    break;
                 default:
                     Type = control.GetType().Name;
                     break;

@@ -18,6 +18,7 @@ The Matter stack is written in plain C# (`P3.Driver.Matter`, no native SDK). It 
 | `IDimmer` | Dimmable Light (On/Off + Level Control) |
 | `ISwitch` | On/Off Light |
 | `IBlind` | Window Covering (lift, percentage) |
+| `IMediaPlayer` (Media player logic) | Dimmable Plug-in Unit: on = play, off = pause, level = volume (default, works with Alexa, Google and Apple). Bridge type *Speaker*: Matter Speaker, on/off = unmute/mute, level = volume (Google only) |
 
 Changes made in Automatica are reported to the controllers through their subscriptions.
 

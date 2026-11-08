@@ -339,6 +339,68 @@
         }
       }
     },
+    "MEDIA_PLAYER": {
+      "NAME": "Mediaplayer",
+      "DESCRIPTION": "Eine Musikzone, ein Lautsprecher oder ein Fernseher eines beliebigen Treibers als Steuerelement: Matter, HomeKit und Sprachassistenten können abspielen, pausieren und die Lautstärke setzen",
+      "INPUT": {
+        "PLAYING": {
+          "NAME": "Spielt",
+          "DESCRIPTION": "Zustand des Geräts: 1, solange es spielt"
+        },
+        "VOLUME": {
+          "NAME": "Lautstärke (%)",
+          "DESCRIPTION": "Zustand des Geräts: Lautstärke 0..100"
+        },
+        "MUTE": {
+          "NAME": "Stumm",
+          "DESCRIPTION": "Zustand des Geräts: 1, solange es stumm ist"
+        },
+        "TITLE": {
+          "NAME": "Titel",
+          "DESCRIPTION": "Zustand des Geräts: der aktuelle Titel"
+        },
+        "ARTIST": {
+          "NAME": "Interpret",
+          "DESCRIPTION": "Zustand des Geräts: der aktuelle Interpret"
+        }
+      },
+      "OUTPUT": {
+        "PLAY": {
+          "NAME": "Abspielen",
+          "DESCRIPTION": "1 = abspielen, 0 = pausieren"
+        },
+        "STOP": {
+          "NAME": "Stopp",
+          "DESCRIPTION": "Impuls: stoppen"
+        },
+        "NEXT": {
+          "NAME": "Weiter",
+          "DESCRIPTION": "Impuls: nächster Titel"
+        },
+        "PREVIOUS": {
+          "NAME": "Zurück",
+          "DESCRIPTION": "Impuls: vorheriger Titel"
+        },
+        "VOLUME": {
+          "NAME": "Lautstärke (%)",
+          "DESCRIPTION": "Zu setzende Lautstärke, 0..100"
+        },
+        "MUTE": {
+          "NAME": "Stumm",
+          "DESCRIPTION": "1 = stumm, 0 = Ton an"
+        }
+      },
+      "PARAM": {
+        "BRIDGE_TYPE": {
+          "NAME": "Smart-Home-Typ",
+          "DESCRIPTION": "Wie Matter den Player zeigt. Ein/Aus mit Lautstärke: Ein spielt, Aus pausiert, die Helligkeit ist die Lautstärke; jeder Sprachassistent kann ihn steuern. Lautsprecher: der Matter-Lautsprechertyp (Ein/Aus schaltet stumm), nur Google Home zeigt ihn"
+        }
+      },
+      "BRIDGE_TYPE": {
+        "ON_OFF_VOLUME": "Ein/Aus mit Lautstärke (alle Sprachassistenten)",
+        "SPEAKER": "Matter-Lautsprecher (nur Google Home)"
+      }
+    },
     "MEDIA_CONTROLLER": {
       "NAME": "Media Controller",
       "DESCRIPTION": "Universalfernbedienung: bis zu 8 Modi (z. B. TV, Radio) mit Ein/Aus, Lautstärke, Kanal, Ziffernblock, Navigation und Wiedergabe",

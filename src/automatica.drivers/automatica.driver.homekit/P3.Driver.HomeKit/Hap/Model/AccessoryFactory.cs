@@ -29,6 +29,7 @@
         public const string ValveType = "D0";
         public const string SecuritySystemType = "7E";
         public const string BatteryServiceType = "96";
+        public const string SpeakerType = "113";
 
         /// <summary>
         /// Instance id of the primary service of accessories created by this factory, the accessory information service uses 1-6.

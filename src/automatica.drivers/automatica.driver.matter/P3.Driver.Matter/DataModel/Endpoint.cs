@@ -28,6 +28,7 @@ namespace P3.Driver.Matter.DataModel
         public static readonly DeviceType Fan = new(0x002B, 2);
         public static readonly DeviceType DoorLock = new(0x000A, 3);
         public static readonly DeviceType WaterValve = new(0x0042, 1);
+        public static readonly DeviceType Speaker = new(0x0022, 1);
     }
 
     public sealed class Endpoint

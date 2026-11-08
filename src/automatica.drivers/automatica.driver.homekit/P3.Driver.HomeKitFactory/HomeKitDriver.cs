@@ -32,6 +32,7 @@ namespace P3.Driver.HomeKitFactory
         private readonly List<Accessory> _accessories = new List<Accessory>();
         private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new();
         private readonly Dictionary<Accessory, IControl> _characteristicControlMap = new();
+        private readonly Dictionary<Accessory, MediaPlayerAccessory> _mediaPlayers = new();
 
         private readonly AccessoryInstanceIdGenerator _aidGenerator;
         
@@ -215,6 +216,17 @@ namespace P3.Driver.HomeKitFactory
                     _characteristicControlMap.Add(accessory, control);
                     BindBlind(accessory, iBlind, WriteCharacteristic, DriverContext.Logger);
                 }
+                else if (MediaPlayerProxy.TryCreate(control) is { } player)
+                {
+                    var accessory = MediaPlayerAccessory.CreateAccessory(aid, control.Name, control.Id.ToString());
+
+                    accessory.Id = _server.AddAccessory(accessory);
+                    _mediaPlayers.Add(accessory, MediaPlayerAccessory.Bind(accessory, player, WriteCharacteristic));
+                }
+                else
+                {
+                    DriverContext.Logger.LogWarning($"Control {control.Name} ({control.GetType().Name}) has no HomeKit mapping and is skipped");
+                }
             }
 
             foreach (var accessory in _server.AccessoryContainer.Accessories)
@@ -344,6 +356,11 @@ namespace P3.Driver.HomeKitFactory
                 if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
                 {
                     value.ForEach(a => a.SetValue(e.Value));
+                }
+                else if (_mediaPlayers.TryGetValue(e.Characteristic.Accessory, out var mediaPlayer))
+                {
+                    DriverContext.Logger.LogDebug($"Target is the media player {e.Characteristic.Accessory.AccessoryInfo.Name.Value}");
+                    await mediaPlayer.HandleWriteAsync(e.Characteristic, e.Value);
                 }
                 else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
                 {

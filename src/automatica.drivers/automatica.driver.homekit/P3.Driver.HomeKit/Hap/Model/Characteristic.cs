@@ -70,6 +70,8 @@ namespace P3.Driver.HomeKit.Hap.Model
         public const string StatusLowBatteryType = "79";
         public const string StatusFaultType = "77";
         public const string StatusTamperedType = "7A";
+        public const string MuteType = "11A";
+        public const string VolumeType = "119";
         
 
         internal CharacteristicBase(Type defaultType)

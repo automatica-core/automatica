@@ -141,11 +141,45 @@ namespace P3.Driver.Matter.Driver
                     break;
                 }
                 default:
+                    if (MediaPlayerProxy.TryCreate(control) is { } player)
+                    {
+                        AddMediaPlayer(id, player);
+                        break;
+                    }
+
                     DriverContext.Logger.LogWarning("Control {Name} ({Type}) has no Matter mapping and is skipped", control.Name, control.GetType().Name);
                     return;
             }
 
             DriverContext.Logger.LogDebug("Bridged control {Name} as {Type}", control.Name, control.GetType().Name);
+        }
+
+        /// <summary>
+        /// On/off with volume: on = playing, off = paused. Speaker: on = unmuted (the Matter speaker's on/off is its mute).
+        /// </summary>
+        internal static (bool On, int Volume) MediaState(MediaPlayerProxy player) =>
+            (player.IsSpeaker ? !player.IsMuted : player.IsPlaying, player.Volume);
+
+        private void AddMediaPlayer(string id, MediaPlayerProxy player)
+        {
+            var speaker = player.IsSpeaker;
+            var device = _bridge.Add(new BridgedMediaPlayer(id, player.Control.Name, speaker ? MediaPlayerDeviceKind.Speaker : MediaPlayerDeviceKind.OnOffVolume)
+            {
+                SwitchRequested = on => Guard(() => speaker
+                    ? player.SetMuteAsync(!on)
+                    : on ? player.PlayAsync() : player.PauseAsync()),
+                VolumeRequested = percent => Guard(() => player.SetVolumeAsync(percent))
+            });
+            var (on, volume) = MediaState(player);
+            device.SetState(on, volume);
+            player.RegisterValueCallback(() =>
+            {
+                if (_running)
+                {
+                    var (isOn, level) = MediaState(player);
+                    device.SetState(isOn, level);
+                }
+            });
         }
 
         private static CoveringMovement Movement(IBlind blind)

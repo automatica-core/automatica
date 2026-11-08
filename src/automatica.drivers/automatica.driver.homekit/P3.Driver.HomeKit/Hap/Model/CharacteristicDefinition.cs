@@ -260,6 +260,9 @@ namespace P3.Driver.HomeKit.Hap.Model
         public static CharacteristicDefinition LockCurrentState => new CharacteristicDefinition(CharacteristicBase.LockCurrentStateType, CharacteristicFormat.UInt8, false, 3, 0, 3, 1, validValues: new[] { 0, 1, 2, 3 });
         public static CharacteristicDefinition LockTargetState => new CharacteristicDefinition(CharacteristicBase.LockTargetStateType, CharacteristicFormat.UInt8, true, 1, 0, 1, 1, validValues: new[] { 0, 1 });
 
+        public static CharacteristicDefinition Mute => new CharacteristicDefinition(CharacteristicBase.MuteType, CharacteristicFormat.Bool, true, false);
+        public static CharacteristicDefinition Volume => new CharacteristicDefinition(CharacteristicBase.VolumeType, CharacteristicFormat.UInt8, true, 0, 0, 100, 1, CharacteristicUnit.Percentage);
+
         public static CharacteristicDefinition CurrentPosition => new CharacteristicDefinition(CharacteristicBase.CurrentPositionType, CharacteristicFormat.UInt8, false, 0, 0, 100, 1, CharacteristicUnit.Percentage);
         public static CharacteristicDefinition TargetPosition => new CharacteristicDefinition(CharacteristicBase.TargetPositionType, CharacteristicFormat.UInt8, true, 0, 0, 100, 1, CharacteristicUnit.Percentage);
         public static CharacteristicDefinition PositionState => new CharacteristicDefinition(CharacteristicBase.PositionStateType, CharacteristicFormat.UInt8, false, 2, 0, 2, 1, validValues: new[] { 0, 1, 2 });

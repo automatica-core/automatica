@@ -220,9 +220,10 @@ namespace P3.Driver.Matter.DataModel.Clusters
         private byte? _onLevel;
         private byte? _startUpLevel;
 
-        public LevelControlCluster() : base(Id, 5)
+        /// <param name="lighting">The Lighting feature (lights and dimmable plugs); a speaker's volume is a level without it</param>
+        public LevelControlCluster(bool lighting = true) : base(Id, 5)
         {
-            FeatureMap = 0x03;
+            FeatureMap = lighting ? 0x03u : 0x01u;
             Attribute(AttributeCurrentLevel, (w, t, _) => PutNullableUInt(w, t, _currentLevel));
             Attribute(0x0001, (w, t, _) => w.PutUInt(t, 0));
             Attribute(0x0002, (w, t, _) => w.PutUInt(t, MinLevel));

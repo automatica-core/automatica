@@ -339,6 +339,68 @@
         }
       }
     },
+    "MEDIA_PLAYER": {
+      "NAME": "Media player",
+      "DESCRIPTION": "A music zone, speaker or TV of any driver as a control: Matter, HomeKit and voice assistants can play, pause and set the volume",
+      "INPUT": {
+        "PLAYING": {
+          "NAME": "Playing",
+          "DESCRIPTION": "State of the device: 1 while it plays"
+        },
+        "VOLUME": {
+          "NAME": "Volume (%)",
+          "DESCRIPTION": "State of the device: volume 0..100"
+        },
+        "MUTE": {
+          "NAME": "Muted",
+          "DESCRIPTION": "State of the device: 1 while muted"
+        },
+        "TITLE": {
+          "NAME": "Title",
+          "DESCRIPTION": "State of the device: the current title"
+        },
+        "ARTIST": {
+          "NAME": "Artist",
+          "DESCRIPTION": "State of the device: the current artist"
+        }
+      },
+      "OUTPUT": {
+        "PLAY": {
+          "NAME": "Play",
+          "DESCRIPTION": "1 = play, 0 = pause"
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": "Pulse: stop"
+        },
+        "NEXT": {
+          "NAME": "Next",
+          "DESCRIPTION": "Pulse: next title"
+        },
+        "PREVIOUS": {
+          "NAME": "Previous",
+          "DESCRIPTION": "Pulse: previous title"
+        },
+        "VOLUME": {
+          "NAME": "Volume (%)",
+          "DESCRIPTION": "Volume to set, 0..100"
+        },
+        "MUTE": {
+          "NAME": "Mute",
+          "DESCRIPTION": "1 = mute, 0 = unmute"
+        }
+      },
+      "PARAM": {
+        "BRIDGE_TYPE": {
+          "NAME": "Smart home type",
+          "DESCRIPTION": "How Matter shows the player. On/off with volume: on plays, off pauses, the level is the volume; every voice assistant can control it. Speaker: the Matter speaker type (on/off mutes), only Google Home shows it"
+        }
+      },
+      "BRIDGE_TYPE": {
+        "ON_OFF_VOLUME": "On/off with volume (all voice assistants)",
+        "SPEAKER": "Matter speaker (Google Home only)"
+      }
+    },
     "MEDIA_CONTROLLER": {
       "NAME": "Media Controller",
       "DESCRIPTION": "Universal remote: up to 8 modes (e.g. TV, radio) with power, volume, channel, number pad, navigation and playback commands",
