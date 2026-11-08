@@ -22,6 +22,7 @@ import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
+import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
 
 @Component({
     selector: "visu-component",
@@ -122,6 +123,11 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "camera": {
         this.component = CameraComponent;
+        break;
+      }
+      case "energy-flow": {
+        // the tile of the energy monitor logic, it needs the values of that logic
+        this.component = this.item.type === VisuObjectSourceType.RuleInstance ? EnergyFlowComponent : LabelComponent;
         break;
       }
       

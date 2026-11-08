@@ -81,6 +81,18 @@ namespace Automatica.Core.Visu
                 "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             AddCameraControl(factory);
+            AddEnergyFlowControl(factory);
+        }
+
+        /// <summary>
+        /// Animated energy flow (grid, PV, battery, house, extra consumers) of the energy monitor logic of the metering plugin
+        /// </summary>
+        private void AddEnergyFlowControl(VisuMobileTemplateFactory factory)
+        {
+            var energyFlow = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.EnergyFlow);
+            factory.CreateVisuMobileTemplate(energyFlow, "VISU.OBJECT.ENERGY_FLOW.NAME", "VISU.OBJECT.ENERGY_FLOW.DESCRIPTION", "energy-flow",
+                "VISU.CATEGORY.COMMON.NAME", 2, 2, true);
+            AddCommonProperty(energyFlow, factory);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)

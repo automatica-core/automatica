@@ -16,6 +16,9 @@
     <EmbeddedResource Include="Resources\Automatica.Logic.Metering-en.json" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Automatica.Logic.Metering.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Automatica.Core.Logic" Version="10.0.0.2049" />
   </ItemGroup>
 </Project>

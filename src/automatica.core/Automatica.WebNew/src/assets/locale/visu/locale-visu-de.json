@@ -78,6 +78,10 @@
             "CAMERA": {
                 "NAME": "Kamera",
                 "DESCRIPTION": "Live-Bild einer Kamera (Kamera-Treiber)"
+            },
+            "ENERGY_FLOW": {
+                "NAME": "Energiefluss",
+                "DESCRIPTION": "Aktueller Leistungsfluss zwischen Netz, PV, Speicher und Verbrauchern (Logik Energiemonitor)"
             }
         },
         "CATEGORY": {

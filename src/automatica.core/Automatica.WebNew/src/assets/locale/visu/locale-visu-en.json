@@ -78,6 +78,10 @@
             "CAMERA": {
                 "NAME": "Camera",
                 "DESCRIPTION": "Live picture of a camera (camera driver)"
+            },
+            "ENERGY_FLOW": {
+                "NAME": "Energy flow",
+                "DESCRIPTION": "Live power flow between grid, PV, battery and consumers (energy monitor logic)"
             }
         },
         "CATEGORY": {

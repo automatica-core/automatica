@@ -1,6 +1,164 @@
 {
   "METERING": {
     "NAME": "Metering",
-    "DESCRIPTION": "Evaluates meter readings"
+    "DESCRIPTION": "Evaluates meter readings",
+    "COMMON": {
+      "INPUT": {
+        "POWER": { "NAME": "Power", "DESCRIPTION": "Power in kW (use the power factor for W)" },
+        "READING": { "NAME": "Meter reading", "DESCRIPTION": "Absolute meter reading in kWh, counting up; once it has a value the energy is counted from it instead of the power" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Power", "DESCRIPTION": "Power in kW (without a power input calculated from the readings or pulses)" },
+        "TODAY": { "NAME": "Today", "DESCRIPTION": "Energy since midnight in kWh" },
+        "MONTH": { "NAME": "This month", "DESCRIPTION": "Energy since the first of the month in kWh" },
+        "TOTAL": { "NAME": "Total", "DESCRIPTION": "Total energy in kWh (starts at the first meter reading); kept over restarts" }
+      },
+      "PARAM": {
+        "POWER_FACTOR": { "NAME": "Power factor", "DESCRIPTION": "Multiplies the power inputs, e.g. 0.001 when the device sends W" },
+        "READING_FACTOR": { "NAME": "Reading factor", "DESCRIPTION": "Multiplies the meter readings, e.g. 0.001 when the meter sends Wh" },
+        "INVERT": { "NAME": "Invert sign", "DESCRIPTION": "Turn on when the device sends the other sign" }
+      }
+    },
+    "METER": {
+      "NAME": "Meter",
+      "DESCRIPTION": "Meter of a consumer or producer: power and/or meter reading in, power and energy today, this month and in total out"
+    },
+    "METER_BIDIRECTIONAL": {
+      "NAME": "Meter bidirectional",
+      "DESCRIPTION": "Meter counting both ways, e.g. the grid: import and export power and energy today, this month and in total",
+      "INPUT": {
+        "POWER": { "NAME": "Power (±)", "DESCRIPTION": "Signed power in kW: + import, - export" },
+        "IMPORT_POWER": { "NAME": "Import power", "DESCRIPTION": "Import power in kW" },
+        "EXPORT_POWER": { "NAME": "Export power", "DESCRIPTION": "Export power in kW" },
+        "IMPORT_READING": { "NAME": "Import reading", "DESCRIPTION": "Absolute import meter reading in kWh" },
+        "EXPORT_READING": { "NAME": "Export reading", "DESCRIPTION": "Absolute export meter reading in kWh" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Power (±)", "DESCRIPTION": "Signed power in kW: + import, - export" },
+        "IMPORT_POWER": { "NAME": "Import power", "DESCRIPTION": "Import power in kW" },
+        "EXPORT_POWER": { "NAME": "Export power", "DESCRIPTION": "Export power in kW" },
+        "IMPORT_TODAY": { "NAME": "Import today", "DESCRIPTION": "Imported energy since midnight in kWh" },
+        "IMPORT_MONTH": { "NAME": "Import this month", "DESCRIPTION": "Imported energy since the first of the month in kWh" },
+        "IMPORT_TOTAL": { "NAME": "Import total", "DESCRIPTION": "Total imported energy in kWh" },
+        "EXPORT_TODAY": { "NAME": "Export today", "DESCRIPTION": "Exported energy since midnight in kWh" },
+        "EXPORT_MONTH": { "NAME": "Export this month", "DESCRIPTION": "Exported energy since the first of the month in kWh" },
+        "EXPORT_TOTAL": { "NAME": "Export total", "DESCRIPTION": "Total exported energy in kWh" }
+      }
+    },
+    "METER_STORAGE": {
+      "NAME": "Meter & storage",
+      "DESCRIPTION": "Meter of a storage (battery): charge and discharge power and energy, state of charge and stored energy",
+      "INPUT": {
+        "POWER": { "NAME": "Power (±)", "DESCRIPTION": "Signed power in kW: + charging, - discharging" },
+        "SOC": { "NAME": "State of charge", "DESCRIPTION": "State of charge in %" },
+        "CHARGE_READING": { "NAME": "Charge reading", "DESCRIPTION": "Absolute charge meter reading in kWh" },
+        "DISCHARGE_READING": { "NAME": "Discharge reading", "DESCRIPTION": "Absolute discharge meter reading in kWh" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Power (±)", "DESCRIPTION": "Signed power in kW: + charging, - discharging" },
+        "CHARGE_POWER": { "NAME": "Charge power", "DESCRIPTION": "Charge power in kW" },
+        "DISCHARGE_POWER": { "NAME": "Discharge power", "DESCRIPTION": "Discharge power in kW" },
+        "SOC": { "NAME": "State of charge", "DESCRIPTION": "State of charge in %" },
+        "STORED": { "NAME": "Stored energy", "DESCRIPTION": "Stored energy in kWh (state of charge × capacity)" },
+        "CHARGE_TODAY": { "NAME": "Charged today", "DESCRIPTION": "Charged energy since midnight in kWh" },
+        "CHARGE_MONTH": { "NAME": "Charged this month", "DESCRIPTION": "Charged energy since the first of the month in kWh" },
+        "CHARGE_TOTAL": { "NAME": "Charged total", "DESCRIPTION": "Total charged energy in kWh" },
+        "DISCHARGE_TODAY": { "NAME": "Discharged today", "DESCRIPTION": "Discharged energy since midnight in kWh" },
+        "DISCHARGE_MONTH": { "NAME": "Discharged this month", "DESCRIPTION": "Discharged energy since the first of the month in kWh" },
+        "DISCHARGE_TOTAL": { "NAME": "Discharged total", "DESCRIPTION": "Total discharged energy in kWh" }
+      },
+      "PARAM": {
+        "CAPACITY": { "NAME": "Capacity (kWh)", "DESCRIPTION": "Usable capacity of the storage, for the stored energy (0: not shown)" }
+      }
+    },
+    "METER_PULSE": {
+      "NAME": "Pulse meter",
+      "DESCRIPTION": "S0 pulse meter: power from the time between pulses and energy today, this month and in total",
+      "INPUT": {
+        "PULSE": { "NAME": "Pulse", "DESCRIPTION": "Pulse input: a binary input counts each switch-on, a number is a pulse counter (its increase counts)" }
+      },
+      "PARAM": {
+        "PULSES_PER_KWH": { "NAME": "Pulses per kWh", "DESCRIPTION": "Pulses of the meter per kWh (printed on the meter, e.g. 1000 imp/kWh)" }
+      }
+    },
+    "METER_FIXED": {
+      "NAME": "Fixed value meter",
+      "DESCRIPTION": "Meter of a device with a known power: energy = power × on-time, today, this month and in total",
+      "INPUT": {
+        "ON": { "NAME": "On", "DESCRIPTION": "Device on (counts the power while on)" }
+      },
+      "PARAM": {
+        "POWER": { "NAME": "Power (kW)", "DESCRIPTION": "Power of the device while on in kW" }
+      }
+    },
+    "METER_UTILITY": {
+      "NAME": "Utility meter",
+      "DESCRIPTION": "Meter for water, gas, heat or any other quantity: flow and quantity today, this month and in total",
+      "INPUT": {
+        "FLOW": { "NAME": "Flow", "DESCRIPTION": "Flow in units per hour" },
+        "READING": { "NAME": "Meter reading", "DESCRIPTION": "Absolute meter reading in the unit, counting up" },
+        "PULSE": { "NAME": "Pulse", "DESCRIPTION": "Pulse input: a binary input counts each switch-on, a number is a pulse counter" }
+      },
+      "OUTPUT": {
+        "FLOW": { "NAME": "Flow", "DESCRIPTION": "Flow in units per hour (without a flow input calculated from the readings or pulses)" },
+        "TODAY": { "NAME": "Today", "DESCRIPTION": "Quantity since midnight" },
+        "MONTH": { "NAME": "This month", "DESCRIPTION": "Quantity since the first of the month" },
+        "TOTAL": { "NAME": "Total", "DESCRIPTION": "Total quantity (starts at the first meter reading); kept over restarts" }
+      },
+      "PARAM": {
+        "UNIT": { "NAME": "Unit", "DESCRIPTION": "Unit of the quantity, only a label (e.g. m³, l, kWh)" },
+        "PULSES_PER_UNIT": { "NAME": "Pulses per unit", "DESCRIPTION": "Pulses per unit of the quantity (e.g. 100 per m³)" }
+      }
+    },
+    "ENERGY_MONITOR": {
+      "NAME": "Energy monitor",
+      "DESCRIPTION": "Energy flow between grid, PV, battery and consumers: house consumption, self-consumption, autarky and today's energy, with its own visu tile",
+      "INPUT": {
+        "GRID": { "NAME": "Grid (±)", "DESCRIPTION": "Grid power in kW: + import, - export (use \"invert grid\" for meters with the other sign)" },
+        "GRID_IMPORT": { "NAME": "Grid import", "DESCRIPTION": "Grid import in kW, used while the signed grid input has no value" },
+        "GRID_EXPORT": { "NAME": "Grid export", "DESCRIPTION": "Grid export in kW, used while the signed grid input has no value" },
+        "PV": { "NAME": "PV", "DESCRIPTION": "PV production in kW (negative standby values count as 0)" },
+        "BATTERY": { "NAME": "Battery (±)", "DESCRIPTION": "Battery power in kW: + charging, - discharging" },
+        "SOC": { "NAME": "Battery SoC", "DESCRIPTION": "State of charge of the battery in %" },
+        "CONSUMER1": { "NAME": "Consumer 1", "DESCRIPTION": "Power of an extra consumer in kW (e.g. wallbox), shown on its own and taken out of the house consumption" },
+        "CONSUMER2": { "NAME": "Consumer 2", "DESCRIPTION": "Power of an extra consumer in kW (e.g. heat pump)" },
+        "CONSUMER3": { "NAME": "Consumer 3", "DESCRIPTION": "Power of an extra consumer in kW" },
+        "PV_METER": { "NAME": "PV meter", "DESCRIPTION": "Optional PV energy meter in kWh, today's PV energy is counted from it instead of the power" },
+        "IMPORT_METER": { "NAME": "Import meter", "DESCRIPTION": "Optional grid import meter in kWh" },
+        "EXPORT_METER": { "NAME": "Export meter", "DESCRIPTION": "Optional grid export meter in kWh" },
+        "CHARGE_METER": { "NAME": "Charge meter", "DESCRIPTION": "Optional battery charge meter in kWh" },
+        "DISCHARGE_METER": { "NAME": "Discharge meter", "DESCRIPTION": "Optional battery discharge meter in kWh" }
+      },
+      "OUTPUT": {
+        "GRID": { "NAME": "Grid (±)", "DESCRIPTION": "Grid power in kW: + import, - export" },
+        "PV": { "NAME": "PV", "DESCRIPTION": "PV production in kW" },
+        "BATTERY": { "NAME": "Battery (±)", "DESCRIPTION": "Battery power in kW: + charging, - discharging" },
+        "SOC": { "NAME": "Battery SoC", "DESCRIPTION": "State of charge of the battery in %" },
+        "CONSUMER1": { "NAME": "Consumer 1", "DESCRIPTION": "Power of consumer 1 in kW" },
+        "CONSUMER2": { "NAME": "Consumer 2", "DESCRIPTION": "Power of consumer 2 in kW" },
+        "CONSUMER3": { "NAME": "Consumer 3", "DESCRIPTION": "Power of consumer 3 in kW" },
+        "HOUSE": { "NAME": "House", "DESCRIPTION": "House consumption in kW: PV + import - export + discharge - charge - extra consumers" },
+        "CONSUMPTION": { "NAME": "Consumption", "DESCRIPTION": "Total consumption in kW (house and extra consumers)" },
+        "SELF_CONSUMPTION": { "NAME": "Self-consumption", "DESCRIPTION": "Share of the PV power used on site in % (0 without production)" },
+        "AUTARKY": { "NAME": "Autarky", "DESCRIPTION": "Share of the consumption not taken from the grid in % (0 without consumption)" },
+        "PV_TODAY": { "NAME": "PV today", "DESCRIPTION": "PV energy since midnight in kWh" },
+        "IMPORT_TODAY": { "NAME": "Import today", "DESCRIPTION": "Grid import since midnight in kWh" },
+        "EXPORT_TODAY": { "NAME": "Export today", "DESCRIPTION": "Grid export since midnight in kWh" },
+        "CHARGE_TODAY": { "NAME": "Charged today", "DESCRIPTION": "Energy charged into the battery since midnight in kWh" },
+        "DISCHARGE_TODAY": { "NAME": "Discharged today", "DESCRIPTION": "Energy taken from the battery since midnight in kWh" },
+        "CONSUMPTION_TODAY": { "NAME": "Consumption today", "DESCRIPTION": "Total consumption since midnight in kWh" },
+        "SELF_CONSUMPTION_TODAY": { "NAME": "Self-consumption today", "DESCRIPTION": "Self-consumption rate since midnight in %" },
+        "AUTARKY_TODAY": { "NAME": "Autarky today", "DESCRIPTION": "Autarky rate since midnight in %" }
+      },
+      "PARAM": {
+        "INVERT_GRID": { "NAME": "Invert grid", "DESCRIPTION": "Turn on when the grid meter sends - for import and + for export" },
+        "INVERT_BATTERY": { "NAME": "Invert battery", "DESCRIPTION": "Turn on when the battery sends - for charging and + for discharging" },
+        "PEAK_POWER": { "NAME": "Peak power (kW)", "DESCRIPTION": "Power at which the line in the energy flow tile is thickest and fastest" },
+        "CONSUMER1_NAME": { "NAME": "Name consumer 1" },
+        "CONSUMER2_NAME": { "NAME": "Name consumer 2" },
+        "CONSUMER3_NAME": { "NAME": "Name consumer 3" },
+        "CONSUMER_NAME": { "DESCRIPTION": "Name shown in the energy flow tile (e.g. Wallbox)" }
+      }
+    }
   }
 }

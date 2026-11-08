@@ -24,6 +24,7 @@ import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
 import { CameraComponent } from "./camera/camera.component";
+import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { CameraComponent } from "./camera/camera.component";
     GaugeComponent,
     ThreeRangeGaugeComponent,
     ShutterComponent,
-    CameraComponent
+    CameraComponent,
+    EnergyFlowComponent
   ],
   exports: [
     VisuItemComponent
