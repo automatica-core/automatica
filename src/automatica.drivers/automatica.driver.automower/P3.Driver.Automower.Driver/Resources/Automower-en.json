@@ -1,0 +1,158 @@
+{
+  "AUTOMOWER": {
+    "NAME": "Husqvarna Automower",
+    "DESCRIPTION": "Husqvarna Automower robot mowers via the official Automower Connect API",
+    "APPLICATION_KEY": {
+      "NAME": "Application key",
+      "DESCRIPTION": "Application key from developer.husqvarnagroup.cloud (connected to the Authentication API and the Automower Connect API)"
+    },
+    "APPLICATION_SECRET": {
+      "NAME": "Application secret",
+      "DESCRIPTION": "Application secret of the application"
+    },
+    "POLL": {
+      "NAME": "Full read interval [s]",
+      "DESCRIPTION": "Changes arrive live through the web socket. The API allows 21000 requests per week per application"
+    },
+    "API_URL": {
+      "NAME": "API URL",
+      "DESCRIPTION": "https://api.amc.husqvarna.dev/v1"
+    },
+    "WEBSOCKET_URL": {
+      "NAME": "Web socket URL",
+      "DESCRIPTION": "wss://ws.openapi.husqvarna.dev/v1"
+    },
+    "AUTH_URL": {
+      "NAME": "Token URL",
+      "DESCRIPTION": "Husqvarna authentication API"
+    },
+    "SCAN": {
+      "NAME": "Search mowers",
+      "DESCRIPTION": "Lists the mowers of the account"
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "OK or the last error"
+    },
+    "SOCKET_CONNECTED": {
+      "NAME": "Live connection",
+      "DESCRIPTION": "True while the web socket is connected"
+    },
+    "MOWER": {
+      "NAME": "Mower",
+      "DESCRIPTION": "A Husqvarna Automower",
+      "MOWER_ID": {
+        "NAME": "Mower ID",
+        "DESCRIPTION": "Filled by the scan"
+      },
+      "DEFAULT_MINUTES": {
+        "NAME": "Default mowing duration [min]",
+        "DESCRIPTION": "Used when Mowing is set to true"
+      },
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": "The mower is reachable by the cloud"
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": ""
+      },
+      "MODE": {
+        "NAME": "Mode",
+        "DESCRIPTION": "MAIN_AREA, SECONDARY_AREA, HOME, DEMO, ..."
+      },
+      "ACTIVITY": {
+        "NAME": "Activity",
+        "DESCRIPTION": "MOWING, GOING_HOME, CHARGING, LEAVING, PARKED_IN_CS, STOPPED_IN_GARDEN, ..."
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "IN_OPERATION, PAUSED, RESTRICTED, OFF, STOPPED, ERROR, ..."
+      },
+      "INACTIVE_REASON": {
+        "NAME": "Inactive reason",
+        "DESCRIPTION": "NONE, PLANNING, SEARCHING_FOR_SATELLITES"
+      },
+      "ERROR_CODE": {
+        "NAME": "Error code",
+        "DESCRIPTION": "0 = no error"
+      },
+      "ERROR_TIME": {
+        "NAME": "Error time",
+        "DESCRIPTION": "Mower local time"
+      },
+      "NEXT_START": {
+        "NAME": "Next start",
+        "DESCRIPTION": "Mower local time"
+      },
+      "OVERRIDE_ACTION": {
+        "NAME": "Override",
+        "DESCRIPTION": "NOT_ACTIVE, FORCE_PARK or FORCE_MOW"
+      },
+      "RESTRICTED_REASON": {
+        "NAME": "Restriction",
+        "DESCRIPTION": "NONE, WEEK_SCHEDULE, PARK_OVERRIDE, SENSOR, DAILY_LIMIT, FROST, ..."
+      },
+      "MOWING": {
+        "NAME": "Mowing",
+        "DESCRIPTION": "Write true to mow for the default duration, false to park until the next schedule"
+      },
+      "MOW_MINUTES": {
+        "NAME": "Mow for [min]",
+        "DESCRIPTION": "Write minutes to mow that long, 0 to park until the next schedule"
+      },
+      "PARK_MINUTES": {
+        "NAME": "Park for [min]",
+        "DESCRIPTION": "Write minutes to park that long"
+      },
+      "PARK": {
+        "NAME": "Park until further notice",
+        "DESCRIPTION": "Write true to park"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Write true to stop the mower where it is"
+      },
+      "RESUME_SCHEDULE": {
+        "NAME": "Resume schedule",
+        "DESCRIPTION": "Write true to return to the schedule"
+      },
+      "CUTTING_HEIGHT": {
+        "NAME": "Cutting height",
+        "DESCRIPTION": "1 to 9"
+      },
+      "HEADLIGHT": {
+        "NAME": "Headlights",
+        "DESCRIPTION": "ALWAYS_ON, ALWAYS_OFF, EVENING_ONLY or EVENING_AND_NIGHT"
+      },
+      "LATITUDE": {
+        "NAME": "Latitude",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Longitude",
+        "DESCRIPTION": ""
+      },
+      "CUTTING_TIME": {
+        "NAME": "Total cutting time [h]",
+        "DESCRIPTION": ""
+      },
+      "RUNNING_TIME": {
+        "NAME": "Total running time [h]",
+        "DESCRIPTION": ""
+      },
+      "BLADE_TIME": {
+        "NAME": "Blade usage [h]",
+        "DESCRIPTION": "Since the last blade reset"
+      },
+      "CHARGING_CYCLES": {
+        "NAME": "Charging cycles",
+        "DESCRIPTION": ""
+      },
+      "COLLISIONS": {
+        "NAME": "Collisions",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}
