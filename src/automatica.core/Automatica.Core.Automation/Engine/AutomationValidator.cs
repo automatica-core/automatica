@@ -46,6 +46,31 @@ namespace Automatica.Core.Automation.Engine
             return _problems.ToList();
         }
 
+        private void ValidateMail(MailAction mail, string path)
+        {
+            var recipients = (mail.To ?? new List<string>()).SelectMany(a => (a ?? "").Split(';', ',')).Select(a => a.Trim()).Where(a => a.Length > 0).ToList();
+            if (recipients.Count == 0)
+            {
+                Error(path, "recipientMissing");
+            }
+
+            foreach (var address in recipients.Where(a => !IsMailAddress(a)))
+            {
+                Error(path, "invalidMailAddress", address);
+            }
+
+            if (string.IsNullOrWhiteSpace(mail.Subject) && string.IsNullOrWhiteSpace(mail.Body))
+            {
+                Error(path, "valueMissing");
+            }
+        }
+
+        internal static bool IsMailAddress(string value)
+        {
+            var at = value.IndexOf('@');
+            return at > 0 && at < value.Length - 1 && value.IndexOf('@', at + 1) < 0 && !value.Any(char.IsWhiteSpace) && value[(at + 1)..].Contains('.');
+        }
+
         private void Error(string path, string code, string detail = null) => _problems.Add(new ValidationProblem(path, code, ValidationSeverity.Error, detail));
         private void Warning(string path, string code, string detail = null) => _problems.Add(new ValidationProblem(path, code, ValidationSeverity.Warning, detail));
 
@@ -207,6 +232,9 @@ namespace Automatica.Core.Automation.Engine
                         {
                             Error(path, "valueMissing");
                         }
+                        break;
+                    case MailAction mail:
+                        ValidateMail(mail, path);
                         break;
                     case IfAction ifAction:
                         if (ifAction.Condition == null)

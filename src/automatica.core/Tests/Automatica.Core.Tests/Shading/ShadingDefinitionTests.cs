@@ -84,6 +84,9 @@ namespace Automatica.Core.Tests.Shading
             Assert.Empty(ShadingValidator.Validate("South", 180, new FacadeDefinition()));
             Assert.Contains(ShadingValidator.Validate("", 360, new FacadeDefinition { MinElevation = 50, MaxElevation = 40 }), a => a.Path == "azimuth");
             Assert.Contains(ShadingValidator.Validate("x", 0, new FacadeDefinition { MinElevation = 50, MaxElevation = 40 }), a => a.Code == "MIN_ABOVE_MAX");
+            Assert.Empty(ShadingValidator.Validate("Roof", 180, new FacadeDefinition { Inclination = 0 }));
+            Assert.Contains(ShadingValidator.Validate("Roof", 180, new FacadeDefinition { Inclination = 95 }), a => a.Path == "inclination");
+            Assert.Contains(ShadingValidator.Validate(new BlindDefinition { Inclination = -1 }), a => a.Path == "inclination" && a.Code == "OUT_OF_RANGE");
 
             Assert.Empty(ShadingValidator.Validate(new BlindDefinition { Type = BlindType.Venetian }));
             var problems = ShadingValidator.Validate(new BlindDefinition

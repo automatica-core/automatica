@@ -10,7 +10,8 @@
     },
     "SETTINGS": "Server Settings",
     "REMOTE": "Remote Server Settings",
-    "MCP": "AI Assistant (MCP)"
+    "MCP": "AI Assistant (MCP)",
+    "SMTP": "Email server (SMTP)"
   },
   "COMMON": {
     "LOG": "Log",
@@ -499,6 +500,45 @@
       "REMOTETOKEN": {
         "NAME": "Token"
       },
+      "SMTPENABLED": {
+        "NAME": "Send emails through this server",
+        "DESCRIPTION": "Off = emails go through the Automatica cloud (only to the recipients verified there)."
+      },
+      "SMTPHOST": {
+        "NAME": "SMTP server"
+      },
+      "SMTPPORT": {
+        "NAME": "Port"
+      },
+      "SMTPSECURITY": {
+        "NAME": "Encryption",
+        "AUTO": "Automatic (TLS on port 465, otherwise STARTTLS if offered)",
+        "STARTTLS": "STARTTLS",
+        "SSL": "SSL/TLS",
+        "NONE": "None"
+      },
+      "SMTPUSER": {
+        "NAME": "User name"
+      },
+      "SMTPPASSWORD": {
+        "NAME": "Password"
+      },
+      "SMTPFROM": {
+        "NAME": "Sender address"
+      },
+      "SMTPFROMNAME": {
+        "NAME": "Sender name"
+      },
+      "SMTPACCEPTINVALIDCERTIFICATE": {
+        "NAME": "Accept invalid certificates",
+        "DESCRIPTION": "Only for a mail server in the local network with a self-signed certificate."
+      },
+      "SMTPTEST": {
+        "NAME": "Send test email",
+        "CONFIRM": "Send a test email to the sender address with the current settings?",
+        "OK": "Test email sent.",
+        "FAILED": "The test email could not be sent: {{ error }}"
+      },
       "HYPERSERIESUSER":{
         "NAME": "User"
       },
@@ -888,7 +928,10 @@
         "ENABLE": "Action on or off",
         "DISABLED": "Off",
         "PROBLEMS": "{{ count }} problems",
-        "CONTINUES_ON_ERROR": "continues on error"
+        "CONTINUES_ON_ERROR": "continues on error",
+        "USER_EDITABLE": "users may change",
+        "USER_EDITABLE_ON": "Visualization users may change the values of this block. Click to take it back.",
+        "USER_EDITABLE_OFF": "Let visualization users change the values of this block (times, days, thresholds, values)"
       },
       "SIDE": {
         "READS_AS": "Reads as",
@@ -899,7 +942,31 @@
         "TEST": "Test",
         "PROBLEMS": "Problems",
         "CHECKING": "checking",
-        "NO_PROBLEMS": "No problems found."
+        "NO_PROBLEMS": "No problems found.",
+        "USER_ACCESS": "Visualization",
+        "USER_ACCESS_ON": "Released for the visualization",
+        "USER_ACCESS_OFF": "Admins only",
+        "USER_ACCESS_HINT": "Released rules show under Automations in the visualization. Users with the visualization role switch them on or off and change the values of the blocks marked with the user icon. The structure stays with the admins.",
+        "USER_ACCESS_BLOCKS": "{{ count }} blocks marked for users. Mark more with the user icon on a block."
+      },
+      "VISU": {
+        "TITLE": "Automations",
+        "HINT": "Switch automations on or off and adjust their times and values.",
+        "LOADING": "Loading…",
+        "RETRY": "Try again",
+        "LAST_RUN": "Last run",
+        "KIND": {
+          "TRIGGER": "When",
+          "CONDITION": "If",
+          "ACTION": "Then"
+        },
+        "RESET": "Undo changes",
+        "SAVED": "Automation saved",
+        "SAVE_REFUSED": "The changes were not saved: {{ detail }}",
+        "ENABLE_PROBLEMS": "The automation has errors and cannot be switched on. Ask your administrator.",
+        "FAILED": "That did not work, please try again.",
+        "EMPTY": "No automations released",
+        "EMPTY_HINT": "An administrator can release automations for the visualization in the automation editor."
       },
       "MODE": {
         "SINGLE": "Ignore new triggers",
@@ -960,6 +1027,8 @@
           "WAITUNTIL_HINT": "condition with timeout",
           "NOTIFY": "Notify",
           "NOTIFY_HINT": "notification, email",
+          "MAIL": "Send email",
+          "MAIL_HINT": "own text with values to one or more addresses",
           "IF": "If / else",
           "IF_HINT": "different actions by condition",
           "RUNAUTOMATION": "Run another rule",
@@ -1030,6 +1099,8 @@
         "EMAIL": "Email to",
         "EMAIL_PLACEHOLDER": "name@example.com",
         "EMAIL_HINT": "Separate several addresses with commas. Empty = notification only.",
+        "MAIL_TO": "To",
+        "MAIL_TO_HINT": "Separate several addresses with commas. Sent through the SMTP server of the settings, otherwise through the Automatica cloud.",
         "AUTOMATION": "Rule",
         "SKIP_CONDITIONS": "Skip its conditions",
         "ENABLE": "Switch",
@@ -1235,6 +1306,7 @@
         "TIMEOUT_STOP": "(stop after {{ duration }})",
         "A_NOTIFY": "send the notification {{ subject }}",
         "A_NOTIFY_EMAIL": "and email it to {{ to }}",
+        "A_MAIL": "email {{ subject }} to {{ to }}",
         "A_IF": "if {{ condition }}",
         "A_IF_FULL": "if {{ condition }} then {{ then }}",
         "A_IF_ELSE": "otherwise {{ else }}",
@@ -1265,6 +1337,8 @@
         "AREANOTFOUND": "The area does not exist (anymore).",
         "CATEGORYNOTFOUND": "The category does not exist (anymore).",
         "GROUPTARGETMISSING": "Choose an area or a category.",
+        "RECIPIENTMISSING": "Enter at least one email address.",
+        "INVALIDMAILADDRESS": "Not a valid email address.",
         "SHADINGNOTCONFIGURED": "The blind is not set up on the shading page.",
         "NEGATIVEDURATION": "A duration must not be negative.",
         "LOCATIONMISSING": "Sun times need the location (latitude and longitude) in the settings.",
@@ -1385,6 +1459,7 @@
         "EMPTY_HINT": "A facade is a side of the house with its direction, for example south or west. Blinds on the same side share it.",
         "ENABLED": "Active",
         "ACCEPTANCE": "sun within ±{{ angle }}°",
+        "ROOF": "roof windows {{ angle }}°",
         "BLIND_COUNT": "{{ count }} blinds",
         "NAME_PLACEHOLDER": "e.g. South side",
         "BRIGHTNESS": "Brightness on this facade",
@@ -1452,6 +1527,8 @@
         "ACCEPTANCE": "Sun angle (±°)",
         "MIN_ELEVATION": "Min. sun elevation (°)",
         "MAX_ELEVATION": "Max. sun elevation (°)",
+        "INCLINATION": "Window tilt (°)",
+        "INCLINATION_HINT": "90 = windows in a wall. Less for roof windows (the roof pitch, e.g. 35), 0 = flat skylight. For roof windows the sun angle is the largest angle between the sun and the glass, so a high sun also reaches roof windows on the north side.",
         "GEOMETRY_HINT": "The sun reaches the windows when it is within the angle to both sides and between the elevations. Raise the minimum elevation for trees or buildings in front, lower the maximum for a roof overhang.",
         "ON_LUX": "Shade above (lx)",
         "ON_DELAY": "after (min)",

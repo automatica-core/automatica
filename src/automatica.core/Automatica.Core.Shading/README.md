@@ -15,7 +15,8 @@ Three JSON documents, stored in `ShadingSettings` (one row), `ShadingFacades` an
   an optional brightness signal of that side of the building. A facade can also set its own thresholds, the
   acceptance angle (how far left or right of the facade direction the sun may be, default 80°), the horizon limit
   (`minElevation`, for trees or buildings), the overhang limit (`maxElevation`, for a balcony), and "only shade
-  when warmer than X °C".
+  when warmer than X °C". `inclination` is the tilt of the glass from horizontal: 90° (default) is a wall, smaller
+  values are roof windows (0° = flat skylight); a blind can override it for a single roof window.
 - **Blind**: a shutter logic instance (the control id), its facade or its own azimuth, the type (roller or
   venetian), the shade position, and whether to restore the previous position afterwards. For venetian blinds also
   the slat geometry and how the angle maps to percent. Optional: wind protection, rain protection, a door contact
@@ -45,7 +46,9 @@ Every input is a `Signal`, a list of sources tried in order. The first source wi
   and temperature cannot be calculated.
 
 All brightness sources end in the same facade illuminance: direct · cos(incidence) + half the diffuse sky + half the
-ground reflection (albedo 0.2), at 105 lm/W.
+ground reflection (albedo 0.2), at 105 lm/W. For a tilted plane (roof window, inclination t) the incidence uses
+`cos i = sin h·cos t + cos h·sin t·cos(Δaz)`, the sky term is diffuse·(1 + cos t)/2 and the ground term
+albedo·global·(1 − cos t)/2; at 90° this is exactly the wall formula.
 - If a facade's brightness signal has no value, the global brightness signal is used. A calculated source in the
   global signal still estimates the brightness for that facade's direction.
 
@@ -71,6 +74,9 @@ Highest priority first:
    hysteresis: on at `onLux` for `onDelayMinutes`, off below `offLux` for `offDelayMinutes`) and the temperature
    condition holds. The blind moves to `shadePosition`. Venetian slats follow the sun: they get the smallest angle
    that still blocks direct light, `asin(spacing·cos γ / width) − γ` with the profile angle γ, plus `extraAngle`.
+   On a roof window (inclination below 90°) the sun is on the window when the incidence angle is at most the
+   acceptance angle, so a high sun from behind the facade direction counts too; venetian slats there keep their
+   `fixedAngle`, the profile-angle tracking only applies to walls.
    Slats move at most every `minMoveIntervalMinutes`, and only by at least `minSlatChange`. A blind that is
    already closed further than the shade position is not touched.
 8. **Winter**: in winter, a blind with `winterGain` stays open on sun, so the sun warms the room, unless its room

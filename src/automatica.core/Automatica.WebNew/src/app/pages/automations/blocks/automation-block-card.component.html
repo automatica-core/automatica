@@ -17,6 +17,14 @@
       </span>
     </button>
     <span class="badges">
+      @if (canRelease) {
+        <button type="button" class="pill release" [class.accent]="released" [attr.aria-pressed]="released"
+          [title]="(released ? 'UI.AUTOMATIONS.CARD.USER_EDITABLE_ON' : 'UI.AUTOMATIONS.CARD.USER_EDITABLE_OFF') | translateAsync"
+          (click)="toggleRelease()">
+          <fa-icon [icon]="['fas', 'user-pen']"></fa-icon>
+          @if (released) { {{ 'UI.AUTOMATIONS.CARD.USER_EDITABLE' | translateAsync }} }
+        </button>
+      }
       @if (test) {
         <span class="pill" [class.ok]="test.passed" [class.bad]="!test.passed"
           [title]="(test.passed ? 'UI.AUTOMATIONS.TEST.PASSED' : 'UI.AUTOMATIONS.TEST.FAILED') | translateAsync">

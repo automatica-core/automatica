@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Automatica.Core.Automation.Definition;
 using Automatica.Core.Automation.Engine;
@@ -134,6 +135,7 @@ namespace Automatica.Core.Automation.Actions
                 DelayAction delay => DelayAsync(delay, step, run),
                 WaitUntilAction wait => WaitUntilAsync(wait, path, step, run),
                 NotifyAction notify => NotifyAsync(notify, step, run),
+                MailAction mail => MailAsync(mail, step, run),
                 IfAction ifAction => IfAsync(ifAction, path, step, run),
                 RunAutomationAction runAutomation => RunAutomationAsync(runAutomation, step, run),
                 EnableAutomationAction enable => EnableAutomationAsync(enable, step, run),
@@ -424,6 +426,28 @@ namespace Automatica.Core.Automation.Actions
             }
         }
 
+        private async Task MailAsync(MailAction action, RunStep step, AutomationRunContext run)
+        {
+            var subject = Render(action.Subject, run);
+            if (string.IsNullOrWhiteSpace(subject))
+            {
+                subject = run.AutomationName;
+            }
+            var body = Render(action.Body, run) ?? "";
+
+            var recipients = (action.To ?? new List<string>()).SelectMany(a => (a ?? "").Split(';', ',')).Select(a => a.Trim()).Where(a => a.Length > 0).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            run.Update(() => step.Value = subject);
+            if (recipients.Count == 0)
+            {
+                throw new InvalidOperationException("No recipient");
+            }
+
+            if (!await _environment.SendEmailAsync(recipients, subject, body).ConfigureAwait(false))
+            {
+                throw new InvalidOperationException("Email could not be sent");
+            }
+        }
+
         private async Task IfAsync(IfAction action, string path, RunStep step, AutomationRunContext run)
         {
             var passed = _evaluator.Evaluate(action.Condition, $"{path}/condition", _evaluator.CreateContext(run.Trigger?.TriggerId), run.AddStep);
@@ -473,7 +497,7 @@ namespace Automatica.Core.Automation.Actions
             return Task.CompletedTask;
         }
 
-        [GeneratedRegex(@"\{(automation|trigger|trigger\.value|value:([0-9a-fA-F-]{36}))\}")]
+        [GeneratedRegex(@"\{(automation|trigger|trigger\.value|date|time|datetime|value:([0-9a-fA-F-]{36}))\}")]
         private static partial Regex PlaceholderRegex();
 
         internal string Render(string template, AutomationRunContext run)
@@ -493,6 +517,12 @@ namespace Automatica.Core.Automation.Actions
                         return run.Trigger?.TriggerId ?? "manual";
                     case "trigger.value":
                         return AutomationValues.Format(run.Trigger?.Value);
+                    case "date":
+                        return LocalTime.Now(_environment.Time).ToString("d", CultureInfo.CurrentCulture);
+                    case "time":
+                        return LocalTime.Now(_environment.Time).ToString("t", CultureInfo.CurrentCulture);
+                    case "datetime":
+                        return LocalTime.Now(_environment.Time).ToString("g", CultureInfo.CurrentCulture);
                     default:
                         return Guid.TryParse(match.Groups[2].Value, out var id) ? AutomationValues.Format(_environment.GetValue(id)) : match.Value;
                 }

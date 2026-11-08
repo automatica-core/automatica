@@ -470,6 +470,40 @@ namespace Automatica.Core.Tests.Automation
         }
 
         [Fact]
+        public async Task Mail_SendsToEveryRecipientWithPlaceholders()
+        {
+            _store.Add(MotionLight(new MailAction
+            {
+                To = { "a@example.com; b@example.com", "A@example.com" },
+                Subject = "{automation} at {time}",
+                Body = "Brightness {value:" + _brightness + "} on {date}"
+            }), name: "Hallway");
+            await _engine.StartAsync();
+
+            await _environment.PublishAsync(_motion, true);
+            await Eventually(() => _environment.Emails.Count == 1, "mail");
+
+            var (to, subject, body) = _environment.Emails.Single();
+            Assert.Equal(new[] { "a@example.com", "b@example.com" }, to);
+            var now = _environment.Time.GetLocalNow();
+            Assert.Equal($"Hallway at {now.ToString("t", System.Globalization.CultureInfo.CurrentCulture)}", subject);
+            Assert.Equal($"Brightness 12 on {now.ToString("d", System.Globalization.CultureInfo.CurrentCulture)}", body);
+            Assert.Empty(_environment.Notifications);
+            await Eventually(() => _store.Runs.Count == 1 && _store.Runs.Single().State == AutomationRunState.Done, "run done");
+        }
+
+        [Fact]
+        public async Task Mail_FailsTheRunWhenTheMailIsNotSent()
+        {
+            _environment.EmailResult = false;
+            _store.Add(MotionLight(new MailAction { To = { "a@example.com" }, Subject = "x" }));
+            await _engine.StartAsync();
+
+            await _environment.PublishAsync(_motion, true);
+            await Eventually(() => _store.Runs.Count == 1 && _store.Runs.Single().State == AutomationRunState.Failed, "run failed");
+        }
+
+        [Fact]
         public void Test_EvaluatesConditionsWithValues()
         {
             var result = _engine.Test(MotionLight(), "motion");

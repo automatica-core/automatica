@@ -99,7 +99,8 @@ namespace Automatica.Core.Shading.Engine
         DateTimeOffset? ManualUntil,
         DateTimeOffset? LastMoveAt);
 
-    public sealed record FacadeStatus(Guid Id, string Name, double Azimuth, bool IsEnabled, bool Sunny, bool SunOnFacade, SignalInfo Brightness, bool TemperatureOk);
+    public sealed record FacadeStatus(Guid Id, string Name, double Azimuth, bool IsEnabled, bool Sunny, bool SunOnFacade, SignalInfo Brightness, bool TemperatureOk,
+        double Inclination = SunGeometry.Vertical);
 
     public sealed record ShadingStatus(
         bool IsEnabled,

@@ -14,10 +14,8 @@ import { AutomationBlockCardComponent } from "./blocks/automation-block-card.com
 import { AutomationTriggerCardComponent } from "./blocks/automation-trigger-card.component";
 import { AutomationConditionCardComponent, AutomationConditionListComponent } from "./blocks/automation-condition-list.component";
 import { AutomationActionCardComponent, AutomationActionListComponent } from "./blocks/automation-action-list.component";
-import {
-    AutomationAddMenuComponent, AutomationDaysPickerComponent, AutomationDurationInputComponent, AutomationNodeFieldComponent,
-    AutomationTimeInputComponent, AutomationValueInputComponent
-} from "./fields/automation-fields";
+import { AutomationAddMenuComponent, AutomationNodeFieldComponent, AutomationValueInputComponent } from "./fields/automation-fields";
+import { AutomationFieldsModule } from "./fields/automation-fields.module";
 
 /** the Automations pages (admin): rule list, editor and run history */
 @NgModule({
@@ -33,9 +31,6 @@ import {
         AutomationActionCardComponent,
         AutomationNodeFieldComponent,
         AutomationValueInputComponent,
-        AutomationDaysPickerComponent,
-        AutomationTimeInputComponent,
-        AutomationDurationInputComponent,
         AutomationAddMenuComponent
     ],
     imports: [
@@ -43,6 +38,7 @@ import {
         L10nTranslationModule,
         FontAwesomeModule,
         SharedModule,
+        AutomationFieldsModule,
         DxButtonModule,
         DxCheckBoxModule,
         DxDateBoxModule,

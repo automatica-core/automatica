@@ -5,7 +5,7 @@ import { L10nTranslationService } from "angular-l10n";
 import { BaseService } from "./base-service";
 import { AutomationDefinition } from "../base/model/automations/automation-definition";
 import {
-    AutomationDto, AutomationRunDto, AutomationSaveDto, RunStartedDto, TestResult, ValidationProblem
+    AutomationDto, AutomationRunDto, AutomationSaveDto, AutomationVisuDto, AutomationVisuSaveDto, RunStartedDto, TestResult, ValidationProblem
 } from "../base/model/automations/automation-dto";
 
 /**
@@ -15,6 +15,7 @@ import {
 export class AutomationsService extends BaseService {
 
     private static readonly base = "automations";
+    private static readonly visu = "automations-visu";
 
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
@@ -69,6 +70,22 @@ export class AutomationsService extends BaseService {
         return ((await super.getJson(`${AutomationsService.base}/where-used/${objectId}`)) || []).map(AutomationsService.normalize);
     }
 
+    // ---------- visualization (webapi/automations-visu) ----------
+
+    /** the automations released for the visualization */
+    async getVisu(): Promise<AutomationVisuDto[]> {
+        return (await super.getJson(AutomationsService.visu)) || [];
+    }
+
+    /** changes the values of the released blocks (visu and admin roles) */
+    saveVisu(id: string, dto: AutomationVisuSaveDto): Promise<AutomationVisuDto> {
+        return super.putJson(`${AutomationsService.visu}/${id}`, dto);
+    }
+
+    setVisuEnabled(id: string, enabled: boolean): Promise<AutomationVisuDto> {
+        return super.postJson(`${AutomationsService.visu}/${id}/enabled`, { enabled });
+    }
+
     /** the ValidationProblem[] of a 400 answer (saving an enabled rule with errors), otherwise undefined */
     static problemsOfError(error: any): ValidationProblem[] | undefined {
         if (error?.status === 400 && Array.isArray(error.error)) {
@@ -97,6 +114,9 @@ export class AutomationsService extends BaseService {
             conditions: def.conditions ?? { type: "group", operator: "all", conditions: [] },
             actions: def.actions ?? []
         };
+        if (def.userAccess) {
+            dto.definition.userAccess = true;
+        }
         dto.problems = dto.problems ?? [];
         return dto;
     }

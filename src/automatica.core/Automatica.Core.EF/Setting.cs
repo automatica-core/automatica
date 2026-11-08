@@ -42,6 +42,7 @@ namespace Automatica.Core.EF.Models
                         throw new NotImplementedException();
 
                     case PropertyTemplateType.Scan:
+                    case PropertyTemplateType.CustomAction:
                         return null;
                     case PropertyTemplateType.Invalid:
                         return "INVALID";

@@ -10,7 +10,8 @@
     },
     "SETTINGS": "Server Einstellungen",
     "REMOTE": "Remote Server Einstellungen",
-    "MCP": "KI-Assistent (MCP)"
+    "MCP": "KI-Assistent (MCP)",
+    "SMTP": "E-Mail-Server (SMTP)"
   },
   "COMMON": {
     "LOG": "Log",
@@ -499,6 +500,45 @@
       "REMOTETOKEN": {
         "NAME": "Token"
       },
+      "SMTPENABLED": {
+        "NAME": "E-Mails über diesen Server senden",
+        "DESCRIPTION": "Aus = E-Mails gehen über die Automatica Cloud (nur an die dort bestätigten Empfänger)."
+      },
+      "SMTPHOST": {
+        "NAME": "SMTP-Server"
+      },
+      "SMTPPORT": {
+        "NAME": "Port"
+      },
+      "SMTPSECURITY": {
+        "NAME": "Verschlüsselung",
+        "AUTO": "Automatisch (TLS auf Port 465, sonst STARTTLS falls angeboten)",
+        "STARTTLS": "STARTTLS",
+        "SSL": "SSL/TLS",
+        "NONE": "Keine"
+      },
+      "SMTPUSER": {
+        "NAME": "Benutzername"
+      },
+      "SMTPPASSWORD": {
+        "NAME": "Passwort"
+      },
+      "SMTPFROM": {
+        "NAME": "Absenderadresse"
+      },
+      "SMTPFROMNAME": {
+        "NAME": "Absendername"
+      },
+      "SMTPACCEPTINVALIDCERTIFICATE": {
+        "NAME": "Ungültige Zertifikate akzeptieren",
+        "DESCRIPTION": "Nur für einen Mailserver im lokalen Netz mit selbst signiertem Zertifikat."
+      },
+      "SMTPTEST": {
+        "NAME": "Test-E-Mail senden",
+        "CONFIRM": "Test-E-Mail mit den aktuellen Einstellungen an die Absenderadresse senden?",
+        "OK": "Test-E-Mail gesendet.",
+        "FAILED": "Die Test-E-Mail konnte nicht gesendet werden: {{ error }}"
+      },
       "HYPERSERIESUSER": {
         "NAME": "Benutzer"
       },
@@ -888,7 +928,10 @@
         "ENABLE": "Aktion ein oder aus",
         "DISABLED": "Aus",
         "PROBLEMS": "{{ count }} Probleme",
-        "CONTINUES_ON_ERROR": "läuft bei Fehler weiter"
+        "CONTINUES_ON_ERROR": "läuft bei Fehler weiter",
+        "USER_EDITABLE": "Benutzer dürfen ändern",
+        "USER_EDITABLE_ON": "Visualisierungs-Benutzer dürfen die Werte dieses Blocks ändern. Klicken zum Zurücknehmen.",
+        "USER_EDITABLE_OFF": "Visualisierungs-Benutzer die Werte dieses Blocks ändern lassen (Zeiten, Tage, Schwellen, Werte)"
       },
       "SIDE": {
         "READS_AS": "Liest sich als",
@@ -899,7 +942,31 @@
         "TEST": "Test",
         "PROBLEMS": "Probleme",
         "CHECKING": "wird geprüft",
-        "NO_PROBLEMS": "Keine Probleme gefunden."
+        "NO_PROBLEMS": "Keine Probleme gefunden.",
+        "USER_ACCESS": "Visualisierung",
+        "USER_ACCESS_ON": "Für die Visualisierung freigegeben",
+        "USER_ACCESS_OFF": "Nur Administratoren",
+        "USER_ACCESS_HINT": "Freigegebene Regeln erscheinen in der Visualisierung unter Automationen. Benutzer mit der Visualisierungs-Rolle schalten sie ein oder aus und ändern die Werte der Blöcke mit dem Benutzer-Symbol. Den Aufbau ändern nur Administratoren.",
+        "USER_ACCESS_BLOCKS": "{{ count }} Blöcke für Benutzer freigegeben. Weitere mit dem Benutzer-Symbol am Block freigeben."
+      },
+      "VISU": {
+        "TITLE": "Automationen",
+        "HINT": "Automationen ein- oder ausschalten und ihre Zeiten und Werte anpassen.",
+        "LOADING": "Wird geladen…",
+        "RETRY": "Erneut versuchen",
+        "LAST_RUN": "Letzter Lauf",
+        "KIND": {
+          "TRIGGER": "Wenn",
+          "CONDITION": "Falls",
+          "ACTION": "Dann"
+        },
+        "RESET": "Änderungen verwerfen",
+        "SAVED": "Automation gespeichert",
+        "SAVE_REFUSED": "Die Änderungen wurden nicht gespeichert: {{ detail }}",
+        "ENABLE_PROBLEMS": "Die Automation hat Fehler und kann nicht eingeschaltet werden. Bitte wenden Sie sich an Ihren Administrator.",
+        "FAILED": "Das hat nicht funktioniert, bitte erneut versuchen.",
+        "EMPTY": "Keine Automationen freigegeben",
+        "EMPTY_HINT": "Ein Administrator kann Automationen im Automations-Editor für die Visualisierung freigeben."
       },
       "MODE": {
         "SINGLE": "Neue Auslöser ignorieren",
@@ -960,6 +1027,8 @@
           "WAITUNTIL_HINT": "Bedingung mit Zeitlimit",
           "NOTIFY": "Benachrichtigen",
           "NOTIFY_HINT": "Benachrichtigung, E-Mail",
+          "MAIL": "E-Mail senden",
+          "MAIL_HINT": "eigener Text mit Werten an eine oder mehrere Adressen",
           "IF": "Wenn / sonst",
           "IF_HINT": "verschiedene Aktionen je nach Bedingung",
           "RUNAUTOMATION": "Andere Regel ausführen",
@@ -1030,6 +1099,8 @@
         "EMAIL": "E-Mail an",
         "EMAIL_PLACEHOLDER": "name@beispiel.at",
         "EMAIL_HINT": "Mehrere Adressen mit Kommas trennen. Leer = nur Benachrichtigung.",
+        "MAIL_TO": "An",
+        "MAIL_TO_HINT": "Mehrere Adressen mit Kommas trennen. Versand über den SMTP-Server der Einstellungen, sonst über die Automatica Cloud.",
         "AUTOMATION": "Regel",
         "SKIP_CONDITIONS": "Ihre Bedingungen überspringen",
         "ENABLE": "Schalten",
@@ -1235,6 +1306,7 @@
         "TIMEOUT_STOP": "(nach {{ duration }} beenden)",
         "A_NOTIFY": "die Benachrichtigung {{ subject }} senden",
         "A_NOTIFY_EMAIL": "und an {{ to }} mailen",
+        "A_MAIL": "{{ subject }} an {{ to }} mailen",
         "A_IF": "falls {{ condition }}",
         "A_IF_FULL": "falls {{ condition }}, dann {{ then }}",
         "A_IF_ELSE": "sonst {{ else }}",
@@ -1265,6 +1337,8 @@
         "AREANOTFOUND": "Den Bereich gibt es nicht (mehr).",
         "CATEGORYNOTFOUND": "Die Kategorie gibt es nicht (mehr).",
         "GROUPTARGETMISSING": "Wähle einen Bereich oder eine Kategorie.",
+        "RECIPIENTMISSING": "Gib mindestens eine E-Mail-Adresse ein.",
+        "INVALIDMAILADDRESS": "Keine gültige E-Mail-Adresse.",
         "SHADINGNOTCONFIGURED": "Der Behang ist auf der Seite Beschattung nicht eingerichtet.",
         "NEGATIVEDURATION": "Eine Dauer darf nicht negativ sein.",
         "LOCATIONMISSING": "Sonnenzeiten brauchen den Standort (Breiten- und Längengrad) in den Einstellungen.",
@@ -1385,6 +1459,7 @@
         "EMPTY_HINT": "Eine Fassade ist eine Hausseite mit ihrer Ausrichtung, zum Beispiel Süd oder West. Behänge auf derselben Seite teilen sie sich.",
         "ENABLED": "Aktiv",
         "ACCEPTANCE": "Sonne innerhalb ±{{ angle }}°",
+        "ROOF": "Dachfenster {{ angle }}°",
         "BLIND_COUNT": "{{ count }} Behänge",
         "NAME_PLACEHOLDER": "z. B. Südseite",
         "BRIGHTNESS": "Helligkeit an dieser Fassade",
@@ -1452,6 +1527,8 @@
         "ACCEPTANCE": "Sonnenwinkel (±°)",
         "MIN_ELEVATION": "Min. Sonnenhöhe (°)",
         "MAX_ELEVATION": "Max. Sonnenhöhe (°)",
+        "INCLINATION": "Fensterneigung (°)",
+        "INCLINATION_HINT": "90 = Fenster in der Wand. Weniger für Dachfenster (die Dachneigung, z. B. 35), 0 = flaches Oberlicht. Bei Dachfenstern ist der Sonnenwinkel der größte Winkel zwischen Sonne und Glas, so erreicht eine hohe Sonne auch Dachfenster auf der Nordseite.",
         "GEOMETRY_HINT": "Die Sonne erreicht die Fenster, wenn sie innerhalb des Winkels zu beiden Seiten und zwischen den Höhen steht. Mindesthöhe für Bäume oder Gebäude davor anheben, Maximalhöhe für einen Dachvorsprung senken.",
         "ON_LUX": "Beschatten über (lx)",
         "ON_DELAY": "nach (min)",

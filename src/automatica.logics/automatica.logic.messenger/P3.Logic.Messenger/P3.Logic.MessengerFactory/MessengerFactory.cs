@@ -20,6 +20,7 @@ namespace P3.Logic.Messenger
 
         public static Guid ToProperty = new Guid("836178a4-b8b5-472c-a515-5e3e7a730a89");
         public static Guid SubjectProperty = new Guid("ea67a0cd-1765-4c24-b645-3298147b584a");
+        public static Guid BodyProperty = new Guid("5b0d7a3e-8f61-4c2b-9d47-2e8a1f6c3b90");
 
         public override ILogic CreateLogicInstance(ILogicContext context)
         {
@@ -38,6 +39,8 @@ namespace P3.Logic.Messenger
                 "MESSENGER.CLOUD_EMAIL.TO.DESCRIPTION", LogicGuid, 0, RuleInterfaceParameterDataType.Text, "");
             factory.CreateParameterLogicInterfaceTemplate(SubjectProperty, "MESSENGER.CLOUD_EMAIL.SUBJECT.NAME",
                 "MESSENGER.CLOUD_EMAIL.SUBJECT.DESCRIPTION", LogicGuid, 0, RuleInterfaceParameterDataType.Text, "");
+            factory.CreateParameterLogicInterfaceTemplate(BodyProperty, "MESSENGER.CLOUD_EMAIL.BODY_TEMPLATE.NAME",
+                "MESSENGER.CLOUD_EMAIL.BODY_TEMPLATE.DESCRIPTION", LogicGuid, 0, RuleInterfaceParameterDataType.Text, "");
         }
     }
 }

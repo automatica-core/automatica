@@ -263,8 +263,9 @@ namespace Automatica.Core.Shading.Engine
                 var facade = first.Facade;
                 var definition = facade?.Definition ?? new FacadeDefinition();
                 var azimuth = facade?.Azimuth ?? first.Azimuth;
+                var inclination = facade?.Definition.Inclination ?? first.Inclination;
 
-                var brightness = ReadBrightness(facade, azimuth, sun, settings, now);
+                var brightness = ReadBrightness(facade, azimuth, sun, settings, now, inclination);
                 if (!_sunStates.TryGetValue(group.Key, out var hysteresis))
                 {
                     hysteresis = _sunStates[group.Key] = new SunHysteresis();
@@ -276,17 +277,17 @@ namespace Automatica.Core.Shading.Engine
 
                 if (facade != null)
                 {
-                    var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, definition.AcceptanceAngle, definition.MinElevation, definition.MaxElevation);
-                    facadeStatus.Add(new FacadeStatus(facade.Id, facade.Name, facade.Azimuth, facade.IsEnabled, isSunny, onFacade, ToInfo(brightness), temperatureOk));
+                    var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, definition.AcceptanceAngle, definition.MinElevation, definition.MaxElevation, definition.Inclination);
+                    facadeStatus.Add(new FacadeStatus(facade.Id, facade.Name, facade.Azimuth, facade.IsEnabled, isSunny, onFacade, ToInfo(brightness), temperatureOk, definition.Inclination));
                 }
             }
 
             foreach (var facade in _config.Facades.Where(a => facadeStatus.All(b => b.Id != a.Id)))
             {
-                var brightness = ReadBrightness(facade, facade.Azimuth, sun, settings, now);
-                var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, facade.Definition.AcceptanceAngle, facade.Definition.MinElevation, facade.Definition.MaxElevation);
+                var brightness = ReadBrightness(facade, facade.Azimuth, sun, settings, now, facade.Definition.Inclination);
+                var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, facade.Definition.AcceptanceAngle, facade.Definition.MinElevation, facade.Definition.MaxElevation, facade.Definition.Inclination);
                 facadeStatus.Add(new FacadeStatus(facade.Id, facade.Name, facade.Azimuth, facade.IsEnabled,
-                    SunHysteresis.Instant(brightness?.Value, facade.Definition.Thresholds ?? settings.Thresholds), onFacade, ToInfo(brightness), true));
+                    SunHysteresis.Instant(brightness?.Value, facade.Definition.Thresholds ?? settings.Thresholds), onFacade, ToInfo(brightness), true, facade.Definition.Inclination));
             }
 
             foreach (var blind in _blinds.Values)
@@ -349,7 +350,8 @@ namespace Automatica.Core.Shading.Engine
         /// Facade brightness, then the global one. Calculated, irradiance and PV sources estimate the brightness on this
         /// facade from the sky state they measure or assume.
         /// </summary>
-        private SignalReading ReadBrightness(FacadeConfig facade, double? azimuth, SunPosition? sun, ShadingSettingsDefinition settings, DateTimeOffset at)
+        private SignalReading ReadBrightness(FacadeConfig facade, double? azimuth, SunPosition? sun, ShadingSettingsDefinition settings, DateTimeOffset at,
+            double inclination)
         {
             SignalReading Calculate(CalculatedSource source)
             {
@@ -359,7 +361,7 @@ namespace Automatica.Core.Shading.Engine
                 }
 
                 var cloudCover = _reader.Read(source.CloudCover, at);
-                var lux = SunGeometry.EstimateIlluminance(sun.Value, azimuth, cloudCover?.Value, at);
+                var lux = SunGeometry.EstimateIlluminance(sun.Value, azimuth, cloudCover?.Value, at, inclination);
                 return new SignalReading(lux, cloudCover == null ? "calculated" : $"calculated+clouds:{cloudCover.Source}");
             }
 
@@ -375,13 +377,13 @@ namespace Automatica.Core.Shading.Engine
                     case IrradianceSource irradiance:
                     {
                         var sky = SunGeometry.FromGlobalHorizontal(value, sun.Value.Elevation, at);
-                        return new SignalReading(SunGeometry.Illuminance(sky, sun.Value, azimuth), $"irradiance:{irradiance.Node}");
+                        return new SignalReading(SunGeometry.Illuminance(sky, sun.Value, azimuth, inclination), $"irradiance:{irradiance.Node}");
                     }
                     case PvSource pv:
                     {
                         var plane = SunGeometry.PlaneIrradianceFromPower(value, pv.PeakPower, pv.PerformanceRatio);
                         var sky = SunGeometry.FromPlaneOfArray(plane, sun.Value, pv.Azimuth, pv.Tilt);
-                        return sky.HasValue ? new SignalReading(SunGeometry.Illuminance(sky.Value, sun.Value, azimuth), $"pv:{pv.Node}") : null;
+                        return sky.HasValue ? new SignalReading(SunGeometry.Illuminance(sky.Value, sun.Value, azimuth, inclination), $"pv:{pv.Node}") : null;
                     }
                     default:
                         return null;
@@ -493,11 +495,11 @@ namespace Automatica.Core.Shading.Engine
                 var facades = new List<FacadeStatus>();
                 foreach (var facade in _config.Facades)
                 {
-                    var brightness = ReadBrightness(facade, facade.Azimuth, sun, settings, at);
-                    var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, facade.Definition.AcceptanceAngle, facade.Definition.MinElevation, facade.Definition.MaxElevation);
+                    var brightness = ReadBrightness(facade, facade.Azimuth, sun, settings, at, facade.Definition.Inclination);
+                    var onFacade = sun.HasValue && SunGeometry.IsSunOnWindow(sun.Value, facade.Azimuth, facade.Definition.AcceptanceAngle, facade.Definition.MinElevation, facade.Definition.MaxElevation, facade.Definition.Inclination);
                     var temperatureOk = !facade.Definition.MinOutsideTemperature.HasValue || temperature == null || temperature.Value >= facade.Definition.MinOutsideTemperature.Value;
                     facades.Add(new FacadeStatus(facade.Id, facade.Name, facade.Azimuth, facade.IsEnabled,
-                        SunHysteresis.Instant(brightness?.Value, facade.Definition.Thresholds ?? settings.Thresholds), onFacade, ToInfo(brightness), temperatureOk));
+                        SunHysteresis.Instant(brightness?.Value, facade.Definition.Thresholds ?? settings.Thresholds), onFacade, ToInfo(brightness), temperatureOk, facade.Definition.Inclination));
                 }
 
                 var blinds = new List<BlindPreview>();
@@ -505,7 +507,7 @@ namespace Automatica.Core.Shading.Engine
                 {
                     var facade = blind.Facade;
                     var definition = facade?.Definition ?? new FacadeDefinition();
-                    var brightness = ReadBrightness(facade, facade?.Azimuth ?? blind.Azimuth, sun, settings, at);
+                    var brightness = ReadBrightness(facade, facade?.Azimuth ?? blind.Azimuth, sun, settings, at, facade?.Definition.Inclination ?? blind.Inclination);
                     var sunny = SunHysteresis.Instant(brightness?.Value, definition.Thresholds ?? settings.Thresholds);
                     var temperatureOk = !definition.MinOutsideTemperature.HasValue || temperature == null || temperature.Value >= definition.MinOutsideTemperature.Value;
                     var onWindow = blind.IsSunOnWindow(sun);

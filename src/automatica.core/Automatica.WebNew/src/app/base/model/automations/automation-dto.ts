@@ -83,3 +83,35 @@ export interface TestResult {
 export interface RunStartedDto {
     runId: string;
 }
+
+/** a block of a released automation, webapi/automations-visu */
+export interface AutomationVisuBlockDto {
+    path: string;
+    kind: "trigger" | "condition" | "action";
+    type: string;
+    /** name of the datapoint or control, null for time and sun blocks */
+    label: string | null;
+    /** the fields users may change */
+    fields: string[];
+    /** the whole block (camelCase definition JSON) */
+    block: any;
+}
+
+/** an automation released for the visualization */
+export interface AutomationVisuDto {
+    objId: string;
+    name: string;
+    description: string | null;
+    isEnabled: boolean;
+    this2AreaInstance: string | null;
+    this2CategoryInstance: string | null;
+    lastRunAt: string | null;
+    lastRunState: RunState | null;
+    /** the user may change it (visu and admin roles) */
+    canEdit: boolean;
+    blocks: AutomationVisuBlockDto[];
+}
+
+export interface AutomationVisuSaveDto {
+    blocks: { path: string; values: { [field: string]: any } }[];
+}

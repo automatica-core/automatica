@@ -446,6 +446,11 @@ export class AutomationDescriber {
                 }
                 return text;
             }
+            case "mail":
+                return this.s("A_MAIL", {
+                    subject: action.subject || this.t("VALUE.UNSET"),
+                    to: action.to?.length ? action.to.join(", ") : this.t("VALUE.UNSET")
+                }, html);
             case "if":
                 return this.t("S.A_IF", { condition: this.condition(action.condition, html) });
             case "runAutomation": {

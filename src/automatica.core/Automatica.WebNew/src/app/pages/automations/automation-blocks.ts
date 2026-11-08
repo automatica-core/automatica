@@ -77,6 +77,8 @@ export function newAction(type: ActionType): ActionDefinition {
             return { ...base, type, condition: newGroup("all"), forSeconds: 0, timeoutSeconds: 0, continueOnTimeout: true };
         case "notify":
             return { ...base, type, subject: "", body: "", severity: "info", email: [] };
+        case "mail":
+            return { ...base, type, to: [], subject: "", body: "" };
         case "if":
             return { ...base, type, condition: newGroup("all"), then: [], else: [] };
         case "runAutomation":
@@ -116,6 +118,7 @@ const ACTION_ICONS: Record<ActionType, string> = {
     delay: "hourglass-half",
     waitUntil: "stopwatch",
     notify: "bell",
+    mail: "envelope",
     if: "code-branch",
     runAutomation: "play",
     enableAutomation: "power-off",
@@ -264,6 +267,9 @@ export function normalizeDefinition(def: AutomationDefinition): AutomationDefini
         }
         if (a.type === "notify" && !a.email) {
             a.email = [];
+        }
+        if (a.type === "mail" && !a.to) {
+            a.to = [];
         }
         return a;
     });

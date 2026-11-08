@@ -46,13 +46,36 @@ All property names are camelCase, enums are camelCase strings, every block has a
 | Action | `groupControl` | `area`, `includeSubAreas`, `category`, `command`, `value` |
 | Action | `delay` | `seconds`, `randomToSeconds` |
 | Action | `waitUntil` | `condition`, `forSeconds`, `timeoutSeconds` (0 = never), `continueOnTimeout` |
-| Action | `notify` | `subject`, `body`, `severity` (`info`/`warning`/`error`), `email` (list) – placeholders `{automation}`, `{trigger}`, `{trigger.value}`, `{value:<node id>}` |
+| Action | `notify` | `subject`, `body`, `severity` (`info`/`warning`/`error`), `email` (list) – placeholders below |
+| Action | `mail` | `to` (list of addresses), `subject`, `body` – sends through the SMTP server of the settings, otherwise through the cloud |
 | Action | `if` | `condition`, `then`, `else` |
 | Action | `runAutomation` | `automation`, `skipConditions` |
 | Action | `enableAutomation` | `automation`, `enable` |
 | Action | `stop` | `reason` |
 
 Every action also has `enabled` (default true) and `continueOnError` (default false).
+
+Placeholders in `notify` and `mail` texts: `{automation}`, `{trigger}`, `{trigger.value}`, `{value:<node id>}`, `{date}`, `{time}`, `{datetime}` (local time of the core, formatted for its culture).
+
+### Released for the visualization
+
+`"userAccess": true` on the root releases the rule for the visualization. Every block can carry `"userEditable": true`; both are left out of the JSON when false. In a released rule users with the visu role (and admins) switch the rule on or off and change only these fields of the marked blocks (`Definition/AutomationUserAccess.cs`, the web UI mirrors it in `USER_EDITABLE_FIELDS`):
+
+| Block | Fields |
+|---|---|
+| Trigger `time` | `at`, `days` |
+| Trigger `sun` | `event`, `offsetMinutes`, `days` |
+| Trigger `datapoint` | `value`, `forSeconds` |
+| Condition `time` | `after`, `before`, `days` |
+| Condition `sun` | `after`, `afterOffsetMinutes`, `before`, `beforeOffsetMinutes` |
+| Condition `datapoint` | `value`, `value2` |
+| Action `setValue` | `value`, `step` |
+| Action `control` | `value` |
+| Action `delay` | `seconds`, `randomToSeconds` |
+| Action `waitUntil` | `forSeconds`, `timeoutSeconds` |
+| Action `mail` | `to` |
+
+Other types cannot be released. Nodes, controls, operators, commands, the marks and the structure stay with the admins.
 
 ## Paths
 
@@ -122,7 +145,34 @@ interface RunStep {
 interface TestResult { passed: boolean; steps: RunStep[]; }
 ```
 
-Validation codes: `noTriggers`, `noActions` (warnings), `nodeNotFound`, `nodeNotReadable`, `nodeNotWritable`, `controlNotFound`, `controlNotSupported`, `invalidTime`, `valueMissing`, `automationNotFound`, `areaNotFound`, `categoryNotFound`, `groupTargetMissing`, `negativeDuration`, `locationMissing` (warning), `selfReference` (warning).
+Validation codes: `noTriggers`, `noActions` (warnings), `nodeNotFound`, `nodeNotReadable`, `nodeNotWritable`, `controlNotFound`, `controlNotSupported`, `invalidTime`, `valueMissing`, `automationNotFound`, `areaNotFound`, `categoryNotFound`, `groupTargetMissing`, `recipientMissing`, `invalidMailAddress` (detail = the address), `negativeDuration`, `locationMissing` (warning), `selfReference` (warning).
+
+## REST API for the visualization (`webapi/automations-visu`)
+
+Every signed-in user may read, the visu and administrator roles may change (`AutomationsVisuController`). Only rules with `userAccess` are visible; anything else answers 404.
+
+| Method | Route | Body | Returns |
+|---|---|---|---|
+| GET | `` | | `AutomationVisuDto[]` |
+| PUT | `{id}` | `{ "blocks": [{ "path": "triggers/0", "values": { "at": "07:15" } }] }` | `AutomationVisuDto` |
+| POST | `{id}/enabled` | `{ "enabled": bool }` | `AutomationVisuDto` |
+
+A path or field that is not released answers 400 `{ "errors": [...] }`. Changes that leave an enabled rule with errors, and switching on a rule with errors, answer 400 `{ "problems": [{ path, code, detail }] }`. The engine reloads the rule after a change.
+
+```ts
+interface AutomationVisuDto {
+  objId: string; name: string; description: string | null; isEnabled: boolean;
+  this2AreaInstance: string | null; this2CategoryInstance: string | null;
+  lastRunAt: string | null; lastRunState: RunState | null;
+  canEdit: boolean;                 // visu or administrator role
+  blocks: { path: string; kind: "trigger" | "condition" | "action"; type: string;
+            label: string | null;   // name of the datapoint or control
+            fields: string[];       // the released fields
+            block: any }[];         // the whole block
+}
+```
+
+The visualization shows them at `/visualization/automations` (menu entry only when at least one rule is released).
 
 ## MCP tools (`Automatica.Core.Mcp/Tools/AutomationTools.cs`)
 

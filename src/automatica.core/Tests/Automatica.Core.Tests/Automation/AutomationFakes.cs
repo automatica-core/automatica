@@ -151,7 +151,15 @@ namespace Automatica.Core.Tests.Automation
             return Task.CompletedTask;
         }
 
-        public Task<bool> SendEmailAsync(IList<string> to, string subject, string body) => Task.FromResult(true);
+        public ConcurrentQueue<(IList<string> To, string Subject, string Body)> Emails { get; } = new();
+
+        public bool EmailResult { get; set; } = true;
+
+        public Task<bool> SendEmailAsync(IList<string> to, string subject, string body)
+        {
+            Emails.Enqueue((to, subject, body));
+            return Task.FromResult(EmailResult);
+        }
 
         private sealed class Unsubscriber(Action action) : IDisposable
         {

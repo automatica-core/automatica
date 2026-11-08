@@ -41,6 +41,8 @@ import { Control, ControlGrouped } from "src/app/base/model/control";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 import { VirtualSettingsPropertyInstance } from "src/app/base/model/virtual-props/settings/settings-property-instance";
 import { getUploadedFileName } from "../uploaded-file-name";
+import { SettingsService } from "src/app/services/settings.service";
+import { confirm } from "devextreme/ui/dialog";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -354,7 +356,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
     private changeDetection: ChangeDetectorRef,
     private router: Router,
     private nodeInstanceImportService: NodeInstanceImportSerivce,
-    private controlsService: ControlsService) {
+    private controlsService: ControlsService,
+    private settingsService: SettingsService) {
     super(notify, translate, appService);
   }
 
@@ -647,7 +650,34 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   }
 
   async onCustomActionClick($event, data: PropertyInstance) {
+    if (data instanceof VirtualSettingsPropertyInstance) {
+      await this.onSettingsAction(data);
+      return;
+    }
     await this.config.customAction(this.item as NodeInstance, data.PropertyTemplate.Key);
+  }
+
+  /** buttons in the server settings (settings of type CustomAction) */
+  private async onSettingsAction(data: VirtualSettingsPropertyInstance) {
+    if (data.setting.ValueKey !== "smtpTest") {
+      return;
+    }
+
+    const ok = await confirm(this.translate.translate("COMMON.PROPERTY.SMTPTEST.CONFIRM"), this.translate.translate("COMMON.PROPERTY.SMTPTEST.NAME"));
+    if (!ok) {
+      return;
+    }
+
+    try {
+      const result = await this.settingsService.sendSmtpTest();
+      if (result?.success) {
+        this.notify.notifySuccess(this.translate.translate("COMMON.PROPERTY.SMTPTEST.OK"));
+      } else {
+        this.notify.notifyError(this.translate.translate("COMMON.PROPERTY.SMTPTEST.FAILED", { error: result?.error ?? "" }));
+      }
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   async onLearnClick($event, data: PropertyInstance) {
