@@ -51,7 +51,8 @@ namespace P3.Driver.Camera.Driver
 
         public override Guid DriverGuid => new("ebe3fa72-1f18-4ece-a1f8-0172bff79c13");
 
-        public override Version DriverVersion => new(1, 0, 0, 0);
+        // the core rewrites the node templates only when this goes up. 1.1: camera tile as default visu template
+        public override Version DriverVersion => new(1, 1, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.camera";
 
