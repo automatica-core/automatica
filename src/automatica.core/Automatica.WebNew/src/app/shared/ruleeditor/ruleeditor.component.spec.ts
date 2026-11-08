@@ -2139,4 +2139,443 @@ describe("RuleEditorComponent", () => {
       expect(fixture.nativeElement.querySelector(".empty")).not.toBeNull();
     });
   });
+
+  // ---------------------------------------------------------------------------------------------
+  describe("multi selection and alignment", () => {
+
+    function elementOf(model: any): HTMLElement {
+      return fixture.nativeElement.querySelectorAll(".node")[editor.nodes.indexOf(nodeOf(model))];
+    }
+
+    /** client coordinates of a world point */
+    function client(x: number, y: number) {
+      const rect = canvas().getBoundingClientRect();
+      return { clientX: rect.left + editor.panX + x * editor.zoom, clientY: rect.top + editor.panY + y * editor.zoom };
+    }
+
+    async function setup() {
+      await create();
+      resetView();
+      fixture.detectChanges();
+    }
+
+    function dragNode(model: any, dx: number, dy: number, init: PointerEventInit = {}) {
+      elementOf(model).dispatchEvent(pointer("pointerdown", { clientX: 500, clientY: 500, ...init }));
+      hostElement().dispatchEvent(pointer("pointermove", { clientX: 500 + dx, clientY: 500 + dy, ...init }));
+      fixture.detectChanges();
+    }
+
+    it("shiftClick_AddsTheBlockAndShowsTheAlignBar", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+
+      elementOf(a).dispatchEvent(pointer("pointerdown", { clientX: 10, clientY: 10 }));
+      elementOf(b).dispatchEvent(pointer("pointerdown", { clientX: 10, clientY: 10, shiftKey: true }));
+      await editor.onPointerUp(pointer("pointerup", { clientX: 10, clientY: 10 }));
+      fixture.detectChanges();
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a), nodeOf(b)]);
+      expect(editor.selectedNode).toBe(nodeOf(b));
+      expect(host.selected[host.selected.length - 1]).toEqual({ page, items: [a, b] });
+      expect(fixture.nativeElement.querySelectorAll(".node.selected").length).toBe(2);
+      expect(fixture.nativeElement.querySelector(".align-bar .count").textContent).toContain("UI.LOGIC.SELECTED {\"count\":2}");
+    });
+
+    it("ctrlClick_OnASelectedBlock_TakesItOutAndStartsNoDrag", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      elementOf(b).dispatchEvent(pointer("pointerdown", { clientX: 10, clientY: 10, ctrlKey: true }));
+      fixture.detectChanges();
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a)]);
+      expect(editor.selectedNode).toBe(nodeOf(a));
+      expect(editor.drag).toBeUndefined();
+      expect(fixture.nativeElement.querySelector(".align-bar")).toBeNull();
+    });
+
+    it("ctrlA_SelectsEveryBlock", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const dp = addDataPoint("Lamp", NodeDataTypeEnum.Boolean, 300, 0);
+      await setup();
+
+      await editor.onKeyDown(key("a", { ctrlKey: true }));
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a), nodeOf(dp)]);
+      expect(host.selected[host.selected.length - 1]).toEqual({ page, items: [a, dp] });
+    });
+
+    it("boxSelect_ShiftDragOnTheCanvas_SelectsTheBlocksItTouches", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);   // 300/240
+      await setup();
+
+      canvas().dispatchEvent(pointer("pointerdown", { ...client(260, 200), shiftKey: true }));
+      expect(editor.drag.mode).toBe("box");
+      hostElement().dispatchEvent(pointer("pointermove", { ...client(320, 260), shiftKey: true }));
+      fixture.detectChanges();
+
+      expect(editor.selectedNodes).toEqual([nodeOf(b)]);
+      expect(fixture.nativeElement.querySelector(".overlay rect.marquee")).not.toBeNull();
+      expect(editor.panX).toBe(40);
+
+      await editor.onPointerUp(pointer("pointerup", client(320, 260)));
+      fixture.detectChanges();
+
+      expect(editor.box).toBeUndefined();
+      expect(fixture.nativeElement.querySelector(".marquee")).toBeNull();
+      expect(host.selected[host.selected.length - 1]).toEqual({ page, items: [b] });
+      expect(nodeOf(a).x).toBe(0);
+    });
+
+    it("boxSelect_AddsToTheSelection", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.select(nodeOf(a), false);
+
+      canvas().dispatchEvent(pointer("pointerdown", { ...client(260, 200), shiftKey: true }));
+      hostElement().dispatchEvent(pointer("pointermove", { ...client(320, 260), shiftKey: true }));
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a), nodeOf(b)]);
+    });
+
+    it("boxSelect_ClickWithoutMove_KeepsTheSelection", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      await setup();
+      editor.select(nodeOf(a), false);
+
+      canvas().dispatchEvent(pointer("pointerdown", { ...client(600, 400), shiftKey: true }));
+      await editor.onPointerUp(pointer("pointerup", client(600, 400)));
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a)]);
+      expect(host.selected.length).toBe(0);
+    });
+
+    it("groupDrag_MovesEverySelectedBlockAndSavesEach", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      dragNode(a, 50, 30);
+      await editor.onPointerUp(pointer("pointerup"));
+
+      expect([nodeOf(a).x, nodeOf(a).y]).toEqual([50, 30]);
+      expect([nodeOf(b).x, nodeOf(b).y]).toEqual([350, 270]);
+      expect(engine.updateItem).toHaveBeenCalledTimes(2);
+      expect(engine.updateItem).toHaveBeenCalledWith(a, LogicUpdateScope.Drag);
+      expect(engine.updateItem).toHaveBeenCalledWith(b, LogicUpdateScope.Drag);
+      // the model stores whole numbers
+      expect(b.X).toBe(Math.round(350 / SX));
+      expect(b.Y).toBe(Math.round(270 / SY));
+      expect(editor.selectedNodes.length).toBe(2);
+    });
+
+    it("groupDrag_StopsWhenTheFirstBlockReachesTheEdge", async () => {
+      const a = addRule("A", ["I1"], ["O1"], 20, 50);     // 30/60
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);   // 300/240
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      dragNode(b, -500, -500);
+
+      expect([nodeOf(a).x, nodeOf(a).y]).toEqual([0, 0]);
+      expect([nodeOf(b).x, nodeOf(b).y]).toEqual([270, 180]);
+    });
+
+    it("groupClick_WithoutMove_SelectsOnlyThatBlock", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      elementOf(a).dispatchEvent(pointer("pointerdown", { clientX: 10, clientY: 10 }));
+      expect(editor.selectedNodes.length).toBe(2);
+      await editor.onPointerUp(pointer("pointerup", { clientX: 10, clientY: 10 }));
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a)]);
+      expect(host.selected[host.selected.length - 1]).toEqual({ page, items: [a] });
+      expect(engine.updateItem).not.toHaveBeenCalled();
+    });
+
+    it("snap_NearTheEdgeOfAnotherBlock_AlignsAndShowsAGuide", async () => {
+      addRule("A", ["I1"], ["O1"], 2, 0);   // x = 3, off the grid
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+
+      // B from 300 to 6: the grid would say 10, the left edge of A says 3
+      dragNode(b, -294, 0);
+
+      expect(nodeOf(b).x).toBe(3);
+      expect(nodeOf(b).y).toBe(240);
+      expect(editor.guides.length).toBe(1);
+      expect(editor.guides[0].x1).toBe(3);
+      expect(editor.guides[0].x2).toBe(3);
+      expect(fixture.nativeElement.querySelectorAll(".overlay line.guide").length).toBe(1);
+
+      await editor.onPointerUp(pointer("pointerup"));
+      fixture.detectChanges();
+      expect(editor.guides.length).toBe(0);
+      expect(fixture.nativeElement.querySelector(".guide")).toBeNull();
+    });
+
+    it("pointerCancel_DuringAGroupDrag_PutsTheBlocksBackWithoutSaving", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      dragNode(a, 50, 30);
+      editor.onPointerCancel();
+
+      expect([nodeOf(a).x, nodeOf(a).y]).toEqual([0, 0]);
+      expect([nodeOf(b).x, nodeOf(b).y]).toEqual([300, 240]);
+      expect(editor.guides.length).toBe(0);
+      expect(engine.updateItem).not.toHaveBeenCalled();
+    });
+
+    it("snap_WithAlt_UsesTheGridOnly", async () => {
+      addRule("A", ["I1"], ["O1"], 2, 0);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+
+      dragNode(b, -294, 0, { altKey: true });
+
+      expect(nodeOf(b).x).toBe(10);
+      expect(editor.guides.length).toBe(0);
+    });
+
+    it("snap_TooFarAway_UsesTheGrid", async () => {
+      addRule("A", ["I1"], ["O1"], 2, 0);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+
+      dragNode(b, -280, 0);   // 20 is 17 away from the edge of A
+
+      expect(nodeOf(b).x).toBe(20);
+      expect(editor.guides.length).toBe(0);
+    });
+
+    it("snap_ToleranceIsInScreenPixels", async () => {
+      addRule("A", ["I1"], ["O1"], 2, 0);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      resetView(0.5);
+
+      // 9 world pixels are 4.5 screen pixels at 50 %
+      dragNode(b, (12 - 300) * 0.5, 0);
+
+      expect(nodeOf(b).x).toBe(3);
+    });
+
+    it("snap_NearTheWiredPort_StraightensTheWire", async () => {
+      const a = addRule("A", ["I1"], ["O1", "O2"]);
+      const b = addRule("B", ["I1"], ["O1"], 300, 150);   // 450/180
+      page.Links.push(linkRules(page, output(a, 1), input(b)));
+      await setup();
+
+      // O2 of A sits at 42 + 6 + 22 + 11 = 81, I1 of B 59 below its top: a straight wire needs y = 22 (the grid says 20,
+      // and the bottom edges would be just as close)
+      dragNode(b, 0, 25 - 180);
+
+      expect(nodeOf(b).y).toBe(22);
+      expect(nodeOf(b).x).toBe(450);
+      const wire = editor.wires[0];
+      expect(editor.anchor(wire.from).y).toBe(editor.anchor(wire.to).y);
+      expect(editor.guides).toEqual([{ x1: -8, y1: 81, x2: 678, y2: 81 }]);
+    });
+
+    it("align_Left_LinesUpTheBlocksAndSavesThem", async () => {
+      const a = addRule("A", ["I1"], ["O1"], 100, 0);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      await editor.align("left");
+
+      expect(nodeOf(a).x).toBe(150);
+      expect(nodeOf(b).x).toBe(150);
+      expect(nodeOf(b).y).toBe(240);
+      expect(engine.updateItem).toHaveBeenCalledTimes(2);
+      expect(b.X).toBeCloseTo(100);
+    });
+
+    it("align_EveryMode_UsesTheBoxAroundTheSelection", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);                  // 0/0, 220 x 76
+      const b = addRule("B", ["I1", "I2"], ["O1"], 200, 200);  // 300/240, 220 x 98
+      await setup();
+      const na = nodeOf(a), nb = nodeOf(b);
+      editor.selectNodes([na, nb], false);
+
+      await editor.align("right");
+      expect([na.x, nb.x]).toEqual([300, 300]);
+
+      na.x = 0;
+      await editor.align("center");
+      expect([na.x, nb.x]).toEqual([150, 150]);
+
+      await editor.align("top");
+      expect([na.y, nb.y]).toEqual([0, 0]);
+
+      nb.y = 240;
+      await editor.align("bottom");
+      expect([na.y + na.h, nb.y + nb.h]).toEqual([338, 338]);
+
+      na.y = 0;
+      nb.y = 240;
+      await editor.align("middle");
+      expect([na.y + na.h / 2, nb.y + nb.h / 2]).toEqual([169, 169]);
+    });
+
+    it("align_SingleBlock_DoesNothing", async () => {
+      const a = addRule("A", ["I1"], ["O1"], 100, 0);
+      await setup();
+      editor.select(nodeOf(a), false);
+
+      await editor.align("left");
+
+      expect(engine.updateItem).not.toHaveBeenCalled();
+    });
+
+    it("alignBar_Button_Aligns", async () => {
+      const a = addRule("A", ["I1"], ["O1"], 100, 0);
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+      fixture.detectChanges();
+
+      const buttons = fixture.nativeElement.querySelectorAll(".align-bar button");
+      expect(buttons.length).toBe(8);
+      // distribute needs three blocks
+      expect(buttons[6].disabled).toBeTrue();
+      buttons[0].click();
+      await flushPromises();
+
+      expect(nodeOf(b).x).toBe(150);
+    });
+
+    it("distribute_Horizontal_LeavesEqualGaps", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);   // 300
+      const c = addRule("C", ["I1"], ["O1"], 800, 0);   // 1200
+      await setup();
+      editor.selectNodes([nodeOf(c), nodeOf(a), nodeOf(b)], false);
+
+      await editor.distribute("h");
+
+      // span 0..1420, three blocks of 220: two gaps of 380
+      expect([nodeOf(a).x, nodeOf(b).x, nodeOf(c).x]).toEqual([0, 600, 1200]);
+      expect(engine.updateItem).toHaveBeenCalledTimes(3);
+    });
+
+    it("distribute_VerticalOverlapping_PullsTheBlocksApart", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 0, 10);   // 12
+      const c = addRule("C", ["I1"], ["O1"], 0, 20);   // 24
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b), nodeOf(c)], false);
+
+      await editor.distribute("v");
+
+      // blocks of 76 with the smallest gap of 20
+      expect([nodeOf(a).y, nodeOf(b).y, nodeOf(c).y]).toEqual([0, 96, 192]);
+    });
+
+    it("distribute_TwoBlocks_DoesNothing", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      await editor.distribute("h");
+
+      expect(engine.updateItem).not.toHaveBeenCalled();
+    });
+
+    it("arrowKeys_MoveTheWholeSelectionAndSaveEachOnce", async () => {
+      const a = addRule("A", ["I1"], ["O1"], 20, 50);     // 30/60
+      const b = addRule("B", ["I1"], ["O1"], 200, 200);   // 300/240
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      await editor.onKeyDown(key("ArrowRight"));
+      await editor.onKeyDown(key("ArrowUp"));
+      await editor.onKeyDown(key("ArrowUp", { shiftKey: true }));
+
+      expect([nodeOf(a).x, nodeOf(a).y]).toEqual([40, 49]);
+      expect([nodeOf(b).x, nodeOf(b).y]).toEqual([310, 229]);
+      expect(engine.updateItem).not.toHaveBeenCalled();
+
+      await new Promise(resolve => setTimeout(resolve, 450));
+      await flushPromises();
+      expect(engine.updateItem).toHaveBeenCalledTimes(2);
+    });
+
+    it("deleteSelection_MultipleBlocks_RemovesTheirLinksOnceAndEveryBlock", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);
+      const c = addRule("C", ["I1"], ["O1"], 400, 0);
+      page.Links.push(linkRules(page, output(a), input(b)));
+      page.Links.push(linkRules(page, output(b), input(c)));
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      await editor.deleteSelection();
+
+      expect(engine.removeLink).toHaveBeenCalledTimes(2);
+      expect(host.removed.map(r => r.item)).toEqual([a, b]);
+      expect(host.removed.every(r => r.multiple === true)).toBeTrue();
+      expect(editor.selectedNodes).toEqual([]);
+    });
+
+    it("deleteSelection_SingleBlock_SendsNoMultipleFlag", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      await setup();
+      editor.select(nodeOf(a), false);
+
+      await editor.deleteSelection();
+
+      expect(host.removed).toEqual([{ item: a, page, removed: false }]);
+    });
+
+    it("selectLink_ClearsTheBlockSelection", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);
+      const link = linkRules(page, output(a), input(b));
+      page.Links.push(link);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      editor.selectLink(pointer("pointerdown"), link);
+
+      expect(editor.selectedNodes).toEqual([]);
+      expect(editor.selectedLink).toBe(link);
+    });
+
+    it("rebuild_KeepsTheMultiSelectionById", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+
+      page.RuleInstances = [...page.RuleInstances];
+      fixture.detectChanges();
+
+      expect(editor.selectedNodes).toEqual([nodeOf(a), nodeOf(b)]);
+    });
+
+    it("minimap_MarksEverySelectedBlock", async () => {
+      const a = addRule("A", ["I1"], ["O1"]);
+      const b = addRule("B", ["I1"], ["O1"], 200, 0);
+      await setup();
+      editor.selectNodes([nodeOf(a), nodeOf(b)], false);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelectorAll(".minimap rect.selected").length).toBe(2);
+    });
+  });
 });

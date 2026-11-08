@@ -250,7 +250,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     const item = $event.item;
     const page: RulePage = $event.page;
     if (item instanceof RuleInstance) {
-      if (this.selectedItem && this.selectedItem.ObjId === item.ObjId) {
+      // a multi selection in the editor leaves the property editor empty, every selected block goes
+      if ($event.multiple || (this.selectedItem && this.selectedItem.ObjId === item.ObjId)) {
         page.removeRuleInstance(item.ObjId);
         $event.removed = true;
         await this.ruleEngineService.removeItem(item);

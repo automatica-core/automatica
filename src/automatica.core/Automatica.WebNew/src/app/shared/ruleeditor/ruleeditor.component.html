@@ -22,7 +22,7 @@
 
     @for (node of nodes; track node.id) {
       @if (node.type === 'rule') {
-        <div class="node rule" [class.selected]="node === selectedNode"
+        <div class="node rule" [class.selected]="isSelected(node)"
           [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.w" [style.height.px]="node.h"
           (pointerdown)="onNodePointerDown($event, node)">
           <div class="head" [style.height.px]="headHeight">
@@ -54,7 +54,7 @@
           }
         </div>
       } @else {
-        <div class="node dp" [class.selected]="node === selectedNode"
+        <div class="node dp" [class.selected]="isSelected(node)"
           [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.w" [style.height.px]="node.h"
           [title]="fullName(node)"
           (pointerdown)="onNodePointerDown($event, node)">
@@ -78,7 +78,51 @@
         </div>
       }
     }
+
+    @if (guides.length > 0 || box) {
+      <svg class="overlay" width="1" height="1" overflow="visible">
+        @for (guide of guides; track $index) {
+          <line class="guide" [attr.x1]="guide.x1" [attr.y1]="guide.y1" [attr.x2]="guide.x2" [attr.y2]="guide.y2"></line>
+        }
+        @if (box) {
+          <rect class="marquee" [attr.x]="box.x" [attr.y]="box.y" [attr.width]="box.w" [attr.height]="box.h"></rect>
+        }
+      </svg>
+    }
   </div>
+
+  @if (selectedNodes.length > 1) {
+    <div class="align-bar" role="toolbar" [attr.aria-label]="'UI.LOGIC.ALIGN' | translateAsync" (pointerdown)="$event.stopPropagation()">
+      <span class="count">{{ 'UI.LOGIC.SELECTED' | translateAsync: { count: selectedNodes.length } }}</span>
+      <span class="sep"></span>
+      <button type="button" (click)="align('left')" [title]="'UI.LOGIC.ALIGN_LEFT' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M2 1v14"/><rect x="4" y="3" width="9" height="3" rx="1"/><rect x="4" y="10" width="6" height="3" rx="1"/></svg>
+      </button>
+      <button type="button" (click)="align('center')" [title]="'UI.LOGIC.ALIGN_CENTER' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M8 1v14"/><rect x="3" y="3" width="10" height="3" rx="1"/><rect x="5" y="10" width="6" height="3" rx="1"/></svg>
+      </button>
+      <button type="button" (click)="align('right')" [title]="'UI.LOGIC.ALIGN_RIGHT' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M14 1v14"/><rect x="3" y="3" width="9" height="3" rx="1"/><rect x="6" y="10" width="6" height="3" rx="1"/></svg>
+      </button>
+      <span class="sep"></span>
+      <button type="button" (click)="align('top')" [title]="'UI.LOGIC.ALIGN_TOP' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M1 2h14"/><rect x="3" y="4" width="3" height="9" rx="1"/><rect x="10" y="4" width="3" height="6" rx="1"/></svg>
+      </button>
+      <button type="button" (click)="align('middle')" [title]="'UI.LOGIC.ALIGN_MIDDLE' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M1 8h14"/><rect x="3" y="3" width="3" height="10" rx="1"/><rect x="10" y="5" width="3" height="6" rx="1"/></svg>
+      </button>
+      <button type="button" (click)="align('bottom')" [title]="'UI.LOGIC.ALIGN_BOTTOM' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M1 14h14"/><rect x="3" y="3" width="3" height="9" rx="1"/><rect x="10" y="6" width="3" height="6" rx="1"/></svg>
+      </button>
+      <span class="sep"></span>
+      <button type="button" (click)="distribute('h')" [disabled]="!canDistribute" [title]="'UI.LOGIC.DISTRIBUTE_H' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M1 2v12M15 2v12"/><rect x="6.5" y="4" width="3" height="8" rx="1"/></svg>
+      </button>
+      <button type="button" (click)="distribute('v')" [disabled]="!canDistribute" [title]="'UI.LOGIC.DISTRIBUTE_V' | translateAsync">
+        <svg viewBox="0 0 16 16"><path d="M2 1h12M2 15h12"/><rect x="4" y="6.5" width="8" height="3" rx="1"/></svg>
+      </button>
+    </div>
+  }
 
   @if (nodes.length === 0) {
     <div class="empty">
@@ -99,6 +143,10 @@
     <button type="button" (click)="fitToView()" [title]="'UI.LOGIC.FIT' | translateAsync">
       <fa-icon icon="expand"></fa-icon>
     </button>
+    <span class="help" tabindex="0" role="note" [title]="'UI.LOGIC.SELECT_HINT' | translateAsync"
+      [attr.aria-label]="'UI.LOGIC.SELECT_HINT' | translateAsync">
+      <fa-icon icon="circle-question"></fa-icon>
+    </span>
   </div>
 
   @if (minimap; as map) {
@@ -107,7 +155,7 @@
       (pointerdown)="onMinimapPointer($event, mini)" (pointermove)="onMinimapPointer($event, mini)">
       @for (node of nodes; track node.id) {
         <rect [attr.x]="node.x" [attr.y]="node.y" [attr.width]="node.w" [attr.height]="node.h" rx="6"
-          [attr.class]="(node.type === 'rule' ? 'mini-rule' : 'mini-dp') + (node === selectedNode ? ' selected' : '')"></rect>
+          [attr.class]="(node.type === 'rule' ? 'mini-rule' : 'mini-dp') + (isSelected(node) ? ' selected' : '')"></rect>
       }
       <rect class="mini-view" [attr.x]="map.view.x" [attr.y]="map.view.y" [attr.width]="map.view.w" [attr.height]="map.view.h"></rect>
     </svg>

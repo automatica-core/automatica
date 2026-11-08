@@ -73,6 +73,37 @@ const SY = 1.2;
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 2.5;
 
+/** how close (in screen pixels) an edge, centre or port has to come to another one to snap onto it */
+const SNAP_PX = 6;
+/** smallest gap distribute leaves between blocks that overlap */
+const MIN_GAP = 20;
+
+export type AlignMode = "left" | "center" | "right" | "top" | "middle" | "bottom";
+
+export interface GuideVM {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+interface DragState {
+  mode: "pan" | "node" | "box";
+  startX: number;
+  startY: number;
+  originX: number;
+  originY: number;
+  node?: NodeVM;
+  moved: boolean;
+  pointerId: number;
+  /** node drag: where every selected block started */
+  origins?: Map<NodeVM, { x: number, y: number }>;
+  /** node drag: a plain click on a block of a multi selection selects only that block */
+  collapse?: boolean;
+  /** box drag: the selection the box adds to */
+  base?: NodeVM[];
+}
+
 @Component({
   selector: "p3-ruleeditor",
   templateUrl: "./ruleeditor.component.html",
@@ -106,8 +137,15 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   panX = 40;
   panY = 40;
 
+  /** the block clicked last; with a multi selection the one the alignment guides follow */
   selectedNode: NodeVM;
+  selectedNodes: NodeVM[] = [];
   selectedLink: Link;
+
+  /** rubber band in world coordinates while selecting with Shift/Ctrl + drag */
+  box: { x: number, y: number, w: number, h: number };
+  /** alignment guides shown while a block snaps onto another one */
+  guides: GuideVM[] = [];
 
   /** wire being dragged out of a port */
   pending: { from: PortVM, x: number, y: number, d: string, target?: PortVM };
@@ -120,8 +158,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   private lastNodeCount = -1;
   private lastLinkCount = -1;
 
-  drag: { mode: "pan" | "node", startX: number, startY: number, originX: number, originY: number, node?: NodeVM, moved: boolean, pointerId: number };
+  drag: DragState;
   private nudgeTimer: any;
+  private nudged = new Set<NodeVM>();
   private resizeObserver: ResizeObserver;
   private viewportW = 0;
   private viewportH = 0;
@@ -277,6 +316,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     if (this.selectedNode) {
       this.selectedNode = this.nodes.find(a => a.id === this.selectedNode.id);
+    }
+    if (this.selectedNodes.length > 0) {
+      const ids = new Set(this.selectedNodes.map(a => a.id));
+      this.selectedNodes = this.nodes.filter(a => ids.has(a.id));
     }
 
     this.buildWires();
@@ -546,29 +589,70 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   // ---------- selection ----------
 
+  isSelected(node: NodeVM) {
+    return this.selectedNodes.includes(node);
+  }
+
   select(node: NodeVM, emit = true) {
-    this.selectedNode = node;
+    this.selectNodes(node ? [node] : [], emit);
+  }
+
+  /** replaces the selection; the property editor only shows a single block, a multi selection clears it */
+  selectNodes(nodes: NodeVM[], emit = true) {
+    this.selectedNodes = [...nodes];
+    this.selectedNode = nodes.includes(this.selectedNode) ? this.selectedNode : nodes[nodes.length - 1];
     this.selectedLink = void 0;
     if (emit) {
-      this.selectedItemsChanged.emit({ page: this.page, items: node ? [node.model] : [] });
+      this.emitSelection();
     }
+  }
+
+  /** Shift/Ctrl + click adds a block to the selection or takes it out again */
+  toggleSelect(node: NodeVM) {
+    if (this.isSelected(node)) {
+      this.selectedNodes = this.selectedNodes.filter(a => a !== node);
+      this.selectedNode = this.selectedNodes[this.selectedNodes.length - 1];
+    } else {
+      this.selectedNodes = [...this.selectedNodes, node];
+      this.selectedNode = node;
+    }
+    this.selectedLink = void 0;
+    this.emitSelection();
+  }
+
+  selectAll() {
+    this.selectNodes(this.nodes);
+  }
+
+  private emitSelection() {
+    this.selectedItemsChanged.emit({ page: this.page, items: this.selectedNodes.map(a => a.model) });
   }
 
   selectLink(event: PointerEvent, link: Link) {
     event.stopPropagation();
     this.selectedLink = link;
     this.selectedNode = void 0;
+    this.selectedNodes = [];
     this.canvasRef.nativeElement.focus();
     this.selectedItemsChanged.emit({ page: this.page, items: [link] });
   }
 
   // ---------- pointer handling ----------
 
+  private static additive(event: PointerEvent | KeyboardEvent | MouseEvent) {
+    return event.shiftKey || event.ctrlKey || event.metaKey;
+  }
+
   onCanvasPointerDown(event: PointerEvent) {
     if (event.button !== 0 && event.button !== 1) {
       return;
     }
     this.canvasRef.nativeElement.focus();
+    if (event.button === 0 && RuleEditorComponent.additive(event)) {
+      // Shift/Ctrl + drag on the empty canvas draws a selection box, a plain drag pans
+      this.startDrag(event, "box");
+      return;
+    }
     this.startDrag(event, "pan");
   }
 
@@ -578,10 +662,21 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
     event.stopPropagation();
     this.canvasRef.nativeElement.focus();
-    if (this.selectedNode !== node) {
+    let collapse = false;
+    if (RuleEditorComponent.additive(event)) {
+      this.toggleSelect(node);
+      if (!this.isSelected(node)) {
+        return;
+      }
+    } else if (!this.isSelected(node)) {
       this.select(node);
+    } else {
+      // keep the group so it can be dragged together; a click without a move selects only this block
+      collapse = this.selectedNodes.length > 1;
+      this.selectedNode = node;
     }
     this.startDrag(event, "node", node);
+    this.drag.collapse = collapse;
   }
 
   onPortPointerDown(event: PointerEvent, port: PortVM) {
@@ -600,17 +695,26 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     this.canvasRef.nativeElement.setPointerCapture(event.pointerId);
   }
 
-  private startDrag(event: PointerEvent, mode: "pan" | "node", node?: NodeVM) {
+  private startDrag(event: PointerEvent, mode: "pan" | "node" | "box", node?: NodeVM) {
+    const world = mode === "box" ? this.clientToWorld(event.clientX, event.clientY) : void 0;
     this.drag = {
       mode,
       node,
       startX: event.clientX,
       startY: event.clientY,
-      originX: mode === "pan" ? this.panX : node.x,
-      originY: mode === "pan" ? this.panY : node.y,
+      originX: mode === "pan" ? this.panX : mode === "box" ? world.x : node.x,
+      originY: mode === "pan" ? this.panY : mode === "box" ? world.y : node.y,
       moved: false,
       pointerId: event.pointerId
     };
+    if (mode === "node") {
+      this.drag.origins = new Map(this.selectedNodes.map(a => [a, { x: a.x, y: a.y }]));
+      if (!this.drag.origins.has(node)) {
+        this.drag.origins.set(node, { x: node.x, y: node.y });
+      }
+    } else if (mode === "box") {
+      this.drag.base = [...this.selectedNodes];
+    }
     this.canvasRef.nativeElement.setPointerCapture(event.pointerId);
   }
 
@@ -640,12 +744,127 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     if (this.drag.mode === "pan") {
       this.panX = this.drag.originX + dx;
       this.panY = this.drag.originY + dy;
+    } else if (this.drag.mode === "box") {
+      this.updateBox(event);
     } else {
-      const node = this.drag.node;
-      node.x = Math.max(0, this.snap(this.drag.originX + dx / this.zoom));
-      node.y = Math.max(0, this.snap(this.drag.originY + dy / this.zoom));
-      this.updateWirePaths(new Set([node]));
+      this.moveSelection(event);
     }
+  }
+
+  private updateBox(event: PointerEvent) {
+    const p = this.clientToWorld(event.clientX, event.clientY);
+    const x = Math.min(this.drag.originX, p.x);
+    const y = Math.min(this.drag.originY, p.y);
+    const box = { x, y, w: Math.abs(p.x - this.drag.originX), h: Math.abs(p.y - this.drag.originY) };
+    this.box = box;
+    // every block the box touches, on top of what was selected before
+    const hits = this.nodes.filter(n => n.x < box.x + box.w && n.x + n.w > box.x && n.y < box.y + box.h && n.y + n.h > box.y);
+    const base = this.drag.base ?? [];
+    this.selectedNodes = [...base, ...hits.filter(a => !base.includes(a))];
+    this.selectedNode = this.selectedNodes[this.selectedNodes.length - 1];
+  }
+
+  /** moves the dragged block onto the grid or onto the edges/ports of the other blocks, the rest of the selection follows */
+  private moveSelection(event: PointerEvent) {
+    const drag = this.drag;
+    const node = drag.node;
+    const origins = drag.origins;
+    const dx = (event.clientX - drag.startX) / this.zoom;
+    const dy = (event.clientY - drag.startY) / this.zoom;
+
+    const snapped = this.snapNode(node, drag.originX + dx, drag.originY + dy, new Set(origins.keys()), event.altKey);
+    let moveX = snapped.x - drag.originX;
+    let moveY = snapped.y - drag.originY;
+
+    // no block of the group may leave the positive quadrant, the stored layout cannot hold negative positions
+    let minX = Infinity, minY = Infinity;
+    for (const origin of origins.values()) {
+      minX = Math.min(minX, origin.x);
+      minY = Math.min(minY, origin.y);
+    }
+    moveX = Math.max(moveX, -minX);
+    moveY = Math.max(moveY, -minY);
+
+    for (const [n, origin] of origins) {
+      n.x = origin.x + moveX;
+      n.y = origin.y + moveY;
+    }
+    this.guides = moveX === snapped.x - drag.originX && moveY === snapped.y - drag.originY ? snapped.guides : [];
+    this.updateWirePaths(new Set(origins.keys()));
+  }
+
+  /**
+   * Like draw2d's SnapToGeometry policy: the block snaps with its left/right edge or centre onto the edges or
+   * centre of another block, with its top/bottom/middle onto theirs, and with a port onto the port it is wired
+   * to (the wire becomes straight). Without a match the block snaps to the grid. Alt turns the alignment off.
+   */
+  snapNode(node: NodeVM, x: number, y: number, moving: Set<NodeVM>, free = false): { x: number, y: number, guides: GuideVM[] } {
+    if (free) {
+      return { x: this.snap(x), y: this.snap(y), guides: [] };
+    }
+    const tolerance = SNAP_PX / this.zoom;
+    const others = this.nodes.filter(a => !moving.has(a));
+
+    // [offset on the moving block, line on the other block, preferred]
+    type Candidate = { offset: number, line: number, other: NodeVM, port?: boolean };
+    const xs: Candidate[] = [];
+    const ys: Candidate[] = [];
+    for (const other of others) {
+      for (const offset of [0, node.w]) {
+        for (const line of [other.x, other.x + other.w]) {
+          xs.push({ offset, line, other });
+        }
+      }
+      xs.push({ offset: node.w / 2, line: other.x + other.w / 2, other });
+      for (const offset of [0, node.h]) {
+        for (const line of [other.y, other.y + other.h]) {
+          ys.push({ offset, line, other });
+        }
+      }
+      ys.push({ offset: node.h / 2, line: other.y + other.h / 2, other });
+    }
+    // ports wired to a block that stays where it is
+    for (const wire of this.wires) {
+      const mine = wire.from.node === node ? wire.from : wire.to.node === node ? wire.to : void 0;
+      const theirs = mine === wire.from ? wire.to : wire.from;
+      if (mine && !moving.has(theirs.node)) {
+        ys.push({ offset: this.anchor(mine).y - node.y, line: this.anchor(theirs).y, other: theirs.node, port: true });
+      }
+    }
+
+    const best = (candidates: Candidate[], position: number) => {
+      let found: Candidate, distance = Infinity;
+      for (const c of candidates) {
+        // a straight wire wins over an edge that is just as close
+        const d = Math.abs(c.line - (position + c.offset)) * (c.port ? 0.5 : 1);
+        if (d <= tolerance && d < distance) {
+          found = c;
+          distance = d;
+        }
+      }
+      return found;
+    };
+
+    const bx = best(xs, x);
+    const by = best(ys, y);
+    const nx = bx ? bx.line - bx.offset : this.snap(x);
+    const ny = by ? by.line - by.offset : this.snap(y);
+
+    const guides: GuideVM[] = [];
+    if (bx) {
+      // one guide through every block that sits on the same line
+      const on = others.filter(o => [o.x, o.x + o.w / 2, o.x + o.w].some(l => Math.abs(l - bx.line) < 0.5));
+      const top = Math.min(ny, ...on.map(o => o.y));
+      const bottom = Math.max(ny + node.h, ...on.map(o => o.y + o.h));
+      guides.push({ x1: bx.line, y1: top - 8, x2: bx.line, y2: bottom + 8 });
+    }
+    if (by) {
+      const on = by.port ? [by.other] : others.filter(o => [o.y, o.y + o.h / 2, o.y + o.h].some(l => Math.abs(l - by.line) < 0.5));
+      const left = Math.min(nx, ...on.map(o => o.x));
+      const right = Math.max(nx + node.w, ...on.map(o => o.x + o.w));
+      guides.push({ x1: left - 8, y1: by.line, x2: right + 8, y2: by.line });
+    }
+    return { x: nx, y: ny, guides };
   }
 
   @HostListener("pointerup", ["$event"])
@@ -666,18 +885,38 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
     if (drag.mode === "pan" && !drag.moved) {
       // a click on the empty canvas clears the selection
-      if (this.selectedNode || this.selectedLink) {
+      if (this.selectedNodes.length > 0 || this.selectedNode || this.selectedLink) {
         this.select(void 0);
       }
-    } else if (drag.mode === "node" && drag.moved) {
-      await this.saveNodePosition(drag.node);
+    } else if (drag.mode === "box") {
+      this.box = void 0;
+      if (drag.moved) {
+        this.emitSelection();
+      }
+    } else if (drag.mode === "node") {
+      this.guides = [];
+      if (drag.moved) {
+        await this.saveNodePositions([...drag.origins.keys()]);
+      } else if (drag.collapse) {
+        this.select(drag.node);
+      }
     }
   }
 
   @HostListener("pointercancel")
   onPointerCancel() {
+    // a cancelled drag is never saved, so the blocks go back to where they were
+    if (this.drag?.mode === "node" && this.drag.moved) {
+      for (const [node, origin] of this.drag.origins) {
+        node.x = origin.x;
+        node.y = origin.y;
+      }
+      this.updateWirePaths(new Set(this.drag.origins.keys()));
+    }
     this.pending = void 0;
     this.drag = void 0;
+    this.box = void 0;
+    this.guides = [];
   }
 
   private onWheel = (event: WheelEvent) => {
@@ -703,17 +942,32 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       await this.deleteSelection();
       return;
     }
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      this.selectAll();
+      return;
+    }
     const step = event.shiftKey ? 1 : GRID;
     const moves: { [key: string]: [number, number] } = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
     const move = moves[event.key];
-    if (move && this.selectedNode) {
+    if (move && this.selectedNodes.length > 0) {
       event.preventDefault();
-      const node = this.selectedNode;
-      node.x = Math.max(0, node.x + move[0]);
-      node.y = Math.max(0, node.y + move[1]);
-      this.updateWirePaths(new Set([node]));
+      const nodes = this.selectedNodes;
+      // the group moves as one, it stops when its first block reaches the edge
+      const moveX = Math.max(move[0], -Math.min(...nodes.map(a => a.x)));
+      const moveY = Math.max(move[1], -Math.min(...nodes.map(a => a.y)));
+      for (const node of nodes) {
+        node.x += moveX;
+        node.y += moveY;
+        this.nudged.add(node);
+      }
+      this.updateWirePaths(new Set(nodes));
       clearTimeout(this.nudgeTimer);
-      this.nudgeTimer = setTimeout(() => this.saveNodePosition(node), 400);
+      this.nudgeTimer = setTimeout(() => {
+        const moved = [...this.nudged];
+        this.nudged.clear();
+        this.saveNodePositions(moved);
+      }, 400);
     } else if (event.key === "+" || event.key === "=") {
       this.zoomBy(1.25);
     } else if (event.key === "-") {
@@ -801,14 +1055,21 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (this.selectedLink) {
         await this.removeLink(this.selectedLink);
         this.select(void 0);
-      } else if (this.selectedNode) {
-        const node = this.selectedNode;
+      } else if (this.selectedNodes.length > 0) {
+        const nodes = [...this.selectedNodes];
+        const removing = new Set(nodes);
         // links first, as the draw2d editor did when a block was removed
-        for (const wire of this.wires.filter(w => w.from.node === node || w.to.node === node)) {
+        for (const wire of this.wires.filter(w => removing.has(w.from.node) || removing.has(w.to.node))) {
           await this.removeLink(wire.link);
         }
-        const item = { item: node.model, page: this.page, removed: false };
-        this.removeSelectedItem.emit(item);
+        for (const node of nodes) {
+          const item: any = { item: node.model, page: this.page, removed: false };
+          if (nodes.length > 1) {
+            // the page only removes the block shown in its property editor, a multi selection has none
+            item.multiple = true;
+          }
+          this.removeSelectedItem.emit(item);
+        }
         this.select(void 0);
         this.rebuild();
       }
@@ -828,6 +1089,73 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       await this.ruleEngineService.updateItem(owner, LogicUpdateScope.InvertedValueUpdated);
     } catch (error) {
       this.handleError(error);
+    }
+  }
+
+  // ---------- align / distribute ----------
+
+  /** lines the selected blocks up on the edge or centre of the box around them */
+  async align(mode: AlignMode) {
+    const nodes = this.selectedNodes;
+    if (nodes.length < 2) {
+      return;
+    }
+    const left = Math.min(...nodes.map(a => a.x));
+    const right = Math.max(...nodes.map(a => a.x + a.w));
+    const top = Math.min(...nodes.map(a => a.y));
+    const bottom = Math.max(...nodes.map(a => a.y + a.h));
+    for (const node of nodes) {
+      switch (mode) {
+        case "left": node.x = left; break;
+        case "center": node.x = Math.round((left + right) / 2 - node.w / 2); break;
+        case "right": node.x = right - node.w; break;
+        case "top": node.y = top; break;
+        case "middle": node.y = Math.round((top + bottom) / 2 - node.h / 2); break;
+        case "bottom": node.y = bottom - node.h; break;
+      }
+    }
+    await this.applyLayout(nodes);
+  }
+
+  /** spaces the selected blocks evenly between the outer two, blocks that overlap are pulled apart */
+  async distribute(axis: "h" | "v") {
+    const nodes = [...this.selectedNodes];
+    if (nodes.length < 3) {
+      return;
+    }
+    const pos = (n: NodeVM) => axis === "h" ? n.x : n.y;
+    const size = (n: NodeVM) => axis === "h" ? n.w : n.h;
+    nodes.sort((a, b) => pos(a) - pos(b) || a.id.localeCompare(b.id));
+    const start = pos(nodes[0]);
+    const end = Math.max(...nodes.map(a => pos(a) + size(a)));
+    const total = nodes.reduce((sum, a) => sum + size(a), 0);
+    const gap = Math.max(MIN_GAP, (end - start - total) / (nodes.length - 1));
+    let at = start;
+    for (const node of nodes) {
+      if (axis === "h") {
+        node.x = Math.round(at);
+      } else {
+        node.y = Math.round(at);
+      }
+      at += size(node) + gap;
+    }
+    await this.applyLayout(nodes);
+  }
+
+  private async applyLayout(nodes: NodeVM[]) {
+    this.updateWirePaths(new Set(nodes));
+    this.canvasRef.nativeElement.focus();
+    await this.saveNodePositions(nodes);
+  }
+
+  get canDistribute() {
+    return this.selectedNodes.length >= 3;
+  }
+
+  /** one request per block, in order, as a drag of a single block sends it */
+  private async saveNodePositions(nodes: NodeVM[]) {
+    for (const node of nodes) {
+      await this.saveNodePosition(node);
     }
   }
 

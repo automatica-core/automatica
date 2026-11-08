@@ -703,6 +703,34 @@ describe("LogicEditorComponent", () => {
       expect(engine.removeItem).not.toHaveBeenCalled();
     });
 
+    it("removeSelectedItem_RuleOfAMultiSelection_IsRemovedWithoutBeingTheSelectedItem", async () => {
+      const rule = makeRule(translate, "AND", ["I1"], ["O1"]);
+      pageA.RuleInstances.push(rule);
+      const event = { item: rule, page: pageA, removed: false, multiple: true };
+
+      await component.removeSelectedItem(event);
+
+      expect(pageA.RuleInstances.length).toBe(0);
+      expect(event.removed).toBeTrue();
+      expect(engine.removeItem).toHaveBeenCalledOnceWith(rule);
+    });
+
+    it("removeSelectedItem_DeleteOfTwoBlocksInTheEditor_RemovesBoth", async () => {
+      const first = addBlock(pageA);
+      const second = addBlock(pageA);
+      fixture.detectChanges();
+      const editor = ruleEditor();
+      editor.selectNodes(editor.nodes);
+
+      await editor.deleteSelection();
+      await flushPromises();
+      fixture.detectChanges();
+
+      expect(pageA.RuleInstances.length).toBe(0);
+      expect(engine.removeItem).toHaveBeenCalledWith(first);
+      expect(engine.removeItem).toHaveBeenCalledWith(second);
+    });
+
     it("removeSelectedItem_DataPoint_IsRemovedEverywhere", async () => {
       const dp = makeDataPoint(pageA, makeNodeInstance("Lamp", NodeDataTypeEnum.Boolean));
       pageA.NodeInstances.push(dp);

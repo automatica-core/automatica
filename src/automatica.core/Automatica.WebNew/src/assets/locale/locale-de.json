@@ -836,7 +836,18 @@
       "INPUT_TAKEN": "Dieser Eingang ist schon verbunden",
       "OUTPUT_FULL": "Dieser Ausgang hat keine freien Verbindungen mehr",
       "WRONG_DIRECTION": "Verbinde einen Ausgang mit einem Eingang",
-      "MINIMAP": "Übersichtskarte"
+      "MINIMAP": "Übersichtskarte",
+      "SELECTED": "{{ count }} ausgewählt",
+      "ALIGN": "Bausteine ausrichten",
+      "ALIGN_LEFT": "Linke Kanten ausrichten",
+      "ALIGN_CENTER": "Horizontal zentrieren",
+      "ALIGN_RIGHT": "Rechte Kanten ausrichten",
+      "ALIGN_TOP": "Obere Kanten ausrichten",
+      "ALIGN_MIDDLE": "Vertikal zentrieren",
+      "ALIGN_BOTTOM": "Untere Kanten ausrichten",
+      "DISTRIBUTE_H": "Horizontal verteilen (ab 3 Bausteinen)",
+      "DISTRIBUTE_V": "Vertikal verteilen (ab 3 Bausteinen)",
+      "SELECT_HINT": "Umschalt/Strg + Klick nimmt einen Baustein in die Auswahl, Umschalt/Strg + Ziehen auf der Fläche wählt mit einem Rahmen aus, Strg + A wählt alles. Gezogene Bausteine rasten an den Kanten anderer Bausteine und an verbundenen Ports ein; mit gedrückter Alt-Taste frei platzieren."
     },
     "AUTOMATIONS": {
       "TITLE": "Automationen",

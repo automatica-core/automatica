@@ -395,6 +395,118 @@
         font-size: 12px;
         color: var(--muted);
     }
+
+    .help {
+        display: grid;
+        place-items: center;
+        min-width: 26px;
+        height: 28px;
+        color: var(--muted);
+        cursor: help;
+        font-size: 13px;
+        border-radius: 4px;
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+        }
+    }
+}
+
+// ---------- multi selection ----------
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.guide {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 3;
+    vector-effect: non-scaling-stroke;
+}
+
+.marquee {
+    fill: color-mix(in srgb, var(--accent) 10%, transparent);
+    stroke: var(--accent);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.align-bar {
+    position: absolute;
+    top: var(--space-3);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    max-width: calc(100% - 2 * var(--space-3));
+    padding: 3px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+
+    .count {
+        padding: 0 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    .sep {
+        flex: none;
+        width: 1px;
+        height: 18px;
+        margin: 0 3px;
+        background: var(--line);
+    }
+
+    button {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 28px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: var(--surface-2);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+        }
+
+        &:disabled {
+            opacity: .35;
+            cursor: default;
+        }
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.4;
+        stroke-linecap: round;
+
+        rect {
+            fill: currentColor;
+            fill-opacity: .25;
+        }
+    }
 }
 
 .minimap {

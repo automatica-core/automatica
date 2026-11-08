@@ -836,7 +836,18 @@
       "INPUT_TAKEN": "This input is already connected",
       "OUTPUT_FULL": "This output has no free connections left",
       "WRONG_DIRECTION": "Connect an output to an input",
-      "MINIMAP": "Overview map"
+      "MINIMAP": "Overview map",
+      "SELECTED": "{{ count }} selected",
+      "ALIGN": "Align blocks",
+      "ALIGN_LEFT": "Align left edges",
+      "ALIGN_CENTER": "Align horizontal centres",
+      "ALIGN_RIGHT": "Align right edges",
+      "ALIGN_TOP": "Align top edges",
+      "ALIGN_MIDDLE": "Align vertical centres",
+      "ALIGN_BOTTOM": "Align bottom edges",
+      "DISTRIBUTE_H": "Distribute horizontally (3 or more blocks)",
+      "DISTRIBUTE_V": "Distribute vertically (3 or more blocks)",
+      "SELECT_HINT": "Shift/Ctrl + click adds a block to the selection, Shift/Ctrl + drag on the canvas selects with a box, Ctrl + A selects all. Dragged blocks snap onto the edges of other blocks and onto the ports they are wired to; hold Alt to place freely."
     },
     "AUTOMATIONS": {
       "TITLE": "Automations",
