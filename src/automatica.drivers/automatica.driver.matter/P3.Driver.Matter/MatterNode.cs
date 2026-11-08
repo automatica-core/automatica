@@ -794,6 +794,8 @@ namespace P3.Driver.Matter
 
         internal (byte Status, byte FabricIndex) AddNoc(SecureSession session, byte[] noc, byte[] icac, byte[] ipk, ulong caseAdminSubject, ushort adminVendorId)
         {
+            // ICACValue is optional; some controllers (matter.js) send an empty octet string instead of leaving it out
+            icac = icac is { Length: > 0 } ? icac : null;
             Fabric fabric;
             lock (_lock)
             {
@@ -810,7 +812,7 @@ namespace P3.Driver.Matter
 
                 if (fs.PendingRoot == null || ipk.Length != 16)
                 {
-                    return (NocStatus.InvalidNoc, 0);
+                    return RejectNoc(fs.PendingRoot == null ? "no trusted root was added before AddNOC" : $"IPK has {ipk.Length} bytes, 16 expected");
                 }
 
                 if (_fabrics.Count >= SupportedFabrics)
@@ -836,12 +838,12 @@ namespace P3.Driver.Matter
                         var icacCert = new MatterCertificate(icac);
                         if (!icacCert.VerifySignature(rootPublicKey))
                         {
-                            return (NocStatus.InvalidNoc, 0);
+                            return RejectNoc("the ICAC signature does not verify against the root");
                         }
 
                         if (icacCert.SubjectFabricId.HasValue && icacCert.SubjectFabricId != nocCert.SubjectFabricId)
                         {
-                            return (NocStatus.InvalidNoc, 0);
+                            return RejectNoc("the ICAC and the NOC name different fabrics");
                         }
 
                         issuer = icacCert.PublicKey;
@@ -849,12 +851,12 @@ namespace P3.Driver.Matter
 
                     if (!nocCert.VerifySignature(issuer))
                     {
-                        return (NocStatus.InvalidNoc, 0);
+                        return RejectNoc(icac != null ? "the NOC signature does not verify against the ICAC" : "the NOC signature does not verify against the root");
                     }
                 }
-                catch (MatterProtocolException)
+                catch (MatterProtocolException e)
                 {
-                    return (NocStatus.InvalidNoc, 0);
+                    return RejectNoc($"a certificate could not be parsed: {e.Message}");
                 }
 
                 if (!nocCert.PublicKey.AsSpan().SequenceEqual(MatterCrypto.ExportPublicKey(fs.PendingKey)))
@@ -869,7 +871,7 @@ namespace P3.Driver.Matter
 
                 if (nocCert.SubjectFabricId is not { } fabricId || fabricId == 0)
                 {
-                    return (NocStatus.InvalidNoc, 0);
+                    return RejectNoc("the NOC has no fabric id");
                 }
 
                 if (_fabrics.Any(f => f.FabricId == fabricId && f.RootPublicKey.AsSpan().SequenceEqual(rootPublicKey)))
@@ -916,8 +918,16 @@ namespace P3.Driver.Matter
             return (NocStatus.Ok, fabric.FabricIndex);
         }
 
+        private (byte Status, byte FabricIndex) RejectNoc(string reason)
+        {
+            _logger.LogWarning("AddNOC rejected: {Reason}", reason);
+            return (NocStatus.InvalidNoc, 0);
+        }
+
         internal (byte Status, byte FabricIndex) UpdateNoc(SecureSession session, byte[] noc, byte[] icac)
         {
+            // ICACValue is optional; some controllers (matter.js) send an empty octet string instead of leaving it out
+            icac = icac is { Length: > 0 } ? icac : null;
             Fabric fabric;
             lock (_lock)
             {

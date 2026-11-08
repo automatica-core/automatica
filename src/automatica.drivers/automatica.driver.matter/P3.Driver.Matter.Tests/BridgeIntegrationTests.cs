@@ -71,6 +71,35 @@ namespace P3.Driver.Matter.Tests
         }
 
         [Fact]
+        public async Task AddNoc_accepts_an_empty_icac_as_no_icac()
+        {
+            // matter.js sends ICACValue as an empty octet string when the NOC is signed by the root directly
+            using var controller = new MiniController(_bridge.Node.Port);
+            using var ca = new TestCertificateAuthority(FabricId);
+            Assert.NotNull(await controller.EstablishPaseAsync(_bridge.Node.State.Passcode));
+            await controller.InvokeWithResponseAsync(0, GeneralCommissioningCluster.Id, 0x00, w =>
+            {
+                w.PutUInt(0, 60);
+                w.PutUInt(1, 1);
+            });
+
+            var csrResponse = await controller.InvokeWithResponseAsync(0, OperationalCredentialsCluster.Id, 0x04, w => w.PutBytes(0, MatterCrypto.RandomBytes(32)));
+            var request = CertificateRequest.LoadSigningRequest(TlvReader.Decode(csrResponse.GetBytes(0)).GetBytes(1), HashAlgorithmName.SHA256, CertificateRequestLoadOptions.Default);
+            using var csrKey = request.PublicKey.GetECDsaPublicKey()!;
+            Assert.Equal(StatusCode.Success, MiniController.InvokeStatus(await controller.InvokeAsync(0, OperationalCredentialsCluster.Id, 0x0B, w => w.PutBytes(0, ca.RootCert))));
+
+            var noc = await controller.InvokeWithResponseAsync(0, OperationalCredentialsCluster.Id, 0x06, w =>
+            {
+                w.PutBytes(0, ca.IssueNoc(MatterCrypto.ExportPublicKey(csrKey), DeviceNodeId));
+                w.PutBytes(1, Array.Empty<byte>());
+                w.PutBytes(2, MatterCrypto.RandomBytes(16));
+                w.PutUInt(3, ControllerNodeId);
+                w.PutUInt(4, DeviceAttestation.TestVendorId);
+            });
+            Assert.Equal((ulong)NocStatus.Ok, noc.GetUInt(0));
+        }
+
+        [Fact]
         public async Task Commission_then_control_over_case()
         {
             using var controller = new MiniController(_bridge.Node.Port);
