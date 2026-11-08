@@ -1,0 +1,47 @@
+:host {
+    display: block;
+}
+
+.radio-picker-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+}
+
+.radio-picker-logo {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    background: #fff;
+
+    &.is-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: var(--muted);
+    }
+}
+
+.radio-picker-name {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.radio-picker-genre {
+    margin-left: auto;
+    flex: none;
+    color: var(--muted);
+    font-size: var(--text-xs);
+}
+
+.radio-picker-error {
+    margin-top: 4px;
+    color: var(--bad);
+    font-size: var(--text-xs);
+}

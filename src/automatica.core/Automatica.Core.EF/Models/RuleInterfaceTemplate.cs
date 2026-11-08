@@ -18,7 +18,11 @@ namespace Automatica.Core.EF.Models
         Enum = 7,
         Bool = 8,
         Calendar = 9,
-        Controls = 10
+        Controls = 10,
+        /// <summary>
+        /// Radio station keys of the core's station catalog, joined with ';' (stored in ValueString)
+        /// </summary>
+        RadioStations = 11
     }
 
     public class TimerPropertyData : TypedObject

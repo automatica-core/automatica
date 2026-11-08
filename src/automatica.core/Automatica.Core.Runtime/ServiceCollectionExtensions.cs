@@ -2,6 +2,8 @@
 using Automatica.Core.Automation;
 using Automatica.Core.Shading;
 using Automatica.Core.Internals.OperatingModes;
+using Automatica.Core.Base.Media;
+using Automatica.Core.Internals.Media;
 using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.Common;
@@ -64,6 +66,10 @@ namespace Automatica.Core.Runtime
             services.AddDispatcher();
 
             services.AddSingleton<ILocalizationProvider, LocalizationProvider>();
+
+            // radio stations: the built-in list plus the stations the administrator added (drivers translate the station keys)
+            services.AddSingleton<IRadioStationService, RadioStationService>();
+            services.AddSingleton<IRadioStationCatalog>(a => a.GetRequiredService<IRadioStationService>());
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();

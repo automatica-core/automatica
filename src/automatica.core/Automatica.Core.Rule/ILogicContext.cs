@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Base.IO;
+﻿using Automatica.Core.Base.Media;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
@@ -47,6 +48,12 @@ namespace Automatica.Core.Logic
         /// Interface to communicate with the cloud
         /// </summary>
         IServerCloudApi CloudApi { get; }
+
+        /// <summary>
+        /// The radio stations of the core (built-in and added by the administrator). A media player driver translates a
+        /// station into what its device plays. Older cores (and test contexts) have only the built-in list.
+        /// </summary>
+        IRadioStationCatalog RadioStations => RadioStationCatalog.BuiltIn;
 
         /// <summary>
         /// Gives information about the current used license

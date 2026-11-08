@@ -34,6 +34,7 @@ export const navigation: NavItem[] = [
             { text: "UI.NAV.AREAS", path: "/admin/area-config", icon: "layer-group" },
             { text: "UI.NAV.CATEGORIES", path: "/admin/category-config", icon: "tags" },
             { text: "UI.NAV.VISU_EDITOR", path: "/admin/visualisation", icon: "pen-ruler" },
+            { text: "UI.NAV.RADIO_STATIONS", path: "/admin/radio-stations", icon: "radio" },
             { text: "UI.NAV.TELEGRAM_MONITOR", path: "/admin/telegram-monitor", icon: "wave-square" }
         ]
     },

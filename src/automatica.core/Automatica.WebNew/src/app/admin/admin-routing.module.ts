@@ -20,6 +20,7 @@ import { AutomationsListComponent } from "../pages/automations/automations-list/
 import { AutomationEditorComponent } from "../pages/automations/automation-editor/automation-editor.component";
 import { ShadingPageComponent } from "../pages/shading/shading-page/shading-page.component";
 import { OperatingModesPageComponent } from "../pages/operating-modes/operating-modes-page/operating-modes-page.component";
+import { RadioStationsPageComponent } from "../pages/radio-stations/radio-stations-page/radio-stations-page.component";
 
 const routes: Routes =[
     {
@@ -52,6 +53,9 @@ const routes: Routes =[
     }, {
         path: "operating-modes",
         component: OperatingModesPageComponent
+    }, {
+        path: "radio-stations",
+        component: RadioStationsPageComponent
     }, {
         path: "visualisation",
         component: VisualisationEditComponent,

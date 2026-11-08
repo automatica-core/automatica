@@ -122,6 +122,7 @@ export class RuleInterfaceInstance extends BaseModel {
             case RuleInterfaceParameterDataType.Enum:
             case RuleInterfaceParameterDataType.ConstantString:
             case RuleInterfaceParameterDataType.Color:
+            case RuleInterfaceParameterDataType.RadioStations:
                 return this.ValueString;
             case RuleInterfaceParameterDataType.Timer: {
                 const timerProperty = new TimerPropertyData();
@@ -157,6 +158,7 @@ export class RuleInterfaceInstance extends BaseModel {
             case RuleInterfaceParameterDataType.ConstantString:
             case RuleInterfaceParameterDataType.Color:
             case RuleInterfaceParameterDataType.Enum:
+            case RuleInterfaceParameterDataType.RadioStations:
                 this.ValueString = value;
                 break;
             case RuleInterfaceParameterDataType.Timer:

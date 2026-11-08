@@ -1,0 +1,398 @@
+{
+  "source": "radio-browser.info (community station database), checked 2026-11-08: every stream answered with audio",
+  "stations": [
+    {
+      "key": "at-oe3",
+      "name": "Hitradio Ö3",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "https://orf-live.ors-shoutcast.at/oe3-q2a",
+      "codec": "mp3",
+      "logo": "https://tubestatic.orf.at/mojo/1_3/storyserver//tube/common/images/apple-icons/oe3.png"
+    },
+    {
+      "key": "at-fm4",
+      "name": "FM4",
+      "country": "AT",
+      "genre": "alternative",
+      "streamUrl": "https://orf-live.ors-shoutcast.at/fm4-q2a",
+      "codec": "mp3",
+      "logo": "https://tubestatic.orf.at/mojo/1_3/storyserver//tube/fm4/images/touch-icon-iphone-retina.png"
+    },
+    {
+      "key": "at-oe1",
+      "name": "Ö1",
+      "country": "AT",
+      "genre": "culture",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/oe1-q2a",
+      "codec": "mp3",
+      "logo": "https://oe1.orf.at/static/img/logo_oe1.png"
+    },
+    {
+      "key": "at-orf-wien",
+      "name": "Radio Wien",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/wie-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/411/749/352/990/original/16c84635847ddad3.png"
+    },
+    {
+      "key": "at-orf-noe",
+      "name": "Radio Niederösterreich",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/noe-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/434/334/698/982/original/aad9486c4d8e92f2.png"
+    },
+    {
+      "key": "at-orf-ooe",
+      "name": "Radio Oberösterreich",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "https://orf-live.ors-shoutcast.at/ooe-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/484/561/807/260/original/04efe58e0bc4d119.png"
+    },
+    {
+      "key": "at-orf-stmk",
+      "name": "Radio Steiermark",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/stm-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/531/169/177/709/original/1721e6944c64b1b3.png"
+    },
+    {
+      "key": "at-orf-tirol",
+      "name": "Radio Tirol",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/tir-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/561/229/082/482/original/57acca969ede8452.png"
+    },
+    {
+      "key": "at-orf-ktn",
+      "name": "Radio Kärnten",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://ors-sn02.ors-shoutcast.at/ktn-q1a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/600/349/621/738/original/38f30e28fae38639.png"
+    },
+    {
+      "key": "at-orf-vbg",
+      "name": "Radio Vorarlberg",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "https://orf-live.ors-shoutcast.at/vbg-q1a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/623/444/743/699/original/3022673107e835ba.png"
+    },
+    {
+      "key": "at-orf-bgld",
+      "name": "Radio Burgenland",
+      "country": "AT",
+      "genre": "regional",
+      "streamUrl": "http://orf-live.ors-shoutcast.at/bgl-q2a",
+      "codec": "mp3",
+      "logo": "https://orfodon.org/system/accounts/avatars/111/374/581/969/931/266/original/4e38a6ea240646e2.png"
+    },
+    {
+      "key": "at-kronehit",
+      "name": "KroneHit",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "http://onair-ha1.krone.at/kronehit1058.mp3",
+      "codec": "mp3"
+    },
+    {
+      "key": "at-antenne-stmk",
+      "name": "Antenne Steiermark",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "http://live.antenne.at/as",
+      "codec": "mp3",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/Antenne_Logo.svg"
+    },
+    {
+      "key": "at-antenne-ktn",
+      "name": "Antenne Kärnten",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "http://live.antenne.at/ak",
+      "codec": "mp3",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/Antenne_Logo.svg"
+    },
+    {
+      "key": "at-antenne-vbg",
+      "name": "Antenne Vorarlberg",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "https://web.radio.antennevorarlberg.at/av-live?aggregator=Radioplayer",
+      "codec": "aac",
+      "logo": "https://www.antennevorarlberg.at/static/base/img/apple-touch-icon.168e05c8048c.png"
+    },
+    {
+      "key": "at-u1-tirol",
+      "name": "Radio U1 Tirol",
+      "country": "AT",
+      "genre": "schlager",
+      "streamUrl": "https://live.u1-radio.at/",
+      "codec": "mp3",
+      "logo": "https://u1-radio.at/wp-content/uploads/2022/03/u1_favicon512x512-150x150.png"
+    },
+    {
+      "key": "at-arabella-wien",
+      "name": "Radio Arabella Wien",
+      "country": "AT",
+      "genre": "oldies",
+      "streamUrl": "https://frontend.streams.arabella.at/arabella-wien?aggregator=arabella-playlistfile",
+      "codec": "aac",
+      "logo": "https://arabella.at/static/base/img/apple-touch-icon.a3ce28a2756f.png"
+    },
+    {
+      "key": "at-liferadio",
+      "name": "Life Radio",
+      "country": "AT",
+      "genre": "pop",
+      "streamUrl": "http://stream1.liferadio.at/",
+      "codec": "mp3"
+    },
+    {
+      "key": "at-radio-886",
+      "name": "radio 88.6",
+      "country": "AT",
+      "genre": "rock",
+      "streamUrl": "http://radio886.at/streams/radio_88.6/mp3",
+      "codec": "mp3",
+      "logo": "https://www.radio886.at/apple-touch-icon.png"
+    },
+    {
+      "key": "at-rockantenne",
+      "name": "Rock Antenne Österreich",
+      "country": "AT",
+      "genre": "rock",
+      "streamUrl": "http://s1-webradio.webradio.de/rockantenne-oesterreich",
+      "codec": "mp3"
+    },
+    {
+      "key": "at-lounge-austria",
+      "name": "Lounge.FM 100% Austria",
+      "country": "AT",
+      "genre": "austropop",
+      "streamUrl": "https://s35.derstream.net/100austria.mp3",
+      "codec": "mp3",
+      "logo": "https://www.lounge.fm/wp-content/uploads/2014/06/loungefm_logo_colour2-300x300.jpg"
+    },
+    {
+      "key": "de-1live",
+      "name": "1LIVE",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "http://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www1.wdr.de/radio/1live/resources/img/favicon/apple-touch-icon.png"
+    },
+    {
+      "key": "de-wdr2",
+      "name": "WDR 2",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "http://wdr-wdr2-rheinland.icecast.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www1.wdr.de/resources-v5.139.1/img/favicon/apple-touch-icon.png"
+    },
+    {
+      "key": "de-wdr4",
+      "name": "WDR 4",
+      "country": "DE",
+      "genre": "oldies",
+      "streamUrl": "http://wdr-wdr4-live.icecast.wdr.de/wdr/wdr4/live/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www1.wdr.de/resources/img/favicon/apple-touch-icon.png"
+    },
+    {
+      "key": "de-wdr5",
+      "name": "WDR 5",
+      "country": "DE",
+      "genre": "culture",
+      "streamUrl": "http://wdr-wdr5-live.icecast.wdr.de/wdr/wdr5/live/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www1.wdr.de/resources-v5.134.1/img/favicon/apple-touch-icon.png"
+    },
+    {
+      "key": "de-swr3",
+      "name": "SWR3",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "https://liveradio.swr.de/sw282p3/swr3/play.mp3",
+      "codec": "mp3",
+      "logo": "https://swr3.de/assets/swr3/icons/apple-touch-icon.png"
+    },
+    {
+      "key": "de-bayern3",
+      "name": "Bayern 3",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "https://dispatcher.rndfnk.com/br/br3/live/mp3/mid",
+      "codec": "mp3",
+      "logo": "https://api.ardmediathek.de/image-service/images/urn:ard:image:52fd25fc45de7c6a?w=512"
+    },
+    {
+      "key": "de-b5",
+      "name": "B5 aktuell",
+      "country": "DE",
+      "genre": "news",
+      "streamUrl": "http://dispatcher.rndfnk.com/br/br24/live/mp3/mid",
+      "codec": "mp3",
+      "logo": "https://www.br.de/favicon.ico"
+    },
+    {
+      "key": "de-antenne-bayern",
+      "name": "Antenne Bayern",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "http://mp3channels.webradio.antenne.de/antenne",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-rockantenne",
+      "name": "Rock Antenne",
+      "country": "DE",
+      "genre": "rock",
+      "streamUrl": "http://mp3channels.webradio.rockantenne.de/rockantenne",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-dlf",
+      "name": "Deutschlandfunk",
+      "country": "DE",
+      "genre": "news",
+      "streamUrl": "https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=web",
+      "codec": "mp3",
+      "logo": "https://www.deutschlandfunk.de/static/img/deutschlandfunk/icons/apple-touch-icon-128x128.png"
+    },
+    {
+      "key": "de-radioeins",
+      "name": "radioeins",
+      "country": "DE",
+      "genre": "alternative",
+      "streamUrl": "http://d131.rndfnk.com/ard/rbb/radioeins/live/mp3/128/stream.mp3?cid=01FC1WH12KJ93TCQPDSE2E5PZ9&sid=3Li6lmtp6FeDy95IcdDUgJmBfiH&token=i7iuch7DiyqhjzZmy7gYtgnf4j2v17tUUAGltjjClZc&tvf=TNuRVaZg5RhkMTMxLnJuZGZuay5jb20",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-inforadio",
+      "name": "Inforadio",
+      "country": "DE",
+      "genre": "news",
+      "streamUrl": "http://dispatcher.rndfnk.com/rbb/inforadio/live/mp3/mid",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-ffh",
+      "name": "HIT RADIO FFH",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "http://mp3.ffh.de/radioffh/hqlivestream.mp3",
+      "codec": "mp3",
+      "logo": "https://www.ffh.de/android-icon.png"
+    },
+    {
+      "key": "de-ndr2",
+      "name": "NDR 2",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "https://icecast.ndr.de/ndr/ndr2/niedersachsen/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www.ndr.de//apple-touch-icon-57x57.png"
+    },
+    {
+      "key": "de-ndr-info",
+      "name": "NDR Info",
+      "country": "DE",
+      "genre": "news",
+      "streamUrl": "http://icecast.ndr.de/ndr/ndrinfo/hamburg/mp3/128/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://www.ndr.de/apple-touch-icon-120x120.png"
+    },
+    {
+      "key": "de-mdr-klassik",
+      "name": "MDR Klassik",
+      "country": "DE",
+      "genre": "classical",
+      "streamUrl": "http://mdr-284350-0.sslcast.mdr.de/mdr/284350/0/mp3/high/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://cdn.mdr.de/resources/global/img/mdrde/favicons/apple-icon-120x120.png"
+    },
+    {
+      "key": "de-mdr-aktuell",
+      "name": "MDR Aktuell",
+      "country": "DE",
+      "genre": "news",
+      "streamUrl": "http://mdr-284340-0.sslcast.mdr.de/mdr/284340/0/mp3/high/stream.mp3",
+      "codec": "mp3",
+      "logo": "https://cdn.mdr.de/resources/global/img/mdrde/favicons/apple-icon-120x120.png"
+    },
+    {
+      "key": "de-sunshine-live",
+      "name": "Sunshine Live",
+      "country": "DE",
+      "genre": "electronic",
+      "streamUrl": "http://stream.sunshine-live.de/live/mp3-192/stream.sunshine-live.de/",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-80s80s",
+      "name": "80s80s",
+      "country": "DE",
+      "genre": "80s",
+      "streamUrl": "http://streams.80s80s.de/web/mp3-192/streams.80s80s.de/",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-90s90s",
+      "name": "90s90s",
+      "country": "DE",
+      "genre": "90s",
+      "streamUrl": "http://streams.90s90s.de/pop/mp3-192/streams.90s90s.de/",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-fluxfm",
+      "name": "FluxFM",
+      "country": "DE",
+      "genre": "alternative",
+      "streamUrl": "http://streams.fluxfm.de/live/mp3-320/audio/",
+      "codec": "mp3",
+      "logo": "https://www.fluxfm.de/assets/favicons/apple-icon-120x120.png"
+    },
+    {
+      "key": "de-rtl-1046",
+      "name": "104.6 RTL",
+      "country": "DE",
+      "genre": "pop",
+      "streamUrl": "http://stream.104.6rtl.com/rtl-live/mp3-192/radio-browser.info/",
+      "codec": "mp3"
+    },
+    {
+      "key": "de-kissfm",
+      "name": "98.8 KISS FM",
+      "country": "DE",
+      "genre": "hiphop",
+      "streamUrl": "http://stream.kissfm.de/kissfm/mp3-128/internetradio/",
+      "codec": "mp3",
+      "logo": "https://upload.kissfm.de/production/static/1699276434696/icons/icon_64.be8y2280000.png"
+    },
+    {
+      "key": "de-bob-classicrock",
+      "name": "RADIO BOB! Classic Rock",
+      "country": "DE",
+      "genre": "rock",
+      "streamUrl": "http://streams.radiobob.de/bob-classicrock/mp3-192/streams.radiobob.de/",
+      "codec": "mp3"
+    }
+  ]
+}

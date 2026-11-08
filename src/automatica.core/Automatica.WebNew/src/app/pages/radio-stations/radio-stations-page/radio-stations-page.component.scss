@@ -1,0 +1,76 @@
+@use "../../plugins/list";
+
+// Only tokens from src/tokens.scss.
+
+:host {
+    display: block;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.page {
+    height: auto;
+    min-height: 100%;
+}
+
+.head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.intro {
+    margin: 0 0 var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-sm);
+    max-width: 80ch;
+}
+
+// the page is a flex column: the panels keep the height of their grids
+.panel {
+    flex: none;
+    min-width: 0;
+}
+
+.panel + .panel {
+    margin-top: var(--space-4);
+}
+
+.block h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.muted {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.station-logo {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    background: #fff;
+    vertical-align: middle;
+
+    &.is-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: var(--muted);
+    }
+}
+
+.state {
+    color: var(--muted);
+
+    &.bad {
+        color: var(--bad);
+    }
+}

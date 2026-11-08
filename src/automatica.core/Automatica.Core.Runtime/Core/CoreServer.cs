@@ -24,6 +24,7 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Media;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Loader;
@@ -843,7 +844,8 @@ namespace Automatica.Core.Runtime.Core
                 _controlContext,
                 DateTimeHelper.ProviderInstance,
                 _serviceProvider.GetRequiredService<ILocalizationProvider>(), 
-                _serviceProvider.GetRequiredService<INotificationManager>());
+                _serviceProvider.GetRequiredService<INotificationManager>(),
+                _serviceProvider.GetService<IRadioStationCatalog>());
 
             var rule = factory.CreateLogicInstance(ruleContext);
 

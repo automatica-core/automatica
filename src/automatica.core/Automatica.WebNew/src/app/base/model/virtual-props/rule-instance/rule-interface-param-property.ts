@@ -50,6 +50,10 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
             case RuleInterfaceParameterDataType.Bool:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Bool;
                 break;
+            case RuleInterfaceParameterDataType.RadioStations:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.RadioStations;
+                this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
+                break;
         }
 
     }

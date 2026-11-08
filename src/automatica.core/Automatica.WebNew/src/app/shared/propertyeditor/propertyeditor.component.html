@@ -316,6 +316,11 @@
           (onValueChanged)="valueChanged($event, data)">
         </dx-date-box>
       }
+      @case (PropertyTemplateType.RadioStations) {
+        <radio-station-picker #control id="control-{{data.data.ObjId}}" [value]="data.data.Value"
+          [single]="data.data.PropertyTemplate.Meta === 'SINGLE'" [readOnly]="data.data.IsReadonly"
+          (valueChange)="data.data.Value = $event; valueChanged({ value: $event }, data)"></radio-station-picker>
+      }
       @case (PropertyTemplateType.MultiSelect) {
         <dx-drop-down-box #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
           [(value)]="data.data.Value" valueExpr="Key" displayExpr="Value"

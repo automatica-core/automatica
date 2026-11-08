@@ -98,6 +98,8 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   }
   /** the station list of the logic (parameter "radio stations"), switchable in the popup */
   stations: RadioStationItem[] = [];
+  /** logos that could not be loaded: the station shows the radio icon instead */
+  brokenLogos = new Set<string>();
   /** id (or name) of the station played last */
   currentStationValue: string;
   private loadingStations = false;

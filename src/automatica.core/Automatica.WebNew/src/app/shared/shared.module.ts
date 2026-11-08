@@ -7,7 +7,8 @@ import { ConfigTreeComponent } from "./config-tree/config-tree.component";
 import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
-import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule } from "devextreme-angular";
+import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule, DxTagBoxModule } from "devextreme-angular";
+import { RadioStationPickerComponent } from "./radio-station-picker/radio-station-picker.component";
 import { DndModule } from "p3root-angular-dnd";
 import { L10nTranslationModule } from "angular-l10n";
 import { NodeValueSelectorComponent } from "./node-value-selector/node-value-selector.component";
@@ -52,7 +53,8 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         DxSchedulerModule,
         DxTooltipModule,
         DxTabsModule,
-        DxTextAreaModule
+        DxTextAreaModule,
+        DxTagBoxModule
     ],
     declarations: [
         PropertyEditorComponent,
@@ -62,13 +64,15 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         NodeValueSelectorComponent,
         VisuPageSelectorComponent,
         VisuPageListComponent,
-        NodeInstanceImportComponent],
+        NodeInstanceImportComponent,
+        RadioStationPickerComponent],
     exports: [
         SkeletonModule,
         PropertyEditorComponent,
         ConfigMenuComponent,
         ConfigTreeComponent,
-        RuleEditorComponent
+        RuleEditorComponent,
+        RadioStationPickerComponent
     ],
     // no provideHttpClient here: the lazy admin module would get its own HttpClient without the root interceptors
     providers: [

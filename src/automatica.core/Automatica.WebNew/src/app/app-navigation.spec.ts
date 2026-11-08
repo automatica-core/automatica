@@ -25,6 +25,7 @@ describe("app navigation", () => {
       "/admin/area-config",
       "/admin/category-config",
       "/admin/visualisation",
+      "/admin/radio-stations",
       "/admin/telegram-monitor",
       "/admin/user-config",
       "/admin/usergroup-config",

@@ -1,0 +1,116 @@
+<div class="page">
+  <div class="page-head">
+    <h1>{{ 'UI.RADIO_STATIONS.TITLE' | translateAsync }}</h1>
+    @if (dirty) {
+      <span class="pill warn">{{ 'UI.PAGES.UNSAVED' | translateAsync }}</span>
+    }
+    <span class="spacer"></span>
+    <div class="head-actions">
+      <dx-button icon="refresh" stylingMode="text" [hint]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      @if (loaded && !loadError) {
+        <dx-button icon="undo" stylingMode="text" [hint]="'UI.RADIO_STATIONS.RESET' | translateAsync" [disabled]="!dirty" (onClick)="reset()"></dx-button>
+        <dx-button type="default" icon="save" [text]="'COMMON.SAVE' | translateAsync" [disabled]="saving || !dirty" (onClick)="save()"></dx-button>
+      }
+    </div>
+  </div>
+
+  @if (loadError) {
+    <div class="panel">
+      <div class="empty-state">
+        <fa-icon class="icon" [icon]="['fas', 'cloud']"></fa-icon>
+        <b>{{ 'UI.RADIO_STATIONS.LOAD_FAILED' | translateAsync }}</b>
+        <span class="mono">{{ loadError }}</span>
+        <dx-button icon="refresh" [text]="'UI.PAGES.RELOAD' | translateAsync" (onClick)="load()"></dx-button>
+      </div>
+    </div>
+  } @else if (loaded) {
+    <p class="intro">{{ 'UI.RADIO_STATIONS.INTRO' | translateAsync }}</p>
+
+    <section class="panel">
+      <div class="block">
+        <h3><fa-icon icon="pen"></fa-icon>{{ 'UI.RADIO_STATIONS.CUSTOM.TITLE' | translateAsync }}</h3>
+        <p class="muted">{{ 'UI.RADIO_STATIONS.CUSTOM.HINT' | translateAsync }}</p>
+        <dx-data-grid [dataSource]="custom" [showBorders]="true" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+          (onRowInserting)="onRowInserting($event)" [noDataText]="'UI.RADIO_STATIONS.CUSTOM.EMPTY' | translateAsync">
+          <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"
+            [confirmDelete]="false"></dxo-editing>
+          <dxi-column caption="" [width]="48" [allowEditing]="false" cellTemplate="logoCell"></dxi-column>
+          <dxi-column dataField="name" [caption]="'UI.RADIO_STATIONS.FIELD.NAME' | translateAsync">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+          </dxi-column>
+          <dxi-column dataField="key" [caption]="'UI.RADIO_STATIONS.FIELD.KEY' | translateAsync">
+            <dxi-validation-rule type="pattern" [pattern]="keyPattern" [message]="'UI.RADIO_STATIONS.INVALID.KEY' | translateAsync"></dxi-validation-rule>
+          </dxi-column>
+          <dxi-column dataField="streamUrl" [caption]="'UI.RADIO_STATIONS.FIELD.STREAM_URL' | translateAsync" [minWidth]="220">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+            <dxi-validation-rule type="pattern" [pattern]="urlPattern" [message]="'UI.RADIO_STATIONS.INVALID.STREAM_URL' | translateAsync"></dxi-validation-rule>
+          </dxi-column>
+          <dxi-column dataField="country" [caption]="'UI.RADIO_STATIONS.FIELD.COUNTRY' | translateAsync" [width]="90"></dxi-column>
+          <dxi-column dataField="genre" [caption]="'UI.RADIO_STATIONS.FIELD.GENRE' | translateAsync"></dxi-column>
+          <dxi-column dataField="logo" [caption]="'UI.RADIO_STATIONS.FIELD.LOGO' | translateAsync" [minWidth]="160">
+            <dxi-validation-rule type="pattern" [pattern]="urlPattern" [message]="'UI.RADIO_STATIONS.INVALID.LOGO' | translateAsync"></dxi-validation-rule>
+          </dxi-column>
+          <dxi-column dataField="tuneInId" [caption]="'UI.RADIO_STATIONS.FIELD.TUNE_IN' | translateAsync" [width]="100"></dxi-column>
+          <dxi-column caption="" [width]="48" [allowEditing]="false" cellTemplate="playCell"></dxi-column>
+          <dxi-column caption="" [width]="40" [allowEditing]="false" cellTemplate="stateCell"></dxi-column>
+
+          <div *dxTemplate="let cell of 'logoCell'">
+            <ng-container *ngTemplateOutlet="logo; context: { $implicit: cell.data?.logo }"></ng-container>
+          </div>
+          <div *dxTemplate="let cell of 'playCell'">
+            <ng-container *ngTemplateOutlet="play; context: { $implicit: cell.data }"></ng-container>
+          </div>
+          <div *dxTemplate="let cell of 'stateCell'">
+            @if (cell.data && problemOf(cell.data); as problem) {
+              <fa-icon class="state bad" icon="triangle-exclamation" [attr.title]="problem | translateAsync"></fa-icon>
+            } @else if (cell.data && replacesBuiltIn(cell.data)) {
+              <fa-icon class="state" icon="arrows-rotate" [attr.title]="'UI.RADIO_STATIONS.CUSTOM.REPLACES' | translateAsync"></fa-icon>
+            }
+          </div>
+        </dx-data-grid>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="block">
+        <h3><fa-icon icon="radio"></fa-icon>{{ 'UI.RADIO_STATIONS.BUILT_IN.TITLE' | translateAsync }} ({{ builtIn.length }})</h3>
+        <p class="muted">{{ 'UI.RADIO_STATIONS.BUILT_IN.HINT' | translateAsync }}</p>
+        <dx-data-grid [dataSource]="builtIn" keyExpr="key" [showBorders]="true" [columnAutoWidth]="true" [height]="520">
+          <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
+          <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxi-column caption="" [width]="48" cellTemplate="logoCell"></dxi-column>
+          <dxi-column dataField="country" [groupIndex]="0" [caption]="'UI.RADIO_STATIONS.FIELD.COUNTRY' | translateAsync"></dxi-column>
+          <dxi-column dataField="name" [caption]="'UI.RADIO_STATIONS.FIELD.NAME' | translateAsync" sortOrder="asc"></dxi-column>
+          <dxi-column dataField="genre" [caption]="'UI.RADIO_STATIONS.FIELD.GENRE' | translateAsync"></dxi-column>
+          <dxi-column dataField="key" [caption]="'UI.RADIO_STATIONS.FIELD.KEY' | translateAsync"></dxi-column>
+          <dxi-column dataField="codec" caption="Codec" [width]="80"></dxi-column>
+          <dxi-column caption="" [width]="48" cellTemplate="playCell"></dxi-column>
+
+          <div *dxTemplate="let cell of 'logoCell'">
+            <ng-container *ngTemplateOutlet="logo; context: { $implicit: cell.data?.logo }"></ng-container>
+          </div>
+          <div *dxTemplate="let cell of 'playCell'">
+            <ng-container *ngTemplateOutlet="play; context: { $implicit: cell.data }"></ng-container>
+          </div>
+        </dx-data-grid>
+      </div>
+    </section>
+  }
+</div>
+
+<ng-template #logo let-url>
+  @if (showLogo(url)) {
+    <img class="station-logo" [src]="url" alt="" aria-hidden="true" loading="lazy" referrerpolicy="no-referrer" (error)="logoFailed(url)" />
+  } @else {
+    <span class="station-logo is-icon" aria-hidden="true"><fa-icon icon="radio"></fa-icon></span>
+  }
+</ng-template>
+
+<ng-template #play let-station>
+  @if (station?.streamUrl) {
+    <dx-button stylingMode="text" [icon]="playing === station.streamUrl ? 'square' : 'video'"
+      [hint]="(playing === station.streamUrl ? 'UI.RADIO_STATIONS.STOP' : 'UI.RADIO_STATIONS.LISTEN') | translateAsync"
+      (onClick)="toggle(station)"></dx-button>
+  }
+</ng-template>

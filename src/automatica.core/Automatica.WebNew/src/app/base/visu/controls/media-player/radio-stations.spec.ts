@@ -16,6 +16,17 @@ describe("radio stations", () => {
     expect(radioStations(undefined)).toEqual([]);
   });
 
+  it("radioStations_LogoOnlyForHttpUrls", () => {
+    const list = radioStations([
+      { name: "FM4", id: "at-fm4", logo: "https://fm4.orf.at/logo.png" },
+      { name: "x", id: "x", logo: "javascript:alert(1)" },
+      { name: "y", id: "y", logo: null }
+    ]);
+    expect(list[0].logo).toBe("https://fm4.orf.at/logo.png");
+    expect(list[1].logo).toBeUndefined();
+    expect(list[2].logo).toBeUndefined();
+  });
+
   it("currentRadioStation_ByIdOrName", () => {
     const list = radioStations([{ name: "Ö3", id: "s8007" }, { name: "FM4", id: "s8235" }]);
     expect(currentRadioStation(list, "s8235")?.name).toBe("FM4");

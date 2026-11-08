@@ -33,6 +33,7 @@ import { AdminRoutingModule } from "./admin-routing.module";
 import { AutomationsModule } from "../pages/automations/automations.module";
 import { ShadingModule } from "../pages/shading/shading.module";
 import { OperatingModesModule } from "../pages/operating-modes/operating-modes.module";
+import { RadioStationsModule } from "../pages/radio-stations/radio-stations.module";
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { OperatingModesModule } from "../pages/operating-modes/operating-modes.m
     DxTabsModule,
     AutomationsModule,
     ShadingModule,
-    OperatingModesModule
+    OperatingModesModule,
+    RadioStationsModule
   ],
   exports: [
     AdminComponent

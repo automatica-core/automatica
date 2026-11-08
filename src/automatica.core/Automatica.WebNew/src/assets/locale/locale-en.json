@@ -781,6 +781,7 @@
       "SHADING": "Shading",
       "OPERATING_MODES": "Operating modes",
       "VISU_EDITOR": "Visu editor",
+      "RADIO_STATIONS": "Radio stations",
       "DEVICES": "Devices & data points",
       "AREAS": "Areas",
       "CATEGORIES": "Categories",
@@ -1725,6 +1726,45 @@
         "M10": "October",
         "M11": "November",
         "M12": "December"
+      }
+    },
+    "RADIO_STATIONS": {
+      "TITLE": "Radio stations",
+      "INTRO": "The stations logic blocks such as Sonos Control pick their radio stations from. The server comes with a station list (Austria and Germany), own stations are added here. The player (e.g. the Sonos driver) translates the station into what it can play.",
+      "RESET": "Discard changes",
+      "SAVED": "Radio stations saved",
+      "LOAD_FAILED": "The radio stations could not be loaded",
+      "LOAD_ERROR": "The station list could not be loaded",
+      "PLAY_FAILED": "The stream cannot be played in the browser (browsers block http streams on https pages)",
+      "LISTEN": "Listen",
+      "STOP": "Stop",
+      "SELECT": "Select stations",
+      "OTHER": "Other",
+      "CUSTOM": {
+        "TITLE": "Own stations",
+        "HINT": "A name and a stream url (http or https) are enough, the key is made from the name. An own station with the key of a built-in one replaces it. The TuneIn id (e.g. s8007) is optional: Sonos then shows the name and logo of TuneIn.",
+        "EMPTY": "No own stations yet",
+        "REPLACES": "Replaces the built-in station with this key"
+      },
+      "BUILT_IN": {
+        "TITLE": "Built-in stations",
+        "HINT": "Come with the server and are updated with it."
+      },
+      "FIELD": {
+        "NAME": "Name",
+        "KEY": "Key",
+        "STREAM_URL": "Stream url",
+        "COUNTRY": "Country",
+        "GENRE": "Genre",
+        "LOGO": "Logo url",
+        "TUNE_IN": "TuneIn id"
+      },
+      "INVALID": {
+        "KEY": "Key: lower case letters, digits and -, at most 64 characters",
+        "NAME": "The station has no name",
+        "STREAM_URL": "The stream url must start with http:// or https://",
+        "LOGO": "The logo url must start with http:// or https://",
+        "DUPLICATE": "The key is used twice"
       }
     },
     "OPERATING_MODES": {

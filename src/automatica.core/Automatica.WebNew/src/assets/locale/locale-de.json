@@ -781,6 +781,7 @@
       "SHADING": "Beschattung",
       "OPERATING_MODES": "Betriebsmodi",
       "VISU_EDITOR": "Visu-Editor",
+      "RADIO_STATIONS": "Radiosender",
       "DEVICES": "Geräte & Datenpunkte",
       "AREAS": "Bereiche",
       "CATEGORIES": "Kategorien",
@@ -1725,6 +1726,45 @@
         "M10": "Oktober",
         "M11": "November",
         "M12": "Dezember"
+      }
+    },
+    "RADIO_STATIONS": {
+      "TITLE": "Radiosender",
+      "INTRO": "Die Sender, aus denen Logikbausteine wie Sonos Control ihre Radiosender wählen. Der Server bringt eine Senderliste mit (Österreich und Deutschland), eigene Sender kommen hier dazu. Das Abspielgerät (z. B. der Sonos-Treiber) übersetzt den Sender in das, was es abspielen kann.",
+      "RESET": "Änderungen verwerfen",
+      "SAVED": "Radiosender gespeichert",
+      "LOAD_FAILED": "Die Radiosender konnten nicht geladen werden",
+      "LOAD_ERROR": "Die Senderliste konnte nicht geladen werden",
+      "PLAY_FAILED": "Der Stream kann im Browser nicht abgespielt werden (http-Streams blockiert der Browser auf https-Seiten)",
+      "LISTEN": "Probehören",
+      "STOP": "Stopp",
+      "SELECT": "Sender wählen",
+      "OTHER": "Weitere",
+      "CUSTOM": {
+        "TITLE": "Eigene Sender",
+        "HINT": "Name und Stream-URL (http oder https) genügen, der Schlüssel entsteht aus dem Namen. Ein eigener Sender mit dem Schlüssel eines mitgelieferten ersetzt diesen. Die TuneIn-ID (z. B. s8007) ist optional: Sonos zeigt dann Name und Logo von TuneIn.",
+        "EMPTY": "Noch keine eigenen Sender",
+        "REPLACES": "Ersetzt den mitgelieferten Sender mit diesem Schlüssel"
+      },
+      "BUILT_IN": {
+        "TITLE": "Mitgelieferte Sender",
+        "HINT": "Kommen mit dem Server und werden mit Updates aktualisiert."
+      },
+      "FIELD": {
+        "NAME": "Name",
+        "KEY": "Schlüssel",
+        "STREAM_URL": "Stream-URL",
+        "COUNTRY": "Land",
+        "GENRE": "Genre",
+        "LOGO": "Logo-URL",
+        "TUNE_IN": "TuneIn-ID"
+      },
+      "INVALID": {
+        "KEY": "Schlüssel: Kleinbuchstaben, Ziffern und -, höchstens 64 Zeichen",
+        "NAME": "Der Sender hat keinen Namen",
+        "STREAM_URL": "Die Stream-URL muss mit http:// oder https:// beginnen",
+        "LOGO": "Die Logo-URL muss mit http:// oder https:// beginnen",
+        "DUPLICATE": "Der Schlüssel ist doppelt vergeben"
       }
     },
     "OPERATING_MODES": {

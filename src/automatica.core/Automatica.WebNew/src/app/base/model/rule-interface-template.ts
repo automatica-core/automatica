@@ -11,7 +11,10 @@ export enum RuleInterfaceParameterDataType {
     Color = 6,
     Enum = 7,
     Bool = 8,
-    Calendar = 9
+    Calendar = 9,
+    Controls = 10,
+    /** station keys of the server's radio station catalog, "at-oe3;de-1live" (meta "SINGLE": one station) */
+    RadioStations = 11
 }
 
 export enum RuleInterfaceDirectionEnum {

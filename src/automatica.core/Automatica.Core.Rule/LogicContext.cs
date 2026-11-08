@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Media;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
@@ -18,7 +19,7 @@ namespace Automatica.Core.Logic
     public class LogicContext : ILogicContext
     {
         private readonly INotificationManager _notificationManager;
-        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider, ILocalizationProvider localizationProvider, INotificationManager notificationManager)
+        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider, ILocalizationProvider localizationProvider, INotificationManager notificationManager, IRadioStationCatalog radioStations = null)
         {
             RuleInstance = ruleInstance;
             Dispatcher = dispatcher;
@@ -31,6 +32,7 @@ namespace Automatica.Core.Logic
             TimeProvider = timeProvider;
             LocalizationProvider = localizationProvider;
             _notificationManager = notificationManager;
+            RadioStations = radioStations ?? RadioStationCatalog.BuiltIn;
         }
 
         public RuleInstance RuleInstance { get; set; }
@@ -40,6 +42,8 @@ namespace Automatica.Core.Logic
 
         public ILogger Logger { get; }
         public IServerCloudApi CloudApi { get; }
+
+        public IRadioStationCatalog RadioStations { get; }
 
         public ILicenseContract LicenseContract { get; }
 

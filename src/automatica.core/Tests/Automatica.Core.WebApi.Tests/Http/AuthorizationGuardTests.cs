@@ -73,6 +73,8 @@ namespace Automatica.Core.WebApi.Tests.Http
             $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.GetAll)}",
             $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.GetState)}",
             $"{nameof(OperatingModesVisuController)}.{nameof(OperatingModesVisuController.GetState)}",
+            // the radio station catalog: station picker of the logic editor and the media player tile
+            $"{nameof(RadioStationsController)}.{nameof(RadioStationsController.Get)}",
         };
 
         /// <summary>

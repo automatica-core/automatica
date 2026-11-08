@@ -61,8 +61,16 @@
     @for (station of stations; track station.id) {
       <button type="button" role="listitem" class="media-station" [class.is-on]="station === currentStation"
         [attr.aria-current]="station === currentStation ? 'true' : null" (click)="selectStation(station)">
-        <fa-icon [icon]="station === currentStation && isPlaying ? 'volume-high' : 'radio'" aria-hidden="true"></fa-icon>
+        @if (station.logo && !brokenLogos.has(station.logo)) {
+          <img class="media-station-logo" [src]="station.logo" alt="" aria-hidden="true" loading="lazy"
+            referrerpolicy="no-referrer" (error)="brokenLogos.add(station.logo)" />
+        } @else {
+          <fa-icon [icon]="station === currentStation && isPlaying ? 'volume-high' : 'radio'" aria-hidden="true"></fa-icon>
+        }
         <span class="media-station-name">{{ station.name }}</span>
+        @if (station.logo && !brokenLogos.has(station.logo) && station === currentStation && isPlaying) {
+          <fa-icon class="media-station-playing" icon="volume-high" aria-hidden="true"></fa-icon>
+        }
       </button>
     }
   </div>

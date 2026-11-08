@@ -56,6 +56,9 @@ export enum PropertyTemplateType {
     
     Controls = 600,
 
+    /** station keys of the server's radio station catalog (logic parameters), meta "SINGLE" for one station */
+    RadioStations = 700,
+
     Invalid = 2147483647
 }
 

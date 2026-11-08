@@ -248,6 +248,19 @@
     }
 }
 
+.media-station-logo {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    background: #fff;
+}
+
+.media-station-playing {
+    margin-left: auto;
+}
+
 .media-station-name {
     min-width: 0;
     white-space: nowrap;

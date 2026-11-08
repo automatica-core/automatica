@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Media;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
@@ -38,6 +39,7 @@ namespace Automatica.Core.Driver
 
         public ILearnMode LearnMode { get; }
         public IServerCloudApi CloudApi { get; }
+        public IRadioStationCatalog RadioStations { get; }
 
         public ILicenseContract LicenseContract { get; }
         public ILoggerFactory LoggerFactory { get; }
@@ -107,6 +109,7 @@ namespace Automatica.Core.Driver
             RetryContext = serviceProvider.GetRequiredService<IRetryContext>();
 
             LocalizationProvider = serviceProvider.GetRequiredService<ILocalizationProvider>();
+            RadioStations = serviceProvider.GetService<IRadioStationCatalog>() ?? RadioStationCatalog.BuiltIn;
             _notificationManager = serviceProvider.GetRequiredService<INotificationManager>();
         }
     }

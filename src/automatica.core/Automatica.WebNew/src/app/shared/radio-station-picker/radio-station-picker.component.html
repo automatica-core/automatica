@@ -1,0 +1,36 @@
+@if (single) {
+  <dx-select-box [dataSource]="dataSource" [grouped]="true" valueExpr="key" displayExpr="name" [value]="singleValue"
+    [searchEnabled]="true" [readOnly]="readOnly" [showClearButton]="true" itemTemplate="station"
+    placeholder="{{ 'UI.RADIO_STATIONS.SELECT' | translateAsync }}" (onValueChanged)="onSingleChanged($event.value)">
+    <div *dxTemplate="let item of 'station'">
+      <ng-container *ngTemplateOutlet="station; context: { $implicit: item }"></ng-container>
+    </div>
+  </dx-select-box>
+} @else {
+  <dx-tag-box [dataSource]="dataSource" [grouped]="true" valueExpr="key" displayExpr="name" [value]="selected"
+    [searchEnabled]="true" [readOnly]="readOnly" [showSelectionControls]="true" [showClearButton]="true"
+    [multiline]="true" itemTemplate="station" applyValueMode="instantly"
+    placeholder="{{ 'UI.RADIO_STATIONS.SELECT' | translateAsync }}" (onValueChanged)="onMultipleChanged($event.value)">
+    <div *dxTemplate="let item of 'station'">
+      <ng-container *ngTemplateOutlet="station; context: { $implicit: item }"></ng-container>
+    </div>
+  </dx-tag-box>
+}
+@if (loadError) {
+  <div class="radio-picker-error">{{ 'UI.RADIO_STATIONS.LOAD_ERROR' | translateAsync }}</div>
+}
+
+<ng-template #station let-item>
+  <div class="radio-picker-item">
+    @if (showLogo(item)) {
+      <img class="radio-picker-logo" [src]="item.logo" alt="" aria-hidden="true" loading="lazy" referrerpolicy="no-referrer"
+        (error)="logoFailed(item)" />
+    } @else {
+      <span class="radio-picker-logo is-icon" aria-hidden="true"><fa-icon icon="radio"></fa-icon></span>
+    }
+    <span class="radio-picker-name">{{ item.name }}</span>
+    @if (item.genre) {
+      <span class="radio-picker-genre">{{ item.genre }}</span>
+    }
+  </div>
+</ng-template>
