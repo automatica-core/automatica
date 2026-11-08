@@ -16,8 +16,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="10.0.0.2049" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.EBus\P3.Driver.EBus.csproj" />
+    <ProjectReference Include="..\..\P3.Driver.EBusFactory\P3.Driver.EBusFactory.csproj" />
   </ItemGroup>
 </Project>

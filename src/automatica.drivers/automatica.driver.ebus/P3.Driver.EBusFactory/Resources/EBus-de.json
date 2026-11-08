@@ -1,0 +1,92 @@
+{
+  "EBUS": {
+    "NAME": "eBUS",
+    "DESCRIPTION": "eBUS-Heizungsbus über einen Netzwerkadapter im Raw-Modus. Liest nur Werte, an die Geräte wird nichts geschrieben",
+    "IP": {
+      "DESCRIPTION": "IP-Adresse des eBUS-Netzwerkadapters"
+    },
+    "PORT": {
+      "DESCRIPTION": "TCP-Port des Adapters im Raw-Modus (jedes Byte des Busses, kein Enhanced-Protokoll)"
+    },
+    "MASTER_ADDRESS": {
+      "NAME": "Eigene Master-Adresse",
+      "DESCRIPTION": "Master-Adresse für die Leseanfragen, darf von keinem anderen Gerät verwendet werden. 255 (0xFF) hat die niedrigste Priorität"
+    },
+    "POLL_INTERVAL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Wie oft die Register der Geräte gelesen werden"
+    },
+    "DEVICE_ADDRESS": {
+      "NAME": "Geräteadresse",
+      "DESCRIPTION": "eBUS-Slave-Adresse des Geräts, 8 (0x08) für die Wärmepumpe"
+    },
+    "WOLF_BWL1": {
+      "NAME": "Wolf BWL-1",
+      "DESCRIPTION": "Wolf BWL-1 Luft/Wasser-Wärmepumpe",
+      "FLOW_TEMPERATURE": {
+        "NAME": "Vorlauftemperatur [°C]",
+        "DESCRIPTION": "Register 13"
+      },
+      "RETURN_TEMPERATURE": {
+        "NAME": "Rücklauftemperatur [°C]",
+        "DESCRIPTION": "Register 22"
+      },
+      "FLOW_SETPOINT": {
+        "NAME": "Vorlauf-Sollwert [°C]",
+        "DESCRIPTION": "Register 2"
+      },
+      "HOT_WATER_TEMPERATURE": {
+        "NAME": "Warmwassertemperatur [°C]",
+        "DESCRIPTION": "Register 14"
+      },
+      "HOT_WATER_SETPOINT": {
+        "NAME": "Warmwasser-Sollwert [°C]",
+        "DESCRIPTION": "Register 19"
+      },
+      "OUTSIDE_TEMPERATURE": {
+        "NAME": "Außentemperatur [°C]",
+        "DESCRIPTION": "Register 12"
+      },
+      "CIRCUIT_2_FLOW_TEMPERATURE": {
+        "NAME": "Vorlauftemperatur Heizkreis 2 [°C]",
+        "DESCRIPTION": "Register 15, vermutlich der Vorlauf des Mischerkreises (nicht bestätigt)"
+      },
+      "COMPRESSOR_HOURS": {
+        "NAME": "Verdichter-Betriebsstunden [h]",
+        "DESCRIPTION": "Register 554"
+      },
+      "COMPRESSOR_STARTS": {
+        "NAME": "Verdichter-Starts",
+        "DESCRIPTION": "Register 550 und 551 (nicht bestätigt)"
+      },
+      "RUNNING": {
+        "NAME": "Wärmepumpe läuft",
+        "DESCRIPTION": "Aus den Betriebsdaten, die die Wärmepumpe sendet"
+      },
+      "CIRCULATION_PUMP": {
+        "NAME": "Umwälzpumpe",
+        "DESCRIPTION": "Aus den Betriebsdaten, die die Wärmepumpe sendet"
+      },
+      "FAULT_CODE": {
+        "NAME": "Fehlercode",
+        "DESCRIPTION": "0 = kein Fehler, wird von der Wärmepumpe alle paar Minuten gesendet"
+      }
+    },
+    "WOLF_REGISTER": {
+      "NAME": "Wolf-Register",
+      "DESCRIPTION": "Ein beliebiges weiteres Register des Geräts, nur lesend",
+      "REGISTER": {
+        "NAME": "Register",
+        "DESCRIPTION": "Registernummer"
+      },
+      "SCALE": {
+        "NAME": "Faktor",
+        "DESCRIPTION": "Wert = Rohwert * Faktor, z. B. 0,1 für Temperaturen in 1/10 °C"
+      },
+      "SIGNED": {
+        "NAME": "Vorzeichenbehaftet",
+        "DESCRIPTION": "Der Rohwert ist eine vorzeichenbehaftete 16-Bit-Zahl"
+      }
+    }
+  }
+}

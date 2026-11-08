@@ -1,0 +1,92 @@
+{
+  "EBUS": {
+    "NAME": "eBUS",
+    "DESCRIPTION": "eBUS heating bus through a network adapter in raw mode. Reads values only, nothing is written to the devices",
+    "IP": {
+      "DESCRIPTION": "IP address of the eBUS network adapter"
+    },
+    "PORT": {
+      "DESCRIPTION": "TCP port of the adapter in raw mode (every byte of the bus, no enhanced protocol)"
+    },
+    "MASTER_ADDRESS": {
+      "NAME": "Own master address",
+      "DESCRIPTION": "Master address used for the read requests, must not be used by another device. 255 (0xFF) has the lowest priority"
+    },
+    "POLL_INTERVAL": {
+      "NAME": "Poll interval [s]",
+      "DESCRIPTION": "How often the registers of the devices are read"
+    },
+    "DEVICE_ADDRESS": {
+      "NAME": "Device address",
+      "DESCRIPTION": "eBUS slave address of the device, 8 (0x08) for the heat pump"
+    },
+    "WOLF_BWL1": {
+      "NAME": "Wolf BWL-1",
+      "DESCRIPTION": "Wolf BWL-1 air/water heat pump",
+      "FLOW_TEMPERATURE": {
+        "NAME": "Flow temperature [°C]",
+        "DESCRIPTION": "Register 13"
+      },
+      "RETURN_TEMPERATURE": {
+        "NAME": "Return temperature [°C]",
+        "DESCRIPTION": "Register 22"
+      },
+      "FLOW_SETPOINT": {
+        "NAME": "Flow setpoint [°C]",
+        "DESCRIPTION": "Register 2"
+      },
+      "HOT_WATER_TEMPERATURE": {
+        "NAME": "Hot water temperature [°C]",
+        "DESCRIPTION": "Register 14"
+      },
+      "HOT_WATER_SETPOINT": {
+        "NAME": "Hot water setpoint [°C]",
+        "DESCRIPTION": "Register 19"
+      },
+      "OUTSIDE_TEMPERATURE": {
+        "NAME": "Outside temperature [°C]",
+        "DESCRIPTION": "Register 12"
+      },
+      "CIRCUIT_2_FLOW_TEMPERATURE": {
+        "NAME": "Flow temperature circuit 2 [°C]",
+        "DESCRIPTION": "Register 15, probably the flow of the mixed circuit (not confirmed)"
+      },
+      "COMPRESSOR_HOURS": {
+        "NAME": "Compressor hours [h]",
+        "DESCRIPTION": "Register 554"
+      },
+      "COMPRESSOR_STARTS": {
+        "NAME": "Compressor starts",
+        "DESCRIPTION": "Registers 550 and 551 (not confirmed)"
+      },
+      "RUNNING": {
+        "NAME": "Heat pump running",
+        "DESCRIPTION": "From the operational data the heat pump broadcasts"
+      },
+      "CIRCULATION_PUMP": {
+        "NAME": "Circulation pump",
+        "DESCRIPTION": "From the operational data the heat pump broadcasts"
+      },
+      "FAULT_CODE": {
+        "NAME": "Fault code",
+        "DESCRIPTION": "0 = no fault, broadcast by the heat pump every few minutes"
+      }
+    },
+    "WOLF_REGISTER": {
+      "NAME": "Wolf register",
+      "DESCRIPTION": "Any other register of the device, read only",
+      "REGISTER": {
+        "NAME": "Register",
+        "DESCRIPTION": "Register number"
+      },
+      "SCALE": {
+        "NAME": "Scale",
+        "DESCRIPTION": "Value = raw value * scale, e.g. 0.1 for temperatures in 1/10 °C"
+      },
+      "SIGNED": {
+        "NAME": "Signed",
+        "DESCRIPTION": "The raw value is a signed 16 bit number"
+      }
+    }
+  }
+}
