@@ -67,6 +67,61 @@ namespace Automatica.Core.Tests.Shading
             Assert.Equal(expected, SunGeometry.IsSunOnWindow(new SunPosition(azimuth, elevation), facade, 80, 5, 60));
         }
 
+        [Theory]
+        // roof window facing south, 30 degrees pitch: the high noon sun is almost straight on the glass
+        [InlineData(180, 60, 180, 30, true)]
+        // roof facing north, 20 degrees pitch: the high sun from the south still reaches the glass (45 degrees)
+        [InlineData(180, 65, 0, 20, true)]
+        // ... a low sun from the south does not
+        [InlineData(180, 15, 0, 20, false)]
+        // flat skylight: any direction counts, only the elevation (incidence 90 - elevation) matters
+        [InlineData(37, 20, 180, 0, true)]
+        [InlineData(37, 8, 180, 0, false)]
+        // a wall (90) keeps the azimuth rule: the sun behind the facade never counts
+        [InlineData(180, 65, 0, 90, false)]
+        public void IsSunOnWindow_RoofWindow_UsesTheAngleOnTheGlass(double azimuth, double elevation, double facade, double inclination, bool expected)
+        {
+            Assert.Equal(expected, SunGeometry.IsSunOnWindow(new SunPosition(azimuth, elevation), facade, 80, 5, 90, inclination));
+        }
+
+        [Fact]
+        public void CosIncidence_WallFlatAndTilted()
+        {
+            var sun = new SunPosition(200, 40);
+
+            // wall: cos(elevation) * cos(azimuth difference)
+            Assert.Equal(Math.Cos(40 * Math.PI / 180) * Math.Cos(20 * Math.PI / 180), SunGeometry.CosIncidence(sun, 180, 90), 9);
+            // flat: sin(elevation), whatever the azimuth
+            Assert.Equal(Math.Sin(40 * Math.PI / 180), SunGeometry.CosIncidence(sun, 0, 0), 9);
+            // the glass faces the sun exactly: incidence 0
+            Assert.Equal(1, SunGeometry.CosIncidence(new SunPosition(180, 55), 180, 35), 9);
+            Assert.InRange(SunGeometry.IncidenceAngle(new SunPosition(180, 55), 180, 35), 0, 0.01);
+            Assert.Equal(60, SunGeometry.IncidenceAngle(new SunPosition(180, 30), 180, 0), 6);
+        }
+
+        [Fact]
+        public void Illuminance_RoofWindow_GetsMoreHighSunThanAWall_AndAWallIsUnchanged()
+        {
+            var sun = new SunPosition(180, 65);
+            var sky = SunGeometry.ClearSky(sun.Elevation);
+
+            var wall = SunGeometry.Illuminance(sky, sun, 180);
+            Assert.Equal(wall, SunGeometry.Illuminance(sky, sun, 180, 90), 9);
+
+            // the old formula of the wall: direct * cos h * cos(az) + half the diffuse + half the ground reflection
+            var expected = 105 * (sky.DirectNormal * Math.Cos(65 * Math.PI / 180) + 0.5 * sky.DiffuseHorizontal + 0.5 * 0.2 * sky.GlobalHorizontal);
+            Assert.Equal(expected, wall, 6);
+
+            var roof = SunGeometry.Illuminance(sky, sun, 180, 35);
+            Assert.True(roof > 1.8 * wall, $"roof {roof} wall {wall}");
+
+            // a flat skylight sees the whole sky and no ground: like the horizontal brightness
+            Assert.Equal(105 * sky.GlobalHorizontal, SunGeometry.Illuminance(sky, sun, 0, 0), 6);
+
+            // the estimate of a roof facing north still sees the high sun
+            Assert.True(SunGeometry.EstimateIlluminance(sun, 0, null, null, 20) > 50000);
+        }
+
         [Fact]
         public void ProfileAngle_SunInFront_IsElevation_SunAtTheSide_IsSteeper_SunBehind_IsNull()
         {

@@ -61,6 +61,54 @@
       "IP": {
         "NAME": "IP",
         "DESCRIPTION": "IP address of the Shelly"
+      },
+      "SLEEPING": {
+        "NAME": "Battery device (sleeps)",
+        "DESCRIPTION": "The device sleeps most of the time and reports by itself when it wakes up (CoIoT for Gen1, outbound websocket for Gen2+)"
+      },
+      "MODEL": {
+        "NAME": "Model",
+        "DESCRIPTION": "Model of the device, read during the scan"
+      },
+      "GENERATION": {
+        "NAME": "Generation",
+        "DESCRIPTION": "API generation of the device (1 = Gen1 REST, 2+ = JSON-RPC)"
+      },
+      "MODE": {
+        "NAME": "Mode",
+        "DESCRIPTION": "Gen1 device mode (relay/roller, color/white)"
+      },
+      "COIOT_DESCRIPTION": {
+        "NAME": "CoIoT description",
+        "DESCRIPTION": "Sensor description (/cit/d) of the device, read during the scan"
+      },
+      "COMPONENT_ID": {
+        "NAME": "Component id",
+        "DESCRIPTION": "Id of the component on the device (e.g. 0 for switch:0)"
+      },
+      "SCAN_ADDRESSES": {
+        "NAME": "Scan addresses",
+        "DESCRIPTION": "Additional IP addresses (host or host:port, separated by comma) the scan reads, for devices mDNS does not find"
+      },
+      "DEFAULT_USERNAME": {
+        "NAME": "Default username",
+        "DESCRIPTION": "Username the scan uses for Gen1 devices with login enabled"
+      },
+      "DEFAULT_PASSWORD": {
+        "NAME": "Default password",
+        "DESCRIPTION": "Password the scan uses for devices with login enabled"
+      },
+      "LEARN": {
+        "NAME": "Learn devices",
+        "DESCRIPTION": "Reports battery devices that wake up while learn mode is on"
+      },
+      "COIOT": {
+        "NAME": "CoIoT",
+        "DESCRIPTION": "Receive the Gen1 CoIoT push updates (UDP 5683, multicast 224.0.1.187)"
+      },
+      "OUTBOUND_WS_PORT": {
+        "NAME": "Outbound websocket port",
+        "DESCRIPTION": "Port the battery Gen2+ devices connect to (set ws://<server>:<port> as outbound websocket on the device), 0 = off"
       }
     },
     "METERS": {
@@ -140,6 +188,590 @@
     "HAS_UPDATE": {
       "NAME": "Has update",
       "DESCRIPTION": "A firmware update is available"
+    },
+    "GEN1_DEVICE": {
+      "NAME": "Shelly Gen1 device",
+      "DESCRIPTION": "Shelly Gen1 device (REST API and CoIoT), its components are created by the scan"
+    },
+    "RPC_DEVICE": {
+      "NAME": "Shelly Gen2+ device",
+      "DESCRIPTION": "Shelly Gen2/Gen3/Gen4 device (JSON-RPC and websocket), its components are created by the scan"
+    },
+    "COMPONENT": {
+      "CB": {
+        "NAME": "Circuit breaker",
+        "DESCRIPTION": "Shelly component: Circuit breaker"
+      },
+      "ADC": {
+        "NAME": "Analog input",
+        "DESCRIPTION": "Shelly component: Analog input"
+      },
+      "BLUTRV": {
+        "NAME": "BLU TRV",
+        "DESCRIPTION": "Shelly component: BLU TRV"
+      },
+      "BOOLEAN": {
+        "NAME": "Virtual boolean",
+        "DESCRIPTION": "Shelly component: Virtual boolean"
+      },
+      "BTHOMEDEVICE": {
+        "NAME": "BLU device",
+        "DESCRIPTION": "Shelly component: BLU device"
+      },
+      "BTHOMESENSOR": {
+        "NAME": "BLU sensor",
+        "DESCRIPTION": "Shelly component: BLU sensor"
+      },
+      "BUTTON": {
+        "NAME": "Virtual button",
+        "DESCRIPTION": "Shelly component: Virtual button"
+      },
+      "CCT": {
+        "NAME": "Tunable white light",
+        "DESCRIPTION": "Shelly component: Tunable white light"
+      },
+      "COVER": {
+        "NAME": "Cover",
+        "DESCRIPTION": "Shelly component: Cover"
+      },
+      "DEVICE": {
+        "NAME": "Device",
+        "DESCRIPTION": "Shelly component: Device"
+      },
+      "DEVICEPOWER": {
+        "NAME": "Power supply",
+        "DESCRIPTION": "Shelly component: Power supply"
+      },
+      "EM": {
+        "NAME": "3-phase energy meter",
+        "DESCRIPTION": "Shelly component: 3-phase energy meter"
+      },
+      "EM1": {
+        "NAME": "Energy meter",
+        "DESCRIPTION": "Shelly component: Energy meter"
+      },
+      "EM1DATA": {
+        "NAME": "Energy counters",
+        "DESCRIPTION": "Shelly component: Energy counters"
+      },
+      "EMDATA": {
+        "NAME": "3-phase energy counters",
+        "DESCRIPTION": "Shelly component: 3-phase energy counters"
+      },
+      "EMETER": {
+        "NAME": "Energy meter",
+        "DESCRIPTION": "Shelly component: Energy meter"
+      },
+      "ENUM": {
+        "NAME": "Virtual enum",
+        "DESCRIPTION": "Shelly component: Virtual enum"
+      },
+      "EXT_HUMIDITY": {
+        "NAME": "External humidity",
+        "DESCRIPTION": "Shelly component: External humidity"
+      },
+      "EXT_SWITCH": {
+        "NAME": "External input",
+        "DESCRIPTION": "Shelly component: External input"
+      },
+      "EXT_TEMPERATURE": {
+        "NAME": "External temperature",
+        "DESCRIPTION": "Shelly component: External temperature"
+      },
+      "FLOOD": {
+        "NAME": "Flood sensor",
+        "DESCRIPTION": "Shelly component: Flood sensor"
+      },
+      "HUMIDITY": {
+        "NAME": "Humidity",
+        "DESCRIPTION": "Shelly component: Humidity"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Illuminance",
+        "DESCRIPTION": "Shelly component: Illuminance"
+      },
+      "INPUT": {
+        "NAME": "Input",
+        "DESCRIPTION": "Shelly component: Input"
+      },
+      "LIGHT": {
+        "NAME": "Light",
+        "DESCRIPTION": "Shelly component: Light"
+      },
+      "METER": {
+        "NAME": "Meter",
+        "DESCRIPTION": "Shelly component: Meter"
+      },
+      "NUMBER": {
+        "NAME": "Virtual number",
+        "DESCRIPTION": "Shelly component: Virtual number"
+      },
+      "PM1": {
+        "NAME": "Power meter",
+        "DESCRIPTION": "Shelly component: Power meter"
+      },
+      "PRESENCE": {
+        "NAME": "Presence",
+        "DESCRIPTION": "Shelly component: Presence"
+      },
+      "PRESENCEZONE": {
+        "NAME": "Presence zone",
+        "DESCRIPTION": "Shelly component: Presence zone"
+      },
+      "RELAY": {
+        "NAME": "Relay",
+        "DESCRIPTION": "Shelly component: Relay"
+      },
+      "RGB": {
+        "NAME": "RGB light",
+        "DESCRIPTION": "Shelly component: RGB light"
+      },
+      "RGBCCT": {
+        "NAME": "RGB + tunable white light",
+        "DESCRIPTION": "Shelly component: RGB + tunable white light"
+      },
+      "RGBW": {
+        "NAME": "RGBW light",
+        "DESCRIPTION": "Shelly component: RGBW light"
+      },
+      "ROLLER": {
+        "NAME": "Roller",
+        "DESCRIPTION": "Shelly component: Roller"
+      },
+      "SENSORS": {
+        "NAME": "Sensors",
+        "DESCRIPTION": "Shelly component: Sensors"
+      },
+      "SMOKE": {
+        "NAME": "Smoke detector",
+        "DESCRIPTION": "Shelly component: Smoke detector"
+      },
+      "SWITCH": {
+        "NAME": "Switch",
+        "DESCRIPTION": "Shelly component: Switch"
+      },
+      "SYS": {
+        "NAME": "System",
+        "DESCRIPTION": "Shelly component: System"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperature",
+        "DESCRIPTION": "Shelly component: Temperature"
+      },
+      "TEXT": {
+        "NAME": "Virtual text",
+        "DESCRIPTION": "Shelly component: Virtual text"
+      },
+      "THERMOSTAT": {
+        "NAME": "Thermostat",
+        "DESCRIPTION": "Shelly component: Thermostat"
+      },
+      "VOLTMETER": {
+        "NAME": "Voltmeter",
+        "DESCRIPTION": "Shelly component: Voltmeter"
+      },
+      "WIFI": {
+        "NAME": "WiFi",
+        "DESCRIPTION": "Shelly component: WiFi"
+      }
+    },
+    "DP": {
+      "TOTAL_CYCLES": {
+        "NAME": "Switching cycles",
+        "DESCRIPTION": "Switching cycles"
+      },
+      "ALARM": {
+        "NAME": "Alarm",
+        "DESCRIPTION": "Alarm"
+      },
+      "APPARENT_POWER": {
+        "NAME": "Apparent power [VA]",
+        "DESCRIPTION": "Apparent power [VA]"
+      },
+      "BATTERY": {
+        "NAME": "Battery [%]",
+        "DESCRIPTION": "Battery [%]"
+      },
+      "BATTERY_VOLTAGE": {
+        "NAME": "Battery voltage [V]",
+        "DESCRIPTION": "Battery voltage [V]"
+      },
+      "BLUE": {
+        "NAME": "Blue",
+        "DESCRIPTION": "Blue"
+      },
+      "BRIGHTNESS": {
+        "NAME": "Brightness [%]",
+        "DESCRIPTION": "Brightness [%]"
+      },
+      "CALIBRATE": {
+        "NAME": "Calibrate",
+        "DESCRIPTION": "Calibrate"
+      },
+      "CLOSE": {
+        "NAME": "Close",
+        "DESCRIPTION": "Close"
+      },
+      "COLOR_TEMPERATURE": {
+        "NAME": "Color temperature [K]",
+        "DESCRIPTION": "Color temperature [K]"
+      },
+      "COUNTS": {
+        "NAME": "Pulse count",
+        "DESCRIPTION": "Pulse count"
+      },
+      "COVER_STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "State"
+      },
+      "CURRENT": {
+        "NAME": "Current [A]",
+        "DESCRIPTION": "Current [A]"
+      },
+      "DEVICE_TEMPERATURE": {
+        "NAME": "Device temperature [°C]",
+        "DESCRIPTION": "Device temperature [°C]"
+      },
+      "DOOR_OPEN": {
+        "NAME": "Open",
+        "DESCRIPTION": "Open"
+      },
+      "ENABLE": {
+        "NAME": "Enabled",
+        "DESCRIPTION": "Enabled"
+      },
+      "ENERGY": {
+        "NAME": "Energy [Wh]",
+        "DESCRIPTION": "Energy [Wh]"
+      },
+      "EVENT": {
+        "NAME": "Event",
+        "DESCRIPTION": "Event"
+      },
+      "EVENT_COUNT": {
+        "NAME": "Event count",
+        "DESCRIPTION": "Event count"
+      },
+      "EXTERNAL_POWER": {
+        "NAME": "External power",
+        "DESCRIPTION": "External power"
+      },
+      "FLOOD": {
+        "NAME": "Flood",
+        "DESCRIPTION": "Flood"
+      },
+      "FREQUENCY": {
+        "NAME": "Frequency [Hz]",
+        "DESCRIPTION": "Frequency [Hz]"
+      },
+      "GAIN": {
+        "NAME": "Gain [%]",
+        "DESCRIPTION": "Gain [%]"
+      },
+      "GAS_ALARM": {
+        "NAME": "Gas alarm",
+        "DESCRIPTION": "Gas alarm"
+      },
+      "GAS_CONCENTRATION": {
+        "NAME": "Gas concentration [ppm]",
+        "DESCRIPTION": "Gas concentration [ppm]"
+      },
+      "GREEN": {
+        "NAME": "Green",
+        "DESCRIPTION": "Green"
+      },
+      "HAS_TIMER": {
+        "NAME": "Timer running",
+        "DESCRIPTION": "Timer running"
+      },
+      "HAS_UPDATE": {
+        "NAME": "Update available",
+        "DESCRIPTION": "Update available"
+      },
+      "HUMIDITY": {
+        "NAME": "Humidity [%]",
+        "DESCRIPTION": "Humidity [%]"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Illuminance [lx]",
+        "DESCRIPTION": "Illuminance [lx]"
+      },
+      "ILLUMINATION": {
+        "NAME": "Illumination",
+        "DESCRIPTION": "Illumination"
+      },
+      "MOTION": {
+        "NAME": "Motion",
+        "DESCRIPTION": "Motion"
+      },
+      "MUTE": {
+        "NAME": "Mute",
+        "DESCRIPTION": "Mute"
+      },
+      "MUTED": {
+        "NAME": "Muted",
+        "DESCRIPTION": "Muted"
+      },
+      "NEUTRAL_CURRENT": {
+        "NAME": "Neutral current [A]",
+        "DESCRIPTION": "Neutral current [A]"
+      },
+      "OBJECTS": {
+        "NAME": "Objects",
+        "DESCRIPTION": "Objects"
+      },
+      "OPEN": {
+        "NAME": "Open",
+        "DESCRIPTION": "Open"
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": "Output"
+      },
+      "OVERPOWER": {
+        "NAME": "Overpower",
+        "DESCRIPTION": "Overpower"
+      },
+      "OVERPOWER_VALUE": {
+        "NAME": "Overpower [W]",
+        "DESCRIPTION": "Overpower [W]"
+      },
+      "OVERTEMPERATURE": {
+        "NAME": "Overtemperature",
+        "DESCRIPTION": "Overtemperature"
+      },
+      "PERCENT": {
+        "NAME": "Value [%]",
+        "DESCRIPTION": "Value [%]"
+      },
+      "PHASE_A_APPARENT_POWER": {
+        "NAME": "Phase A apparent power [VA]",
+        "DESCRIPTION": "Phase A apparent power [VA]"
+      },
+      "PHASE_A_CURRENT": {
+        "NAME": "Phase A current [A]",
+        "DESCRIPTION": "Phase A current [A]"
+      },
+      "PHASE_A_ENERGY": {
+        "NAME": "Phase A energy [Wh]",
+        "DESCRIPTION": "Phase A energy [Wh]"
+      },
+      "PHASE_A_FREQUENCY": {
+        "NAME": "Phase A frequency [Hz]",
+        "DESCRIPTION": "Phase A frequency [Hz]"
+      },
+      "PHASE_A_POWER": {
+        "NAME": "Phase A power [W]",
+        "DESCRIPTION": "Phase A power [W]"
+      },
+      "PHASE_A_POWER_FACTOR": {
+        "NAME": "Phase A power factor",
+        "DESCRIPTION": "Phase A power factor"
+      },
+      "PHASE_A_RETURNED_ENERGY": {
+        "NAME": "Phase A returned energy [Wh]",
+        "DESCRIPTION": "Phase A returned energy [Wh]"
+      },
+      "PHASE_A_VOLTAGE": {
+        "NAME": "Phase A voltage [V]",
+        "DESCRIPTION": "Phase A voltage [V]"
+      },
+      "PHASE_B_APPARENT_POWER": {
+        "NAME": "Phase B apparent power [VA]",
+        "DESCRIPTION": "Phase B apparent power [VA]"
+      },
+      "PHASE_B_CURRENT": {
+        "NAME": "Phase B current [A]",
+        "DESCRIPTION": "Phase B current [A]"
+      },
+      "PHASE_B_ENERGY": {
+        "NAME": "Phase B energy [Wh]",
+        "DESCRIPTION": "Phase B energy [Wh]"
+      },
+      "PHASE_B_FREQUENCY": {
+        "NAME": "Phase B frequency [Hz]",
+        "DESCRIPTION": "Phase B frequency [Hz]"
+      },
+      "PHASE_B_POWER": {
+        "NAME": "Phase B power [W]",
+        "DESCRIPTION": "Phase B power [W]"
+      },
+      "PHASE_B_POWER_FACTOR": {
+        "NAME": "Phase B power factor",
+        "DESCRIPTION": "Phase B power factor"
+      },
+      "PHASE_B_RETURNED_ENERGY": {
+        "NAME": "Phase B returned energy [Wh]",
+        "DESCRIPTION": "Phase B returned energy [Wh]"
+      },
+      "PHASE_B_VOLTAGE": {
+        "NAME": "Phase B voltage [V]",
+        "DESCRIPTION": "Phase B voltage [V]"
+      },
+      "PHASE_C_APPARENT_POWER": {
+        "NAME": "Phase C apparent power [VA]",
+        "DESCRIPTION": "Phase C apparent power [VA]"
+      },
+      "PHASE_C_CURRENT": {
+        "NAME": "Phase C current [A]",
+        "DESCRIPTION": "Phase C current [A]"
+      },
+      "PHASE_C_ENERGY": {
+        "NAME": "Phase C energy [Wh]",
+        "DESCRIPTION": "Phase C energy [Wh]"
+      },
+      "PHASE_C_FREQUENCY": {
+        "NAME": "Phase C frequency [Hz]",
+        "DESCRIPTION": "Phase C frequency [Hz]"
+      },
+      "PHASE_C_POWER": {
+        "NAME": "Phase C power [W]",
+        "DESCRIPTION": "Phase C power [W]"
+      },
+      "PHASE_C_POWER_FACTOR": {
+        "NAME": "Phase C power factor",
+        "DESCRIPTION": "Phase C power factor"
+      },
+      "PHASE_C_RETURNED_ENERGY": {
+        "NAME": "Phase C returned energy [Wh]",
+        "DESCRIPTION": "Phase C returned energy [Wh]"
+      },
+      "PHASE_C_VOLTAGE": {
+        "NAME": "Phase C voltage [V]",
+        "DESCRIPTION": "Phase C voltage [V]"
+      },
+      "POSITION": {
+        "NAME": "Position [%]",
+        "DESCRIPTION": "Position [%]"
+      },
+      "POWER": {
+        "NAME": "Power [W]",
+        "DESCRIPTION": "Power [W]"
+      },
+      "POWER_FACTOR": {
+        "NAME": "Power factor",
+        "DESCRIPTION": "Power factor"
+      },
+      "PRESENCE": {
+        "NAME": "Presence",
+        "DESCRIPTION": "Presence"
+      },
+      "REACTIVE_POWER": {
+        "NAME": "Reactive power [var]",
+        "DESCRIPTION": "Reactive power [var]"
+      },
+      "REBOOT": {
+        "NAME": "Reboot",
+        "DESCRIPTION": "Reboot"
+      },
+      "RED": {
+        "NAME": "Red",
+        "DESCRIPTION": "Red"
+      },
+      "RESTART_REQUIRED": {
+        "NAME": "Restart required",
+        "DESCRIPTION": "Restart required"
+      },
+      "RETURNED_ENERGY": {
+        "NAME": "Returned energy [Wh]",
+        "DESCRIPTION": "Returned energy [Wh]"
+      },
+      "RSSI": {
+        "NAME": "Signal strength [dBm]",
+        "DESCRIPTION": "Signal strength [dBm]"
+      },
+      "SLAT_POSITION": {
+        "NAME": "Slat position [%]",
+        "DESCRIPTION": "Slat position [%]"
+      },
+      "SMOKE": {
+        "NAME": "Smoke",
+        "DESCRIPTION": "Smoke"
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": "State"
+      },
+      "STOP": {
+        "NAME": "Stop",
+        "DESCRIPTION": "Stop"
+      },
+      "STOP_REASON": {
+        "NAME": "Stop reason",
+        "DESCRIPTION": "Stop reason"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Target position [%]",
+        "DESCRIPTION": "Target position [%]"
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Target temperature [°C]",
+        "DESCRIPTION": "Target temperature [°C]"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperature [°C]",
+        "DESCRIPTION": "Temperature [°C]"
+      },
+      "TILT": {
+        "NAME": "Tilt [°]",
+        "DESCRIPTION": "Tilt [°]"
+      },
+      "TOGGLE": {
+        "NAME": "Toggle",
+        "DESCRIPTION": "Toggle"
+      },
+      "TOTAL_APPARENT_POWER": {
+        "NAME": "Total apparent power [VA]",
+        "DESCRIPTION": "Total apparent power [VA]"
+      },
+      "TOTAL_CURRENT": {
+        "NAME": "Total current [A]",
+        "DESCRIPTION": "Total current [A]"
+      },
+      "TOTAL_ENERGY": {
+        "NAME": "Total energy [Wh]",
+        "DESCRIPTION": "Total energy [Wh]"
+      },
+      "TOTAL_POWER": {
+        "NAME": "Total power [W]",
+        "DESCRIPTION": "Total power [W]"
+      },
+      "TOTAL_RETURNED_ENERGY": {
+        "NAME": "Total returned energy [Wh]",
+        "DESCRIPTION": "Total returned energy [Wh]"
+      },
+      "TRIGGER": {
+        "NAME": "Trigger",
+        "DESCRIPTION": "Trigger"
+      },
+      "UPTIME": {
+        "NAME": "Uptime [s]",
+        "DESCRIPTION": "Uptime [s]"
+      },
+      "VALUE": {
+        "NAME": "Value",
+        "DESCRIPTION": "Value"
+      },
+      "VALVE_POSITION": {
+        "NAME": "Valve position [%]",
+        "DESCRIPTION": "Valve position [%]"
+      },
+      "VIBRATION": {
+        "NAME": "Vibration",
+        "DESCRIPTION": "Vibration"
+      },
+      "VOLTAGE": {
+        "NAME": "Voltage [V]",
+        "DESCRIPTION": "Voltage [V]"
+      },
+      "WHITE": {
+        "NAME": "White",
+        "DESCRIPTION": "White"
+      },
+      "WINDOW_OPEN": {
+        "NAME": "Window open",
+        "DESCRIPTION": "Window open"
+      }
     }
   }
 }

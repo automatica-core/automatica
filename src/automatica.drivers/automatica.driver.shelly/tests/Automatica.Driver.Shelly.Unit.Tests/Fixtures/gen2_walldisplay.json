@@ -1,0 +1,97 @@
+{
+  "gen": 2,
+  "deviceinfo": {
+    "name": null,
+    "id": "ShellyWallDisplay-0cdc7efa1b2c",
+    "mac": "0CDC7EFA1B2C",
+    "slot": 0,
+    "model": "SAWD-0A1XX10EU1",
+    "gen": 2,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "WallDisplay",
+    "auth_en": false,
+    "auth_domain": null
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "0CDC7EFA1B2C",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "switch:0": {
+      "id": 0,
+      "source": "init",
+      "output": false
+    },
+    "temperature:0": {
+      "id": 0,
+      "tC": 21.5,
+      "tF": 70.7
+    },
+    "humidity:0": {
+      "id": 0,
+      "rh": 44.0
+    },
+    "illuminance:0": {
+      "id": 0,
+      "lux": 120,
+      "illumination": "twilight"
+    },
+    "thermostat:0": {
+      "id": 0,
+      "enable": true,
+      "target_C": 21.0,
+      "current_C": 21.5,
+      "output": false,
+      "schedules": {
+        "enable": false
+      }
+    },
+    "devicepower:0": {
+      "id": 0,
+      "battery": {
+        "V": 0.0,
+        "percent": 0
+      },
+      "external": {
+        "present": true
+      }
+    }
+  },
+  "config": {
+    "thermostat:0": {
+      "id": 0,
+      "name": "Living room",
+      "enable": true,
+      "target_C": 21.0
+    }
+  }
+}

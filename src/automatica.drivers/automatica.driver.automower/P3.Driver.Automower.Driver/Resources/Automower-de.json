@@ -1,0 +1,158 @@
+{
+  "AUTOMOWER": {
+    "NAME": "Husqvarna Automower",
+    "DESCRIPTION": "Husqvarna-Automower-Mähroboter über die offizielle Automower Connect API",
+    "APPLICATION_KEY": {
+      "NAME": "Application Key",
+      "DESCRIPTION": "Application Key von developer.husqvarnagroup.cloud (mit Authentication API und Automower Connect API verbunden)"
+    },
+    "APPLICATION_SECRET": {
+      "NAME": "Application Secret",
+      "DESCRIPTION": "Application Secret der Anwendung"
+    },
+    "POLL": {
+      "NAME": "Intervall vollständiges Lesen [s]",
+      "DESCRIPTION": "Änderungen kommen live über den Web-Socket. Die API erlaubt 21000 Anfragen pro Woche und Anwendung"
+    },
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://api.amc.husqvarna.dev/v1"
+    },
+    "WEBSOCKET_URL": {
+      "NAME": "Web-Socket-URL",
+      "DESCRIPTION": "wss://ws.openapi.husqvarna.dev/v1"
+    },
+    "AUTH_URL": {
+      "NAME": "Token-URL",
+      "DESCRIPTION": "Husqvarna Authentication API"
+    },
+    "SCAN": {
+      "NAME": "Mähroboter suchen",
+      "DESCRIPTION": "Listet die Mähroboter des Kontos"
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "OK oder der letzte Fehler"
+    },
+    "SOCKET_CONNECTED": {
+      "NAME": "Live-Verbindung",
+      "DESCRIPTION": "Wahr, solange der Web-Socket verbunden ist"
+    },
+    "MOWER": {
+      "NAME": "Mähroboter",
+      "DESCRIPTION": "Ein Husqvarna Automower",
+      "MOWER_ID": {
+        "NAME": "Mähroboter-ID",
+        "DESCRIPTION": "Wird von der Suche ausgefüllt"
+      },
+      "DEFAULT_MINUTES": {
+        "NAME": "Standard-Mähdauer [min]",
+        "DESCRIPTION": "Wird verwendet, wenn Mäht auf wahr gesetzt wird"
+      },
+      "CONNECTED": {
+        "NAME": "Verbunden",
+        "DESCRIPTION": "Der Mähroboter ist über die Cloud erreichbar"
+      },
+      "BATTERY": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": ""
+      },
+      "MODE": {
+        "NAME": "Modus",
+        "DESCRIPTION": "MAIN_AREA, SECONDARY_AREA, HOME, DEMO, ..."
+      },
+      "ACTIVITY": {
+        "NAME": "Aktivität",
+        "DESCRIPTION": "MOWING, GOING_HOME, CHARGING, LEAVING, PARKED_IN_CS, STOPPED_IN_GARDEN, ..."
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "IN_OPERATION, PAUSED, RESTRICTED, OFF, STOPPED, ERROR, ..."
+      },
+      "INACTIVE_REASON": {
+        "NAME": "Grund für Inaktivität",
+        "DESCRIPTION": "NONE, PLANNING, SEARCHING_FOR_SATELLITES"
+      },
+      "ERROR_CODE": {
+        "NAME": "Fehlercode",
+        "DESCRIPTION": "0 = kein Fehler"
+      },
+      "ERROR_TIME": {
+        "NAME": "Fehlerzeitpunkt",
+        "DESCRIPTION": "Ortszeit des Mähroboters"
+      },
+      "NEXT_START": {
+        "NAME": "Nächster Start",
+        "DESCRIPTION": "Ortszeit des Mähroboters"
+      },
+      "OVERRIDE_ACTION": {
+        "NAME": "Übersteuerung",
+        "DESCRIPTION": "NOT_ACTIVE, FORCE_PARK oder FORCE_MOW"
+      },
+      "RESTRICTED_REASON": {
+        "NAME": "Einschränkung",
+        "DESCRIPTION": "NONE, WEEK_SCHEDULE, PARK_OVERRIDE, SENSOR, DAILY_LIMIT, FROST, ..."
+      },
+      "MOWING": {
+        "NAME": "Mäht",
+        "DESCRIPTION": "Wahr schreiben mäht für die Standarddauer, falsch parkt bis zum nächsten Zeitplan"
+      },
+      "MOW_MINUTES": {
+        "NAME": "Mähen für [min]",
+        "DESCRIPTION": "Minuten schreiben mäht so lange, 0 parkt bis zum nächsten Zeitplan"
+      },
+      "PARK_MINUTES": {
+        "NAME": "Parken für [min]",
+        "DESCRIPTION": "Minuten schreiben parkt so lange"
+      },
+      "PARK": {
+        "NAME": "Parken bis auf Weiteres",
+        "DESCRIPTION": "Wahr schreiben parkt"
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": "Wahr schreiben hält den Mähroboter an Ort und Stelle an"
+      },
+      "RESUME_SCHEDULE": {
+        "NAME": "Zeitplan fortsetzen",
+        "DESCRIPTION": "Wahr schreiben kehrt zum Zeitplan zurück"
+      },
+      "CUTTING_HEIGHT": {
+        "NAME": "Schnitthöhe",
+        "DESCRIPTION": "1 bis 9"
+      },
+      "HEADLIGHT": {
+        "NAME": "Scheinwerfer",
+        "DESCRIPTION": "ALWAYS_ON, ALWAYS_OFF, EVENING_ONLY oder EVENING_AND_NIGHT"
+      },
+      "LATITUDE": {
+        "NAME": "Breitengrad",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Längengrad",
+        "DESCRIPTION": ""
+      },
+      "CUTTING_TIME": {
+        "NAME": "Gesamte Mähzeit [h]",
+        "DESCRIPTION": ""
+      },
+      "RUNNING_TIME": {
+        "NAME": "Gesamte Laufzeit [h]",
+        "DESCRIPTION": ""
+      },
+      "BLADE_TIME": {
+        "NAME": "Messernutzung [h]",
+        "DESCRIPTION": "Seit dem letzten Messer-Reset"
+      },
+      "CHARGING_CYCLES": {
+        "NAME": "Ladezyklen",
+        "DESCRIPTION": ""
+      },
+      "COLLISIONS": {
+        "NAME": "Kollisionen",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

@@ -81,7 +81,7 @@ export class AutomationActionCardComponent {
     readonly severityItems = options("SEVERITY", NOTIFY_SEVERITIES);
     readonly enableItems = options("ENABLE_OPT", [true, false], v => v ? "ON" : "OFF");
     readonly shadingEnableItems = options("SHADING_OPT", [true, false], v => v ? "ON" : "OFF");
-    readonly placeholders = "{automation} {trigger} {trigger.value} {value:<id>}";
+    readonly placeholders = "{automation} {trigger} {trigger.value} {value:<id>} {date} {time} {datetime}";
 
     private readonly commandsByType: { [type: string]: OptionItem<ControlCommand>[] } = {
         switch: options("CMD", SWITCH_COMMANDS),
@@ -172,6 +172,14 @@ export class AutomationActionCardComponent {
 
     setEmailText(text: string) {
         this.action.email = (text || "").split(/[,;\s]+/).map(a => a.trim()).filter(a => !!a);
+    }
+
+    get mailToText(): string {
+        return (this.action?.to || []).join(", ");
+    }
+
+    setMailToText(text: string) {
+        this.action.to = (text || "").split(/[,;\s]+/).map(a => a.trim()).filter(a => !!a);
     }
 
     get conditionIsGroup(): boolean {

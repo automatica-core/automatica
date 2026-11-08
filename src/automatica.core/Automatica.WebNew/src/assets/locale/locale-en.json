@@ -10,7 +10,8 @@
     },
     "SETTINGS": "Server Settings",
     "REMOTE": "Remote Server Settings",
-    "MCP": "AI Assistant (MCP)"
+    "MCP": "AI Assistant (MCP)",
+    "SMTP": "Email server (SMTP)"
   },
   "COMMON": {
     "LOG": "Log",
@@ -104,7 +105,7 @@
       "OUT": "Zoom out",
       "TO_VIEW": "Zoom default"
     },
-    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "System settings changes require a reboot. This happens automatically!",
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Saved, the server restarts briefly.",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
@@ -499,6 +500,45 @@
       "REMOTETOKEN": {
         "NAME": "Token"
       },
+      "SMTPENABLED": {
+        "NAME": "Send emails through this server",
+        "DESCRIPTION": "Off = emails go through the Automatica cloud (only to the recipients verified there)."
+      },
+      "SMTPHOST": {
+        "NAME": "SMTP server"
+      },
+      "SMTPPORT": {
+        "NAME": "Port"
+      },
+      "SMTPSECURITY": {
+        "NAME": "Encryption",
+        "AUTO": "Automatic (TLS on port 465, otherwise STARTTLS if offered)",
+        "STARTTLS": "STARTTLS",
+        "SSL": "SSL/TLS",
+        "NONE": "None"
+      },
+      "SMTPUSER": {
+        "NAME": "User name"
+      },
+      "SMTPPASSWORD": {
+        "NAME": "Password"
+      },
+      "SMTPFROM": {
+        "NAME": "Sender address"
+      },
+      "SMTPFROMNAME": {
+        "NAME": "Sender name"
+      },
+      "SMTPACCEPTINVALIDCERTIFICATE": {
+        "NAME": "Accept invalid certificates",
+        "DESCRIPTION": "Only for a mail server in the local network with a self-signed certificate."
+      },
+      "SMTPTEST": {
+        "NAME": "Send test email",
+        "CONFIRM": "Send a test email to the sender address with the current settings?",
+        "OK": "Test email sent.",
+        "FAILED": "The test email could not be sent: {{ error }}"
+      },
       "HYPERSERIESUSER":{
         "NAME": "User"
       },
@@ -888,7 +928,10 @@
         "ENABLE": "Action on or off",
         "DISABLED": "Off",
         "PROBLEMS": "{{ count }} problems",
-        "CONTINUES_ON_ERROR": "continues on error"
+        "CONTINUES_ON_ERROR": "continues on error",
+        "USER_EDITABLE": "users may change",
+        "USER_EDITABLE_ON": "Visualization users may change the values of this block. Click to take it back.",
+        "USER_EDITABLE_OFF": "Let visualization users change the values of this block (times, days, thresholds, values)"
       },
       "SIDE": {
         "READS_AS": "Reads as",
@@ -899,7 +942,31 @@
         "TEST": "Test",
         "PROBLEMS": "Problems",
         "CHECKING": "checking",
-        "NO_PROBLEMS": "No problems found."
+        "NO_PROBLEMS": "No problems found.",
+        "USER_ACCESS": "Visualization",
+        "USER_ACCESS_ON": "Released for the visualization",
+        "USER_ACCESS_OFF": "Admins only",
+        "USER_ACCESS_HINT": "Released rules show under Automations in the visualization. Users with the visualization role switch them on or off and change the values of the blocks marked with the user icon. The structure stays with the admins.",
+        "USER_ACCESS_BLOCKS": "{{ count }} blocks marked for users. Mark more with the user icon on a block."
+      },
+      "VISU": {
+        "TITLE": "Automations",
+        "HINT": "Switch automations on or off and adjust their times and values.",
+        "LOADING": "Loading…",
+        "RETRY": "Try again",
+        "LAST_RUN": "Last run",
+        "KIND": {
+          "TRIGGER": "When",
+          "CONDITION": "If",
+          "ACTION": "Then"
+        },
+        "RESET": "Undo changes",
+        "SAVED": "Automation saved",
+        "SAVE_REFUSED": "The changes were not saved: {{ detail }}",
+        "ENABLE_PROBLEMS": "The automation has errors and cannot be switched on. Ask your administrator.",
+        "FAILED": "That did not work, please try again.",
+        "EMPTY": "No automations released",
+        "EMPTY_HINT": "An administrator can release automations for the visualization in the automation editor."
       },
       "MODE": {
         "SINGLE": "Ignore new triggers",
@@ -929,7 +996,9 @@
           "CONTROL": "Control switched",
           "CONTROL_HINT": "a switch or dimmer turns on or off",
           "STARTUP": "Server started",
-          "STARTUP_HINT": "once after each start"
+          "STARTUP_HINT": "once after each start",
+          "SCENE": "Scene activated",
+          "SCENE_HINT": "a scene block: its input or its button in the visualization"
         },
         "CONDITION": {
           "GROUP": "Group",
@@ -960,6 +1029,8 @@
           "WAITUNTIL_HINT": "condition with timeout",
           "NOTIFY": "Notify",
           "NOTIFY_HINT": "notification, email",
+          "MAIL": "Send email",
+          "MAIL_HINT": "own text with values to one or more addresses",
           "IF": "If / else",
           "IF_HINT": "different actions by condition",
           "RUNAUTOMATION": "Run another rule",
@@ -996,6 +1067,8 @@
         "CONTROL": "Control",
         "TO": "Switched",
         "STARTUP_HINT": "Fires once after the server has started.",
+        "SCENE": "Scene",
+        "SCENE_HINT": "Add a \"Scene\" block (Operation) in the logic editor and place it in the visualization. Every activation runs this rule.",
         "TRIGGER_ID": "Trigger id",
         "TRIGGER_ID_HINT": "Shown in the run history and used by \"Started by trigger\"",
         "OPERATOR": "Is",
@@ -1030,6 +1103,8 @@
         "EMAIL": "Email to",
         "EMAIL_PLACEHOLDER": "name@example.com",
         "EMAIL_HINT": "Separate several addresses with commas. Empty = notification only.",
+        "MAIL_TO": "To",
+        "MAIL_TO_HINT": "Separate several addresses with commas. Sent through the SMTP server of the settings, otherwise through the Automatica cloud.",
         "AUTOMATION": "Rule",
         "SKIP_CONDITIONS": "Skip its conditions",
         "ENABLE": "Switch",
@@ -1188,6 +1263,8 @@
         "T_CTRL_ON": "{{ control }} is switched on",
         "T_CTRL_OFF": "{{ control }} is switched off",
         "T_STARTUP": "the server has started",
+        "T_SCENE": "scene {{ scene }} is activated",
+        "T_SCENE_NONE": "a scene is activated",
         "C_GROUP_EMPTY": "always",
         "C_GROUP_NEVER": "never",
         "C_GROUP_NOT": "not ({{ list }})",
@@ -1235,6 +1312,7 @@
         "TIMEOUT_STOP": "(stop after {{ duration }})",
         "A_NOTIFY": "send the notification {{ subject }}",
         "A_NOTIFY_EMAIL": "and email it to {{ to }}",
+        "A_MAIL": "email {{ subject }} to {{ to }}",
         "A_IF": "if {{ condition }}",
         "A_IF_FULL": "if {{ condition }} then {{ then }}",
         "A_IF_ELSE": "otherwise {{ else }}",
@@ -1259,12 +1337,15 @@
         "NODENOTWRITABLE": "The datapoint cannot be written.",
         "CONTROLNOTFOUND": "The control does not exist (anymore).",
         "CONTROLNOTSUPPORTED": "The control does not support this.",
+        "SCENENOTFOUND": "The scene block does not exist (anymore).",
         "INVALIDTIME": "The time is not valid (HH:mm).",
         "VALUEMISSING": "A value is missing.",
         "AUTOMATIONNOTFOUND": "The rule does not exist (anymore).",
         "AREANOTFOUND": "The area does not exist (anymore).",
         "CATEGORYNOTFOUND": "The category does not exist (anymore).",
         "GROUPTARGETMISSING": "Choose an area or a category.",
+        "RECIPIENTMISSING": "Enter at least one email address.",
+        "INVALIDMAILADDRESS": "Not a valid email address.",
         "SHADINGNOTCONFIGURED": "The blind is not set up on the shading page.",
         "NEGATIVEDURATION": "A duration must not be negative.",
         "LOCATIONMISSING": "Sun times need the location (latitude and longitude) in the settings.",
@@ -1385,6 +1466,7 @@
         "EMPTY_HINT": "A facade is a side of the house with its direction, for example south or west. Blinds on the same side share it.",
         "ENABLED": "Active",
         "ACCEPTANCE": "sun within ±{{ angle }}°",
+        "ROOF": "roof windows {{ angle }}°",
         "BLIND_COUNT": "{{ count }} blinds",
         "NAME_PLACEHOLDER": "e.g. South side",
         "BRIGHTNESS": "Brightness on this facade",
@@ -1452,6 +1534,8 @@
         "ACCEPTANCE": "Sun angle (±°)",
         "MIN_ELEVATION": "Min. sun elevation (°)",
         "MAX_ELEVATION": "Max. sun elevation (°)",
+        "INCLINATION": "Window tilt (°)",
+        "INCLINATION_HINT": "90 = windows in a wall. Less for roof windows (the roof pitch, e.g. 35), 0 = flat skylight. For roof windows the sun angle is the largest angle between the sun and the glass, so a high sun also reaches roof windows on the north side.",
         "GEOMETRY_HINT": "The sun reaches the windows when it is within the angle to both sides and between the elevations. Raise the minimum elevation for trees or buildings in front, lower the maximum for a roof overhang.",
         "ON_LUX": "Shade above (lx)",
         "ON_DELAY": "after (min)",
@@ -1889,7 +1973,7 @@
       "OPEN_CONFIG": "Open configuration"
     },
     "STARTING": {
-      "HINT": "The server is restarting or loading extensions. The page reconnects on its own."
+      "HINT": "The page reconnects on its own."
     },
     "VISU": {
       "DETAILS": "Details",
@@ -1918,12 +2002,52 @@
       "CAMERA_OFFLINE": "No picture",
       "CAMERA_CONNECTING": "Connecting",
       "CAMERA_NOT_CONFIGURED": "Choose a camera in the properties",
+      "ENERGY_GRID": "Grid",
+      "ENERGY_PV": "PV",
+      "ENERGY_BATTERY": "Battery",
+      "ENERGY_HOUSE": "House",
+      "ENERGY_CONSUMER": "Consumer {{ index }}",
+      "ENERGY_IMPORT": "Import",
+      "ENERGY_EXPORT": "Export",
+      "ENERGY_CHARGE": "Charging",
+      "ENERGY_DISCHARGE": "Discharging",
+      "ENERGY_AUTARKY": "Autarky",
+      "ENERGY_SELF_CONSUMPTION": "Self-consumption",
+      "ENERGY_PV_TODAY": "PV today",
+      "ENERGY_TODAY": "Today",
       "SHUTTER_DOWN": "Lower",
       "SHADING_AUTO": "Automatic shading",
       "SHADING_TURN_ON": "Switch on the automatic shading",
       "SHADING_TURN_OFF": "Switch off the automatic shading",
       "SHADING_RESUME": "Paused by hand, tap to hand back to the automatic",
       "SHADING_FAILED": "The automatic shading could not be switched.",
+      "SECURITY_CONFIRM_TITLE": "Please confirm",
+      "SECURITY_NOT_POSSIBLE": "This is not possible in the current state.",
+      "SECURITY_DENIED": "You are not allowed to do this.",
+      "SECURITY_FAILED": "The command could not be sent.",
+      "SECURITY_SAVE_FAILED": "The user could not be saved.",
+      "SECURITY_UNAVAILABLE": "State not available",
+      "SECURITY_READ_ONLY": "You can see the state but not operate it.",
+      "SECURITY_USERS": "Users",
+      "SECURITY_NO_USERS": "No users yet.",
+      "SECURITY_SCHEDULE_ERRORS": "Lines of the groups that could not be read",
+      "SECURITY_LEARNING": "Hold the tag to the reader for",
+      "SECURITY_CANCEL": "Cancel",
+      "SECURITY_CODE": "Code",
+      "SECURITY_TAG": "Tag",
+      "SECURITY_EDIT": "Edit",
+      "SECURITY_LEARN_TAG": "Learn tag",
+      "SECURITY_DELETE": "Delete",
+      "SECURITY_DELETE_CONFIRM": "delete this user?",
+      "SECURITY_NAME": "Name",
+      "SECURITY_GROUPS": "Groups (comma separated)",
+      "SECURITY_CODE_HINT": "Digits only. Leave empty to keep the current code.",
+      "SECURITY_TAG_HINT": "Enter the tag id or use Learn tag. Leave empty to keep it.",
+      "SECURITY_CLEAR_CODE": "Remove the code",
+      "SECURITY_CLEAR_TAG": "Remove the tag",
+      "SECURITY_SAVE": "Save",
+      "SECURITY_ADD_USER": "Add user",
+      "SECURITY_LOG": "Log",
       "OPEN_PAGE": "Open",
       "REFRESH": "Refresh",
       "NOTHING_PLAYING": "Nothing playing",
@@ -1932,7 +2056,56 @@
       "PLAY_PAUSE": "Play / pause",
       "PLAY": "Play",
       "PAUSE": "Pause",
-      "VOLUME": "Volume"
+      "VOLUME": "Volume",
+      "STATUS_OBJECTS": "Objects",
+      "STATUS_ACTIVITY": "Activity",
+      "STATUS_NO_OBJECTS": "No objects reported yet",
+      "STATUS_NO_ACTIVITY": "No changes since the start",
+      "STATUS_OTHER": "Other",
+      "STATUS_ALL_FINE": "Nothing to report",
+      "STATUS_NO_STATUS": "No status yet",
+      "TRACKER_EMPTY": "No entries",
+      "TRACKER_COUNT": "{{ count }} entries",
+      "TRACKER_ENTRIES": "Entries",
+      "ROOM_TARGET": "Target",
+      "ROOM_WARMER": "Warmer",
+      "ROOM_COOLER": "Cooler",
+      "ROOM_HEATING": "Heating",
+      "ROOM_COOLING": "Cooling",
+      "ROOM_MODE_OFF": "Off",
+      "ROOM_MODE_ECO": "Eco",
+      "ROOM_MODE_COMFORT": "Comfort",
+      "ROOM_MODE_PROTECTION": "Building protection",
+      "ROOM_MODE_MANUAL": "Fixed setpoint",
+      "ROOM_TARGET_FAILED": "The temperature could not be changed.",
+      "CLIMATE_ON": "On",
+      "CLIMATE_OFF": "Off",
+      "CLIMATE_PAUSED": "Paused",
+      "CLIMATE_HEATING": "Heating",
+      "CLIMATE_COOLING": "Cooling",
+      "CLIMATE_HEATING_COOLING": "Heating and cooling",
+      "CLIMATE_MODE_AUTO": "Auto",
+      "CLIMATE_MODE_HEAT": "Heat",
+      "CLIMATE_MODE_COOL": "Cool",
+      "CLIMATE_MODE_DRY": "Dry",
+      "CLIMATE_MODE_FAN": "Fan only",
+      "CLIMATE_FAN": "Fan",
+      "CLIMATE_POWER": "On / off",
+      "CLIMATE_BOOST": "Boost",
+      "CLIMATE_STAGE2": "Stage 2",
+      "CLIMATE_ADDITIONAL": "Additional heater",
+      "CLIMATE_EMERGENCY": "Emergency heat",
+      "CLIMATE_HUMIDIFIER": "Humidifier",
+      "CLIMATE_UNITS_PAUSED": "units paused",
+      "CLIMATE_AVAILABLE_NONE": "No source available",
+      "CLIMATE_AVAILABLE_HEAT": "Heating available",
+      "CLIMATE_AVAILABLE_COOL": "Cooling available",
+      "CLIMATE_AVAILABLE_BOTH": "Heating and cooling available",
+      "CLIMATE_OUTDOOR_AVERAGE": "Outdoor avg.",
+      "CLIMATE_OPENING": "Opening",
+      "CLIMATE_CLOSING": "Closing",
+      "CLIMATE_ERROR": "Error",
+      "CLIMATE_WRITE_FAILED": "The value could not be changed."
     }
   }
 }

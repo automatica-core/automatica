@@ -118,3 +118,32 @@
         display: none;
     }
 }
+
+/* multi-line text (meta MULTILINE), e.g. the program of the sequence controller */
+// DevExtreme sets display: flow-root on .dx-template-wrapper, the double class wins
+.multiline-edit.dx-template-wrapper,
+.multiline-edit {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.multiline-code {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    ::ng-deep textarea {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        white-space: pre;
+        tab-size: 2;
+    }
+}
+
+.multiline-buttons {
+    flex: none;
+    display: flex;
+    justify-content: flex-end;
+}

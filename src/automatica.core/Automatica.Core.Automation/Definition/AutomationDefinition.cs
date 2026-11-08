@@ -31,6 +31,13 @@ namespace Automatica.Core.Automation.Definition
         /// Executed one after the other
         /// </summary>
         public List<ActionDefinition> Actions { get; set; } = new();
+
+        /// <summary>
+        /// Released for the visualization: users with the visu role see the automation, switch it on or off and change
+        /// the values of the blocks marked <c>userEditable</c>. The structure stays with the admins.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool UserAccess { get; set; }
     }
 
     public enum SunEvent
@@ -50,12 +57,20 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(ConditionsTrigger), "conditions")]
     [JsonDerivedType(typeof(ControlTrigger), "control")]
     [JsonDerivedType(typeof(StartupTrigger), "startup")]
+    [JsonDerivedType(typeof(SceneTrigger), "scene")]
     public abstract class TriggerDefinition
     {
         /// <summary>
         /// Free id of the trigger, used by the "started by trigger" condition and shown in the run history
         /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Visualization users may change the values of this block (see <see cref="AutomationUserAccess"/>), only
+        /// when the automation has <see cref="AutomationDefinition.UserAccess"/>
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool UserEditable { get; set; }
     }
 
     public enum DatapointChange
@@ -138,6 +153,23 @@ namespace Automatica.Core.Automation.Definition
     {
     }
 
+    /// <summary>
+    /// Fires when a scene block (logic "Scene" of the operations plugin, Loxone "Scene") is activated, from its input or
+    /// from its button in the visualization. The block pulses its output with the key <see cref="ActivatedOutputKey"/>.
+    /// </summary>
+    public sealed class SceneTrigger : TriggerDefinition
+    {
+        /// <summary>
+        /// Key of the logic output that pulses on every activation
+        /// </summary>
+        public const string ActivatedOutputKey = "activated";
+
+        /// <summary>
+        /// The scene block (logic instance id, the same as its control id)
+        /// </summary>
+        public Guid Scene { get; set; }
+    }
+
     #endregion
 
     #region conditions
@@ -152,6 +184,12 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(ShadingCondition), "shading")]
     public abstract class ConditionDefinition
     {
+        /// <summary>
+        /// Visualization users may change the values of this block (see <see cref="AutomationUserAccess"/>), only
+        /// when the automation has <see cref="AutomationDefinition.UserAccess"/>
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool UserEditable { get; set; }
     }
 
     public enum GroupOperator
@@ -251,6 +289,7 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(DelayAction), "delay")]
     [JsonDerivedType(typeof(WaitUntilAction), "waitUntil")]
     [JsonDerivedType(typeof(NotifyAction), "notify")]
+    [JsonDerivedType(typeof(MailAction), "mail")]
     [JsonDerivedType(typeof(IfAction), "if")]
     [JsonDerivedType(typeof(RunAutomationAction), "runAutomation")]
     [JsonDerivedType(typeof(EnableAutomationAction), "enableAutomation")]
@@ -267,6 +306,13 @@ namespace Automatica.Core.Automation.Definition
         /// When true a failing action is logged in the run and the run continues
         /// </summary>
         public bool ContinueOnError { get; set; }
+
+        /// <summary>
+        /// Visualization users may change the values of this block (see <see cref="AutomationUserAccess"/>), only
+        /// when the automation has <see cref="AutomationDefinition.UserAccess"/>
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool UserEditable { get; set; }
     }
 
     public enum SetValueMode
@@ -366,6 +412,17 @@ namespace Automatica.Core.Automation.Definition
         public string Body { get; set; }
         public NotifySeverity Severity { get; set; } = NotifySeverity.Info;
         public List<string> Email { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Sends a mail (own SMTP server of the settings, otherwise the Automatica cloud). Subject and body may use the
+    /// placeholders of the notify action plus <c>{date}</c>, <c>{time}</c> and <c>{datetime}</c>.
+    /// </summary>
+    public sealed class MailAction : ActionDefinition
+    {
+        public List<string> To { get; set; } = new();
+        public string Subject { get; set; }
+        public string Body { get; set; }
     }
 
     public sealed class IfAction : ActionDefinition

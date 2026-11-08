@@ -83,6 +83,14 @@
         @case ('startup') {
           <div class="fld wide"><span class="hint">{{ 'UI.AUTOMATIONS.FIELD.STARTUP_HINT' | translateAsync }}</span></div>
         }
+        @case ('scene') {
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SCENE' | translateAsync }}</span>
+            <dx-select-box [items]="ctx.lookups.sceneControls" valueExpr="id" displayExpr="name" [searchEnabled]="true"
+              [(value)]="trigger.scene"></dx-select-box>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.SCENE_HINT' | translateAsync }}</span>
+          </div>
+        }
       }
       <div class="fld">
         <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.TRIGGER_ID' | translateAsync }}</span>

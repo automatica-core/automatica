@@ -1,0 +1,881 @@
+﻿{
+  "CLIMATE": {
+    "NAME": "Klima",
+    "DESCRIPTION": "Heizen, Kühlen und Lüften",
+    "DEWPOINT": {
+      "NAME": "Taupunktrechner",
+      "DESCRIPTION": "Taupunkt aus Temperatur und relativer Luftfeuchte (Magnus-Formel)",
+      "IN": {
+        "T": "Temperatur (°C), -65..60",
+        "H": "Relative Luftfeuchte (%)"
+      },
+      "OUT": {
+        "TD": "Taupunkt (°C)"
+      },
+      "PARAM": {
+        "O": {
+          "NAME": "Offset (K)",
+          "DESCRIPTION": "Wird zum berechneten Taupunkt addiert"
+        }
+      }
+    },
+    "HEATING_CURVE": {
+      "NAME": "Heizkurve",
+      "DESCRIPTION": "Witterungsgeführte Vorlauftemperatur aus Raumsollwert und Außentemperatur",
+      "IN": {
+        "TT": "Raumsollwert (°C), 20 °C wenn nicht verbunden",
+        "CT": "Außentemperatur (°C)",
+        "DIS": "1 = Tt ignorieren und 20 °C verwenden"
+      },
+      "OUT": {
+        "FT": "Vorlauftemperatur (°C)",
+        "IV": "1 solange die Kurve durch minFt / maxFt begrenzt ist"
+      },
+      "PARAM": {
+        "S": {
+          "NAME": "Neigung",
+          "DESCRIPTION": "Neigung der Heizkurve (typ. 0,2 Fußboden .. 1,6 Heizkörper)"
+        },
+        "O": {
+          "NAME": "Niveau (K)",
+          "DESCRIPTION": "Parallelverschiebung der Kurve"
+        },
+        "MINFT": {
+          "NAME": "Minimale Vorlauftemperatur (°C)",
+          "DESCRIPTION": "Untergrenze der Vorlauftemperatur"
+        },
+        "MAXFT": {
+          "NAME": "Maximale Vorlauftemperatur (°C)",
+          "DESCRIPTION": "Obergrenze der Vorlauftemperatur"
+        }
+      }
+    },
+    "TWO_POSITION": {
+      "NAME": "2-Punkt-Regler",
+      "DESCRIPTION": "Schaltet einen Ausgang um einen Sollwert mit Hysterese ein und aus",
+      "IN": {
+        "PV": "Istwert",
+        "OFF": "1 = Ausgang aus und gesperrt"
+      },
+      "OUT": {
+        "O": "Ausgang"
+      },
+      "PARAM": {
+        "SP": {
+          "NAME": "Sollwert",
+          "DESCRIPTION": "Sollwert (verbindbar)"
+        },
+        "HYS": {
+          "NAME": "Hysterese",
+          "DESCRIPTION": "Gesamtbreite des Schaltbands um den Sollwert"
+        },
+        "INV": {
+          "NAME": "Invertiert",
+          "DESCRIPTION": "Aus: ein unter dem Sollwert (Heizen). Ein: ein über dem Sollwert (Kühlen)"
+        }
+      }
+    },
+    "THREE_POSITION": {
+      "NAME": "3-Punkt-Regler",
+      "DESCRIPTION": "Zwei gegenläufige Ausgänge: O1 unter Sollwert 1, O2 über Sollwert 2",
+      "IN": {
+        "PV": "Istwert",
+        "OFF": "1 = beide Ausgänge aus"
+      },
+      "OUT": {
+        "O1": "Ein unter Sollwert 1",
+        "O2": "Ein über Sollwert 2"
+      },
+      "PARAM": {
+        "SP1": {
+          "NAME": "Sollwert 1",
+          "DESCRIPTION": "Unterer Sollwert (verbindbar)"
+        },
+        "SP2": {
+          "NAME": "Sollwert 2",
+          "DESCRIPTION": "Oberer Sollwert (verbindbar)"
+        },
+        "HYS": {
+          "NAME": "Hysterese",
+          "DESCRIPTION": "Ein Ausgang schaltet so weit innerhalb des Bands wieder aus (0 = am Sollwert)"
+        }
+      }
+    },
+    "MIXING_VALVE": {
+      "NAME": "Mischerregler",
+      "DESCRIPTION": "PI-Regelung eines Mischventils: 0-100 % oder Auf/Zu-Ausgänge",
+      "IN": {
+        "TT": "Soll-Vorlauftemperatur (°C)",
+        "TC": "Ist-Vorlauftemperatur (°C)",
+        "OFF": "1 = Regler aus, Ventil laut Aus-Modus",
+        "DISPC": "1 = aktuelle Solltemperatur beibehalten (z. B. Kindersicherung)"
+      },
+      "OUT": {
+        "V": "Ventilstellung (%)",
+        "O": "Auf",
+        "C": "Zu",
+        "ERROR": "1 wenn Soll- und Isttemperatur länger als 10 Minuten mehr als 5 K abweichen"
+      },
+      "PARAM": {
+        "TD": {
+          "NAME": "Laufzeit (s)",
+          "DESCRIPTION": "Zeit des Ventils von zu bis auf"
+        },
+        "ST": {
+          "NAME": "Abtastzeit (s)",
+          "DESCRIPTION": "In diesem Abstand berechnet der Regler eine neue Stellung"
+        },
+        "KP": {
+          "NAME": "Verstärkung Kp (% pro K)",
+          "DESCRIPTION": "Proportionalanteil des PI-Reglers"
+        },
+        "KI": {
+          "NAME": "Integral Ki (% pro K und s)",
+          "DESCRIPTION": "Integralanteil des PI-Reglers"
+        },
+        "OFFM": {
+          "NAME": "Aus-Modus",
+          "DESCRIPTION": "Ventilstellung solange Off = 1",
+          "UNCHANGED": "Unverändert",
+          "OPEN": "Auf",
+          "CLOSE": "Zu"
+        },
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Invertiert für Kühlen: das Ventil öffnet, solange die Temperatur zu hoch ist",
+          "NORMAL": "Normal (Heizen)",
+          "INVERTED": "Invertiert (Kühlen)"
+        },
+        "MINP": {
+          "NAME": "Minimale Stellung (%)",
+          "DESCRIPTION": "Kleinste Ventilstellung des Reglers"
+        },
+        "MAXP": {
+          "NAME": "Maximale Stellung (%)",
+          "DESCRIPTION": "Größte Ventilstellung des Reglers"
+        },
+        "INV": {
+          "NAME": "V invertieren",
+          "DESCRIPTION": "V = 100 - Stellung (Stellantriebe mit 0 % = offen)"
+        }
+      }
+    },
+    "ROOM_CONTROLLER": {
+      "NAME": "Intelligente Raumregelung",
+      "DESCRIPTION": "Hält die Raumtemperatur, wechselt selbst zwischen Heizen und Kühlen, Komfort/Eco/Gebäudeschutz",
+      "IN": {
+        "MODE": "-1 aus, 0 Automatik, 1 Automatik nur Heizen, 2 Automatik nur Kühlen, 3 fester Sollwert, 4 fest nur Heizen, 5 fest nur Kühlen",
+        "TT": "Solltemperatur in den Modi mit festem Sollwert (°C)",
+        "TC": "Aktuelle Raumtemperatur (°C)",
+        "DWC": "Fenster-/Türkontakt, 1 = offen",
+        "COMFORT": "Komfort: startet mit steigender Flanke, nach fallender Flanke um Cet verlängert",
+        "ECO": "Eco: startet mit steigender Flanke, nach fallender Flanke um EBpet verlängert",
+        "BP": "Gebäudeschutz: startet mit steigender Flanke, um EBpet verlängert",
+        "P": "Präsenz: Komfort solange ein und Pet danach",
+        "OFF": "Steigende Flanke bricht die Timer ab, 1 = gesperrt (alle Ausgänge 0)",
+        "DISP": "1 = Präsenz ignorieren",
+        "TO": "Außentemperatur (°C), für offene Fenster",
+        "TCOMF": "Komfort-Heiztemperatur aus der Visualisierung (°C), Komfort-Kühlen behält den Abstand",
+        "SM": "Modus einer zentralen Quelle (Rm): 1 Heizen, 2 Kühlen, 3 keiner, 0 / nicht verbunden = alle",
+        "EH": "Überschuss Heizenergie: Heizsollwert + Texc",
+        "EC": "Überschuss Kühlenergie: Kühlsollwert - Texc"
+      },
+      "OUT": {
+        "H": "Heizventil (%)",
+        "COOL": "Kühlventil (%)",
+        "HC": "Heiz-/Kühlventil (%)",
+        "DEMAND": "Anforderung an eine zentrale Quelle (%): + Heizen, - Kühlen",
+        "SHD": "Beschattungsanforderung",
+        "HCM": "1 Heizen, -1 Kühlen, 0 inaktiv",
+        "ERROR": "1 unter Frost- oder über Hitzeschutztemperatur",
+        "TARGET": "Aktive Solltemperatur (°C)",
+        "BOOST": "1 solange mehr als 1,5 K vom Sollwert entfernt",
+        "OS": "Temperaturmodus: -1 aus, 0 Eco, 1 Komfort, 2 Gebäudeschutz, 3 fester Sollwert",
+        "TCHOUT": "Komfort-Heiztemperatur (°C)",
+        "TCCOUT": "Komfort-Kühltemperatur (°C)"
+      },
+      "PARAM": {
+        "TCH": {
+          "NAME": "Komfort Heizen (°C)",
+          "DESCRIPTION": "Komforttemperatur beim Heizen"
+        },
+        "TCC": {
+          "NAME": "Komfort Kühlen (°C)",
+          "DESCRIPTION": "Komforttemperatur beim Kühlen"
+        },
+        "TEH": {
+          "NAME": "Eco Heizen (K)",
+          "DESCRIPTION": "Eco Heizen = Komfort Heizen - dieser Wert"
+        },
+        "TEC": {
+          "NAME": "Eco Kühlen (K)",
+          "DESCRIPTION": "Eco Kühlen = Komfort Kühlen + dieser Wert"
+        },
+        "TFP": {
+          "NAME": "Frostschutz (°C)",
+          "DESCRIPTION": "Der Gebäudeschutz heizt bis zu dieser Temperatur"
+        },
+        "THP": {
+          "NAME": "Hitzeschutz (°C)",
+          "DESCRIPTION": "Der Gebäudeschutz kühlt bis zu dieser Temperatur"
+        },
+        "TSH": {
+          "NAME": "Beschattung beim Heizen (°C)",
+          "DESCRIPTION": "Beschattungsanforderung über dieser Temperatur beim Heizen"
+        },
+        "TSC": {
+          "NAME": "Beschattung beim Kühlen (°C)",
+          "DESCRIPTION": "Beschattungsanforderung über dieser Temperatur beim Kühlen"
+        },
+        "TD": {
+          "NAME": "Erlaubte Abweichung (K)",
+          "DESCRIPTION": "Modi mit festem Sollwert: Kühlen beginnt so weit über dem Sollwert"
+        },
+        "TEXC": {
+          "NAME": "Überschuss-Offset (K)",
+          "DESCRIPTION": "Sollwertverschiebung bei Überschussenergie (Eh / Ec)"
+        },
+        "CET": {
+          "NAME": "Komfortverlängerung (s)",
+          "DESCRIPTION": "Komfort läuft so lange nach dem Abfallen von C weiter"
+        },
+        "EBPET": {
+          "NAME": "Eco-/Gebäudeschutzverlängerung (s)",
+          "DESCRIPTION": "Läuft so lange nach dem Abfallen von E / Bp weiter, 0 = bis zur nächsten Übersteuerung"
+        },
+        "PET": {
+          "NAME": "Präsenzverlängerung (s)",
+          "DESCRIPTION": "Komfort läuft so lange nach dem Ende der Präsenz weiter"
+        },
+        "DDWC": {
+          "NAME": "Fensterverzögerung (s)",
+          "DESCRIPTION": "Gebäudeschutz beginnt so lange nach dem Öffnen eines Fensters"
+        },
+        "PB": {
+          "NAME": "Proportionalband (K)",
+          "DESCRIPTION": "Abweichung, die das Ventil auf 100 % öffnet"
+        },
+        "KI": {
+          "NAME": "Integral (% pro K und s)",
+          "DESCRIPTION": "Integralanteil des Ventilreglers"
+        },
+        "DEFAULT": {
+          "NAME": "Standardmodus",
+          "DESCRIPTION": "Temperaturmodus ohne C / E / Bp / Präsenz (der Baustein hat keinen Zeitplan, einen Timer mit C oder E verbinden)",
+          "ECO": "Eco",
+          "COMFORT": "Komfort"
+        }
+      }
+    },
+    "HEATING_COOLING": {
+      "NAME": "Heiz- und Kühlregler",
+      "DESCRIPTION": "Zentrale Heiz-/Kühlquelle, entscheidet aus den Raumanforderungen zwischen Heizen und Kühlen",
+      "IN": {
+        "TO": "Außentemperatur (°C)",
+        "B": "Boost: sofort Stufe 2, beim Heizen zusätzlich Zusatzheizung",
+        "OFF": "1 = alles aus",
+        "AH": "Schaltet die Zusatzheizung ein",
+        "F": "Schaltet den Lüfter ein",
+        "EH": "Überschuss Heizenergie, wird beim Heizen weitergegeben",
+        "EC": "Überschuss Kühlenergie, wird beim Kühlen weitergegeben",
+        "MH": "Manuelles Heizen: heizt unabhängig von den Räumen",
+        "SERVICE": "Servicemodus: 0 normal, 1 Heizen, 2 Kühlen, 3 aus",
+        "D1": "Anforderung 1 einer Raumregelung (D, %)",
+        "D2": "Anforderung 2 einer Raumregelung (D, %)",
+        "D3": "Anforderung 3 einer Raumregelung (D, %)",
+        "D4": "Anforderung 4 einer Raumregelung (D, %)",
+        "D5": "Anforderung 5 einer Raumregelung (D, %)",
+        "D6": "Anforderung 6 einer Raumregelung (D, %)",
+        "D7": "Anforderung 7 einer Raumregelung (D, %)",
+        "D8": "Anforderung 8 einer Raumregelung (D, %)"
+      },
+      "OUT": {
+        "H": "Heizen",
+        "H2": "Heizen Stufe 2",
+        "C": "Kühlen",
+        "C2": "Kühlen Stufe 2",
+        "AHOUT": "Zusatzheizung",
+        "SV": "Umschaltventil: 0 Heizen, 1 Kühlen",
+        "FOUT": "Lüfter",
+        "TOA": "Mittlere Außentemperatur über 48 h (°C)",
+        "RM": "Quellmodus für die Raumregelungen (Sm): 1 Heizen, 2 Kühlen, 3 keiner",
+        "EHOUT": "Überschuss Heizen für die Raumregelungen",
+        "ECOUT": "Überschuss Kühlen für die Raumregelungen",
+        "HL": "Mittlere Heizanforderung (%)",
+        "CL": "Mittlere Kühlanforderung (%)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Erlaubte Modi",
+          "OFF": "Aus",
+          "AUTO": "Automatik",
+          "HEATING": "Nur Heizen",
+          "COOLING": "Nur Kühlen"
+        },
+        "MINHR": {
+          "NAME": "Mindestlaufzeit (min)",
+          "DESCRIPTION": "Heizen/Kühlen läuft mindestens so lange"
+        },
+        "SOT": {
+          "NAME": "Einschaltschwelle (%)",
+          "DESCRIPTION": "Nötige mittlere Raumanforderung zum Starten"
+        },
+        "VD": {
+          "NAME": "Ventilverzögerung (s)",
+          "DESCRIPTION": "Laufzeit des Umschaltventils, H/C folgen danach"
+        },
+        "FOD": {
+          "NAME": "Lüfternachlauf (s)",
+          "DESCRIPTION": "Der Lüfter läuft nach dem Heizen/Kühlen nach"
+        },
+        "TT2S": {
+          "NAME": "Zeit bis Stufe 2 (min)",
+          "DESCRIPTION": "Stufe 2 startet nach dieser Laufzeit"
+        },
+        "OTM": {
+          "NAME": "Außentemperatur-Modus",
+          "DESCRIPTION": "Welche Außentemperatur mit den Heiz- und Kühlgrenzen verglichen wird. Der 48-h-Mittelwert ist nach 24 h bekannt, bis dahin gilt der aktuelle Wert.",
+          "DISABLED": "Nicht verwendet",
+          "AVERAGE": "Mittelwert der letzten 48 h",
+          "CURRENT": "Aktueller Wert"
+        },
+        "LIMH": {
+          "NAME": "Heizgrenze (°C)",
+          "DESCRIPTION": "Über dieser Außentemperatur wird nicht geheizt."
+        },
+        "LIMC": {
+          "NAME": "Kühlgrenze (°C)",
+          "DESCRIPTION": "Unter dieser Außentemperatur wird nicht gekühlt."
+        }
+      }
+    },
+    "HVAC": {
+      "NAME": "HVAC-Regler",
+      "DESCRIPTION": "Luftgeführte Heiz-/Kühlanlage (Brenner, Klima, Wärmepumpe mit Backup) aus Raumanforderungen",
+      "IN": {
+        "MODE": "0 aus, 1 Automatik, 2 nur Heizen, 3 nur Kühlen (nicht verbunden = Automatik)",
+        "TO": "Außentemperatur (°C)",
+        "B": "Boost: sofort Stufe 2",
+        "OFF": "1 = alles aus",
+        "EMH": "Notheizung statt der Wärmepumpe",
+        "FAN": "Schaltet den Lüfter ein",
+        "HUM": "Relative Luftfeuchte (%) für den Befeuchter",
+        "EH": "Überschuss Heizenergie, wird beim Heizen weitergegeben",
+        "EC": "Überschuss Kühlenergie, wird beim Kühlen weitergegeben",
+        "D1": "Anforderung 1 einer Raumregelung (D, %)",
+        "D2": "Anforderung 2 einer Raumregelung (D, %)",
+        "D3": "Anforderung 3 einer Raumregelung (D, %)",
+        "D4": "Anforderung 4 einer Raumregelung (D, %)",
+        "D5": "Anforderung 5 einer Raumregelung (D, %)",
+        "D6": "Anforderung 6 einer Raumregelung (D, %)",
+        "D7": "Anforderung 7 einer Raumregelung (D, %)",
+        "D8": "Anforderung 8 einer Raumregelung (D, %)"
+      },
+      "OUT": {
+        "W1": "Heizen Stufe 1 (Brenner / Zusatzheizung)",
+        "W2": "Heizen Stufe 2",
+        "Y": "Verdichter",
+        "Y2": "Kühlen Stufe 2",
+        "E": "Notheizung",
+        "OB": "Umschaltventil (ein für Kühlen, DirV invertiert)",
+        "G": "Lüfter",
+        "HMD": "Befeuchter",
+        "HCM": "1 Heizen, -1 Kühlen, 0 aus",
+        "RM": "Quellmodus für die Raumregelungen (Sm): 1 Heizen, 2 Kühlen, 3 keiner",
+        "EHOUT": "Überschuss Heizen für die Raumregelungen",
+        "ECOUT": "Überschuss Kühlen für die Raumregelungen"
+      },
+      "PARAM": {
+        "TYPE": {
+          "NAME": "Heizungsart",
+          "DESCRIPTION": "Bestimmt, welche Ausgänge heizen",
+          "CONVENTIONAL": "Öl / Gas / elektrisch",
+          "HEAT_PUMP_FOSSIL": "Wärmepumpe mit fossilem Backup",
+          "HEAT_PUMP_ELECTRIC": "Wärmepumpe mit elektrischem Backup"
+        },
+        "MINO": {
+          "NAME": "Mindestauszeit (s)",
+          "DESCRIPTION": "Heizen/Kühlen bleibt mindestens so lange aus"
+        },
+        "SOT": {
+          "NAME": "Einschaltschwelle (%)",
+          "DESCRIPTION": "Nötige mittlere Raumanforderung zum Starten"
+        },
+        "FOT": {
+          "NAME": "Lüfternachlauf (s)",
+          "DESCRIPTION": "Der Lüfter läuft nach dem Heizen/Kühlen nach"
+        },
+        "TT2S": {
+          "NAME": "Zeit bis Stufe 2 (s)",
+          "DESCRIPTION": "Stufe 2 startet nach dieser Laufzeit"
+        },
+        "S2D": {
+          "NAME": "Anforderung Stufe 2 (%)",
+          "DESCRIPTION": "Stufe 2 startet, wenn ein Raum so viel anfordert"
+        },
+        "MIOC": {
+          "NAME": "Minimale Außentemperatur Kühlen (°C)",
+          "DESCRIPTION": "Darunter ist nur Heizen erlaubt"
+        },
+        "MAOH": {
+          "NAME": "Maximale Außentemperatur Heizen (°C)",
+          "DESCRIPTION": "Darüber ist nur Kühlen erlaubt"
+        },
+        "PMIC": {
+          "NAME": "Schutz minimal Kühlen (°C)",
+          "DESCRIPTION": "Der Verdichter kühlt nicht unter dieser Außentemperatur"
+        },
+        "PMIH": {
+          "NAME": "Schutz minimal Heizen (°C)",
+          "DESCRIPTION": "Wärmepumpe mit fossilem Backup: darunter heizt der Brenner"
+        },
+        "PMAH": {
+          "NAME": "Schutz maximal Heizen (°C)",
+          "DESCRIPTION": "Die Wärmepumpe heizt nicht über dieser Außentemperatur"
+        },
+        "HS": {
+          "NAME": "Feuchtesollwert (%)",
+          "DESCRIPTION": "Der Befeuchter läuft beim Heizen darunter, bis 2 % darüber"
+        },
+        "DIRV": {
+          "NAME": "Umschaltventil invertieren",
+          "DESCRIPTION": "O/B ein beim Heizen statt beim Kühlen"
+        },
+        "OTM": {
+          "NAME": "Außentemperatur-Modus",
+          "DESCRIPTION": "Welche Außentemperatur mit den Grenzen verglichen wird",
+          "DISABLED": "Nicht verwendet",
+          "AVERAGE": "Mittelwert der letzten 48 h",
+          "CURRENT": "Aktueller Wert"
+        }
+      }
+    },
+    "FLOW_TEMPERATURE": {
+      "NAME": "Vorlauftemperaturrechner",
+      "DESCRIPTION": "Vorlauftemperatur eines Mischerkreises aus Heizkurve und Raumanforderungen",
+      "IN": {
+        "TO": "Außentemperatur (°C)",
+        "IB": "Boost: maximale (Heizen) / minimale (Kühlen) Vorlauftemperatur",
+        "ST": "Stopp: Pumpe aus, minimaler (Heizen) / maximaler (Kühlen) Vorlauf",
+        "TB": "Puffertemperatur (°C), die Pumpe wartet bis AQb erreicht ist",
+        "TT1": "Solltemperatur Raum 1 (°C)",
+        "TC1": "Isttemperatur Raum 1 (°C)",
+        "V1": "Ventil Raum 1 (%)",
+        "TT2": "Solltemperatur Raum 2 (°C)",
+        "TC2": "Isttemperatur Raum 2 (°C)",
+        "V2": "Ventil Raum 2 (%)",
+        "TT3": "Solltemperatur Raum 3 (°C)",
+        "TC3": "Isttemperatur Raum 3 (°C)",
+        "V3": "Ventil Raum 3 (%)",
+        "TT4": "Solltemperatur Raum 4 (°C)",
+        "TC4": "Isttemperatur Raum 4 (°C)",
+        "V4": "Ventil Raum 4 (%)",
+        "TT5": "Solltemperatur Raum 5 (°C)",
+        "TC5": "Isttemperatur Raum 5 (°C)",
+        "V5": "Ventil Raum 5 (%)",
+        "TT6": "Solltemperatur Raum 6 (°C)",
+        "TC6": "Isttemperatur Raum 6 (°C)",
+        "V6": "Ventil Raum 6 (%)"
+      },
+      "OUT": {
+        "AQT": "Solltemperatur des Raums, der den Vorlauf bestimmt (°C)",
+        "AQF": "Vorlauf-Solltemperatur (°C)",
+        "AQB": "Puffer-Solltemperatur (°C)",
+        "QP": "Freigabe Pumpe / Mischer",
+        "AQL": "Mittlere Ventilöffnung (%)",
+        "AQI": "Vorlauferhöhung (Heizen) / -absenkung (Kühlen) durch die Räume (K)",
+        "QE": "1 solange die Außentemperatur fehlt"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Kreis",
+          "DESCRIPTION": "Heiz- oder Kühlkreis",
+          "HEATING": "Heizen",
+          "COOLING": "Kühlen"
+        },
+        "MIN": {
+          "NAME": "Minimale Vorlauftemperatur (°C)",
+          "DESCRIPTION": "Untergrenze, auch der Vorlauf ohne Heizanforderung"
+        },
+        "MAX": {
+          "NAME": "Maximale Vorlauftemperatur (°C)",
+          "DESCRIPTION": "Obergrenze, auch der Vorlauf ohne Kühlanforderung"
+        },
+        "B": {
+          "NAME": "Puffer-Offset (K)",
+          "DESCRIPTION": "Puffersollwert über (Heizen) / unter (Kühlen) dem Vorlauf"
+        },
+        "S": {
+          "NAME": "Neigung",
+          "DESCRIPTION": "Neigung der Heiz-/Kühlkurve"
+        },
+        "N": {
+          "NAME": "Niveau (K)",
+          "DESCRIPTION": "Parallelverschiebung der Kurve"
+        },
+        "STR": {
+          "NAME": "Einschaltschwelle (%)",
+          "DESCRIPTION": "Die Pumpe läuft, sobald ein Raumventil so weit offen ist"
+        },
+        "G": {
+          "NAME": "Verstärkung",
+          "DESCRIPTION": "Gewichtung der Raumabweichung auf den Raumsollwert"
+        },
+        "I": {
+          "NAME": "Aufheizerhöhung (K)",
+          "DESCRIPTION": "Wird zum Raumsollwert addiert, solange er mehr als 1,5 K entfernt ist"
+        }
+      }
+    },
+    "AC_UNIT": {
+      "NAME": "Klimagerät",
+      "DESCRIPTION": "Klima-Innengerät: Ein/Aus, Modus, Lüfter, Solltemperatur, Pausen",
+      "IN": {
+        "TG": "Schaltet ein / aus um",
+        "ON": "Schaltet ein",
+        "OFF": "Schaltet aus, 1 = gesperrt",
+        "TT": "Solltemperatur (°C)",
+        "TC": "Isttemperatur (°C)",
+        "MODE": "1 Automatik, 2 Heizen, 3 Kühlen, 4 Entfeuchten, 5 Lüften",
+        "FAN": "Lüfterstufe 0 aus, 1 Automatik, 2 leise .. 7 sehr hoch",
+        "ADIR": "Luftrichtung 1 Automatik, 2-6 Position, 7 Schwenken, 8 kein Schwenken",
+        "DWC": "Fenster-/Türkontakt, pausiert solange offen",
+        "PT": "Pausentimer: pausiert für Ptd Sekunden",
+        "LS": "Lastabwurf: pausiert solange ein",
+        "SM": "Leisemodus: leise Lüfterstufe",
+        "PC": "Pause von der Klimazentrale (P1..P8)",
+        "HCM": "Modus einer Raumregelung (HCm): läuft nur auf deren Anforderung"
+      },
+      "OUT": {
+        "STATUS": "Gerät ein",
+        "MODEOUT": "Modus 1..5",
+        "FANOUT": "Lüfterstufe 0..7",
+        "ADIROUT": "Luftrichtung 1..8",
+        "TTOUT": "Solltemperatur (°C)",
+        "TCOUT": "Isttemperatur (°C)",
+        "PAUSED": "Pausiert",
+        "DEMAND": "Anforderung an die Klimazentrale (K): + Heizen, - Kühlen"
+      },
+      "PARAM": {
+        "PTD": {
+          "NAME": "Pausendauer (s)",
+          "DESCRIPTION": "Dauer des Pausentimers"
+        },
+        "MINT": {
+          "NAME": "Minimaler Sollwert (°C)",
+          "DESCRIPTION": "Kleinste Solltemperatur"
+        },
+        "MAXT": {
+          "NAME": "Maximaler Sollwert (°C)",
+          "DESCRIPTION": "Größte Solltemperatur"
+        },
+        "SILENT": {
+          "NAME": "Leise Lüfterstufe",
+          "DESCRIPTION": "Lüfterstufe 0..7 im Leisemodus"
+        }
+      }
+    },
+    "AC_CENTRAL": {
+      "NAME": "Klimazentrale",
+      "DESCRIPTION": "Außengerät einer Multisplit-Anlage, pausiert Innengeräte mit anderem Modus",
+      "IN": {
+        "TO": "Außentemperatur (°C)",
+        "OFF": "1 = aus, alle Geräte pausiert",
+        "D1": "Anforderung 1 eines Klimageräts (D, K)",
+        "D2": "Anforderung 2 eines Klimageräts (D, K)",
+        "D3": "Anforderung 3 eines Klimageräts (D, K)",
+        "D4": "Anforderung 4 eines Klimageräts (D, K)",
+        "D5": "Anforderung 5 eines Klimageräts (D, K)",
+        "D6": "Anforderung 6 eines Klimageräts (D, K)",
+        "D7": "Anforderung 7 eines Klimageräts (D, K)",
+        "D8": "Anforderung 8 eines Klimageräts (D, K)"
+      },
+      "OUT": {
+        "H": "Außengerät heizt",
+        "C": "Außengerät kühlt",
+        "TOA": "Mittlere Außentemperatur über 48 h (°C)",
+        "P1": "Pause Klimagerät 1 (mit Pc verbinden)",
+        "P2": "Pause Klimagerät 2 (mit Pc verbinden)",
+        "P3": "Pause Klimagerät 3 (mit Pc verbinden)",
+        "P4": "Pause Klimagerät 4 (mit Pc verbinden)",
+        "P5": "Pause Klimagerät 5 (mit Pc verbinden)",
+        "P6": "Pause Klimagerät 6 (mit Pc verbinden)",
+        "P7": "Pause Klimagerät 7 (mit Pc verbinden)",
+        "P8": "Pause Klimagerät 8 (mit Pc verbinden)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Erlaubte Modi",
+          "OFF": "Aus",
+          "AUTO": "Automatik",
+          "HEATING": "Nur Heizen",
+          "COOLING": "Nur Kühlen"
+        },
+        "LIMH": {
+          "NAME": "Heizgrenze (°C)",
+          "DESCRIPTION": "Über dieser Außentemperatur wird nicht geheizt."
+        },
+        "LIMC": {
+          "NAME": "Kühlgrenze (°C)",
+          "DESCRIPTION": "Unter dieser Außentemperatur wird nicht gekühlt."
+        },
+        "OTM": {
+          "NAME": "Außentemperatur-Modus",
+          "DESCRIPTION": "Welche Außentemperatur mit den Heiz- und Kühlgrenzen verglichen wird. Der 48-h-Mittelwert ist nach 24 h bekannt, bis dahin gilt der aktuelle Wert.",
+          "DISABLED": "Nicht verwendet",
+          "AVERAGE": "Mittelwert der letzten 48 h",
+          "CURRENT": "Aktueller Wert"
+        },
+        "MINRT": {
+          "NAME": "Mindestlaufzeit (min)",
+          "DESCRIPTION": "Ein Modus wird mindestens so lange gehalten"
+        }
+      }
+    },
+    "FAN_COIL_CENTRAL": {
+      "NAME": "Fan-Coil-Zentrale",
+      "DESCRIPTION": "Zentrale Heiz-/Kühlquelle der Fan-Coil-Geräte, 2- oder 4-Leiter",
+      "IN": {
+        "TO": "Außentemperatur (°C)",
+        "OFF": "1 = alles aus",
+        "HAC": "Heizen von der Quelle bestätigt (nicht verbunden = ja)",
+        "CAC": "Kühlen von der Quelle bestätigt (nicht verbunden = ja)",
+        "D1": "Anforderung 1 eines Fan-Coil-Geräts (D, %)",
+        "D2": "Anforderung 2 eines Fan-Coil-Geräts (D, %)",
+        "D3": "Anforderung 3 eines Fan-Coil-Geräts (D, %)",
+        "D4": "Anforderung 4 eines Fan-Coil-Geräts (D, %)",
+        "D5": "Anforderung 5 eines Fan-Coil-Geräts (D, %)",
+        "D6": "Anforderung 6 eines Fan-Coil-Geräts (D, %)",
+        "D7": "Anforderung 7 eines Fan-Coil-Geräts (D, %)",
+        "D8": "Anforderung 8 eines Fan-Coil-Geräts (D, %)"
+      },
+      "OUT": {
+        "H": "Heizen",
+        "C": "Kühlen",
+        "TOA": "Mittlere Außentemperatur über 48 h (°C)",
+        "AVMODE": "Erlaubte Modi: 0 keiner, 1 Heizen, 2 Kühlen, 3 beide",
+        "SV": "Umschaltventil (2-Leiter): 0 Heizen, 1 Kühlen",
+        "UH": "Geräte dürfen heizen (mit Ha verbinden)",
+        "UC": "Geräte dürfen kühlen (mit Ca verbinden)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Erlaubte Modi",
+          "OFF": "Aus",
+          "AUTO": "Automatik",
+          "HEATING": "Nur Heizen",
+          "COOLING": "Nur Kühlen"
+        },
+        "PIPES": {
+          "NAME": "Leitersystem",
+          "DESCRIPTION": "4-Leiter heizt und kühlt unabhängig, 2-Leiter schaltet um",
+          "FOUR": "4-Leiter",
+          "TWO": "2-Leiter"
+        },
+        "SOTH": {
+          "NAME": "Einschaltschwelle Heizen (%)",
+          "DESCRIPTION": "Nötige mittlere Geräteanforderung zum Heizen"
+        },
+        "SOTC": {
+          "NAME": "Einschaltschwelle Kühlen (%)",
+          "DESCRIPTION": "Nötige mittlere Geräteanforderung zum Kühlen"
+        },
+        "MINHRT": {
+          "NAME": "Mindestlaufzeit Heizen (min)",
+          "DESCRIPTION": "Heizen läuft mindestens so lange"
+        },
+        "MINCRT": {
+          "NAME": "Mindestlaufzeit Kühlen (min)",
+          "DESCRIPTION": "Kühlen läuft mindestens so lange"
+        },
+        "OTM": {
+          "NAME": "Außentemperatur-Modus",
+          "DESCRIPTION": "Welche Außentemperatur mit den Heiz- und Kühlgrenzen verglichen wird. Der 48-h-Mittelwert ist nach 24 h bekannt, bis dahin gilt der aktuelle Wert.",
+          "DISABLED": "Nicht verwendet",
+          "AVERAGE": "Mittelwert der letzten 48 h",
+          "CURRENT": "Aktueller Wert"
+        },
+        "LIMH": {
+          "NAME": "Heizgrenze (°C)",
+          "DESCRIPTION": "Über dieser Außentemperatur wird nicht geheizt."
+        },
+        "LIMC": {
+          "NAME": "Kühlgrenze (°C)",
+          "DESCRIPTION": "Unter dieser Außentemperatur wird nicht gekühlt."
+        },
+        "VD": {
+          "NAME": "Ventilverzögerung (s)",
+          "DESCRIPTION": "Laufzeit des Umschaltventils (2-Leiter)"
+        }
+      }
+    },
+    "FAN_COIL_UNIT": {
+      "NAME": "Fan-Coil-Gerät",
+      "DESCRIPTION": "Fan-Coil-Gerät: Lüfter per PI-Regler, Heiz-/Kühlventile nach Bedarf",
+      "IN": {
+        "TC": "Aktuelle Raumtemperatur (°C)",
+        "TT": "Soll-Raumtemperatur (°C)",
+        "HA": "Heizen verfügbar (nicht verbunden = ja), mit Uh der Zentrale verbinden",
+        "CA": "Kühlen verfügbar (nicht verbunden = ja), mit Uc der Zentrale verbinden",
+        "DWC": "Fenster-/Türkontakt, alles aus solange offen",
+        "OFF": "1 = Lüfter und Ventile aus",
+        "SM": "Leisemodus: Lüfter auf leise Stufe begrenzt",
+        "BM": "Boost: Lüfter 100 %",
+        "PT": "Pausentimer: aus für Ptd Sekunden",
+        "FAN": "Lüfter von Hand (%), -1 = Automatik",
+        "HCM": "Modus einer Raumregelung (HCm): 1 Heizen, -1 Kühlen"
+      },
+      "OUT": {
+        "H": "Heizventil (%)",
+        "COOL": "Kühlventil (%)",
+        "HC": "Heiz-/Kühlventil (%)",
+        "FANOUT": "Lüfterdrehzahl (%)",
+        "FANS": "Lüfterstufe",
+        "TCOUT": "Aktuelle Raumtemperatur (°C)",
+        "TTOUT": "Soll-Raumtemperatur (°C)",
+        "MODEOUT": "Aktueller Modus: 0 aus, 1 Automatik, 2 Heizen, 3 Kühlen, 4 Lüften",
+        "S": "Ein, solange ein Ventil offen ist oder der Lüfter läuft",
+        "DEMAND": "Anforderung an die Fan-Coil-Zentrale (%): + Heizen, - Kühlen"
+      },
+      "PARAM": {
+        "FMAX": {
+          "NAME": "Maximale Lüfterdrehzahl Automatik (%)",
+          "DESCRIPTION": "Obergrenze des automatischen Lüfters"
+        },
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Betriebsart",
+          "OFF": "Aus",
+          "AUTO": "Automatik",
+          "HEATING": "Heizen",
+          "COOLING": "Kühlen",
+          "VENTILATION": "Lüften"
+        },
+        "PTD": {
+          "NAME": "Pausendauer (s)",
+          "DESCRIPTION": "Dauer des Pausentimers"
+        },
+        "FKP": {
+          "NAME": "Lüfter Verstärkung Kp (% pro K)",
+          "DESCRIPTION": "Proportionalanteil des Temperatur-Lüfterreglers"
+        },
+        "FKI": {
+          "NAME": "Lüfter Integral Ki (% pro K und s)",
+          "DESCRIPTION": "Integralanteil des Temperatur-Lüfterreglers"
+        },
+        "FST": {
+          "NAME": "Lüfter Abtastzeit (s)",
+          "DESCRIPTION": "Intervall des Temperatur-Lüfterreglers"
+        },
+        "STEPS": {
+          "NAME": "Lüfterstufen",
+          "DESCRIPTION": "Anzahl Stufen von FanS, 0 = kein FanS"
+        },
+        "SILENT": {
+          "NAME": "Leise Lüfterdrehzahl (%)",
+          "DESCRIPTION": "Lüfterbegrenzung im Leisemodus"
+        }
+      }
+    },
+    "FAN_COIL_FRESH_AIR": {
+      "NAME": "Fan-Coil-Gerät mit Frischluft",
+      "DESCRIPTION": "Fan-Coil-Gerät mit Frischluft: Lüfter und Ventile nach Temperatur und CO2",
+      "IN": {
+        "TC": "Aktuelle Raumtemperatur (°C)",
+        "TT": "Soll-Raumtemperatur (°C)",
+        "HA": "Heizen verfügbar (nicht verbunden = ja), mit Uh der Zentrale verbinden",
+        "CA": "Kühlen verfügbar (nicht verbunden = ja), mit Uc der Zentrale verbinden",
+        "DWC": "Fenster-/Türkontakt, alles aus solange offen",
+        "OFF": "1 = Lüfter und Ventile aus",
+        "SM": "Leisemodus: Lüfter auf leise Stufe begrenzt",
+        "BM": "Boost: Lüfter 100 %",
+        "PT": "Pausentimer: aus für Ptd Sekunden",
+        "FAN": "Lüfter von Hand (%), -1 = Automatik",
+        "HCM": "Modus einer Raumregelung (HCm): 1 Heizen, -1 Kühlen",
+        "CO2": "CO2 des Raums (ppm)"
+      },
+      "OUT": {
+        "H": "Heizventil (%)",
+        "COOL": "Kühlventil (%)",
+        "HC": "Heiz-/Kühlventil (%)",
+        "FANOUT": "Lüfterdrehzahl (%)",
+        "FANS": "Lüfterstufe",
+        "TCOUT": "Aktuelle Raumtemperatur (°C)",
+        "TTOUT": "Soll-Raumtemperatur (°C)",
+        "MODEOUT": "Aktueller Modus: 0 aus, 1 Automatik, 2 Heizen, 3 Kühlen, 4 Lüften",
+        "S": "Ein, solange ein Ventil offen ist oder der Lüfter läuft",
+        "DEMAND": "Anforderung an die Fan-Coil-Zentrale (%): + Heizen, - Kühlen"
+      },
+      "PARAM": {
+        "FMAX": {
+          "NAME": "Maximale Lüfterdrehzahl Automatik (%)",
+          "DESCRIPTION": "Obergrenze des automatischen Lüfters"
+        },
+        "MODE": {
+          "NAME": "Modus",
+          "DESCRIPTION": "Betriebsart",
+          "OFF": "Aus",
+          "AUTO": "Automatik",
+          "HEATING": "Heizen",
+          "COOLING": "Kühlen",
+          "VENTILATION": "Lüften"
+        },
+        "PTD": {
+          "NAME": "Pausendauer (s)",
+          "DESCRIPTION": "Dauer des Pausentimers"
+        },
+        "FKP": {
+          "NAME": "Lüfter Verstärkung Kp (% pro K)",
+          "DESCRIPTION": "Proportionalanteil des Temperatur-Lüfterreglers"
+        },
+        "FKI": {
+          "NAME": "Lüfter Integral Ki (% pro K und s)",
+          "DESCRIPTION": "Integralanteil des Temperatur-Lüfterreglers"
+        },
+        "FST": {
+          "NAME": "Lüfter Abtastzeit (s)",
+          "DESCRIPTION": "Intervall des Temperatur-Lüfterreglers"
+        },
+        "STEPS": {
+          "NAME": "Lüfterstufen",
+          "DESCRIPTION": "Anzahl Stufen von FanS, 0 = kein FanS"
+        },
+        "SILENT": {
+          "NAME": "Leise Lüfterdrehzahl (%)",
+          "DESCRIPTION": "Lüfterbegrenzung im Leisemodus"
+        },
+        "CO2T": {
+          "NAME": "CO2-Sollwert (ppm)",
+          "DESCRIPTION": "Darüber gilt die Luftqualität als schlecht"
+        },
+        "CKP": {
+          "NAME": "CO2-Lüfter Verstärkung Kp (% pro 100 ppm)",
+          "DESCRIPTION": "Proportionalanteil des CO2-Lüfterreglers"
+        },
+        "CKI": {
+          "NAME": "CO2-Lüfter Integral Ki (% pro 100 ppm und s)",
+          "DESCRIPTION": "Integralanteil des CO2-Lüfterreglers"
+        },
+        "CST": {
+          "NAME": "CO2-Abtastzeit (s)",
+          "DESCRIPTION": "Intervall des CO2-Lüfterreglers"
+        },
+        "VKP": {
+          "NAME": "Ventil Verstärkung Kp (% pro K)",
+          "DESCRIPTION": "Proportionalanteil des Ventilreglers bei schlechter Luft"
+        },
+        "VKI": {
+          "NAME": "Ventil Integral Ki (% pro K und s)",
+          "DESCRIPTION": "Integralanteil des Ventilreglers bei schlechter Luft"
+        },
+        "VST": {
+          "NAME": "Ventil Abtastzeit (s)",
+          "DESCRIPTION": "Intervall des Ventilreglers"
+        }
+      }
+    }
+  }
+}

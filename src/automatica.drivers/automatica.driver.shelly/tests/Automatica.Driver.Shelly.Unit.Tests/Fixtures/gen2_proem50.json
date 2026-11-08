@@ -1,0 +1,103 @@
+{
+  "gen": 2,
+  "deviceinfo": {
+    "name": null,
+    "id": "shellyproem50-fcb467a1b2c3",
+    "mac": "FCB467A1B2C3",
+    "slot": 0,
+    "model": "SPEM-002CEBEU50",
+    "gen": 2,
+    "fw_id": "20241011-114455/1.4.4-g6d2a586",
+    "ver": "1.4.4",
+    "app": "ProEM",
+    "auth_en": false,
+    "auth_domain": null
+  },
+  "status": {
+    "ble": {},
+    "cloud": {
+      "connected": false
+    },
+    "mqtt": {
+      "connected": false
+    },
+    "sys": {
+      "mac": "FCB467A1B2C3",
+      "restart_required": false,
+      "time": "12:00",
+      "unixtime": 1700000000,
+      "uptime": 3600,
+      "ram_size": 246000,
+      "ram_free": 150000,
+      "fs_size": 458752,
+      "fs_free": 200000,
+      "cfg_rev": 10,
+      "kvs_rev": 0,
+      "schedule_rev": 0,
+      "webhook_rev": 0,
+      "available_updates": {}
+    },
+    "wifi": {
+      "sta_ip": "192.168.1.40",
+      "status": "got ip",
+      "ssid": "home",
+      "rssi": -58
+    },
+    "ws": {
+      "connected": false
+    },
+    "em1:0": {
+      "id": 0,
+      "current": 2.1,
+      "voltage": 230.4,
+      "act_power": 450.0,
+      "aprt_power": 483.0,
+      "pf": 0.93,
+      "freq": 50.0,
+      "calibration": "factory"
+    },
+    "em1:1": {
+      "id": 1,
+      "current": 0.0,
+      "voltage": 230.4,
+      "act_power": -1200.5,
+      "aprt_power": 1201.0,
+      "pf": -1.0,
+      "freq": 50.0,
+      "calibration": "factory"
+    },
+    "em1data:0": {
+      "id": 0,
+      "total_act_energy": 5000.25,
+      "total_act_ret_energy": 0.0
+    },
+    "em1data:1": {
+      "id": 1,
+      "total_act_energy": 10.0,
+      "total_act_ret_energy": 2500.0
+    },
+    "switch:0": {
+      "id": 0,
+      "source": "init",
+      "output": false,
+      "temperature": {
+        "tC": 35.0,
+        "tF": 95.0
+      }
+    }
+  },
+  "config": {
+    "em1:0": {
+      "id": 0,
+      "name": "Grid"
+    },
+    "em1:1": {
+      "id": 1,
+      "name": "PV"
+    },
+    "switch:0": {
+      "id": 0,
+      "name": null
+    }
+  }
+}

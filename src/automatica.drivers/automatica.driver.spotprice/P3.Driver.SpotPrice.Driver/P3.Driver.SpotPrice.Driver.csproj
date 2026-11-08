@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>1.0.0.0</Version>
+    <AutomaticaCoreVersion>10.0.0.2068</AutomaticaCoreVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\SpotPrice-de.json" />
+    <EmbeddedResource Include="Resources\SpotPrice-en.json" />
+    <InternalsVisibleTo Include="P3.Driver.SpotPrice.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="$(AutomaticaCoreVersion)" />
+
+  </ItemGroup>
+</Project>

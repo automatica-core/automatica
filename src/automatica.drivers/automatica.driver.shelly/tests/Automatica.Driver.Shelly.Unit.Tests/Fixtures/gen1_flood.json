@@ -1,0 +1,42 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHWT-1",
+    "mac": "60019485D7A1",
+    "auth": false,
+    "fw": "20230913-112351/v1.14.0-gcb84623",
+    "sleep_mode": true
+  },
+  "settings": {
+    "name": "Basement"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "flood": false,
+    "tmp": {
+      "value": 15.4,
+      "units": "C",
+      "tC": 15.4,
+      "tF": 59.7,
+      "is_valid": true
+    },
+    "bat": {
+      "value": 71,
+      "voltage": 2.8
+    },
+    "act_reasons": [
+      "periodic"
+    ],
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

@@ -23,6 +23,13 @@ namespace Automatica.Core.Shading.Engine
         /// </summary>
         internal const double LuminousEfficacy = 105;
 
+        /// <summary>
+        /// Inclination of a window in a wall (degrees from the horizontal). Smaller values are roof windows, 0 a flat skylight.
+        /// </summary>
+        public const double Vertical = 90;
+
+        public static bool IsVertical(double inclination) => inclination >= Vertical - 0.001;
+
         public static SunPosition Calculate(double latitude, double longitude, DateTimeOffset at)
         {
             var solarTimes = new SolarTimes(at, new Angle(latitude), new Angle(longitude));
@@ -50,15 +57,45 @@ namespace Automatica.Core.Shading.Engine
         /// True when the sun is in front of the window: at most <paramref name="acceptanceAngle"/> left or right of the
         /// facade direction and between <paramref name="minElevation"/> (horizon) and <paramref name="maxElevation"/> (overhang)
         /// </summary>
-        public static bool IsSunOnWindow(SunPosition sun, double facadeAzimuth, double acceptanceAngle, double minElevation, double maxElevation)
+        /// <remarks>
+        /// For a roof window (<paramref name="inclination"/> below 90) the sun is on the glass when the angle between the sun
+        /// and the normal of the glass is at most <paramref name="acceptanceAngle"/>, so the sun can also reach it from behind
+        /// the facade direction when it is high enough.
+        /// </remarks>
+        public static bool IsSunOnWindow(SunPosition sun, double facadeAzimuth, double acceptanceAngle, double minElevation, double maxElevation,
+            double inclination = Vertical)
         {
             if (sun.Elevation <= Math.Max(0, minElevation) || sun.Elevation > maxElevation)
             {
                 return false;
             }
 
-            return Math.Abs(AzimuthDifference(sun.Azimuth, facadeAzimuth)) <= Math.Min(acceptanceAngle, 90);
+            if (IsVertical(inclination))
+            {
+                return Math.Abs(AzimuthDifference(sun.Azimuth, facadeAzimuth)) <= Math.Min(acceptanceAngle, 90);
+            }
+
+            return IncidenceAngle(sun, facadeAzimuth, inclination) <= Math.Min(acceptanceAngle, 90);
         }
+
+        /// <summary>
+        /// Cosine of the angle between the sun and the normal of a surface facing <paramref name="azimuth"/>, tilted
+        /// <paramref name="inclination"/> degrees from the horizontal (90 a wall, 0 flat). Negative: the sun is behind it.
+        /// </summary>
+        public static double CosIncidence(SunPosition sun, double azimuth, double inclination)
+        {
+            var h = ToRadians(sun.Elevation);
+            var t = ToRadians(Math.Clamp(inclination, 0, Vertical));
+            var sinT = IsVertical(inclination) ? 1 : Math.Sin(t);
+            var cosT = IsVertical(inclination) ? 0 : Math.Cos(t);
+            return Math.Sin(h) * cosT + Math.Cos(h) * sinT * Math.Cos(ToRadians(AzimuthDifference(sun.Azimuth, azimuth)));
+        }
+
+        /// <summary>
+        /// Angle between the sun and the normal of the surface (0 = straight onto it, above 90 = from behind)
+        /// </summary>
+        public static double IncidenceAngle(SunPosition sun, double azimuth, double inclination) =>
+            ToDegrees(Math.Acos(Math.Clamp(CosIncidence(sun, azimuth, inclination), -1, 1)));
 
         /// <summary>
         /// Profile angle (vertical shadow angle): elevation of the sun projected onto the plane perpendicular to the facade.
@@ -225,30 +262,30 @@ namespace Automatica.Core.Shading.Engine
         internal const double GroundReflectance = 0.2;
 
         /// <summary>
-        /// Illuminance (lux) on a vertical facade: direct sun by the angle of incidence, half of the diffuse sky and 20 %
-        /// ground reflection from the lower half. With <paramref name="facadeAzimuth"/> null it is the illuminance on a
-        /// horizontal surface (global brightness).
+        /// Illuminance (lux) on a facade: direct sun by the angle of incidence, the part of the diffuse sky the surface sees
+        /// (half for a wall) and 20 % ground reflection from the part of the ground it sees (half for a wall, nothing for a
+        /// flat skylight). With <paramref name="facadeAzimuth"/> null it is the illuminance on a horizontal surface (global brightness).
         /// </summary>
-        public static double Illuminance(SkyIrradiance sky, SunPosition sun, double? facadeAzimuth)
+        public static double Illuminance(SkyIrradiance sky, SunPosition sun, double? facadeAzimuth, double inclination = Vertical)
         {
             if (!facadeAzimuth.HasValue)
             {
                 return LuminousEfficacy * sky.GlobalHorizontal;
             }
 
-            var cosIncidence = sun.Elevation <= 0
-                ? 0
-                : Math.Cos(ToRadians(sun.Elevation)) * Math.Cos(ToRadians(AzimuthDifference(sun.Azimuth, facadeAzimuth.Value)));
+            var cosT = IsVertical(inclination) ? 0 : Math.Cos(ToRadians(Math.Clamp(inclination, 0, Vertical)));
+            var cosIncidence = sun.Elevation <= 0 ? 0 : CosIncidence(sun, facadeAzimuth.Value, inclination);
             var direct = sky.DirectNormal * Math.Max(0, cosIncidence);
-            var diffuse = 0.5 * sky.DiffuseHorizontal;
-            var reflected = 0.5 * GroundReflectance * sky.GlobalHorizontal;
+            var diffuse = (1 + cosT) / 2 * sky.DiffuseHorizontal;
+            var reflected = (1 - cosT) / 2 * GroundReflectance * sky.GlobalHorizontal;
             return LuminousEfficacy * (direct + diffuse + reflected);
         }
 
         /// <summary>
         /// Estimated illuminance (lux) on a facade from the clear sky model, reduced by the cloud cover when it is known
         /// </summary>
-        public static double EstimateIlluminance(SunPosition sun, double? facadeAzimuth, double? cloudCoverPercent, DateTimeOffset? at = null)
+        public static double EstimateIlluminance(SunPosition sun, double? facadeAzimuth, double? cloudCoverPercent, DateTimeOffset? at = null,
+            double inclination = Vertical)
         {
             if (sun.Elevation <= 0)
             {
@@ -258,7 +295,7 @@ namespace Automatica.Core.Shading.Engine
             var sky = cloudCoverPercent.HasValue
                 ? FromCloudCover(sun.Elevation, cloudCoverPercent.Value, at ?? new DateTimeOffset(2026, 6, 21, 12, 0, 0, TimeSpan.Zero))
                 : ClearSky(sun.Elevation);
-            return Illuminance(sky, sun, facadeAzimuth);
+            return Illuminance(sky, sun, facadeAzimuth, inclination);
         }
 
         internal static double ToRadians(double degrees) => degrees * Math.PI / 180;

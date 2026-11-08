@@ -165,6 +165,25 @@
           </div>
         </div>
       }
+      @case ('mail') {
+        <div class="fields">
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.MAIL_TO' | translateAsync }}</span>
+            <dx-text-box [value]="mailToText" (onValueChanged)="setMailToText($event.value)"
+              [placeholder]="'UI.AUTOMATIONS.FIELD.EMAIL_PLACEHOLDER' | translateAsync"></dx-text-box>
+            <span class="hint">{{ 'UI.AUTOMATIONS.FIELD.MAIL_TO_HINT' | translateAsync }}</span>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.SUBJECT' | translateAsync }}</span>
+            <dx-text-box [(value)]="action.subject" valueChangeEvent="input"></dx-text-box>
+          </div>
+          <div class="fld wide">
+            <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.BODY' | translateAsync }}</span>
+            <dx-text-area [(value)]="action.body" valueChangeEvent="input" [minHeight]="90" [autoResizeEnabled]="true"></dx-text-area>
+            <span class="placeholders">{{ 'UI.AUTOMATIONS.FIELD.PLACEHOLDERS' | translateAsync }} <code>{{ placeholders }}</code></span>
+          </div>
+        </div>
+      }
       @case ('if') {
         <div class="fld">
           <span class="lbl">{{ 'UI.AUTOMATIONS.FIELD.CONDITION' | translateAsync }}</span>

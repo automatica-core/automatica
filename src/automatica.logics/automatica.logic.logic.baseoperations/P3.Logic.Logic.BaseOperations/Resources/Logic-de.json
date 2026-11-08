@@ -132,6 +132,101 @@
         "DESCRIPTION": "Wert des gewählten Eingangs"
       }
     }
-
+,
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 setzt die Ausgänge zurück und sperrt den Baustein, bis Off wieder 0 ist"
+      }
+    },
+    "SEQUENCER": {
+      "NAME": "Schrittschaltwerk",
+      "DESCRIPTION": "Jeder Impuls schaltet den nächsten Ausgang ein, nach dem letzten beginnt es wieder bei O1",
+      "TRIGGER": {
+        "DESCRIPTION": "Impuls schaltet den nächsten Ausgang ein"
+      },
+      "POSITION": {
+        "DESCRIPTION": "Nummer des Ausgangs, der eingeschaltet wird (0 = alle aus)"
+      },
+      "RESET": {
+        "DESCRIPTION": "Impuls schaltet den Standardausgang ein"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignoriert Tr und P (Kindersicherung)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 solange dieser Ausgang gewählt ist"
+      },
+      "SELECTED": {
+        "DESCRIPTION": "Nummer des gewählten Ausgangs (0 = keiner)"
+      },
+      "MAX": {
+        "NAME": "Benutzte Ausgänge",
+        "DESCRIPTION": "Anzahl Ausgänge, die durchlaufen werden (1-8)"
+      },
+      "DEFAULT": {
+        "NAME": "Standardausgang",
+        "DESCRIPTION": "Ausgang, den R einschaltet (0 = alle aus)"
+      }
+    },
+    "SHIFT_REGISTER": {
+      "NAME": "Schieberegister",
+      "DESCRIPTION": "Verzögert digitale Werte um eine Anzahl Impulse: jeder Impuls speichert D und schiebt das Register",
+      "TRIGGER": {
+        "DESCRIPTION": "Impuls speichert D und schiebt das Register"
+      },
+      "DATA": {
+        "DESCRIPTION": "Wert, der mit dem nächsten Impuls gespeichert wird"
+      },
+      "DIRECTION": {
+        "DESCRIPTION": "0 = nach oben schieben (Eintritt bei Bit 1), 1 = nach unten (Eintritt bei Bit 64)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Wert des gewählten Registerbits"
+      },
+      "BIT": {
+        "NAME": "Registerbit",
+        "DESCRIPTION": "Bit, das am Ausgang ausgegeben wird (1-64)"
+      }
+    },
+    "RADIO_BUTTONS": {
+      "NAME": "Radiotasten",
+      "DESCRIPTION": "Bis zu 16 Ausgänge, von denen immer nur einer eingeschaltet ist, in der Visualisierung wählbar",
+      "INPUT": {
+        "DESCRIPTION": "Impuls schaltet den Ausgang mit derselben Nummer ein"
+      },
+      "NEXT": {
+        "DESCRIPTION": "Impuls schaltet den nächsten Ausgang ein"
+      },
+      "PREVIOUS": {
+        "DESCRIPTION": "Impuls schaltet den vorherigen Ausgang ein"
+      },
+      "SELECT": {
+        "DESCRIPTION": "Nummer des Ausgangs, der eingeschaltet wird (0 = alle aus)"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignoriert alle Eingänge außer der Visualisierung (Kindersicherung, Reinigung)"
+      },
+      "VISU": {
+        "DESCRIPTION": "Auswahl aus der Visualisierung, nicht durch Max und DisPc begrenzt"
+      },
+      "NUMBER": {
+        "DESCRIPTION": "Nummer des aktiven Ausgangs (0 = alle aus)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 solange dieser Ausgang aktiv ist"
+      },
+      "MAX": {
+        "NAME": "Max. Ausgänge",
+        "DESCRIPTION": "Ausgänge, die über die Eingänge wählbar sind (1-16)"
+      },
+      "SKIP_ZERO": {
+        "NAME": "0 überspringen",
+        "DESCRIPTION": "+ und - überspringen 'alle aus'"
+      },
+      "LABELS": {
+        "NAME": "Ausgangsnamen",
+        "DESCRIPTION": "Namen der Ausgänge für die Visualisierung, getrennt durch ; (z. B. Aus;Radio;TV)"
+      }
+    }
   }
 }

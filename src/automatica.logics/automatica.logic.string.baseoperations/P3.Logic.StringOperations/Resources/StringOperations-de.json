@@ -10,6 +10,460 @@
       "OUTPUT": {
         "DESCRIPTION": "Zusammengefügter Text"
       }
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "Statustext, Wert, Symbol und Farbe aus bis zu 8 Regeln auf den Eingängen I1..I8, Anzeige in der Visu (wie der Loxone-Baustein Status)",
+      "INPUT": {
+        "DESCRIPTION": "Wert für die Regeln und den Platzhalter <vN>"
+      },
+      "OUTPUT": {
+        "TEXT": {
+          "DESCRIPTION": "Aktueller Statustext"
+        },
+        "VALUE": {
+          "DESCRIPTION": "Aktueller Statuswert"
+        },
+        "RULE": {
+          "DESCRIPTION": "Nummer der zutreffenden Regel (0 = Standard)"
+        }
+      },
+      "PARAM": {
+        "DEFAULT_TEXT": {
+          "NAME": "Standardtext",
+          "DESCRIPTION": "Text, wenn keine Regel zutrifft. Platzhalter: <v1>..<v8> Wert des Eingangs, <v1.1> mit 1 Nachkommastelle"
+        },
+        "DEFAULT_VALUE": {
+          "NAME": "Standardwert",
+          "DESCRIPTION": "Wert (Ausgang Val), wenn keine Regel zutrifft"
+        },
+        "DEFAULT_ICON": {
+          "NAME": "Standardsymbol",
+          "DESCRIPTION": "Symbol in der Visu, wenn keine Regel zutrifft (Font-Awesome-Name, z. B. circle-check)"
+        },
+        "DEFAULT_COLOR": {
+          "NAME": "Standardfarbe",
+          "DESCRIPTION": "Farbe von Text und Symbol in der Visu, wenn keine Regel zutrifft"
+        },
+        "RULE1_CONDITION": {
+          "NAME": "Regel 1: Bedingung"
+        },
+        "RULE1_TEXT": {
+          "NAME": "Regel 1: Text"
+        },
+        "RULE1_VALUE": {
+          "NAME": "Regel 1: Wert"
+        },
+        "RULE1_ICON": {
+          "NAME": "Regel 1: Symbol"
+        },
+        "RULE1_COLOR": {
+          "NAME": "Regel 1: Farbe"
+        },
+        "RULE2_CONDITION": {
+          "NAME": "Regel 2: Bedingung"
+        },
+        "RULE2_TEXT": {
+          "NAME": "Regel 2: Text"
+        },
+        "RULE2_VALUE": {
+          "NAME": "Regel 2: Wert"
+        },
+        "RULE2_ICON": {
+          "NAME": "Regel 2: Symbol"
+        },
+        "RULE2_COLOR": {
+          "NAME": "Regel 2: Farbe"
+        },
+        "RULE3_CONDITION": {
+          "NAME": "Regel 3: Bedingung"
+        },
+        "RULE3_TEXT": {
+          "NAME": "Regel 3: Text"
+        },
+        "RULE3_VALUE": {
+          "NAME": "Regel 3: Wert"
+        },
+        "RULE3_ICON": {
+          "NAME": "Regel 3: Symbol"
+        },
+        "RULE3_COLOR": {
+          "NAME": "Regel 3: Farbe"
+        },
+        "RULE4_CONDITION": {
+          "NAME": "Regel 4: Bedingung"
+        },
+        "RULE4_TEXT": {
+          "NAME": "Regel 4: Text"
+        },
+        "RULE4_VALUE": {
+          "NAME": "Regel 4: Wert"
+        },
+        "RULE4_ICON": {
+          "NAME": "Regel 4: Symbol"
+        },
+        "RULE4_COLOR": {
+          "NAME": "Regel 4: Farbe"
+        },
+        "RULE5_CONDITION": {
+          "NAME": "Regel 5: Bedingung"
+        },
+        "RULE5_TEXT": {
+          "NAME": "Regel 5: Text"
+        },
+        "RULE5_VALUE": {
+          "NAME": "Regel 5: Wert"
+        },
+        "RULE5_ICON": {
+          "NAME": "Regel 5: Symbol"
+        },
+        "RULE5_COLOR": {
+          "NAME": "Regel 5: Farbe"
+        },
+        "RULE6_CONDITION": {
+          "NAME": "Regel 6: Bedingung"
+        },
+        "RULE6_TEXT": {
+          "NAME": "Regel 6: Text"
+        },
+        "RULE6_VALUE": {
+          "NAME": "Regel 6: Wert"
+        },
+        "RULE6_ICON": {
+          "NAME": "Regel 6: Symbol"
+        },
+        "RULE6_COLOR": {
+          "NAME": "Regel 6: Farbe"
+        },
+        "RULE7_CONDITION": {
+          "NAME": "Regel 7: Bedingung"
+        },
+        "RULE7_TEXT": {
+          "NAME": "Regel 7: Text"
+        },
+        "RULE7_VALUE": {
+          "NAME": "Regel 7: Wert"
+        },
+        "RULE7_ICON": {
+          "NAME": "Regel 7: Symbol"
+        },
+        "RULE7_COLOR": {
+          "NAME": "Regel 7: Farbe"
+        },
+        "RULE8_CONDITION": {
+          "NAME": "Regel 8: Bedingung"
+        },
+        "RULE8_TEXT": {
+          "NAME": "Regel 8: Text"
+        },
+        "RULE8_VALUE": {
+          "NAME": "Regel 8: Wert"
+        },
+        "RULE8_ICON": {
+          "NAME": "Regel 8: Symbol"
+        },
+        "RULE8_COLOR": {
+          "NAME": "Regel 8: Farbe"
+        },
+        "RULE_CONDITION": {
+          "DESCRIPTION": "Z. B. I1 >= 20, I2 *= Alarm, I1 == <v2> oder I1 > 20 && I2 == 1. Operatoren: == != > >= < <= *= (enthält) !* (enthält nicht) : (beginnt mit) !: (beginnt nicht mit), verknüpfen mit && oder ||. Text mit Leerzeichen in Anführungszeichen. Die erste zutreffende Regel gilt, leer = Regel aus"
+        },
+        "RULE_TEXT": {
+          "DESCRIPTION": "Statustext der Regel, Platzhalter <v1>..<v8> (<v1.1> mit 1 Nachkommastelle)"
+        },
+        "RULE_VALUE": {
+          "DESCRIPTION": "Statuswert der Regel (Ausgang Val)"
+        },
+        "RULE_ICON": {
+          "DESCRIPTION": "Symbol in der Visu (Font-Awesome-Name, z. B. fire)"
+        },
+        "RULE_COLOR": {
+          "DESCRIPTION": "Farbe von Text und Symbol in der Visu"
+        }
+      }
+    },
+    "STATUS_MONITOR": {
+      "NAME": "Statusmonitor",
+      "DESCRIPTION": "Überwacht beliebig viele Objekte, zählt sie je Zustand (bis zu 10) und zeigt Zustände, Objekte und ein Aktivitätsprotokoll in der Visu (wie der Loxone-Statusmonitor)",
+      "INPUT": {
+        "STATUS": {
+          "DESCRIPTION": "Zu überwachende Objekte (beliebig viele Verbindungen)"
+        }
+      },
+      "OUTPUT": {
+        "LAST_CHANGE": {
+          "DESCRIPTION": "Name und Zustand des zuletzt geänderten Objekts"
+        },
+        "REST": {
+          "DESCRIPTION": "Anzahl der Objekte ohne definierten Zustand"
+        },
+        "COUNT": {
+          "DESCRIPTION": "Anzahl der Objekte in diesem Zustand"
+        }
+      },
+      "PARAM": {
+        "LOG_ENTRIES": {
+          "NAME": "Einträge im Aktivitätsprotokoll",
+          "DESCRIPTION": "Anzahl der Änderungen für die Visu (0 = kein Protokoll, max. 100); nach einem Neustart ist das Protokoll leer"
+        },
+        "REST_TEXT": {
+          "NAME": "Text für andere Werte",
+          "DESCRIPTION": "Zustandstext für Objekte, deren Wert zu keinem Zustand passt (Ausgang Csr)"
+        },
+        "REST_COLOR": {
+          "NAME": "Farbe für andere Werte",
+          "DESCRIPTION": "Farbe der Objekte ohne Zustand in der Visu"
+        },
+        "STATE1_VALUE": {
+          "NAME": "Zustand 1: Wert"
+        },
+        "STATE1_TEXT": {
+          "NAME": "Zustand 1: Text"
+        },
+        "STATE1_COLOR": {
+          "NAME": "Zustand 1: Farbe"
+        },
+        "STATE2_VALUE": {
+          "NAME": "Zustand 2: Wert"
+        },
+        "STATE2_TEXT": {
+          "NAME": "Zustand 2: Text"
+        },
+        "STATE2_COLOR": {
+          "NAME": "Zustand 2: Farbe"
+        },
+        "STATE3_VALUE": {
+          "NAME": "Zustand 3: Wert"
+        },
+        "STATE3_TEXT": {
+          "NAME": "Zustand 3: Text"
+        },
+        "STATE3_COLOR": {
+          "NAME": "Zustand 3: Farbe"
+        },
+        "STATE4_VALUE": {
+          "NAME": "Zustand 4: Wert"
+        },
+        "STATE4_TEXT": {
+          "NAME": "Zustand 4: Text"
+        },
+        "STATE4_COLOR": {
+          "NAME": "Zustand 4: Farbe"
+        },
+        "STATE5_VALUE": {
+          "NAME": "Zustand 5: Wert"
+        },
+        "STATE5_TEXT": {
+          "NAME": "Zustand 5: Text"
+        },
+        "STATE5_COLOR": {
+          "NAME": "Zustand 5: Farbe"
+        },
+        "STATE6_VALUE": {
+          "NAME": "Zustand 6: Wert"
+        },
+        "STATE6_TEXT": {
+          "NAME": "Zustand 6: Text"
+        },
+        "STATE6_COLOR": {
+          "NAME": "Zustand 6: Farbe"
+        },
+        "STATE7_VALUE": {
+          "NAME": "Zustand 7: Wert"
+        },
+        "STATE7_TEXT": {
+          "NAME": "Zustand 7: Text"
+        },
+        "STATE7_COLOR": {
+          "NAME": "Zustand 7: Farbe"
+        },
+        "STATE8_VALUE": {
+          "NAME": "Zustand 8: Wert"
+        },
+        "STATE8_TEXT": {
+          "NAME": "Zustand 8: Text"
+        },
+        "STATE8_COLOR": {
+          "NAME": "Zustand 8: Farbe"
+        },
+        "STATE9_VALUE": {
+          "NAME": "Zustand 9: Wert"
+        },
+        "STATE9_TEXT": {
+          "NAME": "Zustand 9: Text"
+        },
+        "STATE9_COLOR": {
+          "NAME": "Zustand 9: Farbe"
+        },
+        "STATE10_VALUE": {
+          "NAME": "Zustand 10: Wert"
+        },
+        "STATE10_TEXT": {
+          "NAME": "Zustand 10: Text"
+        },
+        "STATE10_COLOR": {
+          "NAME": "Zustand 10: Farbe"
+        },
+        "STATE_VALUE": {
+          "DESCRIPTION": "Wert der Objekte in diesem Zustand: Zahl oder Text, a|b für mehrere, leer = Zustand nicht verwendet. Zustand 1 hat die höchste Priorität"
+        },
+        "STATE_TEXT": {
+          "DESCRIPTION": "Text des Zustands in der Visu und auf Txlc"
+        },
+        "STATE_COLOR": {
+          "DESCRIPTION": "Farbe des Zustands in der Visu"
+        }
+      }
+    },
+    "TRACKER": {
+      "NAME": "Tracker",
+      "DESCRIPTION": "Ereignisprotokoll: jeder Wert auf I wird ein Eintrag mit Zeitstempel, die letzten Einträge zeigt die Visu (wie der Loxone-Tracker)",
+      "INPUT": {
+        "VALUE": {
+          "DESCRIPTION": "Zu protokollierender Wert oder Text (beliebig viele Verbindungen)"
+        },
+        "RESET": {
+          "DESCRIPTION": "Steigende Flanke löscht das Protokoll"
+        }
+      },
+      "OUTPUT": {
+        "LAST": {
+          "DESCRIPTION": "Letzter Eintrag"
+        },
+        "COUNT": {
+          "DESCRIPTION": "Anzahl der Einträge"
+        }
+      },
+      "PARAM": {
+        "TEMPLATE": {
+          "NAME": "Eintragstext",
+          "DESCRIPTION": "Text eines Eintrags: <v> Wert, <v.1> mit 1 Nachkommastelle, <n> Name der Quelle"
+        },
+        "ON_TEXT": {
+          "NAME": "Text bei Ein",
+          "DESCRIPTION": "Eintrag für den Wert Ein / true (leer = Eintragstext)"
+        },
+        "OFF_TEXT": {
+          "NAME": "Text bei Aus",
+          "DESCRIPTION": "Eintrag für den Wert Aus / false (leer = Eintragstext)"
+        },
+        "ENTRIES": {
+          "NAME": "Anzahl Einträge",
+          "DESCRIPTION": "Maximale Anzahl gespeicherter Einträge (2..100)"
+        },
+        "REMANENT": {
+          "NAME": "Einträge behalten",
+          "DESCRIPTION": "Einträge über einen Neustart hinweg behalten"
+        }
+      }
+    },
+    "TEXT_GENERATOR": {
+      "NAME": "Textgenerator",
+      "DESCRIPTION": "Erzeugt bis zu fünf Texte mit den Werten von V1..V8, wenn Tr eingeschaltet wird (wie der Loxone-Textgenerator)",
+      "INPUT": {
+        "TRIGGER": {
+          "DESCRIPTION": "Steigende Flanke erzeugt die Texte, fallende Flanke löscht sie"
+        },
+        "VALUE": {
+          "DESCRIPTION": "Wert für den Platzhalter <vN>"
+        }
+      },
+      "OUTPUT": {
+        "TEXT": {
+          "DESCRIPTION": "Erzeugter Text"
+        }
+      },
+      "PARAM": {
+        "DELAY": {
+          "NAME": "Auslöseverzögerung (ms)",
+          "DESCRIPTION": "Wartet nach dem Auslösen, damit alle Eingänge gesetzt sind"
+        },
+        "INTERVAL": {
+          "NAME": "Aktualisierungsintervall (s)",
+          "DESCRIPTION": "Erzeugt die Texte in diesem Intervall erneut, solange Tr ein ist (0 = aus)"
+        },
+        "TEXT0": {
+          "NAME": "Text Txt"
+        },
+        "TEXT1": {
+          "NAME": "Text Txt1"
+        },
+        "TEXT2": {
+          "NAME": "Text Txt2"
+        },
+        "TEXT3": {
+          "NAME": "Text Txt3"
+        },
+        "TEXT4": {
+          "NAME": "Text Txt4"
+        },
+        "TEXT": {
+          "DESCRIPTION": "Vorlage für den Ausgang, Platzhalter: <v1>..<v8> Wert des Eingangs, <v1.2> mit 2 Nachkommastellen (leer = Ausgang nicht verwendet)"
+        }
+      }
+    },
+    "COMMAND_RECOGNITION": {
+      "NAME": "Befehlserkennung",
+      "DESCRIPTION": "Liest mit einem Suchmuster einen Wert aus einem Text (wie die Loxone-Befehlserkennung)",
+      "INPUT": {
+        "TEXT": {
+          "DESCRIPTION": "Zu durchsuchender Text"
+        }
+      },
+      "OUTPUT": {
+        "VALUE": {
+          "DESCRIPTION": "Zuletzt gelesener Wert"
+        }
+      },
+      "PARAM": {
+        "PATTERN": {
+          "NAME": "Suchmuster",
+          "DESCRIPTION": "Z. B. \\iTemp: \\i\\v. Lesen: \\v Zahl, \\h Hex-Zahl, \\1..\\4 Byte 1..4 des Werts. Bewegen: \\. beliebiges Zeichen, \\w Wort, \\# Zahl, \\d Ziffer, \\a Buchstabe, \\m Buchstabe oder Ziffer, \\s12 12 Zeichen überspringen, \\iText\\i hinter Text springen. Zeichen: \\x09, \\\\ Backslash, \\t Tab, \\b Leerzeichen oder Tab, \\r, \\n; andere Zeichen müssen übereinstimmen"
+        },
+        "SIGNED": {
+          "NAME": "Vorzeichenbehaftet",
+          "DESCRIPTION": "Bytes \\1..\\4 werden als Zahl mit Vorzeichen gelesen"
+        }
+      }
+    },
+    "PULSE_BY": {
+      "NAME": "Impuls bei Text",
+      "DESCRIPTION": "Impuls auf P, wenn der Text auf T eines von bis zu vier Suchmustern enthält (wie der Loxone-Baustein Impuls bei)",
+      "INPUT": {
+        "TEXT": {
+          "DESCRIPTION": "Zu prüfender Text"
+        }
+      },
+      "OUTPUT": {
+        "PULSE": {
+          "DESCRIPTION": "Impuls, wenn ein Muster gefunden wurde"
+        }
+      },
+      "PARAM": {
+        "DURATION": {
+          "NAME": "Impulsdauer (s)",
+          "DESCRIPTION": "Länge des Impulses auf P; ein neuer Treffer startet sie neu"
+        },
+        "PATTERN1": {
+          "NAME": "Suchmuster 1"
+        },
+        "PATTERN2": {
+          "NAME": "Suchmuster 2"
+        },
+        "PATTERN3": {
+          "NAME": "Suchmuster 3"
+        },
+        "PATTERN4": {
+          "NAME": "Suchmuster 4"
+        },
+        "PATTERN": {
+          "DESCRIPTION": "Text, den der Eingang enthalten muss; * = beliebige Zeichen, ? = ein Zeichen, z. B. ?under* passt auf Wunder und Zunder (leer = nicht verwendet)"
+        },
+        "IGNORE_CASE": {
+          "NAME": "Groß-/Kleinschreibung ignorieren",
+          "DESCRIPTION": "Groß- und Kleinschreibung spielt keine Rolle"
+        }
+      }
     }
   }
 }

@@ -1,6 +1,164 @@
 {
   "METERING": {
     "NAME": "Zählerauswertung",
-    "DESCRIPTION": "Wertet Zählerstände aus"
+    "DESCRIPTION": "Wertet Zählerstände aus",
+    "COMMON": {
+      "INPUT": {
+        "POWER": { "NAME": "Leistung", "DESCRIPTION": "Leistung in kW (Leistungsfaktor für W verwenden)" },
+        "READING": { "NAME": "Zählerstand", "DESCRIPTION": "Absoluter Zählerstand in kWh, steigend; sobald er einen Wert hat, wird die Energie daraus statt aus der Leistung gezählt" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Leistung", "DESCRIPTION": "Leistung in kW (ohne Leistungseingang aus Zählerständen oder Impulsen berechnet)" },
+        "TODAY": { "NAME": "Heute", "DESCRIPTION": "Energie seit Mitternacht in kWh" },
+        "MONTH": { "NAME": "Dieser Monat", "DESCRIPTION": "Energie seit dem Monatsersten in kWh" },
+        "TOTAL": { "NAME": "Gesamt", "DESCRIPTION": "Gesamtenergie in kWh (beginnt beim ersten Zählerstand); bleibt über Neustarts erhalten" }
+      },
+      "PARAM": {
+        "POWER_FACTOR": { "NAME": "Leistungsfaktor", "DESCRIPTION": "Multipliziert die Leistungseingänge, z. B. 0,001 wenn das Gerät W sendet" },
+        "READING_FACTOR": { "NAME": "Zählerstandsfaktor", "DESCRIPTION": "Multipliziert die Zählerstände, z. B. 0,001 wenn der Zähler Wh sendet" },
+        "INVERT": { "NAME": "Vorzeichen umkehren", "DESCRIPTION": "Einschalten, wenn das Gerät das umgekehrte Vorzeichen sendet" }
+      }
+    },
+    "METER": {
+      "NAME": "Zähler",
+      "DESCRIPTION": "Zähler eines Verbrauchers oder Erzeugers: Leistung und/oder Zählerstand, liefert Leistung und Energie heute, im Monat und gesamt"
+    },
+    "METER_BIDIRECTIONAL": {
+      "NAME": "Zähler bidirektional",
+      "DESCRIPTION": "Zähler in beide Richtungen, z. B. Netz: Bezug und Einspeisung als Leistung und Energie heute, im Monat und gesamt",
+      "INPUT": {
+        "POWER": { "NAME": "Leistung (±)", "DESCRIPTION": "Leistung mit Vorzeichen in kW: + Bezug, - Einspeisung" },
+        "IMPORT_POWER": { "NAME": "Bezugsleistung", "DESCRIPTION": "Bezugsleistung in kW" },
+        "EXPORT_POWER": { "NAME": "Einspeiseleistung", "DESCRIPTION": "Einspeiseleistung in kW" },
+        "IMPORT_READING": { "NAME": "Zählerstand Bezug", "DESCRIPTION": "Absoluter Zählerstand Bezug in kWh" },
+        "EXPORT_READING": { "NAME": "Zählerstand Einspeisung", "DESCRIPTION": "Absoluter Zählerstand Einspeisung in kWh" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Leistung (±)", "DESCRIPTION": "Leistung mit Vorzeichen in kW: + Bezug, - Einspeisung" },
+        "IMPORT_POWER": { "NAME": "Bezugsleistung", "DESCRIPTION": "Bezugsleistung in kW" },
+        "EXPORT_POWER": { "NAME": "Einspeiseleistung", "DESCRIPTION": "Einspeiseleistung in kW" },
+        "IMPORT_TODAY": { "NAME": "Bezug heute", "DESCRIPTION": "Bezogene Energie seit Mitternacht in kWh" },
+        "IMPORT_MONTH": { "NAME": "Bezug Monat", "DESCRIPTION": "Bezogene Energie seit dem Monatsersten in kWh" },
+        "IMPORT_TOTAL": { "NAME": "Bezug gesamt", "DESCRIPTION": "Gesamte bezogene Energie in kWh" },
+        "EXPORT_TODAY": { "NAME": "Einspeisung heute", "DESCRIPTION": "Eingespeiste Energie seit Mitternacht in kWh" },
+        "EXPORT_MONTH": { "NAME": "Einspeisung Monat", "DESCRIPTION": "Eingespeiste Energie seit dem Monatsersten in kWh" },
+        "EXPORT_TOTAL": { "NAME": "Einspeisung gesamt", "DESCRIPTION": "Gesamte eingespeiste Energie in kWh" }
+      }
+    },
+    "METER_STORAGE": {
+      "NAME": "Zähler & Speicher",
+      "DESCRIPTION": "Zähler eines Speichers (Batterie): Lade- und Entladeleistung und -energie, Ladezustand und gespeicherte Energie",
+      "INPUT": {
+        "POWER": { "NAME": "Leistung (±)", "DESCRIPTION": "Leistung mit Vorzeichen in kW: + Laden, - Entladen" },
+        "SOC": { "NAME": "Ladezustand", "DESCRIPTION": "Ladezustand in %" },
+        "CHARGE_READING": { "NAME": "Zählerstand Laden", "DESCRIPTION": "Absoluter Zählerstand Laden in kWh" },
+        "DISCHARGE_READING": { "NAME": "Zählerstand Entladen", "DESCRIPTION": "Absoluter Zählerstand Entladen in kWh" }
+      },
+      "OUTPUT": {
+        "POWER": { "NAME": "Leistung (±)", "DESCRIPTION": "Leistung mit Vorzeichen in kW: + Laden, - Entladen" },
+        "CHARGE_POWER": { "NAME": "Ladeleistung", "DESCRIPTION": "Ladeleistung in kW" },
+        "DISCHARGE_POWER": { "NAME": "Entladeleistung", "DESCRIPTION": "Entladeleistung in kW" },
+        "SOC": { "NAME": "Ladezustand", "DESCRIPTION": "Ladezustand in %" },
+        "STORED": { "NAME": "Gespeicherte Energie", "DESCRIPTION": "Gespeicherte Energie in kWh (Ladezustand × Kapazität)" },
+        "CHARGE_TODAY": { "NAME": "Geladen heute", "DESCRIPTION": "Geladene Energie seit Mitternacht in kWh" },
+        "CHARGE_MONTH": { "NAME": "Geladen Monat", "DESCRIPTION": "Geladene Energie seit dem Monatsersten in kWh" },
+        "CHARGE_TOTAL": { "NAME": "Geladen gesamt", "DESCRIPTION": "Gesamte geladene Energie in kWh" },
+        "DISCHARGE_TODAY": { "NAME": "Entladen heute", "DESCRIPTION": "Entladene Energie seit Mitternacht in kWh" },
+        "DISCHARGE_MONTH": { "NAME": "Entladen Monat", "DESCRIPTION": "Entladene Energie seit dem Monatsersten in kWh" },
+        "DISCHARGE_TOTAL": { "NAME": "Entladen gesamt", "DESCRIPTION": "Gesamte entladene Energie in kWh" }
+      },
+      "PARAM": {
+        "CAPACITY": { "NAME": "Kapazität (kWh)", "DESCRIPTION": "Nutzbare Kapazität des Speichers, für die gespeicherte Energie (0: keine Anzeige)" }
+      }
+    },
+    "METER_PULSE": {
+      "NAME": "Impulszähler",
+      "DESCRIPTION": "S0-Impulszähler: Leistung aus dem Abstand der Impulse und Energie heute, im Monat und gesamt",
+      "INPUT": {
+        "PULSE": { "NAME": "Impuls", "DESCRIPTION": "Impulseingang: ein binärer Eingang zählt jedes Einschalten, eine Zahl ist ein Impulszähler (dessen Anstieg zählt)" }
+      },
+      "PARAM": {
+        "PULSES_PER_KWH": { "NAME": "Impulse pro kWh", "DESCRIPTION": "Impulse des Zählers pro kWh (auf dem Zähler aufgedruckt, z. B. 1000 imp/kWh)" }
+      }
+    },
+    "METER_FIXED": {
+      "NAME": "Festwertzähler",
+      "DESCRIPTION": "Zähler eines Geräts mit bekannter Leistung: Energie = Leistung × Einschaltdauer, heute, im Monat und gesamt",
+      "INPUT": {
+        "ON": { "NAME": "Ein", "DESCRIPTION": "Gerät eingeschaltet (zählt die Leistung, solange es ein ist)" }
+      },
+      "PARAM": {
+        "POWER": { "NAME": "Leistung (kW)", "DESCRIPTION": "Leistung des Geräts im eingeschalteten Zustand in kW" }
+      }
+    },
+    "METER_UTILITY": {
+      "NAME": "Verbrauchszähler",
+      "DESCRIPTION": "Zähler für Wasser, Gas, Wärme oder andere Mengen: Durchfluss und Menge heute, im Monat und gesamt",
+      "INPUT": {
+        "FLOW": { "NAME": "Durchfluss", "DESCRIPTION": "Durchfluss in Einheiten pro Stunde" },
+        "READING": { "NAME": "Zählerstand", "DESCRIPTION": "Absoluter Zählerstand in der Einheit, steigend" },
+        "PULSE": { "NAME": "Impuls", "DESCRIPTION": "Impulseingang: ein binärer Eingang zählt jedes Einschalten, eine Zahl ist ein Impulszähler" }
+      },
+      "OUTPUT": {
+        "FLOW": { "NAME": "Durchfluss", "DESCRIPTION": "Durchfluss in Einheiten pro Stunde (ohne Durchflusseingang aus Zählerständen oder Impulsen berechnet)" },
+        "TODAY": { "NAME": "Heute", "DESCRIPTION": "Menge seit Mitternacht" },
+        "MONTH": { "NAME": "Dieser Monat", "DESCRIPTION": "Menge seit dem Monatsersten" },
+        "TOTAL": { "NAME": "Gesamt", "DESCRIPTION": "Gesamtmenge (beginnt beim ersten Zählerstand); bleibt über Neustarts erhalten" }
+      },
+      "PARAM": {
+        "UNIT": { "NAME": "Einheit", "DESCRIPTION": "Einheit der Menge, nur zur Anzeige (z. B. m³, l, kWh)" },
+        "PULSES_PER_UNIT": { "NAME": "Impulse pro Einheit", "DESCRIPTION": "Impulse pro Einheit der Menge (z. B. 100 pro m³)" }
+      }
+    },
+    "ENERGY_MONITOR": {
+      "NAME": "Energiemonitor",
+      "DESCRIPTION": "Energiefluss zwischen Netz, PV, Speicher und Verbrauchern: Hausverbrauch, Eigenverbrauch, Autarkie und Energie von heute, mit eigener Visu-Kachel",
+      "INPUT": {
+        "GRID": { "NAME": "Netz (±)", "DESCRIPTION": "Netzleistung in kW: + Bezug, - Einspeisung (\"Netz umkehren\" bei Zählern mit anderem Vorzeichen)" },
+        "GRID_IMPORT": { "NAME": "Netzbezug", "DESCRIPTION": "Netzbezug in kW, wird verwendet, solange der Eingang Netz (±) keinen Wert hat" },
+        "GRID_EXPORT": { "NAME": "Einspeisung", "DESCRIPTION": "Einspeisung in kW, wird verwendet, solange der Eingang Netz (±) keinen Wert hat" },
+        "PV": { "NAME": "PV", "DESCRIPTION": "PV-Erzeugung in kW (negative Standby-Werte zählen als 0)" },
+        "BATTERY": { "NAME": "Speicher (±)", "DESCRIPTION": "Speicherleistung in kW: + Laden, - Entladen" },
+        "SOC": { "NAME": "Speicher SoC", "DESCRIPTION": "Ladezustand des Speichers in %" },
+        "CONSUMER1": { "NAME": "Verbraucher 1", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW (z. B. Wallbox), wird eigens angezeigt und vom Hausverbrauch abgezogen" },
+        "CONSUMER2": { "NAME": "Verbraucher 2", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW (z. B. Wärmepumpe)" },
+        "CONSUMER3": { "NAME": "Verbraucher 3", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW" },
+        "PV_METER": { "NAME": "PV-Zähler", "DESCRIPTION": "Optionaler PV-Energiezähler in kWh, die PV-Energie von heute wird daraus statt aus der Leistung gezählt" },
+        "IMPORT_METER": { "NAME": "Bezugszähler", "DESCRIPTION": "Optionaler Zähler für den Netzbezug in kWh" },
+        "EXPORT_METER": { "NAME": "Einspeisezähler", "DESCRIPTION": "Optionaler Zähler für die Einspeisung in kWh" },
+        "CHARGE_METER": { "NAME": "Ladezähler", "DESCRIPTION": "Optionaler Zähler für die Speicherladung in kWh" },
+        "DISCHARGE_METER": { "NAME": "Entladezähler", "DESCRIPTION": "Optionaler Zähler für die Speicherentladung in kWh" }
+      },
+      "OUTPUT": {
+        "GRID": { "NAME": "Netz (±)", "DESCRIPTION": "Netzleistung in kW: + Bezug, - Einspeisung" },
+        "PV": { "NAME": "PV", "DESCRIPTION": "PV-Erzeugung in kW" },
+        "BATTERY": { "NAME": "Speicher (±)", "DESCRIPTION": "Speicherleistung in kW: + Laden, - Entladen" },
+        "SOC": { "NAME": "Speicher SoC", "DESCRIPTION": "Ladezustand des Speichers in %" },
+        "CONSUMER1": { "NAME": "Verbraucher 1", "DESCRIPTION": "Leistung von Verbraucher 1 in kW" },
+        "CONSUMER2": { "NAME": "Verbraucher 2", "DESCRIPTION": "Leistung von Verbraucher 2 in kW" },
+        "CONSUMER3": { "NAME": "Verbraucher 3", "DESCRIPTION": "Leistung von Verbraucher 3 in kW" },
+        "HOUSE": { "NAME": "Haus", "DESCRIPTION": "Hausverbrauch in kW: PV + Bezug - Einspeisung + Entladen - Laden - eigene Verbraucher" },
+        "CONSUMPTION": { "NAME": "Verbrauch", "DESCRIPTION": "Gesamtverbrauch in kW (Haus und eigene Verbraucher)" },
+        "SELF_CONSUMPTION": { "NAME": "Eigenverbrauch", "DESCRIPTION": "Anteil der PV-Leistung, der selbst verbraucht wird, in % (0 ohne Erzeugung)" },
+        "AUTARKY": { "NAME": "Autarkie", "DESCRIPTION": "Anteil des Verbrauchs, der nicht aus dem Netz kommt, in % (0 ohne Verbrauch)" },
+        "PV_TODAY": { "NAME": "PV heute", "DESCRIPTION": "PV-Energie seit Mitternacht in kWh" },
+        "IMPORT_TODAY": { "NAME": "Bezug heute", "DESCRIPTION": "Netzbezug seit Mitternacht in kWh" },
+        "EXPORT_TODAY": { "NAME": "Einspeisung heute", "DESCRIPTION": "Einspeisung seit Mitternacht in kWh" },
+        "CHARGE_TODAY": { "NAME": "Geladen heute", "DESCRIPTION": "In den Speicher geladene Energie seit Mitternacht in kWh" },
+        "DISCHARGE_TODAY": { "NAME": "Entladen heute", "DESCRIPTION": "Aus dem Speicher entnommene Energie seit Mitternacht in kWh" },
+        "CONSUMPTION_TODAY": { "NAME": "Verbrauch heute", "DESCRIPTION": "Gesamtverbrauch seit Mitternacht in kWh" },
+        "SELF_CONSUMPTION_TODAY": { "NAME": "Eigenverbrauch heute", "DESCRIPTION": "Eigenverbrauchsquote seit Mitternacht in %" },
+        "AUTARKY_TODAY": { "NAME": "Autarkie heute", "DESCRIPTION": "Autarkiegrad seit Mitternacht in %" }
+      },
+      "PARAM": {
+        "INVERT_GRID": { "NAME": "Netz umkehren", "DESCRIPTION": "Einschalten, wenn der Netzzähler - für Bezug und + für Einspeisung sendet" },
+        "INVERT_BATTERY": { "NAME": "Speicher umkehren", "DESCRIPTION": "Einschalten, wenn der Speicher - für Laden und + für Entladen sendet" },
+        "PEAK_POWER": { "NAME": "Spitzenleistung (kW)", "DESCRIPTION": "Leistung, bei der die Linie in der Energiefluss-Kachel am dicksten und schnellsten ist" },
+        "CONSUMER1_NAME": { "NAME": "Name Verbraucher 1" },
+        "CONSUMER2_NAME": { "NAME": "Name Verbraucher 2" },
+        "CONSUMER3_NAME": { "NAME": "Name Verbraucher 3" },
+        "CONSUMER_NAME": { "DESCRIPTION": "In der Energiefluss-Kachel angezeigter Name (z. B. Wallbox)" }
+      }
+    }
   }
 }

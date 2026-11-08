@@ -78,3 +78,68 @@
         animation-duration: 2.4s;
     }
 }
+
+// short outages: a small pill at the top, the page stays usable
+.reconnect-banner {
+    position: fixed;
+    top: calc(var(--app-safe-top, 0px) + var(--space-2));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2001;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    max-width: calc(100vw - 32px);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    color: var(--fg);
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    animation: reconnect-banner-in 0.2s ease-out;
+}
+
+.reconnect-dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--warn);
+    animation: reconnect-dot-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes reconnect-banner-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes reconnect-dot-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reconnect-banner,
+    .reconnect-dot {
+        animation: none;
+    }
+}

@@ -88,14 +88,39 @@ namespace P3.Logic.Messenger.Tests
         }
 
         [Fact]
-        public void Subject_DefaultParameterValue_IsEmptyString()
+        public void Subject_Empty_UsesTheDefaultSubject()
         {
-            // the template default is "" - it overwrites the hard coded "Automatica.Core Message"
+            // the template default is "", the parameter description promises "Automatica.Core Message" then
             var h = new MessengerTestHarness(To);
 
             h.Send(true);
 
-            Assert.Equal(string.Empty, Assert.Single(h.SentMails).subject);
+            Assert.Equal("Automatica.Core Message", Assert.Single(h.SentMails).subject);
+        }
+
+        [Fact]
+        public void BodyTemplate_ReplacesTheDefaultText_AndPlaceholdersWorkInTheSubject()
+        {
+            var h = new MessengerTestHarness(To, "{{NAME}}: {{VALUE}}");
+            h.Logic.ValueChanged(h.Param(MessengerFactory.BodyProperty), new DispatchableMock(), "Temperature {{VALUE}} °C from {{SOURCE}} on {{DATE}}");
+
+            h.Send(23.5, new DispatchableMock("Living room"));
+
+            var mail = Assert.Single(h.SentMails);
+            Assert.Equal("Window alarm: " + 23.5.ToString(), mail.subject);
+            Assert.StartsWith("Temperature " + 23.5.ToString() + " °C from Living room on ", mail.body);
+            Assert.DoesNotContain("{{", mail.body);
+        }
+
+        [Fact]
+        public void BodyTemplate_Empty_FallsBackToTheTranslation()
+        {
+            var h = new MessengerTestHarness(To);
+            h.Logic.ValueChanged(h.Param(MessengerFactory.BodyProperty), new DispatchableMock(), "  ");
+
+            h.Send(1, new DispatchableMock("Kitchen window"));
+
+            Assert.StartsWith("Name=Window alarm;Value=1;Source=Kitchen window;Time=", Assert.Single(h.SentMails).body);
         }
 
         [Fact]
@@ -290,18 +315,18 @@ namespace P3.Logic.Messenger.Tests
         }
 
         [Fact]
-        public void InitTemplates_CreatesTriggerInputAndTwoTextParameters()
+        public void InitTemplates_CreatesTriggerInputAndThreeTextParameters()
         {
             var (factory, templates) = Create();
 
             var template = templates.GetById(factory.LogicGuid);
             Assert.Equal("messenger-cloud-email", template.Key);
-            Assert.Equal(3, template.RuleInterfaceTemplate.Count);
+            Assert.Equal(4, template.RuleInterfaceTemplate.Count);
 
             var trigger = template.RuleInterfaceTemplate.Single(a => a.ObjId == MessengerTestHarness.TriggerInput);
             Assert.Equal((long)LogicInterfaceDirection.Input, trigger.This2RuleInterfaceDirection);
 
-            foreach (var id in new[] { MessengerFactory.ToProperty, MessengerFactory.SubjectProperty })
+            foreach (var id in new[] { MessengerFactory.ToProperty, MessengerFactory.SubjectProperty, MessengerFactory.BodyProperty })
             {
                 var p = template.RuleInterfaceTemplate.Single(a => a.ObjId == id);
                 Assert.Equal((long)LogicInterfaceDirection.Param, p.This2RuleInterfaceDirection);

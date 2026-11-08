@@ -276,6 +276,13 @@ namespace Automatica.Core.Shading.Definition
         public double MaxElevation { get; set; } = 90;
 
         /// <summary>
+        /// Tilt of the windows from the horizontal in degrees: 90 windows in a wall, less for roof windows (e.g. 35 for a
+        /// roof pitch of 35 degrees), 0 a flat skylight. Below 90 the sun-on-glass check and the estimated brightness use
+        /// the angle between the sun and the glass, and <see cref="AcceptanceAngle"/> is the largest such angle.
+        /// </summary>
+        public double Inclination { get; set; } = 90;
+
+        /// <summary>
         /// Only shade when the outside temperature is at least this value (°C, null: always, glare protection)
         /// </summary>
         public double? MinOutsideTemperature { get; set; }
@@ -346,6 +353,11 @@ namespace Automatica.Core.Shading.Definition
         public double? AcceptanceAngle { get; set; }
         public double? MinElevation { get; set; }
         public double? MaxElevation { get; set; }
+
+        /// <summary>
+        /// Own tilt of the window (degrees from the horizontal, 90 = wall, 0 = flat skylight), null: the facade's
+        /// </summary>
+        public double? Inclination { get; set; }
 
         /// <summary>
         /// Position while shading (percent, 100 closed)

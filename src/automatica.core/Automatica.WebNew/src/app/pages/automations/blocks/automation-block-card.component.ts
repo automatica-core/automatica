@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { RunStep, ValidationProblem } from "src/app/base/model/automations/automation-dto";
+import { userEditableFields } from "src/app/base/model/automations/automation-definition";
 import { AutomationEditorContext } from "../automation-editor-context";
 import { BlockKind, blockDomId, blockIcon, sectionOf } from "../automation-blocks";
 
@@ -79,6 +80,24 @@ export class AutomationBlockCardComponent {
             return void 0;
         }
         return this.ctx.describer.stepValue(step, this.block, step.value);
+    }
+
+    /** the automation is released for the visualization and this type of block can be handed to its users */
+    get canRelease(): boolean {
+        return !!this.ctx.definition?.userAccess && userEditableFields(this.kind, this.block?.type).length > 0;
+    }
+
+    get released(): boolean {
+        return !!this.block?.userEditable;
+    }
+
+    /** marks the block: visualization users may change its values (the flag is left out of the JSON when off) */
+    toggleRelease() {
+        if (this.block.userEditable) {
+            delete this.block.userEditable;
+        } else {
+            this.block.userEditable = true;
+        }
     }
 
     problemText(p: ValidationProblem): string {

@@ -81,7 +81,75 @@ namespace Automatica.Core.Visu
                 "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             AddCameraControl(factory);
+            AddEnergyFlowControl(factory);
+            AddTextStatusControls(factory);
+            AddRoomControllerControl(factory);
+            AddSecurityControl(factory);
             AddLightingControllerControl(factory);
+        }
+
+        /// <summary>
+        /// Animated energy flow (grid, PV, battery, house, extra consumers) of the energy monitor logic of the metering plugin
+        /// </summary>
+        private void AddEnergyFlowControl(VisuMobileTemplateFactory factory)
+        {
+            var energyFlow = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.EnergyFlow);
+            factory.CreateVisuMobileTemplate(energyFlow, "VISU.OBJECT.ENERGY_FLOW.NAME", "VISU.OBJECT.ENERGY_FLOW.DESCRIPTION", "energy-flow",
+                "VISU.CATEGORY.COMMON.NAME", 2, 2, true);
+            AddCommonProperty(energyFlow, factory);
+        }
+
+        /// <summary>
+        /// Tiles of the status, status monitor and tracker logics of the string operations plugin
+        /// </summary>
+        private void AddTextStatusControls(VisuMobileTemplateFactory factory)
+        {
+            var status = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Status);
+            factory.CreateVisuMobileTemplate(status, "VISU.OBJECT.STATUS.NAME", "VISU.OBJECT.STATUS.DESCRIPTION", "status",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(status, factory);
+
+            var statusMonitor = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.StatusMonitor);
+            factory.CreateVisuMobileTemplate(statusMonitor, "VISU.OBJECT.STATUS_MONITOR.NAME", "VISU.OBJECT.STATUS_MONITOR.DESCRIPTION", "status-monitor",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(statusMonitor, factory);
+
+            var tracker = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Tracker);
+            factory.CreateVisuMobileTemplate(tracker, "VISU.OBJECT.TRACKER.NAME", "VISU.OBJECT.TRACKER.DESCRIPTION", "tracker",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(tracker, factory);
+        }
+
+        /// <summary>
+        /// Default tile of the intelligent room controller logic (P3.Logic.Operations, Climate)
+        /// </summary>
+        private void AddRoomControllerControl(VisuMobileTemplateFactory factory)
+        {
+            var roomController = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.RoomController);
+            factory.CreateVisuMobileTemplate(roomController, "VISU.OBJECT.ROOM_CONTROLLER.NAME", "VISU.OBJECT.ROOM_CONTROLLER.DESCRIPTION",
+                "room-controller", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(roomController, factory);
+
+            var climateUnit = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ClimateUnit);
+            factory.CreateVisuMobileTemplate(climateUnit, "VISU.OBJECT.CLIMATE_UNIT.NAME", "VISU.OBJECT.CLIMATE_UNIT.DESCRIPTION",
+                "climate-unit", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(climateUnit, factory);
+
+            var climateCentral = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ClimateCentral);
+            factory.CreateVisuMobileTemplate(climateCentral, "VISU.OBJECT.CLIMATE_CENTRAL.NAME", "VISU.OBJECT.CLIMATE_CENTRAL.DESCRIPTION",
+                "climate-central", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(climateCentral, factory);
+        }
+
+        /// <summary>
+        /// State and commands (arm, disarm, acknowledge...) of a security logic, through webapi/security-visu
+        /// </summary>
+        private void AddSecurityControl(VisuMobileTemplateFactory factory)
+        {
+            var security = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Security);
+            factory.CreateVisuMobileTemplate(security, "VISU.OBJECT.SECURITY.NAME", "VISU.OBJECT.SECURITY.DESCRIPTION", "security",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+            AddCommonProperty(security, factory);
         }
 
         /// <summary>

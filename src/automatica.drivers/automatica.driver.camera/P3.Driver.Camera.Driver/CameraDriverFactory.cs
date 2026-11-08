@@ -42,6 +42,11 @@ namespace P3.Driver.Camera.Driver
 
         public const string DefaultGo2RtcUrl = "http://127.0.0.1:1984";
 
+        /// <summary>
+        /// VisuMobileObjectTemplateTypes.Camera, missing in the core NuGet the driver builds against
+        /// </summary>
+        internal const VisuMobileObjectTemplateTypes CameraVisuTemplate = (VisuMobileObjectTemplateTypes)15;
+
         public override string DriverName => "Camera";
 
         public override Guid DriverGuid => new("ebe3fa72-1f18-4ece-a1f8-0172bff79c13");
@@ -82,6 +87,13 @@ namespace P3.Driver.Camera.Driver
             factory.CreateInterfaceType(CameraInterface, "CAMERA.CAMERA.NAME", "CAMERA.CAMERA.DESCRIPTION", int.MaxValue, int.MaxValue, false);
             factory.CreateNodeTemplate(CameraTemplate, "CAMERA.CAMERA.NAME", "CAMERA.CAMERA.DESCRIPTION", "camera", DriverGuid,
                 CameraInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+
+            // a camera in an area or category shows up there as camera tile. The tile type is newer than the core NuGet
+            // the driver builds against, so it is set by number and only when the running core knows it
+            if (Enum.IsDefined(typeof(VisuMobileObjectTemplateTypes), CameraVisuTemplate))
+            {
+                factory.ChangeDefaultVisuTemplate(CameraTemplate, CameraVisuTemplate);
+            }
 
             factory.CreatePropertyTemplate(new Guid("f818e6b2-f338-48fb-880d-c5f5f2688d05"), "CAMERA.CAMERA.HOST.NAME", "CAMERA.CAMERA.HOST.DESCRIPTION", HostKey,
                 PropertyTemplateType.Text, CameraTemplate, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 1);

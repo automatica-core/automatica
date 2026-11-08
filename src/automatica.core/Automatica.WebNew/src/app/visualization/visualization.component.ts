@@ -9,6 +9,7 @@ import { AreaInstance } from "../base/model/areas";
 import { VisuPage } from "../base/model/visu-page";
 import { CategoryInstance } from "../base/model/categories";
 import { DataService } from "../services/data.service";
+import { AutomationsService } from "../services/automations.service";
 
 @Component({
     selector: "app-visualization",
@@ -29,6 +30,7 @@ export class VisualizationComponent implements OnInit {
     private catService: CategoryService,
     appService: AppService,
     private dataService: DataService,
+    private automationsService: AutomationsService,
     private serverStateService: ServerStateService) {
     appService.setAppTitle("Automatica.Core");
   }
@@ -42,10 +44,12 @@ export class VisualizationComponent implements OnInit {
     this.serverStateService.start();
     await this.hubService.init();
 
-    const [areas, categories] = await Promise.all(
+    const [areas, categories, automations] = await Promise.all(
       [
         this.areaService.getAreaInstances(),
-        this.catService.getCategoryInstances()
+        this.catService.getCategoryInstances(),
+        // the menu entry only shows when the admins released automations for the visualization
+        this.automationsService.getVisu().catch(() => [])
       ]);
 
     this.areas = areas;
@@ -58,6 +62,14 @@ export class VisualizationComponent implements OnInit {
       icon: "house",
       path: "/visualization/page/home",
     });
+
+    if (automations.length > 0) {
+      menu.push({
+        text: "UI.NAV.AUTOMATIONS",
+        icon: "bolt",
+        path: "/visualization/automations",
+      });
+    }
 
     const categoriesItem = {
       text: "CATEGORIES.NAME",

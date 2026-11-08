@@ -1,5 +1,12 @@
+@if (indication === 'banner') {
+<div class="reconnect-banner" role="status" aria-live="polite">
+  <span class="reconnect-dot" aria-hidden="true"></span>
+  <span>{{ 'COMMON.CONNECTING_TO_SERVER' | translateAsync }}</span>
+</div>
+}
+
 <dx-popup [showTitle]="false" [dragEnabled]="false" [hideOnOutsideClick]="false" [fullScreen]="true" [shading]="false"
-  [wrapperAttr]="{ class: 'starting-overlay-wrapper' }" [(visible)]="popupVisible">
+  [wrapperAttr]="{ class: 'starting-overlay-wrapper' }" [visible]="fullscreenVisible">
   <div *dxTemplate="let data of 'content'">
     <div class="starting" role="status" aria-live="polite">
       <div class="starting-spinner" aria-hidden="true">

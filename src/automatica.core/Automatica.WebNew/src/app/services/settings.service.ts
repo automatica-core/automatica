@@ -32,6 +32,11 @@ export class SettingsService extends BaseService {
         return this.get<Setting>("settings/language");
     }
 
+    /** sends a test mail with the saved SMTP settings, empty recipient = the sender address */
+    sendSmtpTest(to?: string): Promise<{ success: boolean; transport: string; error?: string }> {
+        return this.postJson("mail/test", { to: to ?? null });
+    }
+
     saveSettings(settings: Setting[]): Promise<Setting[]> {
         const data = new Array<any>();
         for (const set of settings) {

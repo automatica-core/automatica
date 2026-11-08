@@ -219,6 +219,185 @@
         "NAME": "Ausgang max",
         "DESCRIPTION": "Größter Ausgangswert"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 setzt den Ausgang zurück und sperrt den Baustein, bis Off wieder 0 ist"
+      }
+    },
+    "STEPPER": {
+      "NAME": "Schrittschalter",
+      "DESCRIPTION": "Jeder Impuls ändert den Wert um die Schrittweite zwischen 0 und dem Maximum, danach beginnt er von vorne",
+      "STEP_INPUT": {
+        "DESCRIPTION": "Impuls ändert den Wert um einen Schritt"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Aktueller Wert"
+      },
+      "DOWN": {
+        "NAME": "Abwärts zählen",
+        "DESCRIPTION": "Aus = aufwärts (nach dem Maximum wieder 0), ein = abwärts (unter 0 wieder das Maximum)"
+      },
+      "STEP": {
+        "NAME": "Schrittweite",
+        "DESCRIPTION": "Änderung pro Impuls"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Höchster Wert des Ausgangs"
+      }
+    },
+    "ANALOG_MEMORY": {
+      "NAME": "Analogspeicher",
+      "DESCRIPTION": "Speichert den Eingangswert bei einem Impuls und hält ihn am Ausgang",
+      "VALUE": {
+        "DESCRIPTION": "Zu speichernder Wert"
+      },
+      "SET": {
+        "DESCRIPTION": "Impuls übernimmt den Wert an den Ausgang"
+      },
+      "OFF": {
+        "DESCRIPTION": "Impuls setzt den Ausgang auf 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Gespeicherter Wert"
+      }
+    },
+    "MIN_MAX_SINCE_RESET": {
+      "NAME": "MinMax seit Reset",
+      "DESCRIPTION": "Kleinster und größter Eingangswert seit dem letzten Reset",
+      "VALUE": {
+        "DESCRIPTION": "Zu überwachender Wert"
+      },
+      "RESET": {
+        "DESCRIPTION": "Impuls setzt Minimum und Maximum auf den aktuellen Wert"
+      },
+      "MINIMUM": {
+        "DESCRIPTION": "Kleinster Wert seit dem Reset"
+      },
+      "MAXIMUM": {
+        "DESCRIPTION": "Größter Wert seit dem Reset"
+      }
+    },
+    "ANALOG_LIMITER": {
+      "NAME": "Analogbegrenzer (Min/Max)",
+      "DESCRIPTION": "Begrenzt den Eingangswert auf einen Bereich",
+      "VALUE": {
+        "DESCRIPTION": "Zu begrenzender Wert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Wert innerhalb von Minimum und Maximum"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Kleinster Ausgangswert"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Größter Ausgangswert"
+      }
+    },
+    "MOVING_AVERAGE": {
+      "NAME": "Gleitender Mittelwert",
+      "DESCRIPTION": "Liest den Eingang alle C Sekunden und gibt den Mittelwert der letzten N Werte aus",
+      "VALUE": {
+        "DESCRIPTION": "Zu mittelnder Wert"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 schaltet die Mittelung ab, der Ausgang folgt dem Eingang"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Mittelwert der Werte"
+      },
+      "CYCLE": {
+        "NAME": "Abfragezyklus [s]",
+        "DESCRIPTION": "Zeit zwischen zwei Abfragen, 0 = jeder empfangene Wert zählt"
+      },
+      "COUNT": {
+        "NAME": "Anzahl Werte",
+        "DESCRIPTION": "Werte für den Mittelwert (1-1000)"
+      }
+    },
+    "SELECTION_SWITCH_PLUS": {
+      "NAME": "Auswahlschalter (+)",
+      "DESCRIPTION": "Jeder Impuls an + erhöht den Wert um die Schrittweite, nach dem Maximum beginnt er wieder beim Minimum",
+      "PLUS": {
+        "DESCRIPTION": "Impuls erhöht den Wert, Halten wiederholt"
+      },
+      "SET": {
+        "DESCRIPTION": "Setzt den Wert direkt"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 setzt den Standardwert und sperrt den Baustein, bis Off wieder 0 ist"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignoriert + und V (Kindersicherung, Reinigung)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Gewählter Wert"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Kleinster Wert"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Größter Wert"
+      },
+      "STEP": {
+        "NAME": "Schrittweite",
+        "DESCRIPTION": "Änderung pro Impuls"
+      },
+      "REPEAT": {
+        "NAME": "Wiederholrate [s]",
+        "DESCRIPTION": "Hält man + länger als 0,5 s, ändert sich der Wert in diesem Abstand, 0 = aus (für Taster ohne Loslassen-Telegramm)"
+      },
+      "DEFAULT": {
+        "NAME": "Standardwert",
+        "DESCRIPTION": "Wert beim Start und nach Off"
+      }
+    },
+    "SELECTION_SWITCH_PLUS_MINUS": {
+      "NAME": "Auswahlschalter (+/-)",
+      "DESCRIPTION": "Jeder Impuls an + oder - ändert den Wert um die Schrittweite zwischen Minimum und Maximum",
+      "PLUS": {
+        "DESCRIPTION": "Impuls erhöht den Wert, Halten wiederholt"
+      },
+      "MINUS": {
+        "DESCRIPTION": "Impuls verringert den Wert, Halten wiederholt"
+      },
+      "SET": {
+        "DESCRIPTION": "Setzt den Wert direkt"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 setzt den Standardwert und sperrt den Baustein, bis Off wieder 0 ist"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignoriert +, - und V (Kindersicherung, Reinigung)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Gewählter Wert"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Kleinster Wert"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Größter Wert"
+      },
+      "STEP": {
+        "NAME": "Schrittweite",
+        "DESCRIPTION": "Änderung pro Impuls"
+      },
+      "REPEAT": {
+        "NAME": "Wiederholrate [s]",
+        "DESCRIPTION": "Hält man + oder - länger als 0,5 s, ändert sich der Wert in diesem Abstand, 0 = aus (für Taster ohne Loslassen-Telegramm)"
+      },
+      "DEFAULT": {
+        "NAME": "Standardwert",
+        "DESCRIPTION": "Wert beim Start und nach Off"
+      }
     }
   }
 }

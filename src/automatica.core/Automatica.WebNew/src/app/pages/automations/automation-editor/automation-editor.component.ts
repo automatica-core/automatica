@@ -8,7 +8,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { ViewportService } from "src/app/services/viewport.service";
 import { AutomationsService } from "src/app/services/automations.service";
-import { AutomationDefinition, TRIGGER_TYPES, TriggerType } from "src/app/base/model/automations/automation-definition";
+import { AutomationDefinition, TRIGGER_TYPES, TriggerType, userEditableFields } from "src/app/base/model/automations/automation-definition";
 import {
     AUTOMATION_MODES, AutomationDto, AutomationMode, AutomationSaveDto, ValidationProblem
 } from "src/app/base/model/automations/automation-dto";
@@ -124,6 +124,51 @@ export class AutomationEditorComponent extends BaseComponent implements OnInit, 
 
     get title(): string {
         return this.name?.trim() || this.ctx.describer.t(this.isNew ? "EDIT.NEW_TITLE" : "EDIT.UNNAMED");
+    }
+
+    /** releases the automation for the visualization (the flag is left out of the JSON when off) */
+    setUserAccess(on: boolean) {
+        if (on === !!this.def.userAccess) {
+            return;
+        }
+        if (on) {
+            this.def.userAccess = true;
+        } else {
+            delete this.def.userAccess;
+        }
+    }
+
+    /** blocks marked "users may change" that the visualization will offer */
+    get userEditableCount(): number {
+        let count = 0;
+        const visit = (kind: string, block: any) => {
+            if (!block) {
+                return;
+            }
+            if (block.userEditable && userEditableFields(kind, block.type).length > 0) {
+                count++;
+            }
+            if (block.type === "group") {
+                (block.conditions || []).forEach(c => visit("condition", c));
+            }
+        };
+        const actions = (list: any[]) => (list || []).forEach(a => {
+            visit("action", a);
+            if (a.condition) {
+                visit("condition", a.condition);
+            }
+            actions(a.then);
+            actions(a.else);
+        });
+        (this.def.triggers || []).forEach((t: any) => {
+            visit("trigger", t);
+            if (t.type === "conditions") {
+                visit("condition", t.conditions);
+            }
+        });
+        visit("condition", this.def.conditions);
+        actions(this.def.actions);
+        return count;
     }
 
     get dirty(): boolean {

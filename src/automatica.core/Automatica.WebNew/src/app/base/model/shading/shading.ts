@@ -120,6 +120,8 @@ export interface FacadeDefinition {
     acceptanceAngle: number;
     minElevation: number;
     maxElevation: number;
+    /** tilt of the windows from the horizontal: 90 = wall, less = roof window, 0 = flat skylight */
+    inclination?: number;
     minOutsideTemperature?: number | null;
 }
 
@@ -156,6 +158,8 @@ export interface BlindDefinition {
     acceptanceAngle?: number | null;
     minElevation?: number | null;
     maxElevation?: number | null;
+    /** own tilt of the window, null = the facade's */
+    inclination?: number | null;
     shadePosition: number;
     restorePosition: boolean;
     openPosition: number;
@@ -236,6 +240,7 @@ export interface FacadeStatus {
     sunOnFacade: boolean;
     brightness?: SignalInfo | null;
     temperatureOk: boolean;
+    inclination?: number;
 }
 
 export interface ShadingStatus {

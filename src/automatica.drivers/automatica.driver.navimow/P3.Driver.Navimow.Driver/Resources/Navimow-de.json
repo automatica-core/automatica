@@ -1,0 +1,110 @@
+{
+  "NAVIMOW": {
+    "NAME": "Segway Navimow",
+    "DESCRIPTION": "Segway-Navimow-Mähroboter über die Navimow-Cloud (Region EU)",
+    "CLIENT_ID": {
+      "NAME": "Client-ID",
+      "DESCRIPTION": "Von Segway für diese Installation ausgestellte OAuth-Client-ID"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client-Secret",
+      "DESCRIPTION": "Von Segway ausgestelltes OAuth-Client-Secret"
+    },
+    "REDIRECT_URI": {
+      "NAME": "Weiterleitungs-URI",
+      "DESCRIPTION": "Für den Client registrierte Weiterleitungs-URI (leer, wenn Segway keine registriert hat)"
+    },
+    "AUTHORIZATION_CODE": {
+      "NAME": "Autorisierungscode",
+      "DESCRIPTION": "Die im Status angezeigte Login-URL öffnen, mit dem Navimow-Konto anmelden und den Parameter code der Adresse einfügen, zu der man weitergeleitet wird. Wird einmal verwendet"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh-Token",
+      "DESCRIPTION": "Optional, statt eines Autorisierungscodes"
+    },
+    "POLL": {
+      "NAME": "Abfrageintervall [s]",
+      "DESCRIPTION": "Eine Anfrage für alle Mähroboter pro Intervall"
+    },
+    "LOGIN_URL": {
+      "NAME": "Login-URL",
+      "DESCRIPTION": "https://navimow-h5-fra.willand.com/smartHome/login"
+    },
+    "TOKEN_URL": {
+      "NAME": "Token-URL",
+      "DESCRIPTION": "https://navimow-fra.ninebot.com/openapi/oauth/getAccessToken"
+    },
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://navimow-fra.ninebot.com"
+    },
+    "SCAN": {
+      "NAME": "Mähroboter suchen",
+      "DESCRIPTION": "Listet die Mähroboter des Kontos"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token-Status",
+      "DESCRIPTION": "Gespeicherte Anmeldung (intern)"
+    },
+    "STATUS": {
+      "NAME": "Status",
+      "DESCRIPTION": "OK, die Login-URL wenn eine Anmeldung nötig ist, oder der letzte Fehler"
+    },
+    "MOWER": {
+      "NAME": "Mähroboter",
+      "DESCRIPTION": "Ein Segway Navimow",
+      "DEVICE_ID": {
+        "NAME": "Geräte-ID",
+        "DESCRIPTION": "Wird von der Suche ausgefüllt"
+      },
+      "ONLINE": {
+        "NAME": "Online",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "Zustand",
+        "DESCRIPTION": "isDocked, isRunning, isPaused, isDocking, isLifted, Error, Offline, ..."
+      },
+      "MOWING": {
+        "NAME": "Mäht",
+        "DESCRIPTION": "Wahr schreiben startet das Mähen, falsch schickt den Mähroboter zur Ladestation"
+      },
+      "PAUSED": {
+        "NAME": "Pausiert",
+        "DESCRIPTION": "Wahr schreiben pausiert, falsch setzt fort"
+      },
+      "DOCK": {
+        "NAME": "Zur Ladestation",
+        "DESCRIPTION": "Wahr schreiben schickt den Mähroboter zur Ladestation"
+      },
+      "STOP": {
+        "NAME": "Stopp",
+        "DESCRIPTION": "Wahr schreiben beendet das Mähen an Ort und Stelle"
+      },
+      "DOCKED": {
+        "NAME": "In der Ladestation",
+        "DESCRIPTION": ""
+      },
+      "RETURNING": {
+        "NAME": "Kehrt zurück",
+        "DESCRIPTION": "Auf dem Weg zur Ladestation"
+      },
+      "ERROR": {
+        "NAME": "Fehler",
+        "DESCRIPTION": ""
+      },
+      "LIFTED": {
+        "NAME": "Angehoben",
+        "DESCRIPTION": ""
+      },
+      "BATTERY": {
+        "NAME": "Akku [%]",
+        "DESCRIPTION": ""
+      },
+      "FIRMWARE": {
+        "NAME": "Firmware",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

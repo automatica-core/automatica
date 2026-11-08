@@ -49,6 +49,12 @@ namespace Automatica.Core.Automation.Engine
         IControl GetControl(Guid id);
 
         /// <summary>
+        /// The output interface with the template key <paramref name="key"/> of the logic instance <paramref name="logicId"/>,
+        /// null when the logic or the output does not exist
+        /// </summary>
+        Guid? FindLogicOutput(Guid logicId, string key) => null;
+
+        /// <summary>
         /// Controls whose logic is in the area (and its sub areas) and/or in the category
         /// </summary>
         IReadOnlyList<IControl> GetControls(Guid? area, bool includeSubAreas, Guid? category);

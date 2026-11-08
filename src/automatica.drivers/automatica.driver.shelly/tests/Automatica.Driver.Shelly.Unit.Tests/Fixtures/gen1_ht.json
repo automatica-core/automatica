@@ -1,0 +1,121 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHHT-1",
+    "mac": "E8DB84D5A9F0",
+    "auth": false,
+    "fw": "20230913-112234/v1.14.0-gcb84623",
+    "discoverable": false,
+    "sleep_mode": true
+  },
+  "settings": {
+    "name": "Bathroom",
+    "sleep_mode": {
+      "period": 6,
+      "unit": "h"
+    }
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "tmp": {
+      "value": 22.5,
+      "units": "C",
+      "tC": 22.5,
+      "tF": 72.5,
+      "is_valid": true
+    },
+    "hum": {
+      "value": 45.0,
+      "is_valid": true
+    },
+    "bat": {
+      "value": 89,
+      "voltage": 2.92
+    },
+    "act_reasons": [
+      "sensor"
+    ],
+    "connect_retry": 0,
+    "sensor_error": 0,
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  },
+  "citd": {
+    "blk": [
+      {
+        "I": 1,
+        "D": "sensor_0"
+      },
+      {
+        "I": 2,
+        "D": "device"
+      }
+    ],
+    "sen": [
+      {
+        "I": 9103,
+        "T": "EVC",
+        "D": "cfgChanged",
+        "R": "U16",
+        "L": 2
+      },
+      {
+        "I": 3101,
+        "T": "T",
+        "D": "temperature",
+        "U": "C",
+        "R": [
+          "-40/125",
+          "999"
+        ],
+        "L": 1
+      },
+      {
+        "I": 3103,
+        "T": "H",
+        "D": "humidity",
+        "R": [
+          "0/100",
+          "999"
+        ],
+        "L": 1
+      },
+      {
+        "I": 3115,
+        "T": "S",
+        "D": "sensorError",
+        "R": "0/1",
+        "L": 1
+      },
+      {
+        "I": 3111,
+        "T": "B",
+        "D": "battery",
+        "R": [
+          "0/100",
+          "-1"
+        ],
+        "L": 2
+      },
+      {
+        "I": 9102,
+        "T": "EV",
+        "D": "wakeupEvent",
+        "R": [
+          "battery/button/periodic/poweron/sensor/alarm",
+          "unknown"
+        ],
+        "L": 2
+      }
+    ]
+  }
+}

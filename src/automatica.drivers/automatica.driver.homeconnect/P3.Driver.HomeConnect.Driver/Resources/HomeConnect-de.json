@@ -1,0 +1,126 @@
+{
+  "HOMECONNECT": {
+    "NAME": "Home Connect",
+    "DESCRIPTION": "Home-Connect-Hausgeräte (Bosch, Siemens, Neff, Gaggenau, ...) über die offizielle Home Connect API",
+    "API_URL": {
+      "NAME": "API-URL",
+      "DESCRIPTION": "https://api.home-connect.com, oder https://simulator.home-connect.com für den Gerätesimulator des Entwicklerportals"
+    },
+    "CLIENT_ID": {
+      "NAME": "Client-ID",
+      "DESCRIPTION": "Client-ID der eigenen Anwendung auf developer.home-connect.com (Autorisierungsart Device Flow)"
+    },
+    "CLIENT_SECRET": {
+      "NAME": "Client-Secret",
+      "DESCRIPTION": "Client-Secret der eigenen Anwendung"
+    },
+    "REFRESH_TOKEN": {
+      "NAME": "Refresh-Token",
+      "DESCRIPTION": "Optional. Leer = der Treiber startet eine Geräte-Anmeldung und zeigt Link und Code unter Anmeldestatus"
+    },
+    "POLL": {
+      "NAME": "Intervall vollständiges Lesen [s]",
+      "DESCRIPTION": "Änderungen kommen live über den Ereignis-Stream. Home Connect erlaubt 1000 Anfragen pro Tag, jedes vollständige Lesen kostet 1 + 4 pro Gerät"
+    },
+    "SCAN": {
+      "NAME": "Geräte suchen",
+      "DESCRIPTION": "Listet die Geräte des Kontos"
+    },
+    "TOKEN_STATE": {
+      "NAME": "Token-Status",
+      "DESCRIPTION": ""
+    },
+    "LOGIN_STATUS": {
+      "NAME": "Anmeldestatus",
+      "DESCRIPTION": "OK, oder der Link und Code zum Bestätigen der Anmeldung mit dem Home-Connect-Konto"
+    },
+    "STREAM_CONNECTED": {
+      "NAME": "Ereignis-Stream verbunden",
+      "DESCRIPTION": "Wahr, solange Live-Änderungen ankommen"
+    },
+    "APPLIANCE": {
+      "NAME": "Gerät",
+      "DESCRIPTION": "Ein Home-Connect-Gerät",
+      "HA_ID": {
+        "NAME": "Geräte-ID (haId)",
+        "DESCRIPTION": "Wird von der Suche ausgefüllt"
+      },
+      "CONNECTED": {
+        "NAME": "Verbunden",
+        "DESCRIPTION": "Das Gerät ist online"
+      },
+      "OPERATION_STATE": {
+        "NAME": "Betriebszustand",
+        "DESCRIPTION": "Inactive, Ready, DelayedStart, Run, Pause, ActionRequired, Finished, Error, Aborting"
+      },
+      "DOOR_STATE": {
+        "NAME": "Tür",
+        "DESCRIPTION": "Open (offen), Closed (geschlossen) oder Locked (verriegelt)"
+      },
+      "REMOTE_CONTROL_ACTIVE": {
+        "NAME": "Fernsteuerung aktiv",
+        "DESCRIPTION": ""
+      },
+      "REMOTE_START_ALLOWED": {
+        "NAME": "Fernstart erlaubt",
+        "DESCRIPTION": "Fernstart muss am Gerät aktiviert sein, bevor Programme gestartet werden können"
+      },
+      "LOCAL_CONTROL_ACTIVE": {
+        "NAME": "Lokal bedient",
+        "DESCRIPTION": "Jemand bedient das Gerät"
+      },
+      "POWER": {
+        "NAME": "Eingeschaltet",
+        "DESCRIPTION": "Wahr schreiben zum Einschalten, falsch zum Ausschalten (oder Standby)"
+      },
+      "ACTIVE_PROGRAM": {
+        "NAME": "Aktives Programm",
+        "DESCRIPTION": "Programmschlüssel, z. B. Dishcare.Dishwasher.Program.Eco50. Schlüssel schreiben startet ihn, leerer Text stoppt"
+      },
+      "SELECTED_PROGRAM": {
+        "NAME": "Gewähltes Programm",
+        "DESCRIPTION": "Programmschlüssel schreiben wählt ihn aus"
+      },
+      "RUNNING": {
+        "NAME": "Programm läuft",
+        "DESCRIPTION": "Wahr schreiben startet das gewählte Programm mit seinen Optionen, falsch stoppt"
+      },
+      "PAUSED": {
+        "NAME": "Pausiert",
+        "DESCRIPTION": "Wahr schreiben pausiert, falsch setzt fort (wenn das Gerät es unterstützt)"
+      },
+      "REMAINING_TIME": {
+        "NAME": "Restzeit [s]",
+        "DESCRIPTION": ""
+      },
+      "ELAPSED_TIME": {
+        "NAME": "Verstrichene Zeit [s]",
+        "DESCRIPTION": ""
+      },
+      "PROGRESS": {
+        "NAME": "Fortschritt [%]",
+        "DESCRIPTION": ""
+      },
+      "LAST_EVENT": {
+        "NAME": "Letztes Ereignis",
+        "DESCRIPTION": "Schlüssel des letzten Ereignisses, z. B. BSH.Common.Event.ProgramFinished"
+      },
+      "CUSTOM_NUMBER": {
+        "NAME": "Wert (Zahl)",
+        "DESCRIPTION": "Beliebiger numerischer Status, Einstellung oder Option über den Home-Connect-Schlüssel"
+      },
+      "CUSTOM_SWITCH": {
+        "NAME": "Wert (Schalter)",
+        "DESCRIPTION": "Beliebiger boolescher Status, Einstellung oder Option, oder ein Befehl (wahr schreiben), über den Home-Connect-Schlüssel"
+      },
+      "CUSTOM_TEXT": {
+        "NAME": "Wert (Text)",
+        "DESCRIPTION": "Beliebiger Status, Einstellung oder Option über den Home-Connect-Schlüssel, Aufzählungswerte als vollständiger Schlüssel"
+      },
+      "CUSTOM_KEY": {
+        "NAME": "Home-Connect-Schlüssel",
+        "DESCRIPTION": "z. B. Refrigeration.FridgeFreezer.Setting.SetpointTemperatureRefrigerator oder Cooking.Oven.Status.CurrentCavityTemperature. .Setting.- und .Option.-Schlüssel können geschrieben werden"
+      }
+    }
+  }
+}

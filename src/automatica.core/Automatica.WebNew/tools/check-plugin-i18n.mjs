@@ -352,7 +352,9 @@ function holeValues(hole, file, files, index) {
     if (method) {
         const p = method.params.indexOf(expr);
         if (p >= 0) {
-            const { values } = argumentValues(files, method.name, p);
+            // calls in the same file first: helpers like Param(...) exist with the same name in many factories
+            const local = argumentValues([file], method.name, p);
+            const { values } = local.values.length > 0 ? local : argumentValues(files, method.name, p);
             if (values.length > 0) return values.map(transform);
         }
     }

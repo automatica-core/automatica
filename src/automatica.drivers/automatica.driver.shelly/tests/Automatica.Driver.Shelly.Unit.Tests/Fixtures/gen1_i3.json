@@ -1,0 +1,43 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHIX3-1",
+    "mac": "8CAAB5ABCDEF",
+    "auth": false,
+    "fw": "20230913-114306/v1.14.0-gcb84623"
+  },
+  "settings": {
+    "name": "Wall buttons"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "inputs": [
+      {
+        "input": 0,
+        "event": "S",
+        "event_cnt": 4
+      },
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      },
+      {
+        "input": 1,
+        "event": "L",
+        "event_cnt": 1
+      }
+    ],
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

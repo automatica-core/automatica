@@ -450,12 +450,17 @@ export class ShadingPageComponent extends BaseComponent implements OnInit, OnDes
 
     // ---------- facades ----------
 
+    /** a facade of roof windows (tilted less than a wall) */
+    isRoof(inclination: number | null | undefined): boolean {
+        return inclination !== null && inclination !== undefined && inclination < 90;
+    }
+
     newFacade() {
         this.facadeEdit = {
             name: "",
             azimuth: 180,
             isEnabled: true,
-            definition: { brightness: { sources: [] }, thresholds: null, acceptanceAngle: 80, minElevation: 5, maxElevation: 90, minOutsideTemperature: null }
+            definition: { brightness: { sources: [] }, thresholds: null, acceptanceAngle: 80, minElevation: 5, maxElevation: 90, inclination: 90, minOutsideTemperature: null }
         };
         this.facadeOwnThresholds = false;
         this.facadeProblems = [];
@@ -596,6 +601,7 @@ export class ShadingPageComponent extends BaseComponent implements OnInit, OnDes
                 acceptanceAngle: null,
                 minElevation: null,
                 maxElevation: null,
+                inclination: null,
                 shadePosition: 100,
                 restorePosition: true,
                 openPosition: 0,
@@ -660,12 +666,12 @@ export class ShadingPageComponent extends BaseComponent implements OnInit, OnDes
     }
 
     /** the optional angle overrides, null = from the facade */
-    hasOverride(field: "acceptanceAngle" | "minElevation" | "maxElevation" | "windLimit" | "maxRoomTemperature"): boolean {
+    hasOverride(field: "acceptanceAngle" | "minElevation" | "maxElevation" | "inclination" | "windLimit" | "maxRoomTemperature"): boolean {
         const v = this.blindEdit?.definition?.[field];
         return v !== null && v !== undefined;
     }
 
-    setOverride(field: "acceptanceAngle" | "minElevation" | "maxElevation" | "windLimit" | "maxRoomTemperature", on: boolean) {
+    setOverride(field: "acceptanceAngle" | "minElevation" | "maxElevation" | "inclination" | "windLimit" | "maxRoomTemperature", on: boolean) {
         const def = this.blindEdit?.definition;
         if (!def) {
             return;
@@ -675,6 +681,7 @@ export class ShadingPageComponent extends BaseComponent implements OnInit, OnDes
             acceptanceAngle: facade?.acceptanceAngle ?? 80,
             minElevation: facade?.minElevation ?? 5,
             maxElevation: facade?.maxElevation ?? 90,
+            inclination: facade?.inclination ?? 90,
             windLimit: this.settings?.windLimit ?? 10,
             maxRoomTemperature: 24
         };

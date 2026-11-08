@@ -1,0 +1,43 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHMOS-01",
+    "mac": "60A423D4E5F6",
+    "auth": false,
+    "fw": "20230913-112531/v2.2.3@7e5c0b8a"
+  },
+  "settings": {
+    "name": "Hall"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "sensor": {
+      "motion": true,
+      "vibration": false,
+      "timestamp": 1700000000,
+      "active": true,
+      "is_valid": true
+    },
+    "lux": {
+      "value": 250,
+      "illumination": "bright",
+      "is_valid": true
+    },
+    "bat": {
+      "value": 100,
+      "voltage": 4.1
+    },
+    "charger": true,
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

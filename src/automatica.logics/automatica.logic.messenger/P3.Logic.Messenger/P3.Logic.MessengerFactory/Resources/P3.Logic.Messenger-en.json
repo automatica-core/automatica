@@ -3,8 +3,8 @@
     "NAME": "Messengers",
     "DESCRIPTION": "",
     "CLOUD_EMAIL": {
-      "NAME": "Cloud Email Service",
-      "DESCRIPTION": "",
+      "NAME": "Email",
+      "DESCRIPTION": "Sends an email through the own SMTP server of the settings, otherwise through the Automatica cloud.",
       "TO": {
         "NAME": "To",
         "DESCRIPTION": ""
@@ -14,6 +14,10 @@
         "DESCRIPTION": ""
       },
       "BODY":  "{{NAME}} has value {{VALUE}} from source {{SOURCE}} ({{TIMESTAMP}})",
+      "BODY_TEMPLATE": {
+        "NAME": "Text",
+        "DESCRIPTION": "Mail text, empty = the default text. Placeholders: {{NAME}}, {{VALUE}}, {{SOURCE}}, {{TIMESTAMP}}, {{DATE}}, {{TIME}} (also in the subject)."
+      },
       "TRIGGER": {
         "DESCRIPTION": "Sends the email"
       }

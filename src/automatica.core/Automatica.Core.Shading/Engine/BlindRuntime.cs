@@ -82,6 +82,11 @@ namespace Automatica.Core.Shading.Engine
 
         public double? Azimuth => Config.Definition.Azimuth ?? Facade?.Azimuth;
 
+        /// <summary>
+        /// Tilt of the window from the horizontal (90 = wall, less = roof window)
+        /// </summary>
+        public double Inclination => Config.Definition.Inclination ?? Facade?.Definition.Inclination ?? SunGeometry.Vertical;
+
         public bool IsShading => Status.Mode == BlindMode.Shading && _shadedByUs;
 
         private BlindDefinition Definition => Config.Definition;
@@ -125,7 +130,8 @@ namespace Automatica.Core.Shading.Engine
             return SunGeometry.IsSunOnWindow(sun.Value, azimuth.Value,
                 Definition.AcceptanceAngle ?? FacadeDefinition.AcceptanceAngle,
                 Definition.MinElevation ?? FacadeDefinition.MinElevation,
-                Definition.MaxElevation ?? FacadeDefinition.MaxElevation);
+                Definition.MaxElevation ?? FacadeDefinition.MaxElevation,
+                Inclination);
         }
 
         /// <summary>
@@ -140,7 +146,8 @@ namespace Automatica.Core.Shading.Engine
 
             var slats = Definition.Slats;
             double angle;
-            if (!slats.TrackSun || !sun.HasValue || !Azimuth.HasValue)
+            // the cut-off angle is for slats in front of a wall; a roof window keeps the fixed angle
+            if (!slats.TrackSun || !sun.HasValue || !Azimuth.HasValue || !SunGeometry.IsVertical(Inclination))
             {
                 angle = slats.FixedAngle;
             }

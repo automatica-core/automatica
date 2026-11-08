@@ -1,0 +1,145 @@
+<app-visualization-control [hint]="displayText" [state]="statusText" [icon]="stateIcon" [location]="location"
+  [value]="countdownText" [subValue]="subText" [hasPopup]="true" [showIcon]="true">
+
+  <div control class="sec-row">
+    @if (loadFailed && !state) {
+      <span class="sec-muted">{{ 'UI.VISU.SECURITY_UNAVAILABLE' | translateAsync }}</span>
+    }
+    @if (canCommand) {
+      @for (action of tileActions; track action.command) {
+        <button type="button" [class]="actionClass(action)" [disabled]="busy" (click)="run(action, $event)"
+          [attr.aria-label]="(action.label | translateAsync) + ': ' + displayText" [attr.title]="action.label | translateAsync">
+          {{ action.label | translateAsync }}
+        </button>
+      }
+    }
+    <button type="button" class="sec-more" (click)="openDetails($event)" [attr.aria-label]="('UI.VISU.DETAILS' | translateAsync) + ': ' + displayText"
+      [attr.title]="'UI.VISU.DETAILS' | translateAsync" aria-haspopup="dialog">
+      <fa-icon icon="list"></fa-icon>
+    </button>
+  </div>
+
+  <div popup class="sec-popup">
+    @if (countdownText) {
+      <!-- the popup header shows the countdown, the status goes here -->
+      <div class="sec-status">
+        <span class="pill" [class.ok]="severity === 'ok'" [class.warn]="severity === 'warning'" [class.bad]="severity === 'alarm'"
+          [class.accent]="severity === 'info'">{{ statusText }}</span>
+      </div>
+    }
+
+    @if (details.length) {
+      <dl class="sec-details">
+        @for (detail of details; track $index) {
+          <dt>{{ detail.label | translateAsync }}</dt>
+          <dd>{{ detailValue(detail) }}</dd>
+        }
+      </dl>
+    }
+
+    @if (canCommand && actions.length) {
+      <div class="sec-actions">
+        @for (action of actions; track action.command) {
+          <button type="button" [class]="actionClass(action)" [disabled]="busy" (click)="run(action)">{{ action.label | translateAsync }}</button>
+        }
+      </div>
+    } @else if (info && !info.canCommand) {
+      <p class="sec-muted">{{ 'UI.VISU.SECURITY_READ_ONLY' | translateAsync }}</p>
+    }
+
+    @if (users; as userList) {
+      <section class="sec-section">
+        <h4>{{ 'UI.VISU.SECURITY_USERS' | translateAsync }}</h4>
+
+        @if (state?.scheduleErrors?.length) {
+          <p class="sec-error">{{ 'UI.VISU.SECURITY_SCHEDULE_ERRORS' | translateAsync }}: {{ state.scheduleErrors.join('; ') }}</p>
+        }
+
+        @if (state?.learn; as learn) {
+          <div class="sec-learn">
+            <fa-icon icon="id-card"></fa-icon>
+            <span>{{ 'UI.VISU.SECURITY_LEARNING' | translateAsync }}: <b>{{ learn.name }}</b></span>
+            <button type="button" class="sec-btn default" [disabled]="busy" (click)="cancelLearn()">{{ 'UI.VISU.SECURITY_CANCEL' | translateAsync }}</button>
+          </div>
+        }
+
+        @if (!userList.length) {
+          <p class="sec-muted">{{ 'UI.VISU.SECURITY_NO_USERS' | translateAsync }}</p>
+        }
+        <ul class="sec-users">
+          @for (user of userList; track user.name) {
+            <li>
+              <div class="sec-user-main">
+                <b>{{ user.name }}</b>
+                <span class="sec-muted">{{ user.groups.join(', ') }}</span>
+              </div>
+              <span class="pill" [class.ok]="user.hasCode" [class.off]="!user.hasCode">{{ 'UI.VISU.SECURITY_CODE' | translateAsync }}</span>
+              <span class="pill" [class.ok]="user.hasTag" [class.off]="!user.hasTag">{{ 'UI.VISU.SECURITY_TAG' | translateAsync }}</span>
+              <button type="button" class="sec-icon" [disabled]="busy" (click)="editUser(user)" [attr.title]="'UI.VISU.SECURITY_EDIT' | translateAsync"
+                [attr.aria-label]="('UI.VISU.SECURITY_EDIT' | translateAsync) + ': ' + user.name"><fa-icon icon="pen"></fa-icon></button>
+              <button type="button" class="sec-icon" [disabled]="busy" (click)="learnTag(user)" [attr.title]="'UI.VISU.SECURITY_LEARN_TAG' | translateAsync"
+                [attr.aria-label]="('UI.VISU.SECURITY_LEARN_TAG' | translateAsync) + ': ' + user.name"><fa-icon icon="id-card"></fa-icon></button>
+              <button type="button" class="sec-icon danger" [disabled]="busy" (click)="deleteUser(user)" [attr.title]="'UI.VISU.SECURITY_DELETE' | translateAsync"
+                [attr.aria-label]="('UI.VISU.SECURITY_DELETE' | translateAsync) + ': ' + user.name"><fa-icon icon="trash"></fa-icon></button>
+            </li>
+          }
+        </ul>
+
+        @if (userForm; as form) {
+          <form class="sec-form" (submit)="$event.preventDefault(); saveUser()" autocomplete="off">
+            <label>{{ 'UI.VISU.SECURITY_NAME' | translateAsync }}
+              <input type="text" name="name" [(ngModel)]="form.name" maxlength="40" required>
+            </label>
+            <label>{{ 'UI.VISU.SECURITY_GROUPS' | translateAsync }}
+              <input type="text" name="groups" [(ngModel)]="form.groups" [attr.list]="'sec-groups-' + controlId">
+              <datalist [id]="'sec-groups-' + controlId">
+                @for (group of state?.groups ?? []; track group) {
+                  <option [value]="group"></option>
+                }
+              </datalist>
+              <small class="sec-muted">{{ (state?.groups ?? []).join(', ') }}</small>
+            </label>
+            <label>{{ 'UI.VISU.SECURITY_CODE' | translateAsync }}
+              <input type="password" name="code" [(ngModel)]="form.code" inputmode="numeric" autocomplete="new-password"
+                [class.invalid]="!codeValid">
+              <small class="sec-muted">{{ 'UI.VISU.SECURITY_CODE_HINT' | translateAsync }}</small>
+            </label>
+            @if (form.previousName) {
+              <label class="sec-check"><input type="checkbox" name="clearCode" [(ngModel)]="form.clearCode"> {{ 'UI.VISU.SECURITY_CLEAR_CODE' | translateAsync }}</label>
+            }
+            <label>{{ 'UI.VISU.SECURITY_TAG' | translateAsync }}
+              <input type="password" name="tag" [(ngModel)]="form.tag" autocomplete="new-password">
+              <small class="sec-muted">{{ 'UI.VISU.SECURITY_TAG_HINT' | translateAsync }}</small>
+            </label>
+            @if (form.previousName) {
+              <label class="sec-check"><input type="checkbox" name="clearTag" [(ngModel)]="form.clearTag"> {{ 'UI.VISU.SECURITY_CLEAR_TAG' | translateAsync }}</label>
+            }
+            <div class="sec-actions">
+              <button type="submit" class="sec-btn primary" [disabled]="busy || !form.name.trim() || !codeValid">{{ 'UI.VISU.SECURITY_SAVE' | translateAsync }}</button>
+              <button type="button" class="sec-btn default" (click)="cancelUser()">{{ 'UI.VISU.SECURITY_CANCEL' | translateAsync }}</button>
+            </div>
+          </form>
+        } @else {
+          <button type="button" class="sec-btn default" [disabled]="busy" (click)="newUser()">
+            <fa-icon icon="user-plus"></fa-icon> {{ 'UI.VISU.SECURITY_ADD_USER' | translateAsync }}
+          </button>
+        }
+      </section>
+    }
+
+    @if (log.length) {
+      <section class="sec-section">
+        <h4>{{ 'UI.VISU.SECURITY_LOG' | translateAsync }}</h4>
+        <ul class="sec-log">
+          @for (entry of log; track $index) {
+            <li>
+              <time>{{ timeText(entry.time) }}</time>
+              <span>{{ eventText(entry) }}@if (entry.detail) {<span class="sec-muted"> · {{ entry.detail }}</span>}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+
+</app-visualization-control>

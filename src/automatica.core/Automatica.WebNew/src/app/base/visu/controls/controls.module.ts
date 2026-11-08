@@ -24,6 +24,14 @@ import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 import { ShutterComponent } from "./shutter/shutter.component";
 import { CameraComponent } from "./camera/camera.component";
+import { EnergyFlowComponent } from "./energy-flow/energy-flow.component";
+import { StatusComponent } from "./text-status/status/status.component";
+import { StatusMonitorComponent } from "./text-status/status-monitor/status-monitor.component";
+import { TrackerComponent } from "./text-status/tracker/tracker.component";
+import { RoomControllerComponent } from "./room-controller/room-controller.component";
+import { ClimateUnitComponent } from "./climate/climate-unit.component";
+import { ClimateCentralComponent } from "./climate/climate-central.component";
+import { SecurityComponent } from "./security/security.component";
 import { LightingControllerComponent } from "./lighting-controller/lighting-controller.component";
 
 @NgModule({
@@ -72,6 +80,14 @@ import { LightingControllerComponent } from "./lighting-controller/lighting-cont
     ThreeRangeGaugeComponent,
     ShutterComponent,
     CameraComponent,
+    EnergyFlowComponent,
+    StatusComponent,
+    StatusMonitorComponent,
+    TrackerComponent,
+    RoomControllerComponent,
+    ClimateUnitComponent,
+    ClimateCentralComponent,
+    SecurityComponent,
     LightingControllerComponent
   ],
   exports: [

@@ -303,6 +303,11 @@ export class AutomationDescriber {
             }
             case "startup":
                 return this.t("S.T_STARTUP");
+            case "scene":
+                // "die Szene ein Steuerelement" reads wrong, so no scene picked yet gets its own text
+                return trigger.scene
+                    ? this.s("T_SCENE", { scene: this.controlLabel(trigger.scene) }, html)
+                    : this.t("S.T_SCENE_NONE");
         }
         return this.typeLabel("trigger", (trigger as any).type ?? "");
     }
@@ -446,6 +451,11 @@ export class AutomationDescriber {
                 }
                 return text;
             }
+            case "mail":
+                return this.s("A_MAIL", {
+                    subject: action.subject || this.t("VALUE.UNSET"),
+                    to: action.to?.length ? action.to.join(", ") : this.t("VALUE.UNSET")
+                }, html);
             case "if":
                 return this.t("S.A_IF", { condition: this.condition(action.condition, html) });
             case "runAutomation": {

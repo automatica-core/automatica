@@ -29,6 +29,7 @@ import { HyperSeriesService } from "./hyperseries.service";
 import { ControlsService } from "./controls.service";
 import { AutomationsService } from "./automations.service";
 import { ShadingService } from "./shading.service";
+import { SecurityVisuService } from "./security-visu.service";
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { ShadingService } from "./shading.service";
     HyperSeriesService,
     ControlsService,
     AutomationsService,
-    ShadingService
+    ShadingService,
+    SecurityVisuService
 
   ]
 })

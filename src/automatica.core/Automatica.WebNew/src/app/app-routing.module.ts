@@ -38,6 +38,14 @@ const routes: Routes = [
                 data: {
                     l10nProviders: [{ name: "webapi", asset: "./webapi/localization", options: { type: "webapi" } }]
                 }
+            }, {
+                // automations the admins released for the visualization
+                path: "automations",
+                loadChildren: () => import("./visualization/automations/automations-visu.module").then(m => m.AutomationsVisuModule),
+                resolve: { l10n: L10nLazyResolver },
+                data: {
+                    l10nProviders: [{ name: "webapi", asset: "./webapi/localization", options: { type: "webapi" } }]
+                }
             }
         ],
     },

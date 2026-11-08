@@ -1,0 +1,881 @@
+﻿{
+  "CLIMATE": {
+    "NAME": "Climate",
+    "DESCRIPTION": "Heating, cooling and ventilation",
+    "DEWPOINT": {
+      "NAME": "Dewpoint calculator",
+      "DESCRIPTION": "Dew point from temperature and relative humidity (Magnus formula)",
+      "IN": {
+        "T": "Temperature (°C), -65..60",
+        "H": "Relative humidity (%)"
+      },
+      "OUT": {
+        "TD": "Dew point (°C)"
+      },
+      "PARAM": {
+        "O": {
+          "NAME": "Offset (K)",
+          "DESCRIPTION": "Added to the calculated dew point"
+        }
+      }
+    },
+    "HEATING_CURVE": {
+      "NAME": "Heating curve",
+      "DESCRIPTION": "Weather compensated flow temperature from room setpoint and outdoor temperature",
+      "IN": {
+        "TT": "Room setpoint (°C), 20 °C when unlinked",
+        "CT": "Outdoor temperature (°C)",
+        "DIS": "1 = ignore Tt and use 20 °C"
+      },
+      "OUT": {
+        "FT": "Flow temperature (°C)",
+        "IV": "1 while the curve is limited by minFt / maxFt"
+      },
+      "PARAM": {
+        "S": {
+          "NAME": "Slope",
+          "DESCRIPTION": "Slope of the heating curve (typ. 0.2 underfloor .. 1.6 radiators)"
+        },
+        "O": {
+          "NAME": "Level (K)",
+          "DESCRIPTION": "Parallel shift of the curve"
+        },
+        "MINFT": {
+          "NAME": "Minimum flow temperature (°C)",
+          "DESCRIPTION": "Lower limit of the flow temperature"
+        },
+        "MAXFT": {
+          "NAME": "Maximum flow temperature (°C)",
+          "DESCRIPTION": "Upper limit of the flow temperature"
+        }
+      }
+    },
+    "TWO_POSITION": {
+      "NAME": "2-position controller",
+      "DESCRIPTION": "Switches an output on and off around a setpoint with hysteresis",
+      "IN": {
+        "PV": "Process value",
+        "OFF": "1 = output off and locked"
+      },
+      "OUT": {
+        "O": "Output"
+      },
+      "PARAM": {
+        "SP": {
+          "NAME": "Setpoint",
+          "DESCRIPTION": "Setpoint (can be linked)"
+        },
+        "HYS": {
+          "NAME": "Hysteresis",
+          "DESCRIPTION": "Total width of the switching band around the setpoint"
+        },
+        "INV": {
+          "NAME": "Inverted",
+          "DESCRIPTION": "Off: on below the setpoint (heating). On: on above the setpoint (cooling)"
+        }
+      }
+    },
+    "THREE_POSITION": {
+      "NAME": "3-position controller",
+      "DESCRIPTION": "Two outputs with opposite effect: O1 below setpoint 1, O2 above setpoint 2",
+      "IN": {
+        "PV": "Process value",
+        "OFF": "1 = both outputs off"
+      },
+      "OUT": {
+        "O1": "On below setpoint 1",
+        "O2": "On above setpoint 2"
+      },
+      "PARAM": {
+        "SP1": {
+          "NAME": "Setpoint 1",
+          "DESCRIPTION": "Lower setpoint (can be linked)"
+        },
+        "SP2": {
+          "NAME": "Setpoint 2",
+          "DESCRIPTION": "Upper setpoint (can be linked)"
+        },
+        "HYS": {
+          "NAME": "Hysteresis",
+          "DESCRIPTION": "An output switches off this far back inside the band (0 = at the setpoint)"
+        }
+      }
+    },
+    "MIXING_VALVE": {
+      "NAME": "Mixing valve controller",
+      "DESCRIPTION": "PI control of a mixing valve: 0-100 % or open/close outputs",
+      "IN": {
+        "TT": "Target flow temperature (°C)",
+        "TC": "Current flow temperature (°C)",
+        "OFF": "1 = controller off, valve per Off mode",
+        "DISPC": "1 = keep the current target temperature (e.g. child lock)"
+      },
+      "OUT": {
+        "V": "Valve position (%)",
+        "O": "Open",
+        "C": "Close",
+        "ERROR": "1 when target and current temperature are more than 5 K apart for over 10 minutes"
+      },
+      "PARAM": {
+        "TD": {
+          "NAME": "Travel time (s)",
+          "DESCRIPTION": "Time of the valve from closed to open"
+        },
+        "ST": {
+          "NAME": "Sampling time (s)",
+          "DESCRIPTION": "The controller calculates a new position at this interval"
+        },
+        "KP": {
+          "NAME": "Gain Kp (% per K)",
+          "DESCRIPTION": "Proportional part of the PI controller"
+        },
+        "KI": {
+          "NAME": "Integral Ki (% per K and s)",
+          "DESCRIPTION": "Integral part of the PI controller"
+        },
+        "OFFM": {
+          "NAME": "Off mode",
+          "DESCRIPTION": "Valve position while Off = 1",
+          "UNCHANGED": "Unchanged",
+          "OPEN": "Open",
+          "CLOSE": "Close"
+        },
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Inverted for cooling: the valve opens while the temperature is too high",
+          "NORMAL": "Normal (heating)",
+          "INVERTED": "Inverted (cooling)"
+        },
+        "MINP": {
+          "NAME": "Minimum position (%)",
+          "DESCRIPTION": "Lowest valve position of the controller"
+        },
+        "MAXP": {
+          "NAME": "Maximum position (%)",
+          "DESCRIPTION": "Highest valve position of the controller"
+        },
+        "INV": {
+          "NAME": "Invert V",
+          "DESCRIPTION": "V = 100 - position (actuators with 0 % = open)"
+        }
+      }
+    },
+    "ROOM_CONTROLLER": {
+      "NAME": "Intelligent room controller",
+      "DESCRIPTION": "Keeps the room temperature, switches between heating and cooling, comfort/eco/building protection",
+      "IN": {
+        "MODE": "-1 off, 0 auto, 1 auto heating only, 2 auto cooling only, 3 fixed setpoint, 4 fixed heating only, 5 fixed cooling only",
+        "TT": "Target temperature in the fixed setpoint modes (°C)",
+        "TC": "Current room temperature (°C)",
+        "DWC": "Window / door contact, 1 = open",
+        "COMFORT": "Comfort: starts on the rising edge, extended by Cet after the falling edge",
+        "ECO": "Eco: starts on the rising edge, extended by EBpet after the falling edge",
+        "BP": "Building protection: starts on the rising edge, extended by EBpet",
+        "P": "Presence: comfort while on and Pet after",
+        "OFF": "Rising edge cancels the timers, 1 = locked (all outputs 0)",
+        "DISP": "1 = ignore presence",
+        "TO": "Outdoor temperature (°C), used for open windows",
+        "TCOMF": "Comfort heating temperature from the visualization (°C), comfort cooling keeps its distance",
+        "SM": "Source mode of a central source (Rm): 1 heating, 2 cooling, 3 none, 0 / unlinked = any",
+        "EH": "Surplus heating energy: heating setpoint + Texc",
+        "EC": "Surplus cooling energy: cooling setpoint - Texc"
+      },
+      "OUT": {
+        "H": "Heating valve (%)",
+        "COOL": "Cooling valve (%)",
+        "HC": "Heating/cooling valve (%)",
+        "DEMAND": "Demand for a central source (%): + heating, - cooling",
+        "SHD": "Shading demand",
+        "HCM": "1 heating, -1 cooling, 0 idle",
+        "ERROR": "1 below frost or above heat protection temperature",
+        "TARGET": "Active target temperature (°C)",
+        "BOOST": "1 while more than 1.5 K away from the target",
+        "OS": "Temperature mode: -1 off, 0 eco, 1 comfort, 2 building protection, 3 fixed setpoint",
+        "TCHOUT": "Comfort heating temperature (°C)",
+        "TCCOUT": "Comfort cooling temperature (°C)"
+      },
+      "PARAM": {
+        "TCH": {
+          "NAME": "Comfort heating (°C)",
+          "DESCRIPTION": "Comfort temperature while heating"
+        },
+        "TCC": {
+          "NAME": "Comfort cooling (°C)",
+          "DESCRIPTION": "Comfort temperature while cooling"
+        },
+        "TEH": {
+          "NAME": "Eco heating (K)",
+          "DESCRIPTION": "Eco heating = comfort heating - this value"
+        },
+        "TEC": {
+          "NAME": "Eco cooling (K)",
+          "DESCRIPTION": "Eco cooling = comfort cooling + this value"
+        },
+        "TFP": {
+          "NAME": "Frost protection (°C)",
+          "DESCRIPTION": "Building protection heats up to this temperature"
+        },
+        "THP": {
+          "NAME": "Heat protection (°C)",
+          "DESCRIPTION": "Building protection cools down to this temperature"
+        },
+        "TSH": {
+          "NAME": "Shading while heating (°C)",
+          "DESCRIPTION": "Shading demand above this temperature while heating"
+        },
+        "TSC": {
+          "NAME": "Shading while cooling (°C)",
+          "DESCRIPTION": "Shading demand above this temperature while cooling"
+        },
+        "TD": {
+          "NAME": "Allowed deviation (K)",
+          "DESCRIPTION": "Fixed setpoint modes: cooling starts this far above the target"
+        },
+        "TEXC": {
+          "NAME": "Surplus offset (K)",
+          "DESCRIPTION": "Setpoint shift while surplus energy is signalled (Eh / Ec)"
+        },
+        "CET": {
+          "NAME": "Comfort extension (s)",
+          "DESCRIPTION": "Comfort continues this long after C falls"
+        },
+        "EBPET": {
+          "NAME": "Eco / building protection extension (s)",
+          "DESCRIPTION": "Continues this long after E / Bp fall, 0 = until the next override"
+        },
+        "PET": {
+          "NAME": "Presence extension (s)",
+          "DESCRIPTION": "Comfort continues this long after presence ends"
+        },
+        "DDWC": {
+          "NAME": "Window delay (s)",
+          "DESCRIPTION": "Building protection starts this long after a window opened"
+        },
+        "PB": {
+          "NAME": "Proportional band (K)",
+          "DESCRIPTION": "Deviation that opens the valve to 100 %"
+        },
+        "KI": {
+          "NAME": "Integral (% per K and s)",
+          "DESCRIPTION": "Integral part of the valve controller"
+        },
+        "DEFAULT": {
+          "NAME": "Default mode",
+          "DESCRIPTION": "Temperature mode without C / E / Bp / presence (this block has no schedule, link a timer to C or E)",
+          "ECO": "Eco",
+          "COMFORT": "Comfort"
+        }
+      }
+    },
+    "HEATING_COOLING": {
+      "NAME": "Heating and cooling controller",
+      "DESCRIPTION": "Central heating/cooling source, decides heating or cooling from the room demands",
+      "IN": {
+        "TO": "Outdoor temperature (°C)",
+        "B": "Boost: stage 2 at once, plus additional heating while heating",
+        "OFF": "1 = everything off",
+        "AH": "Switches on the additional heating",
+        "F": "Switches on the fan",
+        "EH": "Surplus heating energy, forwarded while heating",
+        "EC": "Surplus cooling energy, forwarded while cooling",
+        "MH": "Manual heating: heats regardless of the rooms",
+        "SERVICE": "Service mode: 0 normal, 1 heating, 2 cooling, 3 off",
+        "D1": "Demand 1 of a room controller (D, %)",
+        "D2": "Demand 2 of a room controller (D, %)",
+        "D3": "Demand 3 of a room controller (D, %)",
+        "D4": "Demand 4 of a room controller (D, %)",
+        "D5": "Demand 5 of a room controller (D, %)",
+        "D6": "Demand 6 of a room controller (D, %)",
+        "D7": "Demand 7 of a room controller (D, %)",
+        "D8": "Demand 8 of a room controller (D, %)"
+      },
+      "OUT": {
+        "H": "Heating",
+        "H2": "Heating stage 2",
+        "C": "Cooling",
+        "C2": "Cooling stage 2",
+        "AHOUT": "Additional heating",
+        "SV": "Switching valve: 0 heating, 1 cooling",
+        "FOUT": "Fan",
+        "TOA": "Average outdoor temperature of 48 h (°C)",
+        "RM": "Source mode for the room controllers (Sm): 1 heating, 2 cooling, 3 none",
+        "EHOUT": "Surplus heating for the room controllers",
+        "ECOUT": "Surplus cooling for the room controllers",
+        "HL": "Average heating demand (%)",
+        "CL": "Average cooling demand (%)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Allowed modes",
+          "OFF": "Off",
+          "AUTO": "Automatic",
+          "HEATING": "Heating only",
+          "COOLING": "Cooling only"
+        },
+        "MINHR": {
+          "NAME": "Minimum runtime (min)",
+          "DESCRIPTION": "Heating/cooling runs at least this long"
+        },
+        "SOT": {
+          "NAME": "Switch-on threshold (%)",
+          "DESCRIPTION": "Average room demand needed to start"
+        },
+        "VD": {
+          "NAME": "Valve delay (s)",
+          "DESCRIPTION": "Travel time of the switching valve, H/C follow after it"
+        },
+        "FOD": {
+          "NAME": "Fan overrun (s)",
+          "DESCRIPTION": "The fan keeps running after heating/cooling"
+        },
+        "TT2S": {
+          "NAME": "Time to stage 2 (min)",
+          "DESCRIPTION": "Stage 2 starts after this runtime"
+        },
+        "OTM": {
+          "NAME": "Outdoor temperature mode",
+          "DESCRIPTION": "Which outdoor temperature is compared with the heating and cooling limits. The 48 h average is known after 24 h, until then the current value is used.",
+          "DISABLED": "Not used",
+          "AVERAGE": "Average of the last 48 h",
+          "CURRENT": "Current value"
+        },
+        "LIMH": {
+          "NAME": "Heating limit (°C)",
+          "DESCRIPTION": "Above this outdoor temperature heating does not start."
+        },
+        "LIMC": {
+          "NAME": "Cooling limit (°C)",
+          "DESCRIPTION": "Below this outdoor temperature cooling does not start."
+        }
+      }
+    },
+    "HVAC": {
+      "NAME": "HVAC controller",
+      "DESCRIPTION": "Air based heating/cooling system (furnace, AC, heat pump with backup) fed by room demands",
+      "IN": {
+        "MODE": "0 off, 1 auto, 2 heating only, 3 cooling only (unlinked = auto)",
+        "TO": "Outdoor temperature (°C)",
+        "B": "Boost: stage 2 at once",
+        "OFF": "1 = everything off",
+        "EMH": "Emergency heat instead of the heat pump",
+        "FAN": "Switches on the fan",
+        "HUM": "Relative humidity (%) for the humidifier",
+        "EH": "Surplus heating energy, forwarded while heating",
+        "EC": "Surplus cooling energy, forwarded while cooling",
+        "D1": "Demand 1 of a room controller (D, %)",
+        "D2": "Demand 2 of a room controller (D, %)",
+        "D3": "Demand 3 of a room controller (D, %)",
+        "D4": "Demand 4 of a room controller (D, %)",
+        "D5": "Demand 5 of a room controller (D, %)",
+        "D6": "Demand 6 of a room controller (D, %)",
+        "D7": "Demand 7 of a room controller (D, %)",
+        "D8": "Demand 8 of a room controller (D, %)"
+      },
+      "OUT": {
+        "W1": "Heating stage 1 (furnace / backup heat)",
+        "W2": "Heating stage 2",
+        "Y": "Compressor",
+        "Y2": "Cooling stage 2",
+        "E": "Emergency heat",
+        "OB": "Reversing valve (on for cooling, DirV inverts)",
+        "G": "Fan",
+        "HMD": "Humidifier",
+        "HCM": "1 heating, -1 cooling, 0 off",
+        "RM": "Source mode for the room controllers (Sm): 1 heating, 2 cooling, 3 none",
+        "EHOUT": "Surplus heating for the room controllers",
+        "ECOUT": "Surplus cooling for the room controllers"
+      },
+      "PARAM": {
+        "TYPE": {
+          "NAME": "Heating type",
+          "DESCRIPTION": "Decides which outputs heat",
+          "CONVENTIONAL": "Oil / gas / electric",
+          "HEAT_PUMP_FOSSIL": "Heat pump with fossil backup",
+          "HEAT_PUMP_ELECTRIC": "Heat pump with electric backup"
+        },
+        "MINO": {
+          "NAME": "Minimum off time (s)",
+          "DESCRIPTION": "Heating/cooling stays off at least this long"
+        },
+        "SOT": {
+          "NAME": "Switch-on threshold (%)",
+          "DESCRIPTION": "Average room demand needed to start"
+        },
+        "FOT": {
+          "NAME": "Fan overrun (s)",
+          "DESCRIPTION": "The fan keeps running after heating/cooling"
+        },
+        "TT2S": {
+          "NAME": "Time to stage 2 (s)",
+          "DESCRIPTION": "Stage 2 starts after this runtime"
+        },
+        "S2D": {
+          "NAME": "Stage 2 demand (%)",
+          "DESCRIPTION": "Stage 2 starts when one room demands this much"
+        },
+        "MIOC": {
+          "NAME": "Minimum outdoor temperature cooling (°C)",
+          "DESCRIPTION": "Below it only heating is allowed"
+        },
+        "MAOH": {
+          "NAME": "Maximum outdoor temperature heating (°C)",
+          "DESCRIPTION": "Above it only cooling is allowed"
+        },
+        "PMIC": {
+          "NAME": "Protection minimum cooling (°C)",
+          "DESCRIPTION": "The compressor does not cool below this outdoor temperature"
+        },
+        "PMIH": {
+          "NAME": "Protection minimum heating (°C)",
+          "DESCRIPTION": "Heat pump with fossil backup: below it the furnace heats"
+        },
+        "PMAH": {
+          "NAME": "Protection maximum heating (°C)",
+          "DESCRIPTION": "The heat pump does not heat above this outdoor temperature"
+        },
+        "HS": {
+          "NAME": "Humidity setpoint (%)",
+          "DESCRIPTION": "The humidifier runs below it while heating, until 2 % above"
+        },
+        "DIRV": {
+          "NAME": "Invert reversing valve",
+          "DESCRIPTION": "O/B on for heating instead of cooling"
+        },
+        "OTM": {
+          "NAME": "Outdoor temperature mode",
+          "DESCRIPTION": "Which outdoor temperature is compared with the limits",
+          "DISABLED": "Not used",
+          "AVERAGE": "Average of the last 48 h",
+          "CURRENT": "Current value"
+        }
+      }
+    },
+    "FLOW_TEMPERATURE": {
+      "NAME": "Flow temperature calculator",
+      "DESCRIPTION": "Flow temperature of a mixing circuit from the heating curve and the room demands",
+      "IN": {
+        "TO": "Outdoor temperature (°C)",
+        "IB": "Boost: maximum (heating) / minimum (cooling) flow temperature",
+        "ST": "Stop: pump off, minimum (heating) / maximum (cooling) flow",
+        "TB": "Buffer temperature (°C), the pump waits until it reaches AQb",
+        "TT1": "Target temperature room 1 (°C)",
+        "TC1": "Current temperature room 1 (°C)",
+        "V1": "Valve of room 1 (%)",
+        "TT2": "Target temperature room 2 (°C)",
+        "TC2": "Current temperature room 2 (°C)",
+        "V2": "Valve of room 2 (%)",
+        "TT3": "Target temperature room 3 (°C)",
+        "TC3": "Current temperature room 3 (°C)",
+        "V3": "Valve of room 3 (%)",
+        "TT4": "Target temperature room 4 (°C)",
+        "TC4": "Current temperature room 4 (°C)",
+        "V4": "Valve of room 4 (%)",
+        "TT5": "Target temperature room 5 (°C)",
+        "TC5": "Current temperature room 5 (°C)",
+        "V5": "Valve of room 5 (%)",
+        "TT6": "Target temperature room 6 (°C)",
+        "TC6": "Current temperature room 6 (°C)",
+        "V6": "Valve of room 6 (%)"
+      },
+      "OUT": {
+        "AQT": "Target temperature of the room that sets the flow (°C)",
+        "AQF": "Flow temperature setpoint (°C)",
+        "AQB": "Buffer temperature setpoint (°C)",
+        "QP": "Pump / mixer enable",
+        "AQL": "Average valve opening (%)",
+        "AQI": "Flow increase (heating) / decrease (cooling) by the rooms (K)",
+        "QE": "1 while the outdoor temperature is missing"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Circuit",
+          "DESCRIPTION": "Heating or cooling circuit",
+          "HEATING": "Heating",
+          "COOLING": "Cooling"
+        },
+        "MIN": {
+          "NAME": "Minimum flow temperature (°C)",
+          "DESCRIPTION": "Lower limit, also the flow without heating demand"
+        },
+        "MAX": {
+          "NAME": "Maximum flow temperature (°C)",
+          "DESCRIPTION": "Upper limit, also the flow without cooling demand"
+        },
+        "B": {
+          "NAME": "Buffer offset (K)",
+          "DESCRIPTION": "Buffer setpoint above (heating) / below (cooling) the flow"
+        },
+        "S": {
+          "NAME": "Slope",
+          "DESCRIPTION": "Slope of the heating/cooling curve"
+        },
+        "N": {
+          "NAME": "Level (K)",
+          "DESCRIPTION": "Parallel shift of the curve"
+        },
+        "STR": {
+          "NAME": "Switch-on threshold (%)",
+          "DESCRIPTION": "The pump runs once a room valve is open this far"
+        },
+        "G": {
+          "NAME": "Gain",
+          "DESCRIPTION": "Weight of the room deviation on the room target"
+        },
+        "I": {
+          "NAME": "Heat-up increase (K)",
+          "DESCRIPTION": "Added to the room target while it is more than 1.5 K away"
+        }
+      }
+    },
+    "AC_UNIT": {
+      "NAME": "AC unit controller",
+      "DESCRIPTION": "Air conditioning indoor unit: on/off, mode, fan, target temperature, pauses",
+      "IN": {
+        "TG": "Toggles on / off",
+        "ON": "Switches on",
+        "OFF": "Switches off, 1 = locked",
+        "TT": "Target temperature (°C)",
+        "TC": "Current temperature (°C)",
+        "MODE": "1 auto, 2 heat, 3 cool, 4 dry, 5 fan",
+        "FAN": "Fan speed 0 off, 1 auto, 2 silent .. 7 very high",
+        "ADIR": "Airflow direction 1 auto, 2-6 position, 7 swing, 8 no swing",
+        "DWC": "Window / door contact, pauses while open",
+        "PT": "Pause timer: pauses for Ptd seconds",
+        "LS": "Load shedding: pauses while on",
+        "SM": "Silent mode: silent fan speed",
+        "PC": "Pause from the AC central (P1..P8)",
+        "HCM": "Mode of a room controller (HCm): runs only on its demand"
+      },
+      "OUT": {
+        "STATUS": "Unit on",
+        "MODEOUT": "Mode 1..5",
+        "FANOUT": "Fan speed 0..7",
+        "ADIROUT": "Airflow direction 1..8",
+        "TTOUT": "Target temperature (°C)",
+        "TCOUT": "Current temperature (°C)",
+        "PAUSED": "Paused",
+        "DEMAND": "Demand for the AC central (K): + heating, - cooling"
+      },
+      "PARAM": {
+        "PTD": {
+          "NAME": "Pause duration (s)",
+          "DESCRIPTION": "Duration of the pause timer"
+        },
+        "MINT": {
+          "NAME": "Minimum target (°C)",
+          "DESCRIPTION": "Lowest target temperature"
+        },
+        "MAXT": {
+          "NAME": "Maximum target (°C)",
+          "DESCRIPTION": "Highest target temperature"
+        },
+        "SILENT": {
+          "NAME": "Silent fan speed",
+          "DESCRIPTION": "Fan speed 0..7 in silent mode"
+        }
+      }
+    },
+    "AC_CENTRAL": {
+      "NAME": "AC central controller",
+      "DESCRIPTION": "Outdoor unit of a multi split system, pauses indoor units with the other mode",
+      "IN": {
+        "TO": "Outdoor temperature (°C)",
+        "OFF": "1 = off, all units paused",
+        "D1": "Demand 1 of an AC unit (D, K)",
+        "D2": "Demand 2 of an AC unit (D, K)",
+        "D3": "Demand 3 of an AC unit (D, K)",
+        "D4": "Demand 4 of an AC unit (D, K)",
+        "D5": "Demand 5 of an AC unit (D, K)",
+        "D6": "Demand 6 of an AC unit (D, K)",
+        "D7": "Demand 7 of an AC unit (D, K)",
+        "D8": "Demand 8 of an AC unit (D, K)"
+      },
+      "OUT": {
+        "H": "Outdoor unit heats",
+        "C": "Outdoor unit cools",
+        "TOA": "Average outdoor temperature of 48 h (°C)",
+        "P1": "Pause AC unit 1 (link to Pc)",
+        "P2": "Pause AC unit 2 (link to Pc)",
+        "P3": "Pause AC unit 3 (link to Pc)",
+        "P4": "Pause AC unit 4 (link to Pc)",
+        "P5": "Pause AC unit 5 (link to Pc)",
+        "P6": "Pause AC unit 6 (link to Pc)",
+        "P7": "Pause AC unit 7 (link to Pc)",
+        "P8": "Pause AC unit 8 (link to Pc)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Allowed modes",
+          "OFF": "Off",
+          "AUTO": "Automatic",
+          "HEATING": "Heating only",
+          "COOLING": "Cooling only"
+        },
+        "LIMH": {
+          "NAME": "Heating limit (°C)",
+          "DESCRIPTION": "Above this outdoor temperature heating does not start."
+        },
+        "LIMC": {
+          "NAME": "Cooling limit (°C)",
+          "DESCRIPTION": "Below this outdoor temperature cooling does not start."
+        },
+        "OTM": {
+          "NAME": "Outdoor temperature mode",
+          "DESCRIPTION": "Which outdoor temperature is compared with the heating and cooling limits. The 48 h average is known after 24 h, until then the current value is used.",
+          "DISABLED": "Not used",
+          "AVERAGE": "Average of the last 48 h",
+          "CURRENT": "Current value"
+        },
+        "MINRT": {
+          "NAME": "Minimum runtime (min)",
+          "DESCRIPTION": "A mode is kept at least this long"
+        }
+      }
+    },
+    "FAN_COIL_CENTRAL": {
+      "NAME": "Fan coil central controller",
+      "DESCRIPTION": "Central heating/cooling source of fan coil units, 2- or 4-pipe",
+      "IN": {
+        "TO": "Outdoor temperature (°C)",
+        "OFF": "1 = everything off",
+        "HAC": "Heating confirmed by the source (unlinked = yes)",
+        "CAC": "Cooling confirmed by the source (unlinked = yes)",
+        "D1": "Demand 1 of a fan coil unit (D, %)",
+        "D2": "Demand 2 of a fan coil unit (D, %)",
+        "D3": "Demand 3 of a fan coil unit (D, %)",
+        "D4": "Demand 4 of a fan coil unit (D, %)",
+        "D5": "Demand 5 of a fan coil unit (D, %)",
+        "D6": "Demand 6 of a fan coil unit (D, %)",
+        "D7": "Demand 7 of a fan coil unit (D, %)",
+        "D8": "Demand 8 of a fan coil unit (D, %)"
+      },
+      "OUT": {
+        "H": "Heating",
+        "C": "Cooling",
+        "TOA": "Average outdoor temperature of 48 h (°C)",
+        "AVMODE": "Allowed modes: 0 none, 1 heating, 2 cooling, 3 both",
+        "SV": "Switching valve (2-pipe): 0 heating, 1 cooling",
+        "UH": "Units may heat (link to Ha)",
+        "UC": "Units may cool (link to Ca)"
+      },
+      "PARAM": {
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Allowed modes",
+          "OFF": "Off",
+          "AUTO": "Automatic",
+          "HEATING": "Heating only",
+          "COOLING": "Cooling only"
+        },
+        "PIPES": {
+          "NAME": "Pipe system",
+          "DESCRIPTION": "4-pipe heats and cools independently, 2-pipe changes over",
+          "FOUR": "4-pipe",
+          "TWO": "2-pipe"
+        },
+        "SOTH": {
+          "NAME": "Switch-on threshold heating (%)",
+          "DESCRIPTION": "Average unit demand needed to heat"
+        },
+        "SOTC": {
+          "NAME": "Switch-on threshold cooling (%)",
+          "DESCRIPTION": "Average unit demand needed to cool"
+        },
+        "MINHRT": {
+          "NAME": "Minimum heating runtime (min)",
+          "DESCRIPTION": "Heating runs at least this long"
+        },
+        "MINCRT": {
+          "NAME": "Minimum cooling runtime (min)",
+          "DESCRIPTION": "Cooling runs at least this long"
+        },
+        "OTM": {
+          "NAME": "Outdoor temperature mode",
+          "DESCRIPTION": "Which outdoor temperature is compared with the heating and cooling limits. The 48 h average is known after 24 h, until then the current value is used.",
+          "DISABLED": "Not used",
+          "AVERAGE": "Average of the last 48 h",
+          "CURRENT": "Current value"
+        },
+        "LIMH": {
+          "NAME": "Heating limit (°C)",
+          "DESCRIPTION": "Above this outdoor temperature heating does not start."
+        },
+        "LIMC": {
+          "NAME": "Cooling limit (°C)",
+          "DESCRIPTION": "Below this outdoor temperature cooling does not start."
+        },
+        "VD": {
+          "NAME": "Valve delay (s)",
+          "DESCRIPTION": "Travel time of the switching valve (2-pipe)"
+        }
+      }
+    },
+    "FAN_COIL_UNIT": {
+      "NAME": "Fan coil unit controller",
+      "DESCRIPTION": "Fan coil unit: fan speed by PI controller, heating/cooling valves on demand",
+      "IN": {
+        "TC": "Current room temperature (°C)",
+        "TT": "Target room temperature (°C)",
+        "HA": "Heating available (unlinked = yes), link to Uh of the central",
+        "CA": "Cooling available (unlinked = yes), link to Uc of the central",
+        "DWC": "Window / door contact, everything off while open",
+        "OFF": "1 = fan and valves off",
+        "SM": "Silent mode: fan limited to the silent speed",
+        "BM": "Boost: fan 100 %",
+        "PT": "Pause timer: off for Ptd seconds",
+        "FAN": "Fan speed by hand (%), -1 = auto",
+        "HCM": "Mode of a room controller (HCm): 1 heating, -1 cooling"
+      },
+      "OUT": {
+        "H": "Heating valve (%)",
+        "COOL": "Cooling valve (%)",
+        "HC": "Heating/cooling valve (%)",
+        "FANOUT": "Fan speed (%)",
+        "FANS": "Fan speed step",
+        "TCOUT": "Current room temperature (°C)",
+        "TTOUT": "Target room temperature (°C)",
+        "MODEOUT": "Current mode: 0 off, 1 auto, 2 heating, 3 cooling, 4 ventilation",
+        "S": "On while a valve is open or the fan runs",
+        "DEMAND": "Demand for the fan coil central (%): + heating, - cooling"
+      },
+      "PARAM": {
+        "FMAX": {
+          "NAME": "Maximum fan speed in auto (%)",
+          "DESCRIPTION": "Upper limit of the automatic fan"
+        },
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Operating mode",
+          "OFF": "Off",
+          "AUTO": "Automatic",
+          "HEATING": "Heating",
+          "COOLING": "Cooling",
+          "VENTILATION": "Ventilation"
+        },
+        "PTD": {
+          "NAME": "Pause duration (s)",
+          "DESCRIPTION": "Duration of the pause timer"
+        },
+        "FKP": {
+          "NAME": "Fan gain Kp (% per K)",
+          "DESCRIPTION": "Proportional part of the temperature fan controller"
+        },
+        "FKI": {
+          "NAME": "Fan integral Ki (% per K and s)",
+          "DESCRIPTION": "Integral part of the temperature fan controller"
+        },
+        "FST": {
+          "NAME": "Fan sampling time (s)",
+          "DESCRIPTION": "Interval of the temperature fan controller"
+        },
+        "STEPS": {
+          "NAME": "Fan speed steps",
+          "DESCRIPTION": "Number of steps of FanS, 0 = no FanS"
+        },
+        "SILENT": {
+          "NAME": "Silent fan speed (%)",
+          "DESCRIPTION": "Fan limit in silent mode"
+        }
+      }
+    },
+    "FAN_COIL_FRESH_AIR": {
+      "NAME": "Fan coil fresh air unit controller",
+      "DESCRIPTION": "Fan coil unit with fresh air: fan and valves by temperature and CO2",
+      "IN": {
+        "TC": "Current room temperature (°C)",
+        "TT": "Target room temperature (°C)",
+        "HA": "Heating available (unlinked = yes), link to Uh of the central",
+        "CA": "Cooling available (unlinked = yes), link to Uc of the central",
+        "DWC": "Window / door contact, everything off while open",
+        "OFF": "1 = fan and valves off",
+        "SM": "Silent mode: fan limited to the silent speed",
+        "BM": "Boost: fan 100 %",
+        "PT": "Pause timer: off for Ptd seconds",
+        "FAN": "Fan speed by hand (%), -1 = auto",
+        "HCM": "Mode of a room controller (HCm): 1 heating, -1 cooling",
+        "CO2": "CO2 of the room (ppm)"
+      },
+      "OUT": {
+        "H": "Heating valve (%)",
+        "COOL": "Cooling valve (%)",
+        "HC": "Heating/cooling valve (%)",
+        "FANOUT": "Fan speed (%)",
+        "FANS": "Fan speed step",
+        "TCOUT": "Current room temperature (°C)",
+        "TTOUT": "Target room temperature (°C)",
+        "MODEOUT": "Current mode: 0 off, 1 auto, 2 heating, 3 cooling, 4 ventilation",
+        "S": "On while a valve is open or the fan runs",
+        "DEMAND": "Demand for the fan coil central (%): + heating, - cooling"
+      },
+      "PARAM": {
+        "FMAX": {
+          "NAME": "Maximum fan speed in auto (%)",
+          "DESCRIPTION": "Upper limit of the automatic fan"
+        },
+        "MODE": {
+          "NAME": "Mode",
+          "DESCRIPTION": "Operating mode",
+          "OFF": "Off",
+          "AUTO": "Automatic",
+          "HEATING": "Heating",
+          "COOLING": "Cooling",
+          "VENTILATION": "Ventilation"
+        },
+        "PTD": {
+          "NAME": "Pause duration (s)",
+          "DESCRIPTION": "Duration of the pause timer"
+        },
+        "FKP": {
+          "NAME": "Fan gain Kp (% per K)",
+          "DESCRIPTION": "Proportional part of the temperature fan controller"
+        },
+        "FKI": {
+          "NAME": "Fan integral Ki (% per K and s)",
+          "DESCRIPTION": "Integral part of the temperature fan controller"
+        },
+        "FST": {
+          "NAME": "Fan sampling time (s)",
+          "DESCRIPTION": "Interval of the temperature fan controller"
+        },
+        "STEPS": {
+          "NAME": "Fan speed steps",
+          "DESCRIPTION": "Number of steps of FanS, 0 = no FanS"
+        },
+        "SILENT": {
+          "NAME": "Silent fan speed (%)",
+          "DESCRIPTION": "Fan limit in silent mode"
+        },
+        "CO2T": {
+          "NAME": "CO2 target (ppm)",
+          "DESCRIPTION": "Above it the air quality counts as bad"
+        },
+        "CKP": {
+          "NAME": "CO2 fan gain Kp (% per 100 ppm)",
+          "DESCRIPTION": "Proportional part of the CO2 fan controller"
+        },
+        "CKI": {
+          "NAME": "CO2 fan integral Ki (% per 100 ppm and s)",
+          "DESCRIPTION": "Integral part of the CO2 fan controller"
+        },
+        "CST": {
+          "NAME": "CO2 sampling time (s)",
+          "DESCRIPTION": "Interval of the CO2 fan controller"
+        },
+        "VKP": {
+          "NAME": "Valve gain Kp (% per K)",
+          "DESCRIPTION": "Proportional part of the valve controller with bad air"
+        },
+        "VKI": {
+          "NAME": "Valve integral Ki (% per K and s)",
+          "DESCRIPTION": "Integral part of the valve controller with bad air"
+        },
+        "VST": {
+          "NAME": "Valve sampling time (s)",
+          "DESCRIPTION": "Interval of the valve controller"
+        }
+      }
+    }
+  }
+}

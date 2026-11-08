@@ -219,6 +219,185 @@
         "NAME": "Output max",
         "DESCRIPTION": "Highest output value"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 resets the output and locks the block until Off is 0 again"
+      }
+    },
+    "STEPPER": {
+      "NAME": "Stepper",
+      "DESCRIPTION": "Every pulse changes the value by the step size between 0 and the maximum, then starts over",
+      "STEP_INPUT": {
+        "DESCRIPTION": "Pulse changes the value by one step"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Current value"
+      },
+      "DOWN": {
+        "NAME": "Count down",
+        "DESCRIPTION": "Off = up (after the maximum back to 0), on = down (below 0 back to the maximum)"
+      },
+      "STEP": {
+        "NAME": "Step size",
+        "DESCRIPTION": "Change per pulse"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Highest value of the output"
+      }
+    },
+    "ANALOG_MEMORY": {
+      "NAME": "Analog memory",
+      "DESCRIPTION": "Stores the input value on a pulse and holds it at the output",
+      "VALUE": {
+        "DESCRIPTION": "Value to store"
+      },
+      "SET": {
+        "DESCRIPTION": "Pulse copies the value to the output"
+      },
+      "OFF": {
+        "DESCRIPTION": "Pulse sets the output to 0"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Stored value"
+      }
+    },
+    "MIN_MAX_SINCE_RESET": {
+      "NAME": "MinMax since reset",
+      "DESCRIPTION": "Lowest and highest input value since the last reset",
+      "VALUE": {
+        "DESCRIPTION": "Value to watch"
+      },
+      "RESET": {
+        "DESCRIPTION": "Pulse sets minimum and maximum to the current value"
+      },
+      "MINIMUM": {
+        "DESCRIPTION": "Lowest value since the reset"
+      },
+      "MAXIMUM": {
+        "DESCRIPTION": "Highest value since the reset"
+      }
+    },
+    "ANALOG_LIMITER": {
+      "NAME": "Analog limiter (min/max)",
+      "DESCRIPTION": "Limits the input value to a range",
+      "VALUE": {
+        "DESCRIPTION": "Value to limit"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Value within minimum and maximum"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Lowest output value"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Highest output value"
+      }
+    },
+    "MOVING_AVERAGE": {
+      "NAME": "Moving average",
+      "DESCRIPTION": "Samples the input every C seconds and outputs the average of the last N samples",
+      "VALUE": {
+        "DESCRIPTION": "Value to average"
+      },
+      "RESET": {
+        "DESCRIPTION": "1 turns the averaging off, the output follows the input"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Average of the samples"
+      },
+      "CYCLE": {
+        "NAME": "Polling cycle [s]",
+        "DESCRIPTION": "Time between two samples, 0 = every received value is a sample"
+      },
+      "COUNT": {
+        "NAME": "Number of samples",
+        "DESCRIPTION": "Samples used for the average (1-1000)"
+      }
+    },
+    "SELECTION_SWITCH_PLUS": {
+      "NAME": "Selection switch (+)",
+      "DESCRIPTION": "Every pulse on + raises the value by the step size, after the maximum it starts again at the minimum",
+      "PLUS": {
+        "DESCRIPTION": "Pulse raises the value, holding repeats"
+      },
+      "SET": {
+        "DESCRIPTION": "Sets the value directly"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 sets the default value and locks the block until Off is 0 again"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignores + and V (child lock, cleaning)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Selected value"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Lowest value"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Highest value"
+      },
+      "STEP": {
+        "NAME": "Step size",
+        "DESCRIPTION": "Change per pulse"
+      },
+      "REPEAT": {
+        "NAME": "Repetition rate [s]",
+        "DESCRIPTION": "Holding + longer than 0.5 s changes the value in this interval, 0 = off (for buttons that send no release)"
+      },
+      "DEFAULT": {
+        "NAME": "Default value",
+        "DESCRIPTION": "Value at the start and after Off"
+      }
+    },
+    "SELECTION_SWITCH_PLUS_MINUS": {
+      "NAME": "Selection switch (+/-)",
+      "DESCRIPTION": "Every pulse on + or - changes the value by the step size between minimum and maximum",
+      "PLUS": {
+        "DESCRIPTION": "Pulse raises the value, holding repeats"
+      },
+      "MINUS": {
+        "DESCRIPTION": "Pulse lowers the value, holding repeats"
+      },
+      "SET": {
+        "DESCRIPTION": "Sets the value directly"
+      },
+      "OFF": {
+        "DESCRIPTION": "1 sets the default value and locks the block until Off is 0 again"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignores +, - and V (child lock, cleaning)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Selected value"
+      },
+      "MINIMUM": {
+        "NAME": "Minimum",
+        "DESCRIPTION": "Lowest value"
+      },
+      "MAXIMUM": {
+        "NAME": "Maximum",
+        "DESCRIPTION": "Highest value"
+      },
+      "STEP": {
+        "NAME": "Step size",
+        "DESCRIPTION": "Change per pulse"
+      },
+      "REPEAT": {
+        "NAME": "Repetition rate [s]",
+        "DESCRIPTION": "Holding + or - longer than 0.5 s changes the value in this interval, 0 = off (for buttons that send no release)"
+      },
+      "DEFAULT": {
+        "NAME": "Default value",
+        "DESCRIPTION": "Value at the start and after Off"
+      }
     }
   }
 }

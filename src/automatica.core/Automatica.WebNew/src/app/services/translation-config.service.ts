@@ -90,21 +90,14 @@ export class TranslationConfigService {
       this.loadDxMessages();
 
       try {
-        var language = await this.settingsService.getLanguage();
-        var enumLanguage = <Language>language.ValueInt!;
-
-        switch(enumLanguage) {
-          case Language.German:
-            locale("de");
-            break;
-          case Language.English:
-            locale("en");
-            break;
-        }
-       
+        const language = await this.settingsService.getLanguage();
+        // the loader picks its own locale (storage, browser, default), set the server language again
+        // or the page switches language (and shows keys of a language that was never loaded)
+        await this.applyLanguage(<Language>language.ValueInt!);
       }
       catch (error) {
-        locale("en");
+        // keep the current language, the translations of it are loaded
+        console.error(error);
       }
     }
     finally {

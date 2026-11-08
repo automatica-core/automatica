@@ -29,6 +29,58 @@ namespace Automatica.Driver.ShellyFactory.Discovery
             return retList.DistinctBy(a => a.Id).ToList();
         }
 
+        /// <summary>
+        /// Every Shelly announced over mDNS (Gen1 on _http._tcp with a shelly* host name, Gen2+ on _shelly._tcp and _http._tcp),
+        /// whatever the model: the scan asks the device itself what it is.
+        /// </summary>
+        public async Task<List<ShellyDiscoveredHost>> SearchAllAsync()
+        {
+            var ret = new List<ShellyDiscoveredHost>();
+            foreach (var service in new[] { "_shelly._tcp.local.", "_http._tcp.local." })
+            {
+                IEnumerable<ZeroconfHost> hosts;
+                try
+                {
+                    hosts = await _discovery.DiscoverAsync(service, default);
+                }
+                catch (System.Exception e)
+                {
+                    _logger.LogWarning($"mDNS search for {service} failed: {e.Message}");
+                    continue;
+                }
+
+                foreach (var host in hosts ?? Enumerable.Empty<ZeroconfHost>())
+                {
+                    var isShellyService = service.StartsWith("_shelly");
+                    if (!isShellyService && (host.DisplayName == null || !host.DisplayName.StartsWith("shelly", System.StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(host.IpAddress) || ret.Any(a => a.IpAddress == host.IpAddress))
+                    {
+                        continue;
+                    }
+
+                    int? generation = null;
+                    var properties = host.Services?.Values.SelectMany(a => a.Properties ?? new List<IReadOnlyDictionary<string, string>>()) ??
+                                     Enumerable.Empty<IReadOnlyDictionary<string, string>>();
+                    foreach (var p in properties)
+                    {
+                        if (p.TryGetValue("gen", out var gen) && int.TryParse(gen, out var g))
+                        {
+                            generation = g;
+                        }
+                    }
+
+                    var id = host.DisplayName ?? host.Id ?? host.IpAddress;
+                    ret.Add(new ShellyDiscoveredHost(id, host.IpAddress, generation ?? (isShellyService ? 2 : null)));
+                }
+            }
+
+            return ret;
+        }
+
         private async Task<List<ShellyDevice>> SearchShellys(string service)
         {
             var devices = await _discovery.DiscoverAsync(service, default);

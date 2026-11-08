@@ -1,0 +1,68 @@
+{
+  "gen": 1,
+  "shelly": {
+    "type": "SHDM-2",
+    "mac": "D8BFC0A1B2C3",
+    "auth": false,
+    "fw": "20230913-114617/v1.14.0-gcb84623",
+    "num_outputs": 1,
+    "num_meters": 1
+  },
+  "settings": {
+    "name": "Dining"
+  },
+  "status": {
+    "wifi_sta": {
+      "connected": true,
+      "ssid": "home",
+      "ip": "192.168.1.30",
+      "rssi": -61
+    },
+    "lights": [
+      {
+        "ison": true,
+        "source": "http",
+        "has_timer": false,
+        "mode": "white",
+        "brightness": 60,
+        "transition": 0
+      }
+    ],
+    "meters": [
+      {
+        "power": 21.4,
+        "overpower": 0.0,
+        "is_valid": true,
+        "timestamp": 0,
+        "counters": [
+          0,
+          0,
+          0
+        ],
+        "total": 3600
+      }
+    ],
+    "inputs": [
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      },
+      {
+        "input": 0,
+        "event": "",
+        "event_cnt": 0
+      }
+    ],
+    "temperature": 52.1,
+    "overtemperature": false,
+    "loaderror": false,
+    "overpower": false,
+    "update": {
+      "status": "idle",
+      "has_update": false,
+      "new_version": "",
+      "old_version": "20230913-112003/v1.14.0-gcb84623"
+    }
+  }
+}

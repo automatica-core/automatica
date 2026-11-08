@@ -69,16 +69,25 @@ namespace Automatica.Core.WebApi.Tests.Http
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetAllByArea)}",
             $"{nameof(VisualizationController)}.{nameof(VisualizationController.GetPage)}",
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.GetBlinds)}",
+            // automations an admin released for the visualization: every signed-in user sees them
+            $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.GetAll)}",
+            $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.GetState)}",
         };
 
         /// <summary>
         /// Actions for the visualization and the administrators (not for viewers): the auto switch of the shading on the
-        /// blind tiles. They need the roles visu or administrator on top of the viewer policy of their controller.
+        /// blind tiles, and changing the released values of automations (Loxone "Automatic Rule": times, days,
+        /// thresholds and values the admin marked, on/off; never the structure). They need the roles visu or
+        /// administrator on top of the viewer policy of their controller.
         /// </summary>
         private static readonly HashSet<string> IntendedVisuActions = new()
         {
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.SetAutomatic)}",
             $"{nameof(ShadingVisuController)}.{nameof(ShadingVisuController.Resume)}",
+            $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.Update)}",
+            $"{nameof(AutomationsVisuController)}.{nameof(AutomationsVisuController.SetEnabled)}",
+            // arming, disarming and acknowledging the security logics (alarms, access controller)
+            $"{nameof(SecurityVisuController)}.{nameof(SecurityVisuController.Command)}",
         };
 
         private readonly WebApiHost _host;

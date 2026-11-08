@@ -131,6 +131,101 @@
       "OUTPUT": {
         "DESCRIPTION": "Value of the selected input"
       }
+    },
+    "LOXONE": {
+      "OFF": {
+        "DESCRIPTION": "1 resets the outputs and locks the block until Off is 0 again"
+      }
+    },
+    "SEQUENCER": {
+      "NAME": "Sequencer",
+      "DESCRIPTION": "Every pulse switches on the next output, after the last one it starts again at O1",
+      "TRIGGER": {
+        "DESCRIPTION": "Pulse switches on the next output"
+      },
+      "POSITION": {
+        "DESCRIPTION": "Number of the output to switch on (0 = all off)"
+      },
+      "RESET": {
+        "DESCRIPTION": "Pulse switches on the default output"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignores Tr and P (child lock)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 while this output is selected"
+      },
+      "SELECTED": {
+        "DESCRIPTION": "Number of the selected output (0 = none)"
+      },
+      "MAX": {
+        "NAME": "Outputs used",
+        "DESCRIPTION": "Number of outputs the sequence runs through (1-8)"
+      },
+      "DEFAULT": {
+        "NAME": "Default output",
+        "DESCRIPTION": "Output switched on by R (0 = all off)"
+      }
+    },
+    "SHIFT_REGISTER": {
+      "NAME": "Shift register",
+      "DESCRIPTION": "Delays digital values by a number of pulses: every pulse stores D and shifts the register",
+      "TRIGGER": {
+        "DESCRIPTION": "Pulse stores D and shifts the register"
+      },
+      "DATA": {
+        "DESCRIPTION": "Value stored with the next pulse"
+      },
+      "DIRECTION": {
+        "DESCRIPTION": "0 = shift up (enter at bit 1), 1 = shift down (enter at bit 64)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Value of the selected register bit"
+      },
+      "BIT": {
+        "NAME": "Register bit",
+        "DESCRIPTION": "Bit passed to the output (1-64)"
+      }
+    },
+    "RADIO_BUTTONS": {
+      "NAME": "Radio buttons",
+      "DESCRIPTION": "Up to 16 outputs of which only one is on at a time, selectable in the visualisation",
+      "INPUT": {
+        "DESCRIPTION": "Pulse switches on the output with the same number"
+      },
+      "NEXT": {
+        "DESCRIPTION": "Pulse switches on the next output"
+      },
+      "PREVIOUS": {
+        "DESCRIPTION": "Pulse switches on the previous output"
+      },
+      "SELECT": {
+        "DESCRIPTION": "Number of the output to switch on (0 = all off)"
+      },
+      "DISABLE": {
+        "DESCRIPTION": "1 ignores all inputs except the visualisation (child lock, cleaning)"
+      },
+      "VISU": {
+        "DESCRIPTION": "Selection from the visualisation, not limited by Max and DisPc"
+      },
+      "NUMBER": {
+        "DESCRIPTION": "Number of the active output (0 = all off)"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "1 while this output is active"
+      },
+      "MAX": {
+        "NAME": "Max. outputs",
+        "DESCRIPTION": "Outputs that can be selected through the inputs (1-16)"
+      },
+      "SKIP_ZERO": {
+        "NAME": "Skip 0",
+        "DESCRIPTION": "+ and - skip 'all off'"
+      },
+      "LABELS": {
+        "NAME": "Output names",
+        "DESCRIPTION": "Names of the outputs for the visualisation, separated by ; (e.g. Off;Radio;TV)"
+      }
     }
   }
 }

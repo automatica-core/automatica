@@ -79,6 +79,38 @@
                 "NAME": "Camera",
                 "DESCRIPTION": "Live picture of a camera (camera driver)"
             },
+            "ENERGY_FLOW": {
+                "NAME": "Energy flow",
+                "DESCRIPTION": "Live power flow between grid, PV, battery and consumers (energy monitor logic)"
+            },
+            "STATUS": {
+                "NAME": "Status",
+                "DESCRIPTION": "Status text with icon and color (status logic)"
+            },
+            "STATUS_MONITOR": {
+                "NAME": "Status monitor",
+                "DESCRIPTION": "Objects per state and the latest changes (status monitor logic)"
+            },
+            "TRACKER": {
+                "NAME": "Tracker",
+                "DESCRIPTION": "Event log with time stamps (tracker logic)"
+            },
+            "ROOM_CONTROLLER": {
+                "NAME": "Room controller",
+                "DESCRIPTION": "Current and target temperature of a room, warmer / cooler"
+            },
+            "CLIMATE_UNIT": {
+                "NAME": "Climate unit",
+                "DESCRIPTION": "AC unit or fan coil: temperature, target, mode and fan"
+            },
+            "CLIMATE_CENTRAL": {
+                "NAME": "Climate central",
+                "DESCRIPTION": "Heating / cooling source, HVAC, central or mixing valve: state and load"
+            },
+            "SECURITY": {
+                "NAME": "Security",
+                "DESCRIPTION": "Arm, acknowledge and log of an alarm or access logic"
+            },
             "LIGHTING_CONTROLLER": {
                 "NAME": "Lighting controller",
                 "DESCRIPTION": "Moods and lighting circuits of a room (lighting controller logic)"

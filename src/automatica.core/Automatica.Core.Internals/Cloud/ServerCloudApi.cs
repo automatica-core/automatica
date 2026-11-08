@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Base.IO;
+using Automatica.Core.Internals.Mail;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -10,18 +11,21 @@ namespace Automatica.Core.Internals.Cloud
 {
     internal class ServerCloudApi : IServerCloudApi
     {
-        private readonly CloudApi _cloudApi;
+        private readonly IMailService _mailService;
         private readonly TextToSpeechApi _textToSpeedApi;
 
-        public ServerCloudApi(CloudApi cloudApi, TextToSpeechApi textToSpeedApi)
+        public ServerCloudApi(IMailService mailService, TextToSpeechApi textToSpeedApi)
         {
-            _cloudApi = cloudApi;
+            _mailService = mailService;
             _textToSpeedApi = textToSpeedApi;
         }
 
-        public Task<bool> SendEmail(IList<string> to, string subject, string message)
+        /// <summary>
+        /// Through the own SMTP server when it is switched on in the settings, otherwise through the cloud
+        /// </summary>
+        public async Task<bool> SendEmail(IList<string> to, string subject, string message)
         {
-            return _cloudApi.SendEmail(to, subject, message);
+            return (await _mailService.SendAsync(to, subject, message).ConfigureAwait(false)).Success;
         }
 
         public async Task<string> Synthesize(Guid id, string text, string language, string voice)

@@ -15,16 +15,20 @@ export interface AutomationDefinition {
     triggers: TriggerDefinition[];
     conditions: ConditionGroup;
     actions: ActionDefinition[];
+    /** released for the visualization: visu users switch it on/off and change the blocks marked userEditable */
+    userAccess?: boolean;
 }
 
 // ---------- triggers ----------
 
-export type TriggerType = "datapoint" | "time" | "sun" | "conditions" | "control" | "startup";
-export const TRIGGER_TYPES: TriggerType[] = ["datapoint", "time", "sun", "conditions", "control", "startup"];
+export type TriggerType = "datapoint" | "time" | "sun" | "conditions" | "control" | "startup" | "scene";
+export const TRIGGER_TYPES: TriggerType[] = ["datapoint", "time", "sun", "conditions", "control", "startup", "scene"];
 
 interface TriggerBase {
     /** free id, used by the "started by trigger" condition and the run history */
     id?: string;
+    /** visualization users may change the values of this block (needs userAccess on the definition) */
+    userEditable?: boolean;
 }
 
 export type DatapointChange = "any" | "to" | "above" | "below";
@@ -74,7 +78,14 @@ export interface StartupTrigger extends TriggerBase {
     type: "startup";
 }
 
-export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | ConditionsTrigger | ControlTrigger | StartupTrigger;
+/** a scene block (logic "Scene") is activated from its input or its button in the visualization */
+export interface SceneTrigger extends TriggerBase {
+    type: "scene";
+    /** the scene block (its logic instance id = control id) */
+    scene?: string;
+}
+
+export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | ConditionsTrigger | ControlTrigger | StartupTrigger | SceneTrigger;
 
 // ---------- conditions ----------
 
@@ -85,6 +96,11 @@ export const CONDITION_TYPES: ConditionType[] = ["datapoint", "time", "sun", "co
 export type GroupOperator = "all" | "any" | "not";
 export const GROUP_OPERATORS: GroupOperator[] = ["all", "any", "not"];
 
+interface ConditionBase {
+    /** visualization users may change the values of this block (needs userAccess on the definition) */
+    userEditable?: boolean;
+}
+
 export interface ConditionGroup {
     type: "group";
     operator: GroupOperator;
@@ -94,7 +110,7 @@ export interface ConditionGroup {
 export type CompareOperator = "eq" | "ne" | "lt" | "le" | "gt" | "ge" | "between";
 export const COMPARE_OPERATORS: CompareOperator[] = ["eq", "ne", "lt", "le", "gt", "ge", "between"];
 
-export interface DatapointCondition {
+export interface DatapointCondition extends ConditionBase {
     type: "datapoint";
     node?: string;
     operator: CompareOperator;
@@ -103,7 +119,7 @@ export interface DatapointCondition {
     value2?: AutomationValue;
 }
 
-export interface TimeCondition {
+export interface TimeCondition extends ConditionBase {
     type: "time";
     /** "HH:mm", wraps midnight when after > before */
     after?: string;
@@ -111,7 +127,7 @@ export interface TimeCondition {
     days: DayOfWeekName[];
 }
 
-export interface SunCondition {
+export interface SunCondition extends ConditionBase {
     type: "sun";
     after?: SunEvent | null;
     afterOffsetMinutes: number;
@@ -142,16 +158,18 @@ export type ConditionDefinition = ConditionGroup | DatapointCondition | TimeCond
 
 // ---------- actions ----------
 
-export type ActionType = "setValue" | "control" | "groupControl" | "delay" | "waitUntil" | "notify" | "if" | "runAutomation" | "enableAutomation" | "shading"
-    | "stop";
-export const ACTION_TYPES: ActionType[] = ["setValue", "control", "groupControl", "delay", "waitUntil", "notify", "if", "runAutomation", "enableAutomation",
-    "shading", "stop"];
+export type ActionType = "setValue" | "control" | "groupControl" | "delay" | "waitUntil" | "notify" | "mail" | "if" | "runAutomation" | "enableAutomation"
+    | "shading" | "stop";
+export const ACTION_TYPES: ActionType[] = ["setValue", "control", "groupControl", "delay", "waitUntil", "notify", "mail", "if", "runAutomation",
+    "enableAutomation", "shading", "stop"];
 
 interface ActionBase {
     /** a disabled action is skipped (default true) */
     enabled: boolean;
     /** a failing action is logged and the run continues (default false) */
     continueOnError: boolean;
+    /** visualization users may change the values of this block (needs userAccess on the definition) */
+    userEditable?: boolean;
 }
 
 export type SetValueMode = "value" | "toggle" | "increment" | "copy";
@@ -213,6 +231,14 @@ export interface NotifyAction extends ActionBase {
     email: string[];
 }
 
+/** an email with own text, through the SMTP server of the settings or the Automatica cloud */
+export interface MailAction extends ActionBase {
+    type: "mail";
+    to: string[];
+    subject?: string;
+    body?: string;
+}
+
 export interface IfAction extends ActionBase {
     type: "if";
     condition: ConditionDefinition;
@@ -247,5 +273,29 @@ export interface StopAction extends ActionBase {
     reason?: string;
 }
 
-export type ActionDefinition = SetValueAction | ControlAction | GroupControlAction | DelayAction | WaitUntilAction | NotifyAction
+export type ActionDefinition = SetValueAction | ControlAction | GroupControlAction | DelayAction | WaitUntilAction | NotifyAction | MailAction
     | IfAction | RunAutomationAction | EnableAutomationAction | ShadingAction | StopAction;
+
+// ---------- released for the visualization ----------
+
+/**
+ * The fields visualization users may change per block kind and type, mirrors AutomationUserAccess in the core
+ * (the server refuses everything else). A type that is missing here cannot be released.
+ */
+export const USER_EDITABLE_FIELDS: { [kindAndType: string]: string[] } = {
+    "trigger/time": ["at", "days"],
+    "trigger/sun": ["event", "offsetMinutes", "days"],
+    "trigger/datapoint": ["value", "forSeconds"],
+    "condition/time": ["after", "before", "days"],
+    "condition/sun": ["after", "afterOffsetMinutes", "before", "beforeOffsetMinutes"],
+    "condition/datapoint": ["value", "value2"],
+    "action/setValue": ["value", "step"],
+    "action/control": ["value"],
+    "action/delay": ["seconds", "randomToSeconds"],
+    "action/waitUntil": ["forSeconds", "timeoutSeconds"],
+    "action/mail": ["to"]
+};
+
+export function userEditableFields(kind: string, type: string): string[] {
+    return USER_EDITABLE_FIELDS[`${kind}/${type}`] ?? [];
+}

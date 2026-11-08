@@ -2,6 +2,8 @@ import { Component, OnInit, Input, ChangeDetectionStrategy, HostBinding } from "
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { VisuPageGroupType } from "src/app/base/model/visu-page";
 
+const WIDE_TILES = new Set(["camera", "energy-flow"]);
+
 @Component({
     selector: "app-visualization-element",
     templateUrl: "./element.component.html",
@@ -17,10 +19,10 @@ export class ElementComponent implements OnInit {
   @Input()
   pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
-  /** camera pictures need the room of two tiles */
+  /** camera pictures and the energy flow need the room of two tiles */
   @HostBinding("class.is-wide")
   get isWide(): boolean {
-    return this.item?.VisuObjectTemplate?.Key === "camera";
+    return WIDE_TILES.has(this.item?.VisuObjectTemplate?.Key);
   }
 
   constructor() { }

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Control.Base;
+using Automatica.Core.Control.Cache;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Model.Models.User;
@@ -23,10 +25,12 @@ namespace Automatica.Push.Hubs
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
+        private readonly IControlCache _controlCache;
         private readonly ILogger<DataHub> _logger;
 
-        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, ILogger<DataHub> logger)
+        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, IControlCache controlCache, ILogger<DataHub> logger)
         {
+            _controlCache = controlCache;
             _logger = logger;
             _dispatcher = dispatcher;
             _notify = notify;
@@ -202,6 +206,14 @@ namespace Automatica.Push.Hubs
                     !HubAccess.IsAdmin(Context.User))
                 {
                     throw new HubException("Logic outputs cannot be written");
+                }
+
+                // security logics (alarms, access controller) are armed and acknowledged through the authorised and audited
+                // webapi/security-visu, a visualization user must not disarm them by writing an input
+                if (_controlCache.Get(logicInterface.This2RuleInstance) is ISecurityControl && !HubAccess.IsAdmin(Context.User))
+                {
+                    _logger.LogWarning($"Refused write of user {SanitizeForLog(Context.User?.Identity?.Name)} to an input of security logic {logicInterface.This2RuleInstance}");
+                    throw new HubException("Inputs of security logics cannot be written, use the security commands");
                 }
 
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
