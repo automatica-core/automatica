@@ -124,6 +124,13 @@ namespace Automatica.Core.Tests.Automation
 
         public IControl GetControl(Guid id) => Controls.TryGetValue(id, out var control) ? control : null;
 
+        /// <summary>
+        /// Logic outputs by (logic id, template key), e.g. the "activated" output of a scene block
+        /// </summary>
+        public Dictionary<(Guid Logic, string Key), Guid> LogicOutputs { get; } = new();
+
+        public Guid? FindLogicOutput(Guid logicId, string key) => LogicOutputs.TryGetValue((logicId, key), out var id) ? id : null;
+
         public IReadOnlyList<IControl> GetControls(Guid? area, bool includeSubAreas, Guid? category) => Controls.Values.ToList();
 
         public bool AreaExists(Guid id) => true;

@@ -62,6 +62,45 @@
       "NAME": "Trigger only if true",
       "DESCRIPTION": ""
     },
+    "SEQUENCE_CONTROLLER": {
+      "NAME": "Sequence controller",
+      "DESCRIPTION": "Runs sequences of steps written as text, one line per interval: set, setpulse, sleep, waitcondition, if/else/endif, goto, startsequence, return. A line \"sequence <name>\" starts a new sequence (up to 8).",
+      "START": {
+        "DESCRIPTION": "Starts the sequence with this number from line 1 (any value other than 0)"
+      },
+      "INPUT": {
+        "DESCRIPTION": "Analog input, used in the program as AI1..AI8"
+      },
+      "SELECT": {
+        "DESCRIPTION": "Starts the sequence with this number, 0 stops"
+      },
+      "OFF": {
+        "DESCRIPTION": "Off: stops, sets the outputs to 0 and locks the block while 1"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Analog output, set in the program as AQ1..AQ8"
+      },
+      "ACTIVE": {
+        "DESCRIPTION": "Number of the running sequence, 0 = none"
+      },
+      "LINE": {
+        "DESCRIPTION": "Current line of the running sequence"
+      },
+      "TEXT": {
+        "DESCRIPTION": "Text output, set in the program with set TQ = \"...\""
+      },
+      "ERRORS": {
+        "DESCRIPTION": "Errors in the program (invalid lines are skipped), empty when the program is valid"
+      },
+      "PROGRAM": {
+        "NAME": "Program",
+        "DESCRIPTION": "The sequences, one command per line. Example: sequence Heat / set AQ1 = 1 / waitcondition AI1 >= 55 / set AQ1 = 0"
+      },
+      "INTERVAL": {
+        "NAME": "Interval (ms)",
+        "DESCRIPTION": "Time between two steps, 20 to 1000 ms"
+      }
+    },
     "PULSE_GENERATOR": {
       "NAME": "Pulse generator",
       "DESCRIPTION": "While enabled the output alternates between 1 for the on time and 0 for the off time",

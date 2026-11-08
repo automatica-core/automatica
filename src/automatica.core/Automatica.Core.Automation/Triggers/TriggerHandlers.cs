@@ -54,6 +54,7 @@ namespace Automatica.Core.Automation.Triggers
                 ConditionsTrigger conditions => new ConditionsTriggerHandler(conditions, path),
                 ControlTrigger control => new ControlTriggerHandler(control, path),
                 StartupTrigger startup => new StartupTriggerHandler(startup, path),
+                SceneTrigger scene => new SceneTriggerHandler(scene, path),
                 _ => throw new NotSupportedException($"Trigger {trigger?.GetType().Name} is not supported")
             };
         }
@@ -487,6 +488,67 @@ namespace Automatica.Core.Automation.Triggers
         {
             _disposed = true;
             _callbackControl?.UnregisterValueCallback(_callbackId);
+            return ValueTask.CompletedTask;
+        }
+    }
+
+    /// <summary>
+    /// A scene block pulses its "activated" output (1 and back to 0): every change to true fires, also the first one after
+    /// a restart when the previous value is still unknown (unlike the datapoint trigger).
+    /// </summary>
+    internal sealed class SceneTriggerHandler : ITriggerHandler
+    {
+        private readonly SceneTrigger _trigger;
+        private readonly string _path;
+        private readonly object _lock = new();
+        private IDisposable _subscription;
+        private bool _high;
+        private volatile bool _disposed;
+
+        public SceneTriggerHandler(SceneTrigger trigger, string path)
+        {
+            _trigger = trigger;
+            _path = path;
+        }
+
+        public async Task StartAsync(TriggerContext context, Func<TriggerEvent, Task> fire)
+        {
+            var output = context.Environment.FindLogicOutput(_trigger.Scene, SceneTrigger.ActivatedOutputKey);
+            if (output == null)
+            {
+                context.Logger.LogWarning($"Automation {context.AutomationId}: scene {_trigger.Scene} of {_path} not found");
+                return;
+            }
+
+            _high = IsTrue(context.Environment.GetValue(output.Value));
+            _subscription = await context.Environment.SubscribeAsync(output.Value, change =>
+            {
+                if (_disposed)
+                {
+                    return Task.CompletedTask;
+                }
+
+                var high = IsTrue(change.Value);
+                bool rising;
+                lock (_lock)
+                {
+                    rising = high && !_high;
+                    _high = high;
+                }
+
+                return rising ? fire(new TriggerEvent(_trigger.Id, _path, true, false)) : Task.CompletedTask;
+            });
+        }
+
+        private static bool IsTrue(object value)
+        {
+            return AutomationValues.AreEqual(AutomationValues.ToPlain(value), true);
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            _disposed = true;
+            _subscription?.Dispose();
             return ValueTask.CompletedTask;
         }
     }

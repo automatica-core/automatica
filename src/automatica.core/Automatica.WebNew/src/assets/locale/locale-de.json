@@ -996,7 +996,9 @@
           "CONTROL": "Steuerelement geschaltet",
           "CONTROL_HINT": "ein Schalter oder Dimmer geht ein oder aus",
           "STARTUP": "Server gestartet",
-          "STARTUP_HINT": "einmal nach jedem Start"
+          "STARTUP_HINT": "einmal nach jedem Start",
+          "SCENE": "Szene aktiviert",
+          "SCENE_HINT": "ein Szenen-Baustein: sein Eingang oder seine Schaltfläche in der Visualisierung"
         },
         "CONDITION": {
           "GROUP": "Gruppe",
@@ -1065,6 +1067,8 @@
         "CONTROL": "Steuerelement",
         "TO": "Geschaltet",
         "STARTUP_HINT": "Löst einmal aus, nachdem der Server gestartet ist.",
+        "SCENE": "Szene",
+        "SCENE_HINT": "Füge im Logikeditor einen Baustein \"Szene\" (Bedienung) hinzu und platziere ihn in der Visualisierung. Jede Aktivierung startet diese Regel.",
         "TRIGGER_ID": "Auslöser-ID",
         "TRIGGER_ID_HINT": "Wird im Verlauf angezeigt und von „Gestartet durch Auslöser“ verwendet",
         "OPERATOR": "Ist",
@@ -1259,6 +1263,8 @@
         "T_CTRL_ON": "{{ control }} eingeschaltet wird",
         "T_CTRL_OFF": "{{ control }} ausgeschaltet wird",
         "T_STARTUP": "der Server gestartet ist",
+        "T_SCENE": "die Szene {{ scene }} aktiviert wird",
+        "T_SCENE_NONE": "eine Szene aktiviert wird",
         "C_GROUP_EMPTY": "immer",
         "C_GROUP_NEVER": "nie",
         "C_GROUP_NOT": "nicht ({{ list }})",
@@ -1331,6 +1337,7 @@
         "NODENOTWRITABLE": "Der Datenpunkt kann nicht geschrieben werden.",
         "CONTROLNOTFOUND": "Das Steuerelement gibt es nicht (mehr).",
         "CONTROLNOTSUPPORTED": "Das Steuerelement unterstützt das nicht.",
+        "SCENENOTFOUND": "Der Szenen-Baustein existiert nicht (mehr).",
         "INVALIDTIME": "Die Uhrzeit ist ungültig (HH:mm).",
         "VALUEMISSING": "Ein Wert fehlt.",
         "AUTOMATIONNOTFOUND": "Die Regel gibt es nicht (mehr).",

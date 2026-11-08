@@ -147,6 +147,16 @@ namespace Automatica.Core.Automation.Engine
             return _controlCache.Get(id);
         }
 
+        public Guid? FindLogicOutput(Guid logicId, string key)
+        {
+            var logic = _logicInstanceCache.Get(logicId);
+            var output = logic?.RuleInterfaceInstance?.FirstOrDefault(a =>
+                a.This2RuleInterfaceTemplateNavigation != null &&
+                a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output &&
+                string.Equals(a.This2RuleInterfaceTemplateNavigation.Key, key, StringComparison.OrdinalIgnoreCase));
+            return output?.ObjId;
+        }
+
         public IReadOnlyList<IControl> GetControls(Guid? area, bool includeSubAreas, Guid? category)
         {
             var result = new List<IControl>();

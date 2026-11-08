@@ -104,6 +104,12 @@ namespace Automatica.Core.Automation.Engine
                 case ControlTrigger control:
                     SwitchControl(control.Control, path);
                     break;
+                case SceneTrigger scene:
+                    if (_environment.FindLogicOutput(scene.Scene, SceneTrigger.ActivatedOutputKey) == null)
+                    {
+                        Error(path, "sceneNotFound");
+                    }
+                    break;
             }
         }
 
@@ -365,6 +371,9 @@ namespace Automatica.Core.Automation.Engine
                         break;
                     case ControlTrigger control:
                         result.Add((control.Control, AutomationReferenceType.Control, AutomationReferenceRole.Trigger));
+                        break;
+                    case SceneTrigger scene:
+                        result.Add((scene.Scene, AutomationReferenceType.Control, AutomationReferenceRole.Trigger));
                         break;
                     case ConditionsTrigger conditions:
                         Condition(conditions.Conditions, AutomationReferenceRole.Trigger, result);

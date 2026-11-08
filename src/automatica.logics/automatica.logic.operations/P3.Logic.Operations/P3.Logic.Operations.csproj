@@ -21,6 +21,9 @@
     <EmbeddedResource Include="automatica-manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="P3.Logic.Operations.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Operations-de.json" />
     <EmbeddedResource Include="Resources\Operations-en.json" />
     <EmbeddedResource Include="Resources\Climate-de.json" />

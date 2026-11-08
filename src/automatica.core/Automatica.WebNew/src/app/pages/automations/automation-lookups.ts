@@ -56,7 +56,12 @@ export class AutomationLookups {
         this.controlMap = new Map(this.controls.map(c => [c.id, c]));
         this.switchControls = this.controls.filter(c => c.type === "switch" || c.type === "dimmer");
         this.blindControls = this.controls.filter(c => c.type === "blind");
+        // the scene block of the operations plugin, the controls API names it by class name
+        this.sceneControls = this.controls.filter(c => c.type === "scene");
     }
+
+    /** scene blocks, for the trigger "scene is activated" */
+    sceneControls: ControlOption[] = [];
 
     /** blinds, for the automatic shading */
     blindControls: ControlOption[] = [];

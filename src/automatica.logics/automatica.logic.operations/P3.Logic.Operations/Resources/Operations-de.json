@@ -46,6 +46,22 @@
         "DESCRIPTION": "O"
       }
     },
+    "SCENE": {
+      "NAME": "Szene",
+      "DESCRIPTION": "Startet eine Szene (eine Aktionsliste ohne Bedingungen) über einen Eingang oder eine Schaltfläche in der Visualisierung. Die Aktionen sind eine Automatisierung mit dem Auslöser 'Szene wird aktiviert'.",
+      "ACTIVATE": {
+        "DESCRIPTION": "Aktivieren: jeder Wert ungleich 0 startet die Szene"
+      },
+      "OFF": {
+        "DESCRIPTION": "Aus: solange 1 ist die Szene gesperrt und kann nicht gestartet werden"
+      },
+      "ACTIVATED": {
+        "DESCRIPTION": "Impuls (1 für 0,5 s), wenn die Szene gestartet wird"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "1, solange die Szene gesperrt ist"
+      }
+    },
     "DIMMER": {
       "NAME": "Dimmer",
       "DESCRIPTION": "Dimmer",

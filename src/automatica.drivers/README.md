@@ -18,6 +18,8 @@ Here is a list of all built-in available drivers.
 * [Home Connect](./automatica.driver.homeconnect)
     * Bosch / Siemens / Neff / Gaggenau appliances (cloud)
 * [Apple HomeKit](./automatica.driver.homekit)
+* [HTTP](./automatica.driver.http)
+    * Virtual HTTP inputs and outputs: read values from URLs, send HTTP commands
 * [Hue Bridge Simulator](./automatica.driver.huebridgesimulator)
 * [Husqvarna Automower](./automatica.driver.automower)
     * Automower robot mowers (Automower Connect API)

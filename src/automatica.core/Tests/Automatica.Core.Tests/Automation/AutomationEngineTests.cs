@@ -386,6 +386,48 @@ namespace Automatica.Core.Tests.Automation
         }
 
         [Fact]
+        public async Task SceneTrigger_FiresOnEveryActivationPulse()
+        {
+            var scene = Guid.NewGuid();
+            var activated = Guid.NewGuid();
+            _environment.LogicOutputs[(scene, SceneTrigger.ActivatedOutputKey)] = activated;
+
+            _store.Add(new AutomationDefinition
+            {
+                Triggers = { new SceneTrigger { Id = "scene", Scene = scene } },
+                Actions = { new SetValueAction { Node = _light, Value = Json(true) } }
+            });
+            await _engine.StartAsync();
+            Assert.Equal(1, _environment.SubscriberCount(activated));
+
+            // the scene block pulses 1 and back to 0 on every activation
+            await _environment.PublishAsync(activated, true);
+            await Eventually(() => _store.Runs.Count == 1, "first activation");
+            await _environment.PublishAsync(activated, false);
+            await _environment.PublishAsync(activated, true);
+            await Eventually(() => _store.Runs.Count == 2, "second activation");
+
+            Assert.All(_store.Runs, r => Assert.Equal("scene", r.TriggerId));
+        }
+
+        [Fact]
+        public async Task SceneTrigger_UnknownScene_IsAValidationError_AndDoesNotStart()
+        {
+            var definition = new AutomationDefinition
+            {
+                Triggers = { new SceneTrigger { Id = "scene", Scene = Guid.NewGuid() } },
+                Actions = { new SetValueAction { Node = _light, Value = Json(true) } }
+            };
+
+            var problems = await _engine.ValidateAsync(definition, null);
+            Assert.Contains(problems, p => p.Code == "sceneNotFound" && p.Path == "triggers/0");
+
+            _store.Add(definition);
+            await _engine.StartAsync();
+            Assert.Empty(_store.Runs);
+        }
+
+        [Fact]
         public async Task ManualRun_OfDisabledAutomation_SkipsConditions()
         {
             var automation = _store.Add(MotionLight(), enabled: false);

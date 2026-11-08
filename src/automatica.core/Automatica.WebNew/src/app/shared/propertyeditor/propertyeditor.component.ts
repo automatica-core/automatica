@@ -175,6 +175,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   public learnModeVisible: boolean = false;
   public learnNodeInstance: LearnNodeInstance[] = [];
 
+  /** multi-line text (property meta MULTILINE, e.g. the program of the sequence controller) */
+  public multilineEditPopupVisible: boolean = false;
+  public multilineEditValue: string = "";
+  public multilineEditTitle: string = "";
+  public multilineEditMaxLength: number = 65535;
+  private multilineEditSource: any;
+
   @ViewChild("timerEditPopup")
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
@@ -522,6 +529,42 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
         break;
       }
     }
+  }
+
+  isMultiline(prop: PropertyInstance): boolean {
+    return prop?.PropertyTemplate?.Meta === "MULTILINE";
+  }
+
+  /** the first line that is not empty, for the button in the grid */
+  multilinePreview(prop: PropertyInstance): string {
+    const text = typeof prop?.Value === "string" ? prop.Value : "";
+    const first = text.split(/\r?\n/).map(l => l.trim()).find(l => l.length > 0) ?? "";
+    return first.length > 40 ? first.substring(0, 40) + "…" : first;
+  }
+
+  onMultilineEditClick($event, prop: PropertyInstance) {
+    this.selectedProperty = prop;
+    this.multilineEditSource = this.item;
+    this.multilineEditValue = typeof prop.Value === "string" ? prop.Value : "";
+    this.multilineEditTitle = this.translate.translate(prop.PropertyTemplate.Name);
+    this.multilineEditMaxLength = (prop.PropertyTemplate.ExtendedType as any)?.length ?? 65535;
+    this.multilineEditPopupVisible = true;
+  }
+
+  onMultilineEditPopupClosing($event, ok: boolean) {
+    if (!this.multilineEditPopupVisible) {
+      return;
+    }
+    this.multilineEditPopupVisible = false;
+
+    if (ok && this.selectedProperty && this.selectedProperty.Value !== this.multilineEditValue) {
+      this.item = this.multilineEditSource;
+      this.selectedProperty.Value = this.multilineEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
+    }
+
+    this.selectedProperty = void 0;
+    this.multilineEditSource = void 0;
   }
 
   onTimerEditClick($event, prop: PropertyInstance) {

@@ -40,6 +40,8 @@ export function newTrigger(type: TriggerType, existing: TriggerDefinition[]): Tr
             return { type, id, to: "on" };
         case "startup":
             return { type, id };
+        case "scene":
+            return { type, id };
     }
 }
 
@@ -98,7 +100,8 @@ const TRIGGER_ICONS: Record<TriggerType, string> = {
     sun: "sun",
     conditions: "circle-check",
     control: "toggle-on",
-    startup: "power-off"
+    startup: "power-off",
+    scene: "clapperboard"
 };
 
 const CONDITION_ICONS: Record<ConditionType, string> = {

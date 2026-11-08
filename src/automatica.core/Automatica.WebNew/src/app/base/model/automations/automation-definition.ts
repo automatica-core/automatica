@@ -21,8 +21,8 @@ export interface AutomationDefinition {
 
 // ---------- triggers ----------
 
-export type TriggerType = "datapoint" | "time" | "sun" | "conditions" | "control" | "startup";
-export const TRIGGER_TYPES: TriggerType[] = ["datapoint", "time", "sun", "conditions", "control", "startup"];
+export type TriggerType = "datapoint" | "time" | "sun" | "conditions" | "control" | "startup" | "scene";
+export const TRIGGER_TYPES: TriggerType[] = ["datapoint", "time", "sun", "conditions", "control", "startup", "scene"];
 
 interface TriggerBase {
     /** free id, used by the "started by trigger" condition and the run history */
@@ -78,7 +78,14 @@ export interface StartupTrigger extends TriggerBase {
     type: "startup";
 }
 
-export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | ConditionsTrigger | ControlTrigger | StartupTrigger;
+/** a scene block (logic "Scene") is activated from its input or its button in the visualization */
+export interface SceneTrigger extends TriggerBase {
+    type: "scene";
+    /** the scene block (its logic instance id = control id) */
+    scene?: string;
+}
+
+export type TriggerDefinition = DatapointTrigger | TimeTrigger | SunTrigger | ConditionsTrigger | ControlTrigger | StartupTrigger | SceneTrigger;
 
 // ---------- conditions ----------
 

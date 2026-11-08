@@ -57,6 +57,7 @@ namespace Automatica.Core.Automation.Definition
     [JsonDerivedType(typeof(ConditionsTrigger), "conditions")]
     [JsonDerivedType(typeof(ControlTrigger), "control")]
     [JsonDerivedType(typeof(StartupTrigger), "startup")]
+    [JsonDerivedType(typeof(SceneTrigger), "scene")]
     public abstract class TriggerDefinition
     {
         /// <summary>
@@ -150,6 +151,23 @@ namespace Automatica.Core.Automation.Definition
     /// </summary>
     public sealed class StartupTrigger : TriggerDefinition
     {
+    }
+
+    /// <summary>
+    /// Fires when a scene block (logic "Scene" of the operations plugin, Loxone "Scene") is activated, from its input or
+    /// from its button in the visualization. The block pulses its output with the key <see cref="ActivatedOutputKey"/>.
+    /// </summary>
+    public sealed class SceneTrigger : TriggerDefinition
+    {
+        /// <summary>
+        /// Key of the logic output that pulses on every activation
+        /// </summary>
+        public const string ActivatedOutputKey = "activated";
+
+        /// <summary>
+        /// The scene block (logic instance id, the same as its control id)
+        /// </summary>
+        public Guid Scene { get; set; }
     }
 
     #endregion

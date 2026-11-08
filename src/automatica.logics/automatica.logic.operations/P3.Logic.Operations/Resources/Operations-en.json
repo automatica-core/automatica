@@ -46,6 +46,22 @@
         "DESCRIPTION": "O"
       }
     },
+    "SCENE": {
+      "NAME": "Scene",
+      "DESCRIPTION": "Starts a scene (an action list without conditions) from an input or from a button in the visualization. The actions are an automation with the trigger 'Scene is activated'.",
+      "ACTIVATE": {
+        "DESCRIPTION": "Activate: every value other than 0 starts the scene"
+      },
+      "OFF": {
+        "DESCRIPTION": "Off: while 1 the scene is locked and cannot be started"
+      },
+      "ACTIVATED": {
+        "DESCRIPTION": "Pulse (1 for 0.5 s) when the scene is started"
+      },
+      "LOCKED": {
+        "DESCRIPTION": "1 while the scene is locked"
+      }
+    },
     "DIMMER": {
       "NAME": "Dimmer",
       "DESCRIPTION": "Dimmer",

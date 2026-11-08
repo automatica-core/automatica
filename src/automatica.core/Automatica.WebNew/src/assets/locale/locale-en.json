@@ -996,7 +996,9 @@
           "CONTROL": "Control switched",
           "CONTROL_HINT": "a switch or dimmer turns on or off",
           "STARTUP": "Server started",
-          "STARTUP_HINT": "once after each start"
+          "STARTUP_HINT": "once after each start",
+          "SCENE": "Scene activated",
+          "SCENE_HINT": "a scene block: its input or its button in the visualization"
         },
         "CONDITION": {
           "GROUP": "Group",
@@ -1065,6 +1067,8 @@
         "CONTROL": "Control",
         "TO": "Switched",
         "STARTUP_HINT": "Fires once after the server has started.",
+        "SCENE": "Scene",
+        "SCENE_HINT": "Add a \"Scene\" block (Operation) in the logic editor and place it in the visualization. Every activation runs this rule.",
         "TRIGGER_ID": "Trigger id",
         "TRIGGER_ID_HINT": "Shown in the run history and used by \"Started by trigger\"",
         "OPERATOR": "Is",
@@ -1259,6 +1263,8 @@
         "T_CTRL_ON": "{{ control }} is switched on",
         "T_CTRL_OFF": "{{ control }} is switched off",
         "T_STARTUP": "the server has started",
+        "T_SCENE": "scene {{ scene }} is activated",
+        "T_SCENE_NONE": "a scene is activated",
         "C_GROUP_EMPTY": "always",
         "C_GROUP_NEVER": "never",
         "C_GROUP_NOT": "not ({{ list }})",
@@ -1331,6 +1337,7 @@
         "NODENOTWRITABLE": "The datapoint cannot be written.",
         "CONTROLNOTFOUND": "The control does not exist (anymore).",
         "CONTROLNOTSUPPORTED": "The control does not support this.",
+        "SCENENOTFOUND": "The scene block does not exist (anymore).",
         "INVALIDTIME": "The time is not valid (HH:mm).",
         "VALUEMISSING": "A value is missing.",
         "AUTOMATIONNOTFOUND": "The rule does not exist (anymore).",
