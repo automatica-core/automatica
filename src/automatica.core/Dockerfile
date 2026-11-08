@@ -50,11 +50,16 @@ RUN --mount=type=secret,id=cloud_api_key,required=true \
 
 RUN rm -rf /src
 
-# frp for Remote Connect. Bump deliberately: version plus the sha256 from that release's
-# frp_sha256_checksums.txt. Keep it compatible with the frps version on the cloud tunnel server.
+# frp for Remote Connect. Bump deliberately: version, the sha256 from that release's
+# frp_sha256_checksums.txt and the asset id (GitHub API repos/fatedier/frp/releases/tags/v<version>,
+# assets[].id). The asset id is the fallback for when the release download link fails (it returned 504
+# for hours in November 2026) while the GitHub API still serves the file. Keep it compatible with the
+# frps version on the cloud tunnel server.
 ARG FRP_VERSION=0.72.0
 ARG FRP_SHA256=daf719b32ca2778770bb92955e231a07414d754378b9af328aa2642862479804
-RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_amd64.tar.gz \
+ARG FRP_ASSET_ID=710291514
+RUN (curl -fsSL --retry 2 --retry-delay 10 -o frp.tgz https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_amd64.tar.gz \
+     || curl -fsSL --retry 5 --retry-delay 15 -H "Accept: application/octet-stream" -o frp.tgz https://api.github.com/repos/fatedier/frp/releases/assets/${FRP_ASSET_ID}) \
  && echo "${FRP_SHA256}  frp.tgz" | sha256sum -c - \
  && tar xzf frp.tgz \
  && mkdir -p frp \
