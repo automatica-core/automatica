@@ -542,12 +542,15 @@ namespace Automatica.Core.Runtime.Core
                 
                 _logicInstanceStore.Update(ruleInstance, oldLogic.Value);
                 await RestartLogic(oldLogic.Value, ruleInstance);
-
+                // interfaces the logic got since the engine was loaded (template migration)
+                await _logicEngineDispatcher.RegisterLogicInterfaces(ruleInstance);
             }
             else
             {
                 var newLogic = InitLogicInstance(ruleInstanceId);
                 await StartLogic(newLogic.Value, newLogic.Key);
+                // the engine registered the visualization writes of the logics it found at start only
+                await _logicEngineDispatcher.RegisterLogicInterfaces(newLogic.Key);
             }
         }
 
