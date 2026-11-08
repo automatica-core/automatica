@@ -71,6 +71,11 @@ namespace Automatica.Driver.Shelly.Gen1
             {
                 throw new ShellyRpcException(503, $"{_address} is not reachable: {e.Message}");
             }
+            catch (Exception e) when (e is System.Net.Sockets.SocketException || e is System.IO.IOException)
+            {
+                // Linux reports a connection the peer resets right away as a bare SocketException, not as HttpRequestException
+                throw new ShellyRpcException(503, $"{_address} is not reachable: {e.Message}");
+            }
 
             using (response)
             {

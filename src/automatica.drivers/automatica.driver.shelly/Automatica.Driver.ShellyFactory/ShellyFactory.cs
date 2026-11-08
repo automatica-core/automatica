@@ -26,7 +26,7 @@ namespace Automatica.Driver.ShellyFactory
 
         public override string ImageName => "automaticacore/plugin-automatica.driver.shelly";
 
-        public override Version DriverVersion => new Version(0, 3, 0, 0);
+        public override Version DriverVersion => new Version(0, 3, 0, 1);
 
         public override bool InDevelopmentMode => true;
 
