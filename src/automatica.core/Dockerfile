@@ -52,8 +52,8 @@ RUN rm -rf /src
 
 # frp for Remote Connect. Bump deliberately: version plus the sha256 from that release's
 # frp_sha256_checksums.txt. Keep it compatible with the frps version on the cloud tunnel server.
-ARG FRP_VERSION=0.71.1
-ARG FRP_SHA256=1d9875210972a5d1a62b2dc4c48df45ab0af05d3ca1b5e494a014428259df803
+ARG FRP_VERSION=0.72.0
+ARG FRP_SHA256=daf719b32ca2778770bb92955e231a07414d754378b9af328aa2642862479804
 RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_amd64.tar.gz \
  && echo "${FRP_SHA256}  frp.tgz" | sha256sum -c - \
  && tar xzf frp.tgz \
