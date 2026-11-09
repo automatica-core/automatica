@@ -17,10 +17,43 @@ namespace Automatica.Core.HyperSeries.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.DayByDayAggregatedRecordValue", b =>
+                {
+                    b.Property<double>("AverageValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("avgvalue");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer")
+                        .HasColumnName("countvalue");
+
+                    b.Property<double>("DifferenceValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("diffvalue");
+
+                    b.Property<double>("MaxValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("maxvalue");
+
+                    b.Property<double>("MinValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minvalue");
+
+                    b.Property<Guid>("NodeInstanceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("nodeinstanceid");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
+
+                    b.ToTable("values_day_by_day", (string)null);
+                });
 
             modelBuilder.Entity("Automatica.Core.HyperSeries.Model.HourByHourAggregatedRecordValue", b =>
                 {
@@ -52,7 +85,40 @@ namespace Automatica.Core.HyperSeries.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("time");
 
-                    b.ToTable("values_hour_by_hour");
+                    b.ToTable("values_hour_by_hour", (string)null);
+                });
+
+            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.MonthByMonthAggregatedRecordValue", b =>
+                {
+                    b.Property<double>("AverageValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("avgvalue");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer")
+                        .HasColumnName("countvalue");
+
+                    b.Property<double>("DifferenceValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("diffvalue");
+
+                    b.Property<double>("MaxValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("maxvalue");
+
+                    b.Property<double>("MinValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minvalue");
+
+                    b.Property<Guid>("NodeInstanceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("nodeinstanceid");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
+
+                    b.ToTable("values_month_by_month", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.HyperSeries.Model.RecordValue", b =>
@@ -70,6 +136,72 @@ namespace Automatica.Core.HyperSeries.Migrations
                         .HasColumnType("double precision");
 
                     b.ToTable("RecordValues");
+                });
+
+            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.WeekByWeekAggregatedRecordValue", b =>
+                {
+                    b.Property<double>("AverageValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("avgvalue");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer")
+                        .HasColumnName("countvalue");
+
+                    b.Property<double>("DifferenceValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("diffvalue");
+
+                    b.Property<double>("MaxValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("maxvalue");
+
+                    b.Property<double>("MinValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minvalue");
+
+                    b.Property<Guid>("NodeInstanceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("nodeinstanceid");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
+
+                    b.ToTable("values_week_by_week", (string)null);
+                });
+
+            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.YearByYearAggregatedRecordValue", b =>
+                {
+                    b.Property<double>("AverageValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("avgvalue");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer")
+                        .HasColumnName("countvalue");
+
+                    b.Property<double>("DifferenceValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("diffvalue");
+
+                    b.Property<double>("MaxValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("maxvalue");
+
+                    b.Property<double>("MinValue")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minvalue");
+
+                    b.Property<Guid>("NodeInstanceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("nodeinstanceid");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
+
+                    b.ToTable("values_year_by_year", (string)null);
                 });
 #pragma warning restore 612, 618
         }
