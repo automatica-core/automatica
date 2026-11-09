@@ -243,9 +243,40 @@ namespace Automatica.Core.Tests.Mcp
             AllowLogs(true);
             var tools = Tools(ApiKey());
 
-            Assert.Equal("all.log", tools.ListLogFiles().Single().File);
+            Assert.Equal("all.log", tools.ListLogFiles().Files.Single().File);
             Assert.Equal("hello", tools.ReadLog("all.log").Lines.Single());
             Assert.Equal(3, tools.GetLogLevels().Count);
+        }
+
+        [Fact]
+        public void ListLogFiles_ManyOldFiles_ReturnsTheNewestUpToTheLimitAndTheTotal()
+        {
+            // like a server that kept every day since 2024: thousands of files would not fit into one answer
+            var day = new DateTime(2026, 11, 9, 12, 0, 0);
+            for (var i = 0; i < 120; i++)
+            {
+                File.SetLastWriteTime(WriteLog($"enocean/enocean{day.AddDays(-i):yyyyMMdd}.log", "x\n"), day.AddDays(-i));
+            }
+            File.SetLastWriteTime(WriteLog("all20261109.log", "abc\n"), day.AddMinutes(1));
+            AllowLogs(true);
+            var tools = Tools(ApiKey());
+
+            var list = tools.ListLogFiles();
+
+            Assert.Equal(121, list.TotalCount);
+            Assert.Equal(120 * 2 + 4, list.TotalSizeBytes);
+            Assert.Equal(LogTools.DefaultFileLimit, list.Returned);
+            Assert.Equal(LogTools.DefaultFileLimit, list.Files.Count);
+            Assert.Equal("all20261109.log", list.Files[0].File);
+            Assert.Equal("enocean/enocean20261109.log", list.Files[1].File);
+
+            Assert.Equal(3, tools.ListLogFiles(limit: 3).Files.Count);
+            Assert.Single(tools.ListLogFiles(limit: 0).Files);
+            Assert.Equal(121, tools.ListLogFiles(limit: 100000).Files.Count);
+
+            var oneDay = tools.ListLogFiles("20260801");
+            Assert.Equal(1, oneDay.TotalCount);
+            Assert.Equal("enocean/enocean20260801.log", oneDay.Files.Single().File);
         }
 
         [Fact]
