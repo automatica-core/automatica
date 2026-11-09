@@ -816,16 +816,16 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
     const loadingDone = this.appService.beginLoading();
     try {
-      if (this.item instanceof NodeInstance) {
-        await this.config.update(this.item, prop.updateScope);
-
-        if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
-          await this.nodeInstanceService.saveSetting(prop);
-          // most settings apply without a restart (or only reload their own part), only tell the user when the server restarts
-          if (prop.setting.restartsServerOnChange) {
-            this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
-          }
+      if (this.item instanceof NodeInstance && !this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
+        // a server setting is not part of the root node: save only the setting. Saving the root node sends the
+        // whole device tree, which a reverse proxy rejects with 413 on bigger installations, and the setting was lost.
+        await this.nodeInstanceService.saveSetting(prop);
+        // most settings apply without a restart (or only reload their own part), only tell the user when the server restarts
+        if (prop.setting.restartsServerOnChange) {
+          this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
         }
+      } else if (this.item instanceof NodeInstance) {
+        await this.config.update(this.item, prop.updateScope);
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);
       } else if (this.item instanceof RulePage) {
