@@ -123,6 +123,9 @@
         "CONSUMER1": { "NAME": "Verbraucher 1", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW (z. B. Wallbox), wird eigens angezeigt und vom Hausverbrauch abgezogen" },
         "CONSUMER2": { "NAME": "Verbraucher 2", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW (z. B. Wärmepumpe)" },
         "CONSUMER3": { "NAME": "Verbraucher 3", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW" },
+        "CONSUMER4": { "NAME": "Verbraucher 4", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW" },
+        "CONSUMER5": { "NAME": "Verbraucher 5", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW" },
+        "CONSUMER6": { "NAME": "Verbraucher 6", "DESCRIPTION": "Leistung eines eigenen Verbrauchers in kW" },
         "PV_METER": { "NAME": "PV-Zähler", "DESCRIPTION": "Optionaler PV-Energiezähler in kWh, die PV-Energie von heute wird daraus statt aus der Leistung gezählt" },
         "IMPORT_METER": { "NAME": "Bezugszähler", "DESCRIPTION": "Optionaler Zähler für den Netzbezug in kWh" },
         "EXPORT_METER": { "NAME": "Einspeisezähler", "DESCRIPTION": "Optionaler Zähler für die Einspeisung in kWh" },
@@ -137,6 +140,9 @@
         "CONSUMER1": { "NAME": "Verbraucher 1", "DESCRIPTION": "Leistung von Verbraucher 1 in kW" },
         "CONSUMER2": { "NAME": "Verbraucher 2", "DESCRIPTION": "Leistung von Verbraucher 2 in kW" },
         "CONSUMER3": { "NAME": "Verbraucher 3", "DESCRIPTION": "Leistung von Verbraucher 3 in kW" },
+        "CONSUMER4": { "NAME": "Verbraucher 4", "DESCRIPTION": "Leistung von Verbraucher 4 in kW" },
+        "CONSUMER5": { "NAME": "Verbraucher 5", "DESCRIPTION": "Leistung von Verbraucher 5 in kW" },
+        "CONSUMER6": { "NAME": "Verbraucher 6", "DESCRIPTION": "Leistung von Verbraucher 6 in kW" },
         "HOUSE": { "NAME": "Haus", "DESCRIPTION": "Hausverbrauch in kW: PV + Bezug - Einspeisung + Entladen - Laden - eigene Verbraucher" },
         "CONSUMPTION": { "NAME": "Verbrauch", "DESCRIPTION": "Gesamtverbrauch in kW (Haus und eigene Verbraucher)" },
         "SELF_CONSUMPTION": { "NAME": "Eigenverbrauch", "DESCRIPTION": "Anteil der PV-Leistung, der selbst verbraucht wird, in % (0 ohne Erzeugung)" },
@@ -157,6 +163,9 @@
         "CONSUMER1_NAME": { "NAME": "Name Verbraucher 1" },
         "CONSUMER2_NAME": { "NAME": "Name Verbraucher 2" },
         "CONSUMER3_NAME": { "NAME": "Name Verbraucher 3" },
+        "CONSUMER4_NAME": { "NAME": "Name Verbraucher 4" },
+        "CONSUMER5_NAME": { "NAME": "Name Verbraucher 5" },
+        "CONSUMER6_NAME": { "NAME": "Name Verbraucher 6" },
         "CONSUMER_NAME": { "DESCRIPTION": "In der Energiefluss-Kachel angezeigter Name (z. B. Wallbox)" }
       }
     }

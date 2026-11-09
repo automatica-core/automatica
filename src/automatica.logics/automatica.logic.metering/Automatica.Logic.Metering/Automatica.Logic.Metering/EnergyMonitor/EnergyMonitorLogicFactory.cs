@@ -6,7 +6,7 @@ using Automatica.Core.Logic;
 namespace Automatica.Logic.Metering.EnergyMonitor
 {
     /// <summary>
-    /// Energy monitor (like Loxone's energy flow monitor): grid, PV, battery and up to three extra consumers in,
+    /// Energy monitor (like Loxone's energy flow monitor): grid, PV, battery and up to six extra consumers in,
     /// house consumption, self-consumption, autarky and today's energy out. Brings its own visu tile (energy flow).
     /// </summary>
     public class EnergyMonitorLogicFactory : LogicFactory
@@ -24,7 +24,10 @@ namespace Automatica.Logic.Metering.EnergyMonitor
         {
             new Guid("38443425-7feb-4931-a731-bebb737f375b"),
             new Guid("7322bfe1-3f09-4884-95f4-958a4cb35c11"),
-            new Guid("9d0c6855-3d20-4522-b36f-6a77b29cd8e1")
+            new Guid("9d0c6855-3d20-4522-b36f-6a77b29cd8e1"),
+            new Guid("d497c9fe-3f59-4eb5-8feb-78b0b856dbc9"),
+            new Guid("c800f1f7-528b-431e-b031-7c1d7272c6a8"),
+            new Guid("f6dde8a9-e791-4985-bd30-7c10a8e62f16")
         };
         public static readonly Guid InputPvMeter = new Guid("139f01aa-6a80-4108-b4e3-7b6dd5b58368");
         public static readonly Guid InputImportMeter = new Guid("a9002abc-35e1-42ab-84ff-74303b10e055");
@@ -41,7 +44,10 @@ namespace Automatica.Logic.Metering.EnergyMonitor
         {
             new Guid("01ce23af-f2a7-4589-b8c2-2c4add4f5d40"),
             new Guid("9582934c-fb92-4ee3-90a4-a2f4952c4c79"),
-            new Guid("b11212c4-1c5e-4426-87a1-ebf960e43249")
+            new Guid("b11212c4-1c5e-4426-87a1-ebf960e43249"),
+            new Guid("145f99a8-01ea-4748-908f-7be38e3029c1"),
+            new Guid("798ca2b2-4601-4489-ba7d-e66c8b797102"),
+            new Guid("ea992104-882f-4aaf-8899-767f6a6cdd92")
         };
         public static readonly Guid OutputHouse = new Guid("627349df-f31b-4ac1-ba6f-66e5a1472227");
         public static readonly Guid OutputConsumption = new Guid("0e8d3441-de9d-4bec-8012-8d6f312bad50");
@@ -64,11 +70,15 @@ namespace Automatica.Logic.Metering.EnergyMonitor
         {
             new Guid("c84e1ab6-010f-4dab-8fc2-d8f7646df031"),
             new Guid("56aa2d0a-ea2d-43f9-b821-be4ae8f6eeb1"),
-            new Guid("39847236-d148-434f-a1f0-7ae438649253")
+            new Guid("39847236-d148-434f-a1f0-7ae438649253"),
+            new Guid("4b74931c-0033-4869-98a4-1fb75a1f858c"),
+            new Guid("0879d7f9-4a46-49b2-a74a-ccfe74a876cb"),
+            new Guid("c3d29b2d-b980-42f7-b044-64038e0fa3d8")
         };
 
         public override string LogicName => "Metering.EnergyMonitor";
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        // 1.1: consumers 4-6 (inputs, outputs, names); the core adds them to existing instances only on a version bump
+        public override Version LogicVersion => new Version(1, 1, 0, 0);
         public override Guid LogicGuid => new Guid("270e43f0-bda0-4e87-a1ad-691dbe745adb");
 
         /// <summary>

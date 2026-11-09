@@ -7,7 +7,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
     /// </summary>
     public sealed class EnergyFlowInputs
     {
-        public const int ConsumerCount = 3;
+        public const int ConsumerCount = 6;
 
         /// <summary>signed grid power: + import (Bezug), - export (Einspeisung)</summary>
         public double? Grid { get; set; }

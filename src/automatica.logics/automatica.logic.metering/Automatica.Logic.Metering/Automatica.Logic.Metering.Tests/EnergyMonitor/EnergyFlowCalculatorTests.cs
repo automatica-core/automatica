@@ -144,7 +144,25 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             Assert.Equal(7, s.Consumption, Precision);
             Assert.Equal(6, s.ConsumersTotal, Precision);
             Assert.Equal(1, s.House, Precision);
-            Assert.Equal(new[] { 5d, 0d, 1d }, s.Consumers);
+            Assert.Equal(new[] { 5d, 0d, 1d, 0d, 0d, 0d }, s.Consumers);
+        }
+
+        [Fact]
+        public void AllSixConsumers_AreTakenOutOfTheHouse()
+        {
+            var inputs = new EnergyFlowInputs { Pv = 2, Grid = 8 };
+            for (var i = 0; i < EnergyFlowInputs.ConsumerCount; i++)
+            {
+                inputs.Consumers[i] = i + 1 == 6 ? 3 : 1; // 1 + 1 + 1 + 1 + 1 + 3
+            }
+
+            var s = EnergyFlowCalculator.Calculate(inputs);
+
+            Assert.Equal(6, EnergyFlowInputs.ConsumerCount);
+            Assert.Equal(10, s.Consumption, Precision);
+            Assert.Equal(8, s.ConsumersTotal, Precision);
+            Assert.Equal(2, s.House, Precision);
+            Assert.Equal(3, s.Consumers[5]);
         }
 
         [Fact]

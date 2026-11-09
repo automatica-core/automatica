@@ -8,7 +8,7 @@
       <div class="tile-name">{{ displayText }}</div>
     </div>
 
-    <div class="energy-stage">
+    <div class="energy-stage" [style.aspect-ratio]="aspectRatio">
       <svg class="energy-lines" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
         @for (link of layout.links; track link.id) {
           <path class="energy-track" [attr.d]="link.path"></path>

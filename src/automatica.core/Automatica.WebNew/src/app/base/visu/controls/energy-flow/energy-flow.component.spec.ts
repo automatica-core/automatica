@@ -14,7 +14,7 @@ import { VisuItemComponent } from "../visu-item.component";
 import { FakeTranslateAsyncPipe, createNotifySpy, createTranslateSpy, flushPromises } from "src/app/testing/test-helpers";
 
 /** output keys of the energy monitor logic (EnergyMonitorLogicFactory), id = "id-" + key */
-const OUTPUTS = ["grid", "pv", "battery", "soc", "consumer1", "consumer2", "consumer3", "house", "consumption",
+const OUTPUTS = ["grid", "pv", "battery", "soc", "consumer1", "consumer2", "consumer3", "consumer4", "consumer5", "consumer6", "house", "consumption",
   "selfConsumption", "autarky", "pvToday", "importToday", "exportToday", "chargeToday", "dischargeToday", "consumptionToday",
   "selfConsumptionToday", "autarkyToday"];
 
@@ -49,7 +49,7 @@ describe("EnergyFlowComponent", () => {
   }
 
   beforeEach(() => {
-    parameters = { peakPower: 10, consumer1Name: "", consumer2Name: "", consumer3Name: "" };
+    parameters = { peakPower: 10, consumer1Name: "", consumer2Name: "", consumer3Name: "", consumer4Name: "", consumer5Name: "", consumer6Name: "" };
     visuData = {};
     dataHub = {
       ruleInstanceValueChanged: new EventEmitter<any>(),
@@ -200,6 +200,43 @@ describe("EnergyFlowComponent", () => {
     expect(nodeText("consumer1")).toContain("7.40kW");
     expect(nodeText("consumer3")).toContain("UI.VISU.ENERGY_CONSUMER");
     expect(node("consumer2")).toBeNull();
+  });
+
+  it("shows all six consumers with their names and grows the stage for the bottom row", async () => {
+    parameters.consumer4Name = "EG";
+    parameters.consumer6Name = "Sauna";
+    visuData = { "id-consumer1": 7.4, hasConsumer2: true, hasConsumer3: true, "id-consumer4": 1.25, hasConsumer5: true, "id-consumer6": 0.3 };
+    await create();
+
+    for (const i of [1, 2, 3, 4, 5, 6]) {
+      expect(node(`consumer${i}`)).withContext(`consumer${i}`).not.toBeNull();
+    }
+    expect(nodeText("consumer4")).toContain("EG");
+    expect(nodeText("consumer4")).toContain("1.25kW");
+    expect(nodeText("consumer6")).toContain("Sauna");
+    expect(nodeText("consumer6")).toContain("300W");
+    expect(nodeText("consumer5")).toContain("UI.VISU.ENERGY_CONSUMER");
+    expect(el().querySelector(".energy-lines").getAttribute("viewBox")).toBe("0 0 320 300");
+    expect((el().querySelector(".energy-stage") as HTMLElement).style.aspectRatio.replace(/\s/g, "")).toBe("320/300");
+    // node positions follow the taller view box: the bottom row sits at 270 / 300
+    expect(parseFloat(node("consumer5").style.top)).toBeCloseTo(90, 5);
+  });
+
+  it("keeps the compact stage with up to four consumers", async () => {
+    visuData = { hasConsumer1: true, hasConsumer4: true };
+    await create();
+
+    expect(node("consumer4")).not.toBeNull();
+    expect(el().querySelector(".energy-lines").getAttribute("viewBox")).toBe("0 0 320 220");
+  });
+
+  it("follows live values of consumer 6", async () => {
+    await create();
+    expect(node("consumer6")).toBeNull();
+
+    push("consumer6", 2);
+
+    expect(nodeText("consumer6")).toContain("2.00kW");
   });
 
   it("shows today's autarky, self-consumption and PV energy", async () => {

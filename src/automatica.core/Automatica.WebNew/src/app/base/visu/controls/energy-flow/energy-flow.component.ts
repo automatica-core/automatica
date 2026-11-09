@@ -1,19 +1,23 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import {
-  buildEnergyFlow, EnergyConsumerConfig, EnergyFlowLayout, EnergyNode, EnergyValues, formatNumber, formatPower,
+  buildEnergyFlow, CONSUMER_COUNT, EnergyConsumerConfig, EnergyFlowLayout, EnergyNode, EnergyValues, formatNumber, formatPower,
   HUB, VIEW_HEIGHT, VIEW_WIDTH
 } from "./energy-flow-model";
 
+/** consumer numbers 1..6 */
+const CONSUMER_NUMBERS = Array.from({ length: CONSUMER_COUNT }, (_, i) => i + 1);
+
 /** output keys of the energy monitor logic that the tile shows */
-const VALUE_KEYS = ["grid", "pv", "battery", "soc", "house", "consumer1", "consumer2", "consumer3",
+const VALUE_KEYS = ["grid", "pv", "battery", "soc", "house",
+  "consumer1", "consumer2", "consumer3", "consumer4", "consumer5", "consumer6",
   "autarkyToday", "selfConsumptionToday", "pvToday"] as const;
 type ValueKey = typeof VALUE_KEYS[number];
 
 const DEFAULT_PEAK_POWER = 10;
 
 /**
- * Energy flow tile of the energy monitor logic (metering plugin): grid, PV, battery, house and up to three extra
+ * Energy flow tile of the energy monitor logic (metering plugin): grid, PV, battery, house and up to six extra
  * consumers around a hub, with dots running in the direction of the flow (faster and thicker with more power).
  * Only shows values; it writes nothing, so everyone who may see the visu page may see it.
  */
@@ -26,16 +30,15 @@ const DEFAULT_PEAK_POWER = 10;
 })
 export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 
-  readonly viewBox = `0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`;
   readonly hub = HUB;
 
-  layout: EnergyFlowLayout = { nodes: [], links: [] };
+  layout: EnergyFlowLayout = { nodes: [], links: [], height: VIEW_HEIGHT };
 
   private readonly values: { [key in ValueKey]?: number } = {};
   /** interface id -> output key */
   private readonly keysById = new Map<string, ValueKey>();
   private hasBattery = false;
-  private consumerPresent = [false, false, false];
+  private consumerPresent = CONSUMER_NUMBERS.map(() => false);
 
   async ngOnInit() {
     this.baseOnInit();
@@ -78,7 +81,7 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
       }
     }
     this.hasBattery = data["hasBattery"] === true;
-    this.consumerPresent = [1, 2, 3].map(i => data[`hasConsumer${i}`] === true);
+    this.consumerPresent = CONSUMER_NUMBERS.map(i => data[`hasConsumer${i}`] === true);
     this.rebuild();
   }
 
@@ -113,7 +116,7 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
   }
 
   private consumers(): EnergyConsumerConfig[] {
-    return [1, 2, 3].map(i => {
+    return CONSUMER_NUMBERS.map(i => {
       const name = this.parameter(`consumer${i}Name`);
       return { name: typeof name === "string" && name.trim() ? name.trim() : undefined, present: this.consumerPresent[i - 1] };
     });
@@ -126,7 +129,7 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
       battery: this.values.battery,
       soc: this.values.soc,
       house: this.values.house,
-      consumers: [this.values.consumer1, this.values.consumer2, this.values.consumer3],
+      consumers: CONSUMER_NUMBERS.map(i => this.values[`consumer${i}` as ValueKey]),
       autarkyToday: this.values.autarkyToday,
       selfConsumptionToday: this.values.selfConsumptionToday,
       pvToday: this.values.pvToday
@@ -147,12 +150,21 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
     return this.translate?.getLocale?.()?.language || "en";
   }
 
+  /** grows with the bottom consumer row; the stage keeps the same ratio so nodes and lines stay on top of each other */
+  get viewBox(): string {
+    return `0 0 ${VIEW_WIDTH} ${this.layout.height}`;
+  }
+
+  get aspectRatio(): string {
+    return `${VIEW_WIDTH} / ${this.layout.height}`;
+  }
+
   left(node: EnergyNode): number {
     return node.position.x / VIEW_WIDTH * 100;
   }
 
   top(node: EnergyNode): number {
-    return node.position.y / VIEW_HEIGHT * 100;
+    return node.position.y / this.layout.height * 100;
   }
 
   power(node: EnergyNode) {

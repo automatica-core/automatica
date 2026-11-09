@@ -47,7 +47,7 @@
     width: 100%;
     max-width: 520px;
     margin: 0 auto;
-    aspect-ratio: 320 / 220;
+    aspect-ratio: 320 / 220; // 320 / 300 with the bottom consumer row, set by the component
     min-height: 0;
 }
 
@@ -243,7 +243,7 @@
     border: 0;
 }
 
-// phones: smaller nodes so five to seven of them fit into ~340 px
+// phones: smaller nodes so up to ten of them (PV, grid, house, battery, six consumers) fit into ~340 px
 @media (max-width: 480px) {
     .energy {
         padding: 10px;

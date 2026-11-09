@@ -1,6 +1,6 @@
 import {
-  ACTIVE_THRESHOLD, buildEnergyFlow, flowDirection, flowDuration, formatNumber, formatPower, HUB, linkPath, load, strokeWidth,
-  EnergyFlowOptions, EnergyValues
+  ACTIVE_THRESHOLD, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB,
+  linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH
 } from "./energy-flow-model";
 
 describe("energy flow model", () => {
@@ -8,7 +8,7 @@ describe("energy flow model", () => {
   const options = (extra: Partial<EnergyFlowOptions> = {}): EnergyFlowOptions => ({
     peakPower: 10,
     hasBattery: false,
-    consumers: [{ present: false }, { present: false }, { present: false }],
+    consumers: Array.from({ length: CONSUMER_COUNT }, () => ({ present: false })),
     ...extra
   });
 
@@ -114,6 +114,63 @@ describe("energy flow model", () => {
       expect(consumers.map(n => n.index)).toEqual([1, 2, 3]);
       expect(consumers[1].name).toBe("Wallbox");
       expect(consumers[2].direction).toBe("out");
+    });
+
+    it("shows up to six consumers, each at its own fixed place", () => {
+      const layout = buildEnergyFlow(values({ consumers: [1, 1, 1, 1, 1, 1] }), options());
+
+      const consumers = layout.nodes.filter(n => n.kind === "consumer");
+      expect(consumers.map(n => n.id)).toEqual(["consumer1", "consumer2", "consumer3", "consumer4", "consumer5", "consumer6"]);
+      expect(consumers.map(n => n.position)).toEqual(CONSUMER_SLOTS);
+      expect(layout.links.filter(l => l.kind === "consumer").every(l => l.active)).toBeTrue();
+      expect(layout.height).toBe(VIEW_HEIGHT_TALL);
+    });
+
+    it("keeps consumers 1-3 where they always were and moves none when another appears", () => {
+      const alone = buildEnergyFlow(values({ consumers: [undefined, undefined, 1] }), options());
+      const withSix = buildEnergyFlow(values({ consumers: [undefined, undefined, 1, undefined, undefined, 1] }), options());
+
+      const consumer3 = (l: typeof alone) => l.nodes.find(n => n.id === "consumer3").position;
+      expect(consumer3(alone)).toEqual({ x: 42, y: 190 });
+      expect(consumer3(withSix)).toEqual({ x: 42, y: 190 });
+      expect(withSix.nodes.find(n => n.id === "consumer1")).toBeUndefined();
+    });
+
+    it("stays compact up to four consumers and grows for the fifth or sixth", () => {
+      expect(buildEnergyFlow(values({ consumers: [1, 1, 1, 1] }), options()).height).toBe(VIEW_HEIGHT);
+      expect(buildEnergyFlow(values({ consumers: [] }), options()).height).toBe(VIEW_HEIGHT);
+      expect(buildEnergyFlow(values({ consumers: [undefined, undefined, undefined, undefined, 2] }), options()).height).toBe(VIEW_HEIGHT_TALL);
+      expect(buildEnergyFlow(values(), options({
+        consumers: [{ present: false }, { present: false }, { present: false }, { present: false }, { present: false }, { present: false, name: "Sauna" }]
+      })).height).toBe(VIEW_HEIGHT_TALL);
+    });
+
+    it("places every node inside the view, apart from each other and off the curves of the bottom row", () => {
+      const layout = buildEnergyFlow(values({ consumers: [1, 1, 1, 1, 1, 1] }), options({ hasBattery: true }));
+      const points = layout.nodes.map(n => n.position);
+
+      for (const p of points) {
+        expect(p.x).toBeGreaterThan(0);
+        expect(p.x).toBeLessThan(VIEW_WIDTH);
+        expect(p.y).toBeGreaterThan(0);
+        expect(p.y).toBeLessThan(layout.height);
+      }
+      // phone nodes are ~68 view units wide and ~55 high: two nodes never share that box
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const apart = Math.abs(points[i].x - points[j].x) >= 58 || Math.abs(points[i].y - points[j].y) >= 60;
+          expect(apart).withContext(`${layout.nodes[i].id} / ${layout.nodes[j].id}`).toBeTrue();
+        }
+      }
+      // the bottom row curves pass the battery row at least 40 units from the battery and the corner nodes
+      for (const id of ["consumer5", "consumer6"]) {
+        const from = layout.nodes.find(n => n.id === id).position;
+        const t = 1 - Math.sqrt((190 - HUB.y) / (from.y - HUB.y));
+        const x = (1 - t) * (1 - t) * from.x + 2 * t * (1 - t) * from.x + t * t * HUB.x;
+        for (const other of [42, 160, 278]) {
+          expect(Math.abs(x - other)).withContext(id).toBeGreaterThanOrEqual(40);
+        }
+      }
     });
 
     it("a sunny noon: PV in, export out, battery charging, house taking", () => {

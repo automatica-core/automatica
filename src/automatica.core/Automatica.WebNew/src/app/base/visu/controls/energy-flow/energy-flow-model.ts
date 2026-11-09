@@ -66,10 +66,17 @@ export interface EnergyLink {
 export interface EnergyFlowLayout {
   nodes: EnergyNode[];
   links: EnergyLink[];
+  /** view box height: {@link VIEW_HEIGHT}, or {@link VIEW_HEIGHT_TALL} when the bottom consumer row is used */
+  height: number;
 }
+
+/** extra consumers of the energy monitor logic (consumer1..6) */
+export const CONSUMER_COUNT = 6;
 
 export const VIEW_WIDTH = 320;
 export const VIEW_HEIGHT = 220;
+/** with a fifth or sixth consumer the tile grows by a row below the battery */
+export const VIEW_HEIGHT_TALL = 300;
 export const HUB: EnergyPoint = { x: 160, y: 110 };
 /** distance of two dots along a line, the stroke-dasharray period in the template */
 export const DOT_SPACING = 14;
@@ -85,11 +92,22 @@ const POSITIONS: { [key: string]: EnergyPoint } = {
   pv: { x: 160, y: 30 },
   grid: { x: 42, y: 110 },
   house: { x: 278, y: 110 },
-  battery: { x: 160, y: 190 },
-  consumer1: { x: 278, y: 190 },
-  consumer2: { x: 278, y: 30 },
-  consumer3: { x: 42, y: 190 }
+  battery: { x: 160, y: 190 }
 };
+
+/**
+ * Place of each consumer (index 0 = consumer1). Consumers 1-4 use the corners, so the tile keeps its compact size;
+ * 5 and 6 add a row below the battery. That row sits in the columns between the outer nodes and the battery, so its
+ * curves run past them instead of through them. Fixed per number, so a node never moves when another one appears.
+ */
+export const CONSUMER_SLOTS: EnergyPoint[] = [
+  { x: 278, y: 190 },
+  { x: 278, y: 30 },
+  { x: 42, y: 190 },
+  { x: 42, y: 30 },
+  { x: 101, y: 270 },
+  { x: 219, y: 270 }
+];
 
 function finite(value: number | undefined | null): number {
   const n = Number(value);
@@ -159,11 +177,11 @@ export function buildEnergyFlow(values: EnergyValues, options: EnergyFlowOptions
   if (options.hasBattery || Math.abs(finite(values.battery)) >= ACTIVE_THRESHOLD) {
     add("battery", "battery", values.battery);
   }
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < CONSUMER_COUNT; i++) {
     const consumer = options.consumers[i];
     const power = values.consumers[i];
     if (consumer?.present || consumer?.name || Math.abs(finite(power)) >= ACTIVE_THRESHOLD) {
-      add(`consumer${i + 1}`, "consumer", power, { index: i + 1, name: consumer?.name || undefined });
+      add(`consumer${i + 1}`, "consumer", power, { index: i + 1, name: consumer?.name || undefined, position: CONSUMER_SLOTS[i] });
     }
   }
 
@@ -178,7 +196,8 @@ export function buildEnergyFlow(values: EnergyValues, options: EnergyFlowOptions
     duration: flowDuration(node.power, options.peakPower)
   }));
 
-  return { nodes, links };
+  const height = nodes.some(n => n.position.y > VIEW_HEIGHT) ? VIEW_HEIGHT_TALL : VIEW_HEIGHT;
+  return { nodes, links, height };
 }
 
 /** 0.42 kW -> 420 W, 3.456 kW -> 3.46 kW, 12.3 kW -> 12.3 kW */

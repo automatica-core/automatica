@@ -41,16 +41,18 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
         [Fact]
         public void Template_HasAllInterfaces()
         {
-            Assert.Equal(14, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
-            Assert.Equal(19, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output));
-            Assert.Equal(6, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
+            Assert.Equal(17, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
+            Assert.Equal(22, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output));
+            Assert.Equal(9, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
 
             // the visu tile finds its values by these keys
             var keys = RuleInstance.RuleInterfaceInstance.Select(a => a.This2RuleInterfaceTemplateNavigation.Key).ToList();
             Assert.Contains("house", keys);
             Assert.Contains("grid", keys);
             Assert.Contains("autarkyToday", keys);
-            Assert.Contains("consumer3Name", keys);
+            Assert.Contains("consumer6Name", keys);
+            Assert.Contains("consumer6", keys);
+            Assert.Contains("consumer6In", keys);
             Assert.Equal(keys.Count, keys.Distinct().Count());
         }
 
@@ -118,6 +120,24 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             Assert.Equal(3, ValueOf(changes, F.OutputConsumers[1]));
             Assert.Equal(1, ValueOf(changes, F.OutputHouse));
             Assert.Equal(4, Rule.Snapshot.Consumption);
+        }
+
+        [Fact]
+        public void AllSixConsumers_AreTakenOutOfTheHouse()
+        {
+            Input(F.InputGrid, 10d);
+            for (var i = 0; i < F.InputConsumers.Length; i++)
+            {
+                Input(F.InputConsumers[i], (i + 1) * 0.5);
+            }
+
+            // 0.5 + 1 + 1.5 + 2 + 2.5 + 3 = 10.5 > 10: the house stays at 0
+            Assert.Equal(0, Rule.Snapshot.House);
+            Assert.Equal(3, Rule.Snapshot.Consumers[5]);
+
+            var changes = Input(F.InputConsumers[5], 2d);
+            Assert.Equal(2, ValueOf(changes, F.OutputConsumers[5]));
+            Assert.Equal(0.5, ValueOf(changes, F.OutputHouse));
         }
 
         [Fact]
@@ -259,9 +279,22 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             Assert.Equal(false, data["hasBattery"]);
             Assert.Equal(false, data["hasConsumer1"]);
             Assert.Equal(true, data["hasConsumer3"]);
+            Assert.Equal(false, data["hasConsumer6"]);
             // parameters by key, e.g. the consumer names and the peak power for the tile
             Assert.Equal(10d, Convert.ToDouble(data["peakPower"]));
             Assert.True(data.ContainsKey("consumer1Name"));
+            Assert.True(data.ContainsKey("consumer6Name"));
+        }
+
+        [Fact]
+        public void GetDataForVisu_Consumer6IsPresent()
+        {
+            Input(F.InputConsumers[5], 1.2d);
+
+            var data = Assert.IsType<Dictionary<string, object>>(Logic.GetDataForVisu());
+
+            Assert.Equal(true, data["hasConsumer6"]);
+            Assert.Equal(1.2d, data[GetLogicInterfaceByTemplate(F.OutputConsumers[5]).ObjId.ToString()]);
         }
 
         [Fact]

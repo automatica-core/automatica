@@ -123,6 +123,9 @@
         "CONSUMER1": { "NAME": "Consumer 1", "DESCRIPTION": "Power of an extra consumer in kW (e.g. wallbox), shown on its own and taken out of the house consumption" },
         "CONSUMER2": { "NAME": "Consumer 2", "DESCRIPTION": "Power of an extra consumer in kW (e.g. heat pump)" },
         "CONSUMER3": { "NAME": "Consumer 3", "DESCRIPTION": "Power of an extra consumer in kW" },
+        "CONSUMER4": { "NAME": "Consumer 4", "DESCRIPTION": "Power of an extra consumer in kW" },
+        "CONSUMER5": { "NAME": "Consumer 5", "DESCRIPTION": "Power of an extra consumer in kW" },
+        "CONSUMER6": { "NAME": "Consumer 6", "DESCRIPTION": "Power of an extra consumer in kW" },
         "PV_METER": { "NAME": "PV meter", "DESCRIPTION": "Optional PV energy meter in kWh, today's PV energy is counted from it instead of the power" },
         "IMPORT_METER": { "NAME": "Import meter", "DESCRIPTION": "Optional grid import meter in kWh" },
         "EXPORT_METER": { "NAME": "Export meter", "DESCRIPTION": "Optional grid export meter in kWh" },
@@ -137,6 +140,9 @@
         "CONSUMER1": { "NAME": "Consumer 1", "DESCRIPTION": "Power of consumer 1 in kW" },
         "CONSUMER2": { "NAME": "Consumer 2", "DESCRIPTION": "Power of consumer 2 in kW" },
         "CONSUMER3": { "NAME": "Consumer 3", "DESCRIPTION": "Power of consumer 3 in kW" },
+        "CONSUMER4": { "NAME": "Consumer 4", "DESCRIPTION": "Power of consumer 4 in kW" },
+        "CONSUMER5": { "NAME": "Consumer 5", "DESCRIPTION": "Power of consumer 5 in kW" },
+        "CONSUMER6": { "NAME": "Consumer 6", "DESCRIPTION": "Power of consumer 6 in kW" },
         "HOUSE": { "NAME": "House", "DESCRIPTION": "House consumption in kW: PV + import - export + discharge - charge - extra consumers" },
         "CONSUMPTION": { "NAME": "Consumption", "DESCRIPTION": "Total consumption in kW (house and extra consumers)" },
         "SELF_CONSUMPTION": { "NAME": "Self-consumption", "DESCRIPTION": "Share of the PV power used on site in % (0 without production)" },
@@ -157,6 +163,9 @@
         "CONSUMER1_NAME": { "NAME": "Name consumer 1" },
         "CONSUMER2_NAME": { "NAME": "Name consumer 2" },
         "CONSUMER3_NAME": { "NAME": "Name consumer 3" },
+        "CONSUMER4_NAME": { "NAME": "Name consumer 4" },
+        "CONSUMER5_NAME": { "NAME": "Name consumer 5" },
+        "CONSUMER6_NAME": { "NAME": "Name consumer 6" },
         "CONSUMER_NAME": { "DESCRIPTION": "Name shown in the energy flow tile (e.g. Wallbox)" }
       }
     }
