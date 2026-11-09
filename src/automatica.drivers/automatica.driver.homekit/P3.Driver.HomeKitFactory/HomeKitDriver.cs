@@ -33,6 +33,7 @@ namespace P3.Driver.HomeKitFactory
         private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new();
         private readonly Dictionary<Accessory, IControl> _characteristicControlMap = new();
         private readonly Dictionary<Accessory, MediaPlayerAccessory> _mediaPlayers = new();
+        private readonly Dictionary<Accessory, BlindAccessory> _blinds = new();
 
         private readonly AccessoryInstanceIdGenerator _aidGenerator;
         
@@ -213,8 +214,7 @@ namespace P3.Driver.HomeKitFactory
                     
                     accessory.Id = _server.AddAccessory(accessory);
 
-                    _characteristicControlMap.Add(accessory, control);
-                    BindBlind(accessory, iBlind, WriteCharacteristic, DriverContext.Logger);
+                    _blinds.Add(accessory, BlindAccessory.Bind(accessory, iBlind, WriteCharacteristic, DriverContext.Logger, DriverContext.TimeProvider));
                 }
                 else if (MediaPlayerProxy.TryCreate(control) is { } player)
                 {
@@ -262,63 +262,6 @@ namespace P3.Driver.HomeKitFactory
             }
         }
 
-        /// <summary>
-        /// Initializes the window covering from the blind and notifies HomeKit about position and movement changes of the blind.
-        /// </summary>
-        internal static void BindBlind(WindowCovering accessory, IBlind blind, Action<Characteristic> writeCharacteristic, ILogger logger)
-        {
-            accessory.PositionType.Value = ToHapPositionState(blind);
-            accessory.TargetPosition.Value = ToHapPosition(blind.Position);
-            accessory.CurrentPosition.Value = ToHapPosition(blind.Position);
-
-            var wasMoving = blind.IsMoving;
-            blind.RegisterValueCallback(() =>
-            {
-                accessory.CurrentPosition.Value = ToHapPosition(blind.Position);
-                accessory.PositionType.Value = ToHapPositionState(blind);
-
-                // IBlind has no target: when a movement ends (also one started outside of HomeKit, e.g. by a wall switch) the
-                // target is where the blind stopped, otherwise HomeKit keeps showing the blind as opening/closing.
-                // Only on the moving => stopped transition, a HomeKit target must not be overwritten before the blind starts moving.
-                var stopped = wasMoving && !blind.IsMoving;
-                wasMoving = blind.IsMoving;
-
-                logger.LogInformation($"{blind.Name} Blind...moving {blind.IsMoving} direction {blind.Direction} position {blind.Position} ({accessory.CurrentPosition.Value})");
-                logger.LogInformation($"{blind.Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
-
-                writeCharacteristic(accessory.CurrentPosition);
-                writeCharacteristic(accessory.PositionType);
-
-                if (stopped)
-                {
-                    accessory.TargetPosition.Value = accessory.CurrentPosition.Value;
-                    writeCharacteristic(accessory.TargetPosition);
-                }
-            });
-        }
-
-        private static int ToHapPosition(int input)
-        {
-            var currentBlind = Convert.ToInt32(input); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
-            var hapCurrentBlind = Math.Abs(currentBlind - 100);
-            return hapCurrentBlind;
-        }
-
-        private static int ToHapPositionState(IBlind iBlind)
-        {
-            int value = 0;
-            if (iBlind.IsMoving)
-            {
-                value = iBlind.Direction == 0 ? 1 : 0;
-            }
-            else
-            {
-                value = 2; //stopped
-            }
-
-            return value;
-        }
-
         public UInt64 GuidToUint64(Guid guid)
         {
             var val= BitConverter.ToUInt64(guid.ToByteArray(), 0);
@@ -357,6 +300,13 @@ namespace P3.Driver.HomeKitFactory
                 {
                     value.ForEach(a => a.SetValue(e.Value));
                 }
+                else if (_blinds.TryGetValue(e.Characteristic.Accessory, out var blind))
+                {
+                    if (e.Characteristic.Type == CharacteristicBase.TargetPositionType)
+                    {
+                        await blind.HandleTargetAsync(e.Value);
+                    }
+                }
                 else if (_mediaPlayers.TryGetValue(e.Characteristic.Accessory, out var mediaPlayer))
                 {
                     DriverContext.Logger.LogDebug($"Target is the media player {e.Characteristic.Accessory.AccessoryInfo.Name.Value}");
@@ -381,12 +331,6 @@ namespace P3.Driver.HomeKitFactory
                     else if (control is ISwitch iSwitch)
                     {
                         await Switch(e.Value, iSwitch);
-                    }
-                    else if (control is IBlind iBlind)
-                    {
-                        var targetBlind = Convert.ToInt32(e.Value); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
-                        var newTarget = Math.Abs(targetBlind - 100);
-                        await iBlind.MoveAbsoluteAsync(newTarget);
                     }
                 }
             }
@@ -451,6 +395,12 @@ namespace P3.Driver.HomeKitFactory
                 _server.ValueChanged -= ServerOnValueChanged;
                 await _server.Stop();
             }
+
+            foreach (var blind in _blinds.Values)
+            {
+                blind.Dispose();
+            }
+            _blinds.Clear();
 
 
             return await base.Stop(token);

@@ -332,15 +332,17 @@
                 Id = id
             };
 
-            var targetPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.TargetPositionType, currentPosition, 8), "int");
-            targetPos.Value = currentPosition;
+            // uint8 0-100 % and 0-2 as the HAP spec defines them (was "int" without range/unit);
+            // the instance ids 8-10 stay as before, paired controllers keep their automations
+            var targetPos = HapCharacteristics.TargetPosition.Create(service, 8);
+            targetPos.Value = currentPosition ?? 0;
             accessory.TargetPosition = targetPos;
 
-            var currentPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, currentPosition, 9), "int", false);
-            currentPos.Value = currentPosition;
+            var currentPos = HapCharacteristics.CurrentPosition.Create(service, 9);
+            currentPos.Value = currentPosition ?? 0;
             accessory.CurrentPosition = currentPos;
 
-            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.PositionStateType, 2, 10), "int", false);
+            var positionType = HapCharacteristics.PositionState.Create(service, 10);
             accessory.PositionType = positionType;
 
             service.Characteristics.Add(targetPos);
