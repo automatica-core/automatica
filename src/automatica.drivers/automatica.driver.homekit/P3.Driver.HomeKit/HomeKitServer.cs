@@ -77,43 +77,125 @@ namespace P3.Driver.HomeKit
         [DllImport(Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_library_version_minor();
 
+        internal const string TempDirectoryPrefix = "automatica-homekit-libsodium-";
+
+        private static readonly object NativeLock = new object();
+        private static IntPtr _libsodiumHandle;
+
+        /// <summary>
+        /// The path libsodium was loaded from, null before <see cref="Init"/>
+        /// </summary>
+        internal static string LoadedLibsodiumPath { get; private set; }
+
+        /// <summary>
+        /// Loads the embedded libsodium for this platform and makes the DllImports of this assembly and NSec use it.
+        /// The library is written to a new private temp directory, never next to the assembly: the plugin directory is
+        /// signed, an extra file there makes the core refuse to load the plugin on the next start.
+        /// </summary>
         public static void Init(ILogger logger)
         {
-            //extract libsodium dll
+            lock (NativeLock)
+            {
+                if (_libsodiumHandle == IntPtr.Zero)
+                {
+                    _libsodiumHandle = LoadEmbeddedLibsodium(logger);
 
-            var myPath = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            var corePath = new FileInfo(Assembly.GetExecutingAssembly().Location);
+                    RegisterResolver(typeof(HomeKitServer).Assembly, logger);
+                    RegisterResolver(typeof(NSec.Cryptography.Key).Assembly, logger);
+                }
+            }
 
+            logger.LogInformation($"Loading sodium version {sodium_library_version_major()}.{sodium_library_version_minor()}");
+        }
+
+        private static IntPtr LoadEmbeddedLibsodium(ILogger logger)
+        {
+            var assembly = typeof(HomeKitServer).Assembly;
             var rid = ServerInfo.Rid.Replace("-", "_");
-            var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-            var embeddedResource = resources
-                .SingleOrDefault(a => a.Contains(rid));
+            var resourcePrefix = $"P3.Driver.HomeKit.Sodium.{rid}.native.";
+            var embeddedResource = assembly.GetManifestResourceNames()
+                .SingleOrDefault(a => a.StartsWith(resourcePrefix, StringComparison.Ordinal));
 
             if (string.IsNullOrEmpty(embeddedResource))
             {
                 throw new NotSupportedException($"libsodium seems not avaialable for {rid}");
             }
 
-            var fileName = embeddedResource.Replace($"P3.Driver.HomeKit.Sodium.{rid}.native.", "");
+            DeleteStaleTempDirectories(logger);
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResource))
+            // fresh directory with a random name, 0700 on unix: nobody can swap the library before it is loaded
+            var directory = Directory.CreateTempSubdirectory(TempDirectoryPrefix);
+            var path = Path.Combine(directory.FullName, embeddedResource.Substring(resourcePrefix.Length));
+
+            using (var stream = assembly.GetManifestResourceStream(embeddedResource))
             {
-                using (var file = new FileStream(Path.Combine(myPath.DirectoryName, fileName), FileMode.Create, FileAccess.Write))
+                using (var file = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
                 {
-                    stream?.CopyTo(file);
+                    stream.CopyTo(file);
                 }
             }
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResource))
+            var handle = NativeLibrary.Load(path);
+            LoadedLibsodiumPath = path;
+            logger.LogDebug($"Loaded libsodium from {path}");
+
+            if (!OperatingSystem.IsWindows())
             {
-                using (var file = new FileStream(Path.Combine(corePath.DirectoryName, fileName), FileMode.Create,
-                    FileAccess.Write))
-                {
-                    stream?.CopyTo(file);
-                }
+                // the loaded library stays mapped, the file is not needed any more
+                TryDelete(directory.FullName, logger);
             }
 
-            logger.LogInformation($"Loading sodium version {sodium_library_version_major()}.{sodium_library_version_minor()}");
+            return handle;
+        }
+
+        private static void RegisterResolver(Assembly assembly, ILogger logger)
+        {
+            try
+            {
+                NativeLibrary.SetDllImportResolver(assembly, (name, _, __) => IsLibsodium(name) ? _libsodiumHandle : IntPtr.Zero);
+            }
+            catch (InvalidOperationException e)
+            {
+                // a resolver is already set for this assembly
+                logger.LogWarning(e, $"Could not set the libsodium resolver for {assembly.GetName().Name}");
+            }
+        }
+
+        internal static bool IsLibsodium(string libraryName)
+        {
+            return string.Equals(libraryName, Libsodium, StringComparison.OrdinalIgnoreCase) ||
+                   libraryName.StartsWith(Libsodium + ".", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// On windows the loaded library can not be deleted, remove the copies of earlier runs
+        /// </summary>
+        private static void DeleteStaleTempDirectories(ILogger logger)
+        {
+            try
+            {
+                foreach (var directory in Directory.EnumerateDirectories(Path.GetTempPath(), TempDirectoryPrefix + "*"))
+                {
+                    TryDelete(directory, logger);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogDebug(e, "Could not clean up old libsodium copies");
+            }
+        }
+
+        private static void TryDelete(string directory, ILogger logger)
+        {
+            try
+            {
+                Directory.Delete(directory, true);
+            }
+            catch (Exception e)
+            {
+                // still in use by another process (windows) or not ours
+                logger.LogDebug($"Could not delete {directory}: {e.Message}");
+            }
         }
 
         internal List<Accessory> GetAccessories()
