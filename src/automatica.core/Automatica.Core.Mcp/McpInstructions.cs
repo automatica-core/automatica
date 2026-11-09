@@ -35,7 +35,8 @@ namespace Automatica.Core.Mcp
 
             Configuration (same permission): update_node_settings changes properties of a driver, device or data point by key
             (as get_datapoint lists them), e.g. the IP address of a driver whose device got a new address. The driver restarts;
-            check read_log or get_current_values afterwards and tell the user the old and new values.
+            check read_log or get_current_values afterwards and tell the user the old and new values. Its history parameters
+            switch the recording of a data point on or off (OnChange for counters and on/off states, Average for measurements).
             """;
     }
 }

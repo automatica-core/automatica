@@ -3,8 +3,10 @@ using System.Globalization;
 using System.Net;
 using System.Text.Json;
 using Automatica.Core.EF.Models;
+using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Recorder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -35,11 +37,13 @@ namespace Automatica.Core.Mcp.Tools
         private readonly ICoreServer _coreServer;
         private readonly IConfiguration _configuration;
         private readonly McpAccess _access;
+        private readonly IRecorderContext _recorderContext;
         private readonly ILogger<NodeConfigTools> _logger;
 
         public NodeConfigTools(INodeInstanceCache nodeInstanceCache, ICoreServer coreServer, IConfiguration configuration, McpAccess access,
-            ILogger<NodeConfigTools> logger)
+            IRecorderContext recorderContext, ILogger<NodeConfigTools> logger)
         {
+            _recorderContext = recorderContext;
             _nodeInstanceCache = nodeInstanceCache;
             _coreServer = coreServer;
             _configuration = configuration;
@@ -52,20 +56,25 @@ namespace Automatica.Core.Mcp.Tools
 
         [McpServerTool(Name = "update_node_settings", Title = "Change node settings", Destructive = false, Idempotent = true, OpenWorld = true)]
         [Description("Changes configuration properties of a node (driver, device or data point), e.g. the IP address, port or poll interval of a " +
-                     "driver or the register of a data point. Properties are set by key as get_datapoint lists them. The driver the node " +
-                     "belongs to restarts afterwards (it is offline for a moment); check get_current_values or read_log afterwards.")]
+                     "driver or the register of a data point, and switches the history (recording) of a data point on or off. Properties are " +
+                     "set by key as get_datapoint lists them. After a property change the driver the node belongs to restarts (it is offline " +
+                     "for a moment); check get_current_values or read_log afterwards. History changes apply without a restart.")]
         public async Task<NodeSettingsChanged> UpdateNodeSettings(
             [Description("Node id (driver, device or data point), see browse_nodes or get_datapoint.")] Guid nodeId,
             [Description("Property values by key, e.g. {\"modbus-master-ip\": \"192.168.8.247\", \"modbus-master-port\": 502}.")] Dictionary<string, JsonElement> properties = null,
-            [Description("New name of the node, empty to keep it.")] string name = null)
+            [Description("New name of the node, empty to keep it.")] string name = null,
+            [Description("Data points only: true records the values (history for get_history / get_aggregated_history), false stops recording.")] bool? history = null,
+            [Description("How values are recorded: Average, Max, Min (of the values within the interval), Raw (last value per interval) or OnChange (every change; best for counters and on/off states).")] string historyType = null,
+            [Description("Recording interval in seconds (1 to 86400) for Average, Max, Min and Raw; 60 when history is switched on without one.")] int? historyInterval = null)
         {
             if (!_access.CanEditLogics)
             {
                 throw new McpException("Changing the configuration is disabled for the MCP API key. Enable the setting 'mcpAllowWrite' or log in as an administrator.");
             }
-            if ((properties == null || properties.Count == 0) && string.IsNullOrWhiteSpace(name))
+            var changesHistory = history.HasValue || historyType != null || historyInterval.HasValue;
+            if ((properties == null || properties.Count == 0) && string.IsNullOrWhiteSpace(name) && !changesHistory)
             {
-                throw new McpException("Nothing to change: pass properties and/or name");
+                throw new McpException("Nothing to change: pass properties, name and/or history");
             }
 
             var cached = _nodeInstanceCache.Get(nodeId);
@@ -75,12 +84,22 @@ namespace Automatica.Core.Mcp.Tools
             }
 
             var changes = new List<PropertyChange>();
+            var historyChanges = new List<PropertyChange>();
+            bool recordedBefore = false, recordedAfter = false;
             await using (var db = new AutomaticaContext(_configuration))
             {
                 var node = await db.NodeInstances
                                .Include(a => a.PropertyInstance).ThenInclude(a => a.This2PropertyTemplateNavigation).ThenInclude(a => a.This2PropertyTypeNavigation)
+                               .Include(a => a.This2NodeTemplateNavigation)
                                .SingleOrDefaultAsync(a => a.ObjId == nodeId && !a.IsDeleted)
                            ?? throw new McpException($"Node {nodeId} not found");
+
+                recordedBefore = node.Trending;
+                if (changesHistory)
+                {
+                    historyChanges.AddRange(ApplyHistory(node, history, historyType, historyInterval));
+                }
+                recordedAfter = node.Trending;
 
                 foreach (var (key, json) in properties ?? new Dictionary<string, JsonElement>())
                 {
@@ -113,9 +132,24 @@ namespace Automatica.Core.Mcp.Tools
             }
 
             _logger.LogInformation("{Caller} changed node {Node} ({Id}): {Changes}", _access.CallerName, cached.Name, nodeId,
-                string.Join(", ", changes.Select(a => $"{a.Key} {a.OldValue} -> {a.NewValue}")));
+                string.Join(", ", changes.Concat(historyChanges).Select(a => $"{a.Key} {a.OldValue} -> {a.NewValue}")));
 
+            // like NodeInstanceV2Controller.ApplyTrendingChanges; a changed type or interval needs a new recorder as well
+            if (historyChanges.Count > 0)
+            {
+                if (recordedBefore)
+                {
+                    await _recorderContext.RemoveRecording(nodeId);
+                }
+                if (recordedAfter)
+                {
+                    await _recorderContext.AddRecording(nodeId);
+                }
+            }
+
+            // only property changes need the driver to restart
             var restart = changes.Count > 0;
+            changes.AddRange(historyChanges);
             if (restart)
             {
                 var updated = _nodeInstanceCache.Get(nodeId);
@@ -133,6 +167,46 @@ namespace Automatica.Core.Mcp.Tools
             }
 
             return new NodeSettingsChanged(nodeId, _nodeInstanceCache.Get(nodeId)?.Name ?? cached.Name, changes, restart);
+        }
+
+        private static IEnumerable<PropertyChange> ApplyHistory(NodeInstance node, bool? history, string historyType, int? historyInterval)
+        {
+            if (node.This2NodeTemplateNavigation?.ProvidesInterface2InterfaceType != NodeDescriber.ValueInterfaceType)
+            {
+                throw new McpException($"'{node.Name}' is not a data point, only data points have a history");
+            }
+
+            var type = node.TrendingType;
+            if (historyType != null && (!Enum.TryParse(historyType, true, out type) || !Enum.IsDefined(type) || int.TryParse(historyType, out _)))
+            {
+                throw new McpException($"'{historyType}' is not a history type: {string.Join(", ", Enum.GetNames<TrendingTypes>())}");
+            }
+            if (historyInterval is < 1 or > 86400)
+            {
+                throw new McpException($"The history interval must be between 1 and 86400 seconds, got {historyInterval}");
+            }
+
+            var trending = history ?? node.Trending;
+            var interval = historyInterval ?? (trending && node.TrendingInterval <= 0 ? 60 : node.TrendingInterval);
+
+            var changes = new List<PropertyChange>();
+            if (trending != node.Trending)
+            {
+                changes.Add(new PropertyChange("history", node.Trending, trending));
+            }
+            if (type != node.TrendingType)
+            {
+                changes.Add(new PropertyChange("historyType", node.TrendingType.ToString(), type.ToString()));
+            }
+            if (interval != node.TrendingInterval)
+            {
+                changes.Add(new PropertyChange("historyInterval", node.TrendingInterval, interval));
+            }
+
+            node.Trending = trending;
+            node.TrendingType = type;
+            node.TrendingInterval = interval;
+            return changes;
         }
 
         private static bool IsEditable(PropertyInstance property)

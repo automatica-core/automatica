@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
+using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Mcp;
 using Automatica.Core.Mcp.Authentication;
 using Automatica.Core.Mcp.Tools;
@@ -29,8 +31,10 @@ namespace Automatica.Core.WebApi.Tests.Mcp
     public class NodeConfigToolsTests : BaseControllerTest<NodeInstanceV2Controller>
     {
         private readonly Mock<ICoreServer> _coreServer = new();
+        private readonly Mock<IRecorderContext> _recorder = new();
         private readonly Dictionary<string, string> _settings = new();
         private readonly NodeInstance _driver;
+        private readonly NodeInstance _dataPoint;
 
         public NodeConfigToolsTests()
         {
@@ -46,9 +50,22 @@ namespace Automatica.Core.WebApi.Tests.Mcp
             AddProperty(db, driverId, "modbus-password", PropertyTemplateType.Password, a => a.ValueString = "secret");
             AddProperty(db, driverId, "modbus-type", PropertyTemplateType.Text, a => a.ValueString = "MODBUS-MASTER", isReadonly: true);
             AddProperty(db, driverId, "modbus-scan", PropertyTemplateType.Scan, _ => { });
+
+            // the test database has no driver templates: a copy of a seeded template that provides a value makes a data point
+            var valueTemplate = db.NodeTemplates.AsNoTracking().First();
+            valueTemplate.ObjId = Guid.NewGuid();
+            valueTemplate.Key = "mcp-test-value";
+            valueTemplate.ProvidesInterface2InterfaceType = NodeDescriber.ValueInterfaceType;
+            db.NodeTemplates.Add(valueTemplate);
+            var dataPointId = Guid.NewGuid();
+            db.NodeInstances.Add(new NodeInstance
+            {
+                ObjId = dataPointId, Name = "Verdichter-Starts", This2ParentNodeInstance = driverId, This2NodeTemplate = valueTemplate.ObjId, Description = ""
+            });
             db.SaveChanges();
 
             _driver = new NodeInstance { ObjId = driverId, Name = "ModBus TCP Keba P30", This2ParentNodeInstance = rootId };
+            _dataPoint = new NodeInstance { ObjId = dataPointId, Name = "Verdichter-Starts", This2ParentNodeInstance = driverId };
         }
 
         private static void AddProperty(AutomaticaContext db, Guid nodeId, string key, PropertyTemplateType type, Action<PropertyInstance> value, bool isReadonly = false)
@@ -74,8 +91,9 @@ namespace Automatica.Core.WebApi.Tests.Mcp
 
             var nodeCache = new Mock<INodeInstanceCache>();
             nodeCache.Setup(a => a.Get(_driver.ObjId)).Returns(_driver);
+            nodeCache.Setup(a => a.Get(_dataPoint.ObjId)).Returns(_dataPoint);
 
-            return new NodeConfigTools(nodeCache.Object, _coreServer.Object, Configuration, access, NullLogger<NodeConfigTools>.Instance);
+            return new NodeConfigTools(nodeCache.Object, _coreServer.Object, Configuration, access, _recorder.Object, NullLogger<NodeConfigTools>.Instance);
         }
 
         private static ClaimsPrincipal Admin() => User(Role.AdminRole);
@@ -218,6 +236,89 @@ namespace Automatica.Core.WebApi.Tests.Mcp
             _settings[McpSettings.AllowWriteKey] = "True";
             await Tools(ApiKey()).UpdateNodeSettings(_driver.ObjId, Props("{\"modbus-master-port\": 503}"));
             Assert.Equal(503, Stored("modbus-master-port").ValueInt);
+        }
+
+        private NodeInstance StoredNode(Guid id)
+        {
+            using var db = new AutomaticaContext(Configuration);
+            return db.NodeInstances.AsNoTracking().Single(a => a.ObjId == id);
+        }
+
+        [Fact]
+        public async Task History_IsSwitchedOnAndRecordedWithoutDriverRestart()
+        {
+            var result = await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: "onchange");
+
+            var stored = StoredNode(_dataPoint.ObjId);
+            Assert.True(stored.Trending);
+            Assert.Equal(TrendingTypes.OnChange, stored.TrendingType);
+            Assert.Equal(60, stored.TrendingInterval);
+            Assert.False(result.DriverRestarted);
+            Assert.Contains(result.Changes, a => a.Key == "history" && Equals(a.OldValue, false) && Equals(a.NewValue, true));
+            _recorder.Verify(a => a.AddRecording(_dataPoint.ObjId), Times.Once);
+            _recorder.Verify(a => a.RemoveRecording(It.IsAny<Guid>()), Times.Never);
+            _coreServer.Verify(a => a.StartStopDriver(It.IsAny<NodeInstance>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task HistoryInterval_OfARecordedDataPoint_RestartsItsRecorder()
+        {
+            await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: "Average", historyInterval: 30);
+            _recorder.Invocations.Clear();
+
+            var result = await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, historyInterval: 300);
+
+            Assert.Equal(300, StoredNode(_dataPoint.ObjId).TrendingInterval);
+            var change = Assert.Single(result.Changes);
+            Assert.Equal("historyInterval", change.Key);
+            _recorder.Verify(a => a.RemoveRecording(_dataPoint.ObjId), Times.Once);
+            _recorder.Verify(a => a.AddRecording(_dataPoint.ObjId), Times.Once);
+        }
+
+        [Fact]
+        public async Task History_IsSwitchedOff()
+        {
+            await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true);
+            _recorder.Invocations.Clear();
+
+            await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: false);
+
+            Assert.False(StoredNode(_dataPoint.ObjId).Trending);
+            _recorder.Verify(a => a.RemoveRecording(_dataPoint.ObjId), Times.Once);
+            _recorder.Verify(a => a.AddRecording(It.IsAny<Guid>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task SameHistory_ChangesNothing()
+        {
+            await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: "Raw", historyInterval: 60);
+            _recorder.Invocations.Clear();
+
+            var result = await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: "Raw");
+
+            Assert.Empty(result.Changes);
+            Assert.Empty(_recorder.Invocations);
+        }
+
+        [Theory]
+        [InlineData("Median", null)]
+        [InlineData("1", null)]
+        [InlineData(null, 0)]
+        [InlineData(null, 86401)]
+        public async Task InvalidHistory_IsRejected(string type, int? interval)
+        {
+            await Assert.ThrowsAsync<McpException>(() => Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: type, historyInterval: interval));
+
+            Assert.False(StoredNode(_dataPoint.ObjId).Trending);
+            Assert.Empty(_recorder.Invocations);
+        }
+
+        [Fact]
+        public async Task History_OfADriver_IsRejected()
+        {
+            var error = await Assert.ThrowsAsync<McpException>(() => Tools(Admin()).UpdateNodeSettings(_driver.ObjId, history: true));
+
+            Assert.Contains("not a data point", error.Message);
         }
 
         [Fact]
