@@ -32,6 +32,10 @@ namespace Automatica.Core.Mcp
             data point or logic input) build a page like the logic editor; get_logic_page shows the result. Check the
             units a block expects (e.g. kW vs. W) against the data point values and put a math block in between when they
             differ. Tell the user what you changed; remove_link and remove_logic undo mistakes.
+
+            Configuration (same permission): update_node_settings changes properties of a driver, device or data point by key
+            (as get_datapoint lists them), e.g. the IP address of a driver whose device got a new address. The driver restarts;
+            check read_log or get_current_values afterwards and tell the user the old and new values.
             """;
     }
 }
