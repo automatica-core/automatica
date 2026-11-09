@@ -125,7 +125,9 @@ namespace P3.Driver.HomeKit
 
             // fresh directory with a random name, 0700 on unix: nobody can swap the library before it is loaded
             var directory = Directory.CreateTempSubdirectory(TempDirectoryPrefix);
-            var path = Path.Combine(directory.FullName, embeddedResource.Substring(resourcePrefix.Length));
+            // own file name: windows hands out an already loaded module by its name, another libsodium.dll in the process
+            // (e.g. NSec of another load context) must not get this copy for "libsodium" and the other way round
+            var path = Path.Combine(directory.FullName, "automatica-homekit-" + embeddedResource.Substring(resourcePrefix.Length));
 
             using (var stream = assembly.GetManifestResourceStream(embeddedResource))
             {
