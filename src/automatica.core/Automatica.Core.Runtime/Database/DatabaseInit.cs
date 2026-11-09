@@ -692,6 +692,23 @@ namespace Automatica.Core.Runtime.Database
                     ModifiedAt = DateTimeOffset.Now
                 });
             }
+
+            // reading the server logs over MCP, off by default because logs can contain addresses and credentials
+            var allowLogs = context.Settings.SingleOrDefault(a => a.ValueKey == "mcpAllowLogs");
+            if (allowLogs == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "mcpAllowLogs",
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.MCP",
+                    IsVisible = true,
+                    Order = 4,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
         }
 
         private static void AddSmtpSettings(AutomaticaContext context)

@@ -11,6 +11,8 @@ namespace Automatica.Core.Mcp
     /// API key callers see everything (they are configured by an administrator) and may write only when
     /// <c>mcpAllowWrite</c> is on. JWT callers follow the same rules as the web UI: user groups restrict
     /// visibility and every authenticated user may set values.
+    /// Logs can contain addresses, device credentials and tokens: API key callers read them only when <c>mcpAllowLogs</c>
+    /// is on, JWT callers need the admin role like on the web UI.
     /// </summary>
     public class McpAccess
     {
@@ -42,5 +44,7 @@ namespace Automatica.Core.Mcp
         }
 
         public bool CanWrite => !IsApiKeyCaller || _settingsCache.IsWriteAllowedForApiKey();
+
+        public bool CanReadLogs => IsApiKeyCaller ? _settingsCache.IsLogAccessAllowedForApiKey() : IsAdmin;
     }
 }

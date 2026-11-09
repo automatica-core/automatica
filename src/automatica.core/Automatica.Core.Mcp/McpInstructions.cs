@@ -20,6 +20,11 @@ namespace Automatica.Core.Mcp
 
             Blinds with automatic shading: get_shading_status explains why a blind is up or down (sun, brightness,
             wind, rain, winter mode, manual moves); preview_shading simulates another time of day.
+
+            Logs (only when the administrator allows it): list_log_files shows the files, newest first ("all*.log" holds
+            every facility, the others one driver or part of the server each); read_log returns the last lines of a
+            file, optionally only lines containing a text. Use them to explain errors or why a device did not react.
+            get_log_levels / set_log_level show and change how much each facility logs; set it back when done.
             """;
     }
 }

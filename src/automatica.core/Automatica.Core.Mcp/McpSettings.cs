@@ -11,10 +11,13 @@ namespace Automatica.Core.Mcp
         public const string EnabledKey = "mcpEnabled";
         public const string ApiKeyKey = "mcpApiKey";
         public const string AllowWriteKey = "mcpAllowWrite";
+        public const string AllowLogsKey = "mcpAllowLogs";
 
         public static bool IsEnabled(this ISettingsCache cache) => ReadBool(cache, EnabledKey);
 
         public static bool IsWriteAllowedForApiKey(this ISettingsCache cache) => ReadBool(cache, AllowWriteKey);
+
+        public static bool IsLogAccessAllowedForApiKey(this ISettingsCache cache) => ReadBool(cache, AllowLogsKey);
 
         public static string GetApiKey(this ISettingsCache cache)
         {

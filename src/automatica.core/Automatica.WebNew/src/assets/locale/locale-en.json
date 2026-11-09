@@ -492,6 +492,10 @@
         "NAME": "Allow writing values",
         "DESCRIPTION": "Lets assistants that use the API key write values to data points and logic inputs."
       },
+      "MCPALLOWLOGS": {
+        "NAME": "Allow reading logs",
+        "DESCRIPTION": "Lets assistants that use the API key read the server log files and log levels. Logs can contain addresses and device credentials. Changing log levels also needs \"Allow writing values\"."
+      },
       "REMOTEDOMAIN": {
         "NAME": "Domain"
       },

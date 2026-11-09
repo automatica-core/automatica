@@ -492,6 +492,10 @@
         "NAME": "Schreiben erlauben",
         "DESCRIPTION": "Erlaubt Assistenten mit API-Schlüssel, Werte auf Datenpunkte und Logikeingänge zu schreiben."
       },
+      "MCPALLOWLOGS": {
+        "NAME": "Logs lesen erlauben",
+        "DESCRIPTION": "Erlaubt Assistenten mit API-Schlüssel, die Server-Logdateien und Log-Level zu lesen. Logs können Adressen und Zugangsdaten von Geräten enthalten. Log-Level ändern braucht zusätzlich \"Schreiben erlauben\"."
+      },
       "REMOTEDOMAIN": {
         "NAME": "Domain"
       },
