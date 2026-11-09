@@ -25,6 +25,13 @@ namespace Automatica.Core.Mcp
             every facility, the others one driver or part of the server each); read_log returns the last lines of a
             file, optionally only lines containing a text. Use them to explain errors or why a device did not react.
             get_log_levels / set_log_level show and change how much each facility logs; set it back when done.
+
+            Building logic pages (administrators, or the API key with writing allowed): list_logic_templates and
+            get_logic_template show the block types with the keys of their inputs, outputs and parameters;
+            create_logic_page, add_logic (parameters by key) and link_logic (data point -> logic input, logic output ->
+            data point or logic input) build a page like the logic editor; get_logic_page shows the result. Check the
+            units a block expects (e.g. kW vs. W) against the data point values and put a math block in between when they
+            differ. Tell the user what you changed; remove_link and remove_logic undo mistakes.
             """;
     }
 }

@@ -46,5 +46,11 @@ namespace Automatica.Core.Mcp
         public bool CanWrite => !IsApiKeyCaller || _settingsCache.IsWriteAllowedForApiKey();
 
         public bool CanReadLogs => IsApiKeyCaller ? _settingsCache.IsLogAccessAllowedForApiKey() : IsAdmin;
+
+        /// <summary>The logic configuration (pages, block types, links) is for administrators like the logic editor; the API key is set up by one.</summary>
+        public bool CanSeeLogicConfiguration => IsApiKeyCaller || IsAdmin;
+
+        /// <summary>Changing logic pages: administrators, or the API key with <c>mcpAllowWrite</c>.</summary>
+        public bool CanEditLogics => IsApiKeyCaller ? _settingsCache.IsWriteAllowedForApiKey() : IsAdmin;
     }
 }
