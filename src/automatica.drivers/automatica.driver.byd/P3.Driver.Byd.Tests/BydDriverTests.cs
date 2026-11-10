@@ -25,6 +25,7 @@ namespace P3.Driver.Byd.Tests
         private readonly List<BydRequest> _requests = new();
         private int _logins;
         private string _expireNext;
+        private string _listErrorCode;
 
         // what the fake car answers
         private object _realtimeTrigger = new { requestSerial = "RS1" };
@@ -99,6 +100,10 @@ namespace P3.Driver.Byd.Tests
             {
                 _expireNext = null;
                 return Reply(new { code = "1002", message = "session expired" });
+            }
+            if (_listErrorCode != null && r.Path == "/app/account/getAllListByUserId")
+            {
+                return Reply(new { code = _listErrorCode, message = $"Service error({_listErrorCode})" });
             }
 
             object data = r.Path switch
@@ -232,6 +237,27 @@ namespace P3.Driver.Byd.Tests
             Assert.Equal(true, Value(values["locked"]));
             Assert.Equal(48.2082, Value(values["latitude"]));
             Assert.Equal(16.3738, Value(values["longitude"]));
+        }
+
+        [Fact]
+        public async Task Poll_VehicleListFails_StillReadsTheCarAsElectricAndAsksTheListAgain()
+        {
+            _listErrorCode = "1007";
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            var poll = _requests.Single(r => r.Endpoint == "/vehicleInfo/vehicle/vehicleRealTimeResult");
+            Assert.Equal("0", poll.Inner["energyType"]);
+            Assert.Equal(81d, Value(values["battery"]));
+            Assert.Equal(48.2082, Value(values["latitude"]));
+
+            _listErrorCode = null;
+            await driver.PollAsync();
+
+            Assert.Equal(2, _requests.Count(r => r.Endpoint == "/app/account/getAllListByUserId"));
         }
 
         [Fact]

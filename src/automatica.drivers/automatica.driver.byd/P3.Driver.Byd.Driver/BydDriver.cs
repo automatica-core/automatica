@@ -89,9 +89,27 @@ namespace P3.Driver.Byd.Driver
             return true;
         }
 
+        /// <summary>
+        /// Model data of the car from the vehicle list of the account. The list is only needed for the energy type, so a failing
+        /// list (e.g. code 1007) does not stop the car from being read: the realtime request then goes out as an electric car, like pyBYD.
+        /// A failed list is asked again with the next poll.
+        /// </summary>
         internal async Task<BydVehicleInfo> InfoAsync(string vin, CancellationToken token)
         {
-            _infos ??= (await Cloud.ListVehiclesAsync(token)).ToDictionary(v => v.Vin, StringComparer.OrdinalIgnoreCase);
+            if (_infos == null)
+            {
+                try
+                {
+                    _infos = (await Cloud.ListVehiclesAsync(token))
+                        .GroupBy(v => v.Vin, StringComparer.OrdinalIgnoreCase)
+                        .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+                }
+                catch (BydApiException ex)
+                {
+                    DriverContext.Logger.LogWarning($"Could not list the cars of the BYD account ({ex.Message}), reading {vin} as an electric car");
+                    return null;
+                }
+            }
             return _infos.TryGetValue(vin, out var info) ? info : null;
         }
 
