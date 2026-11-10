@@ -1,5 +1,5 @@
 import {
-  ACTIVE_THRESHOLD, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB,
+  ACTIVE_THRESHOLD, buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB,
   linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH
 } from "./energy-flow-model";
 
@@ -202,6 +202,67 @@ describe("energy flow model", () => {
 
       expect(layout.nodes.find(n => n.id === "pv").power).toBe(0);
       expect(layout.nodes.find(n => n.id === "grid").power).toBe(0);
+    });
+  });
+
+  describe("circuit breakdown", () => {
+    it("lists the circuits by power and the rest last", () => {
+      const [house] = buildBreakdown([{
+        group: 0, total: 3, measured: 2, rest: 1, restToday: 4.5,
+        circuits: [
+          { circuit: 2, name: "Office", hasValue: true, power: 0.5, today: 1.2 },
+          { circuit: 1, name: " Kitchen ", hasValue: true, power: 1.5, today: 3 }
+        ]
+      }]);
+
+      expect(house.rows.map(r => r.id)).toEqual(["circuit1", "circuit2", "rest"]);
+      expect(house.rows[0].name).toBe("Kitchen");
+      expect(house.rows[0].share).toBe(50);
+      expect(house.rows[2]).toEqual(jasmine.objectContaining({ kind: "rest", power: 1, today: 4.5 }));
+      expect(house.coverage).toBeCloseTo(66.67, 1);
+    });
+
+    it("puts the house first and leaves out groups without circuits", () => {
+      const groups = buildBreakdown([
+        { group: 3, total: 1, circuits: [{ circuit: 4, power: 0.2 }] },
+        { group: 2, total: 1, circuits: [] },
+        { group: 0, total: 2, circuits: [{ circuit: 1, power: 1 }] }
+      ]);
+
+      expect(groups.map(g => g.group)).toEqual([0, 3]);
+    });
+
+    it("works out the rest when the logic did not send it", () => {
+      const [group] = buildBreakdown([{ group: 1, total: 3, circuits: [{ circuit: 1, power: 2.6 }] }]);
+
+      expect(group.measured).toBeCloseTo(2.6, 6);
+      expect(group.rest).toBeCloseTo(0.4, 6);
+    });
+
+    it("scales the bars to the measured sum when the circuits read more than the total", () => {
+      const [group] = buildBreakdown([{ group: 0, total: 1, measured: 2, rest: 0,
+        circuits: [{ circuit: 1, power: 1.5 }, { circuit: 2, power: 0.5 }] }]);
+
+      expect(group.rows.map(r => r.share)).toEqual([75, 25, 0]);
+      expect(group.coverage).toBe(100);
+    });
+
+    it("marks a named circuit without a value and treats bad numbers as 0", () => {
+      const [group] = buildBreakdown([{ group: 0, total: NaN, circuits: [
+        { circuit: 5, name: "Garage", hasValue: false, power: 0 },
+        { circuit: 6, power: -1 }
+      ] }]);
+
+      expect(group.rows.find(r => r.circuit === 5).noValue).toBeTrue();
+      expect(group.rows.find(r => r.circuit === 6).power).toBe(0);
+      expect(group.coverage).toBeUndefined();
+      expect(group.rows.every(r => r.share === 0)).toBeTrue();
+    });
+
+    it("returns nothing for missing data", () => {
+      expect(buildBreakdown(undefined)).toEqual([]);
+      expect(buildBreakdown(null)).toEqual([]);
+      expect(buildBreakdown({} as any)).toEqual([]);
     });
   });
 

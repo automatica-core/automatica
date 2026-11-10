@@ -21,12 +21,14 @@ namespace Automatica.Logic.Metering.EnergyMonitor
 
         private readonly object _sync = new();
         private readonly EnergyFlowInputs _inputs = new();
+        private readonly EnergyCircuitInputs _circuits = new();
         private readonly Dictionary<Guid, RuleInterfaceInstance> _outputs;
         /// <summary>last value sent per output, only changes are sent</summary>
         private readonly Dictionary<Guid, double> _sent = new();
 
         private EnergyDayCounter _counter;
         private EnergyFlowSnapshot _snapshot;
+        private EnergyCircuitBreakdown _breakdown;
         private System.Timers.Timer _timer;
 
         public EnergyMonitorRule(ILogicContext context) : base(context)
@@ -35,8 +37,9 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                 .Where(a => a.This2RuleInterfaceTemplateNavigation?.This2RuleInterfaceDirection == (long)Automatica.Core.Base.Templates.LogicInterfaceDirection.Output)
                 .GroupBy(a => a.This2RuleInterfaceTemplate)
                 .ToDictionary(a => a.Key, a => a.First());
-            _counter = new EnergyDayCounter(context.TimeProvider?.LocalTimeZone);
+            _counter = NewCounter();
             _snapshot = EnergyFlowCalculator.Calculate(_inputs);
+            _breakdown = EnergyCircuitCalculator.Calculate(_circuits, _snapshot);
         }
 
         internal EnergyFlowSnapshot Snapshot
@@ -49,15 +52,26 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             get { lock (_sync) { return _counter; } }
         }
 
+        internal EnergyCircuitBreakdown Breakdown
+        {
+            get { lock (_sync) { return _breakdown; } }
+        }
+
+        /// <summary>extra channels of the day counter: the circuits, then the rest of each group</summary>
+        private EnergyDayCounter NewCounter() =>
+            new(Context.TimeProvider?.LocalTimeZone, EnergyCircuitInputs.CircuitCount + EnergyCircuitInputs.GroupCount);
+
+        private static int RestChannel(int group) => EnergyCircuitInputs.CircuitCount + group;
+
         private DateTimeOffset Now => Context.TimeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
 
         protected override Task<bool> Start(RuleInstance instance, CancellationToken token = default)
         {
             lock (_sync)
             {
-                _counter = new EnergyDayCounter(Context.TimeProvider?.LocalTimeZone);
+                _counter = NewCounter();
                 _counter.Advance(Now);
-                _counter.SetPower(_snapshot);
+                HoldPower();
                 _sent.Clear();
 
                 _timer?.Dispose();
@@ -93,6 +107,16 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                     _inputs.InvertBattery = ToBool(value);
                     Recalculate();
                 }
+                else if (Array.IndexOf(EnergyMonitorLogicFactory.ParamCircuitGroups, instance.This2RuleInterfaceTemplate) is var group and >= 0)
+                {
+                    _circuits.Group[group] = EnergyCircuitInputs.NormalizeGroup(ToDouble(value));
+                    Recalculate();
+                }
+                else if (Array.IndexOf(EnergyMonitorLogicFactory.ParamCircuitNames, instance.This2RuleInterfaceTemplate) is var name and >= 0)
+                {
+                    _circuits.Name[name] = value?.ToString()?.Trim();
+                    Recalculate();
+                }
             }
             base.ParameterValueChanged(instance, source, value);
         }
@@ -119,14 +143,17 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                 else if (id == EnergyMonitorLogicFactory.InputPv) _inputs.Pv = number;
                 else if (id == EnergyMonitorLogicFactory.InputBattery) _inputs.Battery = number;
                 else if (id == EnergyMonitorLogicFactory.InputSoc) _inputs.Soc = number;
+                else if (Array.IndexOf(EnergyMonitorLogicFactory.InputConsumers, id) is var consumer and >= 0)
+                {
+                    _inputs.Consumers[consumer] = number;
+                }
+                else if (Array.IndexOf(EnergyMonitorLogicFactory.InputCircuits, id) is var circuit and >= 0)
+                {
+                    _circuits.Power[circuit] = number;
+                }
                 else
                 {
-                    var consumer = Array.IndexOf(EnergyMonitorLogicFactory.InputConsumers, id);
-                    if (consumer < 0)
-                    {
-                        return new List<ILogicOutputChanged>();
-                    }
-                    _inputs.Consumers[consumer] = number;
+                    return new List<ILogicOutputChanged>();
                 }
 
                 Recalculate();
@@ -169,8 +196,37 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                 {
                     data[$"hasConsumer{i + 1}"] = _inputs.Consumers[i].HasValue;
                 }
+
+                // today's energy of the circuits is up to date at the moment the popup asks
+                _counter.Advance(Now);
+                data["circuitGroups"] = CircuitGroupsForVisu();
             }
             return data;
+        }
+
+        /// <summary>
+        /// The breakdown for the details popup of the tile: per group (0 = house, 1-6 = consumer) its total, the rest that is
+        /// not measured and its circuits, all with today's energy. Groups without circuits are left out.
+        /// </summary>
+        internal List<Dictionary<string, object>> CircuitGroupsForVisu()
+        {
+            var c = _counter;
+            return _breakdown.Groups.Values.OrderBy(g => g.Group).Select(g => new Dictionary<string, object>
+            {
+                ["group"] = g.Group,
+                ["total"] = Power(g.Total),
+                ["measured"] = Power(g.Measured),
+                ["rest"] = Power(g.Rest),
+                ["restToday"] = Power(c.TodayExtra(RestChannel(g.Group))),
+                ["circuits"] = g.Circuits.Select(i => new Dictionary<string, object>
+                {
+                    ["circuit"] = i + 1,
+                    ["name"] = string.IsNullOrWhiteSpace(_circuits.Name[i]) ? null : _circuits.Name[i],
+                    ["hasValue"] = _circuits.Power[i].HasValue,
+                    ["power"] = Power(_breakdown.Power[i]),
+                    ["today"] = Power(c.TodayExtra(i))
+                }).ToList()
+            }).ToList();
         }
 
         private void Recalculate()
@@ -178,7 +234,22 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             // the power held so far is booked before the new one applies
             _counter.Advance(Now);
             _snapshot = EnergyFlowCalculator.Calculate(_inputs);
+            _breakdown = EnergyCircuitCalculator.Calculate(_circuits, _snapshot);
+            HoldPower();
+        }
+
+        /// <summary>the flows, the circuits and the rests the day counter books from now on</summary>
+        private void HoldPower()
+        {
             _counter.SetPower(_snapshot);
+            for (var i = 0; i < EnergyCircuitInputs.CircuitCount; i++)
+            {
+                _counter.SetExtraPower(i, _breakdown.Power[i]);
+            }
+            for (var g = 0; g < EnergyCircuitInputs.GroupCount; g++)
+            {
+                _counter.SetExtraPower(RestChannel(g), _breakdown.Rest(g) ?? 0);
+            }
         }
 
         private IList<ILogicOutputChanged> Changes()
@@ -226,6 +297,12 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             yield return (EnergyMonitorLogicFactory.OutputConsumptionToday, Power(c.ConsumptionToday));
             yield return (EnergyMonitorLogicFactory.OutputSelfConsumptionToday, Percent(c.SelfConsumptionToday));
             yield return (EnergyMonitorLogicFactory.OutputAutarkyToday, Percent(c.AutarkyToday));
+
+            for (var g = 0; g < EnergyMonitorLogicFactory.OutputRests.Length; g++)
+            {
+                var rest = _breakdown.Rest(g);
+                yield return (EnergyMonitorLogicFactory.OutputRests[g], rest.HasValue ? Power(rest.Value) : null);
+            }
         }
 
         private static double Power(double value) => Math.Round(value, 3) + 0d; // + 0 turns -0 into 0

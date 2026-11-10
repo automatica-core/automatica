@@ -41,9 +41,9 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
         [Fact]
         public void Template_HasAllInterfaces()
         {
-            Assert.Equal(17, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
-            Assert.Equal(22, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output));
-            Assert.Equal(9, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
+            Assert.Equal(17 + 18, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
+            Assert.Equal(22 + 7, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output));
+            Assert.Equal(9 + 36, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
 
             // the visu tile finds its values by these keys
             var keys = RuleInstance.RuleInterfaceInstance.Select(a => a.This2RuleInterfaceTemplateNavigation.Key).ToList();
@@ -53,6 +53,11 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             Assert.Contains("consumer6Name", keys);
             Assert.Contains("consumer6", keys);
             Assert.Contains("consumer6In", keys);
+            Assert.Contains("circuit18In", keys);
+            Assert.Contains("circuit18Name", keys);
+            Assert.Contains("circuit18Group", keys);
+            Assert.Contains("houseRest", keys);
+            Assert.Contains("consumer6Rest", keys);
             Assert.Equal(keys.Count, keys.Distinct().Count());
         }
 
@@ -305,6 +310,145 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             var data = Assert.IsType<Dictionary<string, object>>(Logic.GetDataForVisu());
 
             Assert.Equal(true, data["hasBattery"]);
+        }
+
+        private void Param(Guid template, object value) => Logic.ValueChanged(GetLogicInterfaceByTemplate(template), Dispatchable, value);
+
+        [Fact]
+        public void HouseCircuits_LeaveTheRest()
+        {
+            Input(F.InputGrid, 3d);
+            Input(F.InputCircuits[0], 1d);
+            var changes = Input(F.InputCircuits[1], 0.5d);
+
+            Assert.Equal(1.5, ValueOf(changes, F.OutputRests[0]));
+            // the house itself stays as it was, the circuits are only its details
+            Assert.Equal(3, Rule.Snapshot.House);
+            Assert.Null(ValueOf(changes, F.OutputRests[1]));
+        }
+
+        [Fact]
+        public void WithoutCircuits_NoRestIsSent()
+        {
+            var changes = Input(F.InputGrid, 3d);
+
+            Assert.All(F.OutputRests, rest => Assert.Null(ValueOf(changes, rest)));
+            Assert.Empty(Rule.Breakdown.Groups);
+        }
+
+        [Fact]
+        public void ConsumerCircuits_SplitTheConsumer_NotTheHouse()
+        {
+            Input(F.InputGrid, 5d);
+            Input(F.InputConsumers[1], 3d);
+            Param(F.ParamCircuitGroups[2], 2);
+            var changes = Input(F.InputCircuits[2], 2.6d);
+
+            Assert.Equal(0.4, ValueOf(changes, F.OutputRests[2]));
+            Assert.Null(ValueOf(changes, F.OutputRests[0]));
+            Assert.Equal(2, Rule.Snapshot.House);
+        }
+
+        [Fact]
+        public void MovingACircuit_ChangesBothRests()
+        {
+            Input(F.InputGrid, 5d);
+            Input(F.InputConsumers[0], 2d);
+            Input(F.InputCircuits[0], 1d);
+            Assert.Equal(2, Rule.Breakdown.Rest(0)); // house 3 - 1
+
+            Param(F.ParamCircuitGroups[0], "1");
+
+            Assert.Null(Rule.Breakdown.Rest(0));
+            Assert.Equal(1, Rule.Breakdown.Rest(1));
+        }
+
+        [Fact]
+        public void CircuitsAboveTheTotal_LeaveNoNegativeRest()
+        {
+            Input(F.InputGrid, 1d);
+            Input(F.InputCircuits[0], 0.8d);
+            var changes = Input(F.InputCircuits[1], 0.5d);
+
+            Assert.Equal(0, ValueOf(changes, F.OutputRests[0]));
+            Assert.Equal(1.3, Rule.Breakdown.Groups[0].Measured, 6);
+        }
+
+        [Theory]
+        [InlineData(7)]
+        [InlineData(-1)]
+        [InlineData("x")]
+        [InlineData(null)]
+        public void UnknownGroup_CountsAsHouse(object group)
+        {
+            Param(F.ParamCircuitGroups[4], group);
+            Input(F.InputCircuits[4], 0.2d);
+
+            Assert.Equal(new[] { 0 }, Rule.Breakdown.Groups.Keys);
+        }
+
+        [Fact]
+        public void NamedCircuit_WithoutValue_IsListed()
+        {
+            Param(F.ParamCircuitNames[5], " Kitchen ");
+
+            var group = Assert.Single(Rule.CircuitGroupsForVisu());
+            var circuit = Assert.Single((List<Dictionary<string, object>>)group["circuits"]);
+            Assert.Equal(6, circuit["circuit"]);
+            Assert.Equal("Kitchen", circuit["name"]);
+            Assert.Equal(false, circuit["hasValue"]);
+        }
+
+        [Fact]
+        public async Task Circuits_CountTodaysEnergy_AndShowInTheVisuData()
+        {
+            await StartAt(EnergyDayCounterTests.At(5, 10));
+            Param(F.ParamCircuitNames[0], "Heat pump");
+            Param(F.ParamCircuitGroups[0], 1);
+            Input(F.InputGrid, 4d);
+            Input(F.InputConsumers[0], 3d);
+            Input(F.InputCircuits[0], 2.5d);
+            Input(F.InputCircuits[1], 0.5d); // house, no name
+
+            SetTime(EnergyDayCounterTests.At(5, 12));
+            var data = Assert.IsType<Dictionary<string, object>>(Logic.GetDataForVisu());
+
+            var groups = Assert.IsType<List<Dictionary<string, object>>>(data["circuitGroups"]);
+            Assert.Equal(new object[] { 0, 1 }, groups.Select(g => g["group"]));
+
+            var house = groups[0];
+            Assert.Equal(1d, house["total"]);
+            Assert.Equal(0.5d, house["rest"]);
+            Assert.Equal(1d, house["restToday"]);
+            var houseCircuit = Assert.Single((List<Dictionary<string, object>>)house["circuits"]);
+            Assert.Null(houseCircuit["name"]);
+            Assert.Equal(1d, houseCircuit["today"]);
+
+            var heatPump = groups[1];
+            Assert.Equal(3d, heatPump["total"]);
+            Assert.Equal(2.5d, heatPump["measured"]);
+            Assert.Equal(0.5d, heatPump["rest"]);
+            Assert.Equal(1d, heatPump["restToday"]);
+            var compressor = Assert.Single((List<Dictionary<string, object>>)heatPump["circuits"]);
+            Assert.Equal("Heat pump", compressor["name"]);
+            Assert.Equal(2.5d, compressor["power"]);
+            Assert.Equal(5d, compressor["today"]);
+        }
+
+        [Fact]
+        public async Task CircuitEnergy_StartsAgainAtMidnight()
+        {
+            await StartAt(EnergyDayCounterTests.At(5, 23));
+            Input(F.InputGrid, 2d);
+            Input(F.InputCircuits[0], 2d);
+
+            SetTime(EnergyDayCounterTests.At(5, 23, 30));
+            Rule.Tick();
+            Assert.Equal(1, Rule.Counter.TodayExtra(0), 6);
+
+            SetTime(EnergyDayCounterTests.At(6, 0, 30));
+            Rule.Tick();
+            Assert.Equal(1, Rule.Counter.TodayExtra(0), 6);
         }
 
         [Fact]

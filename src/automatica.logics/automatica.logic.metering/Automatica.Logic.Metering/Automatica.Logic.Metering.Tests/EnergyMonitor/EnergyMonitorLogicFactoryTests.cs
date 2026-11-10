@@ -23,11 +23,34 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
 
             var parameters = calls.Where(c => c.Method.Name == nameof(ILogicTemplateFactory.CreateParameterLogicInterfaceTemplate)).ToList();
 
-            Assert.Equal(9, parameters.Count);
+            Assert.Equal(9 + 36, parameters.Count);
             Assert.All(parameters, c => Assert.Contains(c.Method.GetParameters(), p => p.Name == "linkable"));
             var keys = parameters.Select(c => (string)c.Args[Array.FindIndex(c.Method.GetParameters(), p => p.Name == "key")]).ToList();
-            Assert.Equal(new[] { "invertGrid", "invertBattery", "peakPower", "consumer1Name", "consumer2Name", "consumer3Name",
-                "consumer4Name", "consumer5Name", "consumer6Name" }, keys);
+            var expected = new List<string> { "invertGrid", "invertBattery", "peakPower", "consumer1Name", "consumer2Name", "consumer3Name",
+                "consumer4Name", "consumer5Name", "consumer6Name" };
+            for (var i = 1; i <= EnergyCircuitInputs.CircuitCount; i++)
+            {
+                expected.Add($"circuit{i}Name");
+                expected.Add($"circuit{i}Group");
+            }
+            Assert.Equal(expected, keys);
+        }
+
+        /// <summary>the group parameter is a drop down: house and the six consumers</summary>
+        [Fact]
+        public void CircuitGroup_IsAnEnumOfHouseAndConsumers()
+        {
+            var calls = RecordingFactory.Record(new EnergyMonitorLogicFactory());
+
+            var group = calls.Single(c => c.Method.Name == nameof(ILogicTemplateFactory.CreateParameterLogicInterfaceTemplate)
+                                          && (Guid)c.Args[0] == EnergyMonitorLogicFactory.ParamCircuitGroups[0]);
+            var names = group.Method.GetParameters().Select(p => p.Name).ToList();
+
+            Assert.Equal(Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Enum, group.Args[names.IndexOf("dataType")]);
+            Assert.Equal(EnergyCircuitInputs.HouseGroup, group.Args[names.IndexOf("defaultValue")]);
+            var meta = (string)group.Args[names.IndexOf("meta")];
+            Assert.StartsWith("ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;", meta);
+            Assert.Contains("6,METERING.ENERGY_MONITOR.GROUP.CONSUMER6)", meta);
         }
 
         /// <summary>
@@ -59,15 +82,24 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
                 .Select(c => (Guid)c.Args[0])
                 .ToList();
 
-            Assert.Equal(17 + 22 + 9, ids.Count);
+            Assert.Equal(17 + 22 + 9 + 18 + 7 + 36, ids.Count);
             Assert.Equal(ids.Count, ids.Distinct().Count());
         }
 
         /// <summary>the core only adds new interfaces to existing instances when the logic version goes up</summary>
         [Fact]
-        public void Version_WasRaisedForConsumers4To6()
+        public void Version_WasRaisedForTheCircuits()
         {
-            Assert.True(new EnergyMonitorLogicFactory().LogicVersion >= new Version(1, 1, 0, 0));
+            Assert.True(new EnergyMonitorLogicFactory().LogicVersion >= new Version(1, 2, 0, 0));
+        }
+
+        [Fact]
+        public void Circuits_HaveAllTheirTemplates()
+        {
+            Assert.Equal(EnergyCircuitInputs.CircuitCount, EnergyMonitorLogicFactory.InputCircuits.Length);
+            Assert.Equal(EnergyCircuitInputs.CircuitCount, EnergyMonitorLogicFactory.ParamCircuitNames.Length);
+            Assert.Equal(EnergyCircuitInputs.CircuitCount, EnergyMonitorLogicFactory.ParamCircuitGroups.Length);
+            Assert.Equal(EnergyCircuitInputs.GroupCount, EnergyMonitorLogicFactory.OutputRests.Length);
         }
 
         public class RecordingFactory : DispatchProxy

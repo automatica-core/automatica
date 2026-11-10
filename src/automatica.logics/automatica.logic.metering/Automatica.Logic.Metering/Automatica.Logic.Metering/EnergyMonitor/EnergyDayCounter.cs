@@ -26,11 +26,17 @@ namespace Automatica.Logic.Metering.EnergyMonitor
         private readonly double?[] _meterBaseline = new double?[FlowCount];
         private readonly double?[] _meterLast = new double?[FlowCount];
 
+        /// <summary>channels that only integrate their power (circuits and their rests), no meters</summary>
+        private readonly double[] _extraIntegrated;
+        private readonly double[] _extraPower;
+
         private DateTimeOffset? _lastUpdate;
 
-        public EnergyDayCounter(TimeZoneInfo timeZone)
+        public EnergyDayCounter(TimeZoneInfo timeZone, int extraChannels = 0)
         {
             _timeZone = timeZone ?? TimeZoneInfo.Local;
+            _extraIntegrated = new double[Math.Max(extraChannels, 0)];
+            _extraPower = new double[_extraIntegrated.Length];
         }
 
         /// <summary>the local date the totals belong to, null before the first update</summary>
@@ -72,8 +78,24 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             {
                 _integrated[i] += _power[i] * hours;
             }
+            for (var i = 0; i < _extraIntegrated.Length; i++)
+            {
+                _extraIntegrated[i] += _extraPower[i] * hours;
+            }
             _lastUpdate = now;
         }
+
+        /// <summary>the power (kW) of an extra channel held from now on, call <see cref="Advance"/> first</summary>
+        public void SetExtraPower(int channel, double power)
+        {
+            if (channel >= 0 && channel < _extraPower.Length)
+            {
+                _extraPower[channel] = double.IsFinite(power) ? Math.Max(power, 0) : 0;
+            }
+        }
+
+        /// <summary>today's energy of an extra channel in kWh</summary>
+        public double TodayExtra(int channel) => channel >= 0 && channel < _extraIntegrated.Length ? _extraIntegrated[channel] : 0;
 
         /// <summary>the power (kW) held from now on, call <see cref="Advance"/> first</summary>
         public void SetPower(EnergyFlowSnapshot snapshot)
@@ -143,6 +165,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                 // the last reading of yesterday is where today starts
                 _meterBaseline[i] = _meterLast[i];
             }
+            Array.Clear(_extraIntegrated);
         }
 
         private DateTime LocalDate(DateTimeOffset time) => TimeZoneInfo.ConvertTime(time, _timeZone).Date;

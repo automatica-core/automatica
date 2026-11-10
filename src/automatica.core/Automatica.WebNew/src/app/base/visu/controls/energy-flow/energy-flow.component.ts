@@ -1,12 +1,16 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ViewChild } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
+import { BaseControlComponent } from "../base-control/base-control.component";
 import {
-  buildEnergyFlow, CONSUMER_COUNT, EnergyConsumerConfig, EnergyFlowLayout, EnergyNode, EnergyValues, formatNumber, formatPower,
-  HUB, VIEW_HEIGHT, VIEW_WIDTH
+  buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, EnergyBreakdownGroup, EnergyBreakdownRow, EnergyConsumerConfig, EnergyFlowLayout,
+  EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, VIEW_HEIGHT, VIEW_WIDTH
 } from "./energy-flow-model";
 
 /** consumer numbers 1..6 */
 const CONSUMER_NUMBERS = Array.from({ length: CONSUMER_COUNT }, (_, i) => i + 1);
+
+/** how often the open details popup reloads the circuits (they come from GetDataForVisu, not as outputs) */
+export const DETAILS_REFRESH_MS = 5000;
 
 /** output keys of the energy monitor logic that the tile shows */
 const VALUE_KEYS = ["grid", "pv", "battery", "soc", "house",
@@ -40,6 +44,12 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
   private hasBattery = false;
   private consumerPresent = CONSUMER_NUMBERS.map(() => false);
 
+  @ViewChild(BaseControlComponent) baseControl: BaseControlComponent;
+
+  /** measured circuits of the house and the consumers, shown in the details popup */
+  circuitGroups: EnergyBreakdownGroup[] = [];
+  private detailsTimer: any;
+
   async ngOnInit() {
     this.baseOnInit();
     await this.mobileRuleInit();
@@ -56,6 +66,15 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
     }
     this.rebuild();
 
+    await this.loadVisuData();
+  }
+
+  async ngOnDestroy() {
+    this.stopDetailsRefresh();
+    this.baseOnDestroy();
+  }
+
+  private async loadVisuData() {
     try {
       const data = await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
       this.applyVisuData(data);
@@ -65,8 +84,40 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
     }
   }
 
-  async ngOnDestroy() {
-    this.baseOnDestroy();
+  /** the logic has measured circuits: the tile opens a details popup with them */
+  get hasDetails(): boolean {
+    return this.circuitGroups.length > 0;
+  }
+
+  /** whether the tile offers the details: only with circuits and not in the visu editor */
+  get canOpenDetails(): boolean {
+    return this.hasDetails && !this.editMode;
+  }
+
+  openDetails($event?: Event) {
+    if (!this.canOpenDetails) {
+      return;
+    }
+    $event?.stopPropagation();
+    this.baseControl?.openPopup();
+  }
+
+  /** the popup loads the circuits when it opens and again every few seconds while it is open */
+  onDetailsShowing() {
+    this.stopDetailsRefresh();
+    this.loadVisuData();
+    this.detailsTimer = setInterval(() => this.loadVisuData(), DETAILS_REFRESH_MS);
+  }
+
+  onDetailsHiding() {
+    this.stopDetailsRefresh();
+  }
+
+  private stopDetailsRefresh() {
+    if (this.detailsTimer) {
+      clearInterval(this.detailsTimer);
+      this.detailsTimer = undefined;
+    }
   }
 
   /** what GetDataForVisu of the logic returns: output values by interface id, parameters by key, presence flags */
@@ -82,6 +133,7 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
     }
     this.hasBattery = data["hasBattery"] === true;
     this.consumerPresent = CONSUMER_NUMBERS.map(i => data[`hasConsumer${i}`] === true);
+    this.circuitGroups = buildBreakdown(data["circuitGroups"]);
     this.rebuild();
   }
 
@@ -240,6 +292,42 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
       const p = this.power(n);
       return `${this.label(n)} ${p.value} ${p.unit}`.trim();
     }).join(", ");
+  }
+
+  /** "House", or the consumer's name as on the tile */
+  groupLabel(group: EnergyBreakdownGroup): string {
+    if (group.group === HOUSE_GROUP) {
+      return this.translate.translate("UI.VISU.ENERGY_HOUSE");
+    }
+    return this.consumers()[group.group - 1]?.name || this.translate.translate("UI.VISU.ENERGY_CONSUMER", { index: group.group });
+  }
+
+  groupIcon(group: EnergyBreakdownGroup): string[] {
+    return group.group === HOUSE_GROUP ? ["fad", "house"] : ["fad", "plug"];
+  }
+
+  rowLabel(row: EnergyBreakdownRow): string {
+    if (row.kind === "rest") {
+      return this.translate.translate("UI.VISU.ENERGY_NOT_MEASURED");
+    }
+    return row.name || this.translate.translate("UI.VISU.ENERGY_CIRCUIT", { index: row.circuit });
+  }
+
+  powerText(kw: number | undefined): string {
+    const p = formatPower(kw, this.locale);
+    return `${p.value} ${p.unit}`.trim();
+  }
+
+  todayText(kwh: number | undefined): string {
+    return `${formatNumber(kwh, 2, this.locale)} kWh`;
+  }
+
+  /** "85 % measured" under the group name */
+  coverageText(group: EnergyBreakdownGroup): string | undefined {
+    if (group.coverage === undefined) {
+      return undefined;
+    }
+    return this.translate.translate("UI.VISU.ENERGY_MEASURED", { percent: formatNumber(group.coverage, 0, this.locale) });
   }
 
   trackById(_: number, item: { id: string }) {

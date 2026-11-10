@@ -2,7 +2,7 @@ import { EventEmitter, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { L10nTranslationService } from "angular-l10n";
 
-import { EnergyFlowComponent } from "./energy-flow.component";
+import { DETAILS_REFRESH_MS, EnergyFlowComponent } from "./energy-flow.component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { ConfigService } from "src/app/services/config.service";
@@ -289,6 +289,116 @@ describe("EnergyFlowComponent", () => {
     await create();
 
     expect(el().querySelector(".sr-only").textContent).toContain("UI.VISU.ENERGY_PV 1.00 kW");
+  });
+
+  describe("circuit details", () => {
+    const circuitGroups = () => [
+      { group: 1, total: 3, measured: 2.6, rest: 0.4, restToday: 1.1,
+        circuits: [{ circuit: 3, name: "Compressor", hasValue: true, power: 2.6, today: 7.25 }] },
+      { group: 0, total: 1.2, measured: 0.9, rest: 0.3, restToday: 0.8,
+        circuits: [
+          { circuit: 1, name: "Kitchen", hasValue: true, power: 0.6, today: 2 },
+          { circuit: 2, name: null, hasValue: true, power: 0.3, today: 0.5 },
+          { circuit: 7, name: "Garage", hasValue: false, power: 0, today: 0 }
+        ] }
+    ];
+
+    function rows(group: Element): string[] {
+      return Array.from(group.querySelectorAll(".energy-row")).map(r => r.textContent.replace(/\s+/g, " ").trim());
+    }
+
+    it("offers no details without circuits", async () => {
+      visuData = { "id-house": 1 };
+      await create();
+
+      expect(component.hasDetails).toBeFalse();
+      expect(el().querySelector(".energy-more")).toBeNull();
+      expect(el().querySelectorAll(".energy-group").length).toBe(0);
+    });
+
+    it("lists the house and the consumers with their circuits and the rest", async () => {
+      parameters.consumer1Name = "Heat pump";
+      visuData = { "id-house": 1.2, "id-consumer1": 3, circuitGroups: circuitGroups() };
+      await create();
+
+      expect(el().querySelector(".energy-more")).not.toBeNull();
+      const groups = el().querySelectorAll(".energy-group");
+      expect(groups.length).toBe(2);
+      expect(groups[0].querySelector(".energy-group-name").textContent).toContain("UI.VISU.ENERGY_HOUSE");
+      expect(groups[0].querySelector(".energy-group-value").textContent).toContain("1.20 kW");
+      expect(groups[1].querySelector(".energy-group-name").textContent).toContain("Heat pump");
+
+      const house = rows(groups[0]);
+      expect(house[0]).toContain("Kitchen");
+      expect(house[0]).toContain("600 W");
+      expect(house[0]).toContain("2.00 kWh");
+      expect(house[1]).toContain("UI.VISU.ENERGY_CIRCUIT");
+      expect(house[2]).toContain("Garage");
+      expect(house[2]).toContain("–");
+      expect(house[3]).toContain("UI.VISU.ENERGY_NOT_MEASURED");
+      expect(house[3]).toContain("300 W");
+      expect(groups[0].querySelectorAll(".energy-row.is-rest").length).toBe(1);
+      expect(groups[0].querySelectorAll(".energy-row.no-value").length).toBe(1);
+    });
+
+    it("opens the popup from the button and from the diagram", async () => {
+      visuData = { circuitGroups: circuitGroups() };
+      await create();
+      const openPopup = jasmine.createSpy("openPopup");
+      component.baseControl = { openPopup } as any;
+
+      (el().querySelector(".energy-more") as HTMLElement).click();
+      (el().querySelector(".energy-stage") as HTMLElement).click();
+
+      expect(openPopup).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not open the details in the visu editor", async () => {
+      visuData = { circuitGroups: circuitGroups() };
+      await create(true);
+      const openPopup = jasmine.createSpy("openPopup");
+      component.baseControl = { openPopup } as any;
+
+      expect(el().querySelector(".energy-more")).toBeNull();
+      (el().querySelector(".energy-stage") as HTMLElement).click();
+
+      expect(openPopup).not.toHaveBeenCalled();
+    });
+
+    it("reloads the circuits while the popup is open", async () => {
+      visuData = { circuitGroups: circuitGroups() };
+      await create();
+      jasmine.clock().install();
+      try {
+        const calls = visuService.getRuleInstanceData.calls.count();
+
+        component.onDetailsShowing();
+        expect(visuService.getRuleInstanceData.calls.count()).toBe(calls + 1);
+        jasmine.clock().tick(DETAILS_REFRESH_MS * 2);
+        expect(visuService.getRuleInstanceData.calls.count()).toBe(calls + 3);
+
+        component.onDetailsHiding();
+        jasmine.clock().tick(DETAILS_REFRESH_MS * 3);
+        expect(visuService.getRuleInstanceData.calls.count()).toBe(calls + 3);
+      } finally {
+        jasmine.clock().uninstall();
+      }
+    });
+
+    it("updates the rows from the reloaded data", async () => {
+      visuData = { circuitGroups: circuitGroups() };
+      await create();
+
+      visuData = { circuitGroups: [{ group: 0, total: 2, rest: 0.5, circuits: [{ circuit: 1, name: "Kitchen", hasValue: true, power: 1.5 }] }] };
+      component.onDetailsShowing();
+      await flushPromises();
+      component.onDetailsHiding();
+      fixture.detectChanges();
+
+      const groups = el().querySelectorAll(".energy-group");
+      expect(groups.length).toBe(1);
+      expect(rows(groups[0])[0]).toContain("1.50 kW");
+    });
   });
 });
 

@@ -200,6 +200,102 @@ export function buildEnergyFlow(values: EnergyValues, options: EnergyFlowOptions
   return { nodes, links, height };
 }
 
+/** group number of the house in the circuit breakdown, 1-6 are the consumers */
+export const HOUSE_GROUP = 0;
+
+/** one measured circuit as GetDataForVisu of the logic sends it ("circuitGroups"), kW and kWh */
+export interface EnergyCircuitData {
+  circuit: number;
+  name?: string | null;
+  /** the circuit input got a value (a named circuit without one is listed too) */
+  hasValue?: boolean;
+  power?: number;
+  today?: number;
+}
+
+/** the house (0) or a consumer (1-6) with its circuits and the part no circuit measures */
+export interface EnergyCircuitGroupData {
+  group: number;
+  total?: number;
+  measured?: number;
+  rest?: number;
+  restToday?: number;
+  circuits?: EnergyCircuitData[];
+}
+
+export interface EnergyBreakdownRow {
+  id: string;
+  kind: "circuit" | "rest";
+  /** circuit number, 1 based */
+  circuit?: number;
+  name?: string;
+  power: number;
+  today?: number;
+  /** bar width in %: share of the group (or of the measured sum when the circuits read more than the total) */
+  share: number;
+  /** a named circuit whose input has no value yet */
+  noValue: boolean;
+}
+
+export interface EnergyBreakdownGroup {
+  id: string;
+  group: number;
+  total: number;
+  measured: number;
+  rest: number;
+  restToday?: number;
+  /** % of the total the circuits measure, undefined without a total */
+  coverage?: number;
+  /** circuits by power, the not measured rest last */
+  rows: EnergyBreakdownRow[];
+}
+
+function optional(value: number | undefined | null): number | undefined {
+  const n = Number(value);
+  return value === undefined || value === null || !isFinite(n) ? undefined : n;
+}
+
+/**
+ * Rows of the details popup from the "circuitGroups" of the logic: house first, then the consumers; inside a group the
+ * circuits with the most power first and the rest last. The circuits do not have to add up to the total: what they
+ * leave is the rest, and when they read more than the total the bars are scaled to the measured sum instead.
+ */
+export function buildBreakdown(groups: EnergyCircuitGroupData[] | null | undefined): EnergyBreakdownGroup[] {
+  if (!Array.isArray(groups)) {
+    return [];
+  }
+  return groups
+    .filter(g => g && isFinite(Number(g.group)) && Array.isArray(g.circuits) && g.circuits.length > 0)
+    .map(g => {
+      const group = Number(g.group);
+      const circuits = g.circuits!.filter(c => c && isFinite(Number(c.circuit)));
+      const measured = optional(g.measured) ?? circuits.reduce((sum, c) => sum + Math.max(finite(c.power), 0), 0);
+      const total = Math.max(finite(g.total), 0);
+      const rest = Math.max(optional(g.rest) ?? total - measured, 0);
+      const scale = Math.max(total, measured);
+      const share = (power: number) => scale > 0 ? Math.max(0, Math.min(100, power / scale * 100)) : 0;
+
+      const rows: EnergyBreakdownRow[] = circuits
+        .map(c => {
+          const power = Math.max(finite(c.power), 0);
+          const name = typeof c.name === "string" && c.name.trim() ? c.name.trim() : undefined;
+          return {
+            id: `circuit${c.circuit}`, kind: "circuit" as const, circuit: Number(c.circuit), name, power,
+            today: optional(c.today), share: share(power), noValue: c.hasValue === false
+          };
+        })
+        .sort((a, b) => b.power - a.power || a.circuit - b.circuit);
+      rows.push({ id: "rest", kind: "rest", power: rest, today: optional(g.restToday), share: share(rest), noValue: false });
+
+      return {
+        id: `group${group}`, group, total, measured, rest, restToday: optional(g.restToday),
+        coverage: total > 0 ? Math.min(measured / total * 100, 100) : undefined,
+        rows
+      };
+    })
+    .sort((a, b) => a.group - b.group);
+}
+
 /** 0.42 kW -> 420 W, 3.456 kW -> 3.46 kW, 12.3 kW -> 12.3 kW */
 export function formatPower(kw: number | undefined, locale = "en"): { value: string; unit: string } {
   if (kw === undefined || kw === null || !isFinite(Number(kw))) {

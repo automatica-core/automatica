@@ -20,6 +20,9 @@
 
 .energy-head {
     min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
 
     .tile-room {
         font-size: var(--text-xs);
@@ -38,6 +41,42 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+}
+
+.energy-head-text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+// opens the circuit details; the same look as the details button of the other tiles
+.energy-more {
+    appearance: none;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--fg);
+        border-color: var(--accent);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+}
+
+.has-details .energy-stage {
+    cursor: pointer;
 }
 
 // the stage keeps the ratio of the SVG view box, so nodes (HTML, in %) and lines (SVG) stay on top of each other
@@ -280,6 +319,152 @@
     }
 
     .energy-ico {
+        transition: none;
+    }
+}
+
+// details popup: per group (house, consumers) its measured circuits and the rest that is not measured
+.energy-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--fg);
+    font-family: var(--font-ui);
+}
+
+.energy-group-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--line);
+}
+
+.energy-group-ico {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.energy-group-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.energy-group-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.energy-group-sub {
+    font-size: var(--text-xs);
+    color: var(--muted);
+}
+
+.energy-group-value {
+    flex: 0 0 auto;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.energy-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+// name and power on the first line, the bar below, today's energy under the power
+.energy-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "name power"
+        "bar bar"
+        "today today";
+    column-gap: var(--space-2);
+    row-gap: 4px;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.energy-row-name {
+    grid-area: name;
+    font-size: var(--text-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.energy-row-power {
+    grid-area: power;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.energy-row-bar {
+    grid-area: bar;
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    overflow: hidden;
+
+    i {
+        display: block;
+        height: 100%;
+        border-radius: 3px;
+        background: var(--accent);
+        transition: width 0.3s ease;
+    }
+}
+
+.energy-row-today {
+    grid-area: today;
+    font-size: var(--text-xs);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+// the part no circuit measures: grey, so it reads as "the rest" and not as a circuit
+.energy-row.is-rest {
+    .energy-row-name {
+        color: var(--muted);
+        font-style: italic;
+    }
+
+    .energy-row-bar i {
+        background: color-mix(in srgb, var(--muted) 55%, transparent);
+    }
+}
+
+.energy-row.no-value {
+    .energy-row-name,
+    .energy-row-power {
+        color: var(--muted);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .energy-row-bar i {
         transition: none;
     }
 }

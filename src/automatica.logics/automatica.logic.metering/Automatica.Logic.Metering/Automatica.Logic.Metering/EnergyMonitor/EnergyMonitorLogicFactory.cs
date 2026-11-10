@@ -29,6 +29,28 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("c800f1f7-528b-431e-b031-7c1d7272c6a8"),
             new Guid("f6dde8a9-e791-4985-bd30-7c10a8e62f16")
         };
+        /// <summary>power of the measured sub-circuits (kW), see <see cref="EnergyCircuitInputs"/></summary>
+        public static readonly Guid[] InputCircuits =
+        {
+            new Guid("a4404911-d7f4-49a9-a08b-75e21bdffffa"),
+            new Guid("f67fb28d-b0ae-4423-bdda-4a94814abb99"),
+            new Guid("975c583f-da2a-46dd-9ee5-39ae981def01"),
+            new Guid("e0440a9b-d5f9-417d-8d95-68a21664c9cd"),
+            new Guid("0a8290b6-094d-4dfa-9d55-b09cc490fede"),
+            new Guid("34caa145-b562-400c-bad8-3722f3735631"),
+            new Guid("f5d4f074-835c-42b5-a7fe-f77f10743dea"),
+            new Guid("910fc7c5-b3f8-48e9-a072-91aa57d0769c"),
+            new Guid("730709b8-2f87-404d-8ef2-d3bf182262a6"),
+            new Guid("6c4c29ee-dcc0-4c2f-b640-3e439f51c639"),
+            new Guid("ec99ae87-50d9-43ca-a300-d689939fc2e9"),
+            new Guid("e99e08ef-77f5-4be1-8a5c-9715162a07d1"),
+            new Guid("8a9834ad-19f8-48f6-9db0-8df56058da18"),
+            new Guid("5eeeba73-65fe-471f-ac45-e363cebf9a9c"),
+            new Guid("0dfbfac3-a937-48dc-afd0-574501f2ea0a"),
+            new Guid("6e7809f2-e413-4899-b6a5-885c84deac95"),
+            new Guid("e2e90ad9-0210-4572-8f60-caf6db02efbe"),
+            new Guid("8cded5fe-9279-404b-9485-3f8c02f35071")
+        };
         public static readonly Guid InputPvMeter = new Guid("139f01aa-6a80-4108-b4e3-7b6dd5b58368");
         public static readonly Guid InputImportMeter = new Guid("a9002abc-35e1-42ab-84ff-74303b10e055");
         public static readonly Guid InputExportMeter = new Guid("759447cb-d93c-4503-9ace-8f23d5ac66c6");
@@ -61,6 +83,17 @@ namespace Automatica.Logic.Metering.EnergyMonitor
         public static readonly Guid OutputConsumptionToday = new Guid("8a1bbe59-13e4-4a9f-b297-4269d6b1a093");
         public static readonly Guid OutputSelfConsumptionToday = new Guid("b240f5ca-0590-40c5-99dd-a30ece6deb4a");
         public static readonly Guid OutputAutarkyToday = new Guid("43919875-4af2-4345-94e3-838bcf972e35");
+        /// <summary>not measured part (kW) of the house (index 0) and of consumers 1-6, sent once the group has circuits</summary>
+        public static readonly Guid[] OutputRests =
+        {
+            new Guid("59023f37-43ce-4568-97bc-5157545d6739"),
+            new Guid("e775507d-39f1-4beb-ae29-564c214bdc84"),
+            new Guid("d4edee0a-9ca6-4e33-b15b-7ec7d706d671"),
+            new Guid("41ab06d9-fded-48bb-a4e0-e11591039e27"),
+            new Guid("933dc025-2158-4f69-bf9c-5d462858cf72"),
+            new Guid("36a68084-0bd6-4839-8bfe-a3550a976c37"),
+            new Guid("199c2654-d70e-433d-8209-d04dee3e457f")
+        };
 
         // parameters
         public static readonly Guid ParamInvertGrid = new Guid("932f6f30-5d85-47d3-8df1-67b0041fa1f8");
@@ -75,10 +108,58 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("0879d7f9-4a46-49b2-a74a-ccfe74a876cb"),
             new Guid("c3d29b2d-b980-42f7-b044-64038e0fa3d8")
         };
+        /// <summary>which group a circuit belongs to: 0 = house, 1-6 = consumer</summary>
+        public static readonly Guid[] ParamCircuitGroups =
+        {
+            new Guid("2aac0b7e-b61e-40a2-b364-d5cebcf3c883"),
+            new Guid("63329d83-60f2-4f7f-b37b-a0af5bd83f51"),
+            new Guid("46b6c5f1-b4fd-4a66-a750-dc5ca672a5fe"),
+            new Guid("e5ef385e-e83d-4c43-8452-3259d0ca05e1"),
+            new Guid("ce57d88c-be97-49b7-9400-6cbf1ce155fb"),
+            new Guid("aaf90c89-70c5-4f01-adab-147be7cb7237"),
+            new Guid("ec8cd9bb-3512-48af-a895-6f8e96980c9c"),
+            new Guid("709bf30e-624f-42a6-9496-e5eb618575a2"),
+            new Guid("46bc7583-c263-4e55-b5e1-8fec8b0b2fb8"),
+            new Guid("ad92c3d5-e159-437a-8483-5db7e93fb512"),
+            new Guid("1e6f1ca6-83ae-417d-aec3-f008c54ee8e2"),
+            new Guid("041e0462-753c-4425-8060-3b1eb16c0c77"),
+            new Guid("d6d4e94a-e84f-4cc8-901d-7b4e1aa91471"),
+            new Guid("d717a16e-1c19-4110-9eff-03104e8ec2f3"),
+            new Guid("68feb00c-26e4-4cac-a71c-aad6d2fd11dd"),
+            new Guid("4b06af09-9ae3-426f-a5e7-56bc57abf4e8"),
+            new Guid("0d353f11-4351-4673-83fa-87302669e499"),
+            new Guid("e8822674-1aff-4d55-b148-b34495422cdf")
+        };
+        public static readonly Guid[] ParamCircuitNames =
+        {
+            new Guid("450627b7-9489-443e-ba36-029ddd3493bd"),
+            new Guid("bf961157-f73d-4be6-b99a-828ff31209b7"),
+            new Guid("89fcd395-c157-42a5-8198-5092659af1c1"),
+            new Guid("1db3dcad-fd72-45bc-9bf1-09386a8dc9ee"),
+            new Guid("77cc8a0e-bdc1-474a-b7f4-0af86cf40f88"),
+            new Guid("fb7b4c81-ddf1-44af-8d12-f817bed01ea3"),
+            new Guid("56017b15-c830-4f66-bab0-23dbfc6443df"),
+            new Guid("d07d3179-f5b9-4ee3-88ee-db24f860d9a5"),
+            new Guid("dee34965-6040-4324-8d15-d01f273b6079"),
+            new Guid("71f24aed-200e-493a-ba2d-66b1130f6933"),
+            new Guid("8911747e-cae6-45e6-a659-d147953ff127"),
+            new Guid("a738dc20-b158-4f96-b9a5-86cd0c0a950b"),
+            new Guid("e8ab9f75-8b5b-4858-8741-ce5103c01922"),
+            new Guid("bc35a647-e832-44db-960a-984a9b967911"),
+            new Guid("16388133-b0cc-49b7-8bb7-2728ff5455cd"),
+            new Guid("129ef886-b049-4d3d-9921-2b36326da860"),
+            new Guid("8e909517-2c62-45aa-8621-9cfb085dddd0"),
+            new Guid("e54899e8-c824-4f2e-8bec-dd452bd1de7b")
+        };
+
+        internal const string CircuitGroupMeta = "ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;1,METERING.ENERGY_MONITOR.GROUP.CONSUMER1;"
+            + "2,METERING.ENERGY_MONITOR.GROUP.CONSUMER2;3,METERING.ENERGY_MONITOR.GROUP.CONSUMER3;4,METERING.ENERGY_MONITOR.GROUP.CONSUMER4;"
+            + "5,METERING.ENERGY_MONITOR.GROUP.CONSUMER5;6,METERING.ENERGY_MONITOR.GROUP.CONSUMER6)";
 
         public override string LogicName => "Metering.EnergyMonitor";
-        // 1.1: consumers 4-6 (inputs, outputs, names); the core adds them to existing instances only on a version bump
-        public override Version LogicVersion => new Version(1, 1, 0, 0);
+        // 1.1: consumers 4-6 (inputs, outputs, names); 1.2: sub-circuits (inputs, group + name, rest outputs).
+        // The core adds new interfaces to existing instances only on a version bump.
+        public override Version LogicVersion => new Version(1, 2, 0, 0);
         public override Guid LogicGuid => new Guid("270e43f0-bda0-4e87-a1ad-691dbe745adb");
 
         /// <summary>
@@ -108,6 +189,11 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             MonitorInput(factory, InputExportMeter, "EXPORT_METER", "exportMeter", ++sort);
             MonitorInput(factory, InputChargeMeter, "CHARGE_METER", "chargeMeter", ++sort);
             MonitorInput(factory, InputDischargeMeter, "DISCHARGE_METER", "dischargeMeter", ++sort);
+            // after the existing inputs, so they keep their place on the block
+            for (var i = 0; i < InputCircuits.Length; i++)
+            {
+                MonitorInput(factory, InputCircuits[i], $"CIRCUIT{i + 1}", $"circuit{i + 1}", ++sort);
+            }
 
             sort = 0;
             MonitorOutput(factory, OutputGrid, "GRID", "grid", ++sort);
@@ -131,6 +217,11 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             MonitorOutput(factory, OutputConsumptionToday, "CONSUMPTION_TODAY", "consumptionToday", ++sort);
             MonitorOutput(factory, OutputSelfConsumptionToday, "SELF_CONSUMPTION_TODAY", "selfConsumptionToday", ++sort);
             MonitorOutput(factory, OutputAutarkyToday, "AUTARKY_TODAY", "autarkyToday", ++sort);
+            MonitorOutput(factory, OutputRests[0], "HOUSE_REST", "houseRest", ++sort);
+            for (var i = 1; i < OutputRests.Length; i++)
+            {
+                MonitorOutput(factory, OutputRests[i], $"CONSUMER{i}_REST", $"consumer{i}Rest", ++sort);
+            }
 
             sort = 0;
             // the overloads with "linkable": the one without it stores the name as key on current cores, and the tile looks the
@@ -145,6 +236,14 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             {
                 factory.CreateParameterLogicInterfaceTemplate(ParamConsumerNames[i], $"METERING.ENERGY_MONITOR.PARAM.CONSUMER{i + 1}_NAME.NAME",
                     "METERING.ENERGY_MONITOR.PARAM.CONSUMER_NAME.DESCRIPTION", $"consumer{i + 1}Name", LogicGuid, ++sort, RuleInterfaceParameterDataType.Text, "", false);
+            }
+            for (var i = 0; i < ParamCircuitNames.Length; i++)
+            {
+                factory.CreateParameterLogicInterfaceTemplate(ParamCircuitNames[i], $"METERING.ENERGY_MONITOR.PARAM.CIRCUIT{i + 1}_NAME.NAME",
+                    "METERING.ENERGY_MONITOR.PARAM.CIRCUIT_NAME.DESCRIPTION", $"circuit{i + 1}Name", LogicGuid, ++sort, RuleInterfaceParameterDataType.Text, "", false);
+                factory.CreateParameterLogicInterfaceTemplate(ParamCircuitGroups[i], $"METERING.ENERGY_MONITOR.PARAM.CIRCUIT{i + 1}_GROUP.NAME",
+                    "METERING.ENERGY_MONITOR.PARAM.CIRCUIT_GROUP.DESCRIPTION", $"circuit{i + 1}Group", LogicGuid, ++sort, RuleInterfaceParameterDataType.Enum,
+                    EnergyCircuitInputs.HouseGroup, false, CircuitGroupMeta);
             }
 
             UseEnergyFlowVisu(factory, LogicGuid);

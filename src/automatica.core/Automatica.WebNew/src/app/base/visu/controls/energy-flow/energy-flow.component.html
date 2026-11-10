@@ -1,14 +1,25 @@
-<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false">
-  <div control_full class="energy" [class.is-animated]="animate" role="group" [attr.aria-label]="displayText">
+<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false" [hint]="displayText" [location]="location"
+  [hasPopup]="hasDetails" [showIconInPopup]="false" (onPopupShowing)="onDetailsShowing()" (onPopupHiding)="onDetailsHiding()">
+  <div control_full class="energy" [class.is-animated]="animate" [class.has-details]="canOpenDetails" role="group"
+    [attr.aria-label]="displayText">
 
     <div class="energy-head">
-      @if (location) {
-        <div class="tile-room">{{ location }}</div>
+      <div class="energy-head-text">
+        @if (location) {
+          <div class="tile-room">{{ location }}</div>
+        }
+        <div class="tile-name">{{ displayText }}</div>
+      </div>
+      @if (canOpenDetails) {
+        <button type="button" class="energy-more" aria-haspopup="dialog" [attr.title]="'UI.VISU.ENERGY_CIRCUITS' | translateAsync"
+          [attr.aria-label]="('UI.VISU.ENERGY_CIRCUITS' | translateAsync) + ': ' + displayText" (click)="openDetails($event)">
+          <fa-icon icon="list"></fa-icon>
+        </button>
       }
-      <div class="tile-name">{{ displayText }}</div>
     </div>
 
-    <div class="energy-stage" [style.aspect-ratio]="aspectRatio">
+    <!-- the details button is the keyboard way in; a click on the diagram opens them as well -->
+    <div class="energy-stage" [style.aspect-ratio]="aspectRatio" (click)="openDetails($event)">
       <svg class="energy-lines" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
         @for (link of layout.links; track link.id) {
           <path class="energy-track" [attr.d]="link.path"></path>
@@ -49,6 +60,33 @@
           <span class="energy-stat-value">{{ pvTodayText }}</span>
         </div>
       </div>
+    }
+  </div>
+
+  <div popup class="energy-details">
+    @for (group of circuitGroups; track group.id) {
+      <section class="energy-group" [attr.aria-label]="groupLabel(group)">
+        <header class="energy-group-head">
+          <span class="energy-group-ico" aria-hidden="true"><fa-icon [icon]="groupIcon(group)"></fa-icon></span>
+          <span class="energy-group-text">
+            <span class="energy-group-name">{{ groupLabel(group) }}</span>
+            @if (coverageText(group); as coverage) {
+              <span class="energy-group-sub">{{ coverage }}</span>
+            }
+          </span>
+          <span class="energy-group-value">{{ powerText(group.total) }}</span>
+        </header>
+        <ul class="energy-rows">
+          @for (row of group.rows; track row.id) {
+            <li class="energy-row" [class.is-rest]="row.kind === 'rest'" [class.no-value]="row.noValue">
+              <span class="energy-row-name">{{ rowLabel(row) }}</span>
+              <span class="energy-row-power">{{ row.noValue ? '–' : powerText(row.power) }}</span>
+              <span class="energy-row-bar" aria-hidden="true"><i [style.width.%]="row.share"></i></span>
+              <span class="energy-row-today">{{ 'UI.VISU.ENERGY_TODAY' | translateAsync }} {{ todayText(row.today) }}</span>
+            </li>
+          }
+        </ul>
+      </section>
     }
   </div>
 </app-visualization-control>
