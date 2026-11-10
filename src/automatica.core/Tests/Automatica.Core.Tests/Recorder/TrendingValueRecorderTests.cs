@@ -141,5 +141,49 @@ namespace Automatica.Core.Tests.Recorder
             Assert.Equal(1, recorder.LastTrending.Value);
 
         }
+
+        [Fact]
+        public async Task OnOffValues_AreRecordedAsOneAndZero()
+        {
+            var node = new NodeInstance
+            {
+                ObjId = Guid.NewGuid(),
+                Trending = false,
+                TrendingType = TrendingTypes.OnChange
+            };
+
+            var recorder = await CreateRecorder(node);
+            var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
+            await trendingValueRecorder.Start();
+
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.Read), "testSource");
+            Assert.Equal(1, recorder.LastTrending.Value);
+
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, false, DateTime.Now, DispatchValueSource.Read), "testSource");
+            Assert.Equal(0, recorder.LastTrending.Value);
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        [InlineData("True", 1)]
+        [InlineData("false", 0)]
+        [InlineData(33.42, 33.42)]
+        [InlineData(7, 7)]
+        [InlineData("12.5", 12.5)]
+        public void TryGetNumber_ConvertsNumbersAndOnOffValues(object value, double expected)
+        {
+            Assert.True(TrendingValueRecorder.TryGetNumber(value, out var number));
+            Assert.Equal(expected, number);
+        }
+
+        [Theory]
+        [InlineData("on")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void TryGetNumber_RejectsText(object value)
+        {
+            Assert.False(TrendingValueRecorder.TryGetNumber(value, out _));
+        }
     }
 }

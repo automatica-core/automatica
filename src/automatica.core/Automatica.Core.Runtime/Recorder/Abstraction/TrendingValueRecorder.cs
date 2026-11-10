@@ -74,6 +74,35 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
             }
         }
 
+        /// <summary>
+        /// On/off values are recorded as 1 and 0: bool.ToString() is "True", which no number parser accepts, so switches
+        /// and states never had a history.
+        /// </summary>
+        internal static bool TryGetNumber(object value, out double number)
+        {
+            switch (value)
+            {
+                case bool b:
+                    number = b ? 1 : 0;
+                    return true;
+                case string text when bool.TryParse(text, out var parsed):
+                    number = parsed ? 1 : 0;
+                    return true;
+                case IConvertible convertible and not string:
+                    try
+                    {
+                        number = convertible.ToDouble(CultureInfo.InvariantCulture);
+                        return true;
+                    }
+                    catch (Exception e) when (e is FormatException or InvalidCastException or OverflowException)
+                    {
+                        break;
+                    }
+            }
+
+            return double.TryParse(value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out number);
+        }
+
         public void ValueChanged(DispatchValue value, string source)
         {
             lock (_lock)
@@ -86,7 +115,7 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
                     }
 
                     _lastSource = source;
-                    if (double.TryParse(value.Value.ToString(), CultureInfo.InvariantCulture, out var dblValue))
+                    if (TryGetNumber(value.Value, out var dblValue))
                     {
                         switch (Instance.TrendingType)
                         {
