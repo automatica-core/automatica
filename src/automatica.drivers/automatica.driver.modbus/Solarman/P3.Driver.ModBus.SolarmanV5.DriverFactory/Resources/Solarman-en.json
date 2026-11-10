@@ -182,7 +182,7 @@
         },
         "RUNNING": {
           "NAME": "Running",
-          "DESCRIPTION": ""
+          "DESCRIPTION": "On while the inverter reports normal operation (device state 500 = 2); off in standby, self-test, alarm or fault."
         },
         "TOTAL-POWER": {
           "NAME": "Total Power [W]",
@@ -250,7 +250,7 @@
         },
         "SMARTLOAD-ENABLED-STATUS": {
           "NAME": "Smartload Enabled",
-          "DESCRIPTION": ""
+          "DESCRIPTION": "On while the generator port is set to SmartLoad output (register 133)."
         },
         "TOTAL-LOAD-CONSUMPTION": {
           "NAME": "Total Load Consumption [kWh]",
@@ -262,7 +262,7 @@
         },
         "GRID-STATUS": {
           "NAME": "Grid Status",
-          "DESCRIPTION": ""
+          "DESCRIPTION": "1 while the grid relay is closed, 0 when the inverter is off the grid (register 552, bit 2)."
         },
         "BOOTLOADER-VERSION": {
           "NAME": "Bootloader Version",

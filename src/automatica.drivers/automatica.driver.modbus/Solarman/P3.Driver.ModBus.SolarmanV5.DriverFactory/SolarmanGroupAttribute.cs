@@ -92,6 +92,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 attribute = CreateGridChargeAttribute(ctx, attributeMap);
             }
+            else if (_map.Decoders.TryGetValue(key, out var decoder))
+            {
+                attribute = new SolarmanDecodedAttribute(ctx, this, decoder);
+            }
             else if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
                 (long)NodeDataType.Double)
             {

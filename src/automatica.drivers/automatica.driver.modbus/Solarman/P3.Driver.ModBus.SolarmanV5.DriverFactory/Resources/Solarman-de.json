@@ -181,8 +181,8 @@
           "DESCRIPTION": ""
         },
         "RUNNING": {
-          "NAME": "Running",
-          "DESCRIPTION": ""
+          "NAME": "In Betrieb",
+          "DESCRIPTION": "Ein, solange der Wechselrichter normalen Betrieb meldet (Gerätezustand 500 = 2); aus bei Standby, Selbsttest, Alarm oder Fehler."
         },
         "TOTAL-POWER": {
           "NAME": "Total Power [W]",
@@ -250,7 +250,7 @@
         },
         "SMARTLOAD-ENABLED-STATUS": {
           "NAME": "Smartload aktiviert",
-          "DESCRIPTION": ""
+          "DESCRIPTION": "Ein, solange der Generator-Anschluss als SmartLoad-Ausgang eingestellt ist (Register 133)."
         },
         "TOTAL-LOAD-CONSUMPTION": {
           "NAME": "Total Load Consumption [kWh]",
@@ -261,8 +261,8 @@
           "DESCRIPTION": ""
         },
         "GRID-STATUS": {
-          "NAME": "Grid Status",
-          "DESCRIPTION": ""
+          "NAME": "Netzstatus",
+          "DESCRIPTION": "1, solange das Netzrelais geschlossen ist, 0 im Inselbetrieb (Register 552, Bit 2)."
         },
         "BOOTLOADER-VERSION": {
           "NAME": "Bootloader Version",

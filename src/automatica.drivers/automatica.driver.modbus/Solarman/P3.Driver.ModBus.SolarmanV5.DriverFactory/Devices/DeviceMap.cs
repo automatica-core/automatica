@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices
 {
@@ -32,6 +33,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices
         /// First register and number of the time of use charge registers (one per slot).
         /// </summary>
         public (int start, int count) TimeOfUseChargeRegisters { get; protected set; }
+
+        /// <summary>
+        /// Registers that are not a plain number: enums or bit fields decoded to the node value.
+        /// </summary>
+        public Dictionary<string, Func<ushort[], object>> Decoders { get; } = new();
 
         public bool IsSigned(string key) => SignedKeys.Contains(key);
 

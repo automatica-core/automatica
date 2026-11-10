@@ -62,7 +62,8 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
             NameRegisterMap.Add("solarman-sg03lp3-total-energy-bought", new() { 0x020A, 0x020B });
             NameRegisterMap.Add("solarman-sg03lp3-daily-energy-sold", new() { 0x0209 });
             NameRegisterMap.Add("solarman-sg03lp3-total-energy-sold", new() { 0x020C, 0x020D });
-            NameRegisterMap.Add("solarman-sg03lp3-grid-status", new() { 0x0271 });
+            // grid relay closed (bit 2 of the device relay status 552); 0x0271 is the total grid power
+            NameRegisterMap.Add("solarman-sg03lp3-grid-status", new() { 0x0228 });
 
 
             NameRegisterMap.Add("solarman-sg03lp3-total-load-power", new() { 0x028D });
@@ -74,9 +75,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
             NameRegisterMap.Add("solarman-sg03lp3-load-voltage-l3", new() { 0x0286 });
             NameRegisterMap.Add("solarman-sg03lp3-daily-load-consumption", new() { 0x020E });
             NameRegisterMap.Add("solarman-sg03lp3-total-load-consumption", new() { 0x020F, 0x0210 });
-            NameRegisterMap.Add("solarman-sg03lp3-smartload-enabled-status", new() { 0x00C3 });
+            // generator port mode (133): 1 = SmartLoad output
+            NameRegisterMap.Add("solarman-sg03lp3-smartload-enabled-status", new() { 0x0085 });
 
 
+            // device state (500): 2 = normal operation
             NameRegisterMap.Add("solarman-sg03lp3-running", new() { 0x01F4 });
             NameRegisterMap.Add("solarman-sg03lp3-total-power", new() { 0x027C });
             NameRegisterMap.Add("solarman-sg03lp3-current-l1", new() { 0x0276 });
@@ -100,6 +103,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
             NameRegisterMap.Add("solarman-sg03lp3-alarm-3", new() { 0x022C });
             NameRegisterMap.Add("solarman-sg03lp3-alarm-4", new() { 0x022D });
             NameRegisterMap.Add("solarman-sg03lp3-alarm-5", new() { 0x022E });
+
+            Decoders.Add("solarman-sg03lp3-running", data => SolarmanRegisterCodec.IsDeviceStateNormal(data[0]));
+            Decoders.Add("solarman-sg03lp3-grid-status", data => SolarmanRegisterCodec.GridRelayClosed(data[0]));
+            Decoders.Add("solarman-sg03lp3-smartload-enabled-status", data => SolarmanRegisterCodec.IsSmartLoadOutput(data[0]));
 
             TimeOfUseChargeRegisters = (TimeOfUseChargeStart, TimeOfUseSlots);
 

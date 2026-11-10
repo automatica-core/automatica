@@ -50,6 +50,9 @@ namespace P3.Driver.ModBus.Tests.Solarman
         [InlineData("external-ct-l1-power", 616)]
         [InlineData("inverter-l1-power", 633)]
         [InlineData("current-l1", 630)]
+        [InlineData("running", 500)]
+        [InlineData("grid-status", 552)]
+        [InlineData("smartload-enabled-status", 133)]
         public void RegisterAddresses(string name, int register)
         {
             Assert.Equal(new[] { register }, _map[SG04LP3DeviceMap.KeyPrefix + name]);
@@ -105,10 +108,33 @@ namespace P3.Driver.ModBus.Tests.Solarman
         [InlineData("tou-grid-charge-6")]
         [InlineData("tou-soc-1")]
         [InlineData("tou-soc-6")]
+        [InlineData("running")]
+        [InlineData("grid-status")]
+        [InlineData("smartload-enabled-status")]
         public void RegistersArePolled(string name)
         {
             var registers = _map[SG04LP3DeviceMap.KeyPrefix + name];
             Assert.Contains(_groups.GroupRead, group => registers.First() >= group.start && registers.Last() <= group.end);
+        }
+
+        [Fact]
+        public void EveryMappedRegisterIsPolled()
+        {
+            Assert.All(_map.NameRegisterMap, entry => Assert.Contains(_groups.GroupRead,
+                group => entry.Value.First() >= group.start && entry.Value.Last() <= group.end));
+        }
+
+        [Theory]
+        [InlineData("running", 2, true)]
+        [InlineData("running", 1, false)]
+        [InlineData("grid-status", 5, 1)]
+        [InlineData("grid-status", 1, 0)]
+        [InlineData("smartload-enabled-status", 1, true)]
+        [InlineData("smartload-enabled-status", 0, false)]
+        public void Decoders(string name, int raw, object expected)
+        {
+            var decoder = _map.Decoders[SG04LP3DeviceMap.KeyPrefix + name];
+            Assert.Equal(expected, decoder(new[] { (ushort)raw }));
         }
     }
 }

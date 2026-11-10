@@ -102,6 +102,37 @@ namespace P3.Driver.ModBus.Tests.Solarman
         }
 
         [Theory]
+        [InlineData(0, false)] // standby
+        [InlineData(1, false)] // self-test
+        [InlineData(2, true)] // normal
+        [InlineData(3, false)] // alarm
+        [InlineData(4, false)] // fault
+        public void IsDeviceStateNormal(int raw, bool expected)
+        {
+            Assert.Equal(expected, SolarmanRegisterCodec.IsDeviceStateNormal((ushort)raw));
+        }
+
+        [Theory]
+        [InlineData(0x0000, 0)] // off
+        [InlineData(0x0001, 0)] // inverter relay only
+        [InlineData(0x0004, 1)] // grid
+        [InlineData(0x0005, 1)] // inverter + grid (seen on the user's inverter)
+        [InlineData(0x0008, 0)] // generator
+        public void GridRelayClosed_ReadsBit2(int raw, int expected)
+        {
+            Assert.Equal(expected, SolarmanRegisterCodec.GridRelayClosed((ushort)raw));
+        }
+
+        [Theory]
+        [InlineData(0, false)] // generator input
+        [InlineData(1, true)] // SmartLoad output
+        [InlineData(2, false)] // micro-inverter input
+        public void IsSmartLoadOutput(int raw, bool expected)
+        {
+            Assert.Equal(expected, SolarmanRegisterCodec.IsSmartLoadOutput((ushort)raw));
+        }
+
+        [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
         [InlineData(1, true)]

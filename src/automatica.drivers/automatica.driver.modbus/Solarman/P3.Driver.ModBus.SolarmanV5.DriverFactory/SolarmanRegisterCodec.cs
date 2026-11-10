@@ -56,6 +56,27 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return val;
         }
 
+        /// <summary>
+        /// Deye device state (register 500): 0 standby, 1 self-test, 2 normal, 3 alarm, 4 fault.
+        /// </summary>
+        public const ushort DeviceStateNormal = 2;
+
+        /// <summary>
+        /// Deye device relay status (register 552): bit 0 inverter relay, bit 2 grid relay, bit 3 generator relay.
+        /// </summary>
+        public const ushort GridRelayBit = 0x0004;
+
+        /// <summary>
+        /// Deye generator port mode (register 133): 0 generator input, 1 SmartLoad output, 2 micro-inverter input.
+        /// </summary>
+        public const ushort GeneratorPortSmartLoad = 1;
+
+        public static bool IsDeviceStateNormal(ushort raw) => raw == DeviceStateNormal;
+
+        public static int GridRelayClosed(ushort raw) => (raw & GridRelayBit) != 0 ? 1 : 0;
+
+        public static bool IsSmartLoadOutput(ushort raw) => raw == GeneratorPortSmartLoad;
+
         public static bool IsGridChargeEnabled(ushort raw)
         {
             return (raw & GridChargeBit) != 0;
