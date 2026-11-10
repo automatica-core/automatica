@@ -1,0 +1,26 @@
+{
+  "REFOSS": {
+    "NAME": "Refoss energy monitor",
+    "DESCRIPTION": "Refoss EM16P / EM06P energy monitors through the local API (LAN)",
+    "HOST": { "NAME": "Device address", "DESCRIPTION": "IP address or host name of the energy monitor, e.g. 192.168.1.60 (http is used). Give the device a fixed address in the router" },
+    "PASSWORD": { "NAME": "Password", "DESCRIPTION": "Only when authentication is switched on in the Refoss app or web UI (user admin). Empty = no authentication" },
+    "POLL": { "NAME": "Polling interval [s]", "DESCRIPTION": "How often all channels are read (one request per poll)" },
+    "SCAN": { "NAME": "Search channels", "DESCRIPTION": "Lists the channels of the device that are not configured yet, named after the names set in the Refoss app" },
+    "CONNECTED": { "NAME": "Connected", "DESCRIPTION": "The last poll reached the device" },
+    "CHANNEL": {
+      "NAME": "Channel",
+      "DESCRIPTION": "One current transformer (CT) of the energy monitor",
+      "ID": { "NAME": "Channel number", "DESCRIPTION": "EM16P: A1–A6 = 1–6 (black), B1–B6 = 7–12 (red), C1–C6 = 13–18 (blue). Merged channels use the id the device reports" },
+      "POWER": { "NAME": "Power [W]", "DESCRIPTION": "Active power of the channel" },
+      "CURRENT": { "NAME": "Current [A]", "DESCRIPTION": "Current through the CT" },
+      "VOLTAGE": { "NAME": "Voltage [V]", "DESCRIPTION": "Voltage of the phase the channel is assigned to" },
+      "PF": { "NAME": "Power factor", "DESCRIPTION": "Power factor of the channel" },
+      "DAY_ENERGY": { "NAME": "Energy today [kWh]", "DESCRIPTION": "Consumption today, restarts at 0 every day. Link it to a meter logic for a running total" },
+      "WEEK_ENERGY": { "NAME": "Energy this week [kWh]", "DESCRIPTION": "Consumption this week, restarts at 0 every week" },
+      "MONTH_ENERGY": { "NAME": "Energy this month [kWh]", "DESCRIPTION": "Consumption this month, restarts at 0 every month. Link it to a meter logic for a running total" },
+      "DAY_RET_ENERGY": { "NAME": "Returned energy today [kWh]", "DESCRIPTION": "Energy fed back (e.g. PV) today" },
+      "WEEK_RET_ENERGY": { "NAME": "Returned energy this week [kWh]", "DESCRIPTION": "Energy fed back this week" },
+      "MONTH_RET_ENERGY": { "NAME": "Returned energy this month [kWh]", "DESCRIPTION": "Energy fed back this month" }
+    }
+  }
+}

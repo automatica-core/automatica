@@ -1,0 +1,17 @@
+{
+  "Automatica": {
+    "manifest-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "plugin-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "PluginGuid": "61dda446-c265-4104-b8b4-a371ca8a4738",
+    "Name": "P3.Driver.Refoss.Driver",
+    "ComponentName": "Refoss",
+    "Type": "driver",
+    "Output": "P3.Driver.Refoss.Driver.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.refoss",
+    "MinCoreServerVersion": { "Minor": 0, "Major": 10, "Build": 0, "Revision": 2068 },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

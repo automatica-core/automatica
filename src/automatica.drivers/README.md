@@ -36,6 +36,8 @@ Here is a list of all built-in available drivers.
 * [MBus](./automatica.driver.mbus)
 * [ModBus](./automatica.driver.modbus)
 * [OpenWeatherMap](./automatica.driver.openweathermap.driver)
+* [Refoss](./automatica.driver.refoss)
+    * Refoss EM16P / EM06P energy monitors, per-circuit power and energy (local API)
 * [Segway Navimow](./automatica.driver.navimow)
     * Navimow robot mowers (cloud)
 * [Spot price](./automatica.driver.spotprice)

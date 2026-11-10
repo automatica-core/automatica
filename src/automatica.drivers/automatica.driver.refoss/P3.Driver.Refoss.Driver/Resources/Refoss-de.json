@@ -1,0 +1,26 @@
+{
+  "REFOSS": {
+    "NAME": "Refoss Energiemonitor",
+    "DESCRIPTION": "Refoss EM16P / EM06P Energiemonitore über die lokale API (LAN)",
+    "HOST": { "NAME": "Geräteadresse", "DESCRIPTION": "IP-Adresse oder Hostname des Energiemonitors, z. B. 192.168.1.60 (http). Dem Gerät im Router eine feste Adresse geben" },
+    "PASSWORD": { "NAME": "Passwort", "DESCRIPTION": "Nur wenn die Authentifizierung in der Refoss-App oder Weboberfläche eingeschaltet ist (Benutzer admin). Leer = keine Authentifizierung" },
+    "POLL": { "NAME": "Abfrageintervall [s]", "DESCRIPTION": "Wie oft alle Kanäle gelesen werden (eine Anfrage pro Abfrage)" },
+    "SCAN": { "NAME": "Kanäle suchen", "DESCRIPTION": "Listet die noch nicht angelegten Kanäle des Geräts, benannt nach den Namen aus der Refoss-App" },
+    "CONNECTED": { "NAME": "Verbunden", "DESCRIPTION": "Die letzte Abfrage hat das Gerät erreicht" },
+    "CHANNEL": {
+      "NAME": "Kanal",
+      "DESCRIPTION": "Ein Stromwandler (CT) des Energiemonitors",
+      "ID": { "NAME": "Kanalnummer", "DESCRIPTION": "EM16P: A1–A6 = 1–6 (schwarz), B1–B6 = 7–12 (rot), C1–C6 = 13–18 (blau). Zusammengefasste Kanäle verwenden die Id, die das Gerät meldet" },
+      "POWER": { "NAME": "Leistung [W]", "DESCRIPTION": "Wirkleistung des Kanals" },
+      "CURRENT": { "NAME": "Strom [A]", "DESCRIPTION": "Strom durch den Wandler" },
+      "VOLTAGE": { "NAME": "Spannung [V]", "DESCRIPTION": "Spannung der Phase, der der Kanal zugeordnet ist" },
+      "PF": { "NAME": "Leistungsfaktor", "DESCRIPTION": "Leistungsfaktor des Kanals" },
+      "DAY_ENERGY": { "NAME": "Energie heute [kWh]", "DESCRIPTION": "Verbrauch heute, beginnt jeden Tag bei 0. Für einen fortlaufenden Zählerstand mit einer Zähler-Logik verknüpfen" },
+      "WEEK_ENERGY": { "NAME": "Energie diese Woche [kWh]", "DESCRIPTION": "Verbrauch dieser Woche, beginnt jede Woche bei 0" },
+      "MONTH_ENERGY": { "NAME": "Energie diesen Monat [kWh]", "DESCRIPTION": "Verbrauch dieses Monats, beginnt jeden Monat bei 0. Für einen fortlaufenden Zählerstand mit einer Zähler-Logik verknüpfen" },
+      "DAY_RET_ENERGY": { "NAME": "Rückgespeist heute [kWh]", "DESCRIPTION": "Heute zurückgespeiste Energie (z. B. PV)" },
+      "WEEK_RET_ENERGY": { "NAME": "Rückgespeist diese Woche [kWh]", "DESCRIPTION": "Diese Woche zurückgespeiste Energie" },
+      "MONTH_RET_ENERGY": { "NAME": "Rückgespeist diesen Monat [kWh]", "DESCRIPTION": "Diesen Monat zurückgespeiste Energie" }
+    }
+  }
+}
