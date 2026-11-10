@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -58,6 +60,19 @@ namespace P3.Driver.ModBus.Tests
         }
 
 
+        /// <summary>
+        /// A port the OS reports as free. A random port collided with a slave a previous test left listening
+        /// ("Address already in use"), because the slave tests never stop their driver.
+        /// </summary>
+        private static int GetFreeTcpPort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
+
         protected async Task<ModBusSlaveAttribute> InitSlaveAttribute(Guid attributeType, Func<NodeInstance, NodeInstance> modifyNodeAttribute = null)
         {
             var factory = new NodeTemplateFactoryMock();
@@ -79,7 +94,7 @@ namespace P3.Driver.ModBus.Tests
             var device = factory.CreateNodeInstance(ModBusDriverFactory.ModBusDriverFactory.DeviceTemplate);
 
             driverNode.PropertyInstance.Single(a => a.This2PropertyTemplateNavigation.Key == "modbus-port")
-                .Value = new Random().Next(2000, 5000);
+                .Value = GetFreeTcpPort();
 
             var attributeNode = factory.CreateNodeInstance(attributeType);
 
