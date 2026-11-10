@@ -94,9 +94,23 @@ namespace P3.Driver.HomeKit
         /// </summary>
         public static void Init(ILogger logger)
         {
+            // build output and tests have NSec's own libsodium in runtimes/<rid>/native and may already use it: a second
+            // copy would get the imports bound later and crash (not initialized). Installed plugins have no runtimes folder.
+            var bundled = FindBundledLibsodium();
+            if (bundled != null)
+            {
+                logger.LogDebug($"Using the libsodium of the runtimes folder {bundled}");
+            }
+
+            Init(logger, bundled == null);
+        }
+
+        /// <param name="extract">load the embedded copy, false: the normal native library probing</param>
+        internal static void Init(ILogger logger, bool extract)
+        {
             lock (NativeLock)
             {
-                if (_libsodiumHandle == IntPtr.Zero)
+                if (extract && _libsodiumHandle == IntPtr.Zero)
                 {
                     _libsodiumHandle = LoadEmbeddedLibsodium(logger);
 
@@ -106,6 +120,21 @@ namespace P3.Driver.HomeKit
             }
 
             logger.LogInformation($"Loading sodium version {sodium_library_version_major()}.{sodium_library_version_minor()}");
+        }
+
+        /// <summary>
+        /// libsodium of the NSec package next to NSec (runtimes/&lt;rid&gt;/native), null if there is none
+        /// </summary>
+        internal static string FindBundledLibsodium()
+        {
+            var location = typeof(NSec.Cryptography.Key).Assembly.Location;
+            if (string.IsNullOrEmpty(location))
+            {
+                return null;
+            }
+
+            var native = Path.Combine(Path.GetDirectoryName(location), "runtimes", ServerInfo.Rid, "native");
+            return Directory.Exists(native) ? Directory.EnumerateFiles(native, Libsodium + "*").FirstOrDefault() : null;
         }
 
         private static IntPtr LoadEmbeddedLibsodium(ILogger logger)

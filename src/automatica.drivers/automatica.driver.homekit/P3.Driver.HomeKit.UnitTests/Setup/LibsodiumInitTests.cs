@@ -62,8 +62,10 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
             Assert.NotSame(typeof(HomeKitServer).Assembly, homeKit);
 
             var server = homeKit.GetType(typeof(HomeKitServer).FullName!)!;
-            server.GetMethod(nameof(HomeKitServer.Init))!.Invoke(null, new object[] { NullLogger.Instance });
-            server.GetMethod(nameof(HomeKitServer.Init))!.Invoke(null, new object[] { NullLogger.Instance }); // drivers call it once per start
+            // as in an installed plugin (no runtimes folder): load the embedded copy
+            var init = server.GetMethod(nameof(HomeKitServer.Init), BindingFlags.Static | BindingFlags.NonPublic, new[] { typeof(Microsoft.Extensions.Logging.ILogger), typeof(bool) })!;
+            init.Invoke(null, new object[] { NullLogger.Instance, true });
+            init.Invoke(null, new object[] { NullLogger.Instance, true }); // drivers call it once per start
 
             var nsec = context.LoadFromAssemblyName(new AssemblyName("NSec.Cryptography"));
             var rngType = nsec.GetType("NSec.Cryptography.RandomGenerator")!;
@@ -114,6 +116,13 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
             // NSec of the plugin context, bound by the resolver of Init and not by the load context
             Assert.Same(result.Context, AssemblyLoadContext.GetLoadContext(result.NSec!));
             Assert.DoesNotContain(result.Context!.UnmanagedRequests, a => a.Contains("sodium", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Fact]
+        public void BuildOutput_UsesTheBundledLibsodium()
+        {
+            // the test host has NSec's runtimes folder: Init (also called by HomeKitFactory.CreateDriver) must not load a second copy
+            Assert.NotNull(HomeKitServer.FindBundledLibsodium());
         }
 
         [Theory]
