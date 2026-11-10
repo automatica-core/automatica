@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
@@ -152,14 +153,25 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("e54899e8-c824-4f2e-8bec-dd452bd1de7b")
         };
 
-        internal const string CircuitGroupMeta = "ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;1,METERING.ENERGY_MONITOR.GROUP.CONSUMER1;"
+        private const string CircuitGroupMetaGroups = "ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;1,METERING.ENERGY_MONITOR.GROUP.CONSUMER1;"
             + "2,METERING.ENERGY_MONITOR.GROUP.CONSUMER2;3,METERING.ENERGY_MONITOR.GROUP.CONSUMER3;4,METERING.ENERGY_MONITOR.GROUP.CONSUMER4;"
             + "5,METERING.ENERGY_MONITOR.GROUP.CONSUMER5;6,METERING.ENERGY_MONITOR.GROUP.CONSUMER6)";
 
+        /// <summary>
+        /// what a circuit can belong to: the house, a consumer or any other circuit (101-118); the circuit itself is left out
+        /// </summary>
+        internal static string CircuitParentMeta(int circuit) =>
+            CircuitGroupMetaGroups.TrimEnd(')')
+            + string.Concat(Enumerable.Range(0, EnergyCircuitInputs.CircuitCount)
+                .Where(other => other != circuit)
+                .Select(other => $";{EnergyCircuitInputs.CircuitParent(other)},METERING.ENERGY_MONITOR.GROUP.CIRCUIT{other + 1}"))
+            + ")";
+
         public override string LogicName => "Metering.EnergyMonitor";
-        // 1.1: consumers 4-6 (inputs, outputs, names); 1.2: sub-circuits (inputs, group + name, rest outputs).
+        // 1.1: consumers 4-6 (inputs, outputs, names); 1.2: sub-circuits (inputs, group + name, rest outputs);
+        // 1.3: a circuit can belong to another circuit (choices of the group parameter).
         // The core adds new interfaces to existing instances only on a version bump.
-        public override Version LogicVersion => new Version(1, 2, 0, 0);
+        public override Version LogicVersion => new Version(1, 3, 0, 0);
         public override Guid LogicGuid => new Guid("270e43f0-bda0-4e87-a1ad-691dbe745adb");
 
         /// <summary>
@@ -243,7 +255,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                     "METERING.ENERGY_MONITOR.PARAM.CIRCUIT_NAME.DESCRIPTION", $"circuit{i + 1}Name", LogicGuid, ++sort, RuleInterfaceParameterDataType.Text, "", false);
                 factory.CreateParameterLogicInterfaceTemplate(ParamCircuitGroups[i], $"METERING.ENERGY_MONITOR.PARAM.CIRCUIT{i + 1}_GROUP.NAME",
                     "METERING.ENERGY_MONITOR.PARAM.CIRCUIT_GROUP.DESCRIPTION", $"circuit{i + 1}Group", LogicGuid, ++sort, RuleInterfaceParameterDataType.Enum,
-                    EnergyCircuitInputs.HouseGroup, false, CircuitGroupMeta);
+                    EnergyCircuitInputs.HouseGroup, false, CircuitParentMeta(i));
             }
 
             UseEnergyFlowVisu(factory, LogicGuid);

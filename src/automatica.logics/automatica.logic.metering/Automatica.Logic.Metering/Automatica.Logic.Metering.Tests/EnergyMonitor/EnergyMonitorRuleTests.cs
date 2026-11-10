@@ -379,12 +379,157 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
         [InlineData(-1)]
         [InlineData("x")]
         [InlineData(null)]
+        [InlineData(100)]
+        [InlineData(119)]
+        [InlineData("105")] // the circuit itself
         public void UnknownGroup_CountsAsHouse(object group)
         {
             Param(F.ParamCircuitGroups[4], group);
             Input(F.InputCircuits[4], 0.2d);
 
             Assert.Equal(new[] { 0 }, Rule.Breakdown.Groups.Keys);
+            Assert.Equal(new[] { 4 }, Rule.Breakdown.Groups[0].Circuits);
+        }
+
+        [Fact]
+        public void CircuitBelowACircuit_SplitsThatCircuit_NotTheHouse()
+        {
+            Input(F.InputGrid, 3d);
+            Input(F.InputCircuits[0], 1d);              // kitchen
+            Param(F.ParamCircuitGroups[1], "101");      // oven below the kitchen
+            var changes = Input(F.InputCircuits[1], 0.6d);
+
+            // the house only counts the kitchen, the oven is part of it: its rest stays 3 - 1 and is not sent again
+            Assert.Null(ValueOf(changes, F.OutputRests[0]));
+            Assert.Equal(2, Rule.Breakdown.Rest(0)!.Value, 6);
+            Assert.Equal(new[] { 0 }, Rule.Breakdown.Groups[0].Circuits);
+            var kitchen = Rule.Breakdown.Circuits[0];
+            Assert.Equal(new[] { 1 }, kitchen.Children);
+            Assert.Equal(0.6, kitchen.Measured, 6);
+            Assert.Equal(0.4, Rule.Breakdown.CircuitRest(0)!.Value, 6);
+            Assert.Null(Rule.Breakdown.CircuitRest(1));
+            Assert.Equal(0, Rule.Breakdown.Circuits[1].Group);
+            Assert.Equal(0, Rule.Breakdown.Circuits[1].ParentCircuit);
+        }
+
+        [Fact]
+        public void MovingACircuitBelowAnother_ChangesTheRests()
+        {
+            Input(F.InputGrid, 3d);
+            Input(F.InputCircuits[0], 1d);
+            Input(F.InputCircuits[1], 0.5d);
+            Assert.Equal(1.5, Rule.Breakdown.Rest(0)!.Value, 6);
+            Assert.Null(Rule.Breakdown.CircuitRest(0));
+
+            Param(F.ParamCircuitGroups[1], 101);
+
+            Assert.Equal(2, Rule.Breakdown.Rest(0)!.Value, 6);
+            Assert.Equal(0.5, Rule.Breakdown.CircuitRest(0)!.Value, 6);
+        }
+
+        [Fact]
+        public void ConsumerCircuits_CanHaveCircuitsToo()
+        {
+            Input(F.InputGrid, 5d);
+            Input(F.InputConsumers[0], 3d);
+            Param(F.ParamCircuitGroups[0], 1);
+            Input(F.InputCircuits[0], 2.5d);
+            Param(F.ParamCircuitGroups[1], 101);
+            Input(F.InputCircuits[1], 2d);
+
+            Assert.Equal(0.5, Rule.Breakdown.Rest(1)!.Value, 6);
+            Assert.Equal(0.5, Rule.Breakdown.CircuitRest(0)!.Value, 6);
+            Assert.Equal(1, Rule.Breakdown.Circuits[1].Group);
+            Assert.False(Rule.Breakdown.Groups.ContainsKey(0));
+        }
+
+        [Fact]
+        public void ThreeLevels_EachLevelHasItsRest()
+        {
+            Input(F.InputGrid, 2d);
+            Input(F.InputCircuits[0], 1.5d);
+            Param(F.ParamCircuitGroups[1], 101);
+            Input(F.InputCircuits[1], 1d);
+            Param(F.ParamCircuitGroups[2], 102);
+            Input(F.InputCircuits[2], 0.3d);
+
+            Assert.Equal(0.5, Rule.Breakdown.Rest(0)!.Value, 6);
+            Assert.Equal(0.5, Rule.Breakdown.CircuitRest(0)!.Value, 6);
+            Assert.Equal(0.7, Rule.Breakdown.CircuitRest(1)!.Value, 6);
+            Assert.Null(Rule.Breakdown.CircuitRest(2));
+            Assert.Equal(0, Rule.Breakdown.Circuits[2].Group);
+        }
+
+        [Fact]
+        public void UnmeasuredCircuit_CountsWhatItsCircuitsMeasure()
+        {
+            Input(F.InputGrid, 3d);
+            Param(F.ParamCircuitNames[0], "Kitchen"); // no meter of its own
+            Param(F.ParamCircuitGroups[1], 101);
+            Input(F.InputCircuits[1], 0.6d);
+
+            Assert.Equal(2.4, Rule.Breakdown.Rest(0)!.Value, 6);
+            Assert.Equal(0.6, Rule.Breakdown.Circuits[0].Known!.Value, 6);
+            // without its own value nothing is known about its rest
+            Assert.Null(Rule.Breakdown.CircuitRest(0));
+        }
+
+        [Fact]
+        public void UnusedParentCircuit_IsListedForItsCircuits()
+        {
+            Input(F.InputGrid, 1d);
+            Param(F.ParamCircuitGroups[4], 104);
+            Input(F.InputCircuits[4], 0.2d);
+
+            Assert.Equal(new[] { 3 }, Rule.Breakdown.Groups[0].Circuits);
+            Assert.Equal(new[] { 4 }, Rule.Breakdown.Circuits[3].Children);
+        }
+
+        [Fact]
+        public void CircuitsBelowEachOther_GoBelowTheHouse()
+        {
+            Input(F.InputGrid, 3d);
+            Param(F.ParamCircuitGroups[0], 102);
+            Param(F.ParamCircuitGroups[1], 101);
+            Param(F.ParamCircuitGroups[2], 101);
+            Input(F.InputCircuits[0], 1d);
+            Input(F.InputCircuits[1], 0.5d);
+            Input(F.InputCircuits[2], 0.2d);
+
+            Assert.Equal(new[] { 0, 1 }, Rule.Breakdown.Groups[0].Circuits);
+            Assert.Equal(new[] { 2 }, Rule.Breakdown.Circuits[0].Children);
+            Assert.Equal(1.5, Rule.Breakdown.Rest(0)!.Value, 6);
+        }
+
+        [Fact]
+        public async Task CircuitTree_IsInTheVisuData_WithTodaysRest()
+        {
+            await StartAt(EnergyDayCounterTests.At(5, 10));
+            Param(F.ParamCircuitNames[0], "Kitchen");
+            Param(F.ParamCircuitNames[1], "Oven");
+            Param(F.ParamCircuitGroups[1], "101");
+            Input(F.InputGrid, 3d);
+            Input(F.InputCircuits[0], 1d);
+            Input(F.InputCircuits[1], 0.6d);
+
+            SetTime(EnergyDayCounterTests.At(5, 12));
+            var data = Assert.IsType<Dictionary<string, object>>(Logic.GetDataForVisu());
+
+            var house = Assert.Single(Assert.IsType<List<Dictionary<string, object>>>(data["circuitGroups"]));
+            Assert.Equal(1d, house["measured"]);
+            Assert.Equal(2d, house["rest"]);
+            var kitchen = Assert.Single((List<Dictionary<string, object>>)house["circuits"]);
+            Assert.Equal("Kitchen", kitchen["name"]);
+            Assert.Equal(0.6d, kitchen["measured"]);
+            Assert.Equal(0.4d, kitchen["rest"]);
+            Assert.Equal(0.8d, kitchen["restToday"]);
+            var oven = Assert.Single((List<Dictionary<string, object>>)kitchen["circuits"]);
+            Assert.Equal("Oven", oven["name"]);
+            Assert.Equal(2, oven["circuit"]);
+            Assert.Equal(1.2d, oven["today"]);
+            Assert.Null(oven["rest"]);
+            Assert.Null(oven["restToday"]);
+            Assert.Empty((List<Dictionary<string, object>>)oven["circuits"]);
         }
 
         [Fact]

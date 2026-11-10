@@ -405,6 +405,62 @@
     }
 }
 
+// circuits below a circuit: indented one step per level (at most 4, phones stay readable) with a guide line on the left
+.energy-row.is-nested {
+    margin-left: calc((min(var(--depth, 1), 4) - 1) * var(--space-3) + var(--space-2));
+    padding-left: var(--space-3);
+    border-left: 2px solid color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+// a circuit that other circuits belong to: its name opens and closes them
+.energy-row.has-children .energy-row-name {
+    font-weight: 600;
+}
+
+.energy-row-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-width: 0;
+    min-height: 24px;
+    margin: -4px 0 -4px -4px;
+    padding: 4px;
+    border: 0;
+    border-radius: var(--radius-sm, 6px);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--surface-2);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+}
+
+.energy-row-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.energy-row-chevron {
+    flex: none;
+    width: 1em;
+    font-size: var(--text-xs);
+    color: var(--muted);
+    transition: transform 0.15s ease;
+}
+
+.energy-row.is-open .energy-row-chevron {
+    transform: rotate(90deg);
+}
+
 .energy-row-name {
     grid-area: name;
     font-size: var(--text-sm);
@@ -464,7 +520,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .energy-row-bar i {
+    .energy-row-bar i,
+    .energy-row-chevron {
         transition: none;
     }
 }

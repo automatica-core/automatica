@@ -341,6 +341,89 @@ describe("EnergyFlowComponent", () => {
       expect(groups[0].querySelectorAll(".energy-row.no-value").length).toBe(1);
     });
 
+    describe("circuits below circuits", () => {
+      const nested = () => [{ group: 0, total: 2, measured: 1, rest: 1, circuits: [
+        { circuit: 1, name: "Kitchen", hasValue: true, power: 1, measured: 0.6, rest: 0.4, restToday: 0.2, circuits: [
+          { circuit: 2, name: "Oven", hasValue: true, power: 0.6, today: 1, measured: 0.5, rest: 0.1, circuits: [
+            { circuit: 3, name: "Grill", hasValue: true, power: 0.5, circuits: [] }
+          ] }
+        ] }
+      ] }];
+
+      const items = () => Array.from(el().querySelectorAll<HTMLElement>(".energy-group .energy-row"));
+      const names = () => items().map(r => r.querySelector(".energy-row-name").textContent.trim());
+      const toggle = (name: string) => items().find(r => r.textContent.includes(name)).querySelector<HTMLButtonElement>(".energy-row-toggle");
+      const click = async (name: string) => {
+        toggle(name).click();
+        fixture.detectChanges();
+        await fixture.whenStable();
+      };
+
+      beforeEach(async () => {
+        visuData = { circuitGroups: nested() };
+        await create();
+      });
+
+      it("keeps the sub-circuits closed at first", () => {
+        expect(names()).toEqual(["Kitchen", "UI.VISU.ENERGY_NOT_MEASURED"]);
+        expect(toggle("Kitchen").getAttribute("aria-expanded")).toBe("false");
+        // a circuit without sub-circuits has no toggle
+        expect(el().querySelectorAll(".energy-row-toggle").length).toBe(1);
+      });
+
+      it("opens a circuit with its sub-circuits and its rest, indented", async () => {
+        await click("Kitchen");
+
+        expect(names()).toEqual(["Kitchen", "Oven", "UI.VISU.ENERGY_NOT_MEASURED", "UI.VISU.ENERGY_NOT_MEASURED"]);
+        expect(toggle("Kitchen").getAttribute("aria-expanded")).toBe("true");
+        const [kitchen, oven, kitchenRest, houseRest] = items();
+        expect(kitchen.classList).toContain("is-open");
+        expect(kitchen.classList).not.toContain("is-nested");
+        expect(oven.classList).toContain("is-nested");
+        expect(oven.style.getPropertyValue("--depth")).toBe("1");
+        // the oven has a sub-circuit too, but it stays closed
+        expect(oven.classList).not.toContain("is-open");
+        expect(kitchenRest.textContent).toContain("400 W");
+        expect(houseRest.classList).not.toContain("is-nested");
+        expect(houseRest.textContent).toContain("1.00 kW");
+      });
+
+      it("opens the next level on its own and closes all below with its parent", async () => {
+        await click("Kitchen");
+        await click("Oven");
+        expect(names()).toEqual(["Kitchen", "Oven", "Grill", "UI.VISU.ENERGY_NOT_MEASURED", "UI.VISU.ENERGY_NOT_MEASURED",
+          "UI.VISU.ENERGY_NOT_MEASURED"]);
+
+        await click("Kitchen");
+        expect(names()).toEqual(["Kitchen", "UI.VISU.ENERGY_NOT_MEASURED"]);
+
+        // opening the kitchen again shows the oven as it was left: open
+        await click("Kitchen");
+        expect(names()).toContain("Grill");
+      });
+
+      it("keeps what is open when the popup reloads", async () => {
+        await click("Kitchen");
+
+        component.applyVisuData({ circuitGroups: nested() });
+        fixture.detectChanges();
+
+        expect(names()).toContain("Oven");
+      });
+
+      it("does not close the popup or open the diagram when toggling", async () => {
+        const openPopup = jasmine.createSpy("openPopup");
+        component.baseControl = { openPopup } as any;
+        const event = new MouseEvent("click", { bubbles: true });
+        spyOn(event, "stopPropagation").and.callThrough();
+
+        toggle("Kitchen").dispatchEvent(event);
+
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(openPopup).not.toHaveBeenCalled();
+      });
+    });
+
     it("opens the popup from the button and from the diagram", async () => {
       visuData = { circuitGroups: circuitGroups() };
       await create();

@@ -113,7 +113,7 @@
     "ENERGY_MONITOR": {
       "NAME": "Energiemonitor",
       "DESCRIPTION": "Energiefluss zwischen Netz, PV, Speicher und Verbrauchern: Hausverbrauch, Eigenverbrauch, Autarkie und Energie von heute, mit eigener Visu-Kachel",
-      "GROUP": { "HOUSE": "Haus", "CONSUMER1": "Verbraucher 1", "CONSUMER2": "Verbraucher 2", "CONSUMER3": "Verbraucher 3", "CONSUMER4": "Verbraucher 4", "CONSUMER5": "Verbraucher 5", "CONSUMER6": "Verbraucher 6" },
+      "GROUP": { "HOUSE": "Haus", "CONSUMER1": "Verbraucher 1", "CONSUMER2": "Verbraucher 2", "CONSUMER3": "Verbraucher 3", "CONSUMER4": "Verbraucher 4", "CONSUMER5": "Verbraucher 5", "CONSUMER6": "Verbraucher 6", "CIRCUIT1": "Stromkreis 1", "CIRCUIT2": "Stromkreis 2", "CIRCUIT3": "Stromkreis 3", "CIRCUIT4": "Stromkreis 4", "CIRCUIT5": "Stromkreis 5", "CIRCUIT6": "Stromkreis 6", "CIRCUIT7": "Stromkreis 7", "CIRCUIT8": "Stromkreis 8", "CIRCUIT9": "Stromkreis 9", "CIRCUIT10": "Stromkreis 10", "CIRCUIT11": "Stromkreis 11", "CIRCUIT12": "Stromkreis 12", "CIRCUIT13": "Stromkreis 13", "CIRCUIT14": "Stromkreis 14", "CIRCUIT15": "Stromkreis 15", "CIRCUIT16": "Stromkreis 16", "CIRCUIT17": "Stromkreis 17", "CIRCUIT18": "Stromkreis 18" },
       "INPUT": {
         "GRID": { "NAME": "Netz (±)", "DESCRIPTION": "Netzleistung in kW: + Bezug, - Einspeisung (\"Netz umkehren\" bei Zählern mit anderem Vorzeichen)" },
         "GRID_IMPORT": { "NAME": "Netzbezug", "DESCRIPTION": "Netzbezug in kW, wird verwendet, solange der Eingang Netz (±) keinen Wert hat" },
@@ -230,7 +230,7 @@
         "CIRCUIT18_NAME": { "NAME": "Name Stromkreis 18" },
         "CIRCUIT18_GROUP": { "NAME": "Stromkreis 18 gehört zu" },
         "CIRCUIT_NAME": { "DESCRIPTION": "In den Details der Energiefluss-Kachel angezeigter Name (z. B. Küche)" },
-        "CIRCUIT_GROUP": { "DESCRIPTION": "Ob der Stromkreis zum Haus oder zu einem der Verbraucher gehört; die Stromkreise müssen nicht aufgehen, der Rest wird als nicht gemessen angezeigt" }
+        "CIRCUIT_GROUP": { "DESCRIPTION": "Wozu der Stromkreis gehört: zum Haus, zu einem der Verbraucher oder zu einem anderen Stromkreis (z. B. ein Steckdosenkreis unter der Küche); die Stromkreise darunter müssen nicht aufgehen, der Rest wird als nicht gemessen angezeigt" }
       }
     }
   }

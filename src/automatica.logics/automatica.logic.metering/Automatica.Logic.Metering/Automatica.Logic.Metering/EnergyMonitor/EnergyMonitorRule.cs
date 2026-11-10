@@ -57,11 +57,13 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             get { lock (_sync) { return _breakdown; } }
         }
 
-        /// <summary>extra channels of the day counter: the circuits, then the rest of each group</summary>
+        /// <summary>extra channels of the day counter: the circuits, the rest of each group, the rest of each circuit</summary>
         private EnergyDayCounter NewCounter() =>
-            new(Context.TimeProvider?.LocalTimeZone, EnergyCircuitInputs.CircuitCount + EnergyCircuitInputs.GroupCount);
+            new(Context.TimeProvider?.LocalTimeZone, 2 * EnergyCircuitInputs.CircuitCount + EnergyCircuitInputs.GroupCount);
 
         private static int RestChannel(int group) => EnergyCircuitInputs.CircuitCount + group;
+
+        private static int CircuitRestChannel(int circuit) => EnergyCircuitInputs.CircuitCount + EnergyCircuitInputs.GroupCount + circuit;
 
         private DateTimeOffset Now => Context.TimeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
 
@@ -107,9 +109,9 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                     _inputs.InvertBattery = ToBool(value);
                     Recalculate();
                 }
-                else if (Array.IndexOf(EnergyMonitorLogicFactory.ParamCircuitGroups, instance.This2RuleInterfaceTemplate) is var group and >= 0)
+                else if (Array.IndexOf(EnergyMonitorLogicFactory.ParamCircuitGroups, instance.This2RuleInterfaceTemplate) is var circuit and >= 0)
                 {
-                    _circuits.Group[group] = EnergyCircuitInputs.NormalizeGroup(ToDouble(value));
+                    _circuits.Parent[circuit] = EnergyCircuitInputs.NormalizeParent(ToDouble(value), circuit);
                     Recalculate();
                 }
                 else if (Array.IndexOf(EnergyMonitorLogicFactory.ParamCircuitNames, instance.This2RuleInterfaceTemplate) is var name and >= 0)
@@ -206,7 +208,8 @@ namespace Automatica.Logic.Metering.EnergyMonitor
 
         /// <summary>
         /// The breakdown for the details popup of the tile: per group (0 = house, 1-6 = consumer) its total, the rest that is
-        /// not measured and its circuits, all with today's energy. Groups without circuits are left out.
+        /// not measured and the circuits directly below it, all with today's energy. Each circuit carries the circuits that
+        /// belong to it in the same shape, plus its own rest when it has a value. Groups without circuits are left out.
         /// </summary>
         internal List<Dictionary<string, object>> CircuitGroupsForVisu()
         {
@@ -218,14 +221,28 @@ namespace Automatica.Logic.Metering.EnergyMonitor
                 ["measured"] = Power(g.Measured),
                 ["rest"] = Power(g.Rest),
                 ["restToday"] = Power(c.TodayExtra(RestChannel(g.Group))),
-                ["circuits"] = g.Circuits.Select(i => new Dictionary<string, object>
+                ["circuits"] = CircuitsForVisu(g.Circuits)
+            }).ToList();
+        }
+
+        private List<Dictionary<string, object>> CircuitsForVisu(IEnumerable<int> circuits)
+        {
+            var c = _counter;
+            return circuits.Select(i =>
+            {
+                var node = _breakdown.Circuits[i];
+                return new Dictionary<string, object>
                 {
                     ["circuit"] = i + 1,
                     ["name"] = string.IsNullOrWhiteSpace(_circuits.Name[i]) ? null : _circuits.Name[i],
                     ["hasValue"] = _circuits.Power[i].HasValue,
                     ["power"] = Power(_breakdown.Power[i]),
-                    ["today"] = Power(c.TodayExtra(i))
-                }).ToList()
+                    ["today"] = Power(c.TodayExtra(i)),
+                    ["measured"] = Power(node.Measured),
+                    ["rest"] = node.Rest.HasValue ? Power(node.Rest.Value) : null,
+                    ["restToday"] = node.Rest.HasValue ? Power(c.TodayExtra(CircuitRestChannel(i))) : null,
+                    ["circuits"] = CircuitsForVisu(node.Children)
+                };
             }).ToList();
         }
 
@@ -245,6 +262,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             for (var i = 0; i < EnergyCircuitInputs.CircuitCount; i++)
             {
                 _counter.SetExtraPower(i, _breakdown.Power[i]);
+                _counter.SetExtraPower(CircuitRestChannel(i), _breakdown.CircuitRest(i) ?? 0);
             }
             for (var g = 0; g < EnergyCircuitInputs.GroupCount; g++)
             {

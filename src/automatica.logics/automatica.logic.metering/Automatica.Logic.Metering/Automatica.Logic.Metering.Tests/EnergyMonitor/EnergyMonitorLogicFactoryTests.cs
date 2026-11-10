@@ -36,21 +36,34 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
             Assert.Equal(expected, keys);
         }
 
-        /// <summary>the group parameter is a drop down: house and the six consumers</summary>
-        [Fact]
-        public void CircuitGroup_IsAnEnumOfHouseAndConsumers()
+        /// <summary>the group parameter is a drop down: house, the six consumers and every other circuit</summary>
+        [Theory]
+        [InlineData(0)]
+        [InlineData(4)]
+        [InlineData(17)]
+        public void CircuitGroup_IsAnEnumOfHouseConsumersAndTheOtherCircuits(int circuit)
         {
             var calls = RecordingFactory.Record(new EnergyMonitorLogicFactory());
 
             var group = calls.Single(c => c.Method.Name == nameof(ILogicTemplateFactory.CreateParameterLogicInterfaceTemplate)
-                                          && (Guid)c.Args[0] == EnergyMonitorLogicFactory.ParamCircuitGroups[0]);
+                                          && (Guid)c.Args[0] == EnergyMonitorLogicFactory.ParamCircuitGroups[circuit]);
             var names = group.Method.GetParameters().Select(p => p.Name).ToList();
 
             Assert.Equal(Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Enum, group.Args[names.IndexOf("dataType")]);
             Assert.Equal(EnergyCircuitInputs.HouseGroup, group.Args[names.IndexOf("defaultValue")]);
             var meta = (string)group.Args[names.IndexOf("meta")];
             Assert.StartsWith("ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;", meta);
-            Assert.Contains("6,METERING.ENERGY_MONITOR.GROUP.CONSUMER6)", meta);
+            Assert.EndsWith(")", meta);
+
+            var values = meta["ENUM(".Length..^1].Split(';').Select(item => item.Split(',')).ToList();
+            Assert.All(values, v => Assert.Equal(2, v.Length));
+            var expected = Enumerable.Range(0, EnergyCircuitInputs.GroupCount)
+                .Concat(Enumerable.Range(0, EnergyCircuitInputs.CircuitCount).Where(c => c != circuit).Select(EnergyCircuitInputs.CircuitParent))
+                .Select(v => v.ToString());
+            Assert.Equal(expected, values.Select(v => v[0]));
+            Assert.Contains(values, v => v[0] == "6" && v[1] == "METERING.ENERGY_MONITOR.GROUP.CONSUMER6");
+            var other = circuit == 0 ? 1 : 0;
+            Assert.Contains(values, v => v[0] == (101 + other).ToString() && v[1] == $"METERING.ENERGY_MONITOR.GROUP.CIRCUIT{other + 1}");
         }
 
         /// <summary>
@@ -88,9 +101,9 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
 
         /// <summary>the core only adds new interfaces to existing instances when the logic version goes up</summary>
         [Fact]
-        public void Version_WasRaisedForTheCircuits()
+        public void Version_WasRaisedForTheCircuitTree()
         {
-            Assert.True(new EnergyMonitorLogicFactory().LogicVersion >= new Version(1, 2, 0, 0));
+            Assert.True(new EnergyMonitorLogicFactory().LogicVersion >= new Version(1, 3, 0, 0));
         }
 
         [Fact]

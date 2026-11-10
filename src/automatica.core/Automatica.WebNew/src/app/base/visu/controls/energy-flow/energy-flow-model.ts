@@ -211,6 +211,13 @@ export interface EnergyCircuitData {
   hasValue?: boolean;
   power?: number;
   today?: number;
+  /** what the circuits below it measure */
+  measured?: number;
+  /** own power - measured, only for a circuit with a value and circuits below it */
+  rest?: number | null;
+  restToday?: number | null;
+  /** the circuits that belong to this one */
+  circuits?: EnergyCircuitData[];
 }
 
 /** the house (0) or a consumer (1-6) with its circuits and the part no circuit measures */
@@ -231,10 +238,21 @@ export interface EnergyBreakdownRow {
   name?: string;
   power: number;
   today?: number;
-  /** bar width in %: share of the group (or of the measured sum when the circuits read more than the total) */
+  /** bar width in %: share of what it belongs to (or of the measured sum when the circuits read more than that) */
   share: number;
   /** a named circuit whose input has no value yet */
   noValue: boolean;
+  /** 0 directly below the house or consumer, 1 below a circuit, ... */
+  depth: number;
+  /** other circuits belong to this one, they follow it in the rows */
+  hasChildren: boolean;
+  /** circuit numbers of the circuits it sits below, the closest last; empty directly below the house or consumer */
+  ancestors: number[];
+}
+
+/** a row is shown while every circuit above it is opened */
+export function isRowVisible(row: EnergyBreakdownRow, opened: ReadonlySet<number>): boolean {
+  return row.ancestors.every(circuit => opened.has(circuit));
 }
 
 export interface EnergyBreakdownGroup {
@@ -246,7 +264,7 @@ export interface EnergyBreakdownGroup {
   restToday?: number;
   /** % of the total the circuits measure, undefined without a total */
   coverage?: number;
-  /** circuits by power, the not measured rest last */
+  /** the circuit tree as rows: circuits by power, each followed by its own circuits and their rest; the group's rest last */
   rows: EnergyBreakdownRow[];
 }
 
@@ -255,10 +273,65 @@ function optional(value: number | undefined | null): number | undefined {
   return value === undefined || value === null || !isFinite(n) ? undefined : n;
 }
 
+function validCircuits(circuits: EnergyCircuitData[] | null | undefined): EnergyCircuitData[] {
+  return Array.isArray(circuits) ? circuits.filter(c => c && isFinite(Number(c.circuit))) : [];
+}
+
+function sumPower(circuits: EnergyCircuitData[]): number {
+  return circuits.reduce((sum, c) => sum + Math.max(finite(c.power), 0), 0);
+}
+
+/** bar width in % of scale */
+function shareOf(power: number, scale: number): number {
+  return scale > 0 ? Math.max(0, Math.min(100, power / scale * 100)) : 0;
+}
+
 /**
- * Rows of the details popup from the "circuitGroups" of the logic: house first, then the consumers; inside a group the
- * circuits with the most power first and the rest last. The circuits do not have to add up to the total: what they
- * leave is the rest, and when they read more than the total the bars are scaled to the measured sum instead.
+ * Appends the circuits (most power first) with, right after each one, the circuits below it and their rest one level
+ * deeper. scale is the power the bars are relative to: what the circuits belong to.
+ */
+function appendCircuitRows(circuits: EnergyCircuitData[], scale: number, ancestors: number[], rows: EnergyBreakdownRow[], seen: Set<number>) {
+  const depth = ancestors.length;
+  const sorted = circuits
+    .filter(c => !seen.has(Number(c.circuit)))
+    .map(c => ({ data: c, circuit: Number(c.circuit), power: Math.max(finite(c.power), 0) }))
+    .sort((a, b) => b.power - a.power || a.circuit - b.circuit);
+
+  for (const { data, circuit, power } of sorted) {
+    // the logic never sends a circuit twice; this keeps a broken answer from looping
+    if (seen.has(circuit)) {
+      continue;
+    }
+    seen.add(circuit);
+    const children = validCircuits(data.circuits).filter(c => !seen.has(Number(c.circuit)));
+    const name = typeof data.name === "string" && data.name.trim() ? data.name.trim() : undefined;
+    const noValue = data.hasValue === false;
+    rows.push({
+      id: `circuit${circuit}`, kind: "circuit", circuit, name, power, today: optional(data.today),
+      share: noValue ? 0 : shareOf(power, scale), noValue, depth, hasChildren: children.length > 0, ancestors
+    });
+
+    if (children.length > 0) {
+      const measured = optional(data.measured) ?? sumPower(children);
+      const childScale = Math.max(noValue ? 0 : power, measured);
+      const below = [...ancestors, circuit];
+      appendCircuitRows(children, childScale, below, rows, seen);
+      const rest = optional(data.rest);
+      if (rest !== undefined && !noValue) {
+        rows.push({
+          id: `rest${circuit}`, kind: "rest", circuit, power: Math.max(rest, 0), today: optional(data.restToday),
+          share: shareOf(Math.max(rest, 0), childScale), noValue: false, depth: depth + 1, hasChildren: false, ancestors: below
+        });
+      }
+    }
+  }
+}
+
+/**
+ * Rows of the details popup from the "circuitGroups" of the logic: house first, then the consumers. Inside a group the
+ * circuits with the most power first, each followed by the circuits that belong to it, and the rest last. The circuits
+ * do not have to add up: what they leave is the rest, and when they read more than what they belong to the bars are
+ * scaled to the measured sum instead.
  */
 export function buildBreakdown(groups: EnergyCircuitGroupData[] | null | undefined): EnergyBreakdownGroup[] {
   if (!Array.isArray(groups)) {
@@ -268,24 +341,18 @@ export function buildBreakdown(groups: EnergyCircuitGroupData[] | null | undefin
     .filter(g => g && isFinite(Number(g.group)) && Array.isArray(g.circuits) && g.circuits.length > 0)
     .map(g => {
       const group = Number(g.group);
-      const circuits = g.circuits!.filter(c => c && isFinite(Number(c.circuit)));
-      const measured = optional(g.measured) ?? circuits.reduce((sum, c) => sum + Math.max(finite(c.power), 0), 0);
+      const circuits = validCircuits(g.circuits);
+      const measured = optional(g.measured) ?? sumPower(circuits);
       const total = Math.max(finite(g.total), 0);
       const rest = Math.max(optional(g.rest) ?? total - measured, 0);
       const scale = Math.max(total, measured);
-      const share = (power: number) => scale > 0 ? Math.max(0, Math.min(100, power / scale * 100)) : 0;
 
-      const rows: EnergyBreakdownRow[] = circuits
-        .map(c => {
-          const power = Math.max(finite(c.power), 0);
-          const name = typeof c.name === "string" && c.name.trim() ? c.name.trim() : undefined;
-          return {
-            id: `circuit${c.circuit}`, kind: "circuit" as const, circuit: Number(c.circuit), name, power,
-            today: optional(c.today), share: share(power), noValue: c.hasValue === false
-          };
-        })
-        .sort((a, b) => b.power - a.power || a.circuit - b.circuit);
-      rows.push({ id: "rest", kind: "rest", power: rest, today: optional(g.restToday), share: share(rest), noValue: false });
+      const rows: EnergyBreakdownRow[] = [];
+      appendCircuitRows(circuits, scale, [], rows, new Set<number>());
+      rows.push({
+        id: "rest", kind: "rest", power: rest, today: optional(g.restToday), share: shareOf(rest, scale), noValue: false,
+        depth: 0, hasChildren: false, ancestors: []
+      });
 
       return {
         id: `group${group}`, group, total, measured, rest, restToday: optional(g.restToday),

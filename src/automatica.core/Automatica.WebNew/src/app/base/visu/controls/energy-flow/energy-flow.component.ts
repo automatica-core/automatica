@@ -3,7 +3,7 @@ import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { BaseControlComponent } from "../base-control/base-control.component";
 import {
   buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, EnergyBreakdownGroup, EnergyBreakdownRow, EnergyConsumerConfig, EnergyFlowLayout,
-  EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, VIEW_HEIGHT, VIEW_WIDTH
+  EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, isRowVisible, VIEW_HEIGHT, VIEW_WIDTH
 } from "./energy-flow-model";
 
 /** consumer numbers 1..6 */
@@ -49,6 +49,11 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
   /** measured circuits of the house and the consumers, shown in the details popup */
   circuitGroups: EnergyBreakdownGroup[] = [];
   private detailsTimer: any;
+  /**
+   * circuits whose own circuits are shown; all are closed at first. Kept by circuit number, so the refresh of the open
+   * popup and closing and opening it again keep what the user opened.
+   */
+  readonly openedCircuits = new Set<number>();
 
   async ngOnInit() {
     this.baseOnInit();
@@ -111,6 +116,27 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
 
   onDetailsHiding() {
     this.stopDetailsRefresh();
+  }
+
+  isRowVisible(row: EnergyBreakdownRow): boolean {
+    return isRowVisible(row, this.openedCircuits);
+  }
+
+  isOpened(row: EnergyBreakdownRow): boolean {
+    return this.openedCircuits.has(row.circuit);
+  }
+
+  /** opens or closes the circuits below a circuit */
+  toggleCircuit(row: EnergyBreakdownRow, $event?: Event) {
+    $event?.stopPropagation();
+    if (!row.hasChildren || row.circuit === undefined) {
+      return;
+    }
+    if (this.openedCircuits.has(row.circuit)) {
+      this.openedCircuits.delete(row.circuit);
+    } else {
+      this.openedCircuits.add(row.circuit);
+    }
   }
 
   private stopDetailsRefresh() {

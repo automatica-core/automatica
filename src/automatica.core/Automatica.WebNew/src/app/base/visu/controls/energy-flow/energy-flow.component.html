@@ -78,12 +78,25 @@
         </header>
         <ul class="energy-rows">
           @for (row of group.rows; track row.id) {
-            <li class="energy-row" [class.is-rest]="row.kind === 'rest'" [class.no-value]="row.noValue">
-              <span class="energy-row-name">{{ rowLabel(row) }}</span>
+            @if (isRowVisible(row)) {
+            <li class="energy-row" [class.is-rest]="row.kind === 'rest'" [class.no-value]="row.noValue"
+              [class.has-children]="row.hasChildren" [class.is-nested]="row.depth > 0" [class.is-open]="row.hasChildren && isOpened(row)"
+              [style.--depth]="row.depth">
+              @if (row.hasChildren) {
+                <!-- the sub-circuits follow as rows of their own; they are shown while this one is open -->
+                <button type="button" class="energy-row-name energy-row-toggle" [attr.aria-expanded]="isOpened(row)"
+                  (click)="toggleCircuit(row, $event)">
+                  <fa-icon class="energy-row-chevron" icon="chevron-right" aria-hidden="true"></fa-icon>
+                  <span class="energy-row-label">{{ rowLabel(row) }}</span>
+                </button>
+              } @else {
+                <span class="energy-row-name">{{ rowLabel(row) }}</span>
+              }
               <span class="energy-row-power">{{ row.noValue ? '–' : powerText(row.power) }}</span>
               <span class="energy-row-bar" aria-hidden="true"><i [style.width.%]="row.share"></i></span>
               <span class="energy-row-today">{{ 'UI.VISU.ENERGY_TODAY' | translateAsync }} {{ todayText(row.today) }}</span>
             </li>
+            }
           }
         </ul>
       </section>

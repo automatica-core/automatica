@@ -1,5 +1,5 @@
 import {
-  ACTIVE_THRESHOLD, buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB,
+  ACTIVE_THRESHOLD, buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB, isRowVisible,
   linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH
 } from "./energy-flow-model";
 
@@ -263,6 +263,87 @@ describe("energy flow model", () => {
       expect(buildBreakdown(undefined)).toEqual([]);
       expect(buildBreakdown(null)).toEqual([]);
       expect(buildBreakdown({} as any)).toEqual([]);
+    });
+
+    describe("circuits below circuits", () => {
+      const house = () => buildBreakdown([{
+        group: 0, total: 3, measured: 1.4, rest: 1.6, circuits: [
+          { circuit: 2, name: "Office", hasValue: true, power: 0.4, circuits: [] },
+          {
+            circuit: 1, name: "Kitchen", hasValue: true, power: 1, measured: 0.8, rest: 0.2, restToday: 0.5, circuits: [
+              { circuit: 3, name: "Oven", hasValue: true, power: 0.2 },
+              {
+                circuit: 4, name: "Sockets", hasValue: true, power: 0.6, measured: 0.5, rest: 0.1, circuits: [
+                  { circuit: 5, name: "Coffee", hasValue: true, power: 0.5 }
+                ]
+              }
+            ]
+          }
+        ]
+      }])[0];
+
+      it("follows each circuit with its own circuits and their rest", () => {
+        expect(house().rows.map(r => `${r.id}@${r.depth}`)).toEqual([
+          "circuit1@0", "circuit4@1", "circuit5@2", "rest4@2", "circuit3@1", "rest1@1", "circuit2@0", "rest@0"
+        ]);
+      });
+
+      it("knows the circuits each row sits below", () => {
+        const rows = house().rows;
+        const ancestors = (id: string) => rows.find(r => r.id === id).ancestors;
+        expect(ancestors("circuit1")).toEqual([]);
+        expect(ancestors("circuit4")).toEqual([1]);
+        expect(ancestors("circuit5")).toEqual([1, 4]);
+        expect(ancestors("rest4")).toEqual([1, 4]);
+        expect(ancestors("rest1")).toEqual([1]);
+        expect(ancestors("rest")).toEqual([]);
+      });
+
+      it("shows a row only while every circuit above it is open", () => {
+        const rows = house().rows;
+        const visible = (opened: number[]) => rows.filter(r => isRowVisible(r, new Set(opened))).map(r => r.id);
+        expect(visible([])).toEqual(["circuit1", "circuit2", "rest"]);
+        expect(visible([1])).toEqual(["circuit1", "circuit4", "circuit3", "rest1", "circuit2", "rest"]);
+        // the sockets are open, but the kitchen above them is closed
+        expect(visible([4])).toEqual(["circuit1", "circuit2", "rest"]);
+        expect(visible([1, 4])).toEqual(rows.map(r => r.id));
+      });
+
+      it("marks the circuits that others belong to", () => {
+        const rows = house().rows;
+        expect(rows.filter(r => r.hasChildren).map(r => r.circuit)).toEqual([1, 4]);
+        const kitchenRest = rows.find(r => r.id === "rest1");
+        expect(kitchenRest).toEqual(jasmine.objectContaining({ kind: "rest", circuit: 1, power: 0.2, today: 0.5 }));
+      });
+
+      it("scales the bars to what the circuit belongs to", () => {
+        const share = (id: string) => house().rows.find(r => r.id === id).share;
+        expect(share("circuit1")).toBeCloseTo(33.33, 1); // of the house (3 kW)
+        expect(share("circuit4")).toBeCloseTo(60, 6);    // of the kitchen (1 kW)
+        expect(share("circuit5")).toBeCloseTo(83.33, 1); // of the sockets (0.6 kW)
+        expect(share("rest1")).toBeCloseTo(20, 6);
+      });
+
+      it("shows no rest for a circuit without a value of its own", () => {
+        const [group] = buildBreakdown([{ group: 0, total: 2, circuits: [
+          { circuit: 1, name: "Kitchen", hasValue: false, power: 0, measured: 0.6, rest: null, circuits: [
+            { circuit: 2, power: 0.6, hasValue: true }
+          ] }
+        ] }]);
+
+        expect(group.rows.map(r => r.id)).toEqual(["circuit1", "circuit2", "rest"]);
+        expect(group.rows[0].noValue).toBeTrue();
+        // its circuits are scaled to what they measure together
+        expect(group.rows[1].share).toBe(100);
+      });
+
+      it("lists a circuit only once, also when the data repeats it", () => {
+        const [group] = buildBreakdown([{ group: 0, total: 1, circuits: [
+          { circuit: 1, power: 0.5, circuits: [{ circuit: 1, power: 0.5 }, { circuit: 2, power: 0.1 }] }
+        ] }]);
+
+        expect(group.rows.map(r => r.id)).toEqual(["circuit1", "circuit2", "rest"]);
+      });
     });
   });
 
