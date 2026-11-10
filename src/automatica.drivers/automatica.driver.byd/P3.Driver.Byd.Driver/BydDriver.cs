@@ -283,7 +283,6 @@ namespace P3.Driver.Byd.Driver
     {
         private readonly BydVehicle _vehicle;
         private readonly object _lock = new();
-        private bool _hasValue;
 
         public BydValueNode(IDriverContext driverContext, BydVehicle vehicle, BydDataPoint dataPoint) : base(driverContext)
         {
@@ -295,15 +294,14 @@ namespace P3.Driver.Byd.Driver
 
         public object LastValue { get; private set; }
 
+        /// <summary>
+        /// Dispatches the value on every poll, also when it did not change: logics linked later (e.g. a formula over
+        /// latitude/longitude of a parked car) only get a value when it is dispatched again
+        /// </summary>
         public void Set(object value)
         {
             lock (_lock)
             {
-                if (_hasValue && Equals(LastValue, value))
-                {
-                    return;
-                }
-                _hasValue = true;
                 LastValue = value;
             }
             DispatchRead(value);

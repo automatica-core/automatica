@@ -291,6 +291,23 @@ namespace P3.Driver.Byd.Tests
         }
 
         [Fact]
+        public async Task Poll_UnchangedValue_IsDispatchedAgain()
+        {
+            // a parked car keeps its position; logics linked later must still get it with the next poll
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+            var first = Dispatcher.GetValue(DispatchableType.NodeInstance, values["latitude"].ObjId);
+            await driver.PollAsync();
+            var second = Dispatcher.GetValue(DispatchableType.NodeInstance, values["latitude"].ObjId);
+
+            Assert.Equal(first.Value, second.Value);
+            Assert.NotSame(first, second);
+        }
+
+        [Fact]
         public async Task Poll_NotCharging_PowerAndTimeToFullAreZero()
         {
             var account = CreateAccount();
