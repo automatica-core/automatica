@@ -21,6 +21,11 @@ namespace P3.Driver.Byd.Driver
         }
 
         public string Code { get; }
+
+        /// <summary>
+        /// Decoded outer answer of the server, for diagnostics
+        /// </summary>
+        public string Response { get; init; }
     }
 
     internal sealed record BydVehicleInfo(string Vin, string Alias, string ModelName, string EnergyType);
@@ -79,6 +84,11 @@ namespace P3.Driver.Byd.Driver
         public TimeSpan SessionTtl { get; set; } = TimeSpan.FromHours(12);
         public int PollAttempts { get; set; } = 10;
         public TimeSpan PollInterval { get; set; } = TimeSpan.FromSeconds(1.5);
+
+        /// <summary>
+        /// IANA time zone sent with the login
+        /// </summary>
+        public string TimeZoneId { get; set; } = TimeZone();
 
         internal static string TimeZone()
         {
@@ -170,7 +180,7 @@ namespace P3.Driver.Byd.Driver
                 new("random", RandomHex()),
                 new("softType", "0"),
                 new("timeStamp", now),
-                new("timeZone", TimeZone())
+                new("timeZone", TimeZoneId)
             };
             var loginKey = BydCrypto.LoginKey(_password);
             var signFields = inner.Concat(new KeyValuePair<string, string>[]
@@ -222,7 +232,7 @@ namespace P3.Driver.Byd.Driver
                 throw new BydApiException("BYD login response misses token fields");
             }
             _session = new Session(userId, BydCrypto.Md5(encryToken), BydCrypto.Md5(signToken), _now());
-            _logger.LogInformation("Logged in to the BYD cloud");
+            _logger.LogInformation($"Logged in to the BYD cloud (time zone {TimeZoneId})");
         }
 
         private async Task<Session> EnsureSessionAsync(CancellationToken token)
@@ -300,7 +310,8 @@ namespace P3.Driver.Byd.Driver
             }
             if (code != "0")
             {
-                throw new BydApiException($"{endpoint} failed: code {code} {Str(response, "message")}", code);
+                _logger.LogDebug($"{endpoint} answered {response.GetRawText()}");
+                throw new BydApiException($"{endpoint} failed: code {code} {Str(response, "message")}", code) { Response = response.GetRawText() };
             }
             var respondData = Str(response, "respondData");
             if (string.IsNullOrEmpty(respondData))

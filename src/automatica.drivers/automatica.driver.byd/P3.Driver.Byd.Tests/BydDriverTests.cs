@@ -209,8 +209,15 @@ namespace P3.Driver.Byd.Tests
 
             var list = _requests.First(r => r.Endpoint == "/app/account/getAllListByUserId");
             Assert.Equal("U77", list.Outer["identifier"]);
-            var signFields = list.Inner.Concat(list.Outer.Where(p => p.Key is "countryCode" or "identifier" or "imeiMD5" or "language" or "reqTimestamp"));
-            Assert.Equal(BydCrypto.Sign(signFields, BydCrypto.Md5("sign-1")), list.Outer["sign"]);
+            // the sign string written out by hand like pyBYD's dict: imeiMD5 is in the inner payload and the outer fields, but appears once
+            var signFields = new Dictionary<string, string>(list.Inner);
+            foreach (var key in new[] { "countryCode", "identifier", "imeiMD5", "language", "reqTimestamp" })
+            {
+                signFields[key] = list.Outer[key];
+            }
+            var signString = string.Join("&", signFields.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => $"{p.Key}={p.Value}")) + "&password=" + BydCrypto.Md5("sign-1");
+            Assert.Single(System.Text.RegularExpressions.Regex.Matches(signString, "imeiMD5="));
+            Assert.Equal(BydCrypto.Sha1Mixed(signString), list.Outer["sign"]);
             Assert.Equal(BydCrypto.CheckCode(list.Outer.Where(p => p.Key != "checkcode")), list.Outer["checkcode"]);
             Assert.Equal(32, list.Inner["random"].Length);
         }

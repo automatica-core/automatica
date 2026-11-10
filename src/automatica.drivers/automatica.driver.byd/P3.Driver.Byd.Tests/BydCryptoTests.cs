@@ -50,6 +50,14 @@ namespace P3.Driver.Byd.Tests
         }
 
         [Fact]
+        public void SignString_KeyGivenTwice_AppearsOnceWithTheLastValue()
+        {
+            // token requests: imeiMD5 is in the inner payload and again in the outer sign fields ({**inner, "imeiMD5": ...} in pyBYD)
+            var fields = new List<KeyValuePair<string, string>> { new("imeiMD5", "OLD"), new("random", "R"), new("imeiMD5", "NEW") };
+            Assert.Equal("imeiMD5=NEW&random=R&password=PW", BydCrypto.SignString(fields, "PW"));
+        }
+
+        [Fact]
         public void Aes_RoundTripAsUpperHex()
         {
             var cipher = BydCrypto.AesEncryptHex("{\"k\":\"v\"}", BydCrypto.LoginKey("pw"));

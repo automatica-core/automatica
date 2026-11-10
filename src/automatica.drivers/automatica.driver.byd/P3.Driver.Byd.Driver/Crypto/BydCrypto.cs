@@ -46,11 +46,18 @@ namespace P3.Driver.Byd.Driver.Crypto
         }
 
         /// <summary>
-        /// "k1=v1&amp;k2=v2...&amp;password=..." with the keys sorted ordinally, null as "null"
+        /// "k1=v1&amp;k2=v2...&amp;password=..." with the keys sorted ordinally, null as "null".
+        /// pyBYD builds the fields as a dict ({**inner, "imeiMD5": ...}), so a key given twice appears once with its last value.
+        /// Token requests carry imeiMD5 in the inner payload and the outer fields: listing it twice breaks the signature (BYD answers 1007).
         /// </summary>
         public static string SignString(IEnumerable<KeyValuePair<string, string>> fields, string password)
         {
-            var joined = string.Join("&", fields.OrderBy(f => f.Key, StringComparer.Ordinal).Select(f => $"{f.Key}={f.Value ?? "null"}"));
+            var merged = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var (key, value) in fields)
+            {
+                merged[key] = value;
+            }
+            var joined = string.Join("&", merged.OrderBy(f => f.Key, StringComparer.Ordinal).Select(f => $"{f.Key}={f.Value ?? "null"}"));
             return $"{joined}&password={password}";
         }
 
