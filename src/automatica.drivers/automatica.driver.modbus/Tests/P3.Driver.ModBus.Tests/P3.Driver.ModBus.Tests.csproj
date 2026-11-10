@@ -36,5 +36,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj" />
     <ProjectReference Include="..\..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />
+    <ProjectReference Include="..\..\Solarman\P3.Driver.ModBus.SolarmanV5.DriverFactory\P3.Driver.ModBus.SolarmanV5.DriverFactory.csproj" />
   </ItemGroup>
 </Project>

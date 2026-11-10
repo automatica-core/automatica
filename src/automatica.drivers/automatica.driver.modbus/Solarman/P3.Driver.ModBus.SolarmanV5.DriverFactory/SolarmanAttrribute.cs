@@ -11,6 +11,14 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         public double  Scale { get; set; }
         public bool IsSigned { get; set; }
 
+        /// <summary>
+        /// Set by the group when the register map marks the register as signed. The "signed" property of nodes
+        /// created before the register map knew about it is false and cannot be edited, so the map wins.
+        /// </summary>
+        public bool SignedInRegisterMap { get; set; }
+
+        protected SolarmanGroupAttribute Group => _parent;
+
         protected SolarmanAttrribute(IDriverContext driverContext, SolarmanGroupAttribute parent) : base(driverContext)
         {
             _parent = parent;
@@ -20,7 +28,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         {
             Offset = GetPropertyValueInt("offset");
             Scale = GetPropertyValueDouble("scale");
-            IsSigned = GetProperty("signed").ValueBool.Value;
+            IsSigned = SignedInRegisterMap || (GetProperty("signed")?.ValueBool ?? false);
             return base.Init(token);
         }
 

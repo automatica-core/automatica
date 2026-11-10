@@ -14,6 +14,9 @@
 
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="P3.Driver.ModBus.Tests" />
+	</ItemGroup>
+	<ItemGroup>
 		<EmbeddedResource Include="automatica-manifest.json" />
 		<EmbeddedResource Include="Resources\Solarman-de.json" />
 		<EmbeddedResource Include="Resources\Solarman-en.json" />

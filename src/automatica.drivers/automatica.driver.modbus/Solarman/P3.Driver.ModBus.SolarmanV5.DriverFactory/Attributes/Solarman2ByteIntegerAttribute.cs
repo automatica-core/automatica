@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
@@ -14,20 +13,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
         {
             await Task.CompletedTask;
 
-            int val = data[0];
-
-            if (Offset > 0)
-            {
-                val -= Offset;
-            }
-
-            if (Scale > 1.0 || Scale < 1.0)
-            {
-                return Math.Round(val * Scale, 2);
-            }
-
-
-            return val;
+            return SolarmanRegisterCodec.Decode16(data[0], IsSigned, Offset, Scale);
         }
     }
 }

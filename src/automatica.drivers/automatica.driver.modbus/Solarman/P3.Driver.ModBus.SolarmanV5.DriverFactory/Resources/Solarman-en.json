@@ -271,6 +271,58 @@
         "GRID-CONNECTED-STATUS": {
           "NAME": "Grid Connected Status",
           "DESCRIPTION": ""
+        },
+        "TOU-GRID-CHARGE-ALL": {
+          "NAME": "Grid charge (all slots)",
+          "DESCRIPTION": "On while at least one time of use slot charges the battery from the grid. Writing sets or clears grid charging in all six slots (registers 172-177, bit 0), the generator charge bit stays as it is."
+        },
+        "TOU-GRID-CHARGE-1": {
+          "NAME": "Grid charge slot 1",
+          "DESCRIPTION": "Time of use slot 1 charges the battery from the grid (register 172, bit 0). Writing changes only this bit."
+        },
+        "TOU-GRID-CHARGE-2": {
+          "NAME": "Grid charge slot 2",
+          "DESCRIPTION": "Time of use slot 2 charges the battery from the grid (register 173, bit 0). Writing changes only this bit."
+        },
+        "TOU-GRID-CHARGE-3": {
+          "NAME": "Grid charge slot 3",
+          "DESCRIPTION": "Time of use slot 3 charges the battery from the grid (register 174, bit 0). Writing changes only this bit."
+        },
+        "TOU-GRID-CHARGE-4": {
+          "NAME": "Grid charge slot 4",
+          "DESCRIPTION": "Time of use slot 4 charges the battery from the grid (register 175, bit 0). Writing changes only this bit."
+        },
+        "TOU-GRID-CHARGE-5": {
+          "NAME": "Grid charge slot 5",
+          "DESCRIPTION": "Time of use slot 5 charges the battery from the grid (register 176, bit 0). Writing changes only this bit."
+        },
+        "TOU-GRID-CHARGE-6": {
+          "NAME": "Grid charge slot 6",
+          "DESCRIPTION": "Time of use slot 6 charges the battery from the grid (register 177, bit 0). Writing changes only this bit."
+        },
+        "TOU-SOC-1": {
+          "NAME": "SoC target slot 1 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 1 (register 166)."
+        },
+        "TOU-SOC-2": {
+          "NAME": "SoC target slot 2 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 2 (register 167)."
+        },
+        "TOU-SOC-3": {
+          "NAME": "SoC target slot 3 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 3 (register 168)."
+        },
+        "TOU-SOC-4": {
+          "NAME": "SoC target slot 4 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 4 (register 169)."
+        },
+        "TOU-SOC-5": {
+          "NAME": "SoC target slot 5 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 5 (register 170)."
+        },
+        "TOU-SOC-6": {
+          "NAME": "SoC target slot 6 [%]",
+          "DESCRIPTION": "Battery SoC target of time of use slot 6 (register 171)."
         }
       }
     },
@@ -301,6 +353,10 @@
     "LAST_POLL_TIMESTAMP": {
       "NAME": "Last poll timestamp",
       "DESCRIPTION": ""
+    },
+    "TIME_OF_USE": {
+      "NAME": "Time of use",
+      "DESCRIPTION": "Time of use programs of the inverter"
     },
     "UPLOAD": {
       "NAME": "Upload",

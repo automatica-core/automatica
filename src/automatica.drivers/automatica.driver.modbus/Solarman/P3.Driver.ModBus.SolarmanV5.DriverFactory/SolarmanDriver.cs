@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -25,6 +26,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
 
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1);
         private SolarmanConnection? _driver;
         private volatile bool _stopped;
 
@@ -199,6 +201,52 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             catch(Exception ex)
             {
                 DriverContext.Logger.LogError($"Could not poll solarman {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Sets or clears the grid charge bit of one time of use slot (<paramref name="slotIndex"/> 0-5) or of all slots (null).
+        /// Only bit 0 of the charge registers is changed, the registers are read right before the write.
+        /// </summary>
+        /// <returns>The grid charge state the inverter reports after the write.</returns>
+        internal async Task<bool> WriteGridCharge(int? slotIndex, bool enabled, SolarmanAttrribute source, CancellationToken token)
+        {
+            var (start, count) = _map.TimeOfUseChargeRegisters;
+            if (count == 0)
+            {
+                throw new InvalidOperationException("The device has no time of use charge registers");
+            }
+
+            if (slotIndex is < 0 || slotIndex >= count)
+            {
+                throw new InvalidOperationException($"Time of use slot index {slotIndex} is out of range");
+            }
+
+            await _writeSemaphore.WaitAsync(token);
+            try
+            {
+                var values = await SolarmanRegisterWriter.ReadModifyWrite(_driver!, DeviceId, (ushort)start, count,
+                    (index, raw) => slotIndex == null || slotIndex == index ? SolarmanRegisterCodec.WithGridCharge(raw, enabled) : raw,
+                    SolarmanRegisterCodec.GridChargeBit, _map.WritableRegisters, token);
+
+                DriverContext.Logger.LogInformation($"Time of use charge registers {start}-{start + count - 1} now hold {string.Join(",", values.Select(a => $"0x{a:X4}"))}");
+
+                // the other slots and the all-slots node follow right away instead of on the next poll;
+                // all groups share one name map, so one group dispatches every node of the range
+                var registerValues = new ModBusRegisterValueReturn(ModBusRequestStatus.Success, values, values);
+                var group = _groups.FirstOrDefault();
+                if (group != null)
+                {
+                    await group.FetchValues(registerValues, (start, start + count - 1), source);
+                }
+
+                return slotIndex.HasValue
+                    ? SolarmanRegisterCodec.IsGridChargeEnabled(values[slotIndex.Value])
+                    : SolarmanRegisterCodec.IsGridChargeEnabledInAnySlot(values);
+            }
+            finally
+            {
+                _writeSemaphore.Release();
             }
         }
 

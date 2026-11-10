@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 
@@ -15,34 +14,13 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
         {
             await Task.CompletedTask;
 
-            var value = new List<byte>();
-
-            foreach (var va in data)
+            if (data.Length != 2)
             {
-                value.AddRange(BitConverter.GetBytes(va));
+                throw new ArgumentException($"Expected 2 registers, got {data.Length}", nameof(data));
             }
 
-            
-            if (value.Count != 4)
-            {
-                throw new ArgumentException(nameof(value));
-            }
-
-            var bytes = new[] { value[0], value[1], value[2], value[3] };
-
-            var val = BitConverter.ToInt32(bytes, 0);
-
-            if (Offset > 0)
-            {
-                val -= Offset;
-            }
-
-            if (Scale > 1.0 || Scale < 1.0)
-            {
-                return Math.Round(val * Scale, 2);
-            }
-
-            return val;
+            // low word first
+            return SolarmanRegisterCodec.Decode32(data[0], data[1], IsSigned, Offset, Scale);
         }
     }
 }

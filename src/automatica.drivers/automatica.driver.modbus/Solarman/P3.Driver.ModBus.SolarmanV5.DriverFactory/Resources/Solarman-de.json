@@ -271,6 +271,58 @@
         "GRID-CONNECTED-STATUS": {
           "NAME": "Grid Connected Status",
           "DESCRIPTION": ""
+        },
+        "TOU-GRID-CHARGE-ALL": {
+          "NAME": "Netzladen (alle Zeitfenster)",
+          "DESCRIPTION": "Ein, solange mindestens ein Zeitfenster die Batterie aus dem Netz lädt. Schreiben setzt oder löscht das Netzladen in allen sechs Zeitfenstern (Register 172-177, Bit 0), das Generator-Bit bleibt unverändert."
+        },
+        "TOU-GRID-CHARGE-1": {
+          "NAME": "Netzladen Zeitfenster 1",
+          "DESCRIPTION": "Zeitfenster 1 lädt die Batterie aus dem Netz (Register 172, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-GRID-CHARGE-2": {
+          "NAME": "Netzladen Zeitfenster 2",
+          "DESCRIPTION": "Zeitfenster 2 lädt die Batterie aus dem Netz (Register 173, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-GRID-CHARGE-3": {
+          "NAME": "Netzladen Zeitfenster 3",
+          "DESCRIPTION": "Zeitfenster 3 lädt die Batterie aus dem Netz (Register 174, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-GRID-CHARGE-4": {
+          "NAME": "Netzladen Zeitfenster 4",
+          "DESCRIPTION": "Zeitfenster 4 lädt die Batterie aus dem Netz (Register 175, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-GRID-CHARGE-5": {
+          "NAME": "Netzladen Zeitfenster 5",
+          "DESCRIPTION": "Zeitfenster 5 lädt die Batterie aus dem Netz (Register 176, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-GRID-CHARGE-6": {
+          "NAME": "Netzladen Zeitfenster 6",
+          "DESCRIPTION": "Zeitfenster 6 lädt die Batterie aus dem Netz (Register 177, Bit 0). Schreiben ändert nur dieses Bit."
+        },
+        "TOU-SOC-1": {
+          "NAME": "Ziel-SoC Zeitfenster 1 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 1 (Register 166)."
+        },
+        "TOU-SOC-2": {
+          "NAME": "Ziel-SoC Zeitfenster 2 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 2 (Register 167)."
+        },
+        "TOU-SOC-3": {
+          "NAME": "Ziel-SoC Zeitfenster 3 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 3 (Register 168)."
+        },
+        "TOU-SOC-4": {
+          "NAME": "Ziel-SoC Zeitfenster 4 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 4 (Register 169)."
+        },
+        "TOU-SOC-5": {
+          "NAME": "Ziel-SoC Zeitfenster 5 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 5 (Register 170)."
+        },
+        "TOU-SOC-6": {
+          "NAME": "Ziel-SoC Zeitfenster 6 [%]",
+          "DESCRIPTION": "Ziel-SoC der Batterie im Zeitfenster 6 (Register 171)."
         }
       }
     },
@@ -301,6 +353,10 @@
     "LAST_POLL_TIMESTAMP": {
       "NAME": "Last poll timestamp",
       "DESCRIPTION": ""
+    },
+    "TIME_OF_USE": {
+      "NAME": "Zeitnutzung",
+      "DESCRIPTION": "Zeitprogramme (Time of Use) des Wechselrichters"
     },
     "UPLOAD": {
       "NAME": "Upload",

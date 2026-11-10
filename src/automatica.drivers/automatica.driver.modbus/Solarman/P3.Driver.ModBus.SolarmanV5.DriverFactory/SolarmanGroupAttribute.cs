@@ -34,27 +34,40 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return Task.FromResult(true);
         }
 
-        internal async Task FetchValues(ModBusRegisterValueReturn modbusRegisterValue, (int start, int end) groupRead)
+        /// <summary>
+        /// Dispatches the values of every node whose registers lie completely in <paramref name="groupRead"/>.
+        /// </summary>
+        /// <param name="except">Node that is not dispatched (it dispatches the value it wrote itself).</param>
+        internal async Task FetchValues(ModBusRegisterValueReturn modbusRegisterValue, (int start, int end) groupRead, SolarmanAttrribute? except = null)
         {
+            var registers = modbusRegisterValue.Data.ToArray();
             foreach (var register in _map.NameRegisterMap)
             {
-                if (_nameMap.ContainsKey(register.Key))
+                if (_nameMap.TryGetValue(register.Key, out var attribute))
                 {
-                    if (register.Value[0] >= groupRead.start && register.Value[0] <= groupRead.end)
+                    var first = register.Value[0];
+                    var length = register.Value.Count;
+                    var offset = first - groupRead.start;
+
+                    // a node is only dispatched when all its registers were read
+                    if (first >= groupRead.start && first + length - 1 <= groupRead.end && offset + length <= registers.Length)
                     {
-                        var offset = register.Value[0] - groupRead.start;
-                        var length = register.Value.Count;
+                        if (ReferenceEquals(attribute, except))
+                        {
+                            continue;
+                        }
 
                         var data = new ushort[length];
-                        Array.Copy(modbusRegisterValue.Data.ToArray(), offset, data, 0, length);
+                        Array.Copy(registers, offset, data, 0, length);
 
-                        var val = await _nameMap[register.Key].ConvertValue(data);
-                        _nameMap[register.Key].DispatchRead(val);
+                        var val = await attribute.ConvertValue(data);
+                        attribute.DispatchRead(val);
                     }
                 }
                 else
                 {
-                    DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
+                    // nodes the user did not create (e.g. the time of use group) are part of the map, too
+                    DriverContext.Logger.LogDebug($"Could not find instance for {register.Key}");
                 }
             }
             
@@ -75,7 +88,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
 
             SolarmanAttrribute? attribute = null;
-            if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
+            if (_map.GridChargeKeys.Contains(key))
+            {
+                attribute = CreateGridChargeAttribute(ctx, attributeMap);
+            }
+            else if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
                 (long)NodeDataType.Double)
             {
                 if (attributeMap.Count == 1)
@@ -116,9 +133,31 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 return null;
             }
 
+            attribute.SignedInRegisterMap = _map.IsSigned(key);
             _nameMap.Add(key, attribute);
 
             return attribute;
+        }
+
+        private SolarmanAttrribute? CreateGridChargeAttribute(IDriverContext ctx, List<int> registers)
+        {
+            var (start, count) = _map.TimeOfUseChargeRegisters;
+            if (registers.Count == count && registers[0] == start)
+            {
+                return new SolarmanGridChargeAttribute(ctx, this, null);
+            }
+
+            if (registers.Count == 1 && registers[0] >= start && registers[0] < start + count)
+            {
+                return new SolarmanGridChargeAttribute(ctx, this, registers[0] - start);
+            }
+
+            return null;
+        }
+
+        internal Task<bool> WriteGridCharge(int? slotIndex, bool enabled, SolarmanAttrribute source, CancellationToken token)
+        {
+            return _parent.WriteGridCharge(slotIndex, enabled, source, token);
         }
 
     }
