@@ -46,6 +46,52 @@ namespace P3.Driver.Byd.Driver
             return state is null or < 0 ? null : state == 1;
         }
 
+        /// <summary>
+        /// Charging power in kW ("chargePower": "1.6", "chargePowerUnit": "kW"), 0 when the car is not charging
+        /// </summary>
+        internal static object ChargePower(JsonElement e)
+        {
+            if (Charging(e) is false)
+            {
+                return 0d;
+            }
+            var power = BydCloud.Number(e, "chargePower");
+            if (power is null or < 0)
+            {
+                return null;
+            }
+            return string.Equals(BydCloud.Str(e, "chargePowerUnit"), "W", StringComparison.OrdinalIgnoreCase) ? power / 1000 : power;
+        }
+
+        /// <summary>
+        /// Minutes until the battery is full, 0 when not charging. fullHour/fullMinute (pyBYD) when the car sends them,
+        /// otherwise remainingHours/remainingMinutes: a SEAL U sent -1 for full* while charging and 33 h 29 min in remaining*
+        /// </summary>
+        internal static object TimeToFull(JsonElement e)
+        {
+            if (Charging(e) is false)
+            {
+                return 0d;
+            }
+            foreach (var (hours, minutes) in new[] { ("fullHour", "fullMinute"), ("remainingHours", "remainingMinutes") })
+            {
+                if (BydCloud.Number(e, hours) is >= 0 and var h && BydCloud.Number(e, minutes) is >= 0 and var m)
+                {
+                    return h * 60 + m;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The GPS answer wraps its values in "data" (pyBYD flattens it); also accepts them on the top level
+        /// </summary>
+        internal static object Gps(JsonElement e, string name)
+        {
+            return BydCloud.Number(e, name)
+                   ?? (e.ValueKind == JsonValueKind.Object && e.TryGetProperty("data", out var data) ? BydCloud.Number(data, name) : null);
+        }
+
         public static readonly IReadOnlyList<BydDataPoint> All = new[]
         {
             new BydDataPoint(new Guid("9580c9db-c8fa-44ae-93d0-efcf501496d9"), "online", "ONLINE", NodeDataType.Boolean, BydSource.Realtime,
@@ -61,12 +107,15 @@ namespace P3.Driver.Byd.Driver
                 on => on ? "LOCKDOOR" : "OPENDOOR"),
             new BydDataPoint(new Guid("1510de92-1854-48a9-832b-abb57181aa44"), "climate", "CLIMATE", NodeDataType.Boolean, BydSource.None, null,
                 on => on ? "OPENAIR" : "CLOSEAIR"),
-            new BydDataPoint(new Guid("787f181d-f25f-4369-a816-8f9c32d94c75"), "latitude", "LATITUDE", NodeDataType.Double, BydSource.Gps, e => BydCloud.Number(e, "latitude")),
-            new BydDataPoint(new Guid("ab8f058b-7751-4ebb-8b8a-005e581ab005"), "longitude", "LONGITUDE", NodeDataType.Double, BydSource.Gps, e => BydCloud.Number(e, "longitude")),
+            new BydDataPoint(new Guid("787f181d-f25f-4369-a816-8f9c32d94c75"), "latitude", "LATITUDE", NodeDataType.Double, BydSource.Gps, e => Gps(e, "latitude")),
+            new BydDataPoint(new Guid("ab8f058b-7751-4ebb-8b8a-005e581ab005"), "longitude", "LONGITUDE", NodeDataType.Double, BydSource.Gps, e => Gps(e, "longitude")),
             new BydDataPoint(new Guid("663da5b0-4841-45f9-9d00-fa9b780a10bd"), "flash_lights", "FLASH_LIGHTS", NodeDataType.Boolean, BydSource.None, null,
                 on => on ? "FLASHLIGHTNOWHISTLE" : null),
             new BydDataPoint(new Guid("b0f6490a-24e6-4fd4-af62-472ef8edefca"), "find_car", "FIND_CAR", NodeDataType.Boolean, BydSource.None, null,
                 on => on ? "FINDCAR" : null),
+            // added in driver version 1.1
+            new BydDataPoint(new Guid("5d0e8a3c-7f2b-4c61-9a4e-2b8f6d1c9e37"), "charge_power", "CHARGE_POWER", NodeDataType.Double, BydSource.Realtime, ChargePower),
+            new BydDataPoint(new Guid("a83f1b26-4e9d-4d0a-b5c7-6e2a9f4d8b15"), "time_to_full", "TIME_TO_FULL", NodeDataType.Double, BydSource.Realtime, TimeToFull),
         };
     }
 }

@@ -108,6 +108,17 @@ namespace P3.Driver.Byd.Tests
                     _output.WriteLine($"realtime {vin}: {ex.Message}");
                     _output.WriteLine($"  raw: {ex.Response}");
                 }
+                try
+                {
+                    var gps = await cloud.GetGpsAsync(vin);
+                    _output.WriteLine($"gps {vin}: {(gps.ValueKind == System.Text.Json.JsonValueKind.Undefined ? "(empty)" : gps.GetRawText())}");
+                    _output.WriteLine($"  read as latitude={BydDataPoints.Gps(gps, "latitude")} longitude={BydDataPoints.Gps(gps, "longitude")}");
+                }
+                catch (BydApiException ex)
+                {
+                    _output.WriteLine($"gps {vin}: {ex.Message}");
+                    _output.WriteLine($"  raw: {ex.Response}");
+                }
             }
         }
     }

@@ -65,6 +65,14 @@
         "NAME": "Lädt",
         "DESCRIPTION": ""
       },
+      "CHARGE_POWER": {
+        "NAME": "Ladeleistung [kW]",
+        "DESCRIPTION": "0, wenn das Auto nicht lädt"
+      },
+      "TIME_TO_FULL": {
+        "NAME": "Restladezeit [min]",
+        "DESCRIPTION": "Geschätzte Minuten bis der Akku voll ist, 0, wenn das Auto nicht lädt"
+      },
       "INSIDE_TEMP": {
         "NAME": "Innentemperatur [°C]",
         "DESCRIPTION": ""

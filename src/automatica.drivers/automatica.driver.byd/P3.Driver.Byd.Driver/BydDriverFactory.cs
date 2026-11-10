@@ -28,7 +28,8 @@ namespace P3.Driver.Byd.Driver
 
         public override Guid DriverGuid => new("36a22438-adc1-44d4-a9cb-41e671741f19");
 
-        public override Version DriverVersion => new(1, 0, 0, 0);
+        // 1.1: data points charge_power and time_to_full
+        public override Version DriverVersion => new(1, 1, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.byd";
 

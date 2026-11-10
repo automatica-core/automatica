@@ -65,6 +65,14 @@
         "NAME": "Charging",
         "DESCRIPTION": ""
       },
+      "CHARGE_POWER": {
+        "NAME": "Charging power [kW]",
+        "DESCRIPTION": "0 when the car is not charging"
+      },
+      "TIME_TO_FULL": {
+        "NAME": "Time to full [min]",
+        "DESCRIPTION": "Estimated minutes until the battery is full, 0 when the car is not charging"
+      },
       "INSIDE_TEMP": {
         "NAME": "Inside temperature [°C]",
         "DESCRIPTION": ""

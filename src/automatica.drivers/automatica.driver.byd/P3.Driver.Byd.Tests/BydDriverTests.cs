@@ -268,6 +268,51 @@ namespace P3.Driver.Byd.Tests
         }
 
         [Fact]
+        public async Task Poll_Charging_ReadsPowerAndTimeToFull_AndNestedGps()
+        {
+            // as a charging SEAL U answered on 2026-11-10: full* unknown, remaining* set, GPS values inside "data"
+            _realtimeResult = new
+            {
+                requestSerial = "RS1", onlineState = 1, elecPercent = 39, enduranceMileage = 194, chargeState = 1, chargingState = -1,
+                chargePower = "1.6", chargePowerUnit = "kW", fullHour = -1, fullMinute = -1, remainingHours = 33, remainingMinutes = 29, time = 1794306070
+            };
+            _gpsResult = new { requestSerial = "GS1", data = new { latitude = 48.3069, longitude = 14.2858, direction = 12 } };
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(true, Value(values["charging"]));
+            Assert.Equal(1.6, Value(values["charge_power"]));
+            Assert.Equal(33d * 60 + 29, Value(values["time_to_full"]));
+            Assert.Equal(48.3069, Value(values["latitude"]));
+            Assert.Equal(14.2858, Value(values["longitude"]));
+        }
+
+        [Fact]
+        public async Task Poll_NotCharging_PowerAndTimeToFullAreZero()
+        {
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(false, Value(values["charging"]));
+            Assert.Equal(0d, Value(values["charge_power"]));
+            Assert.Equal(0d, Value(values["time_to_full"]));
+        }
+
+        [Fact]
+        public void ChargePower_InWatt_IsConvertedToKilowatt()
+        {
+            using var doc = JsonDocument.Parse("{\"chargeState\":1,\"chargePower\":\"7400\",\"chargePowerUnit\":\"W\",\"fullHour\":2,\"fullMinute\":5}");
+            Assert.Equal(7.4, BydDataPoints.ChargePower(doc.RootElement));
+            Assert.Equal(125d, BydDataPoints.TimeToFull(doc.RootElement));
+        }
+
+        [Fact]
         public async Task Poll_ReadyTrigger_SkipsThePolling()
         {
             _realtimeTrigger = new { onlineState = 1, elecPercent = 55, enduranceMileage = 250, leftFrontDoorLock = 1, rightFrontDoorLock = 2, tempInCar = -129 };
