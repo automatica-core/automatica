@@ -22,20 +22,22 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
         {
             factory.CreateInterfaceType(DeviceTypeGuid, "SOLARMAN.DEVICE.NAME", "SOLARMAN.DEVICE.DESCRIPTION", 8, 1,
                 true);
+            // only the device is a driver interface: a group flagged as one makes the core start it as a driver of its own
+            // when it is added ("No factory found") instead of reloading the Solarman driver, so new nodes stay without values
             factory.CreateInterfaceType(BatteryTypeGuid, "SOLARMAN.BATTERY.NAME", "SOLARMAN.BATTERY.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(SolarTypeGuid, "SOLARMAN.SOLAR.NAME", "SOLARMAN.SOLAR.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(GridTypeGuid, "SOLARMAN.GRID.NAME", "SOLARMAN.GRID.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(UploadTypeGuid, "SOLARMAN.UPLOAD.NAME", "SOLARMAN.UPLOAD.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(AlertTypeGuid, "SOLARMAN.ALERT.NAME", "SOLARMAN.ALERT.DESCRIPTION", 6, 1,
-                true);
+                false);
             factory.CreateInterfaceType(InverterTypeGuid, "SOLARMAN.INVERTER.NAME", "SOLARMAN.INVERTER.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(TimeOfUseTypeGuid, "SOLARMAN.TIME_OF_USE.NAME", "SOLARMAN.TIME_OF_USE.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
 
             factory.CreateNodeTemplate(DriverGuid, "SOLARMAN.DEVICE.SG03LP3.NAME", "SOLARMAN.DEVICE.SG03LP3.DESCRIPTION",
                 "solarman-device", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), DeviceTypeGuid, false, false, true, false, true,
