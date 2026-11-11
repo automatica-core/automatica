@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Loader;
 using Automatica.Core.Base.Common;
 
@@ -22,6 +25,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         private readonly AssemblyDependencyResolver? _resolver;
         private readonly string? _sharedRoot;
+        // names, not the assemblies: the runtime holds an unloading context strongly, assemblies held by it would keep it loaded forever
+        private readonly HashSet<string> _resolved = new(StringComparer.Ordinal);
 
         /// <summary>
         /// The plugin directory (the key of the context)
@@ -74,8 +79,15 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
         }
 
+        /// <summary>
+        /// Raised for every call of <see cref="Load"/>, i.e. every time the runtime runs managed code to find an assembly (tests)
+        /// </summary>
+        internal event Action<AssemblyName>? LoadRequested;
+
         protected override Assembly? Load(AssemblyName assemblyName)
         {
+            LoadRequested?.Invoke(assemblyName);
+
             if (assemblyName.Name == null || IsHostAssembly(assemblyName))
             {
                 return null;
@@ -155,7 +167,109 @@ namespace Automatica.Core.Runtime.Core.Plugins
         {
             var name = AssemblyName.GetAssemblyName(file);
             var loaded = Assemblies.FirstOrDefault(a => string.Equals(a.GetName().Name, name.Name, StringComparison.OrdinalIgnoreCase));
-            return loaded ?? LoadFromAssemblyPath(ToLoadPath(file));
+            var assembly = loaded ?? LoadFromAssemblyPath(ToLoadPath(file));
+            ResolveReferences(assembly);
+            return assembly;
+        }
+
+        /// <summary>
+        /// Resolves the references of the assembly, and of every assembly of this context it uses, now instead of on first use.
+        /// The runtime asks <see cref="Load"/> (managed code) the first time a module needs one of its references. That can happen
+        /// inside a garbage collection: it reads the argument types of a method that is being compiled, e.g. the
+        /// WebSocketCloseStatus of an OnClosed handler. The managed code allocates, waits for the end of the GC and the whole process
+        /// hangs (automatica10_2, 2026-11-11). A reference the module resolved once is kept in the module, so this happens only here.
+        /// </summary>
+        internal void ResolveReferences(Assembly assembly)
+        {
+            var pending = new Queue<Assembly>();
+            if (MarkResolved(assembly))
+            {
+                pending.Enqueue(assembly);
+            }
+
+            while (pending.TryDequeue(out var next))
+            {
+                foreach (var referenced in ResolveModuleReferences(next))
+                {
+                    // the core's and the framework's assemblies are in the default context, it finds their references without managed code
+                    if (GetLoadContext(referenced) == this && MarkResolved(referenced))
+                    {
+                        pending.Enqueue(referenced);
+                    }
+                }
+            }
+        }
+
+        private bool MarkResolved(Assembly assembly)
+        {
+            lock (_resolved)
+            {
+                return _resolved.Add(assembly.FullName ?? assembly.Location);
+            }
+        }
+
+        /// <summary>
+        /// Resolves one type reference per assembly reference through the module, the same way the runtime does on first use
+        /// </summary>
+        /// <returns>the referenced assemblies that could be loaded</returns>
+        private static List<Assembly> ResolveModuleReferences(Assembly assembly)
+        {
+            var referenced = new List<Assembly>();
+            if (string.IsNullOrEmpty(assembly.Location) || !File.Exists(assembly.Location))
+            {
+                return referenced;
+            }
+
+            try
+            {
+                using var stream = File.OpenRead(assembly.Location);
+                using var pe = new PEReader(stream);
+                if (!pe.HasMetadata)
+                {
+                    return referenced;
+                }
+
+                var metadata = pe.GetMetadataReader();
+                var module = assembly.ManifestModule;
+                var done = new HashSet<AssemblyReferenceHandle>();
+
+                foreach (var handle in metadata.TypeReferences)
+                {
+                    var scope = metadata.GetTypeReference(handle).ResolutionScope;
+                    if (scope.Kind != HandleKind.AssemblyReference)
+                    {
+                        // nested or module local type, its outer type resolves the assembly
+                        continue;
+                    }
+
+                    var reference = (AssemblyReferenceHandle)scope;
+                    if (done.Contains(reference))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        referenced.Add(module.ResolveType(MetadataTokens.GetToken(handle)).Assembly);
+                        done.Add(reference);
+                    }
+                    catch (Exception e) when (e is FileNotFoundException or FileLoadException or BadImageFormatException)
+                    {
+                        // the assembly is not there: an optional dependency, it fails the same way on first use
+                        done.Add(reference);
+                    }
+                    catch (Exception)
+                    {
+                        // this type is not in the assembly (other version), another type of the same reference resolves it
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // unreadable file: the references are resolved on first use, as before
+            }
+
+            return referenced;
         }
 
         /// <summary>

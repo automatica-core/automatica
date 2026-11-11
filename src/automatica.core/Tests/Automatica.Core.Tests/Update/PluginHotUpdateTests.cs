@@ -320,6 +320,108 @@ namespace Automatica.Core.Tests.Update
             PluginLoadContexts.Unload(folder);
         }
 
+        /// <summary>
+        /// The runtime asks the context (managed code) for an assembly the first time a module needs one of its references. If that
+        /// happens inside a GC (it reads the argument types of a method that is being compiled, here a WebSocketCloseStatus), the
+        /// managed code allocates and waits for the GC: the process hangs (automatica10_2, 2026-11-11, ShellyGen2Client._webSocket_OnClosed).
+        /// So every reference is resolved while the plugin loads.
+        /// </summary>
+        [Fact]
+        public void References_AreResolvedWhenThePluginLoads_SoReadingASignatureLaterDoesNotAskTheContext()
+        {
+            var folder = BuildPlugin("v1");
+            var (atLoad, later) = SignatureLookups(folder);
+
+            Assert.Empty(later);
+            Assert.Contains("System.Net.WebSockets", atLoad);
+            Assert.Contains(HelperName, atLoad);
+        }
+
+        [Fact]
+        public void References_OfAPluginReferencedAssembly_AreResolvedToo()
+        {
+            var folder = BuildPlugin("v1");
+            var (_, later) = SignatureLookups(folder, helperSignature: true);
+
+            Assert.Empty(later);
+        }
+
+        [Fact]
+        public void Plugin_ThatReferencesAMissingAssembly_StillLoads()
+        {
+            var folder = CreateFolder("missing");
+            var missing = Path.Combine(_root, "MissingLibrary.dll");
+            Compile("MissingLibrary", "namespace Missing { public class Thing { } }", missing);
+            Compile(PluginName, @"
+namespace HotUpdate
+{
+    public static class Plugin
+    {
+        public static string Version() => ""v1"";
+        public static string Use(Missing.Thing thing) => thing.ToString();
+    }
+}", Path.Combine(folder, PluginName + ".dll"), missing);
+
+            Assert.Equal("v1", InvokeVersion(folder));
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static string InvokeVersion(string folder)
+        {
+            var context = new PluginLoadContext(folder);
+            try
+            {
+                var assembly = context.LoadPluginAssembly(Path.Combine(folder, PluginName + ".dll"));
+                return (string)assembly.GetType("HotUpdate.Plugin")!.GetMethod("Version")!.Invoke(null, null)!;
+            }
+            finally
+            {
+                context.Unload();
+            }
+        }
+
+        /// <returns>the assemblies the context was asked for while the plugin loaded, and afterwards while a signature was read</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static (string[] AtLoad, string[] Later) SignatureLookups(string folder, bool helperSignature = false)
+        {
+            var context = new PluginLoadContext(folder);
+            var requested = new List<string>();
+            context.LoadRequested += name =>
+            {
+                lock (requested)
+                {
+                    requested.Add(name.Name!);
+                }
+            };
+
+            try
+            {
+                var assembly = context.LoadPluginAssembly(Path.Combine(folder, PluginName + ".dll"));
+                string[] atLoad;
+                lock (requested)
+                {
+                    atLoad = requested.ToArray();
+                }
+
+                // what the GC does for a method that is being compiled: read its parameter types through the module's references
+                var parameter = helperSignature
+                    ? context.Assemblies.Single(a => a.GetName().Name == HelperName).GetType("HotUpdate.Helper")!.GetMethod("State")!.GetParameters()[0].ParameterType
+                    : assembly.GetType("HotUpdate.Plugin")!.GetMethod("Closed")!.GetParameters()[1].ParameterType;
+                Assert.Equal(helperSignature ? "WebSocketState" : "WebSocketCloseStatus", parameter.Name);
+                Assert.Equal("v1", (string)assembly.GetType("HotUpdate.Plugin")!.GetMethod("Version")!.Invoke(null, null)!);
+                Assert.Equal("helper v1", (string)assembly.GetType("HotUpdate.Plugin")!.GetMethod("Helper")!.Invoke(null, null)!);
+
+                lock (requested)
+                {
+                    return (atLoad, requested.Skip(atLoad.Length).ToArray());
+                }
+            }
+            finally
+            {
+                context.Unload();
+            }
+        }
+
         [Fact]
         public void Library_ThePluginDoesNotShip_IsLoadedFromAnotherPluginFolder_AsItsOwnCopy()
         {
@@ -395,7 +497,15 @@ namespace Automatica.Core.Tests.Update
             Directory.CreateDirectory(folder);
 
             var helperPath = Path.Combine(folder, HelperName + ".dll");
-            Compile(HelperName, $"namespace HotUpdate {{ public static class Helper {{ public static string Text() => \"helper {version}\"; }} }}", helperPath);
+            Compile(HelperName, $@"
+namespace HotUpdate
+{{
+    public static class Helper
+    {{
+        public static string Text() => ""helper {version}"";
+        public static string State(System.Net.WebSockets.WebSocketState state) => state.ToString();
+    }}
+}}", helperPath);
 
             Compile(PluginName, $@"
 namespace HotUpdate
@@ -405,6 +515,7 @@ namespace HotUpdate
         public static string Version() => ""{version}"";
         public static string Helper() => HotUpdate.Helper.Text();
         public static System.Type CoreType() => typeof(Automatica.Core.Base.Common.ServerInfo);
+        public static string Closed(object sender, System.Net.WebSockets.WebSocketCloseStatus status) => status.ToString();
     }}
 
     public class Instance
