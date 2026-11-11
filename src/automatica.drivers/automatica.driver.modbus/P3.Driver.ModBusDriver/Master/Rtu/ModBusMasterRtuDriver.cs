@@ -20,7 +20,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
         public override bool Connected => _connected;
 
-        public ModBusMasterRtuDriver(ModBusMasterRtuConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
+        public ModBusMasterRtuDriver(ModBusMasterRtuConfig config, ITelegramMonitorInstance monitor, ILogger logger = null) : base(config, monitor, logger)
         {
             _serialPortStream = CreateSerialPortStream();
         }
@@ -149,7 +149,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError($"Could not connect to modbus tcp slave {Config.Port}, {Config.Baud}\n{e}");
+                Logger.LogError($"Could not connect to modbus tcp slave {Config.Port}, {Config.Baud}\n{e}");
                 return false;
             }
             return true;
@@ -157,7 +157,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
         protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
-            ModBus.Logger.LogHexOut(data);
+            Logger.LogHexOut(data);
 
             var serialPortStream = _serialPortStream;
             if (serialPortStream == null || serialPortStream.IsDisposed || !serialPortStream.IsOpen)
@@ -205,11 +205,11 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                     // reads until the expected length (or the exception reply length) arrived, checks the crc
                     data = await ModBusFrameReader.ReadRtuFrameAsync(serialPortStream, function, numberOfRegisters, linkedCts.Token);
                 }
-                ModBus.Logger.LogHexIn(data);
+                Logger.LogHexIn(data);
 
                 if ((data[1] & 0x80) != 0)
                 {
-                    ModBus.Logger.LogWarning($"ModBus exception reply from {data[0]} for function {function}: {(ModBusExceptionCode)data[2]}");
+                    Logger.LogWarning($"ModBus exception reply from {data[0]} for function {function}: {(ModBusExceptionCode)data[2]}");
                 }
 
                 // an exception reply is returned as well, the caller surfaces its exception code
@@ -217,7 +217,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
+                Logger.LogError(e, $"Error reading ModBus frame {e}");
             }
             finally
             {

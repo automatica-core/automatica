@@ -40,14 +40,14 @@ namespace P3.Driver.ModBusDriverFactory.Master
             {
                 var ip = GetProperty("modbus-master-ip").ValueString;
                 var port = GetProperty("modbus-master-port").ValueInt.Value;
-                ModBus.Logger.LogInformation($"Connecting to {ip}:{port}...");
+                DriverContext.Logger.LogInformation($"Connecting to {ip}:{port}...");
 
                 _modBusDriver = new ModBusMasterTcpDriver(new ModBusMasterTcpConfig()
                 {
                     IpAddress = IPAddress.Parse(ip),
                     Port = (short)port,
                     Timeout = 5000
-                }, TelegramMonitor);
+                }, TelegramMonitor, DriverContext.Logger);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 var stopBits = GetProperty("modbus-stopbits").ValueDouble;
                 var parity = GetProperty("modbus-parity").ValueString;
 
-                ModBus.Logger.LogInformation($"Connecting to {port} {baud} {dataBits} {parity} {stopBits}...");
+                DriverContext.Logger.LogInformation($"Connecting to {port} {baud} {dataBits} {parity} {stopBits}...");
 
                 _modBusDriver = new ModBusMasterRtuDriver(new ModBusMasterRtuConfig()
                 {
@@ -67,7 +67,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                     Parity = parity,
                     StopBits = stopBits.Value,
                     Timeout = 5000
-                }, TelegramMonitor);
+                }, TelegramMonitor, DriverContext.Logger);
             }
             return base.Init(token);
         }

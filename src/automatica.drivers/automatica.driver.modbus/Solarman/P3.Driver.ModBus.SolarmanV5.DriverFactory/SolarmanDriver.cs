@@ -74,10 +74,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _driver = new SolarmanConnection(new SolarmanConfig
             {
                 IpAddress = IPAddress.Parse(_ip),
-                Port = Convert.ToInt16(_port),
+                // stored as a short like the modbus tcp config, ports > 32767 wrap
+                Port = unchecked((short)_port),
                 SolarmanSerialNumber = Convert.ToUInt32(_serial),
                 Timeout = 5000
-            }, TelegramMonitor);
+            }, TelegramMonitor, DriverContext.Logger);
             if (!_driver.Open())
             {
                 _driver = null;
@@ -161,7 +162,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                     if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }
                         and ModBusRegisterValueReturn modbusRegisterValue)
                     {
-                        foreach (var group in _groups)
+                        // all groups share one name map, so one group dispatches every node of the range;
+                        // calling every group dispatched each value once per group (7 times per poll on a full device)
+                        var group = _groups.FirstOrDefault();
+                        if (group != null)
                         {
                             await group.FetchValues(modbusRegisterValue, groupRead);
                         }

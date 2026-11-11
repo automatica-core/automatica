@@ -1,6 +1,7 @@
 ﻿using System.Buffers.Binary;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Utility;
+using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master.Tcp;
@@ -20,7 +21,7 @@ namespace P3.Driver.ModBus.SolarmanV5
 
         private readonly uint _serial;
 
-        public SolarmanConnection(SolarmanConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
+        public SolarmanConnection(SolarmanConfig config, ITelegramMonitorInstance monitor, ILogger logger = null) : base(config, monitor, logger)
         {
             _serial = config.SolarmanSerialNumber;
         }

@@ -152,6 +152,8 @@ namespace P3.Driver.Blockchain.Ticker.Tests
                 Assert.Contains(paths, p => p.StartsWith("/v1/assetQuotation/Ethereum/"));
                 Assert.Contains(paths, p => p.StartsWith("/v1/assetQuotation/Cardano/"));
                 Assert.All(handler.RequestedUris, u => Assert.Equal("api.diadata.org", u.Host));
+                // DIA answers 404 for an address that is not 20 bytes (Cardano had 39 zeros)
+                Assert.All(paths, p => Assert.Matches("/0x[0-9a-fA-F]{40}$", p));
             }
             finally
             {

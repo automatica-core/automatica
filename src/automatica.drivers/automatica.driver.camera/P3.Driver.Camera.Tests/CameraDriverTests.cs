@@ -387,6 +387,49 @@ namespace P3.Driver.Camera.Tests
             Assert.Contains(setup.Http.Requests, r => r.Body != null && r.Body.Contains("Unsubscribe"));
         }
 
+        /// <summary>
+        /// Tapo cameras accepted the subscription but every pull failed: each round opened one more pull point and never closed it
+        /// </summary>
+        [Fact]
+        public async Task EventLoop_PullFails_UnsubscribesBeforeTheNextRound()
+        {
+            var root = CreateRoot();
+            AddCamera(root, onvif: true, main: "rtsp://192.168.1.20/live");
+            var subscriptions = 0;
+            var setup = await StartAsync(root, http =>
+            {
+                OnvifRoutes(http);
+                http.On(HttpMethod.Post, "/onvif/Events", (_, body) =>
+                {
+                    Interlocked.Increment(ref subscriptions);
+                    return FakeHttp.Soap(
+                        "<tev:CreatePullPointSubscriptionResponse><tev:SubscriptionReference><wsa5:Address>http://192.168.1.20/onvif/Subscription?Idx=1</wsa5:Address>" +
+                        "</tev:SubscriptionReference></tev:CreatePullPointSubscriptionResponse>");
+                });
+                http.On(HttpMethod.Post, "/onvif/Subscription", (_, body) =>
+                {
+                    if (body.Contains("PullMessages"))
+                    {
+                        throw new HttpRequestException("An error occurred while sending the request.");
+                    }
+                    return FakeHttp.Soap("<wsnt:UnsubscribeResponse/>");
+                });
+            });
+            var camera = setup.Driver.Cameras.Single();
+            await camera.Start();
+
+            await setup.Driver.PollAsync();
+            for (var i = 0; i < 300 && Volatile.Read(ref subscriptions) < 3; i++)
+            {
+                await Task.Delay(10);
+            }
+            await camera.Stop();
+
+            Assert.True(subscriptions >= 3, $"only {subscriptions} subscriptions");
+            var unsubscribes = setup.Http.Requests.Count(r => r.Body != null && r.Body.Contains("Unsubscribe"));
+            Assert.True(unsubscribes >= subscriptions, $"{subscriptions} subscriptions, {unsubscribes} unsubscribes");
+        }
+
         [Fact]
         public async Task Scan_ReturnsNewOnvifCamerasWithTheirValueNodes()
         {

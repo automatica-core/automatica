@@ -20,7 +20,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         public override bool Connected => _connected;
 
-        public ModBusMasterTcpDriver(ModBusMasterTcpConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
+        public ModBusMasterTcpDriver(ModBusMasterTcpConfig config, ITelegramMonitorInstance monitor, ILogger logger = null) : base(config, monitor, logger)
         {
         }
         protected override bool OpenConnection()
@@ -35,7 +35,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError($"Could not connect to modbus tcp slave {Config.IpAddress}:{Config.Port}\n{e}");
+                Logger.LogError($"Could not connect to modbus tcp slave {Config.IpAddress}:{Config.Port}\n{e}");
                 return false;
             }
             return true;
@@ -49,7 +49,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError(e, $"Could not close tcp connection {e}");
+                Logger.LogError(e, $"Could not close tcp connection {e}");
             }
 
             return Task.FromResult(true);
@@ -121,7 +121,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
-            ModBus.Logger.LogHexOut(data);
+            Logger.LogHexOut(data);
             if (_networkStream == null)
             {
                 return false;
@@ -173,7 +173,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                             _connected = false;
                             throw new IOException("ModBus tcp connection closed by the remote side");
                         }
-                        ModBus.Logger.LogHexIn(header);
+                        Logger.LogHexIn(header);
 
                         var lengthToRead = GetLengthToRead(header);
                         var data = new byte[lengthToRead];
@@ -182,12 +182,12 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                             _connected = false;
                             throw new IOException("ModBus tcp connection closed by the remote side");
                         }
-                        ModBus.Logger.LogHexIn(data);
+                        Logger.LogHexIn(data);
 
                         if (!IsResponseToLastRequest(header))
                         {
                             // late answer to an earlier (timed out) request, wait for the matching one
-                            ModBus.Logger.LogWarning($"Dropped ModBus tcp response with transaction id {Utils.GetUShort(header[0], header[1])}, expected {_expectedTransactionId}");
+                            Logger.LogWarning($"Dropped ModBus tcp response with transaction id {Utils.GetUShort(header[0], header[1])}, expected {_expectedTransactionId}");
                             continue;
                         }
 
@@ -202,11 +202,11 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                 {
                     // no (complete) response in time, a partial frame would desync the stream, reconnect
                     _connected = false;
-                    ModBus.Logger.LogError($"Timeout reading ModBus frame from {Config.IpAddress}:{Config.Port}");
+                    Logger.LogError($"Timeout reading ModBus frame from {Config.IpAddress}:{Config.Port}");
                 }
                 catch (Exception e)
                 {
-                    ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
+                    Logger.LogError(e, $"Error reading ModBus frame {e}");
                 }
             }
             return null;

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -225,6 +226,42 @@ namespace P3.Driver.Knx.Tests.Attributes
 
             await Write(ga, "ABCDEFGHIJKLMN");
             Assert.Equal(payload, driver.Writes.Single().Value.Value);
+        }
+
+        /// <summary>
+        /// A number (the bitcoin price from the blockchain ticker) was dropped with "Could not convert value correctly"
+        /// </summary>
+        [Fact]
+        public async Task Dpt16_Number_IsWrittenAsInvariantText()
+        {
+            var previous = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = new CultureInfo("de-AT");
+            try
+            {
+                var node = CreateByKey("knx-dpt16", 44, 0);
+                var (driver, ga) = await CreateDriver(node);
+
+                await Write(ga, 73831.5d);
+
+                var expected = new byte[14];
+                "73831.5"u8.ToArray().CopyTo(expected, 0);
+                Assert.Equal(expected, driver.Writes.Single().Value.Value);
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = previous;
+            }
+        }
+
+        [Fact]
+        public async Task Dpt16_LongText_IsCutToFourteenCharacters()
+        {
+            var node = CreateByKey("knx-dpt16", 45, 0);
+            var (driver, ga) = await CreateDriver(node);
+
+            await Write(ga, "73831.67727413896");
+
+            Assert.Equal("73831.67727413"u8.ToArray(), driver.Writes.Single().Value.Value);
         }
 
         [Theory]

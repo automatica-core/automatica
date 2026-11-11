@@ -156,6 +156,25 @@ namespace P3.Driver.Camera.Tests
             await Assert.ThrowsAsync<OnvifException>(() => client.ConnectAsync());
         }
 
+        /// <summary>
+        /// HttpClient only says "An error occurred while sending the request", the log needs the reason behind it
+        /// </summary>
+        [Fact]
+        public async Task Call_TransportError_NamesTheInnerReason()
+        {
+            var http = new FakeHttp
+            {
+                Throw = new System.Net.Http.HttpRequestException("An error occurred while sending the request.",
+                    new System.IO.IOException("The response ended prematurely."))
+            };
+            var client = new OnvifClient(http.Client(), "cam", 80, "admin", "secret", () => LocalNow);
+
+            var ex = await Assert.ThrowsAsync<OnvifException>(() =>
+                client.PullMessagesAsync(new Uri("http://cam:1024/event-0_1024"), TimeSpan.FromSeconds(1), 10));
+
+            Assert.Equal("PullMessages: An error occurred while sending the request. -> The response ended prematurely.", ex.Message);
+        }
+
         [Fact]
         public async Task PullPoint_SubscribesPullsRenewsAndUnsubscribes()
         {

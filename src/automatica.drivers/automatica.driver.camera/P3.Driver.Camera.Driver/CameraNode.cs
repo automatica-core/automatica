@@ -332,7 +332,6 @@ namespace P3.Driver.Camera.Driver
                         subscription = await onvif.CreatePullPointSubscriptionAsync(SubscriptionTermination, cts.Token);
                     }
                     DriverContext.Logger.LogInformation($"{FullName}: following the ONVIF events");
-                    failures = 0;
 
                     var renewAt = _driver.Now + RenewInterval;
                     while (!token.IsCancellationRequested)
@@ -342,6 +341,9 @@ namespace P3.Driver.Camera.Driver
                         {
                             events = await onvif.PullMessagesAsync(subscription, PullTimeout, 50, cts.Token);
                         }
+                        // the events work only once a pull came back: a camera that accepts the subscription but fails
+                        // every pull would otherwise warn (and retry at the shortest delay) on every round
+                        failures = 0;
                         ApplyEvents(events);
 
                         if (_driver.Now >= renewAt)
@@ -368,8 +370,9 @@ namespace P3.Driver.Camera.Driver
                     // stopping
                 }
 
-                if (subscription != null && token.IsCancellationRequested)
+                if (subscription != null)
                 {
+                    // also after a failure: the next round opens a new pull point, cameras allow only a few at once
                     try
                     {
                         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
@@ -383,6 +386,10 @@ namespace P3.Driver.Camera.Driver
                     {
                         // it expires on its own
                     }
+                }
+
+                if (token.IsCancellationRequested)
+                {
                     return;
                 }
 

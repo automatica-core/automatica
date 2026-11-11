@@ -85,11 +85,15 @@ namespace P3.Driver.ModBusDriver.Master
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
-        protected ModBusMasterDriver(T config, ITelegramMonitorInstance monitor)
+        protected ModBusMasterDriver(T config, ITelegramMonitorInstance monitor, ILogger logger = null)
         {
             Config = config;
             Monitor = monitor;
+            // every connection logs into its own driver log; the static ModBus.Logger is shared by all modbus drivers
+            Logger = logger ?? ModBus.Logger;
         }
+
+        protected ILogger Logger { get; }
 
         public abstract bool Connected { get; }
         public ITelegramMonitorInstance Monitor { get; }
@@ -107,7 +111,7 @@ namespace P3.Driver.ModBusDriver.Master
             }
             catch(Exception e)
             {
-                ModBus.Logger.LogError(e, $"Could not close connection...{e}");
+                Logger.LogError(e, $"Could not close connection...{e}");
                 return false;
             }
         }

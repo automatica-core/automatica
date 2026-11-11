@@ -28,7 +28,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
         private readonly Thread _listenerThread;
         private readonly object _lock = new object();
 
-        public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor, ILogger logger) : base(config, telegramMonitor)
+        public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor, ILogger logger) : base(config, telegramMonitor, logger)
         {
             _config = config;
             _logger = logger;
@@ -55,7 +55,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private void Start()
         {
-            ModBus.Logger.LogInformation($"Start tcp listener on {_config.BindAddress}:{_config.Port} (max {_config.MaxConnections} connections{(_config.ReadOnly ? ", read only" : "")})");
+            _logger.LogInformation($"Start tcp listener on {_config.BindAddress}:{_config.Port} (max {_config.MaxConnections} connections{(_config.ReadOnly ? ", read only" : "")})");
             while (_running)
             {
                 TcpClient clt = null;
@@ -71,7 +71,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                 {
                     if (_running)
                     {
-                        ModBus.Logger.LogError(e, $"Could not accept tcp client {e}");
+                        _logger.LogError(e, $"Could not accept tcp client {e}");
                     }
                 }
 
@@ -91,7 +91,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                         }
                         catch (Exception e)
                         {
-                            ModBus.Logger.LogError(e, $"Error working on tcp client {e}");
+                            _logger.LogError(e, $"Error working on tcp client {e}");
                         }
                     });
                 }
@@ -101,7 +101,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                 }
             }
 
-            ModBus.Logger.LogInformation($"Stopping tcp listener on port {_config.Port}");
+            _logger.LogInformation($"Stopping tcp listener on port {_config.Port}");
         }
 
         private bool TryRegisterClient(TcpClient client)
@@ -118,7 +118,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
             if (!_config.IsClientAllowed(remote))
             {
-                ModBus.Logger.LogWarning($"Rejected modbus connection from {remote}, not in the allowed client list");
+                _logger.LogWarning($"Rejected modbus connection from {remote}, not in the allowed client list");
                 return false;
             }
 
@@ -126,7 +126,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
             {
                 if (_config.MaxConnections > 0 && _connections.Count >= _config.MaxConnections)
                 {
-                    ModBus.Logger.LogWarning($"Rejected modbus connection from {remote}, {_config.MaxConnections} connections are open already");
+                    _logger.LogWarning($"Rejected modbus connection from {remote}, {_config.MaxConnections} connections are open already");
                     return false;
                 }
 
@@ -210,7 +210,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
                         if (frameLength < MinFrameLength || frameLength > MaxFrameLength)
                         {
-                            ModBus.Logger.LogWarning($"Invalid modbus frame length {frameLength}, closing connection");
+                            _logger.LogWarning($"Invalid modbus frame length {frameLength}, closing connection");
                             break;
                         }
 
@@ -237,7 +237,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                     }
                     catch (TimeoutException)
                     {
-                        ModBus.Logger.LogDebug("Modbus connection timed out");
+                        _logger.LogDebug("Modbus connection timed out");
                         break;
                     }
                     catch (Exception)
@@ -252,7 +252,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
         {
             lock (_lock)
             {
-                ModBus.Logger
+                _logger
                     .LogDebug($"Creating device store with {String.Join(",", config.DeviceIds)} devices");
                 foreach (var dev in config.DeviceIds)
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
@@ -20,14 +21,24 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
+        /// <summary>
+        /// DPT 16 carries at most 14 characters
+        /// </summary>
+        internal const int MaxLength = 14;
+
         protected override object ConvertToDptValue(object value)
         {
-            if (value is string dpt16Value)
+            // numbers (e.g. a price from a logic) are sent as text, always with a decimal point
+            var text = value switch
             {
-                return dpt16Value;
-            }
+                null => throw new NotImplementedException(),
+                string s => s,
+                IFormattable formattable => formattable.ToString(null, CultureInfo.InvariantCulture),
+                _ => value.ToString()
+            };
 
-            throw new NotImplementedException();
+            // a longer text does not fit into the telegram, send the start of it instead of dropping the write
+            return text.Length > MaxLength ? text[..MaxLength] : text;
         }
 
         protected override bool ValueRead(object value)

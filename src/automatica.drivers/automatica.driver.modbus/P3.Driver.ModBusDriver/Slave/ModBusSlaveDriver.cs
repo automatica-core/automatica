@@ -34,11 +34,14 @@ namespace P3.Driver.ModBusDriver.Slave
         public event EventHandler<RegisterChangedEventArgs> CoilRegisterChanged;
         private readonly object _lock = new object();
 
-        protected ModBusSlaveDriver(T config, ITelegramMonitorInstance telegramMonitor)
+        protected ModBusSlaveDriver(T config, ITelegramMonitorInstance telegramMonitor, ILogger logger = null)
         {
             Config = config;
             TelegramMonitor = telegramMonitor;
+            Logger = logger ?? ModBus.Logger;
         }
+
+        protected ILogger Logger { get; }
         
 
         public bool Close()
@@ -320,7 +323,7 @@ namespace P3.Driver.ModBusDriver.Slave
                         throw new GatewayPathUnavailableException();
                     }
 
-                    ModBus.Logger.LogHexIn(header.ToArray().Concat(frame.ToArray()).ToArray());
+                    Logger.LogHexIn(header.ToArray().Concat(frame.ToArray()).ToArray());
 
                     if (ReadOnly && IsWriteFunction(functionCode))
                     {
@@ -430,7 +433,7 @@ namespace P3.Driver.ModBusDriver.Slave
 
                     var resp = CreateResponseFrame(data, header);
 
-                    ModBus.Logger.LogHexOut(resp);
+                    Logger.LogHexOut(resp);
 
                     TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "SLAVE", deviceId.ToString(), Utils.ByteArrayToString(resp), "");
 
@@ -443,7 +446,7 @@ namespace P3.Driver.ModBusDriver.Slave
                 }
                 catch (Exception e)
                 {
-                    ModBus.Logger.LogError(e, $"Error notifying register change {e}");
+                    Logger.LogError(e, $"Error notifying register change {e}");
                 }
                 return response;
             }
@@ -452,7 +455,7 @@ namespace P3.Driver.ModBusDriver.Slave
                 var ex = modBusException.Serialize((ModBusFunction)functionCode, deviceId);
                 var resp = CreateResponseFrame(ex, header);
 
-                ModBus.Logger.LogHexOut(resp);
+                Logger.LogHexOut(resp);
                 return resp;
             }
         }

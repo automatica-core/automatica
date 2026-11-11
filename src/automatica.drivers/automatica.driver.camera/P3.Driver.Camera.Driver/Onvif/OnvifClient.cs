@@ -209,7 +209,7 @@ namespace P3.Driver.Camera.Driver.Onvif
             }
             catch (HttpRequestException ex)
             {
-                throw new OnvifException($"{operation.LocalName}: {ex.Message}", ex);
+                throw new OnvifException($"{operation.LocalName}: {Describe(ex)}", ex);
             }
 
             using (response)
@@ -241,6 +241,23 @@ namespace P3.Driver.Camera.Driver.Onvif
                 }
                 return body ?? throw new OnvifException($"{operation.LocalName}: empty SOAP response");
             }
+        }
+
+        /// <summary>
+        /// The message of the exception and of its inner exceptions: HttpClient only says "An error occurred while sending
+        /// the request", the reason (connection reset, response ended prematurely, ...) is in the inner exception.
+        /// </summary>
+        internal static string Describe(Exception ex)
+        {
+            var messages = new List<string>();
+            for (var current = ex; current != null; current = current.InnerException)
+            {
+                if (!string.IsNullOrWhiteSpace(current.Message) && !messages.Contains(current.Message))
+                {
+                    messages.Add(current.Message);
+                }
+            }
+            return string.Join(" -> ", messages);
         }
 
         internal static XDocument BuildEnvelope(XElement request, string username, string password, DateTimeOffset created, byte[] nonce, string action, Uri to)

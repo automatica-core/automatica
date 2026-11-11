@@ -44,7 +44,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
 
         protected override string GetUrl()
         {
-            return "https://api.diadata.org/v1/assetQuotation/Cardano/0x000000000000000000000000000000000000000";
+            return "https://api.diadata.org/v1/assetQuotation/Cardano/0x0000000000000000000000000000000000000000";
         }
     }
 }
