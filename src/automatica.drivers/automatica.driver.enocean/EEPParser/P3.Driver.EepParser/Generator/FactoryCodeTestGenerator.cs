@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using P3.Driver.EepParser.Model;
 
@@ -10,14 +9,13 @@ namespace P3.Driver.EepParser.Generator
 {
     public static class FactoryCodeTestGenerator
     {
-        public static string GenerateTests(IList<Rorg> rorgs, Dictionary<string, Tuple<long, long>> rangeRefs)
+        public static string GenerateTests(IList<Rorg> rorgs, Dictionary<string, Tuple<long, long>> rangeRefs, string testDir)
         {
-            string corePath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
             var ret = new StringBuilder();
             foreach (var rorg in rorgs)
             {
                 ret.AppendLine();
-                ret.AppendLine($"// AUTO GENERATED {DateTime.Now}");
+                ret.AppendLine(FactoryCodeGenerator.GeneratedHeader);
                 ret.AppendLine($"//-------------------------");
                 ret.AppendLine($"//-------------------------");
                 ret.AppendLine($"// {rorg.Number} -------------------");
@@ -31,6 +29,10 @@ namespace P3.Driver.EepParser.Generator
                     {
                         foreach (var dataField in type.DataFields.Values)
                         {
+                            if (dataField.Guid == Guid.Empty)
+                            {
+                                continue;
+                            }
                             var dataFieldTest = String.Format(FactoryCodeGeneratorTemplates.TestDataFieldDefaultProps,
                                 rorg.Number.Replace("0x", ""), func.Number.Replace("0x", ""),
                                 type.Number.Replace("0x", ""), dataField.ShortCut, dataField.Offset, dataField.Length);
@@ -81,11 +83,8 @@ namespace P3.Driver.EepParser.Generator
                     rorg.Number.Replace("0x", ""), ret);
 
 
-                using (StreamWriter sw = new StreamWriter(Path.Combine(corePath,
-                    String.Format(" DriverFactoryRorg{0}Tests.cs", rorg.Number.Replace("0x", "")))))
-                {
-                    sw.Write(fileStr);
-                }
+                FactoryCodeGenerator.WriteSource(Path.Combine(testDir,
+                    String.Format("DriverFactoryRorg{0}Tests.cs", rorg.Number.Replace("0x", ""))), fileStr);
 
                 ret.Clear();
             }

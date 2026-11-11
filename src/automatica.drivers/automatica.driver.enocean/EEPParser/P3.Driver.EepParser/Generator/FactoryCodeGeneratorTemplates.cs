@@ -5,9 +5,7 @@
 
         public static readonly string ClassNameTemplate = @"
         using System;
-        using System.Collections.Generic;
         using System.Diagnostics.CodeAnalysis;
-        using System.Text;
         using Automatica.Core.Base.Templates;
         using Automatica.Core.EF.Models;
         using P3.Driver.EnOcean.DriverFactory.Templates;
@@ -148,10 +146,7 @@
         }}";
 
         public static readonly string TestClassTemplate = @"
-            using System;
-            using System.Collections.Generic;
-            using System.Text;
-            using Automatica.Core.UnitTests.Drivers;
+            using Automatica.Core.UnitTests.Base.Drivers;
             using Xunit;
 
             namespace P3.Driver.EnOcean.DriverFactory.Tests

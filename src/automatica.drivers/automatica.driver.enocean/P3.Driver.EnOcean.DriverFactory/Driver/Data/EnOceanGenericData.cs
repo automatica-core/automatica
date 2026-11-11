@@ -11,6 +11,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
         {
         }
 
+        /// <summary>
+        /// The two-state enum mapping (first range = false, second range = true) only applies to fields whose
+        /// enum really has two states. Nodes created by older driver versions carry the enum properties on
+        /// multi-state fields as well (e.g. A5-10 fan speed), the template decides.
+        /// </summary>
+        private bool UseBoolEnum => !Template.HasValue || EnOceanEepMetadata.IsBoolEnum(Template.Value);
+
         public override void TelegramReceived(RadioErp1Packet telegram)
         {
             var data = GetValueGeneric(telegram);
@@ -19,7 +26,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
 
             if (data != null)
             {
-                if (data is int dataInt && EnumFirstMax.HasValue && EnumFirstMin.HasValue && EnumSecondMax.HasValue && EnumSecondMin.HasValue)
+                if (data is int dataInt && UseBoolEnum && EnumFirstMax.HasValue && EnumFirstMin.HasValue && EnumSecondMax.HasValue && EnumSecondMin.HasValue)
                 {
                     if (dataInt >= EnumFirstMin && dataInt <= EnumFirstMax)
                     {

@@ -13,6 +13,11 @@ namespace P3.Driver.EepParser.Model
 
         public Dictionary<string, DataField> DataFields { get; set; }
 
+        /// <summary>
+        /// Data field values a telegram must carry to belong to this case (e.g. D2-01 CMD = 0x4), empty = every telegram.
+        /// </summary>
+        public List<CaseCondition> Conditions { get; } = new List<CaseCondition>();
+
         public Type(Function parent, string number)
         {
             Parent = parent;
@@ -24,5 +29,17 @@ namespace P3.Driver.EepParser.Model
         {
             return $"{Parent.Parent.Number}_{Parent.Number}_{Number}";
         }
+    }
+
+    public class CaseCondition
+    {
+        public int Offset { get; set; }
+        public int Length { get; set; }
+        public long Value { get; set; }
+
+        public override bool Equals(object obj) =>
+            obj is CaseCondition c && c.Offset == Offset && c.Length == Length && c.Value == Value;
+
+        public override int GetHashCode() => (Offset, Length, Value).GetHashCode();
     }
 }

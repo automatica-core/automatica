@@ -23,7 +23,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Simulated
                     await Driver.SendTelegram(dg);
                     await Task.Delay(150);
 
-                    dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x00 }));
+                    dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x00 }), RadioErp1Packet.StatusRpsReleased);
                     await Driver.SendTelegram(dg);
                     await writeContext.DispatchValue(value, token);
                 }
@@ -34,7 +34,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Simulated
                     await Driver.SendTelegram(dg);
                     await Task.Delay(150);
 
-                    dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x20 }));
+                    dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x00 }), RadioErp1Packet.StatusRpsReleased);
                     await Driver.SendTelegram(dg);
                     await writeContext.DispatchValue(value, token);
                 }

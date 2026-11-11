@@ -1,4 +1,8 @@
-﻿using Automatica.Core.Driver;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Automatica.Core.EF.Models;
+using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Data;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
@@ -11,6 +15,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
     public class EnOceanTypeNode : EnOceanBaseNode<EnOceanDataNode>
     {
         private string _serial;
+        private IReadOnlyList<EepCondition> _conditions = Array.Empty<EepCondition>();
 
         public EnOceanTypeNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
@@ -19,6 +24,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         public override Task<bool> Init(CancellationToken token = default)
         {
             _serial = GetProperty("enocean-serialnumber").ValueString;
+            _conditions = EnOceanEepMetadata.GetConditions(DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty);
             TeachInManager.SetTeachedIn(_serial);
             return base.Init(token);
         }
@@ -41,6 +47,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 {
                     DriverContext.Logger.LogDebug($"Teach-in telegram received for {_serial}, values are not dispatched");
                 }
+                else if (!EnOceanEepMetadata.Matches(_conditions, telegram.Data.Span))
+                {
+                    // a multi-message profile (e.g. D2-01 CMD 0x4 status vs. CMD 0x7 measurement): the telegram
+                    // belongs to another case of the profile and would be decoded with the wrong layout
+                    DriverContext.Logger.LogDebug($"Telegram for {_serial} belongs to another case of the profile, ignored");
+                    return;
+                }
 
                 foreach (var child in ChildrenT)
                 {
@@ -59,7 +72,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 return new EnOceanLrnBit(ctx, TeachInManager);
             }
-            if (ctx.NodeInstance.This2NodeTemplateNavigation.Key == "enocean-shortcut-CO")
+            // D5-00-01 contact; CO in D2-14-31 is a gas concentration and decoded generically
+            if (ctx.NodeInstance.This2NodeTemplateNavigation.Key == "enocean-shortcut-CO" && IsSingleBit(ctx.NodeInstance))
             {
                 return new EnOceanCoBit(ctx, TeachInManager);
             }
@@ -68,6 +82,12 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 return new EnOceanWinData(ctx, TeachInManager);
             }
             return new EnOceanGenericData(ctx, TeachInManager);
+        }
+
+        private static bool IsSingleBit(NodeInstance node)
+        {
+            var length = node.PropertyInstance.FirstOrDefault(p => p.This2PropertyTemplateNavigation?.Key == "enocean-length");
+            return length?.Value != null && Convert.ToInt32(length.Value) == 1;
         }
     }
 }

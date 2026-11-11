@@ -32,10 +32,25 @@ namespace P3.Driver.EnOcean.Data.Packets
            
         }
 
-        public RadioErp1Packet(Rorg rorg, ReadOnlyMemory<byte> packet)
+        /// <summary>
+        /// Status byte for sent RPS telegrams: T21 = 1 and NU = 1, i.e. a rocker press (PTM2xx).
+        /// </summary>
+        public const byte StatusRpsPressed = 0x30;
+
+        /// <summary>
+        /// Status byte for sent RPS telegrams: T21 = 1 and NU = 0, i.e. a rocker release (PTM2xx).
+        /// </summary>
+        public const byte StatusRpsReleased = 0x20;
+
+        public RadioErp1Packet(Rorg rorg, ReadOnlyMemory<byte> packet) : this(rorg, packet, StatusRpsPressed)
+        {
+        }
+
+        public RadioErp1Packet(Rorg rorg, ReadOnlyMemory<byte> packet, byte status)
         {
             Data = packet;
             Rorg = rorg;
+            Status = status;
         }
 
         public Rorg Rorg { get; private set; }
@@ -126,7 +141,7 @@ namespace P3.Driver.EnOcean.Data.Packets
             data.AddRange(Data.Span.ToArray()); //TODO: Change to Packet function
             //source id
             data.AddRange(_idBase.ToArray());
-            data.Add(0x30);
+            data.Add(Status);
 
             var optionalData = new List<byte>();
             //optional data

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -28,6 +29,17 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         public long? EnumSecondMin { get; set; }
         public long? EnumSecondMax { get; set; }
 
+        /// <summary>
+        /// The node template of this data point, null for nodes without a template.
+        /// </summary>
+        protected Guid? Template { get; private set; }
+
+        /// <summary>
+        /// Segmented scale (e.g. D2-14 temperature 0..250 = -40..+60 °C, 251..255 = error codes), null if the
+        /// field scales with range/scale or not at all.
+        /// </summary>
+        internal IReadOnlyList<EepScaleSegment> ScaleSegments { get; set; }
+
 
         protected EnOceanDataNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
@@ -46,6 +58,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         {
             BitOffs = GetPropertyValueInt("enocean-bitoffset");
             Length = GetPropertyValueInt("enocean-length");
+            Template = DriverContext.NodeInstance?.This2NodeTemplate;
+            ScaleSegments = Template.HasValue ? EnOceanEepMetadata.GetScaleSegments(Template.Value) : null;
             try
             {
                 var rangeMinProp = GetProperty("enocean-range-min");
@@ -73,8 +87,12 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 }
 
                 // a degenerate range/scale (e.g. A5-12 MR: scale 0..0, real scaling depends on DIV/DT)
-                // would map every value to ScaleMin - treat it as "no scale" and dispatch the raw value
-                if (UseRange && UseScale && RangeMax != RangeMin && !ScaleMax.Equals(ScaleMin))
+                // would map every value to ScaleMin - treat it as "no scale" and dispatch the raw value.
+                // A range the field cannot hold belongs to a value split over several fields (A5-13-06 LAT(LSB),
+                // D2-01 MD_LSB/MD_MSB): scaling one part gives a wrong value, the part is dispatched raw.
+                var fieldMax = Length >= 63 ? long.MaxValue : (1L << Length) - 1;
+                if (UseRange && UseScale && RangeMax != RangeMin && !ScaleMax.Equals(ScaleMin) &&
+                    Math.Max(RangeMin, RangeMax) <= fieldMax)
                 {
                     Multiplier = (ScaleMax - ScaleMin) / (RangeMax - RangeMin);
                 }
@@ -144,6 +162,20 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             if (Length == 1)
             {
                 return raw.Value == 1;
+            }
+
+            if (ScaleSegments != null)
+            {
+                foreach (var segment in ScaleSegments)
+                {
+                    if (segment.Contains(raw.Value))
+                    {
+                        return segment.Scale(raw.Value);
+                    }
+                }
+
+                // a status code (e.g. "sensor error", "not available") - no measurement value
+                return null;
             }
 
             return ScaleMinMax(raw.Value);

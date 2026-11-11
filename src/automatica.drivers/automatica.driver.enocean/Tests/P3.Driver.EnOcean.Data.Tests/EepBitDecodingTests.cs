@@ -181,8 +181,9 @@ namespace P3.Driver.EnOcean.Data.Tests
             driver.TelegramReceived(Radio(Rorg.Vld, payload, "05123456"));
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
-            Assert.Equal(0x5A, values[tmp.ObjId].Value);
-            Assert.Equal(0xC3, values[hum.ObjId].Value);
+            // TMP8 0..250 => 0..50 °C, HUM 0..200 => 0..100 % (EEP enum segments)
+            Assert.Equal(0x5A * 50.0 / 250, (double)values[tmp.ObjId].Value, 6);
+            Assert.Equal(0xC3 * 100.0 / 200, (double)values[hum.ObjId].Value, 6);
         }
 
         [Fact]
