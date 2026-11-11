@@ -123,6 +123,8 @@ export class LogicEditorInstanceService {
         this.convertPages(pages);
         this.convertConfig(instances);
         this.convertLogicNodeInstances(logicNodeInstances);
+        // a reload (paste, scan, import, a failed save) brings a new row list, the tree only reads it on a refresh
+        this.treeChanged.emit();
     }
 
     convertPages(pages: RulePage[]) {
@@ -226,7 +228,23 @@ export class LogicEditorInstanceService {
         for (const id of removed) {
             this._nodeInstanceMap.delete(id);
         }
+        this.removeFromPages(removed);
         this.treeChanged.emit();
+    }
+
+    /** the server removed the deleted nodes' data points from the logic pages, with their links; the open pages drop them too */
+    private removeFromPages(removedNodeIds: Set<string>) {
+        for (const page of this._logicPages ?? []) {
+            const dataPoints = (page.NodeInstances ?? []).filter(a => removedNodeIds.has(a.This2NodeInstance));
+            if (dataPoints.length === 0) {
+                continue;
+            }
+            const dataPointIds = new Set(dataPoints.map(a => a.ObjId));
+            page.NodeInstances = page.NodeInstances.filter(a => !dataPointIds.has(a.ObjId));
+            page.Links = (page.Links ?? []).filter(a =>
+                !dataPointIds.has(a.This2NodeInstance2RulePageInput) && !dataPointIds.has(a.This2NodeInstance2RulePageOutput));
+            this.logicEngineService.reInit.emit(page);
+        }
     }
 
     public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstanceOrLogicNodeInstance[]) {

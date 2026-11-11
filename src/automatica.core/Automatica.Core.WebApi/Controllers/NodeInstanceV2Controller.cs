@@ -511,12 +511,19 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<IActionResult> DeleteNode([FromBody] NodeInstance node)
         {
             NodeInstance existingNode = null;
+            var removedDataPoints = new List<NodeInstance2RulePage>();
+            var removedLinks = new List<Link>();
+            var logicsToReload = new HashSet<Guid>();
             var strategy = DbContext.Database.CreateExecutionStrategy();
             try
             {
                 await strategy.ExecuteAsync(async
                     () =>
                 {
+                    removedDataPoints.Clear();
+                    removedLinks.Clear();
+                    logicsToReload.Clear();
+
                     await using var transaction = await DbContext.Database.BeginTransactionAsync();
                     existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
                         .SingleOrDefault(a => a.ObjId == node.ObjId);
@@ -526,6 +533,14 @@ namespace Automatica.Core.WebApi.Controllers
                         // nothing to delete, the transaction is disposed (rolled back)
                         return;
                     }
+
+                    // the node (or one of its children) placed on logic pages: that foreign key does not cascade, the delete
+                    // failed for every data point that was on a logic page. The data points go with their links, as when they
+                    // are removed in the logic editor
+                    RemoveFromLogicPages(existingNode.ObjId, removedDataPoints, removedLinks, logicsToReload);
+                    // saved before the node: the children go by the database cascade, EF does not know they are referenced
+                    // and could delete the node first
+                    await DbContext.SaveChangesAsync();
 
                     DbContext.Entry(existingNode).State = EntityState.Deleted;
 
@@ -544,6 +559,8 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 return NotFound();
             }
+
+            await UnloadRemovedLogicItems(removedDataPoints, removedLinks, logicsToReload);
 
             try
             {
@@ -580,6 +597,94 @@ namespace Automatica.Core.WebApi.Controllers
             }
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Marks the logic page data points of the node and of all nodes below it, and the links to them, as removed in the context
+        /// </summary>
+        private void RemoveFromLogicPages(Guid nodeId, List<NodeInstance2RulePage> removedDataPoints, List<Link> removedLinks, HashSet<Guid> logicsToReload)
+        {
+            var childrenOf = DbContext.NodeInstances.AsNoTracking()
+                .Where(a => a.This2ParentNodeInstance != null)
+                .Select(a => new { a.ObjId, Parent = a.This2ParentNodeInstance.Value })
+                .ToList()
+                .ToLookup(a => a.Parent, a => a.ObjId);
+
+            var nodeIds = new HashSet<Guid>();
+            var open = new Stack<Guid>();
+            open.Push(nodeId);
+            while (open.Count > 0)
+            {
+                var id = open.Pop();
+                if (nodeIds.Add(id))
+                {
+                    foreach (var child in childrenOf[id])
+                    {
+                        open.Push(child);
+                    }
+                }
+            }
+
+            removedDataPoints.AddRange(DbContext.NodeInstance2RulePages.Where(a => nodeIds.Contains(a.This2NodeInstance)).ToList());
+            if (removedDataPoints.Count == 0)
+            {
+                return;
+            }
+
+            var dataPointIds = removedDataPoints.Select(a => (Guid?)a.ObjId).ToList();
+            removedLinks.AddRange(DbContext.Links
+                .Where(a => dataPointIds.Contains(a.This2NodeInstance2RulePageInput) || dataPointIds.Contains(a.This2NodeInstance2RulePageOutput))
+                .ToList());
+
+            // the logics at the other end of the links read or write the removed data point, they are reloaded without it
+            var interfaceIds = removedLinks.SelectMany(a => new[] { a.This2RuleInterfaceInstanceInput, a.This2RuleInterfaceInstanceOutput })
+                .Where(a => a.HasValue).ToList();
+            foreach (var ruleId in DbContext.RuleInterfaceInstances.AsNoTracking()
+                         .Where(a => interfaceIds.Contains(a.ObjId)).Select(a => a.This2RuleInstance).ToList())
+            {
+                logicsToReload.Add(ruleId);
+            }
+
+            DbContext.Links.RemoveRange(removedLinks);
+            DbContext.NodeInstance2RulePages.RemoveRange(removedDataPoints);
+        }
+
+        /// <summary>
+        /// Runtime and logic caches after the commit, as the logic editor does when it removes a data point and its links
+        /// </summary>
+        private async Task UnloadRemovedLogicItems(List<NodeInstance2RulePage> removedDataPoints, List<Link> removedLinks, HashSet<Guid> logicsToReload)
+        {
+            if (removedDataPoints.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                foreach (var link in removedLinks)
+                {
+                    await _coreServer.RemoveLink(link.ObjId);
+                    await _logicCacheFacade.RemoveLink(link.ObjId);
+                }
+                _logicCacheFacade.LinkCache.Clear();
+
+                foreach (var dataPoint in removedDataPoints)
+                {
+                    _logicCacheFacade.PageCache.RemoveNodeInstance(dataPoint);
+                    await _logicCacheFacade.RemoveNodeInstance(dataPoint.ObjId);
+                }
+                _logicCacheFacade.ClearInstances();
+
+                foreach (var ruleId in logicsToReload)
+                {
+                    await _coreServer.ReloadLogic(ruleId);
+                }
+                await _coreServer.ReloadLinks();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not unload the logic page data points of a deleted node");
+            }
         }
 
         [Route("reload")]

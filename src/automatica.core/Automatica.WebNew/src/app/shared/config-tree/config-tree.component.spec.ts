@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { EventEmitter, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { L10nTranslationService } from "angular-l10n";
 import { DxContextMenuModule, DxPopoverModule, DxTooltipModule, DxTreeListModule } from "devextreme-angular";
@@ -15,6 +15,7 @@ import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-p
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 import { RulePage } from "src/app/base/model/rule-page";
+import { Link } from "src/app/base/model/link";
 import {
   FakeTranslateAsyncPipe, FakeTranslatePipe, createNotifySpy, createTranslateSpy, emitter, flushPromises, isolateLocalStorage, nextFrames
 } from "src/app/testing/test-helpers";
@@ -36,6 +37,7 @@ describe("ConfigTreeComponent rows", () => {
   let pageA: RulePage;
   let pageB: RulePage;
   let lampOnA: NodeInstance2RulePage;
+  let engine: any;
 
   function child(name: string, parent: NodeInstance) {
     const node = makeNodeInstance(name, NodeDataTypeEnum.Boolean, { parent });
@@ -59,7 +61,7 @@ describe("ConfigTreeComponent rows", () => {
       getLogicNodeInstances: jasmine.createSpy("getLogicNodeInstances").and.resolveTo([lampOnA]),
       delete: jasmine.createSpy("delete").and.resolveTo(undefined)
     };
-    const engine: any = { getPages: () => Promise.resolve([pageA, pageB]) };
+    engine = { getPages: () => Promise.resolve([pageA, pageB]), reInit: new EventEmitter<RulePage>() };
     const hub: any = { subscribeForAll: () => Promise.resolve(), dispatchValue: emitter() };
     service = new LogicEditorInstanceService(<any>{}, config, <any>{ getSettings: () => Promise.resolve([]) }, hub,
       <any>{}, <any>{ getCurrentNodeValues: () => Promise.resolve({}) }, engine);
@@ -114,6 +116,14 @@ describe("ConfigTreeComponent rows", () => {
     return component.tree.instance.getNodeByKey(id)?.parent?.key;
   }
 
+  /** "collapsed" / "expanded" for a row with children, "" for one without (no arrow) */
+  function arrow(name: string): string {
+    const row = Array.from(fixture.nativeElement.querySelectorAll(".dx-data-row"))
+      .find((a: HTMLElement) => a.querySelector(".tree-name")?.textContent.trim() === name) as HTMLElement;
+    const icon = row.querySelector(".dx-treelist-empty-space--last");
+    return icon.classList.contains("dx-treelist-collapsed") ? "collapsed" : icon.classList.contains("dx-treelist-expanded") ? "expanded" : "";
+  }
+
   it("rows_LoadedDataPoint_ShowsItsPageUnderTheNode", () => {
     expect(rows()).toEqual(["Root", "Fan", "Lamp", "A page"]);
     expect(parentKey(lampOnA.Id)).toBe(lamp.Id);
@@ -127,6 +137,29 @@ describe("ConfigTreeComponent rows", () => {
 
     expect(rows()).toEqual(["Root", "Fan", "B page", "Lamp", "A page"]);
     expect(parentKey(fanOnB.Id)).toBe(fan.Id);
+  });
+
+  it("addLogicNodeInstance_CollapsedDataPointOnItsFirstPage_GetsItsExpandArrow", async () => {
+    // the data point is collapsed and has no page yet: nothing changes in its own row but the arrow
+    component.tree.instance.collapseRow(fan.Id);
+    await settle();
+    expect(arrow("Fan")).toBe("");
+
+    service.addLogicNodeInstance(NodeInstance2RulePage.createFromNodeInstance(fan, pageB));
+    await settle();
+
+    expect(arrow("Fan")).toBe("collapsed");
+  });
+
+  it("removeLogicNodeInstance_LastPageOfTheDataPoint_TheArrowGoes", async () => {
+    component.tree.instance.collapseRow(lamp.Id);
+    await settle();
+    expect(arrow("Lamp")).toBe("collapsed");
+
+    service.removeLogicNodeInstance(lampOnA);
+    await settle();
+
+    expect(arrow("Lamp")).toBe("");
   });
 
   it("removeLogicNodeInstance_DataPointRemovedFromThePage_RemovesTheRowRightAway", async () => {
@@ -170,6 +203,41 @@ describe("ConfigTreeComponent rows", () => {
     expect(rows()).toEqual(["Root", "Fan"]);
     expect(service.getLogicNodeInstance(lampOnA.Id)).toBeUndefined();
     expect(service.hasNodeInstance(lamp.Id)).toBeFalse();
+  });
+
+  it("deleteItem_DataPointOnAnOpenPage_LeavesThePageWithItsLinks", async () => {
+    // the page's own objects (the canvas), loaded apart from the tree's rows
+    const lampOnCanvas = makeDataPoint(pageA, lamp);
+    const fanOnCanvas = makeDataPoint(pageA, fan);
+    pageA.NodeInstances = [lampOnCanvas, fanOnCanvas];
+    const lampToFan = new Link();
+    lampToFan.This2NodeInstance2RulePageOutput = lampOnCanvas.ObjId;
+    lampToFan.This2NodeInstance2RulePageInput = fanOnCanvas.ObjId;
+    const fanToLogic = new Link();
+    fanToLogic.This2NodeInstance2RulePageOutput = fanOnCanvas.ObjId;
+    fanToLogic.This2RuleInterfaceInstanceInput = "logic-input";
+    pageA.Links = [lampToFan, fanToLogic];
+    const reInit = spyOn(engine.reInit, "emit");
+
+    await component.deleteItem(lamp);
+    await settle();
+
+    expect(pageA.NodeInstances).toEqual([fanOnCanvas]);
+    expect(pageA.Links).toEqual([fanToLogic]);
+    expect(reInit).toHaveBeenCalledOnceWith(pageA);
+  });
+
+  it("deleteItem_ServerRefusesTheDelete_TheDataPointStaysOnThePage", async () => {
+    const lampOnCanvas = makeDataPoint(pageA, lamp);
+    pageA.NodeInstances = [lampOnCanvas];
+    config.delete.and.rejectWith(new Error("500"));
+    config.getNodeInstances.and.resolveTo([root]);
+
+    await component.deleteItem(lamp);
+    await settle();
+
+    expect(pageA.NodeInstances).toEqual([lampOnCanvas]);
+    expect(rows()).toContain("Lamp");
   });
 
   it("destroyed_ChangesAfterwards_DoNotTouchTheTree", async () => {

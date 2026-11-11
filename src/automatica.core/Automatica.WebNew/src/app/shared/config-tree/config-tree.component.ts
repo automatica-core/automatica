@@ -416,7 +416,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   public refreshTree() {
     // OnPush: the new row list only reaches the tree list's dataSource binding with a change detection
     this.changeRef.detectChanges();
-    this.tree?.instance?.refresh(true);
+    // a full refresh: refresh(true) only repaints rows whose own data changed, a data point that gets its first (or loses
+    // its last) logic page row kept its row without (or with) the expand arrow, and the page row could not be opened
+    this.tree?.instance?.refresh();
   }
 
   allowDrop(dropTarget: ITreeNode) {
