@@ -261,8 +261,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       page.removeNodeInstance(item.ObjId);
       $event.removed = true;
       await this.ruleEngineService.removeItem(item);
+      // the config tree refreshes on the service's treeChanged
       this.nodeInstanceService.removeLogicNodeInstance(item);
-      this.configTree.refreshTree();
     }
 
   }
@@ -313,21 +313,23 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async onLogicNodeInstanceRemoved(item: NodeInstance2RulePage) {
-    const page = item.RulePage;
-    page.NodeInstances = page.NodeInstances.filter(a => a.ObjId !== item.ObjId);
-    this.pages.filter(a => a.ObjId === page.ObjId)[0].NodeInstances = page.NodeInstances;
-
-    this.ruleEngineService.reInit.emit(page);
+    // the page by id: item.RulePage can be another object than the page shown in the editor (data points placed on a page
+    // used to carry an empty copy of it, which replaced all data points of the page)
+    const page = this.pages.find(a => a.ObjId === item.This2RulePage) ?? item.RulePage;
+    if (page) {
+      page.removeNodeInstance(item.ObjId);
+      this.ruleEngineService.reInit.emit(page);
+    }
 
     await this.ruleEngineService.removeItem(item);
     this.nodeInstanceService.removeLogicNodeInstance(item);
-    this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: item.RulePage });
+    this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: page });
   }
 
   async delete() {
     try {
       if (this.selectedItem instanceof NodeInstance2RulePage) {
-        this.onLogicNodeInstanceRemoved(this.selectedItem);
+        await this.onLogicNodeInstanceRemoved(this.selectedItem);
       } else if (this.selectedItem instanceof RuleInstance) {
         const selectedPage = this.selectedPage;
         selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
@@ -405,7 +407,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       await this.pagesDataSource.reload();
 
-      this.configTree.refreshTree();
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
@@ -477,8 +478,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         });
 
         this.nodeInstanceService.addLogicNodeInstance(node);
-
-        this.configTree.refreshTree();
       }
     }
     catch (error) {

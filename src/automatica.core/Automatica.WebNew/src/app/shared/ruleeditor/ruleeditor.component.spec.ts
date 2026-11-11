@@ -1996,10 +1996,10 @@ describe("RuleEditorComponent", () => {
       expect(dp.This2RulePage).toBe(page.ObjId);
       expect(dp.X).toBe(200);
       expect(dp.Y).toBe(100);
-      expect(dp.RulePage).not.toBe(page);
-      expect(dp.RulePage.ObjId).toBe(page.ObjId);
-      expect(dp.RulePage.NodeInstances).toEqual([]);
-      expect(dp.RulePage.RuleInstances).toEqual([]);
+      // the page itself, not a copy: the config tree shows its name and removes the data point from it
+      expect(dp.RulePage).toBe(page);
+      // the page is not sent along, it lists the data point and would recurse
+      expect(dp.toJson()["This2RulePageNavigation"]).toBeUndefined();
       expect(engine.addItem).toHaveBeenCalledOnceWith({ data: dp, pageId: page.ObjId });
       expect(instances.addLogicNodeInstance).toHaveBeenCalledOnceWith(dp);
 

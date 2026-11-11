@@ -125,6 +125,8 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, 
         nd.ObjId = Guid.MakeNew().ToString();
         nd.This2NodeInstance = nodeInstance.ObjId;
         nd.This2RulePage = rulePage.ObjId;
+        // the config tree lists the data point under its node with the page name
+        nd.RulePage = rulePage;
         nd.NodeInstance = nodeInstance;
         nd.afterFromJson();
         return nd;
@@ -210,6 +212,14 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, 
 
     get ToMaxLinks(): number {
         return 1;
+    }
+
+    /**
+     * The page is never sent along: the server takes the page from the url (and ignores the navigation), and the page
+     * lists this data point in its NodeInstances, so serializing it would recurse without end.
+     */
+    protected useBaseModelInstanceForJson(model: BaseModel): boolean {
+        return !(model instanceof RulePage);
     }
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {

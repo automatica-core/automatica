@@ -525,6 +525,42 @@ describe("LogicEditorComponent", () => {
       expect(pageB.NodeInstances.length).toBe(1);
       expect(engine.addItem.calls.mostRecent().args[0].pageId).toBe(pageB.ObjId);
     });
+
+    it("drop_DataPoint_BelongsToThePageItself", async () => {
+      drop(makeNodeInstance("Lamp", NodeDataTypeEnum.Boolean));
+      await flushPromises();
+
+      const dp = pageA.NodeInstances[0];
+      // the tree row shows dp.RulePage.Name: a copy kept the old name after a rename
+      expect(dp.RulePage).toBe(pageA);
+      // the page is not sent along (the page lists the data point, that would recurse)
+      const json: any = dp.toJson();
+      expect(json.This2RulePageNavigation).toBeUndefined();
+      expect(json.This2RulePage).toBe(pageA.ObjId);
+      expect(() => JSON.stringify(pageA.toJson())).not.toThrow();
+    });
+
+    it("drop_ThenDeletedInTheTree_OnlyThatDataPointLeavesThePage", async () => {
+      const lamp = makeNodeInstance("Lamp", NodeDataTypeEnum.Boolean);
+      const fan = makeNodeInstance("Fan", NodeDataTypeEnum.Boolean);
+      drop(lamp);
+      await flushPromises();
+      drop(fan);
+      await flushPromises();
+      fixture.detectChanges();
+      const [lampDp, fanDp] = pageA.NodeInstances;
+
+      // the tree's context menu "delete" on the lamp's page row
+      configTree().onLogicNodeInstanceRemoved.emit(lampDp);
+      await flushPromises();
+      fixture.detectChanges();
+
+      // the page used to get the (empty) data points of a page copy: every data point vanished from the canvas
+      expect(pageA.NodeInstances).toEqual([fanDp]);
+      expect(engine.removeItem).toHaveBeenCalledOnceWith(lampDp);
+      expect(instances.removeLogicNodeInstance).toHaveBeenCalledOnceWith(lampDp);
+      expect(Array.from(fixture.nativeElement.querySelectorAll(".node.dp .name")).map((a: any) => a.textContent.trim())).toEqual(["Fan"]);
+    });
   });
 
   // ---------------------------------------------------------------------------------------------
@@ -657,7 +693,7 @@ describe("LogicEditorComponent", () => {
       expect(engine.addItem).toHaveBeenCalledOnceWith({ data: rule, pageId: pageA.ObjId });
     });
 
-    it("add_NodeInstance_AddsADataPointAndRefreshesTheTree", async () => {
+    it("add_NodeInstance_AddsADataPointAndHandsItToTheTree", async () => {
       const ni = makeNodeInstance("Lamp", NodeDataTypeEnum.Boolean);
 
       await component.add(ni, pageA);
@@ -667,7 +703,8 @@ describe("LogicEditorComponent", () => {
       expect(dp.NodeInstance).toBe(ni);
       expect(engine.addItem).toHaveBeenCalledOnceWith({ data: dp, pageId: pageA.ObjId });
       expect(instances.addLogicNodeInstance).toHaveBeenCalledOnceWith(dp);
-      expect(configTree().refreshTree).toHaveBeenCalled();
+      // the tree reads its rows again on the instance service's treeChanged (config-tree.component.spec)
+      expect(configTree().refreshTree).not.toHaveBeenCalled();
     });
 
     it("add_ServerFails_ReportsTheError", async () => {
@@ -742,7 +779,8 @@ describe("LogicEditorComponent", () => {
       expect(event.removed).toBeTrue();
       expect(engine.removeItem).toHaveBeenCalledOnceWith(dp);
       expect(instances.removeLogicNodeInstance).toHaveBeenCalledOnceWith(dp);
-      expect(configTree().refreshTree).toHaveBeenCalled();
+      // the tree reads its rows again on the instance service's treeChanged (config-tree.component.spec)
+      expect(configTree().refreshTree).not.toHaveBeenCalled();
     });
 
     it("removeSelectedItem_DeleteInTheEditor_RemovesTheRule", async () => {
@@ -808,7 +846,8 @@ describe("LogicEditorComponent", () => {
       expect(component.pages.map(a => a.Name)).toEqual(["B page", "C page"]);
       expect(component.selectedPage).toBeUndefined();
       expect(component.selectedItem).toBeUndefined();
-      expect(configTree().refreshTree).toHaveBeenCalled();
+      // the tree reads its rows again on the instance service's treeChanged (config-tree.component.spec)
+      expect(configTree().refreshTree).not.toHaveBeenCalled();
       expect(tabs().map(a => a.textContent.trim())).toEqual(["B page", "C page"]);
       expect(editors().length).toBe(0);
       expect(TestBed.inject(AppService).isLoading).toBeFalse();

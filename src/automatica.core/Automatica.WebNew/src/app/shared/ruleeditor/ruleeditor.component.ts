@@ -1205,11 +1205,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     node.X = point.x;
     node.Y = point.y;
 
-    const copyRulePage = <RulePage>this.page.copy();
-    copyRulePage.NodeInstances = [];
-    copyRulePage.RuleInstances = [];
-    node.RulePage = copyRulePage;
-
+    // node.RulePage is this page itself (not a copy): the config tree shows its current name and removing the data point
+    // from the tree removes it from this page
     this.page.NodeInstances.push(node);
 
     try {

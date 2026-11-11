@@ -17,7 +17,6 @@ import { LogicEditorInstanceService } from "src/app/services/logic-editor-instan
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
-import { LogicEngineService } from "src/app/services/logicengine.service";
 
 @Component({
     selector: "p3-config-tree",
@@ -89,7 +88,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     private notify: NotifyService,
     private hub: DataHubService,
     appService: AppService,
-    private logicEngineService: LogicEngineService,
     private changeRef: ChangeDetectorRef,
     private ngZone: NgZone) {
 
@@ -116,9 +114,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         this.changeRef.detectChanges();
       });
 
-      super.registerEvent(this.logicEngineService.add, () => {
-        this.changeRef.detectChanges();
-        this.tree.instance.refresh(true);
+      // data points placed on or removed from a logic page (and deleted nodes) change the rows. The logic editor does most
+      // of these, the tree has to read its rows again. Listening to the engine's add event was too early: it fires before
+      // the data point is saved and in the list, so a new data point only showed up after a reload.
+      super.registerEvent(this.nodeInstanceService.treeChanged, () => {
+        this.scheduleRowsChanged();
       });
 
     } catch (error) {
@@ -141,6 +141,21 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   private treeRefreshTimer: any;
+  private rowsChangedQueued = false;
+
+  /** several rows change at once when a page is deleted, one refresh for all of them */
+  private scheduleRowsChanged() {
+    if (this.rowsChangedQueued) {
+      return;
+    }
+    this.rowsChangedQueued = true;
+    queueMicrotask(() => {
+      this.rowsChangedQueued = false;
+      if (!this.destroyed) {
+        this.refreshTree();
+      }
+    });
+  }
 
   /**
    * Repaints the tree at most every 500ms, a busy bus pushes far more values than that.
@@ -399,8 +414,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public refreshTree() {
+    // OnPush: the new row list only reaches the tree list's dataSource binding with a change detection
     this.changeRef.detectChanges();
-    this.tree.instance.refresh(true);
+    this.tree?.instance?.refresh(true);
   }
 
   allowDrop(dropTarget: ITreeNode) {

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { ConfigService } from "./config.service";
 import { NodeInstance, ValueSource } from "../base/model/node-instance";
@@ -32,6 +32,12 @@ export class LogicEditorInstanceService {
 
     private _rootNode: NodeInstance;
     private _logicPageMap: Map<string, RulePage>;
+
+    /**
+     * Fired after the rows of the config tree changed (a data point placed on or removed from a logic page, a node deleted).
+     * The tree only re-reads its rows on a refresh, and most of these changes come from the logic editor, not from the tree.
+     */
+    public readonly treeChanged = new EventEmitter<void>();
 
     public get rootNode(): NodeInstance {
         return this._rootNode;
@@ -143,7 +149,9 @@ export class LogicEditorInstanceService {
 
     public addLogicNodeInstance(node: NodeInstance2RulePage) {
         this._logicNodeInstance.set(node.Id, node);
-        this._nodeInstanceList.push(node);
+        // a new list: the tree is bound to it and only sees a new reference
+        this._nodeInstanceList = [...this._nodeInstanceList.filter(a => a.Id !== node.Id), node];
+        this.treeChanged.emit();
     }
 
     updateNodeInstance(nodeInstance: NodeInstance) {
@@ -193,11 +201,32 @@ export class LogicEditorInstanceService {
         this._nodeInstanceList = this._nodeInstanceList.filter(a => a.Id !== item.Id);
         if (this._logicNodeInstance.has(item.Id))
             this._logicNodeInstance.delete(item.Id);
+        this.treeChanged.emit();
     }
 
+    /** a deleted node takes its children and the logic page rows below them along, the server deleted them too */
     public removeItem(node: ITreeNode) {
-        this._nodeInstanceList = this._nodeInstanceList.filter(a => a.Id !== node.Id);
-        this._nodeInstanceMap.delete(node.Id);
+        const removed = new Set<string>();
+        const collect = (n: ITreeNode) => {
+            removed.add(n.Id);
+            for (const child of n.Children ?? []) {
+                collect(child);
+            }
+        };
+        collect(node);
+
+        for (const a of this._nodeInstanceList) {
+            if (a instanceof NodeInstance2RulePage && removed.has(a.This2NodeInstance)) {
+                removed.add(a.Id);
+                this._logicNodeInstance?.delete(a.Id);
+            }
+        }
+
+        this._nodeInstanceList = this._nodeInstanceList.filter(a => !removed.has(a.Id));
+        for (const id of removed) {
+            this._nodeInstanceMap.delete(id);
+        }
+        this.treeChanged.emit();
     }
 
     public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstanceOrLogicNodeInstance[]) {
