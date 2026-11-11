@@ -15,8 +15,8 @@ RUN --mount=type=secret,id=devexpress_license,target=/root/.config/DevExpress/De
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
-# update and install in one layer: a cached "apt-get update" layer on its own leaves the install without a package index
-RUN apt-get update && apt-get install -y --no-install-recommends zip net-tools && rm -rf /var/lib/apt/lists/*
+# no apt-get here: the SDK image already has curl, tar and sha256sum, and an outage of the Ubuntu
+# mirrors (DNS for archive.ubuntu.com, 2026-11-11) would otherwise stop every build
 
 ARG VERSION
 ARG CLOUD_URL
