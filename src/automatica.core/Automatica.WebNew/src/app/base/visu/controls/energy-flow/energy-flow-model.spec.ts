@@ -1,6 +1,6 @@
 import {
   ACTIVE_THRESHOLD, buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB, isRowVisible,
-  linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH
+  linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH, withPlainGroups
 } from "./energy-flow-model";
 
 describe("energy flow model", () => {
@@ -263,6 +263,41 @@ describe("energy flow model", () => {
       expect(buildBreakdown(undefined)).toEqual([]);
       expect(buildBreakdown(null)).toEqual([]);
       expect(buildBreakdown({} as any)).toEqual([]);
+    });
+
+    describe("meters without circuits", () => {
+      const none = { present: false };
+
+      it("adds every present consumer without circuits as a plain group, sorted with the others", () => {
+        const circuits = buildBreakdown([{ group: 2, total: 1, circuits: [{ circuit: 1, power: 0.4 }] }]);
+        const groups = withPlainGroups(circuits, 0.5,
+          [{ present: true, power: 3 }, { present: true, power: 1 }, none, { present: true, power: -0.2 }, none, { present: true }]);
+
+        expect(groups.map(g => g.group)).toEqual([0, 1, 2, 4, 6]);
+        expect(groups.map(g => !!g.plain)).toEqual([true, true, false, true, true]);
+        const [house, first, , fourth, sixth] = groups;
+        expect(house.total).toBe(0.5);
+        expect(first.total).toBe(3);
+        expect(first.rows).toEqual([]);
+        expect(first.coverage).toBeUndefined();
+        // meters jitter below 0, the tile shows them as 0 as well
+        expect(fourth.total).toBe(0);
+        // present without a value: NaN, shown as "–"
+        expect(sixth.total).toBeNaN();
+      });
+
+      it("keeps the groups with circuits as they are", () => {
+        const circuits = buildBreakdown([{ group: 0, total: 1, circuits: [{ circuit: 1, power: 0.4 }] }]);
+        const [house] = withPlainGroups(circuits, 9, [none, none, none, none, none, none]);
+
+        expect(house).toBe(circuits[0]);
+      });
+
+      it("counts a consumer with a value as present and leaves out the house without a value", () => {
+        const groups = withPlainGroups([], undefined, [none, { present: false, power: 0.1 }, none, none, none, none]);
+
+        expect(groups.map(g => g.group)).toEqual([2]);
+      });
     });
 
     describe("circuits below circuits", () => {

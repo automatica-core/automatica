@@ -3,7 +3,7 @@ import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { BaseControlComponent } from "../base-control/base-control.component";
 import {
   buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, EnergyBreakdownGroup, EnergyBreakdownRow, EnergyConsumerConfig, EnergyFlowLayout,
-  EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, isRowVisible, VIEW_HEIGHT, VIEW_WIDTH
+  EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, isRowVisible, VIEW_HEIGHT, VIEW_WIDTH, withPlainGroups
 } from "./energy-flow-model";
 
 /** consumer numbers 1..6 */
@@ -46,8 +46,10 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
 
   @ViewChild(BaseControlComponent) baseControl: BaseControlComponent;
 
-  /** measured circuits of the house and the consumers, shown in the details popup */
+  /** measured circuits of the house and the consumers */
   circuitGroups: EnergyBreakdownGroup[] = [];
+  /** what the details popup lists: the groups with circuits and every other meter with its power */
+  detailsGroups: EnergyBreakdownGroup[] = [];
   private detailsTimer: any;
   /**
    * circuits whose own circuits are shown; all are closed at first. Kept by circuit number, so the refresh of the open
@@ -212,11 +214,15 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
       selfConsumptionToday: this.values.selfConsumptionToday,
       pvToday: this.values.pvToday
     };
+    const consumers = this.consumers();
     this.layout = buildEnergyFlow(values, {
       peakPower: this.peakPower,
       hasBattery: this.hasBattery || this.values.soc !== undefined,
-      consumers: this.consumers()
+      consumers
     });
+    // the popup is there for the circuits; once it is, it lists the other meters as well
+    this.detailsGroups = this.circuitGroups.length === 0 ? [] : withPlainGroups(this.circuitGroups, values.house,
+      consumers.map((c, i) => ({ present: c.present, power: values.consumers[i] })));
   }
 
   /** animations run only outside the visu editor */

@@ -84,7 +84,8 @@
     position: relative;
     flex: 1 1 auto;
     width: 100%;
-    max-width: 520px;
+    // three grid columns wide the diagram grows to this; two columns (phones, narrow sections) fill the tile
+    max-width: 480px;
     margin: 0 auto;
     aspect-ratio: 320 / 220; // 320 / 300 with the bottom consumer row, set by the component
     min-height: 0;
@@ -330,6 +331,12 @@
     gap: var(--space-4);
     color: var(--fg);
     font-family: var(--font-ui);
+}
+
+// a meter without circuits: only its head, without the line below
+.energy-group.is-plain .energy-group-head {
+    padding-bottom: 0;
+    border-bottom: 0;
 }
 
 .energy-group-head {

@@ -264,6 +264,8 @@ export interface EnergyBreakdownGroup {
   restToday?: number;
   /** % of the total the circuits measure, undefined without a total */
   coverage?: number;
+  /** a meter without circuits of its own: the popup shows only its name and power */
+  plain?: boolean;
   /** the circuit tree as rows: circuits by power, each followed by its own circuits and their rest; the group's rest last */
   rows: EnergyBreakdownRow[];
 }
@@ -361,6 +363,33 @@ export function buildBreakdown(groups: EnergyCircuitGroupData[] | null | undefin
       };
     })
     .sort((a, b) => a.group - b.group);
+}
+
+/**
+ * All groups of the details popup: the ones with circuits from {@link buildBreakdown}, plus the house and every present
+ * consumer without circuits as a plain entry with its power, so the popup lists every meter. House first, then the
+ * consumers by number.
+ */
+export function withPlainGroups(groups: EnergyBreakdownGroup[], house: number | undefined,
+  consumers: { present: boolean; power?: number }[]): EnergyBreakdownGroup[] {
+  const result = [...groups];
+  const has = new Set(groups.map(g => g.group));
+  const plain = (group: number, power: number | undefined) => {
+    // NaN while the consumer has no value yet: shown as "–"
+    const value = optional(power);
+    const total = value === undefined ? NaN : Math.max(value, 0);
+    result.push({ id: `group${group}`, group, total, measured: 0, rest: total, rows: [], plain: true });
+  };
+  if (!has.has(HOUSE_GROUP) && optional(house) !== undefined) {
+    plain(HOUSE_GROUP, house);
+  }
+  consumers.forEach((consumer, i) => {
+    const group = i + 1;
+    if (!has.has(group) && (consumer.present || optional(consumer.power) !== undefined)) {
+      plain(group, consumer.power);
+    }
+  });
+  return result.sort((a, b) => a.group - b.group);
 }
 
 /** 0.42 kW -> 420 W, 3.456 kW -> 3.46 kW, 12.3 kW -> 12.3 kW */

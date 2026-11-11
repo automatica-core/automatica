@@ -1,5 +1,5 @@
 @let interactive = pressable || hasPopup;
-<div class="tile" [class.tile-wide]="width === 2" [class.section_cell_360]="width === 2" [class.is-on]="active"
+<div class="tile" [class.tile-wide]="width >= 2" [class.section_cell_360]="width === 2" [class.section_cell_540]="width >= 3" [class.is-on]="active"
   [class.is-action]="action" [class.is-firing]="firing" [class.is-interactive]="interactive"
   [class.is-disabled]="pressable && disabled" [class.is-full]="useFullContainer" [class.has-more]="pressable && hasPopup" (contextmenu)="onContextMenu($event)">
 

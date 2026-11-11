@@ -29,7 +29,7 @@ interface SparkPath {
 })
 export class BaseControlComponent implements OnDestroy {
 
-  /** 1 = one grid column, 2 = spans two (media player) */
+  /** 1 = one grid column, 2 = spans two (media player), 3 = three where the section has them, else two (energy flow) */
   @Input()
   width: number = 1;
 

@@ -341,6 +341,35 @@ describe("EnergyFlowComponent", () => {
       expect(groups[0].querySelectorAll(".energy-row.no-value").length).toBe(1);
     });
 
+    it("lists the other meters without circuits with their power, in the order of the tile", async () => {
+      parameters.consumer2Name = "UG";
+      parameters.consumer5Name = "Heat pump";
+      visuData = {
+        "id-house": 0.363, "id-consumer2": 0.08, "id-consumer5": 1.5, hasConsumer2: true, hasConsumer3: true, hasConsumer5: true,
+        circuitGroups: [{ group: 0, total: 0.363, measured: 0.135, rest: 0.228,
+          circuits: [{ circuit: 1, name: "Washing machine", hasValue: true, power: 0.135, today: 0.02 }] }]
+      };
+      await create();
+
+      const groups = Array.from(el().querySelectorAll(".energy-group"));
+      expect(groups.map(g => g.querySelector(".energy-group-name").textContent.trim()))
+        .toEqual(["UI.VISU.ENERGY_HOUSE", "UG", "UI.VISU.ENERGY_CONSUMER", "Heat pump"]);
+      expect(groups[0].classList).not.toContain("is-plain");
+      expect(rows(groups[0]).length).toBe(2);
+
+      const plain = groups.slice(1);
+      expect(plain.every(g => g.classList.contains("is-plain"))).toBeTrue();
+      expect(plain.every(g => g.querySelector(".energy-rows") === null)).toBeTrue();
+      expect(plain[0].querySelector(".energy-group-value").textContent).toContain("80 W");
+      // present without a value yet
+      expect(plain[1].querySelector(".energy-group-value").textContent).toContain("–");
+      expect(plain[2].querySelector(".energy-group-value").textContent).toContain("1.50 kW");
+      expect(plain.every(g => g.querySelector(".energy-group-sub") === null)).toBeTrue();
+
+      push("consumer2", 0.25);
+      expect(el().querySelectorAll(".energy-group")[1].querySelector(".energy-group-value").textContent).toContain("250 W");
+    });
+
     describe("circuits below circuits", () => {
       const nested = () => [{ group: 0, total: 2, measured: 1, rest: 1, circuits: [
         { circuit: 1, name: "Kitchen", hasValue: true, power: 1, measured: 0.6, rest: 0.4, restToday: 0.2, circuits: [

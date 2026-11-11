@@ -66,6 +66,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
     gap: var(--space-3);
+    // three-wide tiles ask for the width of the grid (styles.scss)
+    container: visu-section / inline-size;
 }
 
 @media only screen and (max-width: 599.98px) {

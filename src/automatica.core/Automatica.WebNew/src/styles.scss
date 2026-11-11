@@ -195,6 +195,20 @@ app-visualization-element:has(.section_cell_360) {
     grid-column: span 2;
 }
 
+// three-wide controls (energy flow): three columns once the section grid has them (3 × 168 px + 2 × 12 px gap),
+// two before. Phones always have a two column grid, so they stay at two even when the section is wide enough.
+app-visualization-element:has(.section_cell_540) {
+    grid-column: span 2;
+}
+
+@media only screen and (min-width: 600px) {
+    @container visu-section (min-width: 528px) {
+        app-visualization-element:has(.section_cell_540) {
+            grid-column: span 3;
+        }
+    }
+}
+
 // Safe areas (status bar, notch, gesture bar). Capacitor 8 draws the app edge-to-edge and sets
 // --safe-area-inset-* on Android, iOS and newer WebViews provide env(); both are 0 in a browser.
 :root {

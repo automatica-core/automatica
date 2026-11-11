@@ -1,4 +1,4 @@
-<app-visualization-control [width]="2" [useFullContainer]="true" [showIcon]="false" [hint]="displayText" [location]="location"
+<app-visualization-control [width]="3" [useFullContainer]="true" [showIcon]="false" [hint]="displayText" [location]="location"
   [hasPopup]="hasDetails" [showIconInPopup]="false" (onPopupShowing)="onDetailsShowing()" (onPopupHiding)="onDetailsHiding()">
   <div control_full class="energy" [class.is-animated]="animate" [class.has-details]="canOpenDetails" role="group"
     [attr.aria-label]="displayText">
@@ -64,8 +64,9 @@
   </div>
 
   <div popup class="energy-details">
-    @for (group of circuitGroups; track group.id) {
-      <section class="energy-group" [attr.aria-label]="groupLabel(group)">
+    <!-- the house and the consumers; one without circuits of its own shows only its name and power -->
+    @for (group of detailsGroups; track group.id) {
+      <section class="energy-group" [class.is-plain]="group.plain" [attr.aria-label]="groupLabel(group)">
         <header class="energy-group-head">
           <span class="energy-group-ico" aria-hidden="true"><fa-icon [icon]="groupIcon(group)"></fa-icon></span>
           <span class="energy-group-text">
@@ -76,6 +77,7 @@
           </span>
           <span class="energy-group-value">{{ powerText(group.total) }}</span>
         </header>
+        @if (group.rows.length > 0) {
         <ul class="energy-rows">
           @for (row of group.rows; track row.id) {
             @if (isRowVisible(row)) {
@@ -99,6 +101,7 @@
             }
           }
         </ul>
+        }
       </section>
     }
   </div>
