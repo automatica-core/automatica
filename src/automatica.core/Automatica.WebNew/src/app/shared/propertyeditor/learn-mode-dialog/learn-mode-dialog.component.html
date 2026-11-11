@@ -21,6 +21,9 @@
               }
             </div>
             <div class="learn-card__meta">
+              @if (device.profile) {
+                <span>{{ 'LEARN_MODE.PROFILE' | translateAsync }}: {{ device.profile }}</span>
+              }
               @if (device.telegram) {
                 <span>{{ 'LEARN_MODE.TELEGRAM' | translateAsync }}: {{ device.telegram }}</span>
               }

@@ -201,6 +201,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 nodeTemplates = DriverContext.NodeTemplateFactory.GetNodeTemplates(templates.ToArray())
                     .OrderBy(a => templates.IndexOf(a.ObjId)).ToList();
+                if (nodeTemplates.Count < templates.Count)
+                {
+                    // templates are stored when DriverVersion goes up: a new template without a version bump is missing here
+                    DriverContext.Logger.LogWarning($"{templates.Count - nodeTemplates.Count} of {templates.Count} templates for {notification.Serial} are not in the database");
+                }
             }
 
             var _ = NotifyLearnNode(notification, nodeTemplates);
