@@ -25,14 +25,13 @@ namespace P3.Driver.EnOcean.Serial
             _serialPort = serialPort;
         }
 
+        // the receive path keeps reading while a command waits, it hands the RESPONSE over (see WriteFrame)
         public override void Pause()
         {
-            _stream.DataReceived -= _stream_DataReceived;
         }
 
         public override void Continue()
         {
-            _stream.DataReceived += _stream_DataReceived;
         }
 
         public override Task<bool> Open()
@@ -67,7 +66,7 @@ namespace P3.Driver.EnOcean.Serial
             {
                 var packet = await ReadFrameInternal();
 
-                if (packet != null)
+                if (packet != null && !TryCompleteResponse(packet))
                 {
                     try
                     {
@@ -122,9 +121,14 @@ namespace P3.Driver.EnOcean.Serial
         {
             try
             {
-                Logger.Logger.Instance.LogHexOut(frame.RawData);
-                _stream.Write(frame.RawData.ToArray(), 0, frame.RawData.Length);
-                return await ReadFrameInternal();
+                // no read here: the DataReceived handler is the only reader. A second reader split the answer of the
+                // stick with it (lost sync byte) and then blocked on the port, eating the start of the next telegram.
+                return await SendAndWaitForResponse(() =>
+                {
+                    Logger.Logger.Instance.LogHexOut(frame.RawData);
+                    _stream.Write(frame.RawData.ToArray(), 0, frame.RawData.Length);
+                    return Task.CompletedTask;
+                }, ResponseTimeout);
             }
             catch (Exception e)
             {

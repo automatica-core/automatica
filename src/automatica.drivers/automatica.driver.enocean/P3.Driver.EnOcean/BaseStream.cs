@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,16 @@ namespace P3.Driver.EnOcean
         /// </summary>
         private readonly Queue<byte> _pending = new Queue<byte>();
 
+        /// <summary>
+        /// ESP3: the stick answers every command within 500 ms.
+        /// </summary>
+        public static readonly TimeSpan ResponseTimeout = TimeSpan.FromSeconds(1);
+
+        // one command at a time, its RESPONSE comes through the normal receive path
+        private readonly SemaphoreSlim _requestLock = new SemaphoreSlim(1, 1);
+        private readonly object _responseLock = new object();
+        private TaskCompletionSource<EnOceanPacket> _response;
+
         public abstract event EventHandler<PacketReceivedEventArgs> TelegramReceived;
 
         public abstract Task<bool> Open();
@@ -24,6 +35,67 @@ namespace P3.Driver.EnOcean
         public abstract void Continue();
 
         protected int PendingCount => _pending.Count;
+
+        /// <summary>
+        /// Sends a command with <paramref name="write"/> and waits for its RESPONSE, which the receive path hands over
+        /// with <see cref="TryCompleteResponse"/>. Only the receive path reads from the wire, so a send started while a
+        /// telegram is being handled (the reply to a valve) does not race it for the bytes of the answer.
+        /// </summary>
+        /// <returns>the RESPONSE, or null when the stick did not answer within <paramref name="timeout"/></returns>
+        protected async Task<EnOceanPacket> SendAndWaitForResponse(Func<Task> write, TimeSpan timeout)
+        {
+            await _requestLock.WaitAsync();
+            var response = new TaskCompletionSource<EnOceanPacket>(TaskCreationOptions.RunContinuationsAsynchronously);
+            try
+            {
+                lock (_responseLock)
+                {
+                    _response = response;
+                }
+
+                await write();
+
+                var done = await Task.WhenAny(response.Task, Task.Delay(timeout));
+                if (done != response.Task)
+                {
+                    Logger.Logger.Instance.LogWarning($"No response from the EnOcean stick within {timeout.TotalMilliseconds} ms");
+                    return null;
+                }
+                return await response.Task;
+            }
+            finally
+            {
+                lock (_responseLock)
+                {
+                    if (_response == response)
+                    {
+                        _response = null;
+                    }
+                }
+                _requestLock.Release();
+            }
+        }
+
+        /// <summary>
+        /// Hands a received RESPONSE to the command waiting for it.
+        /// </summary>
+        /// <returns>true when a command took it, false for every other packet and for a RESPONSE nobody waits for</returns>
+        protected bool TryCompleteResponse(EnOceanPacket packet)
+        {
+            if (packet == null || packet.PacketType != EnOcean.PacketType.Response)
+            {
+                return false;
+            }
+
+            TaskCompletionSource<EnOceanPacket> response;
+            lock (_responseLock)
+            {
+                response = _response;
+                _response = null;
+            }
+
+            return response != null && response.TrySetResult(packet);
+        }
 
         protected bool TryTakePending(out byte value)
         {
