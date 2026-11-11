@@ -175,6 +175,38 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             return _learnedDevices;
         }
 
+        /// <summary>
+        /// Tests: the stick connection to send over (Init/Start do not open one in test mode).
+        /// </summary>
+        internal void SetTransport(P3.Driver.EnOcean.Driver driver)
+        {
+            _driver = driver;
+        }
+
+        public async Task<bool> Send(RadioErp1Packet telegram)
+        {
+            if (_driver == null)
+            {
+                DriverContext.Logger.LogWarning("EnOcean stick is not open, telegram not sent");
+                return false;
+            }
+
+            if (_driver.IdBase.Length != 4)
+            {
+                DriverContext.Logger.LogError("The id base of the EnOcean stick is unknown, telegram not sent");
+                return false;
+            }
+
+            var answer = await _driver.SendTelegram(telegram);
+            if (answer != null && answer.PacketType == EnOcean.PacketType.Response && answer.Data.Length > 0 && answer.Data.Span[0] != 0)
+            {
+                DriverContext.Logger.LogError($"EnOcean stick rejected the telegram, return code {answer.Data.Span[0]}");
+                return false;
+            }
+
+            return true;
+        }
+
         public void SetTeachedIn(string serialnumber)
         {
             if (!_teachedInDevices.Contains(serialnumber))

@@ -27975,6 +27975,14 @@
         "NAME": "Füllstandssensor (B1)",
         "DESCRIPTION": "Füllstandssensor"
       }
+    },
+    "SENDER_OFFSET": {
+      "NAME": "Sender-Offset",
+      "DESCRIPTION": "Automatica sendet Befehle an diesen Aktor mit der ID-Basis des USB-Sticks plus diesem Offset (0..127). -1 leitet den Offset aus der Geräte-ID ab. Nach einer Änderung den Aktor neu einlernen."
+    },
+    "TEACH_IN": {
+      "NAME": "Einlernen",
+      "DESCRIPTION": "Den Aktor in den Lernmodus versetzen und dann true schreiben: Automatica sendet das Einlerntelegramm des Profils, damit der Aktor seine Befehle annimmt."
     }
   }
 }

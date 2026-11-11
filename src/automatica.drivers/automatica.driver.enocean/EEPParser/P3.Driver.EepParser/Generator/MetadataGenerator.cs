@@ -43,6 +43,12 @@ namespace P3.Driver.EepParser.Generator
                             sb.AppendLine($"            Condition({typeField}, {conditions});");
                         }
 
+                        if (type.Outgoing)
+                        {
+                            var defaults = string.Concat(type.WriteDefaults.Select(c => $", ({c.Offset}, {c.Length}, 0x{c.Value:X})"));
+                            sb.AppendLine($"            Outgoing({typeField}, 0x{r}, 0x{f}, {type.OrigTypeNumber}, {type.TelegramSize}{defaults});");
+                        }
+
                         foreach (var dataField in type.DataFields.Values.Where(d => d.Guid != Guid.Empty))
                         {
                             var dfField = $"EnOceanRorg{r}Data.DataField{r}_{f}_{t}_{dataField.ShortCut}_Guid";

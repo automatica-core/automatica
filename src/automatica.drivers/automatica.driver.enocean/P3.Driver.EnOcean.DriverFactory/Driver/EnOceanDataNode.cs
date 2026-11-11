@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Exceptions;
+using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 
@@ -40,13 +42,171 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         /// </summary>
         internal IReadOnlyList<EepScaleSegment> ScaleSegments { get; set; }
 
+        internal int BitOffset => BitOffs;
+        internal int FieldLength => Length;
+
+        /// <summary>
+        /// The device (EEP case) node this data point belongs to, sends the commands.
+        /// </summary>
+        internal EnOceanTypeNode Device { get; set; }
+
+        /// <summary>
+        /// Raw value of the last successful write; the next command of the case carries it again, so writing one
+        /// data point (e.g. the dim time) does not reset the others (e.g. the output value).
+        /// </summary>
+        internal long? WrittenRaw { get; private set; }
+
+        /// <summary>
+        /// The two-state enum mapping (first range = false, second range = true) only applies to fields whose
+        /// enum really has two states. Nodes created by older driver versions carry the enum properties on
+        /// multi-state fields as well (e.g. A5-10 fan speed), the template decides.
+        /// </summary>
+        protected bool UseBoolEnum => (!Template.HasValue || EnOceanEepMetadata.IsBoolEnum(Template.Value)) &&
+                                      EnumFirstMin.HasValue && EnumFirstMax.HasValue && EnumSecondMin.HasValue && EnumSecondMax.HasValue;
+
+        /// <summary>
+        /// false for data points that are not a field of the telegram (teach-in).
+        /// </summary>
+        protected virtual bool HasField => true;
 
         protected EnOceanDataNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
         }
-        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            return Task.CompletedTask;
+            await SendValue(value, writeContext);
+        }
+
+        /// <summary>
+        /// Encodes <paramref name="value"/>, sends the command of the case and dispatches the value once the stick
+        /// accepted the telegram.
+        /// </summary>
+        internal virtual async Task<bool> SendValue(object value, IWriteContext writeContext)
+        {
+            if (Device?.Outgoing == null)
+            {
+                DriverContext.Logger.LogWarning($"{Name}: the data point belongs to a telegram the device sends, it cannot be written");
+                return false;
+            }
+
+            var raw = Encode(value);
+            if (!raw.HasValue)
+            {
+                DriverContext.Logger.LogWarning($"{Name}: cannot encode {value ?? "null"}");
+                return false;
+            }
+
+            if (!await Device.SendCommand(this, raw.Value))
+            {
+                DriverContext.Logger.LogWarning($"{Name}: sending {value} failed");
+                return false;
+            }
+
+            WrittenRaw = raw;
+            if (writeContext != null)
+            {
+                await writeContext.DispatchValue(value);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// The counterpart of <see cref="GetValueGeneric(ReadOnlyMemory{byte})"/> and the two-state enum mapping: the raw
+        /// field value for <paramref name="value"/>.
+        /// </summary>
+        /// <returns>null if the value cannot be converted</returns>
+        internal long? Encode(object value)
+        {
+            if (value == null || Length < 1 || Length > 32)
+            {
+                return null;
+            }
+
+            var fieldMax = (1L << Length) - 1;
+            long raw;
+            if (value is bool b)
+            {
+                if (Length > 1 && UseBoolEnum)
+                {
+                    raw = b ? EnumSecondMin.Value : EnumFirstMin.Value;
+                }
+                else
+                {
+                    raw = b ? 1 : 0;
+                }
+            }
+            else
+            {
+                double number;
+                try
+                {
+                    number = Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                }
+                catch (Exception e) when (e is FormatException || e is InvalidCastException || e is OverflowException)
+                {
+                    return null;
+                }
+
+                if (double.IsNaN(number) || double.IsInfinity(number))
+                {
+                    return null;
+                }
+
+                if (ScaleSegments != null)
+                {
+                    var segment = FindSegment(number);
+                    if (!segment.HasValue)
+                    {
+                        return null;
+                    }
+                    raw = Unscale(segment.Value.RangeMin, segment.Value.RangeMax, segment.Value.ScaleMin, segment.Value.ScaleMax, number);
+                }
+                else if (UseScale && UseRange)
+                {
+                    raw = Unscale(RangeMin, RangeMax, ScaleMin, ScaleMax, number);
+                }
+                else
+                {
+                    raw = (long)Math.Round(number, MidpointRounding.AwayFromZero);
+                }
+            }
+
+            return raw < 0 || raw > fieldMax ? (long?)null : raw;
+        }
+
+        private EepScaleSegment? FindSegment(double value)
+        {
+            EepScaleSegment? nearest = null;
+            var nearestDistance = double.MaxValue;
+            foreach (var segment in ScaleSegments)
+            {
+                var min = Math.Min(segment.ScaleMin, segment.ScaleMax);
+                var max = Math.Max(segment.ScaleMin, segment.ScaleMax);
+                var distance = value < min ? min - value : value > max ? value - max : 0;
+                if (distance < nearestDistance)
+                {
+                    nearest = segment;
+                    nearestDistance = distance;
+                }
+            }
+
+            return nearest;
+        }
+
+        /// <summary>
+        /// Inverse of the linear scale, clamped to the range.
+        /// </summary>
+        private static long Unscale(long rangeMin, long rangeMax, double scaleMin, double scaleMax, double value)
+        {
+            if (scaleMax.Equals(scaleMin))
+            {
+                return rangeMin;
+            }
+
+            var raw = rangeMin + (value - scaleMin) * (rangeMax - rangeMin) / (scaleMax - scaleMin);
+            var rounded = (long)Math.Round(raw, MidpointRounding.AwayFromZero);
+            return Math.Min(Math.Max(rounded, Math.Min(rangeMin, rangeMax)), Math.Max(rangeMin, rangeMax));
         }
 
         protected override Task<bool> Read(IReadContext writeContext, CancellationToken token = new CancellationToken())
@@ -56,6 +216,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public override Task<bool> Init(CancellationToken token = default)
         {
+            if (!HasField)
+            {
+                return base.Init(token);
+            }
+
             BitOffs = GetPropertyValueInt("enocean-bitoffset");
             Length = GetPropertyValueInt("enocean-length");
             Template = DriverContext.NodeInstance?.This2NodeTemplate;

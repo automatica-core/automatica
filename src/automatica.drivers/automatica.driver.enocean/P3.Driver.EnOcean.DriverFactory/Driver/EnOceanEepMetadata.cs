@@ -46,6 +46,36 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
     }
 
     /// <summary>
+    /// An EEP case Automatica sends (actuator command): the profile and the telegram layout before the written values
+    /// are set.
+    /// </summary>
+    internal sealed class EepOutgoing
+    {
+        public EepOutgoing(byte rorg, byte func, byte type, int size, EepCondition[] defaults)
+        {
+            Rorg = rorg;
+            Func = func;
+            Type = type;
+            Size = size;
+            Defaults = defaults;
+        }
+
+        public byte Rorg { get; }
+        public byte Func { get; }
+        public byte Type { get; }
+
+        /// <summary>
+        /// User data length in bytes.
+        /// </summary>
+        public int Size { get; }
+
+        /// <summary>
+        /// Case constants (e.g. CMD 0x1), "do not change" / "all channels" values and the LRN bit of 4BS data telegrams.
+        /// </summary>
+        public IReadOnlyList<EepCondition> Defaults { get; }
+    }
+
+    /// <summary>
     /// EEP semantics the node properties cannot express, looked up by node template guid (generated from eep.xml,
     /// see EnOceanEepMetadata.Generated.cs). Keyed by template so it applies to existing node instances as well.
     /// </summary>
@@ -54,6 +84,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private static readonly Dictionary<Guid, EepCondition[]> TypeConditions = new Dictionary<Guid, EepCondition[]>();
         private static readonly Dictionary<Guid, EepScaleSegment[]> ScaleSegments = new Dictionary<Guid, EepScaleSegment[]>();
         private static readonly HashSet<Guid> BoolEnums = new HashSet<Guid>();
+        private static readonly Dictionary<Guid, EepOutgoing> OutgoingTypes = new Dictionary<Guid, EepOutgoing>();
 
         static EnOceanEepMetadata()
         {
@@ -85,6 +116,48 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private static void BoolEnum(Guid dataFieldTemplate)
         {
             BoolEnums.Add(dataFieldTemplate);
+        }
+
+        private static void Outgoing(Guid typeTemplate, byte rorg, byte func, byte type, int size, params (int Offset, int Length, long Value)[] defaults)
+        {
+            var list = new EepCondition[defaults.Length];
+            for (var i = 0; i < defaults.Length; i++)
+            {
+                list[i] = new EepCondition(defaults[i].Offset, defaults[i].Length, defaults[i].Value);
+            }
+            OutgoingTypes[typeTemplate] = new EepOutgoing(rorg, func, type, size, list);
+        }
+
+        /// <returns>null if the type is not a command Automatica sends</returns>
+        public static EepOutgoing GetOutgoing(Guid typeTemplate)
+        {
+            return OutgoingTypes.TryGetValue(typeTemplate, out var outgoing) ? outgoing : null;
+        }
+
+        /// <summary>
+        /// Writes <paramref name="value"/> into <paramref name="length"/> bits at <paramref name="offset"/> (EEP bit
+        /// numbering, offset 0 = MSB of the first byte), the counterpart of <see cref="EnOceanDataNode.ExtractBits"/>.
+        /// </summary>
+        public static void SetBits(byte[] data, int offset, int length, long value)
+        {
+            for (var i = 0; i < length; i++)
+            {
+                var pos = offset + i;
+                if (pos < 0 || pos >= data.Length * 8)
+                {
+                    continue;
+                }
+
+                var mask = (byte)(0x80 >> (pos & 7));
+                if (((value >> (length - 1 - i)) & 1) == 1)
+                {
+                    data[pos >> 3] |= mask;
+                }
+                else
+                {
+                    data[pos >> 3] &= (byte)~mask;
+                }
+            }
         }
 
         /// <returns>empty if every telegram of the device belongs to the type</returns>

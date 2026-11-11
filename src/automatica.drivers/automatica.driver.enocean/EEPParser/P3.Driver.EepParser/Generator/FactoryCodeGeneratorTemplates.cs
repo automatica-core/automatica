@@ -83,6 +83,15 @@
 
         }}";
 
+        /// <summary>
+        /// Outgoing cases (actuator commands): the sender id offset to the id base of the USB stick. -1 = derived from
+        /// the device id.
+        /// </summary>
+        public static readonly string AddSenderOffsetProperty = @"
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), ""ENOCEAN.SENDER_OFFSET.NAME"", ""ENOCEAN.SENDER_OFFSET.DESCRIPTION"",
+                ""enocean-sender-offset"", PropertyTemplateType.Integer, nodeGuid, ""COMMON.CATEGORY.ADDRESS"", true, false, null, ""-1"", 0, 1);
+";
+
         public static readonly string AddDataFieldMethodName = @"AddDataField{0}_{1}_{2}_{3}Templates";
         public static readonly string DataFieldName = "ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{2}.SHORTCUT_{3}";
         public static readonly string DataFieldStaticGuid = @"public static readonly Guid DataField{0}_{1}_{2}_{3}_Guid = new Guid(""{4}"");";
@@ -102,6 +111,18 @@
                 ""enocean-length"", PropertyTemplateType.Integer, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);
 
             {6}           
+        }}";
+
+        /// <summary>
+        /// Outgoing cases: writing true sends the teach-in telegram for the profile (4BS teach-in or UTE query).
+        /// </summary>
+        public static readonly string AddTeachInTemplate = @"
+        private static void " + AddDataFieldMethodName + @"(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {{
+            var nodeGuid = DataField{0}_{1}_{2}_{3}_Guid;
+            factory.CreateNodeTemplate(nodeGuid, ""ENOCEAN.TEACH_IN.NAME"", ""ENOCEAN.TEACH_IN.DESCRIPTION"",
+                ""enocean-teach-in"", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }}";
 
         public static readonly string AddUnitDataField = @"

@@ -893,6 +893,7 @@ public static readonly Guid DataFieldA5_38_08_1_TIM_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldA5_38_08_1_LCK_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808010400");
 public static readonly Guid DataFieldA5_38_08_1_DEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808010500");
 public static readonly Guid DataFieldA5_38_08_1_SW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808010600");
+public static readonly Guid DataFieldA5_38_08_1_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808010700");
 public static readonly Guid TypeA5_38_08_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020000");
 public static readonly Guid DataFieldA5_38_08_2_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020100");
 public static readonly Guid DataFieldA5_38_08_2_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020200");
@@ -901,14 +902,17 @@ public static readonly Guid DataFieldA5_38_08_2_RMP_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldA5_38_08_2_EDIMR_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020500");
 public static readonly Guid DataFieldA5_38_08_2_STR_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020600");
 public static readonly Guid DataFieldA5_38_08_2_SW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020700");
+public static readonly Guid DataFieldA5_38_08_2_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808020800");
 public static readonly Guid TypeA5_38_08_3Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808030000");
 public static readonly Guid DataFieldA5_38_08_3_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808030100");
 public static readonly Guid DataFieldA5_38_08_3_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808030200");
 public static readonly Guid DataFieldA5_38_08_3_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808030300");
+public static readonly Guid DataFieldA5_38_08_3_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808030400");
 public static readonly Guid TypeA5_38_08_4Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808040000");
 public static readonly Guid DataFieldA5_38_08_4_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808040100");
 public static readonly Guid DataFieldA5_38_08_4_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808040200");
 public static readonly Guid DataFieldA5_38_08_4_BSP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808040300");
+public static readonly Guid DataFieldA5_38_08_4_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808040400");
 public static readonly Guid TypeA5_38_08_5Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050000");
 public static readonly Guid DataFieldA5_38_08_5_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050100");
 public static readonly Guid DataFieldA5_38_08_5_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050200");
@@ -917,10 +921,12 @@ public static readonly Guid DataFieldA5_38_08_5_CM_Guid = new Guid("eb2c5295-4a3
 public static readonly Guid DataFieldA5_38_08_5_CS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050500");
 public static readonly Guid DataFieldA5_38_08_5_ENHO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050600");
 public static readonly Guid DataFieldA5_38_08_5_RMOCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050700");
+public static readonly Guid DataFieldA5_38_08_5_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808050800");
 public static readonly Guid TypeA5_38_08_6Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808060000");
 public static readonly Guid DataFieldA5_38_08_6_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808060100");
 public static readonly Guid DataFieldA5_38_08_6_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808060200");
 public static readonly Guid DataFieldA5_38_08_6_FO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808060300");
+public static readonly Guid DataFieldA5_38_08_6_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808060400");
 public static readonly Guid TypeA5_38_08_7Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070000");
 public static readonly Guid DataFieldA5_38_08_7_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070100");
 public static readonly Guid DataFieldA5_38_08_7_COM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070200");
@@ -930,6 +936,7 @@ public static readonly Guid DataFieldA5_38_08_7_FUNC_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldA5_38_08_7_SSF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070600");
 public static readonly Guid DataFieldA5_38_08_7_PAF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070700");
 public static readonly Guid DataFieldA5_38_08_7_SMF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070800");
+public static readonly Guid DataFieldA5_38_08_7_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53808070900");
 public static readonly Guid TypeA5_38_09_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53809080000");
 public static readonly Guid DataFieldA5_38_09_8_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53809080100");
 public static readonly Guid DataFieldA5_38_09_8_P1_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53809080200");
@@ -17719,6 +17726,10 @@ AddDataFieldA5_38_08_1_LCKTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_1_DELTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_1_SWTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_1_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldA5_38_08_1_LRNBTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -17821,6 +17832,13 @@ AddDataFieldA5_38_08_1_SWTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldA5_38_08_1_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_1_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_2Guid, 1);
@@ -17843,6 +17861,10 @@ AddDataFieldA5_38_08_2_RMPTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_2_EDIMRTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_2_STRTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_2_SWTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_2_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -17971,6 +17993,13 @@ AddDataFieldA5_38_08_2_SWTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldA5_38_08_2_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_2_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_3Guid, 1);
@@ -17989,6 +18018,10 @@ AddDataFieldA5_38_08_2_SWTemplates(factory, interfaceGuid);
             AddDataFieldA5_38_08_3_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_3_COMTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_3_SPTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_3_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18047,6 +18080,13 @@ AddDataFieldA5_38_08_3_SPTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_A5.FUNCTION_38.TYPE_08_3.SHORTCUT_SPSP.UNIT", "ENOCEAN.RORG_A5.FUNCTION_38.TYPE_08_3.SHORTCUT_SPSP.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "K", 0, 0);           
         }
+        private static void AddDataFieldA5_38_08_3_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_3_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_4Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_4Guid, 1);
@@ -18065,6 +18105,10 @@ AddDataFieldA5_38_08_3_SPTemplates(factory, interfaceGuid);
             AddDataFieldA5_38_08_4_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_4_COMTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_4_BSPTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_4_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18123,6 +18167,13 @@ AddDataFieldA5_38_08_4_BSPTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_A5.FUNCTION_38.TYPE_08_4.SHORTCUT_BSPBSP.UNIT", "ENOCEAN.RORG_A5.FUNCTION_38.TYPE_08_4.SHORTCUT_BSPBSP.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "°C", 0, 0);           
         }
+        private static void AddDataFieldA5_38_08_4_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_4_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_5Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_5Guid, 1);
@@ -18145,6 +18196,10 @@ AddDataFieldA5_38_08_5_CMTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_5_CSTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_5_ENHOTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_5_RMOCCTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_5_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18263,6 +18318,13 @@ AddDataFieldA5_38_08_5_RMOCCTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldA5_38_08_5_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_5_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_6Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_6Guid, 1);
@@ -18281,6 +18343,10 @@ AddDataFieldA5_38_08_5_RMOCCTemplates(factory, interfaceGuid);
             AddDataFieldA5_38_08_6_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_6_COMTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_6_FOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_6_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18329,6 +18395,13 @@ AddDataFieldA5_38_08_6_FOTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldA5_38_08_6_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_6_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesA5_38_08_7Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeA5_38_08_7Guid, 1);
@@ -18352,6 +18425,10 @@ AddDataFieldA5_38_08_7_FUNCTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_7_SSFTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_7_PAFTemplates(factory, interfaceGuid);
 AddDataFieldA5_38_08_7_SMFTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldA5_38_08_7_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18474,6 +18551,13 @@ AddDataFieldA5_38_08_7_SMFTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
 
                        
+        }
+        private static void AddDataFieldA5_38_08_7_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_38_08_7_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesA5_38_09_8Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {

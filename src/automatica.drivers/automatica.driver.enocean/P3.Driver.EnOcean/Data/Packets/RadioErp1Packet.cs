@@ -65,6 +65,27 @@ namespace P3.Driver.EnOcean.Data.Packets
 
         public byte Status { get; private set; }
 
+        /// <summary>
+        /// Sent telegrams: the sender id is the id base of the USB stick plus this offset (0..127). Actuators learn the
+        /// sender id, a different offset per actuator keeps them apart.
+        /// </summary>
+        public byte SenderOffset { get; set; }
+
+        /// <summary>
+        /// The id base plus <see cref="SenderOffset"/>.
+        /// </summary>
+        public static byte[] SenderIdFor(ReadOnlySpan<byte> idBase, byte offset)
+        {
+            var sender = idBase.ToArray();
+            if (sender.Length != 4 || offset == 0)
+            {
+                return sender;
+            }
+
+            var id = ((uint)sender[0] << 24 | (uint)sender[1] << 16 | (uint)sender[2] << 8 | sender[3]) + offset;
+            return new[] { (byte)(id >> 24), (byte)(id >> 16), (byte)(id >> 8), (byte)id };
+        }
+
         public override void FromPacket(EnOceanPacket packet)
         {
             packet.ParseData();
@@ -140,7 +161,7 @@ namespace P3.Driver.EnOcean.Data.Packets
             data.Add((byte)Rorg);
             data.AddRange(Data.Span.ToArray()); //TODO: Change to Packet function
             //source id
-            data.AddRange(_idBase.ToArray());
+            data.AddRange(SenderIdFor(_idBase.Span, SenderOffset));
             data.Add(Status);
 
             var optionalData = new List<byte>();

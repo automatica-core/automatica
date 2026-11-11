@@ -102,7 +102,8 @@ namespace P3.Driver.EnOcean.Data.Tests
 
                 var prefix = $"DataField{parts[0]}_{parts[1]}_{parts[2]}_{match.Groups[1].Value}_";
                 var type = new TypeTemplate { Guid = guid, Name = name };
-                foreach (var (dfName, dfGuid) in fields.Where(f => f.Name.StartsWith(prefix) && f.Name.EndsWith("_Guid")))
+                // the teach-in data point of an actuator command is not a field of the telegram
+                foreach (var (dfName, dfGuid) in fields.Where(f => f.Name.StartsWith(prefix) && f.Name.EndsWith("_Guid") && !f.Name.EndsWith("_TEACHIN_Guid")))
                 {
                     var template = Factory.GetNodeTemplateById(dfGuid);
                     var shortCut = dfName.Substring(prefix.Length, dfName.Length - prefix.Length - "_Guid".Length);

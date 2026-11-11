@@ -27975,6 +27975,14 @@
         "NAME": "Level Sensor (B1)",
         "DESCRIPTION": "Level Sensor"
       }
+    },
+    "SENDER_OFFSET": {
+      "NAME": "Sender offset",
+      "DESCRIPTION": "Automatica sends commands to this actuator with the id base of the USB stick plus this offset (0..127). -1 derives the offset from the device id. Teach the actuator in again after changing it."
+    },
+    "TEACH_IN": {
+      "NAME": "Teach-in",
+      "DESCRIPTION": "Put the actuator into learn mode, then write true: Automatica sends the teach-in telegram of the profile so the actuator accepts its commands."
     }
   }
 }

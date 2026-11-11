@@ -76,6 +76,7 @@ public static readonly Guid DataFieldD2_01_00_1_DV_Guid = new Guid("eb2c5295-4a3
 public static readonly Guid DataFieldD2_01_00_1_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100010300");
 public static readonly Guid DataFieldD2_01_00_1_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100010400");
 public static readonly Guid DataFieldD2_01_00_1_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100010500");
+public static readonly Guid DataFieldD2_01_00_1_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100010600");
 public static readonly Guid TypeD2_01_00_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020000");
 public static readonly Guid DataFieldD2_01_00_2_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020100");
 public static readonly Guid DataFieldD2_01_00_2_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020200");
@@ -90,10 +91,12 @@ public static readonly Guid DataFieldD2_01_00_2_DT2_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_00_2_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020b00");
 public static readonly Guid DataFieldD2_01_00_2_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020c00");
 public static readonly Guid DataFieldD2_01_00_2_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020d00");
+public static readonly Guid DataFieldD2_01_00_2_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100020e00");
 public static readonly Guid TypeD2_01_00_3Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100030000");
 public static readonly Guid DataFieldD2_01_00_3_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100030100");
 public static readonly Guid DataFieldD2_01_00_3_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100030200");
 public static readonly Guid DataFieldD2_01_00_3_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100030300");
+public static readonly Guid DataFieldD2_01_00_3_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100030400");
 public static readonly Guid TypeD2_01_00_4Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100040000");
 public static readonly Guid DataFieldD2_01_00_4_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100040100");
 public static readonly Guid DataFieldD2_01_00_4_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100040200");
@@ -118,11 +121,13 @@ public static readonly Guid DataFieldD2_01_00_5_MAT_RAW_Guid = new Guid("eb2c529
 public static readonly Guid DataFieldD2_01_00_5_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100050b00");
 public static readonly Guid DataFieldD2_01_00_5_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100050c00");
 public static readonly Guid DataFieldD2_01_00_5_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100050d00");
+public static readonly Guid DataFieldD2_01_00_5_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100050e00");
 public static readonly Guid TypeD2_01_00_6Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060000");
 public static readonly Guid DataFieldD2_01_00_6_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060100");
 public static readonly Guid DataFieldD2_01_00_6_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060200");
 public static readonly Guid DataFieldD2_01_00_6_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060300");
 public static readonly Guid DataFieldD2_01_00_6_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060400");
+public static readonly Guid DataFieldD2_01_00_6_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100060500");
 public static readonly Guid TypeD2_01_00_7Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100070000");
 public static readonly Guid DataFieldD2_01_00_7_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100070100");
 public static readonly Guid DataFieldD2_01_00_7_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100070200");
@@ -132,8 +137,10 @@ public static readonly Guid DataFieldD2_01_00_7_MV_Guid = new Guid("eb2c5295-4a3
 public static readonly Guid TypeD2_01_00_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100080000");
 public static readonly Guid DataFieldD2_01_00_8_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100080100");
 public static readonly Guid DataFieldD2_01_00_8_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100080200");
+public static readonly Guid DataFieldD2_01_00_8_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100080300");
 public static readonly Guid TypeD2_01_00_9Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100090000");
 public static readonly Guid DataFieldD2_01_00_9_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100090100");
+public static readonly Guid DataFieldD2_01_00_9_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100090200");
 public static readonly Guid TypeD2_01_00_10Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000a0000");
 public static readonly Guid DataFieldD2_01_00_10_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000a0100");
 public static readonly Guid DataFieldD2_01_00_10_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000a0200");
@@ -145,10 +152,12 @@ public static readonly Guid DataFieldD2_01_00_11_AOT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_00_11_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000b0500");
 public static readonly Guid DataFieldD2_01_00_11_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000b0600");
 public static readonly Guid DataFieldD2_01_00_11_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000b0700");
+public static readonly Guid DataFieldD2_01_00_11_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000b0800");
 public static readonly Guid TypeD2_01_00_12Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000c0000");
 public static readonly Guid DataFieldD2_01_00_12_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000c0100");
 public static readonly Guid DataFieldD2_01_00_12_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000c0200");
 public static readonly Guid DataFieldD2_01_00_12_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000c0300");
+public static readonly Guid DataFieldD2_01_00_12_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000c0400");
 public static readonly Guid TypeD2_01_00_13Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000d0000");
 public static readonly Guid DataFieldD2_01_00_13_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000d0100");
 public static readonly Guid DataFieldD2_01_00_13_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000d0200");
@@ -165,11 +174,13 @@ public static readonly Guid DataFieldD2_01_00_14_IO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_00_14_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000e0500");
 public static readonly Guid DataFieldD2_01_00_14_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000e0600");
 public static readonly Guid DataFieldD2_01_00_14_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000e0700");
+public static readonly Guid DataFieldD2_01_00_14_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000e0800");
 public static readonly Guid TypeD2_01_00_15Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0000");
 public static readonly Guid DataFieldD2_01_00_15_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0100");
 public static readonly Guid DataFieldD2_01_00_15_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0200");
 public static readonly Guid DataFieldD2_01_00_15_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0300");
 public static readonly Guid DataFieldD2_01_00_15_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0400");
+public static readonly Guid DataFieldD2_01_00_15_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201000f0500");
 public static readonly Guid TypeD2_01_00_16Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100100000");
 public static readonly Guid DataFieldD2_01_00_16_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100100100");
 public static readonly Guid DataFieldD2_01_00_16_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20100100200");
@@ -185,6 +196,7 @@ public static readonly Guid DataFieldD2_01_17_17_IOCHANNEL_RAW_Guid = new Guid("
 public static readonly Guid DataFieldD2_01_17_17_IOCHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117110400");
 public static readonly Guid DataFieldD2_01_17_17_OUTPUT_VALUE_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117110500");
 public static readonly Guid DataFieldD2_01_17_17_OUTPUT_VALUE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117110600");
+public static readonly Guid DataFieldD2_01_17_17_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117110700");
 public static readonly Guid TypeD2_01_17_18Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120000");
 public static readonly Guid DataFieldD2_01_17_18_TAUGHT_IN_DEVICES_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120100");
 public static readonly Guid DataFieldD2_01_17_18_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120200");
@@ -201,10 +213,12 @@ public static readonly Guid DataFieldD2_01_17_18_USERINTERFACEINDICATION_Guid = 
 public static readonly Guid DataFieldD2_01_17_18_POWER_FAILURE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120d00");
 public static readonly Guid DataFieldD2_01_17_18_DEFAULTSTATE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120e00");
 public static readonly Guid DataFieldD2_01_17_18_DIM_TIMER_1_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117120f00");
+public static readonly Guid DataFieldD2_01_17_18_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117121000");
 public static readonly Guid TypeD2_01_17_19Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117130000");
 public static readonly Guid DataFieldD2_01_17_19_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117130100");
 public static readonly Guid DataFieldD2_01_17_19_IOCHANNEL_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117130200");
 public static readonly Guid DataFieldD2_01_17_19_IOCHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117130300");
+public static readonly Guid DataFieldD2_01_17_19_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117130400");
 public static readonly Guid TypeD2_01_17_20Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117140000");
 public static readonly Guid DataFieldD2_01_17_20_POWER_FAILURE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117140100");
 public static readonly Guid DataFieldD2_01_17_20_POWER_FAILURE_DETECTION_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117140200");
@@ -230,11 +244,13 @@ public static readonly Guid DataFieldD2_01_17_21_MAXIMUMTIMEBETWEENTWOSUBSEQUENT
 public static readonly Guid DataFieldD2_01_17_21_MAXIMUMTIMEBETWEENTWOSUBSEQUENTA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117150b00");
 public static readonly Guid DataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTA_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117150c00");
 public static readonly Guid DataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117150d00");
+public static readonly Guid DataFieldD2_01_17_21_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117150e00");
 public static readonly Guid TypeD2_01_17_22Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160000");
 public static readonly Guid DataFieldD2_01_17_22_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160100");
 public static readonly Guid DataFieldD2_01_17_22_QUERY_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160200");
 public static readonly Guid DataFieldD2_01_17_22_IOCHANNEL_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160300");
 public static readonly Guid DataFieldD2_01_17_22_IOCHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160400");
+public static readonly Guid DataFieldD2_01_17_22_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117160500");
 public static readonly Guid TypeD2_01_17_23Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117170000");
 public static readonly Guid DataFieldD2_01_17_23_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117170100");
 public static readonly Guid DataFieldD2_01_17_23_UNIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117170200");
@@ -251,10 +267,12 @@ public static readonly Guid DataFieldD2_01_17_24_DELAY_OFF_TIMER_RAW_Guid = new 
 public static readonly Guid DataFieldD2_01_17_24_DELAY_OFF_TIMER_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117180700");
 public static readonly Guid DataFieldD2_01_17_24_EXTERNAL_SWITCH_PUSH_BUTTON_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117180800");
 public static readonly Guid DataFieldD2_01_17_24_F_2_STATE_SWITCH_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117180900");
+public static readonly Guid DataFieldD2_01_17_24_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117180a00");
 public static readonly Guid TypeD2_01_17_25Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117190000");
 public static readonly Guid DataFieldD2_01_17_25_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117190100");
 public static readonly Guid DataFieldD2_01_17_25_IOCHANNEL_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117190200");
 public static readonly Guid DataFieldD2_01_17_25_IOCHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117190300");
+public static readonly Guid DataFieldD2_01_17_25_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20117190400");
 public static readonly Guid TypeD2_01_17_26Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201171a0000");
 public static readonly Guid DataFieldD2_01_17_26_COMMAND_ID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201171a0100");
 public static readonly Guid DataFieldD2_01_17_26_IOCHANNEL_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201171a0200");
@@ -271,6 +289,7 @@ public static readonly Guid DataFieldD2_01_01_27_DV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_01_27_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011b0300");
 public static readonly Guid DataFieldD2_01_01_27_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011b0400");
 public static readonly Guid DataFieldD2_01_01_27_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011b0500");
+public static readonly Guid DataFieldD2_01_01_27_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011b0600");
 public static readonly Guid TypeD2_01_01_28Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0000");
 public static readonly Guid DataFieldD2_01_01_28_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0100");
 public static readonly Guid DataFieldD2_01_01_28_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0200");
@@ -285,10 +304,12 @@ public static readonly Guid DataFieldD2_01_01_28_DT2_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_01_28_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0b00");
 public static readonly Guid DataFieldD2_01_01_28_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0c00");
 public static readonly Guid DataFieldD2_01_01_28_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0d00");
+public static readonly Guid DataFieldD2_01_01_28_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011c0e00");
 public static readonly Guid TypeD2_01_01_29Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011d0000");
 public static readonly Guid DataFieldD2_01_01_29_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011d0100");
 public static readonly Guid DataFieldD2_01_01_29_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011d0200");
 public static readonly Guid DataFieldD2_01_01_29_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011d0300");
+public static readonly Guid DataFieldD2_01_01_29_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011d0400");
 public static readonly Guid TypeD2_01_01_30Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011e0000");
 public static readonly Guid DataFieldD2_01_01_30_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011e0100");
 public static readonly Guid DataFieldD2_01_01_30_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011e0200");
@@ -313,11 +334,13 @@ public static readonly Guid DataFieldD2_01_01_31_MAT_RAW_Guid = new Guid("eb2c52
 public static readonly Guid DataFieldD2_01_01_31_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011f0b00");
 public static readonly Guid DataFieldD2_01_01_31_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011f0c00");
 public static readonly Guid DataFieldD2_01_01_31_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011f0d00");
+public static readonly Guid DataFieldD2_01_01_31_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201011f0e00");
 public static readonly Guid TypeD2_01_01_32Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200000");
 public static readonly Guid DataFieldD2_01_01_32_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200100");
 public static readonly Guid DataFieldD2_01_01_32_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200200");
 public static readonly Guid DataFieldD2_01_01_32_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200300");
 public static readonly Guid DataFieldD2_01_01_32_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200400");
+public static readonly Guid DataFieldD2_01_01_32_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101200500");
 public static readonly Guid TypeD2_01_01_33Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101210000");
 public static readonly Guid DataFieldD2_01_01_33_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101210100");
 public static readonly Guid DataFieldD2_01_01_33_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101210200");
@@ -327,8 +350,10 @@ public static readonly Guid DataFieldD2_01_01_33_MV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid TypeD2_01_01_34Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101220000");
 public static readonly Guid DataFieldD2_01_01_34_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101220100");
 public static readonly Guid DataFieldD2_01_01_34_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101220200");
+public static readonly Guid DataFieldD2_01_01_34_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101220300");
 public static readonly Guid TypeD2_01_01_35Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101230000");
 public static readonly Guid DataFieldD2_01_01_35_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101230100");
+public static readonly Guid DataFieldD2_01_01_35_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101230200");
 public static readonly Guid TypeD2_01_01_36Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101240000");
 public static readonly Guid DataFieldD2_01_01_36_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101240100");
 public static readonly Guid DataFieldD2_01_01_36_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101240200");
@@ -340,10 +365,12 @@ public static readonly Guid DataFieldD2_01_01_37_AOT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_01_37_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101250500");
 public static readonly Guid DataFieldD2_01_01_37_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101250600");
 public static readonly Guid DataFieldD2_01_01_37_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101250700");
+public static readonly Guid DataFieldD2_01_01_37_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101250800");
 public static readonly Guid TypeD2_01_01_38Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101260000");
 public static readonly Guid DataFieldD2_01_01_38_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101260100");
 public static readonly Guid DataFieldD2_01_01_38_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101260200");
 public static readonly Guid DataFieldD2_01_01_38_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101260300");
+public static readonly Guid DataFieldD2_01_01_38_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101260400");
 public static readonly Guid TypeD2_01_01_39Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101270000");
 public static readonly Guid DataFieldD2_01_01_39_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101270100");
 public static readonly Guid DataFieldD2_01_01_39_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101270200");
@@ -360,11 +387,13 @@ public static readonly Guid DataFieldD2_01_01_40_IO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_01_40_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101280500");
 public static readonly Guid DataFieldD2_01_01_40_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101280600");
 public static readonly Guid DataFieldD2_01_01_40_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101280700");
+public static readonly Guid DataFieldD2_01_01_40_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101280800");
 public static readonly Guid TypeD2_01_01_41Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290000");
 public static readonly Guid DataFieldD2_01_01_41_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290100");
 public static readonly Guid DataFieldD2_01_01_41_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290200");
 public static readonly Guid DataFieldD2_01_01_41_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290300");
 public static readonly Guid DataFieldD2_01_01_41_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290400");
+public static readonly Guid DataFieldD2_01_01_41_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20101290500");
 public static readonly Guid TypeD2_01_01_42Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201012a0000");
 public static readonly Guid DataFieldD2_01_01_42_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201012a0100");
 public static readonly Guid DataFieldD2_01_01_42_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201012a0200");
@@ -379,6 +408,7 @@ public static readonly Guid DataFieldD2_01_02_43_DV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_02_43_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022b0300");
 public static readonly Guid DataFieldD2_01_02_43_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022b0400");
 public static readonly Guid DataFieldD2_01_02_43_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022b0500");
+public static readonly Guid DataFieldD2_01_02_43_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022b0600");
 public static readonly Guid TypeD2_01_02_44Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0000");
 public static readonly Guid DataFieldD2_01_02_44_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0100");
 public static readonly Guid DataFieldD2_01_02_44_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0200");
@@ -393,10 +423,12 @@ public static readonly Guid DataFieldD2_01_02_44_DT2_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_02_44_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0b00");
 public static readonly Guid DataFieldD2_01_02_44_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0c00");
 public static readonly Guid DataFieldD2_01_02_44_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0d00");
+public static readonly Guid DataFieldD2_01_02_44_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022c0e00");
 public static readonly Guid TypeD2_01_02_45Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022d0000");
 public static readonly Guid DataFieldD2_01_02_45_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022d0100");
 public static readonly Guid DataFieldD2_01_02_45_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022d0200");
 public static readonly Guid DataFieldD2_01_02_45_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022d0300");
+public static readonly Guid DataFieldD2_01_02_45_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022d0400");
 public static readonly Guid TypeD2_01_02_46Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022e0000");
 public static readonly Guid DataFieldD2_01_02_46_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022e0100");
 public static readonly Guid DataFieldD2_01_02_46_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022e0200");
@@ -421,11 +453,13 @@ public static readonly Guid DataFieldD2_01_02_47_MAT_RAW_Guid = new Guid("eb2c52
 public static readonly Guid DataFieldD2_01_02_47_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022f0b00");
 public static readonly Guid DataFieldD2_01_02_47_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022f0c00");
 public static readonly Guid DataFieldD2_01_02_47_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022f0d00");
+public static readonly Guid DataFieldD2_01_02_47_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201022f0e00");
 public static readonly Guid TypeD2_01_02_48Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300000");
 public static readonly Guid DataFieldD2_01_02_48_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300100");
 public static readonly Guid DataFieldD2_01_02_48_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300200");
 public static readonly Guid DataFieldD2_01_02_48_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300300");
 public static readonly Guid DataFieldD2_01_02_48_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300400");
+public static readonly Guid DataFieldD2_01_02_48_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102300500");
 public static readonly Guid TypeD2_01_02_49Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102310000");
 public static readonly Guid DataFieldD2_01_02_49_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102310100");
 public static readonly Guid DataFieldD2_01_02_49_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102310200");
@@ -435,8 +469,10 @@ public static readonly Guid DataFieldD2_01_02_49_MV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid TypeD2_01_02_50Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102320000");
 public static readonly Guid DataFieldD2_01_02_50_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102320100");
 public static readonly Guid DataFieldD2_01_02_50_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102320200");
+public static readonly Guid DataFieldD2_01_02_50_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102320300");
 public static readonly Guid TypeD2_01_02_51Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102330000");
 public static readonly Guid DataFieldD2_01_02_51_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102330100");
+public static readonly Guid DataFieldD2_01_02_51_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102330200");
 public static readonly Guid TypeD2_01_02_52Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102340000");
 public static readonly Guid DataFieldD2_01_02_52_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102340100");
 public static readonly Guid DataFieldD2_01_02_52_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102340200");
@@ -448,10 +484,12 @@ public static readonly Guid DataFieldD2_01_02_53_AOT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_02_53_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102350500");
 public static readonly Guid DataFieldD2_01_02_53_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102350600");
 public static readonly Guid DataFieldD2_01_02_53_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102350700");
+public static readonly Guid DataFieldD2_01_02_53_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102350800");
 public static readonly Guid TypeD2_01_02_54Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102360000");
 public static readonly Guid DataFieldD2_01_02_54_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102360100");
 public static readonly Guid DataFieldD2_01_02_54_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102360200");
 public static readonly Guid DataFieldD2_01_02_54_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102360300");
+public static readonly Guid DataFieldD2_01_02_54_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102360400");
 public static readonly Guid TypeD2_01_02_55Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102370000");
 public static readonly Guid DataFieldD2_01_02_55_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102370100");
 public static readonly Guid DataFieldD2_01_02_55_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102370200");
@@ -468,11 +506,13 @@ public static readonly Guid DataFieldD2_01_02_56_IO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_02_56_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102380500");
 public static readonly Guid DataFieldD2_01_02_56_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102380600");
 public static readonly Guid DataFieldD2_01_02_56_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102380700");
+public static readonly Guid DataFieldD2_01_02_56_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102380800");
 public static readonly Guid TypeD2_01_02_57Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390000");
 public static readonly Guid DataFieldD2_01_02_57_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390100");
 public static readonly Guid DataFieldD2_01_02_57_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390200");
 public static readonly Guid DataFieldD2_01_02_57_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390300");
 public static readonly Guid DataFieldD2_01_02_57_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390400");
+public static readonly Guid DataFieldD2_01_02_57_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20102390500");
 public static readonly Guid TypeD2_01_02_58Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201023a0000");
 public static readonly Guid DataFieldD2_01_02_58_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201023a0100");
 public static readonly Guid DataFieldD2_01_02_58_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201023a0200");
@@ -487,6 +527,7 @@ public static readonly Guid DataFieldD2_01_03_59_DV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_03_59_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033b0300");
 public static readonly Guid DataFieldD2_01_03_59_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033b0400");
 public static readonly Guid DataFieldD2_01_03_59_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033b0500");
+public static readonly Guid DataFieldD2_01_03_59_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033b0600");
 public static readonly Guid TypeD2_01_03_60Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0000");
 public static readonly Guid DataFieldD2_01_03_60_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0100");
 public static readonly Guid DataFieldD2_01_03_60_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0200");
@@ -501,10 +542,12 @@ public static readonly Guid DataFieldD2_01_03_60_DT2_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_03_60_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0b00");
 public static readonly Guid DataFieldD2_01_03_60_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0c00");
 public static readonly Guid DataFieldD2_01_03_60_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0d00");
+public static readonly Guid DataFieldD2_01_03_60_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033c0e00");
 public static readonly Guid TypeD2_01_03_61Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033d0000");
 public static readonly Guid DataFieldD2_01_03_61_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033d0100");
 public static readonly Guid DataFieldD2_01_03_61_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033d0200");
 public static readonly Guid DataFieldD2_01_03_61_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033d0300");
+public static readonly Guid DataFieldD2_01_03_61_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033d0400");
 public static readonly Guid TypeD2_01_03_62Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033e0000");
 public static readonly Guid DataFieldD2_01_03_62_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033e0100");
 public static readonly Guid DataFieldD2_01_03_62_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033e0200");
@@ -529,11 +572,13 @@ public static readonly Guid DataFieldD2_01_03_63_MAT_RAW_Guid = new Guid("eb2c52
 public static readonly Guid DataFieldD2_01_03_63_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033f0b00");
 public static readonly Guid DataFieldD2_01_03_63_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033f0c00");
 public static readonly Guid DataFieldD2_01_03_63_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033f0d00");
+public static readonly Guid DataFieldD2_01_03_63_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201033f0e00");
 public static readonly Guid TypeD2_01_03_64Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400000");
 public static readonly Guid DataFieldD2_01_03_64_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400100");
 public static readonly Guid DataFieldD2_01_03_64_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400200");
 public static readonly Guid DataFieldD2_01_03_64_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400300");
 public static readonly Guid DataFieldD2_01_03_64_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400400");
+public static readonly Guid DataFieldD2_01_03_64_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103400500");
 public static readonly Guid TypeD2_01_03_65Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103410000");
 public static readonly Guid DataFieldD2_01_03_65_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103410100");
 public static readonly Guid DataFieldD2_01_03_65_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103410200");
@@ -543,8 +588,10 @@ public static readonly Guid DataFieldD2_01_03_65_MV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid TypeD2_01_03_66Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103420000");
 public static readonly Guid DataFieldD2_01_03_66_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103420100");
 public static readonly Guid DataFieldD2_01_03_66_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103420200");
+public static readonly Guid DataFieldD2_01_03_66_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103420300");
 public static readonly Guid TypeD2_01_03_67Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103430000");
 public static readonly Guid DataFieldD2_01_03_67_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103430100");
+public static readonly Guid DataFieldD2_01_03_67_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103430200");
 public static readonly Guid TypeD2_01_03_68Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103440000");
 public static readonly Guid DataFieldD2_01_03_68_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103440100");
 public static readonly Guid DataFieldD2_01_03_68_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103440200");
@@ -556,10 +603,12 @@ public static readonly Guid DataFieldD2_01_03_69_AOT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_03_69_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103450500");
 public static readonly Guid DataFieldD2_01_03_69_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103450600");
 public static readonly Guid DataFieldD2_01_03_69_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103450700");
+public static readonly Guid DataFieldD2_01_03_69_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103450800");
 public static readonly Guid TypeD2_01_03_70Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103460000");
 public static readonly Guid DataFieldD2_01_03_70_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103460100");
 public static readonly Guid DataFieldD2_01_03_70_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103460200");
 public static readonly Guid DataFieldD2_01_03_70_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103460300");
+public static readonly Guid DataFieldD2_01_03_70_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103460400");
 public static readonly Guid TypeD2_01_03_71Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103470000");
 public static readonly Guid DataFieldD2_01_03_71_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103470100");
 public static readonly Guid DataFieldD2_01_03_71_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103470200");
@@ -576,11 +625,13 @@ public static readonly Guid DataFieldD2_01_03_72_IO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_03_72_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103480500");
 public static readonly Guid DataFieldD2_01_03_72_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103480600");
 public static readonly Guid DataFieldD2_01_03_72_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103480700");
+public static readonly Guid DataFieldD2_01_03_72_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103480800");
 public static readonly Guid TypeD2_01_03_73Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490000");
 public static readonly Guid DataFieldD2_01_03_73_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490100");
 public static readonly Guid DataFieldD2_01_03_73_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490200");
 public static readonly Guid DataFieldD2_01_03_73_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490300");
 public static readonly Guid DataFieldD2_01_03_73_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490400");
+public static readonly Guid DataFieldD2_01_03_73_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20103490500");
 public static readonly Guid TypeD2_01_03_74Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201034a0000");
 public static readonly Guid DataFieldD2_01_03_74_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201034a0100");
 public static readonly Guid DataFieldD2_01_03_74_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201034a0200");
@@ -595,6 +646,7 @@ public static readonly Guid DataFieldD2_01_04_75_DV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_04_75_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044b0300");
 public static readonly Guid DataFieldD2_01_04_75_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044b0400");
 public static readonly Guid DataFieldD2_01_04_75_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044b0500");
+public static readonly Guid DataFieldD2_01_04_75_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044b0600");
 public static readonly Guid TypeD2_01_04_76Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0000");
 public static readonly Guid DataFieldD2_01_04_76_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0100");
 public static readonly Guid DataFieldD2_01_04_76_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0200");
@@ -609,10 +661,12 @@ public static readonly Guid DataFieldD2_01_04_76_DT2_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_04_76_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0b00");
 public static readonly Guid DataFieldD2_01_04_76_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0c00");
 public static readonly Guid DataFieldD2_01_04_76_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0d00");
+public static readonly Guid DataFieldD2_01_04_76_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044c0e00");
 public static readonly Guid TypeD2_01_04_77Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044d0000");
 public static readonly Guid DataFieldD2_01_04_77_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044d0100");
 public static readonly Guid DataFieldD2_01_04_77_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044d0200");
 public static readonly Guid DataFieldD2_01_04_77_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044d0300");
+public static readonly Guid DataFieldD2_01_04_77_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044d0400");
 public static readonly Guid TypeD2_01_04_78Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044e0000");
 public static readonly Guid DataFieldD2_01_04_78_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044e0100");
 public static readonly Guid DataFieldD2_01_04_78_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044e0200");
@@ -637,11 +691,13 @@ public static readonly Guid DataFieldD2_01_04_79_MAT_RAW_Guid = new Guid("eb2c52
 public static readonly Guid DataFieldD2_01_04_79_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044f0b00");
 public static readonly Guid DataFieldD2_01_04_79_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044f0c00");
 public static readonly Guid DataFieldD2_01_04_79_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044f0d00");
+public static readonly Guid DataFieldD2_01_04_79_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201044f0e00");
 public static readonly Guid TypeD2_01_04_80Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500000");
 public static readonly Guid DataFieldD2_01_04_80_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500100");
 public static readonly Guid DataFieldD2_01_04_80_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500200");
 public static readonly Guid DataFieldD2_01_04_80_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500300");
 public static readonly Guid DataFieldD2_01_04_80_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500400");
+public static readonly Guid DataFieldD2_01_04_80_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104500500");
 public static readonly Guid TypeD2_01_04_81Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104510000");
 public static readonly Guid DataFieldD2_01_04_81_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104510100");
 public static readonly Guid DataFieldD2_01_04_81_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104510200");
@@ -651,8 +707,10 @@ public static readonly Guid DataFieldD2_01_04_81_MV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid TypeD2_01_04_82Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104520000");
 public static readonly Guid DataFieldD2_01_04_82_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104520100");
 public static readonly Guid DataFieldD2_01_04_82_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104520200");
+public static readonly Guid DataFieldD2_01_04_82_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104520300");
 public static readonly Guid TypeD2_01_04_83Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104530000");
 public static readonly Guid DataFieldD2_01_04_83_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104530100");
+public static readonly Guid DataFieldD2_01_04_83_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104530200");
 public static readonly Guid TypeD2_01_04_84Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104540000");
 public static readonly Guid DataFieldD2_01_04_84_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104540100");
 public static readonly Guid DataFieldD2_01_04_84_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104540200");
@@ -664,10 +722,12 @@ public static readonly Guid DataFieldD2_01_04_85_AOT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_04_85_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104550500");
 public static readonly Guid DataFieldD2_01_04_85_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104550600");
 public static readonly Guid DataFieldD2_01_04_85_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104550700");
+public static readonly Guid DataFieldD2_01_04_85_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104550800");
 public static readonly Guid TypeD2_01_04_86Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104560000");
 public static readonly Guid DataFieldD2_01_04_86_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104560100");
 public static readonly Guid DataFieldD2_01_04_86_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104560200");
 public static readonly Guid DataFieldD2_01_04_86_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104560300");
+public static readonly Guid DataFieldD2_01_04_86_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104560400");
 public static readonly Guid TypeD2_01_04_87Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104570000");
 public static readonly Guid DataFieldD2_01_04_87_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104570100");
 public static readonly Guid DataFieldD2_01_04_87_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104570200");
@@ -684,11 +744,13 @@ public static readonly Guid DataFieldD2_01_04_88_IO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_04_88_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104580500");
 public static readonly Guid DataFieldD2_01_04_88_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104580600");
 public static readonly Guid DataFieldD2_01_04_88_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104580700");
+public static readonly Guid DataFieldD2_01_04_88_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104580800");
 public static readonly Guid TypeD2_01_04_89Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590000");
 public static readonly Guid DataFieldD2_01_04_89_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590100");
 public static readonly Guid DataFieldD2_01_04_89_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590200");
 public static readonly Guid DataFieldD2_01_04_89_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590300");
 public static readonly Guid DataFieldD2_01_04_89_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590400");
+public static readonly Guid DataFieldD2_01_04_89_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20104590500");
 public static readonly Guid TypeD2_01_04_90Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201045a0000");
 public static readonly Guid DataFieldD2_01_04_90_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201045a0100");
 public static readonly Guid DataFieldD2_01_04_90_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201045a0200");
@@ -703,6 +765,7 @@ public static readonly Guid DataFieldD2_01_05_91_DV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_01_05_91_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055b0300");
 public static readonly Guid DataFieldD2_01_05_91_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055b0400");
 public static readonly Guid DataFieldD2_01_05_91_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055b0500");
+public static readonly Guid DataFieldD2_01_05_91_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055b0600");
 public static readonly Guid TypeD2_01_05_92Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0000");
 public static readonly Guid DataFieldD2_01_05_92_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0100");
 public static readonly Guid DataFieldD2_01_05_92_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0200");
@@ -717,10 +780,12 @@ public static readonly Guid DataFieldD2_01_05_92_DT2_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_05_92_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0b00");
 public static readonly Guid DataFieldD2_01_05_92_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0c00");
 public static readonly Guid DataFieldD2_01_05_92_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0d00");
+public static readonly Guid DataFieldD2_01_05_92_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055c0e00");
 public static readonly Guid TypeD2_01_05_93Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055d0000");
 public static readonly Guid DataFieldD2_01_05_93_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055d0100");
 public static readonly Guid DataFieldD2_01_05_93_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055d0200");
 public static readonly Guid DataFieldD2_01_05_93_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055d0300");
+public static readonly Guid DataFieldD2_01_05_93_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055d0400");
 public static readonly Guid TypeD2_01_05_94Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055e0000");
 public static readonly Guid DataFieldD2_01_05_94_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055e0100");
 public static readonly Guid DataFieldD2_01_05_94_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055e0200");
@@ -745,11 +810,13 @@ public static readonly Guid DataFieldD2_01_05_95_MAT_RAW_Guid = new Guid("eb2c52
 public static readonly Guid DataFieldD2_01_05_95_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055f0b00");
 public static readonly Guid DataFieldD2_01_05_95_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055f0c00");
 public static readonly Guid DataFieldD2_01_05_95_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055f0d00");
+public static readonly Guid DataFieldD2_01_05_95_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201055f0e00");
 public static readonly Guid TypeD2_01_05_96Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600000");
 public static readonly Guid DataFieldD2_01_05_96_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600100");
 public static readonly Guid DataFieldD2_01_05_96_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600200");
 public static readonly Guid DataFieldD2_01_05_96_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600300");
 public static readonly Guid DataFieldD2_01_05_96_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600400");
+public static readonly Guid DataFieldD2_01_05_96_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105600500");
 public static readonly Guid TypeD2_01_05_97Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105610000");
 public static readonly Guid DataFieldD2_01_05_97_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105610100");
 public static readonly Guid DataFieldD2_01_05_97_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105610200");
@@ -759,8 +826,10 @@ public static readonly Guid DataFieldD2_01_05_97_MV_Guid = new Guid("eb2c5295-4a
 public static readonly Guid TypeD2_01_05_98Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105620000");
 public static readonly Guid DataFieldD2_01_05_98_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105620100");
 public static readonly Guid DataFieldD2_01_05_98_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105620200");
+public static readonly Guid DataFieldD2_01_05_98_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105620300");
 public static readonly Guid TypeD2_01_05_99Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105630000");
 public static readonly Guid DataFieldD2_01_05_99_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105630100");
+public static readonly Guid DataFieldD2_01_05_99_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105630200");
 public static readonly Guid TypeD2_01_05_100Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105640000");
 public static readonly Guid DataFieldD2_01_05_100_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105640100");
 public static readonly Guid DataFieldD2_01_05_100_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105640200");
@@ -772,10 +841,12 @@ public static readonly Guid DataFieldD2_01_05_101_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_05_101_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105650500");
 public static readonly Guid DataFieldD2_01_05_101_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105650600");
 public static readonly Guid DataFieldD2_01_05_101_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105650700");
+public static readonly Guid DataFieldD2_01_05_101_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105650800");
 public static readonly Guid TypeD2_01_05_102Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105660000");
 public static readonly Guid DataFieldD2_01_05_102_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105660100");
 public static readonly Guid DataFieldD2_01_05_102_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105660200");
 public static readonly Guid DataFieldD2_01_05_102_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105660300");
+public static readonly Guid DataFieldD2_01_05_102_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105660400");
 public static readonly Guid TypeD2_01_05_103Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105670000");
 public static readonly Guid DataFieldD2_01_05_103_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105670100");
 public static readonly Guid DataFieldD2_01_05_103_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105670200");
@@ -792,11 +863,13 @@ public static readonly Guid DataFieldD2_01_05_104_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_05_104_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105680500");
 public static readonly Guid DataFieldD2_01_05_104_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105680600");
 public static readonly Guid DataFieldD2_01_05_104_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105680700");
+public static readonly Guid DataFieldD2_01_05_104_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105680800");
 public static readonly Guid TypeD2_01_05_105Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690000");
 public static readonly Guid DataFieldD2_01_05_105_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690100");
 public static readonly Guid DataFieldD2_01_05_105_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690200");
 public static readonly Guid DataFieldD2_01_05_105_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690300");
 public static readonly Guid DataFieldD2_01_05_105_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690400");
+public static readonly Guid DataFieldD2_01_05_105_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20105690500");
 public static readonly Guid TypeD2_01_05_106Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201056a0000");
 public static readonly Guid DataFieldD2_01_05_106_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201056a0100");
 public static readonly Guid DataFieldD2_01_05_106_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201056a0200");
@@ -811,6 +884,7 @@ public static readonly Guid DataFieldD2_01_06_107_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_06_107_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066b0300");
 public static readonly Guid DataFieldD2_01_06_107_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066b0400");
 public static readonly Guid DataFieldD2_01_06_107_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066b0500");
+public static readonly Guid DataFieldD2_01_06_107_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066b0600");
 public static readonly Guid TypeD2_01_06_108Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0000");
 public static readonly Guid DataFieldD2_01_06_108_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0100");
 public static readonly Guid DataFieldD2_01_06_108_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0200");
@@ -825,10 +899,12 @@ public static readonly Guid DataFieldD2_01_06_108_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_06_108_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0b00");
 public static readonly Guid DataFieldD2_01_06_108_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0c00");
 public static readonly Guid DataFieldD2_01_06_108_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0d00");
+public static readonly Guid DataFieldD2_01_06_108_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066c0e00");
 public static readonly Guid TypeD2_01_06_109Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066d0000");
 public static readonly Guid DataFieldD2_01_06_109_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066d0100");
 public static readonly Guid DataFieldD2_01_06_109_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066d0200");
 public static readonly Guid DataFieldD2_01_06_109_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066d0300");
+public static readonly Guid DataFieldD2_01_06_109_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066d0400");
 public static readonly Guid TypeD2_01_06_110Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066e0000");
 public static readonly Guid DataFieldD2_01_06_110_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066e0100");
 public static readonly Guid DataFieldD2_01_06_110_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066e0200");
@@ -853,11 +929,13 @@ public static readonly Guid DataFieldD2_01_06_111_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_06_111_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066f0b00");
 public static readonly Guid DataFieldD2_01_06_111_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066f0c00");
 public static readonly Guid DataFieldD2_01_06_111_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066f0d00");
+public static readonly Guid DataFieldD2_01_06_111_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201066f0e00");
 public static readonly Guid TypeD2_01_06_112Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700000");
 public static readonly Guid DataFieldD2_01_06_112_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700100");
 public static readonly Guid DataFieldD2_01_06_112_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700200");
 public static readonly Guid DataFieldD2_01_06_112_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700300");
 public static readonly Guid DataFieldD2_01_06_112_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700400");
+public static readonly Guid DataFieldD2_01_06_112_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106700500");
 public static readonly Guid TypeD2_01_06_113Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106710000");
 public static readonly Guid DataFieldD2_01_06_113_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106710100");
 public static readonly Guid DataFieldD2_01_06_113_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106710200");
@@ -867,8 +945,10 @@ public static readonly Guid DataFieldD2_01_06_113_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_06_114Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106720000");
 public static readonly Guid DataFieldD2_01_06_114_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106720100");
 public static readonly Guid DataFieldD2_01_06_114_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106720200");
+public static readonly Guid DataFieldD2_01_06_114_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106720300");
 public static readonly Guid TypeD2_01_06_115Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106730000");
 public static readonly Guid DataFieldD2_01_06_115_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106730100");
+public static readonly Guid DataFieldD2_01_06_115_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106730200");
 public static readonly Guid TypeD2_01_06_116Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106740000");
 public static readonly Guid DataFieldD2_01_06_116_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106740100");
 public static readonly Guid DataFieldD2_01_06_116_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106740200");
@@ -880,10 +960,12 @@ public static readonly Guid DataFieldD2_01_06_117_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_06_117_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106750500");
 public static readonly Guid DataFieldD2_01_06_117_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106750600");
 public static readonly Guid DataFieldD2_01_06_117_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106750700");
+public static readonly Guid DataFieldD2_01_06_117_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106750800");
 public static readonly Guid TypeD2_01_06_118Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106760000");
 public static readonly Guid DataFieldD2_01_06_118_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106760100");
 public static readonly Guid DataFieldD2_01_06_118_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106760200");
 public static readonly Guid DataFieldD2_01_06_118_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106760300");
+public static readonly Guid DataFieldD2_01_06_118_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106760400");
 public static readonly Guid TypeD2_01_06_119Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106770000");
 public static readonly Guid DataFieldD2_01_06_119_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106770100");
 public static readonly Guid DataFieldD2_01_06_119_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106770200");
@@ -900,11 +982,13 @@ public static readonly Guid DataFieldD2_01_06_120_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_06_120_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106780500");
 public static readonly Guid DataFieldD2_01_06_120_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106780600");
 public static readonly Guid DataFieldD2_01_06_120_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106780700");
+public static readonly Guid DataFieldD2_01_06_120_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106780800");
 public static readonly Guid TypeD2_01_06_121Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790000");
 public static readonly Guid DataFieldD2_01_06_121_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790100");
 public static readonly Guid DataFieldD2_01_06_121_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790200");
 public static readonly Guid DataFieldD2_01_06_121_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790300");
 public static readonly Guid DataFieldD2_01_06_121_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790400");
+public static readonly Guid DataFieldD2_01_06_121_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20106790500");
 public static readonly Guid TypeD2_01_06_122Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201067a0000");
 public static readonly Guid DataFieldD2_01_06_122_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201067a0100");
 public static readonly Guid DataFieldD2_01_06_122_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201067a0200");
@@ -919,6 +1003,7 @@ public static readonly Guid DataFieldD2_01_07_123_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_07_123_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077b0300");
 public static readonly Guid DataFieldD2_01_07_123_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077b0400");
 public static readonly Guid DataFieldD2_01_07_123_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077b0500");
+public static readonly Guid DataFieldD2_01_07_123_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077b0600");
 public static readonly Guid TypeD2_01_07_124Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0000");
 public static readonly Guid DataFieldD2_01_07_124_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0100");
 public static readonly Guid DataFieldD2_01_07_124_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0200");
@@ -933,10 +1018,12 @@ public static readonly Guid DataFieldD2_01_07_124_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_07_124_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0b00");
 public static readonly Guid DataFieldD2_01_07_124_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0c00");
 public static readonly Guid DataFieldD2_01_07_124_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0d00");
+public static readonly Guid DataFieldD2_01_07_124_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077c0e00");
 public static readonly Guid TypeD2_01_07_125Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077d0000");
 public static readonly Guid DataFieldD2_01_07_125_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077d0100");
 public static readonly Guid DataFieldD2_01_07_125_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077d0200");
 public static readonly Guid DataFieldD2_01_07_125_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077d0300");
+public static readonly Guid DataFieldD2_01_07_125_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077d0400");
 public static readonly Guid TypeD2_01_07_126Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077e0000");
 public static readonly Guid DataFieldD2_01_07_126_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077e0100");
 public static readonly Guid DataFieldD2_01_07_126_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077e0200");
@@ -961,11 +1048,13 @@ public static readonly Guid DataFieldD2_01_07_127_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_07_127_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077f0b00");
 public static readonly Guid DataFieldD2_01_07_127_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077f0c00");
 public static readonly Guid DataFieldD2_01_07_127_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077f0d00");
+public static readonly Guid DataFieldD2_01_07_127_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201077f0e00");
 public static readonly Guid TypeD2_01_07_128Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800000");
 public static readonly Guid DataFieldD2_01_07_128_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800100");
 public static readonly Guid DataFieldD2_01_07_128_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800200");
 public static readonly Guid DataFieldD2_01_07_128_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800300");
 public static readonly Guid DataFieldD2_01_07_128_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800400");
+public static readonly Guid DataFieldD2_01_07_128_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107800500");
 public static readonly Guid TypeD2_01_07_129Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107810000");
 public static readonly Guid DataFieldD2_01_07_129_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107810100");
 public static readonly Guid DataFieldD2_01_07_129_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107810200");
@@ -975,8 +1064,10 @@ public static readonly Guid DataFieldD2_01_07_129_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_07_130Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107820000");
 public static readonly Guid DataFieldD2_01_07_130_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107820100");
 public static readonly Guid DataFieldD2_01_07_130_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107820200");
+public static readonly Guid DataFieldD2_01_07_130_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107820300");
 public static readonly Guid TypeD2_01_07_131Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107830000");
 public static readonly Guid DataFieldD2_01_07_131_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107830100");
+public static readonly Guid DataFieldD2_01_07_131_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107830200");
 public static readonly Guid TypeD2_01_07_132Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107840000");
 public static readonly Guid DataFieldD2_01_07_132_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107840100");
 public static readonly Guid DataFieldD2_01_07_132_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107840200");
@@ -988,10 +1079,12 @@ public static readonly Guid DataFieldD2_01_07_133_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_07_133_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107850500");
 public static readonly Guid DataFieldD2_01_07_133_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107850600");
 public static readonly Guid DataFieldD2_01_07_133_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107850700");
+public static readonly Guid DataFieldD2_01_07_133_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107850800");
 public static readonly Guid TypeD2_01_07_134Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107860000");
 public static readonly Guid DataFieldD2_01_07_134_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107860100");
 public static readonly Guid DataFieldD2_01_07_134_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107860200");
 public static readonly Guid DataFieldD2_01_07_134_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107860300");
+public static readonly Guid DataFieldD2_01_07_134_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107860400");
 public static readonly Guid TypeD2_01_07_135Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107870000");
 public static readonly Guid DataFieldD2_01_07_135_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107870100");
 public static readonly Guid DataFieldD2_01_07_135_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107870200");
@@ -1008,11 +1101,13 @@ public static readonly Guid DataFieldD2_01_07_136_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_07_136_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107880500");
 public static readonly Guid DataFieldD2_01_07_136_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107880600");
 public static readonly Guid DataFieldD2_01_07_136_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107880700");
+public static readonly Guid DataFieldD2_01_07_136_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107880800");
 public static readonly Guid TypeD2_01_07_137Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890000");
 public static readonly Guid DataFieldD2_01_07_137_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890100");
 public static readonly Guid DataFieldD2_01_07_137_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890200");
 public static readonly Guid DataFieldD2_01_07_137_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890300");
 public static readonly Guid DataFieldD2_01_07_137_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890400");
+public static readonly Guid DataFieldD2_01_07_137_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20107890500");
 public static readonly Guid TypeD2_01_07_138Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201078a0000");
 public static readonly Guid DataFieldD2_01_07_138_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201078a0100");
 public static readonly Guid DataFieldD2_01_07_138_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201078a0200");
@@ -1027,6 +1122,7 @@ public static readonly Guid DataFieldD2_01_08_139_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_08_139_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088b0300");
 public static readonly Guid DataFieldD2_01_08_139_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088b0400");
 public static readonly Guid DataFieldD2_01_08_139_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088b0500");
+public static readonly Guid DataFieldD2_01_08_139_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088b0600");
 public static readonly Guid TypeD2_01_08_140Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0000");
 public static readonly Guid DataFieldD2_01_08_140_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0100");
 public static readonly Guid DataFieldD2_01_08_140_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0200");
@@ -1041,10 +1137,12 @@ public static readonly Guid DataFieldD2_01_08_140_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_08_140_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0b00");
 public static readonly Guid DataFieldD2_01_08_140_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0c00");
 public static readonly Guid DataFieldD2_01_08_140_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0d00");
+public static readonly Guid DataFieldD2_01_08_140_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088c0e00");
 public static readonly Guid TypeD2_01_08_141Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088d0000");
 public static readonly Guid DataFieldD2_01_08_141_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088d0100");
 public static readonly Guid DataFieldD2_01_08_141_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088d0200");
 public static readonly Guid DataFieldD2_01_08_141_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088d0300");
+public static readonly Guid DataFieldD2_01_08_141_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088d0400");
 public static readonly Guid TypeD2_01_08_142Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088e0000");
 public static readonly Guid DataFieldD2_01_08_142_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088e0100");
 public static readonly Guid DataFieldD2_01_08_142_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088e0200");
@@ -1069,11 +1167,13 @@ public static readonly Guid DataFieldD2_01_08_143_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_08_143_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088f0b00");
 public static readonly Guid DataFieldD2_01_08_143_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088f0c00");
 public static readonly Guid DataFieldD2_01_08_143_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088f0d00");
+public static readonly Guid DataFieldD2_01_08_143_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201088f0e00");
 public static readonly Guid TypeD2_01_08_144Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900000");
 public static readonly Guid DataFieldD2_01_08_144_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900100");
 public static readonly Guid DataFieldD2_01_08_144_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900200");
 public static readonly Guid DataFieldD2_01_08_144_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900300");
 public static readonly Guid DataFieldD2_01_08_144_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900400");
+public static readonly Guid DataFieldD2_01_08_144_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108900500");
 public static readonly Guid TypeD2_01_08_145Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108910000");
 public static readonly Guid DataFieldD2_01_08_145_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108910100");
 public static readonly Guid DataFieldD2_01_08_145_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108910200");
@@ -1083,8 +1183,10 @@ public static readonly Guid DataFieldD2_01_08_145_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_08_146Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108920000");
 public static readonly Guid DataFieldD2_01_08_146_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108920100");
 public static readonly Guid DataFieldD2_01_08_146_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108920200");
+public static readonly Guid DataFieldD2_01_08_146_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108920300");
 public static readonly Guid TypeD2_01_08_147Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108930000");
 public static readonly Guid DataFieldD2_01_08_147_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108930100");
+public static readonly Guid DataFieldD2_01_08_147_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108930200");
 public static readonly Guid TypeD2_01_08_148Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108940000");
 public static readonly Guid DataFieldD2_01_08_148_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108940100");
 public static readonly Guid DataFieldD2_01_08_148_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108940200");
@@ -1096,10 +1198,12 @@ public static readonly Guid DataFieldD2_01_08_149_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_08_149_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108950500");
 public static readonly Guid DataFieldD2_01_08_149_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108950600");
 public static readonly Guid DataFieldD2_01_08_149_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108950700");
+public static readonly Guid DataFieldD2_01_08_149_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108950800");
 public static readonly Guid TypeD2_01_08_150Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108960000");
 public static readonly Guid DataFieldD2_01_08_150_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108960100");
 public static readonly Guid DataFieldD2_01_08_150_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108960200");
 public static readonly Guid DataFieldD2_01_08_150_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108960300");
+public static readonly Guid DataFieldD2_01_08_150_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108960400");
 public static readonly Guid TypeD2_01_08_151Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108970000");
 public static readonly Guid DataFieldD2_01_08_151_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108970100");
 public static readonly Guid DataFieldD2_01_08_151_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108970200");
@@ -1116,11 +1220,13 @@ public static readonly Guid DataFieldD2_01_08_152_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_08_152_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108980500");
 public static readonly Guid DataFieldD2_01_08_152_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108980600");
 public static readonly Guid DataFieldD2_01_08_152_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108980700");
+public static readonly Guid DataFieldD2_01_08_152_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108980800");
 public static readonly Guid TypeD2_01_08_153Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990000");
 public static readonly Guid DataFieldD2_01_08_153_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990100");
 public static readonly Guid DataFieldD2_01_08_153_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990200");
 public static readonly Guid DataFieldD2_01_08_153_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990300");
 public static readonly Guid DataFieldD2_01_08_153_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990400");
+public static readonly Guid DataFieldD2_01_08_153_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20108990500");
 public static readonly Guid TypeD2_01_08_154Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201089a0000");
 public static readonly Guid DataFieldD2_01_08_154_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201089a0100");
 public static readonly Guid DataFieldD2_01_08_154_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201089a0200");
@@ -1135,6 +1241,7 @@ public static readonly Guid DataFieldD2_01_09_155_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_09_155_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099b0300");
 public static readonly Guid DataFieldD2_01_09_155_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099b0400");
 public static readonly Guid DataFieldD2_01_09_155_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099b0500");
+public static readonly Guid DataFieldD2_01_09_155_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099b0600");
 public static readonly Guid TypeD2_01_09_156Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0000");
 public static readonly Guid DataFieldD2_01_09_156_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0100");
 public static readonly Guid DataFieldD2_01_09_156_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0200");
@@ -1149,10 +1256,12 @@ public static readonly Guid DataFieldD2_01_09_156_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_09_156_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0b00");
 public static readonly Guid DataFieldD2_01_09_156_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0c00");
 public static readonly Guid DataFieldD2_01_09_156_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0d00");
+public static readonly Guid DataFieldD2_01_09_156_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099c0e00");
 public static readonly Guid TypeD2_01_09_157Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099d0000");
 public static readonly Guid DataFieldD2_01_09_157_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099d0100");
 public static readonly Guid DataFieldD2_01_09_157_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099d0200");
 public static readonly Guid DataFieldD2_01_09_157_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099d0300");
+public static readonly Guid DataFieldD2_01_09_157_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099d0400");
 public static readonly Guid TypeD2_01_09_158Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099e0000");
 public static readonly Guid DataFieldD2_01_09_158_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099e0100");
 public static readonly Guid DataFieldD2_01_09_158_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099e0200");
@@ -1177,11 +1286,13 @@ public static readonly Guid DataFieldD2_01_09_159_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_09_159_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099f0b00");
 public static readonly Guid DataFieldD2_01_09_159_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099f0c00");
 public static readonly Guid DataFieldD2_01_09_159_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099f0d00");
+public static readonly Guid DataFieldD2_01_09_159_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201099f0e00");
 public static readonly Guid TypeD2_01_09_160Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00000");
 public static readonly Guid DataFieldD2_01_09_160_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00100");
 public static readonly Guid DataFieldD2_01_09_160_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00200");
 public static readonly Guid DataFieldD2_01_09_160_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00300");
 public static readonly Guid DataFieldD2_01_09_160_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00400");
+public static readonly Guid DataFieldD2_01_09_160_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a00500");
 public static readonly Guid TypeD2_01_09_161Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a10000");
 public static readonly Guid DataFieldD2_01_09_161_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a10100");
 public static readonly Guid DataFieldD2_01_09_161_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a10200");
@@ -1191,8 +1302,10 @@ public static readonly Guid DataFieldD2_01_09_161_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_09_162Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a20000");
 public static readonly Guid DataFieldD2_01_09_162_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a20100");
 public static readonly Guid DataFieldD2_01_09_162_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a20200");
+public static readonly Guid DataFieldD2_01_09_162_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a20300");
 public static readonly Guid TypeD2_01_09_163Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a30000");
 public static readonly Guid DataFieldD2_01_09_163_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a30100");
+public static readonly Guid DataFieldD2_01_09_163_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a30200");
 public static readonly Guid TypeD2_01_09_164Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a40000");
 public static readonly Guid DataFieldD2_01_09_164_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a40100");
 public static readonly Guid DataFieldD2_01_09_164_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a40200");
@@ -1204,10 +1317,12 @@ public static readonly Guid DataFieldD2_01_09_165_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_09_165_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a50500");
 public static readonly Guid DataFieldD2_01_09_165_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a50600");
 public static readonly Guid DataFieldD2_01_09_165_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a50700");
+public static readonly Guid DataFieldD2_01_09_165_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a50800");
 public static readonly Guid TypeD2_01_09_166Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a60000");
 public static readonly Guid DataFieldD2_01_09_166_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a60100");
 public static readonly Guid DataFieldD2_01_09_166_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a60200");
 public static readonly Guid DataFieldD2_01_09_166_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a60300");
+public static readonly Guid DataFieldD2_01_09_166_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a60400");
 public static readonly Guid TypeD2_01_09_167Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a70000");
 public static readonly Guid DataFieldD2_01_09_167_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a70100");
 public static readonly Guid DataFieldD2_01_09_167_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a70200");
@@ -1224,11 +1339,13 @@ public static readonly Guid DataFieldD2_01_09_168_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_09_168_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a80500");
 public static readonly Guid DataFieldD2_01_09_168_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a80600");
 public static readonly Guid DataFieldD2_01_09_168_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a80700");
+public static readonly Guid DataFieldD2_01_09_168_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a80800");
 public static readonly Guid TypeD2_01_09_169Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90000");
 public static readonly Guid DataFieldD2_01_09_169_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90100");
 public static readonly Guid DataFieldD2_01_09_169_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90200");
 public static readonly Guid DataFieldD2_01_09_169_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90300");
 public static readonly Guid DataFieldD2_01_09_169_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90400");
+public static readonly Guid DataFieldD2_01_09_169_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109a90500");
 public static readonly Guid TypeD2_01_09_170Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109aa0000");
 public static readonly Guid DataFieldD2_01_09_170_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109aa0100");
 public static readonly Guid DataFieldD2_01_09_170_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20109aa0200");
@@ -1243,6 +1360,7 @@ public static readonly Guid DataFieldD2_01_0A_171_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0A_171_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aab0300");
 public static readonly Guid DataFieldD2_01_0A_171_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aab0400");
 public static readonly Guid DataFieldD2_01_0A_171_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aab0500");
+public static readonly Guid DataFieldD2_01_0A_171_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aab0600");
 public static readonly Guid TypeD2_01_0A_172Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0000");
 public static readonly Guid DataFieldD2_01_0A_172_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0100");
 public static readonly Guid DataFieldD2_01_0A_172_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0200");
@@ -1257,10 +1375,12 @@ public static readonly Guid DataFieldD2_01_0A_172_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0A_172_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0b00");
 public static readonly Guid DataFieldD2_01_0A_172_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0c00");
 public static readonly Guid DataFieldD2_01_0A_172_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0d00");
+public static readonly Guid DataFieldD2_01_0A_172_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aac0e00");
 public static readonly Guid TypeD2_01_0A_173Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aad0000");
 public static readonly Guid DataFieldD2_01_0A_173_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aad0100");
 public static readonly Guid DataFieldD2_01_0A_173_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aad0200");
 public static readonly Guid DataFieldD2_01_0A_173_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aad0300");
+public static readonly Guid DataFieldD2_01_0A_173_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aad0400");
 public static readonly Guid TypeD2_01_0A_174Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aae0000");
 public static readonly Guid DataFieldD2_01_0A_174_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aae0100");
 public static readonly Guid DataFieldD2_01_0A_174_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aae0200");
@@ -1285,11 +1405,13 @@ public static readonly Guid DataFieldD2_01_0A_175_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0A_175_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aaf0b00");
 public static readonly Guid DataFieldD2_01_0A_175_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aaf0c00");
 public static readonly Guid DataFieldD2_01_0A_175_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aaf0d00");
+public static readonly Guid DataFieldD2_01_0A_175_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aaf0e00");
 public static readonly Guid TypeD2_01_0A_176Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00000");
 public static readonly Guid DataFieldD2_01_0A_176_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00100");
 public static readonly Guid DataFieldD2_01_0A_176_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00200");
 public static readonly Guid DataFieldD2_01_0A_176_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00300");
 public static readonly Guid DataFieldD2_01_0A_176_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00400");
+public static readonly Guid DataFieldD2_01_0A_176_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab00500");
 public static readonly Guid TypeD2_01_0A_177Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab10000");
 public static readonly Guid DataFieldD2_01_0A_177_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab10100");
 public static readonly Guid DataFieldD2_01_0A_177_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab10200");
@@ -1299,8 +1421,10 @@ public static readonly Guid DataFieldD2_01_0A_177_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0A_178Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab20000");
 public static readonly Guid DataFieldD2_01_0A_178_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab20100");
 public static readonly Guid DataFieldD2_01_0A_178_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab20200");
+public static readonly Guid DataFieldD2_01_0A_178_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab20300");
 public static readonly Guid TypeD2_01_0A_179Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab30000");
 public static readonly Guid DataFieldD2_01_0A_179_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab30100");
+public static readonly Guid DataFieldD2_01_0A_179_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab30200");
 public static readonly Guid TypeD2_01_0A_180Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab40000");
 public static readonly Guid DataFieldD2_01_0A_180_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab40100");
 public static readonly Guid DataFieldD2_01_0A_180_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab40200");
@@ -1312,10 +1436,12 @@ public static readonly Guid DataFieldD2_01_0A_181_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0A_181_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab50500");
 public static readonly Guid DataFieldD2_01_0A_181_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab50600");
 public static readonly Guid DataFieldD2_01_0A_181_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab50700");
+public static readonly Guid DataFieldD2_01_0A_181_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab50800");
 public static readonly Guid TypeD2_01_0A_182Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab60000");
 public static readonly Guid DataFieldD2_01_0A_182_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab60100");
 public static readonly Guid DataFieldD2_01_0A_182_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab60200");
 public static readonly Guid DataFieldD2_01_0A_182_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab60300");
+public static readonly Guid DataFieldD2_01_0A_182_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab60400");
 public static readonly Guid TypeD2_01_0A_183Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab70000");
 public static readonly Guid DataFieldD2_01_0A_183_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab70100");
 public static readonly Guid DataFieldD2_01_0A_183_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab70200");
@@ -1332,11 +1458,13 @@ public static readonly Guid DataFieldD2_01_0A_184_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0A_184_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab80500");
 public static readonly Guid DataFieldD2_01_0A_184_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab80600");
 public static readonly Guid DataFieldD2_01_0A_184_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab80700");
+public static readonly Guid DataFieldD2_01_0A_184_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab80800");
 public static readonly Guid TypeD2_01_0A_185Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90000");
 public static readonly Guid DataFieldD2_01_0A_185_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90100");
 public static readonly Guid DataFieldD2_01_0A_185_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90200");
 public static readonly Guid DataFieldD2_01_0A_185_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90300");
 public static readonly Guid DataFieldD2_01_0A_185_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90400");
+public static readonly Guid DataFieldD2_01_0A_185_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ab90500");
 public static readonly Guid TypeD2_01_0A_186Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aba0000");
 public static readonly Guid DataFieldD2_01_0A_186_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aba0100");
 public static readonly Guid DataFieldD2_01_0A_186_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010aba0200");
@@ -1351,6 +1479,7 @@ public static readonly Guid DataFieldD2_01_0B_187_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0B_187_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbb0300");
 public static readonly Guid DataFieldD2_01_0B_187_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbb0400");
 public static readonly Guid DataFieldD2_01_0B_187_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbb0500");
+public static readonly Guid DataFieldD2_01_0B_187_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbb0600");
 public static readonly Guid TypeD2_01_0B_188Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0000");
 public static readonly Guid DataFieldD2_01_0B_188_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0100");
 public static readonly Guid DataFieldD2_01_0B_188_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0200");
@@ -1365,10 +1494,12 @@ public static readonly Guid DataFieldD2_01_0B_188_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0B_188_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0b00");
 public static readonly Guid DataFieldD2_01_0B_188_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0c00");
 public static readonly Guid DataFieldD2_01_0B_188_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0d00");
+public static readonly Guid DataFieldD2_01_0B_188_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbc0e00");
 public static readonly Guid TypeD2_01_0B_189Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbd0000");
 public static readonly Guid DataFieldD2_01_0B_189_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbd0100");
 public static readonly Guid DataFieldD2_01_0B_189_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbd0200");
 public static readonly Guid DataFieldD2_01_0B_189_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbd0300");
+public static readonly Guid DataFieldD2_01_0B_189_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbd0400");
 public static readonly Guid TypeD2_01_0B_190Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbe0000");
 public static readonly Guid DataFieldD2_01_0B_190_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbe0100");
 public static readonly Guid DataFieldD2_01_0B_190_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbe0200");
@@ -1393,11 +1524,13 @@ public static readonly Guid DataFieldD2_01_0B_191_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0B_191_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbf0b00");
 public static readonly Guid DataFieldD2_01_0B_191_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbf0c00");
 public static readonly Guid DataFieldD2_01_0B_191_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbf0d00");
+public static readonly Guid DataFieldD2_01_0B_191_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bbf0e00");
 public static readonly Guid TypeD2_01_0B_192Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00000");
 public static readonly Guid DataFieldD2_01_0B_192_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00100");
 public static readonly Guid DataFieldD2_01_0B_192_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00200");
 public static readonly Guid DataFieldD2_01_0B_192_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00300");
 public static readonly Guid DataFieldD2_01_0B_192_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00400");
+public static readonly Guid DataFieldD2_01_0B_192_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc00500");
 public static readonly Guid TypeD2_01_0B_193Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc10000");
 public static readonly Guid DataFieldD2_01_0B_193_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc10100");
 public static readonly Guid DataFieldD2_01_0B_193_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc10200");
@@ -1407,8 +1540,10 @@ public static readonly Guid DataFieldD2_01_0B_193_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0B_194Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc20000");
 public static readonly Guid DataFieldD2_01_0B_194_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc20100");
 public static readonly Guid DataFieldD2_01_0B_194_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc20200");
+public static readonly Guid DataFieldD2_01_0B_194_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc20300");
 public static readonly Guid TypeD2_01_0B_195Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc30000");
 public static readonly Guid DataFieldD2_01_0B_195_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc30100");
+public static readonly Guid DataFieldD2_01_0B_195_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc30200");
 public static readonly Guid TypeD2_01_0B_196Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc40000");
 public static readonly Guid DataFieldD2_01_0B_196_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc40100");
 public static readonly Guid DataFieldD2_01_0B_196_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc40200");
@@ -1420,10 +1555,12 @@ public static readonly Guid DataFieldD2_01_0B_197_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0B_197_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc50500");
 public static readonly Guid DataFieldD2_01_0B_197_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc50600");
 public static readonly Guid DataFieldD2_01_0B_197_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc50700");
+public static readonly Guid DataFieldD2_01_0B_197_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc50800");
 public static readonly Guid TypeD2_01_0B_198Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc60000");
 public static readonly Guid DataFieldD2_01_0B_198_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc60100");
 public static readonly Guid DataFieldD2_01_0B_198_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc60200");
 public static readonly Guid DataFieldD2_01_0B_198_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc60300");
+public static readonly Guid DataFieldD2_01_0B_198_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc60400");
 public static readonly Guid TypeD2_01_0B_199Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc70000");
 public static readonly Guid DataFieldD2_01_0B_199_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc70100");
 public static readonly Guid DataFieldD2_01_0B_199_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc70200");
@@ -1440,11 +1577,13 @@ public static readonly Guid DataFieldD2_01_0B_200_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0B_200_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc80500");
 public static readonly Guid DataFieldD2_01_0B_200_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc80600");
 public static readonly Guid DataFieldD2_01_0B_200_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc80700");
+public static readonly Guid DataFieldD2_01_0B_200_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc80800");
 public static readonly Guid TypeD2_01_0B_201Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90000");
 public static readonly Guid DataFieldD2_01_0B_201_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90100");
 public static readonly Guid DataFieldD2_01_0B_201_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90200");
 public static readonly Guid DataFieldD2_01_0B_201_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90300");
 public static readonly Guid DataFieldD2_01_0B_201_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90400");
+public static readonly Guid DataFieldD2_01_0B_201_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bc90500");
 public static readonly Guid TypeD2_01_0B_202Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bca0000");
 public static readonly Guid DataFieldD2_01_0B_202_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bca0100");
 public static readonly Guid DataFieldD2_01_0B_202_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010bca0200");
@@ -1459,6 +1598,7 @@ public static readonly Guid DataFieldD2_01_0C_203_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0C_203_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccb0300");
 public static readonly Guid DataFieldD2_01_0C_203_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccb0400");
 public static readonly Guid DataFieldD2_01_0C_203_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccb0500");
+public static readonly Guid DataFieldD2_01_0C_203_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccb0600");
 public static readonly Guid TypeD2_01_0C_204Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0000");
 public static readonly Guid DataFieldD2_01_0C_204_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0100");
 public static readonly Guid DataFieldD2_01_0C_204_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0200");
@@ -1473,10 +1613,12 @@ public static readonly Guid DataFieldD2_01_0C_204_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0C_204_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0b00");
 public static readonly Guid DataFieldD2_01_0C_204_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0c00");
 public static readonly Guid DataFieldD2_01_0C_204_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0d00");
+public static readonly Guid DataFieldD2_01_0C_204_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccc0e00");
 public static readonly Guid TypeD2_01_0C_205Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccd0000");
 public static readonly Guid DataFieldD2_01_0C_205_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccd0100");
 public static readonly Guid DataFieldD2_01_0C_205_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccd0200");
 public static readonly Guid DataFieldD2_01_0C_205_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccd0300");
+public static readonly Guid DataFieldD2_01_0C_205_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccd0400");
 public static readonly Guid TypeD2_01_0C_206Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cce0000");
 public static readonly Guid DataFieldD2_01_0C_206_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cce0100");
 public static readonly Guid DataFieldD2_01_0C_206_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cce0200");
@@ -1501,11 +1643,13 @@ public static readonly Guid DataFieldD2_01_0C_207_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0C_207_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccf0b00");
 public static readonly Guid DataFieldD2_01_0C_207_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccf0c00");
 public static readonly Guid DataFieldD2_01_0C_207_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccf0d00");
+public static readonly Guid DataFieldD2_01_0C_207_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ccf0e00");
 public static readonly Guid TypeD2_01_0C_208Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00000");
 public static readonly Guid DataFieldD2_01_0C_208_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00100");
 public static readonly Guid DataFieldD2_01_0C_208_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00200");
 public static readonly Guid DataFieldD2_01_0C_208_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00300");
 public static readonly Guid DataFieldD2_01_0C_208_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00400");
+public static readonly Guid DataFieldD2_01_0C_208_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd00500");
 public static readonly Guid TypeD2_01_0C_209Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd10000");
 public static readonly Guid DataFieldD2_01_0C_209_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd10100");
 public static readonly Guid DataFieldD2_01_0C_209_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd10200");
@@ -1515,8 +1659,10 @@ public static readonly Guid DataFieldD2_01_0C_209_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0C_210Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd20000");
 public static readonly Guid DataFieldD2_01_0C_210_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd20100");
 public static readonly Guid DataFieldD2_01_0C_210_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd20200");
+public static readonly Guid DataFieldD2_01_0C_210_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd20300");
 public static readonly Guid TypeD2_01_0C_211Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd30000");
 public static readonly Guid DataFieldD2_01_0C_211_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd30100");
+public static readonly Guid DataFieldD2_01_0C_211_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd30200");
 public static readonly Guid TypeD2_01_0C_212Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd40000");
 public static readonly Guid DataFieldD2_01_0C_212_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd40100");
 public static readonly Guid DataFieldD2_01_0C_212_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd40200");
@@ -1528,10 +1674,12 @@ public static readonly Guid DataFieldD2_01_0C_213_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0C_213_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd50500");
 public static readonly Guid DataFieldD2_01_0C_213_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd50600");
 public static readonly Guid DataFieldD2_01_0C_213_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd50700");
+public static readonly Guid DataFieldD2_01_0C_213_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd50800");
 public static readonly Guid TypeD2_01_0C_214Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd60000");
 public static readonly Guid DataFieldD2_01_0C_214_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd60100");
 public static readonly Guid DataFieldD2_01_0C_214_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd60200");
 public static readonly Guid DataFieldD2_01_0C_214_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd60300");
+public static readonly Guid DataFieldD2_01_0C_214_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd60400");
 public static readonly Guid TypeD2_01_0C_215Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd70000");
 public static readonly Guid DataFieldD2_01_0C_215_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd70100");
 public static readonly Guid DataFieldD2_01_0C_215_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd70200");
@@ -1548,11 +1696,13 @@ public static readonly Guid DataFieldD2_01_0C_216_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0C_216_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd80500");
 public static readonly Guid DataFieldD2_01_0C_216_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd80600");
 public static readonly Guid DataFieldD2_01_0C_216_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd80700");
+public static readonly Guid DataFieldD2_01_0C_216_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd80800");
 public static readonly Guid TypeD2_01_0C_217Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90000");
 public static readonly Guid DataFieldD2_01_0C_217_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90100");
 public static readonly Guid DataFieldD2_01_0C_217_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90200");
 public static readonly Guid DataFieldD2_01_0C_217_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90300");
 public static readonly Guid DataFieldD2_01_0C_217_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90400");
+public static readonly Guid DataFieldD2_01_0C_217_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cd90500");
 public static readonly Guid TypeD2_01_0C_218Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cda0000");
 public static readonly Guid DataFieldD2_01_0C_218_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cda0100");
 public static readonly Guid DataFieldD2_01_0C_218_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010cda0200");
@@ -1567,6 +1717,7 @@ public static readonly Guid DataFieldD2_01_0D_219_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0D_219_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddb0300");
 public static readonly Guid DataFieldD2_01_0D_219_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddb0400");
 public static readonly Guid DataFieldD2_01_0D_219_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddb0500");
+public static readonly Guid DataFieldD2_01_0D_219_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddb0600");
 public static readonly Guid TypeD2_01_0D_220Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0000");
 public static readonly Guid DataFieldD2_01_0D_220_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0100");
 public static readonly Guid DataFieldD2_01_0D_220_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0200");
@@ -1581,10 +1732,12 @@ public static readonly Guid DataFieldD2_01_0D_220_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0D_220_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0b00");
 public static readonly Guid DataFieldD2_01_0D_220_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0c00");
 public static readonly Guid DataFieldD2_01_0D_220_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0d00");
+public static readonly Guid DataFieldD2_01_0D_220_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddc0e00");
 public static readonly Guid TypeD2_01_0D_221Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddd0000");
 public static readonly Guid DataFieldD2_01_0D_221_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddd0100");
 public static readonly Guid DataFieldD2_01_0D_221_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddd0200");
 public static readonly Guid DataFieldD2_01_0D_221_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddd0300");
+public static readonly Guid DataFieldD2_01_0D_221_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddd0400");
 public static readonly Guid TypeD2_01_0D_222Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dde0000");
 public static readonly Guid DataFieldD2_01_0D_222_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dde0100");
 public static readonly Guid DataFieldD2_01_0D_222_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dde0200");
@@ -1609,11 +1762,13 @@ public static readonly Guid DataFieldD2_01_0D_223_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0D_223_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddf0b00");
 public static readonly Guid DataFieldD2_01_0D_223_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddf0c00");
 public static readonly Guid DataFieldD2_01_0D_223_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddf0d00");
+public static readonly Guid DataFieldD2_01_0D_223_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ddf0e00");
 public static readonly Guid TypeD2_01_0D_224Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00000");
 public static readonly Guid DataFieldD2_01_0D_224_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00100");
 public static readonly Guid DataFieldD2_01_0D_224_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00200");
 public static readonly Guid DataFieldD2_01_0D_224_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00300");
 public static readonly Guid DataFieldD2_01_0D_224_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00400");
+public static readonly Guid DataFieldD2_01_0D_224_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de00500");
 public static readonly Guid TypeD2_01_0D_225Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de10000");
 public static readonly Guid DataFieldD2_01_0D_225_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de10100");
 public static readonly Guid DataFieldD2_01_0D_225_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de10200");
@@ -1623,8 +1778,10 @@ public static readonly Guid DataFieldD2_01_0D_225_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0D_226Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de20000");
 public static readonly Guid DataFieldD2_01_0D_226_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de20100");
 public static readonly Guid DataFieldD2_01_0D_226_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de20200");
+public static readonly Guid DataFieldD2_01_0D_226_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de20300");
 public static readonly Guid TypeD2_01_0D_227Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de30000");
 public static readonly Guid DataFieldD2_01_0D_227_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de30100");
+public static readonly Guid DataFieldD2_01_0D_227_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de30200");
 public static readonly Guid TypeD2_01_0D_228Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de40000");
 public static readonly Guid DataFieldD2_01_0D_228_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de40100");
 public static readonly Guid DataFieldD2_01_0D_228_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de40200");
@@ -1636,10 +1793,12 @@ public static readonly Guid DataFieldD2_01_0D_229_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0D_229_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de50500");
 public static readonly Guid DataFieldD2_01_0D_229_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de50600");
 public static readonly Guid DataFieldD2_01_0D_229_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de50700");
+public static readonly Guid DataFieldD2_01_0D_229_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de50800");
 public static readonly Guid TypeD2_01_0D_230Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de60000");
 public static readonly Guid DataFieldD2_01_0D_230_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de60100");
 public static readonly Guid DataFieldD2_01_0D_230_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de60200");
 public static readonly Guid DataFieldD2_01_0D_230_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de60300");
+public static readonly Guid DataFieldD2_01_0D_230_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de60400");
 public static readonly Guid TypeD2_01_0D_231Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de70000");
 public static readonly Guid DataFieldD2_01_0D_231_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de70100");
 public static readonly Guid DataFieldD2_01_0D_231_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de70200");
@@ -1656,11 +1815,13 @@ public static readonly Guid DataFieldD2_01_0D_232_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0D_232_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de80500");
 public static readonly Guid DataFieldD2_01_0D_232_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de80600");
 public static readonly Guid DataFieldD2_01_0D_232_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de80700");
+public static readonly Guid DataFieldD2_01_0D_232_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de80800");
 public static readonly Guid TypeD2_01_0D_233Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90000");
 public static readonly Guid DataFieldD2_01_0D_233_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90100");
 public static readonly Guid DataFieldD2_01_0D_233_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90200");
 public static readonly Guid DataFieldD2_01_0D_233_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90300");
 public static readonly Guid DataFieldD2_01_0D_233_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90400");
+public static readonly Guid DataFieldD2_01_0D_233_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010de90500");
 public static readonly Guid TypeD2_01_0D_234Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dea0000");
 public static readonly Guid DataFieldD2_01_0D_234_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dea0100");
 public static readonly Guid DataFieldD2_01_0D_234_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010dea0200");
@@ -1675,6 +1836,7 @@ public static readonly Guid DataFieldD2_01_0E_235_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0E_235_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eeb0300");
 public static readonly Guid DataFieldD2_01_0E_235_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eeb0400");
 public static readonly Guid DataFieldD2_01_0E_235_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eeb0500");
+public static readonly Guid DataFieldD2_01_0E_235_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eeb0600");
 public static readonly Guid TypeD2_01_0E_236Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0000");
 public static readonly Guid DataFieldD2_01_0E_236_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0100");
 public static readonly Guid DataFieldD2_01_0E_236_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0200");
@@ -1689,10 +1851,12 @@ public static readonly Guid DataFieldD2_01_0E_236_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0E_236_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0b00");
 public static readonly Guid DataFieldD2_01_0E_236_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0c00");
 public static readonly Guid DataFieldD2_01_0E_236_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0d00");
+public static readonly Guid DataFieldD2_01_0E_236_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eec0e00");
 public static readonly Guid TypeD2_01_0E_237Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eed0000");
 public static readonly Guid DataFieldD2_01_0E_237_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eed0100");
 public static readonly Guid DataFieldD2_01_0E_237_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eed0200");
 public static readonly Guid DataFieldD2_01_0E_237_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eed0300");
+public static readonly Guid DataFieldD2_01_0E_237_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eed0400");
 public static readonly Guid TypeD2_01_0E_238Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eee0000");
 public static readonly Guid DataFieldD2_01_0E_238_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eee0100");
 public static readonly Guid DataFieldD2_01_0E_238_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eee0200");
@@ -1717,11 +1881,13 @@ public static readonly Guid DataFieldD2_01_0E_239_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0E_239_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eef0b00");
 public static readonly Guid DataFieldD2_01_0E_239_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eef0c00");
 public static readonly Guid DataFieldD2_01_0E_239_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eef0d00");
+public static readonly Guid DataFieldD2_01_0E_239_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010eef0e00");
 public static readonly Guid TypeD2_01_0E_240Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00000");
 public static readonly Guid DataFieldD2_01_0E_240_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00100");
 public static readonly Guid DataFieldD2_01_0E_240_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00200");
 public static readonly Guid DataFieldD2_01_0E_240_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00300");
 public static readonly Guid DataFieldD2_01_0E_240_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00400");
+public static readonly Guid DataFieldD2_01_0E_240_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef00500");
 public static readonly Guid TypeD2_01_0E_241Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef10000");
 public static readonly Guid DataFieldD2_01_0E_241_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef10100");
 public static readonly Guid DataFieldD2_01_0E_241_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef10200");
@@ -1731,8 +1897,10 @@ public static readonly Guid DataFieldD2_01_0E_241_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0E_242Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef20000");
 public static readonly Guid DataFieldD2_01_0E_242_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef20100");
 public static readonly Guid DataFieldD2_01_0E_242_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef20200");
+public static readonly Guid DataFieldD2_01_0E_242_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef20300");
 public static readonly Guid TypeD2_01_0E_243Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef30000");
 public static readonly Guid DataFieldD2_01_0E_243_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef30100");
+public static readonly Guid DataFieldD2_01_0E_243_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef30200");
 public static readonly Guid TypeD2_01_0E_244Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef40000");
 public static readonly Guid DataFieldD2_01_0E_244_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef40100");
 public static readonly Guid DataFieldD2_01_0E_244_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef40200");
@@ -1744,10 +1912,12 @@ public static readonly Guid DataFieldD2_01_0E_245_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0E_245_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef50500");
 public static readonly Guid DataFieldD2_01_0E_245_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef50600");
 public static readonly Guid DataFieldD2_01_0E_245_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef50700");
+public static readonly Guid DataFieldD2_01_0E_245_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef50800");
 public static readonly Guid TypeD2_01_0E_246Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef60000");
 public static readonly Guid DataFieldD2_01_0E_246_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef60100");
 public static readonly Guid DataFieldD2_01_0E_246_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef60200");
 public static readonly Guid DataFieldD2_01_0E_246_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef60300");
+public static readonly Guid DataFieldD2_01_0E_246_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef60400");
 public static readonly Guid TypeD2_01_0E_247Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef70000");
 public static readonly Guid DataFieldD2_01_0E_247_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef70100");
 public static readonly Guid DataFieldD2_01_0E_247_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef70200");
@@ -1764,11 +1934,13 @@ public static readonly Guid DataFieldD2_01_0E_248_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0E_248_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef80500");
 public static readonly Guid DataFieldD2_01_0E_248_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef80600");
 public static readonly Guid DataFieldD2_01_0E_248_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef80700");
+public static readonly Guid DataFieldD2_01_0E_248_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef80800");
 public static readonly Guid TypeD2_01_0E_249Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90000");
 public static readonly Guid DataFieldD2_01_0E_249_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90100");
 public static readonly Guid DataFieldD2_01_0E_249_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90200");
 public static readonly Guid DataFieldD2_01_0E_249_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90300");
 public static readonly Guid DataFieldD2_01_0E_249_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90400");
+public static readonly Guid DataFieldD2_01_0E_249_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ef90500");
 public static readonly Guid TypeD2_01_0E_250Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010efa0000");
 public static readonly Guid DataFieldD2_01_0E_250_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010efa0100");
 public static readonly Guid DataFieldD2_01_0E_250_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010efa0200");
@@ -1783,6 +1955,7 @@ public static readonly Guid DataFieldD2_01_0F_251_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0F_251_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffb0300");
 public static readonly Guid DataFieldD2_01_0F_251_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffb0400");
 public static readonly Guid DataFieldD2_01_0F_251_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffb0500");
+public static readonly Guid DataFieldD2_01_0F_251_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffb0600");
 public static readonly Guid TypeD2_01_0F_252Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0000");
 public static readonly Guid DataFieldD2_01_0F_252_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0100");
 public static readonly Guid DataFieldD2_01_0F_252_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0200");
@@ -1797,10 +1970,12 @@ public static readonly Guid DataFieldD2_01_0F_252_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0F_252_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0b00");
 public static readonly Guid DataFieldD2_01_0F_252_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0c00");
 public static readonly Guid DataFieldD2_01_0F_252_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0d00");
+public static readonly Guid DataFieldD2_01_0F_252_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffc0e00");
 public static readonly Guid TypeD2_01_0F_253Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffd0000");
 public static readonly Guid DataFieldD2_01_0F_253_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffd0100");
 public static readonly Guid DataFieldD2_01_0F_253_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffd0200");
 public static readonly Guid DataFieldD2_01_0F_253_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffd0300");
+public static readonly Guid DataFieldD2_01_0F_253_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffd0400");
 public static readonly Guid TypeD2_01_0F_254Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffe0000");
 public static readonly Guid DataFieldD2_01_0F_254_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffe0100");
 public static readonly Guid DataFieldD2_01_0F_254_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010ffe0200");
@@ -1825,11 +2000,13 @@ public static readonly Guid DataFieldD2_01_0F_255_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_0F_255_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010fff0b00");
 public static readonly Guid DataFieldD2_01_0F_255_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010fff0c00");
 public static readonly Guid DataFieldD2_01_0F_255_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010fff0d00");
+public static readonly Guid DataFieldD2_01_0F_255_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010fff0e00");
 public static readonly Guid TypeD2_01_0F_256Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000000");
 public static readonly Guid DataFieldD2_01_0F_256_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000100");
 public static readonly Guid DataFieldD2_01_0F_256_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000200");
 public static readonly Guid DataFieldD2_01_0F_256_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000300");
 public static readonly Guid DataFieldD2_01_0F_256_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000400");
+public static readonly Guid DataFieldD2_01_0F_256_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f000500");
 public static readonly Guid TypeD2_01_0F_257Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f010000");
 public static readonly Guid DataFieldD2_01_0F_257_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f010100");
 public static readonly Guid DataFieldD2_01_0F_257_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f010200");
@@ -1839,8 +2016,10 @@ public static readonly Guid DataFieldD2_01_0F_257_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_0F_258Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f020000");
 public static readonly Guid DataFieldD2_01_0F_258_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f020100");
 public static readonly Guid DataFieldD2_01_0F_258_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f020200");
+public static readonly Guid DataFieldD2_01_0F_258_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f020300");
 public static readonly Guid TypeD2_01_0F_259Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f030000");
 public static readonly Guid DataFieldD2_01_0F_259_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f030100");
+public static readonly Guid DataFieldD2_01_0F_259_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f030200");
 public static readonly Guid TypeD2_01_0F_260Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f040000");
 public static readonly Guid DataFieldD2_01_0F_260_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f040100");
 public static readonly Guid DataFieldD2_01_0F_260_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f040200");
@@ -1852,10 +2031,12 @@ public static readonly Guid DataFieldD2_01_0F_261_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_0F_261_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f050500");
 public static readonly Guid DataFieldD2_01_0F_261_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f050600");
 public static readonly Guid DataFieldD2_01_0F_261_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f050700");
+public static readonly Guid DataFieldD2_01_0F_261_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f050800");
 public static readonly Guid TypeD2_01_0F_262Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f060000");
 public static readonly Guid DataFieldD2_01_0F_262_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f060100");
 public static readonly Guid DataFieldD2_01_0F_262_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f060200");
 public static readonly Guid DataFieldD2_01_0F_262_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f060300");
+public static readonly Guid DataFieldD2_01_0F_262_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f060400");
 public static readonly Guid TypeD2_01_0F_263Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f070000");
 public static readonly Guid DataFieldD2_01_0F_263_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f070100");
 public static readonly Guid DataFieldD2_01_0F_263_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f070200");
@@ -1872,11 +2053,13 @@ public static readonly Guid DataFieldD2_01_0F_264_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_0F_264_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f080500");
 public static readonly Guid DataFieldD2_01_0F_264_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f080600");
 public static readonly Guid DataFieldD2_01_0F_264_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f080700");
+public static readonly Guid DataFieldD2_01_0F_264_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f080800");
 public static readonly Guid TypeD2_01_0F_265Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090000");
 public static readonly Guid DataFieldD2_01_0F_265_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090100");
 public static readonly Guid DataFieldD2_01_0F_265_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090200");
 public static readonly Guid DataFieldD2_01_0F_265_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090300");
 public static readonly Guid DataFieldD2_01_0F_265_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090400");
+public static readonly Guid DataFieldD2_01_0F_265_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f090500");
 public static readonly Guid TypeD2_01_0F_266Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f0a0000");
 public static readonly Guid DataFieldD2_01_0F_266_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f0a0100");
 public static readonly Guid DataFieldD2_01_0F_266_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d2010f0a0200");
@@ -1891,6 +2074,7 @@ public static readonly Guid DataFieldD2_01_10_267_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_10_267_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100b0300");
 public static readonly Guid DataFieldD2_01_10_267_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100b0400");
 public static readonly Guid DataFieldD2_01_10_267_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100b0500");
+public static readonly Guid DataFieldD2_01_10_267_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100b0600");
 public static readonly Guid TypeD2_01_10_268Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0000");
 public static readonly Guid DataFieldD2_01_10_268_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0100");
 public static readonly Guid DataFieldD2_01_10_268_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0200");
@@ -1905,10 +2089,12 @@ public static readonly Guid DataFieldD2_01_10_268_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_10_268_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0b00");
 public static readonly Guid DataFieldD2_01_10_268_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0c00");
 public static readonly Guid DataFieldD2_01_10_268_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0d00");
+public static readonly Guid DataFieldD2_01_10_268_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100c0e00");
 public static readonly Guid TypeD2_01_10_269Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100d0000");
 public static readonly Guid DataFieldD2_01_10_269_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100d0100");
 public static readonly Guid DataFieldD2_01_10_269_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100d0200");
 public static readonly Guid DataFieldD2_01_10_269_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100d0300");
+public static readonly Guid DataFieldD2_01_10_269_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100d0400");
 public static readonly Guid TypeD2_01_10_270Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100e0000");
 public static readonly Guid DataFieldD2_01_10_270_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100e0100");
 public static readonly Guid DataFieldD2_01_10_270_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100e0200");
@@ -1933,11 +2119,13 @@ public static readonly Guid DataFieldD2_01_10_271_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_10_271_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100f0b00");
 public static readonly Guid DataFieldD2_01_10_271_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100f0c00");
 public static readonly Guid DataFieldD2_01_10_271_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100f0d00");
+public static readonly Guid DataFieldD2_01_10_271_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201100f0e00");
 public static readonly Guid TypeD2_01_10_272Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100000");
 public static readonly Guid DataFieldD2_01_10_272_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100100");
 public static readonly Guid DataFieldD2_01_10_272_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100200");
 public static readonly Guid DataFieldD2_01_10_272_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100300");
 public static readonly Guid DataFieldD2_01_10_272_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100400");
+public static readonly Guid DataFieldD2_01_10_272_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110100500");
 public static readonly Guid TypeD2_01_10_273Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110110000");
 public static readonly Guid DataFieldD2_01_10_273_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110110100");
 public static readonly Guid DataFieldD2_01_10_273_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110110200");
@@ -1947,8 +2135,10 @@ public static readonly Guid DataFieldD2_01_10_273_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_10_274Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110120000");
 public static readonly Guid DataFieldD2_01_10_274_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110120100");
 public static readonly Guid DataFieldD2_01_10_274_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110120200");
+public static readonly Guid DataFieldD2_01_10_274_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110120300");
 public static readonly Guid TypeD2_01_10_275Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110130000");
 public static readonly Guid DataFieldD2_01_10_275_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110130100");
+public static readonly Guid DataFieldD2_01_10_275_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110130200");
 public static readonly Guid TypeD2_01_10_276Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110140000");
 public static readonly Guid DataFieldD2_01_10_276_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110140100");
 public static readonly Guid DataFieldD2_01_10_276_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110140200");
@@ -1960,10 +2150,12 @@ public static readonly Guid DataFieldD2_01_10_277_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_10_277_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110150500");
 public static readonly Guid DataFieldD2_01_10_277_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110150600");
 public static readonly Guid DataFieldD2_01_10_277_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110150700");
+public static readonly Guid DataFieldD2_01_10_277_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110150800");
 public static readonly Guid TypeD2_01_10_278Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110160000");
 public static readonly Guid DataFieldD2_01_10_278_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110160100");
 public static readonly Guid DataFieldD2_01_10_278_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110160200");
 public static readonly Guid DataFieldD2_01_10_278_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110160300");
+public static readonly Guid DataFieldD2_01_10_278_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110160400");
 public static readonly Guid TypeD2_01_10_279Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110170000");
 public static readonly Guid DataFieldD2_01_10_279_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110170100");
 public static readonly Guid DataFieldD2_01_10_279_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110170200");
@@ -1980,11 +2172,13 @@ public static readonly Guid DataFieldD2_01_10_280_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_10_280_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110180500");
 public static readonly Guid DataFieldD2_01_10_280_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110180600");
 public static readonly Guid DataFieldD2_01_10_280_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110180700");
+public static readonly Guid DataFieldD2_01_10_280_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110180800");
 public static readonly Guid TypeD2_01_10_281Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190000");
 public static readonly Guid DataFieldD2_01_10_281_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190100");
 public static readonly Guid DataFieldD2_01_10_281_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190200");
 public static readonly Guid DataFieldD2_01_10_281_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190300");
 public static readonly Guid DataFieldD2_01_10_281_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190400");
+public static readonly Guid DataFieldD2_01_10_281_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20110190500");
 public static readonly Guid TypeD2_01_10_282Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201101a0000");
 public static readonly Guid DataFieldD2_01_10_282_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201101a0100");
 public static readonly Guid DataFieldD2_01_10_282_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201101a0200");
@@ -1999,6 +2193,7 @@ public static readonly Guid DataFieldD2_01_11_283_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_11_283_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111b0300");
 public static readonly Guid DataFieldD2_01_11_283_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111b0400");
 public static readonly Guid DataFieldD2_01_11_283_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111b0500");
+public static readonly Guid DataFieldD2_01_11_283_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111b0600");
 public static readonly Guid TypeD2_01_11_284Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0000");
 public static readonly Guid DataFieldD2_01_11_284_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0100");
 public static readonly Guid DataFieldD2_01_11_284_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0200");
@@ -2013,10 +2208,12 @@ public static readonly Guid DataFieldD2_01_11_284_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_11_284_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0b00");
 public static readonly Guid DataFieldD2_01_11_284_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0c00");
 public static readonly Guid DataFieldD2_01_11_284_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0d00");
+public static readonly Guid DataFieldD2_01_11_284_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111c0e00");
 public static readonly Guid TypeD2_01_11_285Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111d0000");
 public static readonly Guid DataFieldD2_01_11_285_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111d0100");
 public static readonly Guid DataFieldD2_01_11_285_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111d0200");
 public static readonly Guid DataFieldD2_01_11_285_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111d0300");
+public static readonly Guid DataFieldD2_01_11_285_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111d0400");
 public static readonly Guid TypeD2_01_11_286Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111e0000");
 public static readonly Guid DataFieldD2_01_11_286_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111e0100");
 public static readonly Guid DataFieldD2_01_11_286_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111e0200");
@@ -2041,11 +2238,13 @@ public static readonly Guid DataFieldD2_01_11_287_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_11_287_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111f0b00");
 public static readonly Guid DataFieldD2_01_11_287_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111f0c00");
 public static readonly Guid DataFieldD2_01_11_287_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111f0d00");
+public static readonly Guid DataFieldD2_01_11_287_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201111f0e00");
 public static readonly Guid TypeD2_01_11_288Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200000");
 public static readonly Guid DataFieldD2_01_11_288_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200100");
 public static readonly Guid DataFieldD2_01_11_288_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200200");
 public static readonly Guid DataFieldD2_01_11_288_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200300");
 public static readonly Guid DataFieldD2_01_11_288_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200400");
+public static readonly Guid DataFieldD2_01_11_288_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111200500");
 public static readonly Guid TypeD2_01_11_289Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111210000");
 public static readonly Guid DataFieldD2_01_11_289_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111210100");
 public static readonly Guid DataFieldD2_01_11_289_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111210200");
@@ -2055,8 +2254,10 @@ public static readonly Guid DataFieldD2_01_11_289_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_11_290Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111220000");
 public static readonly Guid DataFieldD2_01_11_290_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111220100");
 public static readonly Guid DataFieldD2_01_11_290_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111220200");
+public static readonly Guid DataFieldD2_01_11_290_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111220300");
 public static readonly Guid TypeD2_01_11_291Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111230000");
 public static readonly Guid DataFieldD2_01_11_291_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111230100");
+public static readonly Guid DataFieldD2_01_11_291_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111230200");
 public static readonly Guid TypeD2_01_11_292Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111240000");
 public static readonly Guid DataFieldD2_01_11_292_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111240100");
 public static readonly Guid DataFieldD2_01_11_292_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111240200");
@@ -2068,10 +2269,12 @@ public static readonly Guid DataFieldD2_01_11_293_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_11_293_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111250500");
 public static readonly Guid DataFieldD2_01_11_293_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111250600");
 public static readonly Guid DataFieldD2_01_11_293_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111250700");
+public static readonly Guid DataFieldD2_01_11_293_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111250800");
 public static readonly Guid TypeD2_01_11_294Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111260000");
 public static readonly Guid DataFieldD2_01_11_294_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111260100");
 public static readonly Guid DataFieldD2_01_11_294_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111260200");
 public static readonly Guid DataFieldD2_01_11_294_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111260300");
+public static readonly Guid DataFieldD2_01_11_294_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111260400");
 public static readonly Guid TypeD2_01_11_295Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111270000");
 public static readonly Guid DataFieldD2_01_11_295_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111270100");
 public static readonly Guid DataFieldD2_01_11_295_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111270200");
@@ -2088,11 +2291,13 @@ public static readonly Guid DataFieldD2_01_11_296_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_11_296_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111280500");
 public static readonly Guid DataFieldD2_01_11_296_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111280600");
 public static readonly Guid DataFieldD2_01_11_296_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111280700");
+public static readonly Guid DataFieldD2_01_11_296_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111280800");
 public static readonly Guid TypeD2_01_11_297Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290000");
 public static readonly Guid DataFieldD2_01_11_297_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290100");
 public static readonly Guid DataFieldD2_01_11_297_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290200");
 public static readonly Guid DataFieldD2_01_11_297_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290300");
 public static readonly Guid DataFieldD2_01_11_297_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290400");
+public static readonly Guid DataFieldD2_01_11_297_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20111290500");
 public static readonly Guid TypeD2_01_11_298Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201112a0000");
 public static readonly Guid DataFieldD2_01_11_298_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201112a0100");
 public static readonly Guid DataFieldD2_01_11_298_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201112a0200");
@@ -2107,6 +2312,7 @@ public static readonly Guid DataFieldD2_01_12_299_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_12_299_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122b0300");
 public static readonly Guid DataFieldD2_01_12_299_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122b0400");
 public static readonly Guid DataFieldD2_01_12_299_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122b0500");
+public static readonly Guid DataFieldD2_01_12_299_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122b0600");
 public static readonly Guid TypeD2_01_12_300Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0000");
 public static readonly Guid DataFieldD2_01_12_300_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0100");
 public static readonly Guid DataFieldD2_01_12_300_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0200");
@@ -2121,10 +2327,12 @@ public static readonly Guid DataFieldD2_01_12_300_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_12_300_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0b00");
 public static readonly Guid DataFieldD2_01_12_300_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0c00");
 public static readonly Guid DataFieldD2_01_12_300_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0d00");
+public static readonly Guid DataFieldD2_01_12_300_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122c0e00");
 public static readonly Guid TypeD2_01_12_301Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122d0000");
 public static readonly Guid DataFieldD2_01_12_301_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122d0100");
 public static readonly Guid DataFieldD2_01_12_301_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122d0200");
 public static readonly Guid DataFieldD2_01_12_301_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122d0300");
+public static readonly Guid DataFieldD2_01_12_301_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122d0400");
 public static readonly Guid TypeD2_01_12_302Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122e0000");
 public static readonly Guid DataFieldD2_01_12_302_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122e0100");
 public static readonly Guid DataFieldD2_01_12_302_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122e0200");
@@ -2149,11 +2357,13 @@ public static readonly Guid DataFieldD2_01_12_303_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_12_303_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122f0b00");
 public static readonly Guid DataFieldD2_01_12_303_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122f0c00");
 public static readonly Guid DataFieldD2_01_12_303_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122f0d00");
+public static readonly Guid DataFieldD2_01_12_303_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201122f0e00");
 public static readonly Guid TypeD2_01_12_304Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300000");
 public static readonly Guid DataFieldD2_01_12_304_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300100");
 public static readonly Guid DataFieldD2_01_12_304_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300200");
 public static readonly Guid DataFieldD2_01_12_304_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300300");
 public static readonly Guid DataFieldD2_01_12_304_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300400");
+public static readonly Guid DataFieldD2_01_12_304_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112300500");
 public static readonly Guid TypeD2_01_12_305Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112310000");
 public static readonly Guid DataFieldD2_01_12_305_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112310100");
 public static readonly Guid DataFieldD2_01_12_305_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112310200");
@@ -2163,8 +2373,10 @@ public static readonly Guid DataFieldD2_01_12_305_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_12_306Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112320000");
 public static readonly Guid DataFieldD2_01_12_306_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112320100");
 public static readonly Guid DataFieldD2_01_12_306_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112320200");
+public static readonly Guid DataFieldD2_01_12_306_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112320300");
 public static readonly Guid TypeD2_01_12_307Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112330000");
 public static readonly Guid DataFieldD2_01_12_307_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112330100");
+public static readonly Guid DataFieldD2_01_12_307_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112330200");
 public static readonly Guid TypeD2_01_12_308Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112340000");
 public static readonly Guid DataFieldD2_01_12_308_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112340100");
 public static readonly Guid DataFieldD2_01_12_308_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112340200");
@@ -2176,10 +2388,12 @@ public static readonly Guid DataFieldD2_01_12_309_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_12_309_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112350500");
 public static readonly Guid DataFieldD2_01_12_309_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112350600");
 public static readonly Guid DataFieldD2_01_12_309_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112350700");
+public static readonly Guid DataFieldD2_01_12_309_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112350800");
 public static readonly Guid TypeD2_01_12_310Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112360000");
 public static readonly Guid DataFieldD2_01_12_310_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112360100");
 public static readonly Guid DataFieldD2_01_12_310_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112360200");
 public static readonly Guid DataFieldD2_01_12_310_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112360300");
+public static readonly Guid DataFieldD2_01_12_310_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112360400");
 public static readonly Guid TypeD2_01_12_311Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112370000");
 public static readonly Guid DataFieldD2_01_12_311_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112370100");
 public static readonly Guid DataFieldD2_01_12_311_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112370200");
@@ -2196,11 +2410,13 @@ public static readonly Guid DataFieldD2_01_12_312_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_12_312_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112380500");
 public static readonly Guid DataFieldD2_01_12_312_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112380600");
 public static readonly Guid DataFieldD2_01_12_312_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112380700");
+public static readonly Guid DataFieldD2_01_12_312_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112380800");
 public static readonly Guid TypeD2_01_12_313Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390000");
 public static readonly Guid DataFieldD2_01_12_313_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390100");
 public static readonly Guid DataFieldD2_01_12_313_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390200");
 public static readonly Guid DataFieldD2_01_12_313_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390300");
 public static readonly Guid DataFieldD2_01_12_313_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390400");
+public static readonly Guid DataFieldD2_01_12_313_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20112390500");
 public static readonly Guid TypeD2_01_12_314Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201123a0000");
 public static readonly Guid DataFieldD2_01_12_314_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201123a0100");
 public static readonly Guid DataFieldD2_01_12_314_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201123a0200");
@@ -2215,6 +2431,7 @@ public static readonly Guid DataFieldD2_01_13_315_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_13_315_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133b0300");
 public static readonly Guid DataFieldD2_01_13_315_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133b0400");
 public static readonly Guid DataFieldD2_01_13_315_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133b0500");
+public static readonly Guid DataFieldD2_01_13_315_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133b0600");
 public static readonly Guid TypeD2_01_13_316Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0000");
 public static readonly Guid DataFieldD2_01_13_316_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0100");
 public static readonly Guid DataFieldD2_01_13_316_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0200");
@@ -2229,10 +2446,12 @@ public static readonly Guid DataFieldD2_01_13_316_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_13_316_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0b00");
 public static readonly Guid DataFieldD2_01_13_316_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0c00");
 public static readonly Guid DataFieldD2_01_13_316_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0d00");
+public static readonly Guid DataFieldD2_01_13_316_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133c0e00");
 public static readonly Guid TypeD2_01_13_317Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133d0000");
 public static readonly Guid DataFieldD2_01_13_317_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133d0100");
 public static readonly Guid DataFieldD2_01_13_317_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133d0200");
 public static readonly Guid DataFieldD2_01_13_317_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133d0300");
+public static readonly Guid DataFieldD2_01_13_317_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133d0400");
 public static readonly Guid TypeD2_01_13_318Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133e0000");
 public static readonly Guid DataFieldD2_01_13_318_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133e0100");
 public static readonly Guid DataFieldD2_01_13_318_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133e0200");
@@ -2257,11 +2476,13 @@ public static readonly Guid DataFieldD2_01_13_319_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_13_319_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133f0b00");
 public static readonly Guid DataFieldD2_01_13_319_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133f0c00");
 public static readonly Guid DataFieldD2_01_13_319_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133f0d00");
+public static readonly Guid DataFieldD2_01_13_319_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201133f0e00");
 public static readonly Guid TypeD2_01_13_320Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400000");
 public static readonly Guid DataFieldD2_01_13_320_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400100");
 public static readonly Guid DataFieldD2_01_13_320_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400200");
 public static readonly Guid DataFieldD2_01_13_320_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400300");
 public static readonly Guid DataFieldD2_01_13_320_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400400");
+public static readonly Guid DataFieldD2_01_13_320_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113400500");
 public static readonly Guid TypeD2_01_13_321Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113410000");
 public static readonly Guid DataFieldD2_01_13_321_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113410100");
 public static readonly Guid DataFieldD2_01_13_321_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113410200");
@@ -2271,8 +2492,10 @@ public static readonly Guid DataFieldD2_01_13_321_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_13_322Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113420000");
 public static readonly Guid DataFieldD2_01_13_322_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113420100");
 public static readonly Guid DataFieldD2_01_13_322_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113420200");
+public static readonly Guid DataFieldD2_01_13_322_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113420300");
 public static readonly Guid TypeD2_01_13_323Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113430000");
 public static readonly Guid DataFieldD2_01_13_323_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113430100");
+public static readonly Guid DataFieldD2_01_13_323_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113430200");
 public static readonly Guid TypeD2_01_13_324Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113440000");
 public static readonly Guid DataFieldD2_01_13_324_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113440100");
 public static readonly Guid DataFieldD2_01_13_324_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113440200");
@@ -2284,10 +2507,12 @@ public static readonly Guid DataFieldD2_01_13_325_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_13_325_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113450500");
 public static readonly Guid DataFieldD2_01_13_325_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113450600");
 public static readonly Guid DataFieldD2_01_13_325_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113450700");
+public static readonly Guid DataFieldD2_01_13_325_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113450800");
 public static readonly Guid TypeD2_01_13_326Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113460000");
 public static readonly Guid DataFieldD2_01_13_326_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113460100");
 public static readonly Guid DataFieldD2_01_13_326_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113460200");
 public static readonly Guid DataFieldD2_01_13_326_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113460300");
+public static readonly Guid DataFieldD2_01_13_326_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113460400");
 public static readonly Guid TypeD2_01_13_327Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113470000");
 public static readonly Guid DataFieldD2_01_13_327_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113470100");
 public static readonly Guid DataFieldD2_01_13_327_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113470200");
@@ -2304,11 +2529,13 @@ public static readonly Guid DataFieldD2_01_13_328_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_13_328_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113480500");
 public static readonly Guid DataFieldD2_01_13_328_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113480600");
 public static readonly Guid DataFieldD2_01_13_328_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113480700");
+public static readonly Guid DataFieldD2_01_13_328_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113480800");
 public static readonly Guid TypeD2_01_13_329Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490000");
 public static readonly Guid DataFieldD2_01_13_329_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490100");
 public static readonly Guid DataFieldD2_01_13_329_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490200");
 public static readonly Guid DataFieldD2_01_13_329_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490300");
 public static readonly Guid DataFieldD2_01_13_329_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490400");
+public static readonly Guid DataFieldD2_01_13_329_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20113490500");
 public static readonly Guid TypeD2_01_13_330Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201134a0000");
 public static readonly Guid DataFieldD2_01_13_330_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201134a0100");
 public static readonly Guid DataFieldD2_01_13_330_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201134a0200");
@@ -2323,6 +2550,7 @@ public static readonly Guid DataFieldD2_01_14_331_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_14_331_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144b0300");
 public static readonly Guid DataFieldD2_01_14_331_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144b0400");
 public static readonly Guid DataFieldD2_01_14_331_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144b0500");
+public static readonly Guid DataFieldD2_01_14_331_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144b0600");
 public static readonly Guid TypeD2_01_14_332Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0000");
 public static readonly Guid DataFieldD2_01_14_332_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0100");
 public static readonly Guid DataFieldD2_01_14_332_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0200");
@@ -2337,10 +2565,12 @@ public static readonly Guid DataFieldD2_01_14_332_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_14_332_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0b00");
 public static readonly Guid DataFieldD2_01_14_332_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0c00");
 public static readonly Guid DataFieldD2_01_14_332_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0d00");
+public static readonly Guid DataFieldD2_01_14_332_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144c0e00");
 public static readonly Guid TypeD2_01_14_333Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144d0000");
 public static readonly Guid DataFieldD2_01_14_333_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144d0100");
 public static readonly Guid DataFieldD2_01_14_333_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144d0200");
 public static readonly Guid DataFieldD2_01_14_333_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144d0300");
+public static readonly Guid DataFieldD2_01_14_333_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144d0400");
 public static readonly Guid TypeD2_01_14_334Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144e0000");
 public static readonly Guid DataFieldD2_01_14_334_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144e0100");
 public static readonly Guid DataFieldD2_01_14_334_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144e0200");
@@ -2365,11 +2595,13 @@ public static readonly Guid DataFieldD2_01_14_335_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_14_335_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144f0b00");
 public static readonly Guid DataFieldD2_01_14_335_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144f0c00");
 public static readonly Guid DataFieldD2_01_14_335_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144f0d00");
+public static readonly Guid DataFieldD2_01_14_335_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201144f0e00");
 public static readonly Guid TypeD2_01_14_336Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500000");
 public static readonly Guid DataFieldD2_01_14_336_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500100");
 public static readonly Guid DataFieldD2_01_14_336_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500200");
 public static readonly Guid DataFieldD2_01_14_336_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500300");
 public static readonly Guid DataFieldD2_01_14_336_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500400");
+public static readonly Guid DataFieldD2_01_14_336_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114500500");
 public static readonly Guid TypeD2_01_14_337Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114510000");
 public static readonly Guid DataFieldD2_01_14_337_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114510100");
 public static readonly Guid DataFieldD2_01_14_337_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114510200");
@@ -2379,8 +2611,10 @@ public static readonly Guid DataFieldD2_01_14_337_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_14_338Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114520000");
 public static readonly Guid DataFieldD2_01_14_338_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114520100");
 public static readonly Guid DataFieldD2_01_14_338_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114520200");
+public static readonly Guid DataFieldD2_01_14_338_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114520300");
 public static readonly Guid TypeD2_01_14_339Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114530000");
 public static readonly Guid DataFieldD2_01_14_339_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114530100");
+public static readonly Guid DataFieldD2_01_14_339_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114530200");
 public static readonly Guid TypeD2_01_14_340Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114540000");
 public static readonly Guid DataFieldD2_01_14_340_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114540100");
 public static readonly Guid DataFieldD2_01_14_340_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114540200");
@@ -2392,10 +2626,12 @@ public static readonly Guid DataFieldD2_01_14_341_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_14_341_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114550500");
 public static readonly Guid DataFieldD2_01_14_341_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114550600");
 public static readonly Guid DataFieldD2_01_14_341_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114550700");
+public static readonly Guid DataFieldD2_01_14_341_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114550800");
 public static readonly Guid TypeD2_01_14_342Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114560000");
 public static readonly Guid DataFieldD2_01_14_342_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114560100");
 public static readonly Guid DataFieldD2_01_14_342_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114560200");
 public static readonly Guid DataFieldD2_01_14_342_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114560300");
+public static readonly Guid DataFieldD2_01_14_342_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114560400");
 public static readonly Guid TypeD2_01_14_343Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114570000");
 public static readonly Guid DataFieldD2_01_14_343_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114570100");
 public static readonly Guid DataFieldD2_01_14_343_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114570200");
@@ -2412,11 +2648,13 @@ public static readonly Guid DataFieldD2_01_14_344_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_14_344_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114580500");
 public static readonly Guid DataFieldD2_01_14_344_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114580600");
 public static readonly Guid DataFieldD2_01_14_344_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114580700");
+public static readonly Guid DataFieldD2_01_14_344_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114580800");
 public static readonly Guid TypeD2_01_14_345Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590000");
 public static readonly Guid DataFieldD2_01_14_345_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590100");
 public static readonly Guid DataFieldD2_01_14_345_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590200");
 public static readonly Guid DataFieldD2_01_14_345_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590300");
 public static readonly Guid DataFieldD2_01_14_345_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590400");
+public static readonly Guid DataFieldD2_01_14_345_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20114590500");
 public static readonly Guid TypeD2_01_14_346Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201145a0000");
 public static readonly Guid DataFieldD2_01_14_346_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201145a0100");
 public static readonly Guid DataFieldD2_01_14_346_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201145a0200");
@@ -2431,6 +2669,7 @@ public static readonly Guid DataFieldD2_01_15_347_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_15_347_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155b0300");
 public static readonly Guid DataFieldD2_01_15_347_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155b0400");
 public static readonly Guid DataFieldD2_01_15_347_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155b0500");
+public static readonly Guid DataFieldD2_01_15_347_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155b0600");
 public static readonly Guid TypeD2_01_15_348Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0000");
 public static readonly Guid DataFieldD2_01_15_348_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0100");
 public static readonly Guid DataFieldD2_01_15_348_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0200");
@@ -2445,10 +2684,12 @@ public static readonly Guid DataFieldD2_01_15_348_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_15_348_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0b00");
 public static readonly Guid DataFieldD2_01_15_348_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0c00");
 public static readonly Guid DataFieldD2_01_15_348_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0d00");
+public static readonly Guid DataFieldD2_01_15_348_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155c0e00");
 public static readonly Guid TypeD2_01_15_349Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155d0000");
 public static readonly Guid DataFieldD2_01_15_349_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155d0100");
 public static readonly Guid DataFieldD2_01_15_349_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155d0200");
 public static readonly Guid DataFieldD2_01_15_349_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155d0300");
+public static readonly Guid DataFieldD2_01_15_349_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155d0400");
 public static readonly Guid TypeD2_01_15_350Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155e0000");
 public static readonly Guid DataFieldD2_01_15_350_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155e0100");
 public static readonly Guid DataFieldD2_01_15_350_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155e0200");
@@ -2473,11 +2714,13 @@ public static readonly Guid DataFieldD2_01_15_351_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_15_351_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155f0b00");
 public static readonly Guid DataFieldD2_01_15_351_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155f0c00");
 public static readonly Guid DataFieldD2_01_15_351_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155f0d00");
+public static readonly Guid DataFieldD2_01_15_351_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201155f0e00");
 public static readonly Guid TypeD2_01_15_352Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600000");
 public static readonly Guid DataFieldD2_01_15_352_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600100");
 public static readonly Guid DataFieldD2_01_15_352_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600200");
 public static readonly Guid DataFieldD2_01_15_352_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600300");
 public static readonly Guid DataFieldD2_01_15_352_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600400");
+public static readonly Guid DataFieldD2_01_15_352_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115600500");
 public static readonly Guid TypeD2_01_15_353Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115610000");
 public static readonly Guid DataFieldD2_01_15_353_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115610100");
 public static readonly Guid DataFieldD2_01_15_353_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115610200");
@@ -2487,8 +2730,10 @@ public static readonly Guid DataFieldD2_01_15_353_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_15_354Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115620000");
 public static readonly Guid DataFieldD2_01_15_354_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115620100");
 public static readonly Guid DataFieldD2_01_15_354_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115620200");
+public static readonly Guid DataFieldD2_01_15_354_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115620300");
 public static readonly Guid TypeD2_01_15_355Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115630000");
 public static readonly Guid DataFieldD2_01_15_355_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115630100");
+public static readonly Guid DataFieldD2_01_15_355_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115630200");
 public static readonly Guid TypeD2_01_15_356Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115640000");
 public static readonly Guid DataFieldD2_01_15_356_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115640100");
 public static readonly Guid DataFieldD2_01_15_356_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115640200");
@@ -2500,10 +2745,12 @@ public static readonly Guid DataFieldD2_01_15_357_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_15_357_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115650500");
 public static readonly Guid DataFieldD2_01_15_357_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115650600");
 public static readonly Guid DataFieldD2_01_15_357_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115650700");
+public static readonly Guid DataFieldD2_01_15_357_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115650800");
 public static readonly Guid TypeD2_01_15_358Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115660000");
 public static readonly Guid DataFieldD2_01_15_358_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115660100");
 public static readonly Guid DataFieldD2_01_15_358_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115660200");
 public static readonly Guid DataFieldD2_01_15_358_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115660300");
+public static readonly Guid DataFieldD2_01_15_358_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115660400");
 public static readonly Guid TypeD2_01_15_359Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115670000");
 public static readonly Guid DataFieldD2_01_15_359_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115670100");
 public static readonly Guid DataFieldD2_01_15_359_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115670200");
@@ -2520,11 +2767,13 @@ public static readonly Guid DataFieldD2_01_15_360_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_15_360_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115680500");
 public static readonly Guid DataFieldD2_01_15_360_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115680600");
 public static readonly Guid DataFieldD2_01_15_360_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115680700");
+public static readonly Guid DataFieldD2_01_15_360_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115680800");
 public static readonly Guid TypeD2_01_15_361Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690000");
 public static readonly Guid DataFieldD2_01_15_361_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690100");
 public static readonly Guid DataFieldD2_01_15_361_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690200");
 public static readonly Guid DataFieldD2_01_15_361_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690300");
 public static readonly Guid DataFieldD2_01_15_361_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690400");
+public static readonly Guid DataFieldD2_01_15_361_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20115690500");
 public static readonly Guid TypeD2_01_15_362Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201156a0000");
 public static readonly Guid DataFieldD2_01_15_362_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201156a0100");
 public static readonly Guid DataFieldD2_01_15_362_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201156a0200");
@@ -2539,6 +2788,7 @@ public static readonly Guid DataFieldD2_01_16_363_DV_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_16_363_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166b0300");
 public static readonly Guid DataFieldD2_01_16_363_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166b0400");
 public static readonly Guid DataFieldD2_01_16_363_OV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166b0500");
+public static readonly Guid DataFieldD2_01_16_363_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166b0600");
 public static readonly Guid TypeD2_01_16_364Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0000");
 public static readonly Guid DataFieldD2_01_16_364_de_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0100");
 public static readonly Guid DataFieldD2_01_16_364_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0200");
@@ -2553,10 +2803,12 @@ public static readonly Guid DataFieldD2_01_16_364_DT2_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_16_364_dn_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0b00");
 public static readonly Guid DataFieldD2_01_16_364_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0c00");
 public static readonly Guid DataFieldD2_01_16_364_DS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0d00");
+public static readonly Guid DataFieldD2_01_16_364_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166c0e00");
 public static readonly Guid TypeD2_01_16_365Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166d0000");
 public static readonly Guid DataFieldD2_01_16_365_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166d0100");
 public static readonly Guid DataFieldD2_01_16_365_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166d0200");
 public static readonly Guid DataFieldD2_01_16_365_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166d0300");
+public static readonly Guid DataFieldD2_01_16_365_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166d0400");
 public static readonly Guid TypeD2_01_16_366Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166e0000");
 public static readonly Guid DataFieldD2_01_16_366_PF_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166e0100");
 public static readonly Guid DataFieldD2_01_16_366_PFD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166e0200");
@@ -2581,11 +2833,13 @@ public static readonly Guid DataFieldD2_01_16_367_MAT_RAW_Guid = new Guid("eb2c5
 public static readonly Guid DataFieldD2_01_16_367_MAT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166f0b00");
 public static readonly Guid DataFieldD2_01_16_367_MIT_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166f0c00");
 public static readonly Guid DataFieldD2_01_16_367_MIT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166f0d00");
+public static readonly Guid DataFieldD2_01_16_367_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201166f0e00");
 public static readonly Guid TypeD2_01_16_368Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700000");
 public static readonly Guid DataFieldD2_01_16_368_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700100");
 public static readonly Guid DataFieldD2_01_16_368_qu_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700200");
 public static readonly Guid DataFieldD2_01_16_368_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700300");
 public static readonly Guid DataFieldD2_01_16_368_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700400");
+public static readonly Guid DataFieldD2_01_16_368_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116700500");
 public static readonly Guid TypeD2_01_16_369Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116710000");
 public static readonly Guid DataFieldD2_01_16_369_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116710100");
 public static readonly Guid DataFieldD2_01_16_369_UN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116710200");
@@ -2595,8 +2849,10 @@ public static readonly Guid DataFieldD2_01_16_369_MV_Guid = new Guid("eb2c5295-4
 public static readonly Guid TypeD2_01_16_370Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116720000");
 public static readonly Guid DataFieldD2_01_16_370_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116720100");
 public static readonly Guid DataFieldD2_01_16_370_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116720200");
+public static readonly Guid DataFieldD2_01_16_370_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116720300");
 public static readonly Guid TypeD2_01_16_371Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116730000");
 public static readonly Guid DataFieldD2_01_16_371_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116730100");
+public static readonly Guid DataFieldD2_01_16_371_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116730200");
 public static readonly Guid TypeD2_01_16_372Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116740000");
 public static readonly Guid DataFieldD2_01_16_372_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116740100");
 public static readonly Guid DataFieldD2_01_16_372_PM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116740200");
@@ -2608,10 +2864,12 @@ public static readonly Guid DataFieldD2_01_16_373_AOT_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_01_16_373_DOT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116750500");
 public static readonly Guid DataFieldD2_01_16_373_EBM_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116750600");
 public static readonly Guid DataFieldD2_01_16_373_SWT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116750700");
+public static readonly Guid DataFieldD2_01_16_373_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116750800");
 public static readonly Guid TypeD2_01_16_374Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116760000");
 public static readonly Guid DataFieldD2_01_16_374_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116760100");
 public static readonly Guid DataFieldD2_01_16_374_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116760200");
 public static readonly Guid DataFieldD2_01_16_374_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116760300");
+public static readonly Guid DataFieldD2_01_16_374_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116760400");
 public static readonly Guid TypeD2_01_16_375Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116770000");
 public static readonly Guid DataFieldD2_01_16_375_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116770100");
 public static readonly Guid DataFieldD2_01_16_375_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116770200");
@@ -2628,11 +2886,13 @@ public static readonly Guid DataFieldD2_01_16_376_IO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_01_16_376_MAXV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116780500");
 public static readonly Guid DataFieldD2_01_16_376_MINV_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116780600");
 public static readonly Guid DataFieldD2_01_16_376_MINV_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116780700");
+public static readonly Guid DataFieldD2_01_16_376_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116780800");
 public static readonly Guid TypeD2_01_16_377Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790000");
 public static readonly Guid DataFieldD2_01_16_377_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790100");
 public static readonly Guid DataFieldD2_01_16_377_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790200");
 public static readonly Guid DataFieldD2_01_16_377_IO_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790300");
 public static readonly Guid DataFieldD2_01_16_377_IO_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790400");
+public static readonly Guid DataFieldD2_01_16_377_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20116790500");
 public static readonly Guid TypeD2_01_16_378Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201167a0000");
 public static readonly Guid DataFieldD2_01_16_378_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201167a0100");
 public static readonly Guid DataFieldD2_01_16_378_ECID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d201167a0200");
@@ -2817,12 +3077,15 @@ public static readonly Guid DataFieldD2_05_00_1_REPO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_05_00_1_LOCK_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500010600");
 public static readonly Guid DataFieldD2_05_00_1_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500010700");
 public static readonly Guid DataFieldD2_05_00_1_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500010800");
+public static readonly Guid DataFieldD2_05_00_1_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500010900");
 public static readonly Guid TypeD2_05_00_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500020000");
 public static readonly Guid DataFieldD2_05_00_2_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500020100");
 public static readonly Guid DataFieldD2_05_00_2_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500020200");
+public static readonly Guid DataFieldD2_05_00_2_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500020300");
 public static readonly Guid TypeD2_05_00_3Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500030000");
 public static readonly Guid DataFieldD2_05_00_3_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500030100");
 public static readonly Guid DataFieldD2_05_00_3_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500030200");
+public static readonly Guid DataFieldD2_05_00_3_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500030300");
 public static readonly Guid TypeD2_05_00_4Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500040000");
 public static readonly Guid DataFieldD2_05_00_4_POS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500040100");
 public static readonly Guid DataFieldD2_05_00_4_POS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500040200");
@@ -2839,6 +3102,7 @@ public static readonly Guid DataFieldD2_05_00_5_ROT_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldD2_05_00_5_AA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500050500");
 public static readonly Guid DataFieldD2_05_00_5_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500050600");
 public static readonly Guid DataFieldD2_05_00_5_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500050700");
+public static readonly Guid DataFieldD2_05_00_5_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20500050800");
 public static readonly Guid TypeD2_05_02_6Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060000");
 public static readonly Guid DataFieldD2_05_02_6_POS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060100");
 public static readonly Guid DataFieldD2_05_02_6_POS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060200");
@@ -2848,12 +3112,15 @@ public static readonly Guid DataFieldD2_05_02_6_REPO_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_05_02_6_LOCK_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060600");
 public static readonly Guid DataFieldD2_05_02_6_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060700");
 public static readonly Guid DataFieldD2_05_02_6_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060800");
+public static readonly Guid DataFieldD2_05_02_6_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502060900");
 public static readonly Guid TypeD2_05_02_7Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502070000");
 public static readonly Guid DataFieldD2_05_02_7_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502070100");
 public static readonly Guid DataFieldD2_05_02_7_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502070200");
+public static readonly Guid DataFieldD2_05_02_7_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502070300");
 public static readonly Guid TypeD2_05_02_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502080000");
 public static readonly Guid DataFieldD2_05_02_8_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502080100");
 public static readonly Guid DataFieldD2_05_02_8_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502080200");
+public static readonly Guid DataFieldD2_05_02_8_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502080300");
 public static readonly Guid TypeD2_05_02_9Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502090000");
 public static readonly Guid DataFieldD2_05_02_9_POS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502090100");
 public static readonly Guid DataFieldD2_05_02_9_POS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20502090200");
@@ -2871,12 +3138,15 @@ public static readonly Guid DataFieldD2_05_03_10_REPOSITIONING_Guid = new Guid("
 public static readonly Guid DataFieldD2_05_03_10_LOCKINGMODE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030a0600");
 public static readonly Guid DataFieldD2_05_03_10_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030a0700");
 public static readonly Guid DataFieldD2_05_03_10_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030a0800");
+public static readonly Guid DataFieldD2_05_03_10_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030a0900");
 public static readonly Guid TypeD2_05_03_11Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030b0000");
 public static readonly Guid DataFieldD2_05_03_11_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030b0100");
 public static readonly Guid DataFieldD2_05_03_11_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030b0200");
+public static readonly Guid DataFieldD2_05_03_11_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030b0300");
 public static readonly Guid TypeD2_05_03_12Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030c0000");
 public static readonly Guid DataFieldD2_05_03_12_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030c0100");
 public static readonly Guid DataFieldD2_05_03_12_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030c0200");
+public static readonly Guid DataFieldD2_05_03_12_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030c0300");
 public static readonly Guid TypeD2_05_03_13Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030d0000");
 public static readonly Guid DataFieldD2_05_03_13_POSITION_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030d0100");
 public static readonly Guid DataFieldD2_05_03_13_POSITION_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030d0200");
@@ -2889,9 +3159,11 @@ public static readonly Guid TypeD2_05_03_14Guid = new Guid("eb2c5295-4a34-4389-8
 public static readonly Guid DataFieldD2_05_03_14_MOTORIZED_SASH_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030e0100");
 public static readonly Guid DataFieldD2_05_03_14_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030e0200");
 public static readonly Guid DataFieldD2_05_03_14_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030e0300");
+public static readonly Guid DataFieldD2_05_03_14_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030e0400");
 public static readonly Guid TypeD2_05_03_15Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030f0000");
 public static readonly Guid DataFieldD2_05_03_15_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030f0100");
 public static readonly Guid DataFieldD2_05_03_15_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030f0200");
+public static readonly Guid DataFieldD2_05_03_15_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205030f0300");
 public static readonly Guid TypeD2_05_03_16Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20503100000");
 public static readonly Guid DataFieldD2_05_03_16_POSITION_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20503100100");
 public static readonly Guid DataFieldD2_05_03_16_ANGLE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20503100200");
@@ -2919,12 +3191,15 @@ public static readonly Guid DataFieldD2_05_04_17_REPOSITIONING_Guid = new Guid("
 public static readonly Guid DataFieldD2_05_04_17_LOCKINGMODE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504110600");
 public static readonly Guid DataFieldD2_05_04_17_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504110700");
 public static readonly Guid DataFieldD2_05_04_17_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504110800");
+public static readonly Guid DataFieldD2_05_04_17_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504110900");
 public static readonly Guid TypeD2_05_04_18Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504120000");
 public static readonly Guid DataFieldD2_05_04_18_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504120100");
 public static readonly Guid DataFieldD2_05_04_18_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504120200");
+public static readonly Guid DataFieldD2_05_04_18_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504120300");
 public static readonly Guid TypeD2_05_04_19Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504130000");
 public static readonly Guid DataFieldD2_05_04_19_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504130100");
 public static readonly Guid DataFieldD2_05_04_19_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504130200");
+public static readonly Guid DataFieldD2_05_04_19_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504130300");
 public static readonly Guid TypeD2_05_04_20Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504140000");
 public static readonly Guid DataFieldD2_05_04_20_POSITION_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504140100");
 public static readonly Guid DataFieldD2_05_04_20_POSITION_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20504140200");
@@ -2943,12 +3218,15 @@ public static readonly Guid DataFieldD2_05_05_21_REPOSITIONING_Guid = new Guid("
 public static readonly Guid DataFieldD2_05_05_21_LOCKINGMODE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505150600");
 public static readonly Guid DataFieldD2_05_05_21_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505150700");
 public static readonly Guid DataFieldD2_05_05_21_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505150800");
+public static readonly Guid DataFieldD2_05_05_21_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505150900");
 public static readonly Guid TypeD2_05_05_22Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505160000");
 public static readonly Guid DataFieldD2_05_05_22_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505160100");
 public static readonly Guid DataFieldD2_05_05_22_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505160200");
+public static readonly Guid DataFieldD2_05_05_22_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505160300");
 public static readonly Guid TypeD2_05_05_23Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505170000");
 public static readonly Guid DataFieldD2_05_05_23_CHANNEL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505170100");
 public static readonly Guid DataFieldD2_05_05_23_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505170200");
+public static readonly Guid DataFieldD2_05_05_23_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505170300");
 public static readonly Guid TypeD2_05_05_24Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505180000");
 public static readonly Guid DataFieldD2_05_05_24_POSITION_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505180100");
 public static readonly Guid DataFieldD2_05_05_24_POSITION_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20505180200");
@@ -2962,6 +3240,7 @@ public static readonly Guid TypeD2_05_06_25Guid = new Guid("eb2c5295-4a34-4389-8
 public static readonly Guid DataFieldD2_05_06_25_SETFANSPEED_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20506190100");
 public static readonly Guid DataFieldD2_05_06_25_SETFANSPEED_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20506190200");
 public static readonly Guid DataFieldD2_05_06_25_COMMANDID_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20506190300");
+public static readonly Guid DataFieldD2_05_06_25_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20506190400");
 public static readonly Guid TypeD2_05_06_26Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205061a0000");
 public static readonly Guid DataFieldD2_05_06_26_FANSPEEDSTATE_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205061a0100");
 public static readonly Guid DataFieldD2_05_06_26_FANSPEEDSTATE_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205061a0200");
@@ -2983,12 +3262,15 @@ public static readonly Guid DataFieldD2_05_01_27_REPO_Guid = new Guid("eb2c5295-
 public static readonly Guid DataFieldD2_05_01_27_LOCK_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011b0600");
 public static readonly Guid DataFieldD2_05_01_27_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011b0700");
 public static readonly Guid DataFieldD2_05_01_27_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011b0800");
+public static readonly Guid DataFieldD2_05_01_27_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011b0900");
 public static readonly Guid TypeD2_05_01_28Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011c0000");
 public static readonly Guid DataFieldD2_05_01_28_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011c0100");
 public static readonly Guid DataFieldD2_05_01_28_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011c0200");
+public static readonly Guid DataFieldD2_05_01_28_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011c0300");
 public static readonly Guid TypeD2_05_01_29Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011d0000");
 public static readonly Guid DataFieldD2_05_01_29_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011d0100");
 public static readonly Guid DataFieldD2_05_01_29_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011d0200");
+public static readonly Guid DataFieldD2_05_01_29_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011d0300");
 public static readonly Guid TypeD2_05_01_30Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011e0000");
 public static readonly Guid DataFieldD2_05_01_30_POS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011e0100");
 public static readonly Guid DataFieldD2_05_01_30_POS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011e0200");
@@ -3005,6 +3287,7 @@ public static readonly Guid DataFieldD2_05_01_31_ROT_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldD2_05_01_31_AA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011f0500");
 public static readonly Guid DataFieldD2_05_01_31_CHN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011f0600");
 public static readonly Guid DataFieldD2_05_01_31_CMD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011f0700");
+public static readonly Guid DataFieldD2_05_01_31_TEACHIN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d205011f0800");
 public static readonly Guid FunctionD2_06Guid = new Guid("eb2c5295-4a34-4389-8bb5-d206ff000000");
 public static readonly Guid TypeD2_06_01_1Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20601010000");
 public static readonly Guid DataFieldD2_06_01_1_MT_Guid = new Guid("eb2c5295-4a34-4389-8bb5-d20601010100");
@@ -7294,6 +7577,10 @@ AddDataFieldD2_01_00_1_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_1_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_1_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_1_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_00_1_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -7371,6 +7658,13 @@ AddDataFieldD2_01_00_1_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_00_1_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_1_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_2Guid, 1);
@@ -7399,6 +7693,10 @@ AddDataFieldD2_01_00_2_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_00_2_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_2_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_2_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_2_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -7597,6 +7895,13 @@ AddDataFieldD2_01_00_2_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_00_2_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_2_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_3Guid, 1);
@@ -7615,6 +7920,10 @@ AddDataFieldD2_01_00_2_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_00_3_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_3_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_3_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_3_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -7662,6 +7971,13 @@ AddDataFieldD2_01_00_3_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_00_3_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_3_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_00_4Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -7853,6 +8169,10 @@ AddDataFieldD2_01_00_5_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_5_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_5_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_5_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_5_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -8079,6 +8399,13 @@ AddDataFieldD2_01_00_5_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_00_5.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_00_5.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_00_5_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_5_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_6Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_6Guid, 1);
@@ -8098,6 +8425,10 @@ AddDataFieldD2_01_00_5_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_6_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_6_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_6_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_6_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -8160,6 +8491,13 @@ AddDataFieldD2_01_00_6_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_00_6_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_6_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_00_7Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -8283,6 +8621,10 @@ AddDataFieldD2_01_00_7_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_00_8_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_8_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_8_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_00_8_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -8315,6 +8657,13 @@ AddDataFieldD2_01_00_8_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_00_8_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_8_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_9Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_9Guid, 1);
@@ -8332,6 +8681,10 @@ AddDataFieldD2_01_00_8_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_00_9_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_9_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_00_9_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -8348,6 +8701,13 @@ AddDataFieldD2_01_00_8_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_00_9_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_9_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_00_10Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -8421,6 +8781,10 @@ AddDataFieldD2_01_00_11_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_11_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_11_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_11_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_11_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -8533,6 +8897,13 @@ AddDataFieldD2_01_00_11_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_00_11_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_11_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_12Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_12Guid, 1);
@@ -8551,6 +8922,10 @@ AddDataFieldD2_01_00_11_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_00_12_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_12_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_12_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_12_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -8598,6 +8973,13 @@ AddDataFieldD2_01_00_12_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_00_12_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_12_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_00_13Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -8756,6 +9138,10 @@ AddDataFieldD2_01_00_14_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_14_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_14_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_14_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_00_14_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -8863,6 +9249,13 @@ AddDataFieldD2_01_00_14_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_00_14_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_14_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_00_15Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_00_15Guid, 1);
@@ -8882,6 +9275,10 @@ AddDataFieldD2_01_00_14_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_15_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_15_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_00_15_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_00_15_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -8944,6 +9341,13 @@ AddDataFieldD2_01_00_15_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_00_15_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_00_15_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_00_16Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -9097,6 +9501,10 @@ AddDataFieldD2_01_17_17_IOCHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_17_OUTPUT_VALUE_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_17_OUTPUT_VALUETemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_17_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_17_17_COMMAND_IDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -9193,6 +9601,13 @@ AddDataFieldD2_01_17_17_OUTPUT_VALUETemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_17_17.SHORTCUT_OUTPUT_VALUEOUTPUT_VALUE.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_17_17.SHORTCUT_OUTPUT_VALUEOUTPUT_VALUE.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "%", 0, 0);           
         }
+        private static void AddDataFieldD2_01_17_17_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_17_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_17_18Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_17_18Guid, 1);
@@ -9223,6 +9638,10 @@ AddDataFieldD2_01_17_18_USERINTERFACEINDICATIONTemplates(factory, interfaceGuid)
 AddDataFieldD2_01_17_18_POWER_FAILURETemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_18_DEFAULTSTATETemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_18_DIM_TIMER_1Templates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_18_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -9459,6 +9878,13 @@ AddDataFieldD2_01_17_18_DIM_TIMER_1Templates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_17_18_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_18_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_17_19Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_17_19Guid, 1);
@@ -9477,6 +9903,10 @@ AddDataFieldD2_01_17_18_DIM_TIMER_1Templates(factory, interfaceGuid);
             AddDataFieldD2_01_17_19_COMMAND_IDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_19_IOCHANNEL_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_19_IOCHANNELTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_19_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -9524,6 +9954,13 @@ AddDataFieldD2_01_17_19_IOCHANNELTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_17_19_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_19_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_17_20Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -9731,6 +10168,10 @@ AddDataFieldD2_01_17_21_MAXIMUMTIMEBETWEENTWOSUBSEQUENTA_RAWTemplates(factory, i
 AddDataFieldD2_01_17_21_MAXIMUMTIMEBETWEENTWOSUBSEQUENTATemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTA_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTATemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_21_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -9953,6 +10394,13 @@ AddDataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTATemplates(factory, inter
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_17_21.SHORTCUT_MINIMUMTIMEBETWEENTWOSUBSEQUENTAMINIMUMTIMEBETWEENTWOSUBSEQUENTA.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_17_21.SHORTCUT_MINIMUMTIMEBETWEENTWOSUBSEQUENTAMINIMUMTIMEBETWEENTWOSUBSEQUENTA.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_17_21_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_21_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_17_22Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_17_22Guid, 1);
@@ -9972,6 +10420,10 @@ AddDataFieldD2_01_17_21_MINIMUMTIMEBETWEENTWOSUBSEQUENTATemplates(factory, inter
 AddDataFieldD2_01_17_22_QUERYTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_22_IOCHANNEL_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_22_IOCHANNELTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_22_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -10034,6 +10486,13 @@ AddDataFieldD2_01_17_22_IOCHANNELTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_17_22_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_22_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_17_23Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -10167,6 +10626,10 @@ AddDataFieldD2_01_17_24_DELAY_OFF_TIMER_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_24_DELAY_OFF_TIMERTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_24_EXTERNAL_SWITCH_PUSH_BUTTONTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_24_F_2_STATE_SWITCHTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_24_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -10313,6 +10776,13 @@ AddDataFieldD2_01_17_24_F_2_STATE_SWITCHTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_17_24_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_24_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_17_25Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_17_25Guid, 1);
@@ -10331,6 +10801,10 @@ AddDataFieldD2_01_17_24_F_2_STATE_SWITCHTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_17_25_COMMAND_IDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_25_IOCHANNEL_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_17_25_IOCHANNELTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_17_25_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -10378,6 +10852,13 @@ AddDataFieldD2_01_17_25_IOCHANNELTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_17_25_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_17_25_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_17_26Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -10562,6 +11043,10 @@ AddDataFieldD2_01_01_27_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_27_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_27_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_27_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_01_27_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -10639,6 +11124,13 @@ AddDataFieldD2_01_01_27_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_01_27_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_27_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_28Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_28Guid, 1);
@@ -10667,6 +11159,10 @@ AddDataFieldD2_01_01_28_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_01_28_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_28_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_28_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_28_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -10865,6 +11361,13 @@ AddDataFieldD2_01_01_28_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_01_28_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_28_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_29Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_29Guid, 1);
@@ -10883,6 +11386,10 @@ AddDataFieldD2_01_01_28_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_01_29_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_29_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_29_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_29_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -10930,6 +11437,13 @@ AddDataFieldD2_01_01_29_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_01_29_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_29_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_01_30Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -11121,6 +11635,10 @@ AddDataFieldD2_01_01_31_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_31_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_31_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_31_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_31_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -11347,6 +11865,13 @@ AddDataFieldD2_01_01_31_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_01_31.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_01_31.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_01_31_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_31_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_32Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_32Guid, 1);
@@ -11366,6 +11891,10 @@ AddDataFieldD2_01_01_31_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_32_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_32_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_32_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_32_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -11428,6 +11957,13 @@ AddDataFieldD2_01_01_32_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_01_32_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_32_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_01_33Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -11551,6 +12087,10 @@ AddDataFieldD2_01_01_33_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_01_34_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_34_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_34_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_01_34_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -11583,6 +12123,13 @@ AddDataFieldD2_01_01_34_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_01_34_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_34_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_35Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_35Guid, 1);
@@ -11600,6 +12147,10 @@ AddDataFieldD2_01_01_34_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_01_35_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_35_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_01_35_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -11616,6 +12167,13 @@ AddDataFieldD2_01_01_34_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_01_35_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_35_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_01_36Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -11689,6 +12247,10 @@ AddDataFieldD2_01_01_37_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_37_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_37_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_37_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_37_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -11801,6 +12363,13 @@ AddDataFieldD2_01_01_37_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_01_37_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_37_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_38Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_38Guid, 1);
@@ -11819,6 +12388,10 @@ AddDataFieldD2_01_01_37_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_01_38_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_38_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_38_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_38_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -11866,6 +12439,13 @@ AddDataFieldD2_01_01_38_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_01_38_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_38_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_01_39Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -12024,6 +12604,10 @@ AddDataFieldD2_01_01_40_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_40_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_40_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_40_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_01_40_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -12131,6 +12715,13 @@ AddDataFieldD2_01_01_40_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_01_40_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_40_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_01_41Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_01_41Guid, 1);
@@ -12150,6 +12741,10 @@ AddDataFieldD2_01_01_40_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_41_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_41_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_01_41_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_01_41_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -12212,6 +12807,13 @@ AddDataFieldD2_01_01_41_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_01_41_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_01_41_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_01_42Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -12364,6 +12966,10 @@ AddDataFieldD2_01_02_43_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_43_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_43_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_43_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_02_43_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -12441,6 +13047,13 @@ AddDataFieldD2_01_02_43_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_02_43_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_43_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_44Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_44Guid, 1);
@@ -12469,6 +13082,10 @@ AddDataFieldD2_01_02_44_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_02_44_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_44_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_44_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_44_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -12667,6 +13284,13 @@ AddDataFieldD2_01_02_44_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_02_44_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_44_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_45Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_45Guid, 1);
@@ -12685,6 +13309,10 @@ AddDataFieldD2_01_02_44_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_02_45_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_45_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_45_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_45_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -12732,6 +13360,13 @@ AddDataFieldD2_01_02_45_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_02_45_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_45_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_02_46Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -12923,6 +13558,10 @@ AddDataFieldD2_01_02_47_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_47_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_47_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_47_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_47_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -13149,6 +13788,13 @@ AddDataFieldD2_01_02_47_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_02_47.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_02_47.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_02_47_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_47_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_48Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_48Guid, 1);
@@ -13168,6 +13814,10 @@ AddDataFieldD2_01_02_47_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_48_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_48_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_48_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_48_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -13230,6 +13880,13 @@ AddDataFieldD2_01_02_48_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_02_48_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_48_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_02_49Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -13353,6 +14010,10 @@ AddDataFieldD2_01_02_49_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_02_50_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_50_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_50_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_02_50_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -13385,6 +14046,13 @@ AddDataFieldD2_01_02_50_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_02_50_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_50_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_51Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_51Guid, 1);
@@ -13402,6 +14070,10 @@ AddDataFieldD2_01_02_50_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_02_51_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_51_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_02_51_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -13418,6 +14090,13 @@ AddDataFieldD2_01_02_50_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_02_51_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_51_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_02_52Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -13491,6 +14170,10 @@ AddDataFieldD2_01_02_53_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_53_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_53_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_53_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_53_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -13603,6 +14286,13 @@ AddDataFieldD2_01_02_53_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_02_53_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_53_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_54Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_54Guid, 1);
@@ -13621,6 +14311,10 @@ AddDataFieldD2_01_02_53_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_02_54_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_54_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_54_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_54_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -13668,6 +14362,13 @@ AddDataFieldD2_01_02_54_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_02_54_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_54_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_02_55Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -13826,6 +14527,10 @@ AddDataFieldD2_01_02_56_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_56_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_56_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_56_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_02_56_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -13933,6 +14638,13 @@ AddDataFieldD2_01_02_56_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_02_56_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_56_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_02_57Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_02_57Guid, 1);
@@ -13952,6 +14664,10 @@ AddDataFieldD2_01_02_56_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_57_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_57_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_02_57_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_02_57_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -14014,6 +14730,13 @@ AddDataFieldD2_01_02_57_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_02_57_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_02_57_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_02_58Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -14166,6 +14889,10 @@ AddDataFieldD2_01_03_59_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_59_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_59_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_59_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_03_59_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -14243,6 +14970,13 @@ AddDataFieldD2_01_03_59_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_03_59_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_59_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_60Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_60Guid, 1);
@@ -14271,6 +15005,10 @@ AddDataFieldD2_01_03_60_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_03_60_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_60_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_60_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_60_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -14469,6 +15207,13 @@ AddDataFieldD2_01_03_60_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_03_60_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_60_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_61Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_61Guid, 1);
@@ -14487,6 +15232,10 @@ AddDataFieldD2_01_03_60_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_03_61_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_61_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_61_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_61_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -14534,6 +15283,13 @@ AddDataFieldD2_01_03_61_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_03_61_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_61_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_03_62Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -14725,6 +15481,10 @@ AddDataFieldD2_01_03_63_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_63_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_63_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_63_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_63_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -14951,6 +15711,13 @@ AddDataFieldD2_01_03_63_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_03_63.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_03_63.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_03_63_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_63_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_64Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_64Guid, 1);
@@ -14970,6 +15737,10 @@ AddDataFieldD2_01_03_63_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_64_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_64_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_64_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_64_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -15032,6 +15803,13 @@ AddDataFieldD2_01_03_64_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_03_64_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_64_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_03_65Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -15155,6 +15933,10 @@ AddDataFieldD2_01_03_65_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_03_66_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_66_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_66_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_03_66_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -15187,6 +15969,13 @@ AddDataFieldD2_01_03_66_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_03_66_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_66_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_67Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_67Guid, 1);
@@ -15204,6 +15993,10 @@ AddDataFieldD2_01_03_66_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_03_67_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_67_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_03_67_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -15220,6 +16013,13 @@ AddDataFieldD2_01_03_66_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_03_67_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_67_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_03_68Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -15293,6 +16093,10 @@ AddDataFieldD2_01_03_69_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_69_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_69_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_69_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_69_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -15405,6 +16209,13 @@ AddDataFieldD2_01_03_69_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_03_69_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_69_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_70Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_70Guid, 1);
@@ -15423,6 +16234,10 @@ AddDataFieldD2_01_03_69_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_03_70_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_70_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_70_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_70_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -15470,6 +16285,13 @@ AddDataFieldD2_01_03_70_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_03_70_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_70_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_03_71Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -15628,6 +16450,10 @@ AddDataFieldD2_01_03_72_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_72_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_72_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_72_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_03_72_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -15735,6 +16561,13 @@ AddDataFieldD2_01_03_72_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_03_72_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_72_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_03_73Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_03_73Guid, 1);
@@ -15754,6 +16587,10 @@ AddDataFieldD2_01_03_72_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_73_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_73_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_03_73_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_03_73_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -15816,6 +16653,13 @@ AddDataFieldD2_01_03_73_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_03_73_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_03_73_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_03_74Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -15968,6 +16812,10 @@ AddDataFieldD2_01_04_75_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_75_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_75_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_75_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_04_75_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -16045,6 +16893,13 @@ AddDataFieldD2_01_04_75_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_04_75_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_75_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_76Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_76Guid, 1);
@@ -16073,6 +16928,10 @@ AddDataFieldD2_01_04_76_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_04_76_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_76_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_76_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_76_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -16271,6 +17130,13 @@ AddDataFieldD2_01_04_76_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_04_76_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_76_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_77Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_77Guid, 1);
@@ -16289,6 +17155,10 @@ AddDataFieldD2_01_04_76_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_04_77_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_77_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_77_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_77_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -16336,6 +17206,13 @@ AddDataFieldD2_01_04_77_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_04_77_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_77_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_04_78Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -16527,6 +17404,10 @@ AddDataFieldD2_01_04_79_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_79_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_79_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_79_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_79_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -16753,6 +17634,13 @@ AddDataFieldD2_01_04_79_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_04_79.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_04_79.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_04_79_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_79_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_80Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_80Guid, 1);
@@ -16772,6 +17660,10 @@ AddDataFieldD2_01_04_79_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_80_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_80_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_80_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_80_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -16834,6 +17726,13 @@ AddDataFieldD2_01_04_80_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_04_80_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_80_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_04_81Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -16957,6 +17856,10 @@ AddDataFieldD2_01_04_81_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_04_82_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_82_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_82_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_04_82_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -16989,6 +17892,13 @@ AddDataFieldD2_01_04_82_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_04_82_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_82_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_83Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_83Guid, 1);
@@ -17006,6 +17916,10 @@ AddDataFieldD2_01_04_82_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_04_83_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_83_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_04_83_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -17022,6 +17936,13 @@ AddDataFieldD2_01_04_82_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_04_83_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_83_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_04_84Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -17095,6 +18016,10 @@ AddDataFieldD2_01_04_85_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_85_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_85_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_85_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_85_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -17207,6 +18132,13 @@ AddDataFieldD2_01_04_85_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_04_85_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_85_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_86Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_86Guid, 1);
@@ -17225,6 +18157,10 @@ AddDataFieldD2_01_04_85_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_04_86_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_86_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_86_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_86_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -17272,6 +18208,13 @@ AddDataFieldD2_01_04_86_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_04_86_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_86_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_04_87Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -17430,6 +18373,10 @@ AddDataFieldD2_01_04_88_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_88_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_88_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_88_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_04_88_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -17537,6 +18484,13 @@ AddDataFieldD2_01_04_88_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_04_88_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_88_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_04_89Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_04_89Guid, 1);
@@ -17556,6 +18510,10 @@ AddDataFieldD2_01_04_88_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_89_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_89_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_04_89_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_04_89_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -17618,6 +18576,13 @@ AddDataFieldD2_01_04_89_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_04_89_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_04_89_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_04_90Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -17770,6 +18735,10 @@ AddDataFieldD2_01_05_91_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_91_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_91_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_91_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_05_91_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -17847,6 +18816,13 @@ AddDataFieldD2_01_05_91_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_05_91_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_91_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_92Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_92Guid, 1);
@@ -17875,6 +18851,10 @@ AddDataFieldD2_01_05_92_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_05_92_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_92_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_92_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_92_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18073,6 +19053,13 @@ AddDataFieldD2_01_05_92_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_05_92_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_92_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_93Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_93Guid, 1);
@@ -18091,6 +19078,10 @@ AddDataFieldD2_01_05_92_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_05_93_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_93_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_93_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_93_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18138,6 +19129,13 @@ AddDataFieldD2_01_05_93_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_05_93_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_93_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_05_94Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -18329,6 +19327,10 @@ AddDataFieldD2_01_05_95_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_95_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_95_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_95_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_95_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18555,6 +19557,13 @@ AddDataFieldD2_01_05_95_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_05_95.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_05_95.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_05_95_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_95_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_96Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_96Guid, 1);
@@ -18574,6 +19583,10 @@ AddDataFieldD2_01_05_95_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_96_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_96_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_96_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_96_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -18636,6 +19649,13 @@ AddDataFieldD2_01_05_96_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_05_96_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_96_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_05_97Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -18759,6 +19779,10 @@ AddDataFieldD2_01_05_97_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_05_98_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_98_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_98_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_05_98_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -18791,6 +19815,13 @@ AddDataFieldD2_01_05_98_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_05_98_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_98_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_99Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_99Guid, 1);
@@ -18808,6 +19839,10 @@ AddDataFieldD2_01_05_98_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_05_99_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_99_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_05_99_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -18824,6 +19859,13 @@ AddDataFieldD2_01_05_98_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_05_99_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_99_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_05_100Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -18897,6 +19939,10 @@ AddDataFieldD2_01_05_101_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_101_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_101_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_101_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_101_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -19009,6 +20055,13 @@ AddDataFieldD2_01_05_101_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_05_101_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_101_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_102Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_102Guid, 1);
@@ -19027,6 +20080,10 @@ AddDataFieldD2_01_05_101_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_05_102_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_102_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_102_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_102_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -19074,6 +20131,13 @@ AddDataFieldD2_01_05_102_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_05_102_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_102_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_05_103Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -19232,6 +20296,10 @@ AddDataFieldD2_01_05_104_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_104_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_104_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_104_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_05_104_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -19339,6 +20407,13 @@ AddDataFieldD2_01_05_104_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_05_104_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_104_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_05_105Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_05_105Guid, 1);
@@ -19358,6 +20433,10 @@ AddDataFieldD2_01_05_104_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_105_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_105_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_05_105_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_05_105_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -19420,6 +20499,13 @@ AddDataFieldD2_01_05_105_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_05_105_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_05_105_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_05_106Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -19572,6 +20658,10 @@ AddDataFieldD2_01_06_107_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_107_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_107_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_107_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_06_107_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -19649,6 +20739,13 @@ AddDataFieldD2_01_06_107_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_06_107_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_107_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_108Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_108Guid, 1);
@@ -19677,6 +20774,10 @@ AddDataFieldD2_01_06_108_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_06_108_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_108_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_108_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_108_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -19875,6 +20976,13 @@ AddDataFieldD2_01_06_108_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_06_108_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_108_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_109Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_109Guid, 1);
@@ -19893,6 +21001,10 @@ AddDataFieldD2_01_06_108_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_06_109_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_109_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_109_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_109_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -19940,6 +21052,13 @@ AddDataFieldD2_01_06_109_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_06_109_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_109_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_06_110Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -20131,6 +21250,10 @@ AddDataFieldD2_01_06_111_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_111_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_111_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_111_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_111_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -20357,6 +21480,13 @@ AddDataFieldD2_01_06_111_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_06_111.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_06_111.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_06_111_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_111_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_112Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_112Guid, 1);
@@ -20376,6 +21506,10 @@ AddDataFieldD2_01_06_111_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_112_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_112_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_112_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_112_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -20438,6 +21572,13 @@ AddDataFieldD2_01_06_112_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_06_112_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_112_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_06_113Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -20561,6 +21702,10 @@ AddDataFieldD2_01_06_113_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_06_114_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_114_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_114_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_06_114_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -20593,6 +21738,13 @@ AddDataFieldD2_01_06_114_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_06_114_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_114_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_115Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_115Guid, 1);
@@ -20610,6 +21762,10 @@ AddDataFieldD2_01_06_114_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_06_115_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_115_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_06_115_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -20626,6 +21782,13 @@ AddDataFieldD2_01_06_114_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_06_115_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_115_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_06_116Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -20699,6 +21862,10 @@ AddDataFieldD2_01_06_117_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_117_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_117_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_117_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_117_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -20811,6 +21978,13 @@ AddDataFieldD2_01_06_117_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_06_117_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_117_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_118Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_118Guid, 1);
@@ -20829,6 +22003,10 @@ AddDataFieldD2_01_06_117_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_06_118_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_118_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_118_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_118_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -20876,6 +22054,13 @@ AddDataFieldD2_01_06_118_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_06_118_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_118_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_06_119Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -21034,6 +22219,10 @@ AddDataFieldD2_01_06_120_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_120_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_120_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_120_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_06_120_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -21141,6 +22330,13 @@ AddDataFieldD2_01_06_120_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_06_120_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_120_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_06_121Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_06_121Guid, 1);
@@ -21160,6 +22356,10 @@ AddDataFieldD2_01_06_120_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_121_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_121_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_06_121_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_06_121_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -21222,6 +22422,13 @@ AddDataFieldD2_01_06_121_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_06_121_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_06_121_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_06_122Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -21374,6 +22581,10 @@ AddDataFieldD2_01_07_123_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_123_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_123_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_123_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_07_123_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -21451,6 +22662,13 @@ AddDataFieldD2_01_07_123_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_07_123_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_123_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_124Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_124Guid, 1);
@@ -21479,6 +22697,10 @@ AddDataFieldD2_01_07_124_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_07_124_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_124_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_124_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_124_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -21677,6 +22899,13 @@ AddDataFieldD2_01_07_124_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_07_124_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_124_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_125Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_125Guid, 1);
@@ -21695,6 +22924,10 @@ AddDataFieldD2_01_07_124_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_07_125_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_125_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_125_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_125_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -21742,6 +22975,13 @@ AddDataFieldD2_01_07_125_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_07_125_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_125_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_07_126Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -21933,6 +23173,10 @@ AddDataFieldD2_01_07_127_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_127_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_127_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_127_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_127_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -22159,6 +23403,13 @@ AddDataFieldD2_01_07_127_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_07_127.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_07_127.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_07_127_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_127_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_128Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_128Guid, 1);
@@ -22178,6 +23429,10 @@ AddDataFieldD2_01_07_127_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_128_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_128_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_128_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_128_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -22240,6 +23495,13 @@ AddDataFieldD2_01_07_128_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_07_128_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_128_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_07_129Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -22363,6 +23625,10 @@ AddDataFieldD2_01_07_129_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_07_130_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_130_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_130_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_07_130_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -22395,6 +23661,13 @@ AddDataFieldD2_01_07_130_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_07_130_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_130_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_131Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_131Guid, 1);
@@ -22412,6 +23685,10 @@ AddDataFieldD2_01_07_130_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_07_131_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_131_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_07_131_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -22428,6 +23705,13 @@ AddDataFieldD2_01_07_130_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_07_131_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_131_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_07_132Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -22501,6 +23785,10 @@ AddDataFieldD2_01_07_133_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_133_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_133_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_133_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_133_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -22613,6 +23901,13 @@ AddDataFieldD2_01_07_133_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_07_133_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_133_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_134Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_134Guid, 1);
@@ -22631,6 +23926,10 @@ AddDataFieldD2_01_07_133_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_07_134_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_134_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_134_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_134_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -22678,6 +23977,13 @@ AddDataFieldD2_01_07_134_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_07_134_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_134_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_07_135Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -22836,6 +24142,10 @@ AddDataFieldD2_01_07_136_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_136_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_136_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_136_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_07_136_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -22943,6 +24253,13 @@ AddDataFieldD2_01_07_136_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_07_136_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_136_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_07_137Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_07_137Guid, 1);
@@ -22962,6 +24279,10 @@ AddDataFieldD2_01_07_136_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_137_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_137_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_07_137_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_07_137_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -23024,6 +24345,13 @@ AddDataFieldD2_01_07_137_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_07_137_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_07_137_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_07_138Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -23176,6 +24504,10 @@ AddDataFieldD2_01_08_139_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_139_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_139_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_139_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_08_139_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -23253,6 +24585,13 @@ AddDataFieldD2_01_08_139_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_08_139_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_139_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_140Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_140Guid, 1);
@@ -23281,6 +24620,10 @@ AddDataFieldD2_01_08_140_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_08_140_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_140_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_140_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_140_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -23479,6 +24822,13 @@ AddDataFieldD2_01_08_140_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_08_140_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_140_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_141Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_141Guid, 1);
@@ -23497,6 +24847,10 @@ AddDataFieldD2_01_08_140_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_08_141_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_141_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_141_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_141_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -23544,6 +24898,13 @@ AddDataFieldD2_01_08_141_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_08_141_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_141_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_08_142Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -23735,6 +25096,10 @@ AddDataFieldD2_01_08_143_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_143_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_143_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_143_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_143_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -23961,6 +25326,13 @@ AddDataFieldD2_01_08_143_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_08_143.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_08_143.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_08_143_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_143_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_144Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_144Guid, 1);
@@ -23980,6 +25352,10 @@ AddDataFieldD2_01_08_143_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_144_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_144_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_144_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_144_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -24042,6 +25418,13 @@ AddDataFieldD2_01_08_144_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_08_144_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_144_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_08_145Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -24165,6 +25548,10 @@ AddDataFieldD2_01_08_145_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_08_146_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_146_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_146_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_08_146_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -24197,6 +25584,13 @@ AddDataFieldD2_01_08_146_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_08_146_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_146_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_147Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_147Guid, 1);
@@ -24214,6 +25608,10 @@ AddDataFieldD2_01_08_146_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_08_147_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_147_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_08_147_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -24230,6 +25628,13 @@ AddDataFieldD2_01_08_146_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_08_147_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_147_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_08_148Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -24303,6 +25708,10 @@ AddDataFieldD2_01_08_149_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_149_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_149_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_149_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_149_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -24415,6 +25824,13 @@ AddDataFieldD2_01_08_149_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_08_149_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_149_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_150Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_150Guid, 1);
@@ -24433,6 +25849,10 @@ AddDataFieldD2_01_08_149_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_08_150_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_150_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_150_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_150_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -24480,6 +25900,13 @@ AddDataFieldD2_01_08_150_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_08_150_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_150_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_08_151Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -24638,6 +26065,10 @@ AddDataFieldD2_01_08_152_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_152_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_152_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_152_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_08_152_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -24745,6 +26176,13 @@ AddDataFieldD2_01_08_152_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_08_152_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_152_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_08_153Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_08_153Guid, 1);
@@ -24764,6 +26202,10 @@ AddDataFieldD2_01_08_152_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_153_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_153_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_08_153_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_08_153_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -24826,6 +26268,13 @@ AddDataFieldD2_01_08_153_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_08_153_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_08_153_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_08_154Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -24978,6 +26427,10 @@ AddDataFieldD2_01_09_155_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_155_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_155_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_155_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_09_155_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -25055,6 +26508,13 @@ AddDataFieldD2_01_09_155_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_09_155_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_155_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_156Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_156Guid, 1);
@@ -25083,6 +26543,10 @@ AddDataFieldD2_01_09_156_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_09_156_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_156_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_156_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_156_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -25281,6 +26745,13 @@ AddDataFieldD2_01_09_156_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_09_156_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_156_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_157Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_157Guid, 1);
@@ -25299,6 +26770,10 @@ AddDataFieldD2_01_09_156_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_09_157_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_157_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_157_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_157_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -25346,6 +26821,13 @@ AddDataFieldD2_01_09_157_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_09_157_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_157_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_09_158Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -25537,6 +27019,10 @@ AddDataFieldD2_01_09_159_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_159_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_159_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_159_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_159_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -25763,6 +27249,13 @@ AddDataFieldD2_01_09_159_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_09_159.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_09_159.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_09_159_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_159_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_160Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_160Guid, 1);
@@ -25782,6 +27275,10 @@ AddDataFieldD2_01_09_159_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_160_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_160_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_160_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_160_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -25844,6 +27341,13 @@ AddDataFieldD2_01_09_160_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_09_160_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_160_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_09_161Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -25967,6 +27471,10 @@ AddDataFieldD2_01_09_161_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_09_162_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_162_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_162_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_09_162_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -25999,6 +27507,13 @@ AddDataFieldD2_01_09_162_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_09_162_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_162_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_163Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_163Guid, 1);
@@ -26016,6 +27531,10 @@ AddDataFieldD2_01_09_162_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_09_163_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_163_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_09_163_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -26032,6 +27551,13 @@ AddDataFieldD2_01_09_162_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_09_163_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_163_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_09_164Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -26105,6 +27631,10 @@ AddDataFieldD2_01_09_165_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_165_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_165_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_165_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_165_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -26217,6 +27747,13 @@ AddDataFieldD2_01_09_165_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_09_165_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_165_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_166Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_166Guid, 1);
@@ -26235,6 +27772,10 @@ AddDataFieldD2_01_09_165_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_09_166_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_166_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_166_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_166_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -26282,6 +27823,13 @@ AddDataFieldD2_01_09_166_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_09_166_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_166_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_09_167Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -26440,6 +27988,10 @@ AddDataFieldD2_01_09_168_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_168_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_168_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_168_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_09_168_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -26547,6 +28099,13 @@ AddDataFieldD2_01_09_168_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_09_168_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_168_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_09_169Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_09_169Guid, 1);
@@ -26566,6 +28125,10 @@ AddDataFieldD2_01_09_168_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_169_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_169_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_09_169_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_09_169_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -26628,6 +28191,13 @@ AddDataFieldD2_01_09_169_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_09_169_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_09_169_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_09_170Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -26780,6 +28350,10 @@ AddDataFieldD2_01_0A_171_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_171_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_171_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_171_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0A_171_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -26857,6 +28431,13 @@ AddDataFieldD2_01_0A_171_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0A_171_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_171_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_172Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_172Guid, 1);
@@ -26885,6 +28466,10 @@ AddDataFieldD2_01_0A_172_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_172_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_172_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_172_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_172_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -27083,6 +28668,13 @@ AddDataFieldD2_01_0A_172_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0A_172_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_172_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_173Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_173Guid, 1);
@@ -27101,6 +28693,10 @@ AddDataFieldD2_01_0A_172_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0A_173_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_173_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_173_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_173_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -27148,6 +28744,13 @@ AddDataFieldD2_01_0A_173_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0A_173_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_173_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0A_174Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -27339,6 +28942,10 @@ AddDataFieldD2_01_0A_175_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_175_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_175_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_175_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_175_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -27565,6 +29172,13 @@ AddDataFieldD2_01_0A_175_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0A_175.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0A_175.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0A_175_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_175_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_176Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_176Guid, 1);
@@ -27584,6 +29198,10 @@ AddDataFieldD2_01_0A_175_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_176_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_176_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_176_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_176_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -27646,6 +29264,13 @@ AddDataFieldD2_01_0A_176_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0A_176_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_176_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0A_177Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -27769,6 +29394,10 @@ AddDataFieldD2_01_0A_177_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0A_178_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_178_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_178_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0A_178_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -27801,6 +29430,13 @@ AddDataFieldD2_01_0A_178_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0A_178_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_178_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_179Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_179Guid, 1);
@@ -27818,6 +29454,10 @@ AddDataFieldD2_01_0A_178_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0A_179_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_179_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0A_179_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -27834,6 +29474,13 @@ AddDataFieldD2_01_0A_178_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0A_179_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_179_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0A_180Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -27907,6 +29554,10 @@ AddDataFieldD2_01_0A_181_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_181_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_181_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_181_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_181_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -28019,6 +29670,13 @@ AddDataFieldD2_01_0A_181_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0A_181_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_181_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_182Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_182Guid, 1);
@@ -28037,6 +29695,10 @@ AddDataFieldD2_01_0A_181_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0A_182_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_182_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_182_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_182_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -28084,6 +29746,13 @@ AddDataFieldD2_01_0A_182_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0A_182_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_182_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0A_183Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -28242,6 +29911,10 @@ AddDataFieldD2_01_0A_184_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_184_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_184_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_184_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0A_184_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -28349,6 +30022,13 @@ AddDataFieldD2_01_0A_184_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0A_184_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_184_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0A_185Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0A_185Guid, 1);
@@ -28368,6 +30048,10 @@ AddDataFieldD2_01_0A_184_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_185_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_185_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0A_185_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0A_185_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -28430,6 +30114,13 @@ AddDataFieldD2_01_0A_185_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0A_185_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0A_185_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0A_186Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -28582,6 +30273,10 @@ AddDataFieldD2_01_0B_187_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_187_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_187_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_187_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0B_187_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -28659,6 +30354,13 @@ AddDataFieldD2_01_0B_187_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0B_187_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_187_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_188Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_188Guid, 1);
@@ -28687,6 +30389,10 @@ AddDataFieldD2_01_0B_188_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_188_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_188_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_188_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_188_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -28885,6 +30591,13 @@ AddDataFieldD2_01_0B_188_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0B_188_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_188_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_189Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_189Guid, 1);
@@ -28903,6 +30616,10 @@ AddDataFieldD2_01_0B_188_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0B_189_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_189_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_189_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_189_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -28950,6 +30667,13 @@ AddDataFieldD2_01_0B_189_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0B_189_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_189_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0B_190Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -29141,6 +30865,10 @@ AddDataFieldD2_01_0B_191_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_191_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_191_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_191_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_191_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -29367,6 +31095,13 @@ AddDataFieldD2_01_0B_191_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0B_191.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0B_191.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0B_191_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_191_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_192Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_192Guid, 1);
@@ -29386,6 +31121,10 @@ AddDataFieldD2_01_0B_191_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_192_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_192_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_192_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_192_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -29448,6 +31187,13 @@ AddDataFieldD2_01_0B_192_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0B_192_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_192_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0B_193Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -29571,6 +31317,10 @@ AddDataFieldD2_01_0B_193_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0B_194_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_194_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_194_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0B_194_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -29603,6 +31353,13 @@ AddDataFieldD2_01_0B_194_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0B_194_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_194_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_195Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_195Guid, 1);
@@ -29620,6 +31377,10 @@ AddDataFieldD2_01_0B_194_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0B_195_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_195_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0B_195_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -29636,6 +31397,13 @@ AddDataFieldD2_01_0B_194_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0B_195_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_195_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0B_196Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -29709,6 +31477,10 @@ AddDataFieldD2_01_0B_197_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_197_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_197_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_197_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_197_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -29821,6 +31593,13 @@ AddDataFieldD2_01_0B_197_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0B_197_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_197_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_198Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_198Guid, 1);
@@ -29839,6 +31618,10 @@ AddDataFieldD2_01_0B_197_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0B_198_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_198_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_198_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_198_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -29886,6 +31669,13 @@ AddDataFieldD2_01_0B_198_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0B_198_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_198_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0B_199Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -30044,6 +31834,10 @@ AddDataFieldD2_01_0B_200_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_200_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_200_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_200_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0B_200_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -30151,6 +31945,13 @@ AddDataFieldD2_01_0B_200_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0B_200_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_200_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0B_201Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0B_201Guid, 1);
@@ -30170,6 +31971,10 @@ AddDataFieldD2_01_0B_200_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_201_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_201_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0B_201_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0B_201_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -30232,6 +32037,13 @@ AddDataFieldD2_01_0B_201_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0B_201_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0B_201_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0B_202Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -30384,6 +32196,10 @@ AddDataFieldD2_01_0C_203_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_203_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_203_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_203_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0C_203_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -30461,6 +32277,13 @@ AddDataFieldD2_01_0C_203_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0C_203_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_203_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_204Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_204Guid, 1);
@@ -30489,6 +32312,10 @@ AddDataFieldD2_01_0C_204_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_204_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_204_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_204_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_204_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -30687,6 +32514,13 @@ AddDataFieldD2_01_0C_204_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0C_204_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_204_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_205Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_205Guid, 1);
@@ -30705,6 +32539,10 @@ AddDataFieldD2_01_0C_204_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0C_205_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_205_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_205_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_205_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -30752,6 +32590,13 @@ AddDataFieldD2_01_0C_205_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0C_205_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_205_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0C_206Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -30943,6 +32788,10 @@ AddDataFieldD2_01_0C_207_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_207_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_207_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_207_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_207_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -31169,6 +33018,13 @@ AddDataFieldD2_01_0C_207_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0C_207.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0C_207.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0C_207_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_207_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_208Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_208Guid, 1);
@@ -31188,6 +33044,10 @@ AddDataFieldD2_01_0C_207_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_208_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_208_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_208_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_208_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -31250,6 +33110,13 @@ AddDataFieldD2_01_0C_208_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0C_208_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_208_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0C_209Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -31373,6 +33240,10 @@ AddDataFieldD2_01_0C_209_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0C_210_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_210_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_210_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0C_210_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -31405,6 +33276,13 @@ AddDataFieldD2_01_0C_210_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0C_210_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_210_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_211Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_211Guid, 1);
@@ -31422,6 +33300,10 @@ AddDataFieldD2_01_0C_210_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0C_211_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_211_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0C_211_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -31438,6 +33320,13 @@ AddDataFieldD2_01_0C_210_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0C_211_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_211_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0C_212Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -31511,6 +33400,10 @@ AddDataFieldD2_01_0C_213_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_213_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_213_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_213_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_213_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -31623,6 +33516,13 @@ AddDataFieldD2_01_0C_213_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0C_213_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_213_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_214Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_214Guid, 1);
@@ -31641,6 +33541,10 @@ AddDataFieldD2_01_0C_213_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0C_214_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_214_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_214_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_214_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -31688,6 +33592,13 @@ AddDataFieldD2_01_0C_214_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0C_214_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_214_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0C_215Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -31846,6 +33757,10 @@ AddDataFieldD2_01_0C_216_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_216_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_216_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_216_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0C_216_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -31953,6 +33868,13 @@ AddDataFieldD2_01_0C_216_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0C_216_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_216_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0C_217Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0C_217Guid, 1);
@@ -31972,6 +33894,10 @@ AddDataFieldD2_01_0C_216_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_217_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_217_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0C_217_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0C_217_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -32034,6 +33960,13 @@ AddDataFieldD2_01_0C_217_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0C_217_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0C_217_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0C_218Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -32186,6 +34119,10 @@ AddDataFieldD2_01_0D_219_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_219_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_219_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_219_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0D_219_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -32263,6 +34200,13 @@ AddDataFieldD2_01_0D_219_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0D_219_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_219_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_220Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_220Guid, 1);
@@ -32291,6 +34235,10 @@ AddDataFieldD2_01_0D_220_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_220_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_220_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_220_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_220_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -32489,6 +34437,13 @@ AddDataFieldD2_01_0D_220_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0D_220_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_220_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_221Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_221Guid, 1);
@@ -32507,6 +34462,10 @@ AddDataFieldD2_01_0D_220_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0D_221_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_221_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_221_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_221_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -32554,6 +34513,13 @@ AddDataFieldD2_01_0D_221_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0D_221_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_221_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0D_222Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -32745,6 +34711,10 @@ AddDataFieldD2_01_0D_223_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_223_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_223_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_223_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_223_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -32971,6 +34941,13 @@ AddDataFieldD2_01_0D_223_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0D_223.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0D_223.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0D_223_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_223_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_224Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_224Guid, 1);
@@ -32990,6 +34967,10 @@ AddDataFieldD2_01_0D_223_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_224_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_224_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_224_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_224_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -33052,6 +35033,13 @@ AddDataFieldD2_01_0D_224_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0D_224_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_224_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0D_225Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -33175,6 +35163,10 @@ AddDataFieldD2_01_0D_225_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0D_226_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_226_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_226_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0D_226_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -33207,6 +35199,13 @@ AddDataFieldD2_01_0D_226_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0D_226_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_226_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_227Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_227Guid, 1);
@@ -33224,6 +35223,10 @@ AddDataFieldD2_01_0D_226_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0D_227_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_227_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0D_227_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -33240,6 +35243,13 @@ AddDataFieldD2_01_0D_226_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0D_227_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_227_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0D_228Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -33313,6 +35323,10 @@ AddDataFieldD2_01_0D_229_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_229_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_229_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_229_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_229_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -33425,6 +35439,13 @@ AddDataFieldD2_01_0D_229_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0D_229_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_229_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_230Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_230Guid, 1);
@@ -33443,6 +35464,10 @@ AddDataFieldD2_01_0D_229_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0D_230_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_230_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_230_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_230_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -33490,6 +35515,13 @@ AddDataFieldD2_01_0D_230_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0D_230_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_230_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0D_231Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -33648,6 +35680,10 @@ AddDataFieldD2_01_0D_232_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_232_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_232_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_232_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0D_232_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -33755,6 +35791,13 @@ AddDataFieldD2_01_0D_232_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0D_232_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_232_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0D_233Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0D_233Guid, 1);
@@ -33774,6 +35817,10 @@ AddDataFieldD2_01_0D_232_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_233_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_233_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0D_233_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0D_233_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -33836,6 +35883,13 @@ AddDataFieldD2_01_0D_233_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0D_233_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0D_233_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0D_234Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -33988,6 +36042,10 @@ AddDataFieldD2_01_0E_235_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_235_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_235_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_235_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0E_235_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -34065,6 +36123,13 @@ AddDataFieldD2_01_0E_235_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0E_235_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_235_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_236Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_236Guid, 1);
@@ -34093,6 +36158,10 @@ AddDataFieldD2_01_0E_236_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_236_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_236_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_236_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_236_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -34291,6 +36360,13 @@ AddDataFieldD2_01_0E_236_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0E_236_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_236_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_237Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_237Guid, 1);
@@ -34309,6 +36385,10 @@ AddDataFieldD2_01_0E_236_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0E_237_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_237_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_237_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_237_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -34356,6 +36436,13 @@ AddDataFieldD2_01_0E_237_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0E_237_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_237_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0E_238Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -34547,6 +36634,10 @@ AddDataFieldD2_01_0E_239_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_239_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_239_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_239_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_239_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -34773,6 +36864,13 @@ AddDataFieldD2_01_0E_239_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0E_239.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0E_239.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0E_239_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_239_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_240Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_240Guid, 1);
@@ -34792,6 +36890,10 @@ AddDataFieldD2_01_0E_239_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_240_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_240_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_240_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_240_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -34854,6 +36956,13 @@ AddDataFieldD2_01_0E_240_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0E_240_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_240_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0E_241Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -34977,6 +37086,10 @@ AddDataFieldD2_01_0E_241_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0E_242_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_242_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_242_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0E_242_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -35009,6 +37122,13 @@ AddDataFieldD2_01_0E_242_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0E_242_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_242_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_243Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_243Guid, 1);
@@ -35026,6 +37146,10 @@ AddDataFieldD2_01_0E_242_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0E_243_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_243_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0E_243_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -35042,6 +37166,13 @@ AddDataFieldD2_01_0E_242_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0E_243_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_243_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0E_244Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -35115,6 +37246,10 @@ AddDataFieldD2_01_0E_245_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_245_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_245_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_245_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_245_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -35227,6 +37362,13 @@ AddDataFieldD2_01_0E_245_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0E_245_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_245_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_246Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_246Guid, 1);
@@ -35245,6 +37387,10 @@ AddDataFieldD2_01_0E_245_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0E_246_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_246_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_246_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_246_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -35292,6 +37438,13 @@ AddDataFieldD2_01_0E_246_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0E_246_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_246_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0E_247Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -35450,6 +37603,10 @@ AddDataFieldD2_01_0E_248_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_248_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_248_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_248_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0E_248_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -35557,6 +37714,13 @@ AddDataFieldD2_01_0E_248_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0E_248_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_248_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0E_249Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0E_249Guid, 1);
@@ -35576,6 +37740,10 @@ AddDataFieldD2_01_0E_248_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_249_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_249_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0E_249_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0E_249_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -35638,6 +37806,13 @@ AddDataFieldD2_01_0E_249_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0E_249_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0E_249_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0E_250Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -35790,6 +37965,10 @@ AddDataFieldD2_01_0F_251_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_251_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_251_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_251_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0F_251_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -35867,6 +38046,13 @@ AddDataFieldD2_01_0F_251_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0F_251_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_251_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_252Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_252Guid, 1);
@@ -35895,6 +38081,10 @@ AddDataFieldD2_01_0F_252_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_252_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_252_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_252_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_252_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -36093,6 +38283,13 @@ AddDataFieldD2_01_0F_252_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0F_252_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_252_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_253Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_253Guid, 1);
@@ -36111,6 +38308,10 @@ AddDataFieldD2_01_0F_252_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0F_253_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_253_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_253_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_253_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -36158,6 +38359,13 @@ AddDataFieldD2_01_0F_253_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0F_253_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_253_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0F_254Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -36349,6 +38557,10 @@ AddDataFieldD2_01_0F_255_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_255_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_255_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_255_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_255_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -36575,6 +38787,13 @@ AddDataFieldD2_01_0F_255_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0F_255.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_0F_255.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_0F_255_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_255_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_256Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_256Guid, 1);
@@ -36594,6 +38813,10 @@ AddDataFieldD2_01_0F_255_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_256_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_256_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_256_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_256_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -36656,6 +38879,13 @@ AddDataFieldD2_01_0F_256_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0F_256_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_256_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0F_257Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -36779,6 +39009,10 @@ AddDataFieldD2_01_0F_257_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0F_258_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_258_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_258_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0F_258_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -36811,6 +39045,13 @@ AddDataFieldD2_01_0F_258_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0F_258_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_258_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_259Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_259Guid, 1);
@@ -36828,6 +39069,10 @@ AddDataFieldD2_01_0F_258_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_0F_259_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_259_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0F_259_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -36844,6 +39089,13 @@ AddDataFieldD2_01_0F_258_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0F_259_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_259_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0F_260Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -36917,6 +39169,10 @@ AddDataFieldD2_01_0F_261_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_261_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_261_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_261_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_261_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -37029,6 +39285,13 @@ AddDataFieldD2_01_0F_261_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0F_261_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_261_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_262Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_262Guid, 1);
@@ -37047,6 +39310,10 @@ AddDataFieldD2_01_0F_261_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_0F_262_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_262_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_262_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_262_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -37094,6 +39361,13 @@ AddDataFieldD2_01_0F_262_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0F_262_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_262_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0F_263Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -37252,6 +39526,10 @@ AddDataFieldD2_01_0F_264_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_264_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_264_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_264_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_0F_264_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -37359,6 +39637,13 @@ AddDataFieldD2_01_0F_264_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_0F_264_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_264_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_0F_265Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_0F_265Guid, 1);
@@ -37378,6 +39663,10 @@ AddDataFieldD2_01_0F_264_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_265_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_265_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_0F_265_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_0F_265_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -37440,6 +39729,13 @@ AddDataFieldD2_01_0F_265_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_0F_265_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_0F_265_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_0F_266Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -37592,6 +39888,10 @@ AddDataFieldD2_01_10_267_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_267_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_267_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_267_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_10_267_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -37669,6 +39969,13 @@ AddDataFieldD2_01_10_267_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_10_267_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_267_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_268Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_268Guid, 1);
@@ -37697,6 +40004,10 @@ AddDataFieldD2_01_10_268_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_10_268_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_268_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_268_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_268_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -37895,6 +40206,13 @@ AddDataFieldD2_01_10_268_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_10_268_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_268_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_269Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_269Guid, 1);
@@ -37913,6 +40231,10 @@ AddDataFieldD2_01_10_268_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_10_269_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_269_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_269_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_269_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -37960,6 +40282,13 @@ AddDataFieldD2_01_10_269_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_10_269_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_269_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_10_270Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -38151,6 +40480,10 @@ AddDataFieldD2_01_10_271_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_271_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_271_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_271_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_271_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -38377,6 +40710,13 @@ AddDataFieldD2_01_10_271_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_10_271.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_10_271.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_10_271_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_271_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_272Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_272Guid, 1);
@@ -38396,6 +40736,10 @@ AddDataFieldD2_01_10_271_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_272_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_272_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_272_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_272_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -38458,6 +40802,13 @@ AddDataFieldD2_01_10_272_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_10_272_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_272_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_10_273Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -38581,6 +40932,10 @@ AddDataFieldD2_01_10_273_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_10_274_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_274_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_274_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_10_274_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -38613,6 +40968,13 @@ AddDataFieldD2_01_10_274_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_10_274_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_274_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_275Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_275Guid, 1);
@@ -38630,6 +40992,10 @@ AddDataFieldD2_01_10_274_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_10_275_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_275_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_10_275_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -38646,6 +41012,13 @@ AddDataFieldD2_01_10_274_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_10_275_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_275_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_10_276Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -38719,6 +41092,10 @@ AddDataFieldD2_01_10_277_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_277_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_277_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_277_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_277_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -38831,6 +41208,13 @@ AddDataFieldD2_01_10_277_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_10_277_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_277_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_278Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_278Guid, 1);
@@ -38849,6 +41233,10 @@ AddDataFieldD2_01_10_277_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_10_278_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_278_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_278_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_278_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -38896,6 +41284,13 @@ AddDataFieldD2_01_10_278_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_10_278_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_278_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_10_279Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -39054,6 +41449,10 @@ AddDataFieldD2_01_10_280_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_280_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_280_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_280_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_10_280_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -39161,6 +41560,13 @@ AddDataFieldD2_01_10_280_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_10_280_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_280_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_10_281Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_10_281Guid, 1);
@@ -39180,6 +41586,10 @@ AddDataFieldD2_01_10_280_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_281_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_281_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_10_281_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_10_281_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -39242,6 +41652,13 @@ AddDataFieldD2_01_10_281_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_10_281_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_10_281_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_10_282Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -39394,6 +41811,10 @@ AddDataFieldD2_01_11_283_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_283_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_283_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_283_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_11_283_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -39471,6 +41892,13 @@ AddDataFieldD2_01_11_283_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_11_283_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_283_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_284Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_284Guid, 1);
@@ -39499,6 +41927,10 @@ AddDataFieldD2_01_11_284_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_11_284_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_284_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_284_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_284_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -39697,6 +42129,13 @@ AddDataFieldD2_01_11_284_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_11_284_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_284_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_285Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_285Guid, 1);
@@ -39715,6 +42154,10 @@ AddDataFieldD2_01_11_284_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_11_285_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_285_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_285_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_285_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -39762,6 +42205,13 @@ AddDataFieldD2_01_11_285_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_11_285_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_285_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_11_286Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -39953,6 +42403,10 @@ AddDataFieldD2_01_11_287_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_287_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_287_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_287_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_287_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -40179,6 +42633,13 @@ AddDataFieldD2_01_11_287_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_11_287.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_11_287.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_11_287_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_287_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_288Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_288Guid, 1);
@@ -40198,6 +42659,10 @@ AddDataFieldD2_01_11_287_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_288_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_288_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_288_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_288_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -40260,6 +42725,13 @@ AddDataFieldD2_01_11_288_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_11_288_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_288_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_11_289Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -40383,6 +42855,10 @@ AddDataFieldD2_01_11_289_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_11_290_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_290_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_290_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_11_290_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -40415,6 +42891,13 @@ AddDataFieldD2_01_11_290_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_11_290_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_290_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_291Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_291Guid, 1);
@@ -40432,6 +42915,10 @@ AddDataFieldD2_01_11_290_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_11_291_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_291_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_11_291_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -40448,6 +42935,13 @@ AddDataFieldD2_01_11_290_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_11_291_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_291_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_11_292Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -40521,6 +43015,10 @@ AddDataFieldD2_01_11_293_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_293_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_293_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_293_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_293_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -40633,6 +43131,13 @@ AddDataFieldD2_01_11_293_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_11_293_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_293_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_294Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_294Guid, 1);
@@ -40651,6 +43156,10 @@ AddDataFieldD2_01_11_293_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_11_294_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_294_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_294_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_294_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -40698,6 +43207,13 @@ AddDataFieldD2_01_11_294_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_11_294_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_294_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_11_295Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -40856,6 +43372,10 @@ AddDataFieldD2_01_11_296_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_296_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_296_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_296_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_11_296_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -40963,6 +43483,13 @@ AddDataFieldD2_01_11_296_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_11_296_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_296_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_11_297Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_11_297Guid, 1);
@@ -40982,6 +43509,10 @@ AddDataFieldD2_01_11_296_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_297_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_297_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_11_297_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_11_297_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -41044,6 +43575,13 @@ AddDataFieldD2_01_11_297_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_11_297_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_11_297_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_11_298Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -41196,6 +43734,10 @@ AddDataFieldD2_01_12_299_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_299_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_299_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_299_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_12_299_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -41273,6 +43815,13 @@ AddDataFieldD2_01_12_299_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_12_299_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_299_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_300Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_300Guid, 1);
@@ -41301,6 +43850,10 @@ AddDataFieldD2_01_12_300_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_12_300_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_300_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_300_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_300_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -41499,6 +44052,13 @@ AddDataFieldD2_01_12_300_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_12_300_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_300_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_301Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_301Guid, 1);
@@ -41517,6 +44077,10 @@ AddDataFieldD2_01_12_300_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_12_301_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_301_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_301_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_301_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -41564,6 +44128,13 @@ AddDataFieldD2_01_12_301_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_12_301_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_301_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_12_302Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -41755,6 +44326,10 @@ AddDataFieldD2_01_12_303_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_303_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_303_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_303_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_303_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -41981,6 +44556,13 @@ AddDataFieldD2_01_12_303_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_12_303.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_12_303.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_12_303_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_303_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_304Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_304Guid, 1);
@@ -42000,6 +44582,10 @@ AddDataFieldD2_01_12_303_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_304_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_304_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_304_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_304_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -42062,6 +44648,13 @@ AddDataFieldD2_01_12_304_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_12_304_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_304_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_12_305Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -42185,6 +44778,10 @@ AddDataFieldD2_01_12_305_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_12_306_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_306_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_306_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_12_306_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -42217,6 +44814,13 @@ AddDataFieldD2_01_12_306_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_12_306_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_306_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_307Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_307Guid, 1);
@@ -42234,6 +44838,10 @@ AddDataFieldD2_01_12_306_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_12_307_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_307_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_12_307_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -42250,6 +44858,13 @@ AddDataFieldD2_01_12_306_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_12_307_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_307_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_12_308Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -42323,6 +44938,10 @@ AddDataFieldD2_01_12_309_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_309_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_309_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_309_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_309_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -42435,6 +45054,13 @@ AddDataFieldD2_01_12_309_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_12_309_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_309_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_310Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_310Guid, 1);
@@ -42453,6 +45079,10 @@ AddDataFieldD2_01_12_309_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_12_310_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_310_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_310_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_310_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -42500,6 +45130,13 @@ AddDataFieldD2_01_12_310_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_12_310_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_310_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_12_311Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -42658,6 +45295,10 @@ AddDataFieldD2_01_12_312_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_312_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_312_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_312_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_12_312_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -42765,6 +45406,13 @@ AddDataFieldD2_01_12_312_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_12_312_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_312_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_12_313Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_12_313Guid, 1);
@@ -42784,6 +45432,10 @@ AddDataFieldD2_01_12_312_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_313_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_313_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_12_313_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_12_313_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -42846,6 +45498,13 @@ AddDataFieldD2_01_12_313_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_12_313_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_12_313_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_12_314Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -42998,6 +45657,10 @@ AddDataFieldD2_01_13_315_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_315_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_315_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_315_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_13_315_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -43075,6 +45738,13 @@ AddDataFieldD2_01_13_315_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_13_315_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_315_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_316Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_316Guid, 1);
@@ -43103,6 +45773,10 @@ AddDataFieldD2_01_13_316_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_13_316_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_316_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_316_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_316_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -43301,6 +45975,13 @@ AddDataFieldD2_01_13_316_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_13_316_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_316_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_317Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_317Guid, 1);
@@ -43319,6 +46000,10 @@ AddDataFieldD2_01_13_316_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_13_317_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_317_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_317_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_317_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -43366,6 +46051,13 @@ AddDataFieldD2_01_13_317_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_13_317_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_317_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_13_318Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -43557,6 +46249,10 @@ AddDataFieldD2_01_13_319_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_319_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_319_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_319_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_319_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -43783,6 +46479,13 @@ AddDataFieldD2_01_13_319_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_13_319.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_13_319.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_13_319_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_319_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_320Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_320Guid, 1);
@@ -43802,6 +46505,10 @@ AddDataFieldD2_01_13_319_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_320_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_320_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_320_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_320_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -43864,6 +46571,13 @@ AddDataFieldD2_01_13_320_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_13_320_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_320_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_13_321Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -43987,6 +46701,10 @@ AddDataFieldD2_01_13_321_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_13_322_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_322_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_322_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_13_322_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -44019,6 +46737,13 @@ AddDataFieldD2_01_13_322_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_13_322_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_322_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_323Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_323Guid, 1);
@@ -44036,6 +46761,10 @@ AddDataFieldD2_01_13_322_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_13_323_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_323_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_13_323_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -44052,6 +46781,13 @@ AddDataFieldD2_01_13_322_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_13_323_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_323_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_13_324Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -44125,6 +46861,10 @@ AddDataFieldD2_01_13_325_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_325_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_325_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_325_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_325_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -44237,6 +46977,13 @@ AddDataFieldD2_01_13_325_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_13_325_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_325_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_326Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_326Guid, 1);
@@ -44255,6 +47002,10 @@ AddDataFieldD2_01_13_325_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_13_326_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_326_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_326_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_326_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -44302,6 +47053,13 @@ AddDataFieldD2_01_13_326_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_13_326_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_326_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_13_327Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -44460,6 +47218,10 @@ AddDataFieldD2_01_13_328_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_328_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_328_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_328_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_13_328_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -44567,6 +47329,13 @@ AddDataFieldD2_01_13_328_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_13_328_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_328_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_13_329Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_13_329Guid, 1);
@@ -44586,6 +47355,10 @@ AddDataFieldD2_01_13_328_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_329_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_329_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_13_329_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_13_329_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -44648,6 +47421,13 @@ AddDataFieldD2_01_13_329_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_13_329_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_13_329_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_13_330Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -44800,6 +47580,10 @@ AddDataFieldD2_01_14_331_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_331_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_331_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_331_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_14_331_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -44877,6 +47661,13 @@ AddDataFieldD2_01_14_331_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_14_331_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_331_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_332Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_332Guid, 1);
@@ -44905,6 +47696,10 @@ AddDataFieldD2_01_14_332_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_14_332_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_332_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_332_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_332_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -45103,6 +47898,13 @@ AddDataFieldD2_01_14_332_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_14_332_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_332_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_333Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_333Guid, 1);
@@ -45121,6 +47923,10 @@ AddDataFieldD2_01_14_332_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_14_333_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_333_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_333_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_333_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -45168,6 +47974,13 @@ AddDataFieldD2_01_14_333_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_14_333_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_333_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_14_334Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -45359,6 +48172,10 @@ AddDataFieldD2_01_14_335_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_335_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_335_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_335_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_335_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -45585,6 +48402,13 @@ AddDataFieldD2_01_14_335_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_14_335.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_14_335.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_14_335_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_335_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_336Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_336Guid, 1);
@@ -45604,6 +48428,10 @@ AddDataFieldD2_01_14_335_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_336_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_336_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_336_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_336_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -45666,6 +48494,13 @@ AddDataFieldD2_01_14_336_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_14_336_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_336_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_14_337Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -45789,6 +48624,10 @@ AddDataFieldD2_01_14_337_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_14_338_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_338_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_338_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_14_338_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -45821,6 +48660,13 @@ AddDataFieldD2_01_14_338_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_14_338_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_338_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_339Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_339Guid, 1);
@@ -45838,6 +48684,10 @@ AddDataFieldD2_01_14_338_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_14_339_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_339_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_14_339_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -45854,6 +48704,13 @@ AddDataFieldD2_01_14_338_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_14_339_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_339_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_14_340Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -45927,6 +48784,10 @@ AddDataFieldD2_01_14_341_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_341_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_341_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_341_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_341_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -46039,6 +48900,13 @@ AddDataFieldD2_01_14_341_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_14_341_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_341_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_342Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_342Guid, 1);
@@ -46057,6 +48925,10 @@ AddDataFieldD2_01_14_341_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_14_342_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_342_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_342_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_342_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -46104,6 +48976,13 @@ AddDataFieldD2_01_14_342_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_14_342_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_342_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_14_343Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -46262,6 +49141,10 @@ AddDataFieldD2_01_14_344_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_344_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_344_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_344_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_14_344_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -46369,6 +49252,13 @@ AddDataFieldD2_01_14_344_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_14_344_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_344_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_14_345Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_14_345Guid, 1);
@@ -46388,6 +49278,10 @@ AddDataFieldD2_01_14_344_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_345_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_345_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_14_345_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_14_345_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -46450,6 +49344,13 @@ AddDataFieldD2_01_14_345_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_14_345_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_14_345_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_14_346Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -46602,6 +49503,10 @@ AddDataFieldD2_01_15_347_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_347_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_347_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_347_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_15_347_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -46679,6 +49584,13 @@ AddDataFieldD2_01_15_347_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_15_347_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_347_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_348Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_348Guid, 1);
@@ -46707,6 +49619,10 @@ AddDataFieldD2_01_15_348_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_15_348_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_348_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_348_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_348_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -46905,6 +49821,13 @@ AddDataFieldD2_01_15_348_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_15_348_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_348_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_349Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_349Guid, 1);
@@ -46923,6 +49846,10 @@ AddDataFieldD2_01_15_348_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_15_349_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_349_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_349_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_349_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -46970,6 +49897,13 @@ AddDataFieldD2_01_15_349_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_15_349_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_349_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_15_350Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -47161,6 +50095,10 @@ AddDataFieldD2_01_15_351_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_351_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_351_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_351_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_351_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -47387,6 +50325,13 @@ AddDataFieldD2_01_15_351_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_15_351.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_15_351.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_15_351_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_351_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_352Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_352Guid, 1);
@@ -47406,6 +50351,10 @@ AddDataFieldD2_01_15_351_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_352_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_352_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_352_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_352_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -47468,6 +50417,13 @@ AddDataFieldD2_01_15_352_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_15_352_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_352_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_15_353Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -47591,6 +50547,10 @@ AddDataFieldD2_01_15_353_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_15_354_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_354_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_354_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_15_354_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -47623,6 +50583,13 @@ AddDataFieldD2_01_15_354_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_15_354_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_354_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_355Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_355Guid, 1);
@@ -47640,6 +50607,10 @@ AddDataFieldD2_01_15_354_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_15_355_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_355_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_15_355_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -47656,6 +50627,13 @@ AddDataFieldD2_01_15_354_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_15_355_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_355_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_15_356Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -47729,6 +50707,10 @@ AddDataFieldD2_01_15_357_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_357_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_357_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_357_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_357_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -47841,6 +50823,13 @@ AddDataFieldD2_01_15_357_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_15_357_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_357_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_358Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_358Guid, 1);
@@ -47859,6 +50848,10 @@ AddDataFieldD2_01_15_357_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_15_358_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_358_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_358_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_358_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -47906,6 +50899,13 @@ AddDataFieldD2_01_15_358_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_15_358_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_358_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_15_359Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -48064,6 +51064,10 @@ AddDataFieldD2_01_15_360_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_360_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_360_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_360_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_15_360_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -48171,6 +51175,13 @@ AddDataFieldD2_01_15_360_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_15_360_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_360_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_15_361Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_15_361Guid, 1);
@@ -48190,6 +51201,10 @@ AddDataFieldD2_01_15_360_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_361_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_361_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_15_361_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_15_361_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -48252,6 +51267,13 @@ AddDataFieldD2_01_15_361_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_15_361_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_15_361_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_15_362Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -48404,6 +51426,10 @@ AddDataFieldD2_01_16_363_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_363_IOTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_363_OVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_363_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_16_363_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -48481,6 +51507,13 @@ AddDataFieldD2_01_16_363_OVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_16_363_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_363_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_364Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_364Guid, 1);
@@ -48509,6 +51542,10 @@ AddDataFieldD2_01_16_364_DT2Templates(factory, interfaceGuid);
 AddDataFieldD2_01_16_364_dnTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_364_PFTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_364_DSTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_364_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -48707,6 +51744,13 @@ AddDataFieldD2_01_16_364_DSTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_16_364_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_364_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_365Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_365Guid, 1);
@@ -48725,6 +51769,10 @@ AddDataFieldD2_01_16_364_DSTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_16_365_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_365_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_365_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_365_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -48772,6 +51820,13 @@ AddDataFieldD2_01_16_365_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_16_365_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_365_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_16_366Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -48963,6 +52018,10 @@ AddDataFieldD2_01_16_367_MAT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_367_MATTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_367_MIT_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_367_MITTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_367_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -49189,6 +52248,13 @@ AddDataFieldD2_01_16_367_MITTemplates(factory, interfaceGuid);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_16_367.SHORTCUT_MITMIT.UNIT", "ENOCEAN.RORG_D2.FUNCTION_01.TYPE_16_367.SHORTCUT_MITMIT.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "s", 0, 0);           
         }
+        private static void AddDataFieldD2_01_16_367_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_367_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_368Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_368Guid, 1);
@@ -49208,6 +52274,10 @@ AddDataFieldD2_01_16_367_MITTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_368_quTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_368_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_368_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_368_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -49270,6 +52340,13 @@ AddDataFieldD2_01_16_368_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_16_368_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_368_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_16_369Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -49393,6 +52470,10 @@ AddDataFieldD2_01_16_369_MVTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_16_370_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_370_PMTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_370_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_16_370_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -49425,6 +52506,13 @@ AddDataFieldD2_01_16_370_PMTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_16_370_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_370_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_371Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_371Guid, 1);
@@ -49442,6 +52530,10 @@ AddDataFieldD2_01_16_370_PMTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_01_16_371_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_371_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_16_371_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -49458,6 +52550,13 @@ AddDataFieldD2_01_16_370_PMTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_16_371_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_371_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_16_372Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -49531,6 +52630,10 @@ AddDataFieldD2_01_16_373_AOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_373_DOTTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_373_EBMTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_373_SWTTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_373_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -49643,6 +52746,13 @@ AddDataFieldD2_01_16_373_SWTTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_16_373_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_373_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_374Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_374Guid, 1);
@@ -49661,6 +52771,10 @@ AddDataFieldD2_01_16_373_SWTTemplates(factory, interfaceGuid);
             AddDataFieldD2_01_16_374_CMDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_374_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_374_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_374_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -49708,6 +52822,13 @@ AddDataFieldD2_01_16_374_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_16_374_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_374_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_16_375Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -49866,6 +52987,10 @@ AddDataFieldD2_01_16_376_MAXVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_376_MINV_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_376_MINVTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_376_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_01_16_376_CMDTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -49973,6 +53098,13 @@ AddDataFieldD2_01_16_376_MINVTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_01_16_376_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_376_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_01_16_377Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_01_16_377Guid, 1);
@@ -49992,6 +53124,10 @@ AddDataFieldD2_01_16_376_MINVTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_377_ECIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_377_IO_RAWTemplates(factory, interfaceGuid);
 AddDataFieldD2_01_16_377_IOTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_01_16_377_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -50054,6 +53190,13 @@ AddDataFieldD2_01_16_377_IOTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "5", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_01_16_377_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_01_16_377_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_01_16_378Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -53620,6 +56763,10 @@ AddDataFieldD2_05_00_1_LOCKTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_1_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_1_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_00_1_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_00_1_POS_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -53750,6 +56897,13 @@ AddDataFieldD2_05_00_1_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_00_1_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_00_1_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_00_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_00_2Guid, 1);
@@ -53767,6 +56921,10 @@ AddDataFieldD2_05_00_1_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_00_2_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_2_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_00_2_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -53800,6 +56958,13 @@ AddDataFieldD2_05_00_2_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_00_2_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_00_2_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_00_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_00_3Guid, 1);
@@ -53817,6 +56982,10 @@ AddDataFieldD2_05_00_2_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_00_3_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_3_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_00_3_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -53849,6 +57018,13 @@ AddDataFieldD2_05_00_3_CMDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_00_3_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_00_3_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_00_4Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -54011,6 +57187,10 @@ AddDataFieldD2_05_00_5_AATemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_5_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_00_5_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_00_5_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_00_5_VERT_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -54126,6 +57306,13 @@ AddDataFieldD2_05_00_5_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_00_5_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_00_5_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_02_6Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_02_6Guid, 1);
@@ -54149,6 +57336,10 @@ AddDataFieldD2_05_02_6_REPOTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_02_6_LOCKTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_02_6_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_02_6_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_02_6_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -54280,6 +57471,13 @@ AddDataFieldD2_05_02_6_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_02_6_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_02_6_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_02_7Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_02_7Guid, 1);
@@ -54297,6 +57495,10 @@ AddDataFieldD2_05_02_6_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_02_7_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_02_7_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_02_7_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -54330,6 +57532,13 @@ AddDataFieldD2_05_02_7_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_02_7_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_02_7_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_02_8Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_02_8Guid, 1);
@@ -54347,6 +57556,10 @@ AddDataFieldD2_05_02_7_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_02_8_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_02_8_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_02_8_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -54379,6 +57592,13 @@ AddDataFieldD2_05_02_8_CMDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_02_8_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_02_8_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_02_9Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -54542,6 +57762,10 @@ AddDataFieldD2_05_03_10_LOCKINGMODETemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_10_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_10_COMMANDIDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_03_10_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_03_10_POSITION_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -54672,6 +57896,13 @@ AddDataFieldD2_05_03_10_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_03_10_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_03_10_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_03_11Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_03_11Guid, 1);
@@ -54689,6 +57920,10 @@ AddDataFieldD2_05_03_10_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_03_11_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_11_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_03_11_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -54722,6 +57957,13 @@ AddDataFieldD2_05_03_11_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_03_11_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_03_11_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_03_12Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_03_12Guid, 1);
@@ -54739,6 +57981,10 @@ AddDataFieldD2_05_03_11_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_03_12_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_12_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_03_12_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -54771,6 +58017,13 @@ AddDataFieldD2_05_03_12_COMMANDIDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_03_12_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_03_12_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_03_13Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -54929,6 +58182,10 @@ AddDataFieldD2_05_03_13_COMMANDIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_14_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_14_COMMANDIDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_03_14_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_03_14_MOTORIZED_SASHTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -54986,6 +58243,13 @@ AddDataFieldD2_05_03_14_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_03_14_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_03_14_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_03_15Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_03_15Guid, 1);
@@ -55003,6 +58267,10 @@ AddDataFieldD2_05_03_14_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_03_15_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_03_15_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_03_15_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -55035,6 +58303,13 @@ AddDataFieldD2_05_03_15_COMMANDIDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_03_15_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_03_15_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_03_16Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -55392,6 +58667,10 @@ AddDataFieldD2_05_04_17_LOCKINGMODETemplates(factory, interfaceGuid);
 AddDataFieldD2_05_04_17_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_04_17_COMMANDIDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_04_17_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_04_17_POSITION_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -55522,6 +58801,13 @@ AddDataFieldD2_05_04_17_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_04_17_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_04_17_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_04_18Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_04_18Guid, 1);
@@ -55539,6 +58825,10 @@ AddDataFieldD2_05_04_17_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_04_18_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_04_18_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_04_18_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -55572,6 +58862,13 @@ AddDataFieldD2_05_04_18_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_04_18_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_04_18_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_04_19Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_04_19Guid, 1);
@@ -55589,6 +58886,10 @@ AddDataFieldD2_05_04_18_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_04_19_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_04_19_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_04_19_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -55621,6 +58922,13 @@ AddDataFieldD2_05_04_19_COMMANDIDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_04_19_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_04_19_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_04_20Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -55800,6 +59108,10 @@ AddDataFieldD2_05_05_21_LOCKINGMODETemplates(factory, interfaceGuid);
 AddDataFieldD2_05_05_21_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_05_21_COMMANDIDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_05_21_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_05_21_POSITION_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -55930,6 +59242,13 @@ AddDataFieldD2_05_05_21_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_05_21_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_05_21_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_05_22Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_05_22Guid, 1);
@@ -55947,6 +59266,10 @@ AddDataFieldD2_05_05_21_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_05_22_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_05_22_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_05_22_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -55980,6 +59303,13 @@ AddDataFieldD2_05_05_22_COMMANDIDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_05_22_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_05_22_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_05_23Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_05_23Guid, 1);
@@ -55997,6 +59327,10 @@ AddDataFieldD2_05_05_22_COMMANDIDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_05_23_CHANNELTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_05_23_COMMANDIDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_05_23_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -56029,6 +59363,13 @@ AddDataFieldD2_05_05_23_COMMANDIDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_05_23_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_05_23_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_05_24Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -56203,6 +59544,10 @@ AddDataFieldD2_05_05_24_COMMANDIDTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_06_25_SETFANSPEEDTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_06_25_COMMANDIDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_06_25_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_06_25_SETFANSPEED_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -56253,6 +59598,13 @@ AddDataFieldD2_05_06_25_COMMANDIDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_06_25_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_06_25_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_06_26Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -56488,6 +59840,10 @@ AddDataFieldD2_05_01_27_LOCKTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_27_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_27_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_01_27_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_01_27_POS_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -56618,6 +59974,13 @@ AddDataFieldD2_05_01_27_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_01_27_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_01_27_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_01_28Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_01_28Guid, 1);
@@ -56635,6 +59998,10 @@ AddDataFieldD2_05_01_27_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_01_28_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_28_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_01_28_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -56668,6 +60035,13 @@ AddDataFieldD2_05_01_28_CMDTemplates(factory, interfaceGuid);
 
                        
         }
+        private static void AddDataFieldD2_05_01_28_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_01_28_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
+        }
         private static void AddTypesD2_05_01_29Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD2_05_01_29Guid, 1);
@@ -56685,6 +60059,10 @@ AddDataFieldD2_05_01_28_CMDTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xD2, nodeGuid);
             AddDataFieldD2_05_01_29_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_29_CMDTemplates(factory, interfaceGuid);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_01_29_TEACHINTemplates(factory, interfaceGuid);
 
 
         }
@@ -56717,6 +60095,13 @@ AddDataFieldD2_05_01_29_CMDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_01_29_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_01_29_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddTypesD2_05_01_30Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
@@ -56879,6 +60264,10 @@ AddDataFieldD2_05_01_31_AATemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_31_CHNTemplates(factory, interfaceGuid);
 AddDataFieldD2_05_01_31_CMDTemplates(factory, interfaceGuid);
 
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.SENDER_OFFSET.NAME", "ENOCEAN.SENDER_OFFSET.DESCRIPTION",
+                "enocean-sender-offset", PropertyTemplateType.Integer, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "-1", 0, 1);
+AddDataFieldD2_05_01_31_TEACHINTemplates(factory, interfaceGuid);
+
 
         }
         private static void AddDataFieldD2_05_01_31_VERT_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
@@ -56993,6 +60382,13 @@ AddDataFieldD2_05_01_31_CMDTemplates(factory, interfaceGuid);
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "4", 0, 0);
 
                        
+        }
+        private static void AddDataFieldD2_05_01_31_TEACHINTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldD2_05_01_31_TEACHIN_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.TEACH_IN.NAME", "ENOCEAN.TEACH_IN.DESCRIPTION",
+                "enocean-teach-in", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Boolean, 1, false);
         }
         private static void AddFunctionD2_06Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {

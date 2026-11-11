@@ -142,6 +142,8 @@ namespace P3.Driver.EepParser
                 function.Types.Add(typeModel);
                 typeModel.Number = $"{typeModel.Number}_{function.Types.Count}";
                 typeModel.TypeIndex = function.Types.Count;
+                typeModel.CaseTitle = NormalizeSpace(c.Element("title")?.Value ?? "");
+                SetWriteInfo(typeModel, c);
 
                 var constants = new List<CaseCondition>();
                 foreach (var condition in c.Element("condition")?.Elements("datafield") ?? Enumerable.Empty<XElement>())
@@ -173,6 +175,80 @@ namespace P3.Driver.EepParser
             }
 
             DeriveConditions(caseModels);
+        }
+
+        private static readonly Regex IncomingCase = new Regex(@"respon|reply|WindowState", RegexOptions.IgnoreCase);
+        private static readonly Regex NoChange = new Regex(@"do\s*not\s*change|no\s*change|nochange|all\s+(output\s+)?channels", RegexOptions.IgnoreCase);
+        private static readonly Regex LeadingNumber = new Regex(@"^\s*(0x[0-9A-F]+|0b[01]+|\d+)", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Profiles Automatica can send to: D2-01 switches/dimmers, D2-05 blinds and A5-38-08 central commands. Every case
+        /// of them except the device's answers (status/measurement responses, replies) is a command.
+        /// </summary>
+        private static bool IsWritableProfile(Model.Type type)
+        {
+            var rorg = type.Parent.Parent.Number;
+            var func = type.Parent.Number;
+            return rorg == "0xD2" && (func == "0x01" || func == "0x05") ||
+                   rorg == "0xA5" && func == "0x38" && type.OrigTypeNumber == "0x08";
+        }
+
+        private static void SetWriteInfo(Model.Type type, XElement c)
+        {
+            if (!IsWritableProfile(type) || IncomingCase.IsMatch(type.CaseTitle))
+            {
+                return;
+            }
+
+            type.Outgoing = true;
+            var fields = c.Elements("datafield").ToList();
+            type.TelegramSize = type.Parent.Parent.Number == "0xA5"
+                ? 4
+                : Math.Max(1, fields.Max(f => (Convert.ToInt32(f.Element("bitoffs")?.Value.Trim() ?? "0") + Convert.ToInt32(f.Element("bitsize")?.Value.Trim() ?? "0") + 7) / 8));
+
+            void Default(int offset, int length, long value)
+            {
+                type.WriteDefaults.RemoveAll(d => d.Offset == offset && d.Length == length);
+                type.WriteDefaults.Add(new CaseCondition { Offset = offset, Length = length, Value = value });
+            }
+
+            foreach (var field in fields.Where(f => !f.Elements("reserved").Any()))
+            {
+                var offset = Convert.ToInt32(field.Element("bitoffs")!.Value.Trim());
+                var length = Convert.ToInt32(field.Element("bitsize")!.Value.Trim());
+                var shortCut = field.Element("shortcut")?.Value.Trim();
+                if (shortCut == "LRNB" || shortCut == "LRN")
+                {
+                    Default(offset, length, 1); // data telegram
+                    continue;
+                }
+
+                var items = field.Element("enum")?.Elements("item").ToList() ?? new List<XElement>();
+                var single = items.Count == 1 ? ParseNumber(items[0].Element("value")?.Value) : null;
+                if (single.HasValue)
+                {
+                    Default(offset, length, single.Value);
+                    continue;
+                }
+
+                var keep = items.FirstOrDefault(i => i.Element("value") != null && NoChange.IsMatch(i.Element("description")?.Value ?? ""));
+                var match = keep == null ? null : LeadingNumber.Match(keep.Element("value")!.Value);
+                if (match != null && match.Success)
+                {
+                    Default(offset, length, ParseNumber(match.Groups[1].Value)!.Value);
+                }
+            }
+
+            foreach (var condition in c.Element("condition")?.Elements("datafield") ?? Enumerable.Empty<XElement>())
+            {
+                var value = ParseNumber(condition.Element("value")?.Value);
+                if (value.HasValue)
+                {
+                    Default(Convert.ToInt32(condition.Element("bitoffs")!.Value.Trim()), Convert.ToInt32(condition.Element("bitsize")!.Value.Trim()), value.Value);
+                }
+            }
+
+            type.WriteDefaults.Sort((a, b) => a.Offset.CompareTo(b.Offset));
         }
 
         /// <summary>

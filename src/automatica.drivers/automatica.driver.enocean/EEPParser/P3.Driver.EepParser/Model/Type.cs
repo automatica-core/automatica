@@ -18,6 +18,32 @@ namespace P3.Driver.EepParser.Model
         /// </summary>
         public List<CaseCondition> Conditions { get; } = new List<CaseCondition>();
 
+        /// <summary>
+        /// Title of the EEP case (e.g. "CMD 0x1 - Actuator Set Output").
+        /// </summary>
+        public string CaseTitle { get; set; }
+
+        /// <summary>
+        /// The case is a command Automatica sends to the device (actuator set, query, ...).
+        /// </summary>
+        public bool Outgoing { get; set; }
+
+        /// <summary>
+        /// User data length of an outgoing telegram in bytes.
+        /// </summary>
+        public int TelegramSize { get; set; }
+
+        /// <summary>
+        /// Field values of an outgoing telegram before the written values are set: case constants, "do not change" /
+        /// "all channels" values and the LRN bit of 4BS data telegrams.
+        /// </summary>
+        public List<CaseCondition> WriteDefaults { get; } = new List<CaseCondition>();
+
+        /// <summary>
+        /// Template of the teach-in data point of an outgoing case.
+        /// </summary>
+        public System.Guid TeachInGuid { get; set; }
+
         public Type(Function parent, string number)
         {
             Parent = parent;
