@@ -34,6 +34,22 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         /// </summary>
         internal byte SenderOffset { get; private set; }
 
+        /// <summary>
+        /// Set if the device expects an answer to each status telegram (A5-20 HVAC components): the command case.
+        /// </summary>
+        private Guid? _replyCommand;
+
+        /// <summary>
+        /// True for the command case of a bidirectional device (e.g. A5-20-01 controller to actuator): its values are
+        /// sent as answer to the next status telegram, telegrams of the device are not decoded with its layout.
+        /// </summary>
+        internal bool IsReplyCommand { get; private set; }
+
+        /// <summary>
+        /// Tests: the last teach-in response or answer to a status telegram.
+        /// </summary>
+        internal Task<bool> LastReply { get; private set; } = Task.FromResult(false);
+
         public EnOceanTypeNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
         }
@@ -44,6 +60,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             _conditions = EnOceanEepMetadata.GetConditions(DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty);
             Outgoing = EnOceanEepMetadata.GetOutgoing(DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty);
             SenderOffset = ReadSenderOffset();
+            var template = DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty;
+            _replyCommand = EnOceanEepMetadata.GetReplyCommand(template);
+            IsReplyCommand = EnOceanEepMetadata.IsReplyCommand(template);
+            if (IsReplyCommand)
+            {
+                TeachInManager.SetCommandNode(_serial, this);
+            }
             TeachInManager.SetTeachedIn(_serial);
             return base.Init(token);
         }
@@ -55,9 +78,15 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public override void TelegramReceived(RadioErp1Packet telegram)
         {
-            if (telegram.SenderIdString == _serial)
+            if (String.Equals(telegram.SenderIdString, _serial, StringComparison.OrdinalIgnoreCase))
             {
                 DriverContext.Logger.LogDebug($"Telegram received for {_serial}");
+
+                if (IsReplyCommand)
+                {
+                    // the layout of what Automatica sends, the status case of the device decodes the telegram
+                    return;
+                }
 
                 // 1BS/4BS teach-in telegrams (LRN bit cleared) carry EEP/manufacturer info instead of values,
                 // so only the LRN node gets them. RPS has no LRN bit and is always decoded.
@@ -65,6 +94,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 if (isTeachIn)
                 {
                     DriverContext.Logger.LogDebug($"Teach-in telegram received for {_serial}, values are not dispatched");
+                    if (IsBidirectionalTeachInQuery(telegram))
+                    {
+                        LastReply = SendTeachInResponse(telegram);
+                    }
                 }
                 else if (!EnOceanEepMetadata.Matches(_conditions, telegram.Data.Span))
                 {
@@ -82,6 +115,102 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                     }
                     child.TelegramReceived(telegram);
                 }
+
+                if (!isTeachIn && _replyCommand.HasValue)
+                {
+                    LastReply = SendReply();
+                }
+            }
+        }
+
+        /// <returns>true if the node is a device (EEP case) node: a type template or a node with a serial number</returns>
+        internal static bool IsTypeNode(NodeInstance node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            var key = node.This2NodeTemplateNavigation?.Key;
+            if (key != null && key.StartsWith("enocean-type-", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return node.PropertyInstance?.Any(p => p.This2PropertyTemplateNavigation?.Key == "enocean-serialnumber") == true;
+        }
+
+        /// <summary>
+        /// A 4BS teach-in query of an A5-20 HVAC component: LRN type = with EEP (DB0.7), LRN status = query (DB0.4 = 0).
+        /// The device repeats it and sends no values until the controller answers.
+        /// </summary>
+        internal static bool IsBidirectionalTeachInQuery(RadioErp1Packet telegram)
+        {
+            if (telegram.Rorg != Rorg.FourBs || telegram.Data.Length < 4)
+            {
+                return false;
+            }
+
+            var data = telegram.Data.Span;
+            var withEep = (data[3] & 0x80) != 0;
+            var query = (data[3] & 0x10) == 0;
+            var func = (byte)(data[0] >> 2);
+            return withEep && query && func == 0x20;
+        }
+
+        /// <summary>
+        /// 4BS teach-in response: the EEP of the query, multi user manufacturer id, DB0 = 0xF0 (with EEP, EEP supported,
+        /// teach-in successful, response), addressed to the device. The device learns the sender id (id base + offset).
+        /// </summary>
+        internal static byte[] FourBsTeachInResponse(ReadOnlySpan<byte> query)
+        {
+            var func = (byte)(query[0] >> 2);
+            var type = (byte)(((query[0] & 0x03) << 5) | (query[1] >> 3));
+            var data = FourBsTeachIn(func, type, ManufacturerId);
+            data[3] = 0xF0;
+            return data;
+        }
+
+        private async Task<bool> SendTeachInResponse(RadioErp1Packet query)
+        {
+            DriverContext.Logger.LogInformation($"{_serial}: answering the teach-in query of the device");
+            return await Send(Rorg.FourBs, FourBsTeachInResponse(query.Data.Span), DeviceId());
+        }
+
+        /// <summary>
+        /// Answers a status telegram with the values written to the command case node of the device.
+        /// </summary>
+        private async Task<bool> SendReply()
+        {
+            var command = TeachInManager.GetCommandNode(_serial);
+            if (command?.Outgoing == null)
+            {
+                DriverContext.Logger.LogDebug($"{_serial}: no command node with this serial number, status telegram not answered");
+                return false;
+            }
+
+            // without a written value the case defaults would go out, e.g. valve position 0 % closes the valve
+            if (!command.HasWrittenValues)
+            {
+                DriverContext.Logger.LogDebug($"{_serial}: nothing written to the command node yet, status telegram not answered");
+                return false;
+            }
+
+            return await Send((Rorg)command.Outgoing.Rorg, command.BuildCommand(null, 0), DeviceId());
+        }
+
+        internal bool HasWrittenValues => ChildrenT.Any(c => c.WrittenRaw.HasValue);
+
+        private byte[] DeviceId()
+        {
+            try
+            {
+                var id = Convert.FromHexString(_serial ?? "");
+                return id.Length == 4 ? id : null;
+            }
+            catch (FormatException)
+            {
+                return null;
             }
         }
 
@@ -176,6 +305,22 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 return false;
             }
 
+            if (IsReplyCommand)
+            {
+                // the device sleeps between its telegrams, the value goes out with the answer to its next one
+                DriverContext.Logger.LogDebug($"{_serial}: {written.Name} is sent with the answer to the next status telegram");
+                return true;
+            }
+
+            return await Send((Rorg)Outgoing.Rorg, BuildCommand(written, raw));
+        }
+
+        /// <summary>
+        /// The command of this case: the case defaults, the last written values of the data points and
+        /// <paramref name="raw"/> for <paramref name="written"/> (null: only the written values).
+        /// </summary>
+        internal byte[] BuildCommand(EnOceanDataNode written, long raw)
+        {
             var data = new byte[Outgoing.Size];
             foreach (var value in Outgoing.Defaults)
             {
@@ -189,7 +334,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                     EnOceanEepMetadata.SetBits(data, child.BitOffset, child.FieldLength, child.WrittenRaw.Value);
                 }
             }
-            EnOceanEepMetadata.SetBits(data, written.BitOffset, written.FieldLength, raw);
+            if (written != null)
+            {
+                EnOceanEepMetadata.SetBits(data, written.BitOffset, written.FieldLength, raw);
+            }
 
             // the case constants (CMD, COM) and the LRN bit of a data telegram are not values a data point may change
             foreach (var condition in _conditions)
@@ -201,7 +349,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 EnOceanEepMetadata.SetBits(data, 28, 1, 1);
             }
 
-            return await Send((Rorg)Outgoing.Rorg, data);
+            return data;
         }
 
         /// <summary>
@@ -252,9 +400,9 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             };
         }
 
-        private async Task<bool> Send(Rorg rorg, byte[] data)
+        private async Task<bool> Send(Rorg rorg, byte[] data, byte[] destination = null)
         {
-            var telegram = new RadioErp1Packet(rorg, data, 0x00) { SenderOffset = SenderOffset };
+            var telegram = new RadioErp1Packet(rorg, data, 0x00) { SenderOffset = SenderOffset, DestinationId = destination };
             DriverContext.Logger.LogDebug($"{_serial}: sending {rorg} {BitConverter.ToString(data)} with sender offset {SenderOffset}");
             return await TeachInManager.Send(telegram);
         }

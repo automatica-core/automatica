@@ -24,6 +24,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private P3.Driver.EnOcean.Driver _driver;
         private EnOceanLearnedDevices _learnedDevices;
         private readonly IList<string> _teachedInDevices = new List<string>();
+        private readonly Dictionary<string, EnOceanTypeNode> _commandNodes = new Dictionary<string, EnOceanTypeNode>(StringComparer.OrdinalIgnoreCase);
         private string _port;
 
         public EnOceanDriver(IDriverContext driverContext, EnOceanTemplateFactory enoceanFactory) : base(driverContext, null)
@@ -205,6 +206,32 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
 
             return true;
+        }
+
+        public void SetCommandNode(string serialnumber, EnOceanTypeNode node)
+        {
+            if (String.IsNullOrEmpty(serialnumber))
+            {
+                return;
+            }
+
+            lock (_commandNodes)
+            {
+                _commandNodes[serialnumber] = node;
+            }
+        }
+
+        public EnOceanTypeNode GetCommandNode(string serialnumber)
+        {
+            if (String.IsNullOrEmpty(serialnumber))
+            {
+                return null;
+            }
+
+            lock (_commandNodes)
+            {
+                return _commandNodes.TryGetValue(serialnumber, out var node) ? node : null;
+            }
         }
 
         public void SetTeachedIn(string serialnumber)

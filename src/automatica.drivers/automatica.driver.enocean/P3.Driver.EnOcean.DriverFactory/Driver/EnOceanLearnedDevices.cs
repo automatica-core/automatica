@@ -6,7 +6,7 @@ using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
-    public class EnOceanLearnedDevices : EnOceanBaseNode<EnOceanRorgNode>
+    public class EnOceanLearnedDevices : EnOceanBaseNode<IEnOceanBaseNode>
     {
         public EnOceanLearnedDevices(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
@@ -26,6 +26,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
+            // learn mode adds the device directly below "Learned", without RORG and function nodes
+            if (EnOceanTypeNode.IsTypeNode(ctx.NodeInstance))
+            {
+                return new EnOceanTypeNode(ctx, TeachInManager);
+            }
             return new EnOceanRorgNode(ctx, TeachInManager);
         }
     }

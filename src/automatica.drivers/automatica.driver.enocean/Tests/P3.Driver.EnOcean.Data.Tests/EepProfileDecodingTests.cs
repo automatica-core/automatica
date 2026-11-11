@@ -203,7 +203,21 @@ namespace P3.Driver.EnOcean.Data.Tests
             }
 
             var driver = await CreateDriver<EnOceanDriver>(driverNode);
-            driver.TelegramReceived(EepTelegrams.Radio((Rorg)Convert.ToByte(parts[0], 16), data, Sender));
+            var telegram = EepTelegrams.Radio((Rorg)Convert.ToByte(parts[0], 16), data, Sender);
+            if (EnOceanEepMetadata.IsReplyCommand(type.Guid))
+            {
+                // a command case (A5-20 controller to actuator) is what Automatica sends, its device node ignores
+                // telegrams on air: check the layout with the data points directly
+                var device = driver.Children.Single().Children.Single().Children.Single().Children.Single();
+                foreach (var child in device.Children.OfType<EnOceanDataNode>())
+                {
+                    child.TelegramReceived(telegram);
+                }
+            }
+            else
+            {
+                driver.TelegramReceived(telegram);
+            }
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             foreach (var expected in vector.Fields)

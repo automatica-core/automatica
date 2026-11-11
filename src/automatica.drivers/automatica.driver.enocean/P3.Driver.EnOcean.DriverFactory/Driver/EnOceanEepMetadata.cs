@@ -85,10 +85,48 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private static readonly Dictionary<Guid, EepScaleSegment[]> ScaleSegments = new Dictionary<Guid, EepScaleSegment[]>();
         private static readonly HashSet<Guid> BoolEnums = new HashSet<Guid>();
         private static readonly Dictionary<Guid, EepOutgoing> OutgoingTypes = new Dictionary<Guid, EepOutgoing>();
+        private static readonly Dictionary<Guid, Guid> ReplyCommands = new Dictionary<Guid, Guid>();
+        private static readonly HashSet<Guid> CommandTypes = new HashSet<Guid>();
 
         static EnOceanEepMetadata()
         {
             Load();
+            LoadReplies();
+        }
+
+        /// <summary>
+        /// A5-20 HVAC components (battery valves, room panels) only listen for about a second after their own
+        /// telegram: the controller answers every status telegram with the command case. Status case (actuator to
+        /// controller) -> command case (controller to actuator).
+        /// </summary>
+        private static void LoadReplies()
+        {
+            Reply(EnOceanRorgA5Data.TypeA5_20_01_1Guid, EnOceanRorgA5Data.TypeA5_20_01_2Guid, 0x01);
+            Reply(EnOceanRorgA5Data.TypeA5_20_02_3Guid, EnOceanRorgA5Data.TypeA5_20_02_4Guid, 0x02);
+            Reply(EnOceanRorgA5Data.TypeA5_20_03_5Guid, EnOceanRorgA5Data.TypeA5_20_03_6Guid, 0x03);
+            Reply(EnOceanRorgA5Data.TypeA5_20_04_7Guid, EnOceanRorgA5Data.TypeA5_20_04_8Guid, 0x04);
+            Reply(EnOceanRorgA5Data.TypeA5_20_05_9Guid, EnOceanRorgA5Data.TypeA5_20_05_10Guid, 0x05);
+            Reply(EnOceanRorgA5Data.TypeA5_20_06_16Guid, EnOceanRorgA5Data.TypeA5_20_06_17Guid, 0x06);
+        }
+
+        private static void Reply(Guid statusType, Guid commandType, byte type)
+        {
+            ReplyCommands[statusType] = commandType;
+            CommandTypes.Add(commandType);
+            // a 4BS data telegram: LRN bit (DB0.3) = 1
+            OutgoingTypes.TryAdd(commandType, new EepOutgoing(0xA5, 0x20, type, 4, new[] { new EepCondition(28, 1, 0x1) }));
+        }
+
+        /// <returns>the command case the device expects as answer to a telegram of <paramref name="statusType"/>, null if none</returns>
+        public static Guid? GetReplyCommand(Guid statusType)
+        {
+            return ReplyCommands.TryGetValue(statusType, out var command) ? command : (Guid?)null;
+        }
+
+        /// <returns>true if the type is a command Automatica only sends as answer to a status telegram of the device</returns>
+        public static bool IsReplyCommand(Guid typeTemplate)
+        {
+            return CommandTypes.Contains(typeTemplate);
         }
 
         static partial void Load();

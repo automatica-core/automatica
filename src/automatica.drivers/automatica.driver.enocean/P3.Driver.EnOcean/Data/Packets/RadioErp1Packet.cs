@@ -72,6 +72,12 @@ namespace P3.Driver.EnOcean.Data.Packets
         public byte SenderOffset { get; set; }
 
         /// <summary>
+        /// Sent telegrams: the device the telegram is addressed to (4 bytes), null sends it as broadcast (FF FF FF FF).
+        /// Answers to bidirectional devices (teach-in response, A5-20 valve commands) are addressed.
+        /// </summary>
+        public byte[] DestinationId { get; set; }
+
+        /// <summary>
         /// The id base plus <see cref="SenderOffset"/>.
         /// </summary>
         public static byte[] SenderIdFor(ReadOnlySpan<byte> idBase, byte offset)
@@ -167,10 +173,17 @@ namespace P3.Driver.EnOcean.Data.Packets
             var optionalData = new List<byte>();
             //optional data
             optionalData.Add(3);
-            optionalData.Add(0xFF);
-            optionalData.Add(0xFF);
-            optionalData.Add(0xFF);
-            optionalData.Add(0xFF);
+            if (DestinationId != null && DestinationId.Length == 4)
+            {
+                optionalData.AddRange(DestinationId);
+            }
+            else
+            {
+                optionalData.Add(0xFF);
+                optionalData.Add(0xFF);
+                optionalData.Add(0xFF);
+                optionalData.Add(0xFF);
+            }
             optionalData.Add(0xFF); //dBM
             optionalData.Add(0); //security level
 
