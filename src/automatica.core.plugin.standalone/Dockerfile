@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
-RUN apt-get update 
-RUN apt-get install zip net-tools -y
+# update and install in one layer: a cached "apt-get update" layer on its own leaves the install without a package index
+RUN apt-get update && apt-get install -y --no-install-recommends zip net-tools && rm -rf /var/lib/apt/lists/*
 
 ARG VERSION
 
