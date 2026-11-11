@@ -23,7 +23,9 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private readonly EnOceanTemplateFactory _enoceanFactory;
         private P3.Driver.EnOcean.Driver _driver;
         private EnOceanLearnedDevices _learnedDevices;
-        private readonly IList<string> _teachedInDevices = new List<string>();
+        private readonly Dictionary<string, string> _teachedInDevices = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, DateTime> _teachInResponses = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
+        private readonly EnOceanLearnSession _learnSession = new EnOceanLearnSession();
         private readonly Dictionary<string, EnOceanTypeNode> _commandNodes = new Dictionary<string, EnOceanTypeNode>(StringComparer.OrdinalIgnoreCase);
         private string _port;
 
@@ -34,13 +36,17 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public override Task<bool> EnableLearnMode(CancellationToken token = default)
         {
-            _driver.StartTeachInMode();
+            _learnSession.Start();
+            _driver?.StartTeachInMode();
+            DriverContext.Logger.LogInformation("Learn mode enabled");
             return Task.FromResult(true);
         }
 
         public override Task<bool> DisableLearnMode(CancellationToken token = default)
         {
-            _driver.StopTeachInMode();
+            _learnSession.Stop();
+            _driver?.StopTeachInMode();
+            DriverContext.Logger.LogInformation("Learn mode disabled");
             return Task.FromResult(true);
         }
 
@@ -93,34 +99,171 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         {
             if (e.Telegram is RadioErp1Packet radio)
             {
-                var serial = Utils.ByteArrayToString(radio.SenderId).Replace(" ", "");
-                if (!_teachedInDevices.Contains(serial))
+                LearnTelegramReceived(radio);
+            }
+        }
+
+        /// <summary>
+        /// Learn mode: a teach-in telegram. Unknown bidirectional devices get their teach-in response right away (they
+        /// only listen for about a second), every sender is reported to the learn dialog once with what the telegram
+        /// tells (profile, signal strength, already known).
+        /// </summary>
+        internal void LearnTelegramReceived(RadioErp1Packet radio)
+        {
+            var teachIn = TeachIn.Parse(radio);
+            if (teachIn == null || !_learnSession.Active)
+            {
+                return;
+            }
+
+            var serial = radio.SenderIdString.ToUpperInvariant();
+            if (teachIn.IsDeletion)
+            {
+                DriverContext.Logger.LogInformation($"{serial} asks to be taught out, ignored");
+                return;
+            }
+
+            var known = GetKnownDevice(serial);
+            var paired = false;
+            if (known == null && teachIn.ResponseExpected && ClaimTeachInResponse(serial))
+            {
+                DriverContext.Logger.LogInformation($"{serial} ({teachIn.Eep}) waits for a teach-in response, answering");
+                LastLearnResponse = SendTeachInResponse(radio, teachIn, serial);
+                paired = true;
+            }
+
+            var notification = _learnSession.TeachIn(serial, teachIn, radio.Rssi, known, paired);
+            if (notification != null)
+            {
+                Notify(notification, teachIn);
+            }
+        }
+
+        /// <summary>
+        /// Learn mode: a data telegram of a device that is set up, the learn dialog shows it as paired.
+        /// </summary>
+        internal void LearnDataReceived(RadioErp1Packet radio)
+        {
+            if (!_learnSession.Active || RadioErp1Packet.IsTechIn(radio))
+            {
+                return;
+            }
+
+            var serial = radio.SenderIdString.ToUpperInvariant();
+            var known = GetKnownDevice(serial);
+            if (known == null)
+            {
+                return;
+            }
+
+            var notification = _learnSession.Receiving(serial, radio.Rssi, known);
+            if (notification != null)
+            {
+                Notify(notification, null);
+            }
+        }
+
+        /// <summary>
+        /// Tests: the last teach-in response sent in learn mode.
+        /// </summary>
+        internal Task<bool> LastLearnResponse { get; private set; } = Task.FromResult(false);
+
+        /// <summary>
+        /// Tests: the learn dialog notifications with the offered templates.
+        /// </summary>
+        internal event Action<EnOceanLearnNotification, IList<Guid>> LearnNotified;
+
+        private Task<bool> SendTeachInResponse(RadioErp1Packet query, TeachIn teachIn, string serial)
+        {
+            var ute = teachIn.Kind == TeachInKind.Ute;
+            var data = ute ? TeachIn.UteResponse(query.Data.Span) : EnOceanTypeNode.FourBsTeachInResponse(query.Data.Span);
+            var telegram = new RadioErp1Packet(ute ? Rorg.Ute : Rorg.FourBs, data, 0x00)
+            {
+                // the node created for the device later derives the same offset, so the device keeps working
+                SenderOffset = EnOceanTypeNode.DerivedSenderOffset(serial),
+                DestinationId = query.SenderId.ToArray()
+            };
+            return Send(telegram);
+        }
+
+        private void Notify(EnOceanLearnNotification notification, TeachIn teachIn)
+        {
+            var templates = teachIn == null ? new List<Guid>() : LearnTemplates(teachIn);
+            LearnNotified?.Invoke(notification, templates);
+
+            if (DriverContext.LearnMode == null || _learnedDevices == null)
+            {
+                return;
+            }
+
+            IList<NodeTemplate> nodeTemplates = new List<NodeTemplate>();
+            if (templates.Count > 0)
+            {
+                nodeTemplates = DriverContext.NodeTemplateFactory.GetNodeTemplates(templates.ToArray())
+                    .OrderBy(a => templates.IndexOf(a.ObjId)).ToList();
+            }
+
+            var _ = NotifyLearnNode(notification, nodeTemplates);
+        }
+
+        private async Task NotifyLearnNode(EnOceanLearnNotification notification, IList<NodeTemplate> templates)
+        {
+            try
+            {
+                await DriverContext.LearnMode.NotifyLearnNode(notification.Serial, notification.Description,
+                    _learnedDevices.DriverContext.NodeInstance, templates, notification.Properties);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Could not report {notification.Serial} to the learn dialog");
+            }
+        }
+
+        /// <summary>
+        /// The templates the learn dialog offers: the detected profile, otherwise every device template of the RORG with
+        /// the common profiles first. The cases of a two-way device are left out, the two-way template replaces them.
+        /// </summary>
+        internal IList<Guid> LearnTemplates(TeachIn teachIn)
+        {
+            IList<Guid> templates = new List<Guid>();
+            if (teachIn.HasProfile)
+            {
+                templates = _enoceanFactory.GetDeviceTemplates(teachIn.Rorg, teachIn.Func.Value, teachIn.Type.Value);
+            }
+            if (templates.Count == 0)
+            {
+                templates = _enoceanFactory.GetDeviceTemplates(teachIn.Rorg);
+            }
+
+            return templates
+                .Where(a => !EnOceanEepMetadata.IsReplyCommand(a) && !EnOceanEepMetadata.GetTwoWayOfStatus(a).HasValue)
+                .OrderBy(a => EnOceanEepMetadata.IsTwoWay(a) ? 0 : 1)
+                .ThenBy(EnOceanLearnSession.CommonRank)
+                .ToList();
+        }
+
+        /// <returns>true once per device within a few seconds: a device with several case nodes gets one response</returns>
+        public bool ClaimTeachInResponse(string serial)
+        {
+            lock (_teachInResponses)
+            {
+                var now = DateTime.UtcNow;
+                if (_teachInResponses.TryGetValue(serial, out var last) && now - last < TimeSpan.FromSeconds(2))
                 {
-                    var properties = new List<PropertyInstance>
-                    {
-                        new PropertyInstance
-                        {
-                            This2PropertyTemplateNavigation = new PropertyTemplate
-                            {
-                                Key = "enocean-serialnumber",
-                                This2PropertyType = (long) PropertyTemplateType.Text,
-                                This2PropertyTypeNavigation = new PropertyType
-                                {
-                                    Type = (long) PropertyTemplateType.Text
-                                }
-                            },
-                            Value = serial
-                        }
-                    };
-                    DriverContext.LearnMode.NotifyLearnNode(Utils.ByteArrayToString(radio.SenderId), "",
-                        _learnedDevices.DriverContext.NodeInstance,
-                        DriverContext.NodeTemplateFactory
-                            .GetNodeTemplates(_enoceanFactory.GetTemplates(radio.Rorg).ToArray()).ToList(), properties);
+                    return false;
                 }
-                else
-                {
-                    DriverContext.Logger.LogInformation($"Received teach-in form already known device {serial}");
-                }
+
+                _teachInResponses[serial] = now;
+                return true;
+            }
+        }
+
+        /// <returns>the name of the node of the device, null if it is not set up</returns>
+        internal string GetKnownDevice(string serial)
+        {
+            lock (_teachedInDevices)
+            {
+                return _teachedInDevices.TryGetValue(serial, out var name) ? name : null;
             }
         }
 
@@ -151,6 +294,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 TelegramMonitor.NotifyTelegram(Automatica.Core.Base.TelegramMonitor.TelegramDirection.Input, radio.SenderIdString, radio.Packet.DestinationIdString, radio.Packet.ToString(), Utils.ByteArrayToString(radio.Data));
                 TelegramReceived(radio);
+                LearnDataReceived(radio);
             }
         }
 
@@ -162,6 +306,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 _driver.TelegramReceived -= DriverOnTelegramReceived;
                 _driver.AnswerReceived -= _driver_AnswerReceived;
                 _driver.PacketSent -= _driver_PacketSent;
+                _driver.TeachInReceived -= _driver_TeachInReceived;
             }
             return base.Stop(token);
         }
@@ -234,11 +379,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
         }
 
-        public void SetTeachedIn(string serialnumber)
+        public void SetTeachedIn(string serialnumber, string name)
         {
-            if (!_teachedInDevices.Contains(serialnumber))
+            if (String.IsNullOrEmpty(serialnumber))
             {
-                _teachedInDevices.Add(serialnumber);
+                return;
+            }
+
+            lock (_teachedInDevices)
+            {
+                _teachedInDevices[serialnumber] = name ?? serialnumber;
             }
         }
     }

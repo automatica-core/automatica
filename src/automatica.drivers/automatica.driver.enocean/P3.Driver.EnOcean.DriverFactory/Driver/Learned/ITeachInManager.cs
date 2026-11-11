@@ -5,7 +5,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Learned
 {
     public interface ITeachInManager
     {
-        void SetTeachedIn(string serialnumber);
+        /// <summary>
+        /// Registers a device that has a node, learn mode reports it as already known.
+        /// </summary>
+        void SetTeachedIn(string serialnumber, string name);
 
         /// <summary>
         /// Sends a telegram over the USB stick (actuator commands, teach-in).
@@ -21,5 +24,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Learned
 
         /// <returns>null if the device has no command case node</returns>
         EnOceanTypeNode GetCommandNode(string serialnumber);
+
+        /// <returns>true once per device within a few seconds: the first of several case nodes of a device answers its teach-in query</returns>
+        bool ClaimTeachInResponse(string serialnumber);
     }
 }

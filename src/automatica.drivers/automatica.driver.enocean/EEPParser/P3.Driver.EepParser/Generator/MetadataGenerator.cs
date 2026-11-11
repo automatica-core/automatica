@@ -64,6 +64,19 @@ namespace P3.Driver.EepParser.Generator
                             }
                         }
                     }
+
+                    foreach (var twoWay in func.TwoWays)
+                    {
+                        var statusField = $"EnOceanRorg{r}Data.Type{r}_{f}_{twoWay.Status.Number.Replace("0x", "")}Guid";
+                        var commandField = $"EnOceanRorg{r}Data.Type{r}_{f}_{twoWay.Command.Number.Replace("0x", "")}Guid";
+                        sb.AppendLine($"            TwoWay(EnOceanRorg{r}Data.TwoWay{r}_{f}_{twoWay.Number}Guid, {statusField}, {commandField});");
+                        foreach (var field in twoWay.Fields)
+                        {
+                            var original = $"EnOceanRorg{r}Data.DataField{r}_{f}_{field.OriginalType.Number.Replace("0x", "")}_{field.Original.ShortCut}_Guid";
+                            var own = $"EnOceanRorg{r}Data.DataField{r}_{f}_{twoWay.Number}_{field.Direction}_{field.Original.ShortCut}_Guid";
+                            sb.AppendLine($"            TwoWayField({own}, {original}, {(field.Command ? "true" : "false")});");
+                        }
+                    }
                 }
             }
 

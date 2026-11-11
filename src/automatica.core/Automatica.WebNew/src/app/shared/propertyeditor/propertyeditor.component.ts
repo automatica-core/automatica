@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
-import { DxDataGridComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxPopupComponent, DxValidatorComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -23,6 +23,7 @@ import { ConfigTreeComponent } from "../config-tree/config-tree.component";
 import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
+import { LearnModeDialogComponent } from "./learn-mode-dialog/learn-mode-dialog.component";
 import { AppService } from "src/app/services/app.service";
 import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
@@ -152,8 +153,6 @@ export class LearnNodeInstance {
 export class PropertyEditorComponent extends BaseComponent implements OnInit, OnDestroy {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
 
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView;
-
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
@@ -169,11 +168,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   public selectedVisuPage: VisuPage;
   public visuPageSelectorVisible: boolean = false;
 
-  @ViewChild("popupLearnMode")
-  popupLearnMode: DxPopupComponent;
-  public learnedNodeInstances: NodeInstance[] = [];
-  public learnModeVisible: boolean = false;
-  public learnNodeInstance: LearnNodeInstance[] = [];
+  @ViewChild("learnModeDialog")
+  learnModeDialog: LearnModeDialogComponent;
 
   /** multi-line text (property meta MULTILINE, e.g. the program of the sequence controller) */
   public multilineEditPopupVisible: boolean = false;
@@ -217,7 +213,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   @Output()
   public unselectItem = new EventEmitter<any>();
 
-  learnModeSub: any;
   calendarEditSource: IPropertyModel;
   availableControlsList: Control[];
 
@@ -283,7 +278,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
   }
 
 
-  private areaInstancesFlat: AreaInstance[] = [];
+  public areaInstancesFlat: AreaInstance[] = [];
   private areaInstanceMap = new Map<string, AreaInstance>();
 
 
@@ -659,39 +654,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
     this.NodeInstanceImportComponent.fileUploaded = this.fileUploaded;
   }
 
-  nodeTemplateSelectItem($event, learnInstance: LearnNodeInstance) {
-    if ($event.node.children.length === 0) {
-      learnInstance.nodeTemplateInstance = $event.itemData;
-      learnInstance.nodeTemplate = learnInstance.nodeTemplateInstance.nodeTemplate.ObjId;
-
-      $event.component.selectItem(learnInstance.nodeTemplate);
-    }
-  }
-
-  nodeTemplateSelectItemSync($event) {
-    if (!this.treeView) return;
-
-
-    this.treeView.instance.selectItem($event.value);
-  }
-
-  nodeTemplateBoxOptionChanged(e) {
-    if (e.name === 'value') {
-      //(<DxDropDownBoxComponent>e).instance.close();
-      e.component.close();
-      this.changeDetection.detectChanges();
-    }
-  }
-
-  saveLearnNodes($event) {
-    if (this.item instanceof NodeInstance) {
-      this.saveLearnedNodes.emit({ learnedNodes: this.learnNodeInstance, nodeInstance: this.item });
-      this.learnNodeInstance = [];
-      this.learnModeVisible = false;
-      this.changeDetection.detectChanges();
-    }
-  }
-
   async onCustomActionClick($event, data: PropertyInstance) {
     if (data instanceof VirtualSettingsPropertyInstance) {
       await this.onSettingsAction(data);
@@ -725,68 +687,18 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
   async onLearnClick($event, data: PropertyInstance) {
     if (data.Parent instanceof NodeInstance) {
-      const currentNode: NodeInstance = data.Parent;
-
-      this.learnModeVisible = true;
-      this.isLoading = true;
-      try {
-        await this.dataHub.enableLearnMode(data.Parent);
-      } catch (error) {
-        this.handleError(error);
-        this.isLoading = false;
-        return;
-      }
-      this.learnedNodeInstances = [];
-
-      this.learnModeSub = super.registerEvent(this.dataHub.notifyLearnMode, (hubData) => {
-
-        if (!this.learnNodeInstance.find(a => a.key === hubData[0])) {
-          const learnNode = new LearnNodeInstance();
-          learnNode.name = hubData[0];
-          learnNode.key = hubData[0];
-          learnNode.description = hubData[1];
-          const nodeTemplates = BaseService.getValidBaseModels<NodeTemplate>(hubData[2], this.translate);
-          learnNode.nodeTemplates = [];
-
-          for (const nodeTemplate of nodeTemplates) {
-            learnNode.nodeTemplates.push(new LearnModeNodeTemplate(nodeTemplate));
-          }
-
-          const rootElements = learnNode.nodeTemplates.filter(a => a.nodeTemplate.NeedsInterface2InterfacesType === currentNode.NodeTemplate.ProvidesInterface2InterfaceType);
-
-          for (const rootEl of rootElements) {
-            rootEl.ParentId = void 0;
-          }
-
-          if (hubData[3]) {
-            learnNode.propertyInstances = BaseService.getValidBaseModels<PropertyInstance>(hubData[3], this.translate);
-          }
-
-          learnNode.init();
-          this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
-          this.changeDetection.detectChanges();
-        }
-      });
-      this.isLoading = false;
+      await this.learnModeDialog.open(data.Parent);
     }
   }
-  async onLearnModeClosing($event) {
-    if (this.item instanceof NodeInstance) {
-      await this.dataHub.disableLearnMode(this.item);
-    }
 
-    if (this.learnModeSub) {
-      super.unregisterEvent(this.learnModeSub);
-      this.learnModeSub = void 0;
+  /** a device was added in learn mode: the tree reloads */
+  onLearnedNodeAdded() {
+    if (this.learnModeDialog?.node) {
+      this.saveLearnedNodes.emit({ learnedNodes: [], nodeInstance: this.learnModeDialog.node });
     }
   }
 
   ngOnDestroy() {
-    if (this.learnModeSub && this.item instanceof NodeInstance) {
-      // closed without the popup closing, don't leave learn mode enabled on the server
-      this.dataHub.disableLearnMode(this.item).catch((error) => console.error(error));
-    }
-    this.learnModeSub = void 0;
     super.baseOnDestroy();
   }
   async optionChanged(e, data) {

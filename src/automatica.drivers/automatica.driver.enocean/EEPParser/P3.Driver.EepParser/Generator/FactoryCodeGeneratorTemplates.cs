@@ -125,6 +125,53 @@
                 NodeDataType.Boolean, 1, false);
         }}";
 
+        public static readonly string AddTwoWayMethodName = @"AddTwoWay{0}_{1}_{2}Templates";
+        public static readonly string TwoWayStaticGuid = @"public static readonly Guid TwoWay{0}_{1}_{2}Guid = new Guid(""{3}"");";
+
+        /// <summary>
+        /// Bidirectional device (A5-20 HVAC components) as one node: status values read only, command values writable.
+        /// {2} = type number without case (01), {3} = the data field methods.
+        /// </summary>
+        public static readonly string AddTwoWayTemplate = @"
+        private static void " + AddTwoWayMethodName + @"(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
+        {{
+            Guid interfaceGuid = GenerateNewGuid(TwoWay{0}_{1}_{2}Guid, 1);
+            factory.CreateInterfaceType(interfaceGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, false);
+
+            var nodeGuid = TwoWay{0}_{1}_{2}Guid;
+
+            factory.CreateNodeTemplate(nodeGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"",
+                ""enocean-type-{1:L}"", funcInterfaceGuid, interfaceGuid, false, false, true, false, true,
+                NodeDataType.NoAttribute, int.MaxValue, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), ""ENOCEAN.SERIAL_NUMBER.NAME"", ""ENOCEAN.SERIAL_NUMBER.DESCRIPTION"",
+                ""enocean-serialnumber"", PropertyTemplateType.Text, nodeGuid, ""COMMON.CATEGORY.ADDRESS"", true, false, null, null, 0, 0);
+" + AddSenderOffsetProperty + @"
+            enoceanFactory.AddTemplate(0x{0}, nodeGuid);
+            {3}
+        }}";
+
+        /// <summary>
+        /// A data field of a two-way device: {2} = type number and direction (01_IN), {9} = the case the field comes
+        /// from (01_1), its names are reused. {10} = writable.
+        /// </summary>
+        public static readonly string AddTwoWayDataFieldTemplate = @"
+        private static void " + AddDataFieldMethodName + @"(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {{
+            var nodeGuid = DataField{0}_{1}_{2}_{3}_Guid;
+            factory.CreateNodeTemplate(nodeGuid, ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}.NAME"", ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}.DESCRIPTION"",
+                ""enocean-shortcut-{3:L}"", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), {7}, true, false, {10}, true,
+                {8}, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}{3}.OFFSET"", ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}{3}.OFFSET"",
+                ""enocean-bitoffset"", PropertyTemplateType.Integer, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}{3}.LENGTH"", ""ENOCEAN.RORG_{0}.FUNCTION_{1}.TYPE_{9}.SHORTCUT_{3}{3}.LENGTH"",
+                ""enocean-length"", PropertyTemplateType.Integer, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);
+
+            {6}
+        }}";
+
         public static readonly string AddUnitDataField = @"
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), """ + DataFieldName + @"{3}.UNIT"", """+ DataFieldName + @"{3}.UNIT"",
                     ""enocean-unit"", PropertyTemplateType.Text, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);";

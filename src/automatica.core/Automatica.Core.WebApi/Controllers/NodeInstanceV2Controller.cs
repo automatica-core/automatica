@@ -235,6 +235,115 @@ namespace Automatica.Core.WebApi.Controllers
             return await AddNode(instance);
         }
 
+        /// <summary>
+        /// Adds a device found in learn mode in one step (name, area and address properties set, the driver reloads
+        /// once), or lets it take over an existing node. 409 if another node below the learn node has the same
+        /// <see cref="LearnedNodeRequest.UniqueProperty"/> value.
+        /// </summary>
+        [HttpPost]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("learned/{locale}")]
+        public async Task<ActionResult<NodeInstance>> AddLearnedNode(string locale, [FromBody] LearnedNodeRequest request)
+        {
+            var parent = request == null ? null : _nodeInstanceCache.Get(request.Parent);
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var properties = request.Properties ?? new Dictionary<string, string>();
+            if (!String.IsNullOrEmpty(request.UniqueProperty) && properties.TryGetValue(request.UniqueProperty, out var unique) &&
+                !String.IsNullOrEmpty(unique))
+            {
+                var duplicate = FindByProperty(parent, request.UniqueProperty, unique, request.Replace);
+                if (duplicate != null)
+                {
+                    return Conflict(new LearnedNodeConflict { NodeId = duplicate.ObjId, Name = duplicate.Name });
+                }
+            }
+
+            if (request.Replace.HasValue)
+            {
+                if (!IsBelow(request.Replace.Value, parent.ObjId))
+                {
+                    return BadRequest($"{request.Replace} is not below {parent.ObjId}");
+                }
+
+                var existing = _nodeInstanceCache.GetSingle(request.Replace.Value, DbContext);
+                SetProperties(existing, properties);
+                _logger.LogInformation($"Learned device takes over {existing.ObjId} {existing.Name}");
+                return await UpdateNode(existing, UpdateScope.SpecificProperty);
+            }
+
+            var node = _nodeInstanceService.CreateNodeInstance(locale, parent, request.NodeTemplate);
+            if (!String.IsNullOrWhiteSpace(request.Name))
+            {
+                node.Name = request.Name.Trim();
+            }
+            if (request.Description != null)
+            {
+                node.Description = request.Description;
+            }
+            node.This2AreaInstance = request.Area;
+            node.This2CategoryInstance = request.Category;
+            SetProperties(node, properties);
+
+            _logger.LogInformation($"Add learned device {node.Name} below {parent.ObjId} {parent.Name}");
+            return await AddNode(node);
+        }
+
+        private static void SetProperties(NodeInstance node, IDictionary<string, string> properties)
+        {
+            foreach (var property in properties)
+            {
+                node.SetProperty(property.Key, property.Value);
+                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>())
+                {
+                    child.SetProperty(property.Key, property.Value);
+                }
+            }
+        }
+
+        /// <returns>the first node below <paramref name="root"/> (except <paramref name="except"/>) with the property value</returns>
+        private NodeInstance FindByProperty(NodeInstance root, string key, string value, Guid? except)
+        {
+            var queue = new Queue<NodeInstance>();
+            queue.Enqueue(root);
+            while (queue.Count > 0)
+            {
+                var item = queue.Dequeue();
+                foreach (var child in item.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>())
+                {
+                    var node = _nodeInstanceCache.Get(child.ObjId) ?? child;
+                    var property = node.PropertyInstance?.FirstOrDefault(p => p.This2PropertyTemplateNavigation?.Key == key);
+                    if (node.ObjId != except && property?.Value != null &&
+                        String.Equals(Convert.ToString(property.Value, System.Globalization.CultureInfo.InvariantCulture)?.Replace(" ", ""),
+                            value.Replace(" ", ""), StringComparison.OrdinalIgnoreCase))
+                    {
+                        return node;
+                    }
+                    queue.Enqueue(node);
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsBelow(Guid node, Guid ancestor)
+        {
+            var current = _nodeInstanceCache.Get(node);
+            for (var depth = 0; current?.This2ParentNodeInstance != null && depth < 64; depth++)
+            {
+                if (current.This2ParentNodeInstance == ancestor)
+                {
+                    return true;
+                }
+                current = _nodeInstanceCache.Get(current.This2ParentNodeInstance.Value);
+            }
+
+            return false;
+        }
+
         [HttpPost]
         [Authorize(Roles = Role.AdminRole)]
         [Route("copy/{nodeInstance}/{targetNodeInstance}")]

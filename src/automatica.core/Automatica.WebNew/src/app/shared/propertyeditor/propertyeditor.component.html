@@ -485,46 +485,6 @@
   </div>
 </dx-popup>
 
-<dx-popup #popupLearnMode [width]="'90%'" [height]="'90%'" showCloseButton="false" [showTitle]="true"
-  [title]="'LEARN_MODE.NAME' | translateAsync" [visible]="learnModeVisible" (onHiding)="onLearnModeClosing($event)">
-  <div *dxTemplate="let data of 'content'">
-    <dx-button text="{{ 'COMMON.ADD' | translateAsync }}" (click)="saveLearnNodes($event)"></dx-button>
-    <dx-scroll-view>
-      <dx-data-grid keyExpr="key" [dataSource]="learnNodeInstance">
-
-        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-        <dxo-paging [enabled]="false"></dxo-paging>
-
-        <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translateAsync }}">
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
-        <dxi-column [showEditorAlways]="true" dataField="nodeTemplate"
-          caption="{{ 'COMMON.TEMPLATE' | translateAsync }}" editCellTemplate="nodeTemplateEditCell">
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dxi-column>
-
-        <div *dxTemplate="let data of 'nodeTemplateEditCell'">
-
-          <dx-drop-down-box [value]="data.data.nodeTemplate" valueExpr="ObjId" displayExpr="DisplayName"
-            placeholder="Select a value..." [dataSource]="data.data.dataSource"
-            (onValueChanged)="nodeTemplateSelectItemSync($event)"
-            (onOptionChanged)="nodeTemplateBoxOptionChanged($event)">
-            <dxo-drop-down-options height="300px"></dxo-drop-down-options>
-            <div *dxTemplate="let contet of 'content'">
-              <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain" keyExpr="Id"
-                parentIdExpr="ParentId" selectionMode="single" displayExpr="DisplayName"
-                [selectByClick]="true"
-                (onItemSelectionChanged)="nodeTemplateSelectItem($event, data.data)"
-                (onContentReady)="$event.component.selectItem(data.data.nodeTemplate)">
-
-              </dx-tree-view>
-            </div>
-          </dx-drop-down-box>
-        </div>
-      </dx-data-grid>
-    </dx-scroll-view>
-  </div>
-</dx-popup>
+<p3-learn-mode-dialog #learnModeDialog [areaInstances]="areaInstancesFlat" (added)="onLearnedNodeAdded()"></p3-learn-mode-dialog>
 
 <node-instance-import #nodeInstanceImport (fileUploaded)="fileUploaded"></node-instance-import>

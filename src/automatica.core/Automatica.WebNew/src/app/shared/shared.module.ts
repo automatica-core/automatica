@@ -8,7 +8,7 @@ import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
 import { LogicBlockPickerComponent } from "./logic-block-picker/logic-block-picker.component";
-import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule, DxTagBoxModule } from "devextreme-angular";
+import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule, DxSchedulerModule, DxTooltipModule, DxTabsModule, DxTextAreaModule, DxTagBoxModule, DxRadioGroupModule } from "devextreme-angular";
 import { RadioStationPickerComponent } from "./radio-station-picker/radio-station-picker.component";
 import { DndModule } from "p3root-angular-dnd";
 import { L10nTranslationModule } from "angular-l10n";
@@ -18,6 +18,7 @@ import { VisuPageListComponent } from "./visu-page-list/visu-page-list.component
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { NodeInstanceImportComponent } from "./propertyeditor/node-instance-ets-import/node-instance-import.component";
 import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-import/node-instance-import.service";
+import { LearnModeDialogComponent } from "./propertyeditor/learn-mode-dialog/learn-mode-dialog.component";
 
 @NgModule({
     imports: [
@@ -55,7 +56,8 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         DxTooltipModule,
         DxTabsModule,
         DxTextAreaModule,
-        DxTagBoxModule
+        DxTagBoxModule,
+        DxRadioGroupModule
     ],
     declarations: [
         PropertyEditorComponent,
@@ -67,6 +69,7 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         VisuPageSelectorComponent,
         VisuPageListComponent,
         NodeInstanceImportComponent,
+        LearnModeDialogComponent,
         RadioStationPickerComponent],
     exports: [
         SkeletonModule,

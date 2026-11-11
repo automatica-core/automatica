@@ -87,6 +87,9 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private static readonly Dictionary<Guid, EepOutgoing> OutgoingTypes = new Dictionary<Guid, EepOutgoing>();
         private static readonly Dictionary<Guid, Guid> ReplyCommands = new Dictionary<Guid, Guid>();
         private static readonly HashSet<Guid> CommandTypes = new HashSet<Guid>();
+        private static readonly Dictionary<Guid, (Guid Status, Guid Command)> TwoWayTypes = new Dictionary<Guid, (Guid Status, Guid Command)>();
+        private static readonly Dictionary<Guid, Guid> TwoWayFieldOrigins = new Dictionary<Guid, Guid>();
+        private static readonly HashSet<Guid> TwoWayCommandFields = new HashSet<Guid>();
 
         static EnOceanEepMetadata()
         {
@@ -131,6 +134,66 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         static partial void Load();
 
+        /// <summary>
+        /// A two-way device template (A5-20-01..06): one node with the data fields of the status case and of the
+        /// command case of the same type.
+        /// </summary>
+        private static void TwoWay(Guid typeTemplate, Guid statusType, Guid commandType)
+        {
+            TwoWayTypes[typeTemplate] = (statusType, commandType);
+        }
+
+        /// <summary>
+        /// A data field of a two-way template: <paramref name="original"/> is the field of the case it comes from, its
+        /// value semantics apply.
+        /// </summary>
+        private static void TwoWayField(Guid dataFieldTemplate, Guid original, bool command)
+        {
+            TwoWayFieldOrigins[dataFieldTemplate] = original;
+            if (command)
+            {
+                TwoWayCommandFields.Add(dataFieldTemplate);
+            }
+        }
+
+        /// <returns>true if the template is a two-way device: status values decoded, command values sent as answer</returns>
+        public static bool IsTwoWay(Guid typeTemplate)
+        {
+            return TwoWayTypes.ContainsKey(typeTemplate);
+        }
+
+        /// <returns>the status and command case of a two-way template, null if it is none</returns>
+        public static (Guid Status, Guid Command)? GetTwoWay(Guid typeTemplate)
+        {
+            return TwoWayTypes.TryGetValue(typeTemplate, out var cases) ? cases : ((Guid Status, Guid Command)?)null;
+        }
+
+        /// <returns>the two-way template that holds <paramref name="caseType"/> as status case, null if none</returns>
+        public static Guid? GetTwoWayOfStatus(Guid caseType)
+        {
+            foreach (var entry in TwoWayTypes)
+            {
+                if (entry.Value.Status == caseType)
+                {
+                    return entry.Key;
+                }
+            }
+
+            return null;
+        }
+
+        /// <returns>true for a data field of the command case of a two-way template</returns>
+        public static bool IsCommandField(Guid dataFieldTemplate)
+        {
+            return TwoWayCommandFields.Contains(dataFieldTemplate);
+        }
+
+        /// <returns>the data field of the EEP case a two-way field comes from, the field itself otherwise</returns>
+        private static Guid Origin(Guid dataFieldTemplate)
+        {
+            return TwoWayFieldOrigins.TryGetValue(dataFieldTemplate, out var original) ? original : dataFieldTemplate;
+        }
+
         private static void Condition(Guid typeTemplate, params (int Offset, int Length, long Value)[] conditions)
         {
             var list = new EepCondition[conditions.Length];
@@ -169,6 +232,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         /// <returns>null if the type is not a command Automatica sends</returns>
         public static EepOutgoing GetOutgoing(Guid typeTemplate)
         {
+            if (TwoWayTypes.TryGetValue(typeTemplate, out var cases))
+            {
+                typeTemplate = cases.Command;
+            }
+
             return OutgoingTypes.TryGetValue(typeTemplate, out var outgoing) ? outgoing : null;
         }
 
@@ -201,18 +269,24 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         /// <returns>empty if every telegram of the device belongs to the type</returns>
         public static IReadOnlyList<EepCondition> GetConditions(Guid typeTemplate)
         {
+            // a two-way device decodes the telegrams of the device with its status case
+            if (TwoWayTypes.TryGetValue(typeTemplate, out var cases))
+            {
+                typeTemplate = cases.Status;
+            }
+
             return TypeConditions.TryGetValue(typeTemplate, out var conditions) ? conditions : Array.Empty<EepCondition>();
         }
 
         /// <returns>null if the data field has no segmented scale</returns>
         public static IReadOnlyList<EepScaleSegment> GetScaleSegments(Guid dataFieldTemplate)
         {
-            return ScaleSegments.TryGetValue(dataFieldTemplate, out var segments) ? segments : null;
+            return ScaleSegments.TryGetValue(Origin(dataFieldTemplate), out var segments) ? segments : null;
         }
 
         public static bool IsBoolEnum(Guid dataFieldTemplate)
         {
-            return BoolEnums.Contains(dataFieldTemplate);
+            return BoolEnums.Contains(Origin(dataFieldTemplate));
         }
 
         /// <returns>true if the user data carries every condition value</returns>

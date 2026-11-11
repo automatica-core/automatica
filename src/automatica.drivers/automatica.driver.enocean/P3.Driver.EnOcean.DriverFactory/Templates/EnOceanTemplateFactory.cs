@@ -42,7 +42,42 @@ namespace P3.Driver.EnOcean.DriverFactory.Templates
 
         public IList<Guid> GetTemplates(Rorg rorg)
         {
-            return _templates[rorg];
+            return _templates.TryGetValue(rorg, out var templates) ? templates : new List<Guid>();
+        }
+
+        /// <summary>
+        /// The device templates (EEP cases and two-way devices) of a RORG, without the RORG and function containers.
+        /// The template guids carry RORG, FUNC and TYPE in bytes 10..12, containers have FUNC or TYPE 0xFF.
+        /// </summary>
+        public IList<Guid> GetDeviceTemplates(Rorg rorg)
+        {
+            var result = new List<Guid>();
+            foreach (var template in GetTemplates(rorg))
+            {
+                var bytes = template.ToByteArray();
+                if (bytes[11] != 0xFF && bytes[12] != 0xFF)
+                {
+                    result.Add(template);
+                }
+            }
+
+            return result;
+        }
+
+        /// <returns>the device templates of the profile <paramref name="rorg"/>-<paramref name="func"/>-<paramref name="type"/></returns>
+        public IList<Guid> GetDeviceTemplates(Rorg rorg, byte func, byte type)
+        {
+            var result = new List<Guid>();
+            foreach (var template in GetDeviceTemplates(rorg))
+            {
+                var bytes = template.ToByteArray();
+                if (bytes[10] == (byte)rorg && bytes[11] == func && bytes[12] == type)
+                {
+                    result.Add(template);
+                }
+            }
+
+            return result;
         }
     }
 }

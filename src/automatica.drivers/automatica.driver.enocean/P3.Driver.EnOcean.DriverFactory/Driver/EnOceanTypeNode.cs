@@ -46,6 +46,17 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         internal bool IsReplyCommand { get; private set; }
 
         /// <summary>
+        /// True for a two-way device template (status and command case in one node, A5-20-01..06): telegrams are decoded
+        /// with the status fields, every status telegram is answered with the values written to the command fields.
+        /// </summary>
+        internal bool IsTwoWay { get; private set; }
+
+        /// <summary>
+        /// The case constants of what Automatica sends: the command case of a two-way device, otherwise the own case.
+        /// </summary>
+        private IReadOnlyList<EepCondition> _commandConditions = Array.Empty<EepCondition>();
+
+        /// <summary>
         /// Tests: the last teach-in response or answer to a status telegram.
         /// </summary>
         internal Task<bool> LastReply { get; private set; } = Task.FromResult(false);
@@ -61,13 +72,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             Outgoing = EnOceanEepMetadata.GetOutgoing(DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty);
             SenderOffset = ReadSenderOffset();
             var template = DriverContext.NodeInstance.This2NodeTemplate ?? Guid.Empty;
-            _replyCommand = EnOceanEepMetadata.GetReplyCommand(template);
+            var twoWay = EnOceanEepMetadata.GetTwoWay(template);
+            IsTwoWay = twoWay.HasValue;
+            _commandConditions = twoWay.HasValue ? EnOceanEepMetadata.GetConditions(twoWay.Value.Command) : _conditions;
+            _replyCommand = IsTwoWay ? template : EnOceanEepMetadata.GetReplyCommand(template);
             IsReplyCommand = EnOceanEepMetadata.IsReplyCommand(template);
             if (IsReplyCommand)
             {
                 TeachInManager.SetCommandNode(_serial, this);
             }
-            TeachInManager.SetTeachedIn(_serial);
+            TeachInManager.SetTeachedIn(_serial, DriverContext.NodeInstance.Name);
             return base.Init(token);
         }
 
@@ -88,13 +102,25 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                     return;
                 }
 
+                // universal teach-in (VLD devices): never data, answered once per device if it waits for it
+                if (telegram.Rorg == Rorg.Ute)
+                {
+                    var teachIn = TeachIn.Parse(telegram);
+                    if (teachIn != null && teachIn.ResponseExpected && !teachIn.IsDeletion && TeachInManager.ClaimTeachInResponse(_serial))
+                    {
+                        DriverContext.Logger.LogInformation($"{_serial}: answering the UTE teach-in query of the device");
+                        LastReply = Send(Rorg.Ute, TeachIn.UteResponse(telegram.Data.Span), DeviceId());
+                    }
+                    return;
+                }
+
                 // 1BS/4BS teach-in telegrams (LRN bit cleared) carry EEP/manufacturer info instead of values,
                 // so only the LRN node gets them. RPS has no LRN bit and is always decoded.
                 var isTeachIn = RadioErp1Packet.IsLrnTeachIn(telegram);
                 if (isTeachIn)
                 {
                     DriverContext.Logger.LogDebug($"Teach-in telegram received for {_serial}, values are not dispatched");
-                    if (IsBidirectionalTeachInQuery(telegram))
+                    if (IsBidirectionalTeachInQuery(telegram) && TeachInManager.ClaimTeachInResponse(_serial))
                     {
                         LastReply = SendTeachInResponse(telegram);
                     }
@@ -110,6 +136,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 foreach (var child in ChildrenT)
                 {
                     if (isTeachIn && !(child is EnOceanLrnBit))
+                    {
+                        continue;
+                    }
+                    // what Automatica sends, not part of the telegrams of the device
+                    if (child.IsCommandField)
                     {
                         continue;
                     }
@@ -182,7 +213,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         /// </summary>
         private async Task<bool> SendReply()
         {
-            var command = TeachInManager.GetCommandNode(_serial);
+            var command = IsTwoWay ? this : TeachInManager.GetCommandNode(_serial);
             if (command?.Outgoing == null)
             {
                 DriverContext.Logger.LogDebug($"{_serial}: no command node with this serial number, status telegram not answered");
@@ -305,7 +336,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 return false;
             }
 
-            if (IsReplyCommand)
+            if (IsReplyCommand || IsTwoWay)
             {
                 // the device sleeps between its telegrams, the value goes out with the answer to its next one
                 DriverContext.Logger.LogDebug($"{_serial}: {written.Name} is sent with the answer to the next status telegram");
@@ -329,6 +360,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
             foreach (var child in ChildrenT)
             {
+                if (IsTwoWay && !child.IsCommandField)
+                {
+                    continue;
+                }
                 if (!ReferenceEquals(child, written) && child.WrittenRaw.HasValue)
                 {
                     EnOceanEepMetadata.SetBits(data, child.BitOffset, child.FieldLength, child.WrittenRaw.Value);
@@ -340,7 +375,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
 
             // the case constants (CMD, COM) and the LRN bit of a data telegram are not values a data point may change
-            foreach (var condition in _conditions)
+            foreach (var condition in _commandConditions)
             {
                 EnOceanEepMetadata.SetBits(data, condition.Offset, condition.Length, condition.Value);
             }

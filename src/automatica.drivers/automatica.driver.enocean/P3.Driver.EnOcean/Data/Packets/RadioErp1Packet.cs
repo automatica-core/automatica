@@ -124,17 +124,18 @@ namespace P3.Driver.EnOcean.Data.Packets
         }
 
         /// <summary>
-        /// True if the telegram can be used to teach in a device. RPS has no LRN bit, so every RPS telegram counts.
+        /// True if the telegram can be used to teach in a device. RPS has no LRN bit, so every RPS telegram counts;
+        /// VLD devices teach in with a UTE query (RORG D4).
         /// </summary>
         public static bool IsTechIn(RadioErp1Packet radio)
         {
-            if (radio.Rorg == Rorg.Rps)
-            {
-                return true;
-            }
-
-            return IsLrnTeachIn(radio);
+            return TeachIn.Parse(radio) != null;
         }
+
+        /// <summary>
+        /// Received telegrams: the signal strength in dBm (negative), null if the stick did not report it.
+        /// </summary>
+        public int? Rssi => Packet != null && Packet.OptionalData.Length >= 6 && Packet.Dbm != 0xFF ? -Packet.Dbm : (int?)null;
 
         /// <summary>
         /// True only for 1BS/4BS telegrams whose LRN bit (DB0.3) is cleared, i.e. real teach-in telegrams

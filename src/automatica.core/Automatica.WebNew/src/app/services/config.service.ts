@@ -90,6 +90,14 @@ export class ConfigService extends BaseService {
         return super.post<NodeInstance>(`nodeInstancesV2/create/${this.translationService.getLocale().language}/${parentNode.ObjId}/${nodeTemplate.ObjId}`, void 0);
     }
 
+    /**
+     * Adds a device found in learn mode in one step, or lets it take over an existing node (request.Replace).
+     * Fails with 409 and { NodeId, Name } if a node below the learn node already has the unique property value.
+     */
+    addLearnedNode(request: LearnedNodeRequest) {
+        return super.post<NodeInstance>(`nodeInstancesV2/learned/${this.translationService.getLocale().language}`, request);
+    }
+
     copy(item: NodeInstance, target: NodeInstance) {
         return super.post<NodeInstance>(`nodeInstancesV2/copy/${item.ObjId}/${target.ObjId}`, void 0);
     }
@@ -97,4 +105,16 @@ export class ConfigService extends BaseService {
     getLogicNodeInstances(): Promise<NodeInstance2RulePage[]> {
         return super.getMultiple<NodeInstance2RulePage>("nodeInstancesV2/logicNodeInstances");
     }
+}
+
+export interface LearnedNodeRequest {
+    Parent: string;
+    NodeTemplate: string;
+    Name?: string;
+    Description?: string;
+    Area?: string;
+    Category?: string;
+    Properties: { [key: string]: string };
+    UniqueProperty?: string;
+    Replace?: string;
 }

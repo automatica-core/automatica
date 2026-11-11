@@ -753,7 +753,29 @@
     "NAME": "License"
   },
   "LEARN_MODE": {
-    "NAME": "Learnmode"
+    "NAME": "Learnmode",
+    "TITLE": "Add devices",
+    "HINT": "Press the learn button of the device (rockers: any button). Every device that sends appears here once.",
+    "LISTENING": "Listening for devices...",
+    "SIGNAL": "Signal",
+    "TELEGRAM": "Telegram",
+    "PROFILE": "Profile",
+    "PROFILE_DETECTED": "detected from the teach-in telegram",
+    "PROFILE_PICK": "not sent by the device, pick it",
+    "DEVICE_NAME": "Name",
+    "AREA": "Area",
+    "MODE_NEW": "New device",
+    "MODE_REPLACE": "Replace a device (keeps its links)",
+    "REPLACE_NODE": "Device to replace",
+    "ADD": "Add",
+    "STATUS_NEW": "New",
+    "STATUS_KNOWN": "Already added as {{ name }}",
+    "STATUS_ADDING": "Adding...",
+    "STATUS_ADDED": "Added, waiting for the first telegram",
+    "STATUS_PAIRED": "Paired, telegrams arrive",
+    "REPLY_SENT": "Pairing reply sent",
+    "DUPLICATE": "This device is already added as {{ name }}",
+    "ADDED": "{{ name }} added"
   },
   "PLUGINS": {
     "NAME": "Plugins",

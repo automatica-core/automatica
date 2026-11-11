@@ -753,7 +753,29 @@
     "NAME": "Lizenz"
   },
   "LEARN_MODE": {
-    "NAME": "Lernmodus"
+    "NAME": "Lernmodus",
+    "TITLE": "Geräte hinzufügen",
+    "HINT": "Drücke die Lerntaste am Gerät (Taster: irgendeine Taste). Jedes Gerät, das sendet, erscheint hier einmal.",
+    "LISTENING": "Warte auf Geräte...",
+    "SIGNAL": "Signal",
+    "TELEGRAM": "Telegramm",
+    "PROFILE": "Profil",
+    "PROFILE_DETECTED": "aus dem Lerntelegramm erkannt",
+    "PROFILE_PICK": "vom Gerät nicht gesendet, bitte wählen",
+    "DEVICE_NAME": "Name",
+    "AREA": "Bereich",
+    "MODE_NEW": "Neues Gerät",
+    "MODE_REPLACE": "Gerät ersetzen (Verknüpfungen bleiben)",
+    "REPLACE_NODE": "Zu ersetzendes Gerät",
+    "ADD": "Hinzufügen",
+    "STATUS_NEW": "Neu",
+    "STATUS_KNOWN": "Bereits angelegt als {{ name }}",
+    "STATUS_ADDING": "Wird angelegt...",
+    "STATUS_ADDED": "Angelegt, warte auf das erste Telegramm",
+    "STATUS_PAIRED": "Gekoppelt, Telegramme kommen an",
+    "REPLY_SENT": "Kopplungsantwort gesendet",
+    "DUPLICATE": "Dieses Gerät ist bereits als {{ name }} angelegt",
+    "ADDED": "{{ name }} angelegt"
   },
   "PLUGINS": {
     "NAME": "Erweiterungen",

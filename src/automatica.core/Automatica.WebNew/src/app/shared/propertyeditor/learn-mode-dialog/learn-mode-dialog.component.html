@@ -1,0 +1,91 @@
+<dx-popup [width]="'min(960px, 96vw)'" [height]="'90%'" [showTitle]="true" [showCloseButton]="true"
+  [title]="'LEARN_MODE.TITLE' | translateAsync" [visible]="visible" (onHiding)="onHiding()">
+  <div *dxTemplate="let data of 'content'" class="learn">
+    <div class="learn__hint">
+      <span class="learn__pulse" aria-hidden="true"></span>
+      <div>
+        <div class="learn__listening">{{ 'LEARN_MODE.LISTENING' | translateAsync }}</div>
+        <div class="learn__muted">{{ 'LEARN_MODE.HINT' | translateAsync }}</div>
+      </div>
+    </div>
+
+    <dx-scroll-view class="learn__list">
+      @for (device of devices; track trackDevice($index, device)) {
+        <div class="learn-card" [class.learn-card--done]="device.status !== 'new'" [attr.data-status]="device.status">
+          <div class="learn-card__head">
+            <div class="learn-card__id">
+              <span class="learn-card__serial">{{ device.key }}</span>
+              <span class="learn-card__status" [attr.data-status]="device.status">{{ statusText(device) }}</span>
+              @if (device.replySent) {
+                <span class="learn-card__chip">{{ 'LEARN_MODE.REPLY_SENT' | translateAsync }}</span>
+              }
+            </div>
+            <div class="learn-card__meta">
+              @if (device.telegram) {
+                <span>{{ 'LEARN_MODE.TELEGRAM' | translateAsync }}: {{ device.telegram }}</span>
+              }
+              @if (device.rssi !== undefined) {
+                <span class="learn-card__signal" [attr.title]="device.rssi + ' dBm'">
+                  {{ 'LEARN_MODE.SIGNAL' | translateAsync }}:
+                  <span class="learn-card__bars" [attr.data-bars]="device.bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                  {{ device.rssi }} dBm
+                </span>
+              }
+            </div>
+          </div>
+
+          @if (device.status === 'new' || device.status === 'adding') {
+            <div class="learn-card__form">
+              <div class="learn-card__field learn-card__field--wide">
+                <label>{{ 'LEARN_MODE.PROFILE' | translateAsync }}
+                  <span class="learn__muted">({{ (device.profileDetected ? 'LEARN_MODE.PROFILE_DETECTED' : 'LEARN_MODE.PROFILE_PICK') | translateAsync }})</span>
+                </label>
+                <dx-select-box [items]="device.templates" displayExpr="DisplayName" valueExpr="ObjId" [searchEnabled]="true"
+                  [(value)]="device.template" (onValueChanged)="templateChanged(device)"
+                  [disabled]="device.mode === 'replace' || device.status === 'adding'"></dx-select-box>
+              </div>
+
+              <div class="learn-card__field learn-card__field--wide">
+                <dx-radio-group [items]="['new', 'replace']" [(value)]="device.mode" layout="horizontal"
+                  [disabled]="device.status === 'adding' || existingDevices.length === 0">
+                  <div *dxTemplate="let mode of 'item'">
+                    {{ (mode === 'new' ? 'LEARN_MODE.MODE_NEW' : 'LEARN_MODE.MODE_REPLACE') | translateAsync }}
+                  </div>
+                </dx-radio-group>
+              </div>
+
+              @if (device.mode === 'new') {
+                <div class="learn-card__field">
+                  <label>{{ 'LEARN_MODE.DEVICE_NAME' | translateAsync }}</label>
+                  <dx-text-box [(value)]="device.name" [disabled]="device.status === 'adding'"></dx-text-box>
+                </div>
+                <div class="learn-card__field">
+                  <label>{{ 'LEARN_MODE.AREA' | translateAsync }}</label>
+                  <dx-select-box [items]="areaInstances" displayExpr="DisplayName" valueExpr="ObjId" [searchEnabled]="true"
+                    [showClearButton]="true" [(value)]="device.area" [disabled]="device.status === 'adding'"></dx-select-box>
+                </div>
+              } @else {
+                <div class="learn-card__field learn-card__field--wide">
+                  <label>{{ 'LEARN_MODE.REPLACE_NODE' | translateAsync }}</label>
+                  <dx-select-box [items]="existingDevices" displayExpr="DisplayName" valueExpr="ObjId" [searchEnabled]="true"
+                    [(value)]="device.replace" [disabled]="device.status === 'adding'"></dx-select-box>
+                </div>
+              }
+
+              @if (device.error) {
+                <div class="learn-card__error" role="alert">{{ device.error }}</div>
+              }
+
+              <div class="learn-card__actions">
+                <dx-button type="default" [text]="'LEARN_MODE.ADD' | translateAsync" [disabled]="!device.canAdd"
+                  (onClick)="add(device)"></dx-button>
+              </div>
+            </div>
+          } @else if (device.error) {
+            <div class="learn-card__error" role="alert">{{ device.error }}</div>
+          }
+        </div>
+      }
+    </dx-scroll-view>
+  </div>
+</dx-popup>

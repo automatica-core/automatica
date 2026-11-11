@@ -3006,6 +3006,10 @@
         "DESCRIPTION": "Multi-Func Sensor"
       },
       "FUNCTION_20": {
+        "TYPE_01": {
+          "NAME": "Battery Powered Actuator (01, two-way)",
+          "DESCRIPTION": "Battery Powered Actuator - status and control in one device"
+        },
         "TYPE_01_1": {
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
@@ -3102,6 +3106,10 @@
           "NAME": "Battery Powered Actuator (01_2)",
           "DESCRIPTION": "Battery Powered Actuator"
         },
+        "TYPE_02": {
+          "NAME": "Basic Actuator (02, two-way)",
+          "DESCRIPTION": "Basic Actuator - status and control in one device"
+        },
         "TYPE_02_3": {
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
@@ -3133,6 +3141,10 @@
             "NAME": "Set point inverse",
             "DESCRIPTION": "Set point inverse"
           }
+        },
+        "TYPE_03": {
+          "NAME": "Line powered Actuator (03, two-way)",
+          "DESCRIPTION": "Line powered Actuator - status and control in one device"
         },
         "TYPE_03_5": {
           "SHORTCUT_LRNB": {
@@ -3173,6 +3185,10 @@
           },
           "NAME": "Line powered Actuator (03_6)",
           "DESCRIPTION": "Line powered Actuator"
+        },
+        "TYPE_04": {
+          "NAME": "Heating Radiator Valve Actuating Drive with Feed and Room Temperature Measurement, Local Set Point Control and Display (04, two-way)",
+          "DESCRIPTION": "Heating Radiator Valve Actuating Drive with Feed and Room Temperature Measurement, Local Set Point Control and Display - status and control in one device"
         },
         "TYPE_04_7": {
           "SHORTCUT_LRNB": {
@@ -3253,6 +3269,10 @@
           },
           "NAME": "Heating Radiator Valve Actuating Drive with Feed and Room Temperature Measurement, Local Set Point Control and Display (04_8)",
           "DESCRIPTION": "Heating Radiator Valve Actuating Drive with Feed and Room Temperature Measurement, Local Set Point Control and Display"
+        },
+        "TYPE_05": {
+          "NAME": "Ventilation Unit (05, two-way)",
+          "DESCRIPTION": "Ventilation Unit - status and control in one device"
         },
         "TYPE_05_9": {
           "SHORTCUT_LRNB": {
@@ -3500,6 +3520,10 @@
         },
         "NAME": "HVAC Components (20)",
         "DESCRIPTION": "HVAC Components",
+        "TYPE_06": {
+          "NAME": "Harvesting-powered actuator with local temperature offset control (BI-DIR) (06, two-way)",
+          "DESCRIPTION": "Harvesting-powered actuator with local temperature offset control (BI-DIR) - status and control in one device"
+        },
         "TYPE_06_16": {
           "SHORTCUT_CV": {
             "NAME": "Current Value",

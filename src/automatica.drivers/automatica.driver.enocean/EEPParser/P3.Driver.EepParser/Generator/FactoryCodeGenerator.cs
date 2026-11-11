@@ -129,56 +129,7 @@ namespace P3.Driver.EepParser.Generator
                             }
                             dataField.Guid = dfGuid;
 
-                            if (dataField.Range != null)
-                            {
-                                long min;
-                                long max;
-                                if (!String.IsNullOrEmpty(dataField.Range.Ref))
-                                {
-                                    if (rangeRefs.ContainsKey(dataField.Range.Ref))
-                                    {
-                                        min = rangeRefs[dataField.Range.Ref].Item1;
-                                        max = rangeRefs[dataField.Range.Ref].Item2;
-                                    }
-                                    else
-                                    {
-                                        throw new ArgumentException("ref not found");
-                                    }
-                                }
-                                else
-                                {
-                                    min = dataField.Range.Min;
-                                    max = dataField.Range.Max;
-                                }
-
-                                var range = String.Format(FactoryCodeGeneratorTemplates.AddRangeDataField,
-                                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, min.ToString(CultureInfo.InvariantCulture), max.ToString(CultureInfo.InvariantCulture));
-                                additionalDfProps.Append(range);
-                            }
-                            if (dataField.Scale != null)
-                            {
-                                var scale = String.Format(FactoryCodeGeneratorTemplates.AddScaleDataField,
-                                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, dataField.Scale.Min.ToString(CultureInfo.InvariantCulture), dataField.Scale.Max.ToString(CultureInfo.InvariantCulture));
-                                additionalDfProps.Append(scale);
-                            }
-
-                            if (!String.IsNullOrEmpty(dataField.Unit))
-                            {
-                                var unit = String.Format(FactoryCodeGeneratorTemplates.AddUnitDataField,
-                                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, dataField.Unit.Replace("\"", "\"\""));
-                                additionalDfProps.Append(unit);
-                            }
-
-                            if (dataField.BoolEnum)
-                            {
-                                var enumeration = String.Format(FactoryCodeGeneratorTemplates.AddEnumMinMaxField,
-                                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut,
-                                    dataField.Enumeration.First.Min!.Value.ToString(CultureInfo.InvariantCulture),
-                                    dataField.Enumeration.First.Max!.Value.ToString(CultureInfo.InvariantCulture),
-                                    dataField.Enumeration.Second.Min!.Value.ToString(CultureInfo.InvariantCulture),
-                                    dataField.Enumeration.Second.Max!.Value.ToString(CultureInfo.InvariantCulture));
-                                additionalDfProps.Append(enumeration);
-                            }
+                            additionalDfProps.Append(DataFieldProperties(rorgNumber, funcNumber, typeNumber, dataField, rangeRefs));
 
                             var dataFieldCode = String.Format(FactoryCodeGeneratorTemplates.AddDataFieldTemplate,
                                 rorgNumber, funcNumber, typeNumber, dataField.ShortCut, dataField.Offset, dataField.Length,
@@ -219,7 +170,54 @@ namespace P3.Driver.EepParser.Generator
                         typesStringBuilder.Append(dfStringBuilder);
                     }
 
-                    var funcName = String.Format(FactoryCodeGeneratorTemplates.AddFunctionMethodName, rorgNumber, funcNumber);
+                    foreach (var (status, command) in TwoWayPairs(rorg, func))
+                    {
+                        var twoWay = new TwoWayType(status, command);
+                        var number = twoWay.Number;
+                        twoWay.Guid = guidLock.Resolve($"TwoWay{rorgNumber}_{funcNumber}_{number}Guid",
+                            new Guid($"eb2c5295-4a34-4389-8bb5-{rorgNumber}{funcNumber}{number}800000"), 3);
+                        staticGuids.Add(String.Format(FactoryCodeGeneratorTemplates.TwoWayStaticGuid, rorgNumber, funcNumber, number, twoWay.Guid));
+
+                        var dfMethods = new StringBuilder();
+                        var dfStringBuilder = new StringBuilder();
+                        var i = 1;
+                        foreach (var (caseType, isCommand) in new[] { (status, false), (command, true) })
+                        {
+                            var caseNumber = caseType.Number.Replace("0x", "");
+                            foreach (var dataField in caseType.DataFields.Values.Where(d => d.Guid != Guid.Empty))
+                            {
+                                // Automatica sets the LRN bit of the answer itself
+                                if (isCommand && (dataField.ShortCut == "LRNB" || dataField.ShortCut == "LRN"))
+                                {
+                                    continue;
+                                }
+
+                                var direction = isCommand ? "OUT" : "IN";
+                                var fieldType = $"{number}_{direction}";
+                                var dfGuid = guidLock.Resolve($"DataField{rorgNumber}_{funcNumber}_{fieldType}_{dataField.ShortCut}_Guid",
+                                    GenerateNewGuid(twoWay.Guid, i, 2), 2);
+                                staticGuids.Add(String.Format(FactoryCodeGeneratorTemplates.DataFieldStaticGuid,
+                                    rorgNumber, funcNumber, fieldType, dataField.ShortCut, dfGuid));
+                                twoWay.Fields.Add(new TwoWayField(dataField, caseType, isCommand, dfGuid));
+
+                                dfMethods.AppendLine($"{String.Format(FactoryCodeGeneratorTemplates.AddDataFieldMethodName, rorgNumber, funcNumber, fieldType, dataField.ShortCut)}(factory, interfaceGuid);");
+                                dfStringBuilder.Append(String.Format(FactoryCodeGeneratorTemplates.AddTwoWayDataFieldTemplate,
+                                    rorgNumber, funcNumber, fieldType, dataField.ShortCut, dataField.Offset, dataField.Length,
+                                    DataFieldProperties(rorgNumber, funcNumber, caseNumber, dataField, rangeRefs),
+                                    dataField.ShortCut == "LRNB" ? "false" : "true", GetDataFieldValueType(dataField), caseNumber,
+                                    isCommand ? "true" : "false"));
+                                i++;
+                            }
+                        }
+
+                        func.TwoWays.Add(twoWay);
+                        typesMethods.AppendLine($"{String.Format(FactoryCodeGeneratorTemplates.AddTwoWayMethodName, rorgNumber, funcNumber, number)}(factory, interfaceGuid, enoceanFactory);");
+                        AddStringToJObject(String.Format(FactoryCodeGeneratorTemplates.TypeName, rorgNumber, funcNumber, number), status.Title, status.OrigTypeNumber, ref json);
+                        typesStringBuilder.Append(String.Format(FactoryCodeGeneratorTemplates.AddTwoWayTemplate, rorgNumber, funcNumber, number, dfMethods));
+                        typesStringBuilder.Append(dfStringBuilder);
+                    }
+
+                    var funcName =String.Format(FactoryCodeGeneratorTemplates.AddFunctionMethodName, rorgNumber, funcNumber);
                     funcMethods.AppendLine($"{funcName}(factory, interfaceGuid, enoceanFactory);");
 
                     var funcJsonName = String.Format(FactoryCodeGeneratorTemplates.FunctionName, rorgNumber, funcNumber);
@@ -248,12 +246,96 @@ namespace P3.Driver.EepParser.Generator
         }
 
         /// <summary>
+        /// Range, scale, unit and enum properties of a data field; <paramref name="typeNumber"/> names the case the
+        /// translation keys belong to.
+        /// </summary>
+        private static string DataFieldProperties(string rorgNumber, string funcNumber, string typeNumber, DataField dataField,
+            Dictionary<string, Tuple<long, long>> rangeRefs)
+        {
+            var props = new StringBuilder();
+            if (dataField.Range != null)
+            {
+                long min;
+                long max;
+                if (!String.IsNullOrEmpty(dataField.Range.Ref))
+                {
+                    if (rangeRefs.ContainsKey(dataField.Range.Ref))
+                    {
+                        min = rangeRefs[dataField.Range.Ref].Item1;
+                        max = rangeRefs[dataField.Range.Ref].Item2;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ref not found");
+                    }
+                }
+                else
+                {
+                    min = dataField.Range.Min;
+                    max = dataField.Range.Max;
+                }
+
+                var range = String.Format(FactoryCodeGeneratorTemplates.AddRangeDataField,
+                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, min.ToString(CultureInfo.InvariantCulture), max.ToString(CultureInfo.InvariantCulture));
+                props.Append(range);
+            }
+            if (dataField.Scale != null)
+            {
+                var scale = String.Format(FactoryCodeGeneratorTemplates.AddScaleDataField,
+                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, dataField.Scale.Min.ToString(CultureInfo.InvariantCulture), dataField.Scale.Max.ToString(CultureInfo.InvariantCulture));
+                props.Append(scale);
+            }
+
+            if (!String.IsNullOrEmpty(dataField.Unit))
+            {
+                var unit = String.Format(FactoryCodeGeneratorTemplates.AddUnitDataField,
+                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut, dataField.Unit.Replace("\"", "\"\""));
+                props.Append(unit);
+            }
+
+            if (dataField.BoolEnum)
+            {
+                var enumeration = String.Format(FactoryCodeGeneratorTemplates.AddEnumMinMaxField,
+                    rorgNumber, funcNumber, typeNumber, dataField.ShortCut,
+                    dataField.Enumeration.First.Min!.Value.ToString(CultureInfo.InvariantCulture),
+                    dataField.Enumeration.First.Max!.Value.ToString(CultureInfo.InvariantCulture),
+                    dataField.Enumeration.Second.Min!.Value.ToString(CultureInfo.InvariantCulture),
+                    dataField.Enumeration.Second.Max!.Value.ToString(CultureInfo.InvariantCulture));
+                props.Append(enumeration);
+            }
+
+            return props.ToString();
+        }
+
+        /// <summary>
         /// Writes UTF-8 with BOM and CRLF like the rest of the repository.
         /// </summary>
         public static void WriteSource(string path, string content)
         {
             var normalized = content.Replace("\r\n", "\n").Replace("\n", "\r\n");
             File.WriteAllText(path, normalized, new UTF8Encoding(true));
+        }
+
+        /// <summary>
+        /// A5-20-01..06 HVAC components: the device sends the status case and only listens right after it for the command
+        /// case. Both cases of the type become one device template.
+        /// </summary>
+        private static IEnumerable<(Model.Type Status, Model.Type Command)> TwoWayPairs(Rorg rorg, Function func)
+        {
+            if (rorg.Number != "0xA5" || func.Number != "0x20")
+            {
+                yield break;
+            }
+
+            foreach (var cases in func.Types.Where(t => t.Guid != Guid.Empty).GroupBy(t => t.OrigTypeNumber))
+            {
+                var typeNumber = Convert.ToInt32(cases.Key.Replace("0x", ""), 16);
+                var list = cases.ToList();
+                if (typeNumber >= 0x01 && typeNumber <= 0x06 && list.Count == 2)
+                {
+                    yield return (list[0], list[1]);
+                }
+            }
         }
 
         private static string GetDataFieldValueType(DataField dataField)

@@ -57,6 +57,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         internal long? WrittenRaw { get; private set; }
 
         /// <summary>
+        /// True for a command field of a two-way device: written by Automatica, never decoded from a telegram.
+        /// </summary>
+        internal bool IsCommandField => Template.HasValue && EnOceanEepMetadata.IsCommandField(Template.Value);
+
+        /// <summary>
         /// The two-state enum mapping (first range = false, second range = true) only applies to fields whose
         /// enum really has two states. Nodes created by older driver versions carry the enum properties on
         /// multi-state fields as well (e.g. A5-10 fan speed), the template decides.
