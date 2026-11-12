@@ -416,6 +416,46 @@ namespace Automatica.Core.EF.Migrations
                     b.ToTable("CategoryInstances");
                 });
 
+            modelBuilder.Entity("Automatica.Core.EF.Models.Habits.HabitAction", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LocalTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperatingModes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Origin")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("This2AreaInstance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("This2CategoryInstance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UtcTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("UtcTime");
+
+                    b.ToTable("HabitActions");
+                });
+
             modelBuilder.Entity("Automatica.Core.EF.Models.InterfaceType", b =>
                 {
                     b.Property<Guid>("Type")
@@ -536,6 +576,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
+
+                    b.Property<bool>("HabitInput")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

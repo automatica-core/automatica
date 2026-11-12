@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Automations;
+using Automatica.Core.EF.Models.Habits;
 using Automatica.Core.EF.Models.Shading;
 using Automatica.Core.EF.Models.Categories;
 using System;
@@ -86,6 +87,8 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<Automation> Automations { get; set; }
         public virtual DbSet<AutomationReference> AutomationReferences { get; set; }
         public virtual DbSet<AutomationRun> AutomationRuns { get; set; }
+
+        public virtual DbSet<HabitAction> HabitActions { get; set; }
 
         public virtual DbSet<ShadingSettings> ShadingSettings { get; set; }
         public virtual DbSet<ShadingFacade> ShadingFacades { get; set; }
@@ -1544,6 +1547,14 @@ namespace Automatica.Core.EF.Models
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("Automation2AutomationRun");
 
+                entity.Ignore(e => e.TypeInfo);
+            });
+
+            modelBuilder.Entity<HabitAction>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.HasIndex(e => e.UtcTime);
                 entity.Ignore(e => e.TypeInfo);
             });
 

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Internals.Areas;
+using Automatica.Core.Internals.Habits;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
@@ -377,6 +378,7 @@ namespace Automatica.Core.Runtime.Database
             AddHyperSeriesRecorderSettings(context, config);
             AddMcpSettings(context);
             AddSmtpSettings(context);
+            AddHabitSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -705,6 +707,40 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.MCP",
                     IsVisible = true,
                     Order = 4,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
+        }
+
+        private static void AddHabitSettings(AutomaticaContext context)
+        {
+            // recording of manual actions for habit suggestions, off until an administrator enables it
+            if (context.Settings.SingleOrDefault(a => a.ValueKey == HabitRecorder.EnabledKey) == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = HabitRecorder.EnabledKey,
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.HABITS",
+                    IsVisible = true,
+                    Order = 1,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
+
+            if (context.Settings.SingleOrDefault(a => a.ValueKey == HabitRecorder.LogDaysKey) == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = HabitRecorder.LogDaysKey,
+                    Type = (long)PropertyTemplateType.Integer,
+                    Value = HabitRecorder.DefaultLogDays,
+                    Group = "SERVER.HABITS",
+                    IsVisible = true,
+                    Order = 2,
                     CreatedAt = DateTimeOffset.Now,
                     ModifiedAt = DateTimeOffset.Now
                 });

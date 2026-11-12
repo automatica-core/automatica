@@ -9,6 +9,7 @@ using Automatica.Core.Control.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Habits;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.WebApi.Tests.Http;
 using Automatica.Push.Hubs;
@@ -29,6 +30,8 @@ namespace Automatica.Core.WebApi.Tests.Push
         private readonly Guid _inputId = Guid.NewGuid();
         private readonly Mock<IDispatcher> _dispatcher = new();
         private readonly Mock<IControlCache> _controls = new();
+        private readonly Mock<IHabitRecorder> _habits = new();
+        private readonly Guid _userId = Guid.NewGuid();
 
         private DataHub CreateHub(string role)
         {
@@ -44,12 +47,12 @@ namespace Automatica.Core.WebApi.Tests.Push
                 This2RuleInterfaceTemplateNavigation = new RuleInterfaceTemplate { This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Input }
             });
 
-            var identity = new ClaimsIdentity(new[] { new Claim("name", "tester"), new Claim("role", role) }, "test", "name", "role");
+            var identity = new ClaimsIdentity(new[] { new Claim("name", "tester"), new Claim("role", role), new Claim(ClaimTypes.NameIdentifier, _userId.ToString()) }, "test", "name", "role");
             var context = new Mock<HubCallerContext>();
             context.SetupGet(a => a.User).Returns(new ClaimsPrincipal(identity));
 
             return new DataHub(_dispatcher.Object, Mock.Of<INotifyDriver>(), nodes.Object, logics.Object, interfaces.Object, _controls.Object,
-                NullLogger<DataHub>.Instance)
+                _habits.Object, NullLogger<DataHub>.Instance)
             {
                 Context = context.Object
             };
@@ -81,6 +84,8 @@ namespace Automatica.Core.WebApi.Tests.Push
             CreateHub(Role.AdminRole).SetValue(_inputId, False);
 
             DispatchCount(Times.Once());
+            // arming an alarm is no habit
+            _habits.Verify(a => a.RecordVisu(It.IsAny<Guid>(), It.IsAny<object>(), It.IsAny<Guid?>()), Times.Never());
         }
 
         [Fact]
@@ -91,6 +96,7 @@ namespace Automatica.Core.WebApi.Tests.Push
             CreateHub(Role.VisuRole).SetValue(_inputId, False);
 
             DispatchCount(Times.Once());
+            _habits.Verify(a => a.RecordVisu(_inputId, false, _userId), Times.Once());
         }
     }
 }

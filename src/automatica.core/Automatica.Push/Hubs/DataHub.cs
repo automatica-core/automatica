@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Calendar;
@@ -8,6 +9,7 @@ using Automatica.Core.Control.Base;
 using Automatica.Core.Control.Cache;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Habits;
 using Automatica.Core.Model.Models.User;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -26,10 +28,12 @@ namespace Automatica.Push.Hubs
         private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
         private readonly IControlCache _controlCache;
+        private readonly IHabitRecorder _habits;
         private readonly ILogger<DataHub> _logger;
 
-        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, IControlCache controlCache, ILogger<DataHub> logger)
+        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, IControlCache controlCache, IHabitRecorder habits, ILogger<DataHub> logger)
         {
+            _habits = habits;
             _controlCache = controlCache;
             _logger = logger;
             _dispatcher = dispatcher;
@@ -191,6 +195,7 @@ namespace Automatica.Push.Hubs
                     DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
                 _dispatcher.DispatchValue(dispatchable,
                     new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTimeHelper.ProviderInstance.GetLocalNow().DateTime, DispatchValueSource.User));
+                _habits.RecordVisu(instanceId, convertedValue, UserId());
             }
             else
             {
@@ -210,7 +215,8 @@ namespace Automatica.Push.Hubs
 
                 // security logics (alarms, access controller) are armed and acknowledged through the authorised and audited
                 // webapi/security-visu, a visualization user must not disarm them by writing an input
-                if (_controlCache.Get(logicInterface.This2RuleInstance) is ISecurityControl && !HubAccess.IsAdmin(Context.User))
+                var isSecurity = _controlCache.Get(logicInterface.This2RuleInstance) is ISecurityControl;
+                if (isSecurity && !HubAccess.IsAdmin(Context.User))
                 {
                     _logger.LogWarning($"Refused write of user {SanitizeForLog(Context.User?.Identity?.Name)} to an input of security logic {logicInterface.This2RuleInstance}");
                     throw new HubException("Inputs of security logics cannot be written, use the security commands");
@@ -220,7 +226,20 @@ namespace Automatica.Push.Hubs
                     DispatchableSource.Visualization, false);
                 _dispatcher.DispatchValue(dispatchable,
                     new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTimeHelper.ProviderInstance.GetLocalNow().DateTime, DispatchValueSource.User));
+
+                // arming an alarm is never suggested as a habit
+                if (!isSecurity)
+                {
+                    _habits.RecordVisu(instanceId, convertedValue, UserId());
+                }
             }
+        }
+
+        private Guid? UserId()
+        {
+            // same lookup as UserClaimsProvider: mapped or raw JWT claim name
+            var claim = Context.User?.FindFirst(ClaimTypes.NameIdentifier) ?? Context.User?.FindFirst("nameid");
+            return Guid.TryParse(claim?.Value, out var id) ? id : null;
         }
     }
 }

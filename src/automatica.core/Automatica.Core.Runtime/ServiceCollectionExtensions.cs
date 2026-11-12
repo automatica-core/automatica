@@ -2,6 +2,7 @@
 using Automatica.Core.Automation;
 using Automatica.Core.Shading;
 using Automatica.Core.Internals.OperatingModes;
+using Automatica.Core.Internals.Habits;
 using Automatica.Core.Base.Media;
 using Automatica.Core.Internals.Media;
 using System.Net;
@@ -140,6 +141,9 @@ namespace Automatica.Core.Runtime
                 services.AddAutomations();
                 services.AddShading();
                 services.AddSingleton<IOperatingModeService, OperatingModeService>();
+                services.AddSingleton<HabitRecorder>();
+                services.AddSingleton<IHabitRecorder>(provider => provider.GetRequiredService<HabitRecorder>());
+                services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<HabitRecorder>());
 
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 

@@ -11,6 +11,7 @@
     "SETTINGS": "Server Einstellungen",
     "REMOTE": "Remote Server Einstellungen",
     "MCP": "KI-Assistent (MCP)",
+    "HABITS": "Gewohnheitsvorschläge",
     "SMTP": "E-Mail-Server (SMTP)",
     "OPERATING_MODES": "Betriebsmodi"
   },
@@ -479,6 +480,18 @@
       },
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
+      },
+      "HABIT_INPUT": {
+        "NAME": "Wandeingang (Gewohnheiten)",
+        "DESCRIPTION": "Ein Taster oder Schalter: Betätigungen werden als manuelle Aktionen für Gewohnheitsvorschläge aufgezeichnet."
+      },
+      "HABITSENABLED": {
+        "NAME": "Manuelle Aktionen aufzeichnen",
+        "DESCRIPTION": "Zeichnet Bedienungen in der Visu und Betätigungen von Wandeingängen (als Wandeingang markierte Datenpunkte) auf, um später Automationen vorzuschlagen. Ausschalten löscht alle Aufzeichnungen."
+      },
+      "HABITSLOGDAYS": {
+        "NAME": "Tage aufbewahren",
+        "DESCRIPTION": "Ältere Aufzeichnungen werden gelöscht."
       },
       "MCPENABLED": {
         "NAME": "MCP-Endpunkt aktivieren",
