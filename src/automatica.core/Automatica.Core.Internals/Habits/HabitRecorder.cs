@@ -180,6 +180,7 @@ namespace Automatica.Core.Internals.Habits
                 await using var context = await _contextFactory.CreateDbContextAsync();
                 context.HabitActions.AddRange(actions);
                 await context.SaveChangesAsync();
+                _logger.LogDebug($"Saved {actions.Count} habit actions");
             }
             catch (Exception e)
             {
@@ -207,9 +208,15 @@ namespace Automatica.Core.Internals.Habits
                 }
             }
 
+            var before = _subscriptions.Count;
             foreach (var id in wanted.Where(a => !_subscriptions.ContainsKey(a)))
             {
                 _subscriptions[id] = await _dispatcher.Subscribe(DispatchableType.NodeInstance, id, OnDataPointValue);
+            }
+
+            if (_subscriptions.Count != before)
+            {
+                _logger.LogInformation($"Habit recorder watches {_subscriptions.Count} data points (enabled: {IsEnabled})");
             }
         }
 
@@ -268,6 +275,7 @@ namespace Automatica.Core.Internals.Habits
         {
             _cts = new CancellationTokenSource();
             _loop = RunAsync(_cts.Token);
+            _logger.LogInformation($"Habit recorder started (enabled: {IsEnabled})");
             return Task.CompletedTask;
         }
 

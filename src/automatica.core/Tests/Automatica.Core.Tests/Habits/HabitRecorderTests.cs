@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Habits;
 using Automatica.Core.Internals.Cache.Common;
@@ -163,6 +164,35 @@ namespace Automatica.Core.Tests.Habits
             _enabled.ValueInt = 0;
             await _recorder.ScanDataPointsAsync();
             Assert.Empty(_registered);
+        }
+
+        [Fact]
+        public async Task ValuesThroughTheRealDispatcher_AreRecorded()
+        {
+            var dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, Mock.Of<IDataBroadcast>(), Mock.Of<IRemoteSender>(),
+                Mock.Of<IRemanentHandler>(), Mock.Of<IRuleInstanceVisuNotify>());
+            var factory = _database.Services().GetRequiredService<IDbContextFactory<AutomaticaContext>>();
+            var settings = new Mock<ISettingsCache>();
+            settings.Setup(a => a.GetByKey(HabitRecorder.EnabledKey)).Returns(() => _enabled);
+            var nodes = new Mock<INodeInstanceCache>();
+            nodes.Setup(a => a.Get(It.IsAny<Guid>())).Returns<Guid>(id => _nodes.FirstOrDefault(a => a.ObjId == id));
+            nodes.Setup(a => a.All()).Returns(() => _nodes);
+            var recorder = new HabitRecorder(factory, settings.Object, nodes.Object, Mock.Of<ILogicInterfaceInstanceCache>(), Mock.Of<ILogicInstanceCache>(),
+                Mock.Of<IOperatingModeService>(a => a.ActiveModes == Array.Empty<string>()), dispatcher, NullLogger<HabitRecorder>.Instance) { Time = _time };
+
+            await recorder.ScanDataPointsAsync();
+            var light = new Mock<IDispatchable>();
+            light.SetupGet(a => a.Id).Returns(_light);
+            light.SetupGet(a => a.Type).Returns(DispatchableType.NodeInstance);
+            light.SetupGet(a => a.Name).Returns("light");
+            await dispatcher.DispatchValue(light.Object, true, DispatchValueSource.Read);
+
+            for (var i = 0; i < 50 && Recorded().Count == 0; i++)
+            {
+                await Task.Delay(20);
+                await recorder.FlushAsync(all: true);
+            }
+            Assert.Equal("True", Assert.Single(Recorded()).Value);
         }
 
         [Fact]
