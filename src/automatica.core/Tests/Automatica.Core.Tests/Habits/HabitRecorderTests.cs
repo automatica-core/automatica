@@ -32,6 +32,7 @@ namespace Automatica.Core.Tests.Habits
         private readonly List<Guid> _registered = new();
         private readonly HabitRecorder _recorder;
 
+        private readonly Guid _root = Guid.NewGuid();
         private readonly Guid _light = Guid.NewGuid();
         private readonly Guid _area = Guid.NewGuid();
         private readonly Guid _category = Guid.NewGuid();
@@ -50,7 +51,7 @@ namespace Automatica.Core.Tests.Habits
             _nodes.Add(new NodeInstance { ObjId = _light, This2AreaInstance = _area, This2CategoryInstance = _category });
             var nodes = new Mock<INodeInstanceCache>();
             nodes.Setup(a => a.Get(It.IsAny<Guid>())).Returns<Guid>(id => _nodes.FirstOrDefault(a => a.ObjId == id));
-            nodes.Setup(a => a.All()).Returns(() => _nodes);
+            nodes.Setup(a => a.All()).Returns(() => Root());
 
             var modes = new Mock<IOperatingModeService>();
             modes.SetupGet(a => a.ActiveModes).Returns(new[] { "workday", "school" });
@@ -69,6 +70,9 @@ namespace Automatica.Core.Tests.Habits
                 Time = _time
             };
         }
+
+        // like the real cache: All() only holds the root, the data points are its children
+        private NodeInstance[] Root() => new[] { new NodeInstance { ObjId = _root, InverseThis2ParentNodeInstanceNavigation = _nodes } };
 
         private List<HabitAction> Recorded()
         {
@@ -140,7 +144,7 @@ namespace Automatica.Core.Tests.Habits
             _nodes.Add(new NodeInstance { ObjId = Guid.NewGuid(), IsDeleted = true });
 
             await _recorder.ScanDataPointsAsync();
-            Assert.Equal(new[] { _light, button }, _registered);
+            Assert.Equal(new[] { _root, _light, button }.Order(), _registered.Order());
 
             // writes of logics and automations are not reported values
             await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.Write));
@@ -176,7 +180,7 @@ namespace Automatica.Core.Tests.Habits
             settings.Setup(a => a.GetByKey(HabitRecorder.EnabledKey)).Returns(() => _enabled);
             var nodes = new Mock<INodeInstanceCache>();
             nodes.Setup(a => a.Get(It.IsAny<Guid>())).Returns<Guid>(id => _nodes.FirstOrDefault(a => a.ObjId == id));
-            nodes.Setup(a => a.All()).Returns(() => _nodes);
+            nodes.Setup(a => a.All()).Returns(() => Root());
             var recorder = new HabitRecorder(factory, settings.Object, nodes.Object, Mock.Of<ILogicInterfaceInstanceCache>(), Mock.Of<ILogicInstanceCache>(),
                 Mock.Of<IOperatingModeService>(a => a.ActiveModes == Array.Empty<string>()), dispatcher, NullLogger<HabitRecorder>.Instance) { Time = _time };
 

@@ -195,7 +195,7 @@ namespace Automatica.Core.Internals.Habits
         internal async Task ScanDataPointsAsync()
         {
             var wanted = IsEnabled
-                ? _nodes.All().Where(a => !a.IsDeleted).Select(a => a.ObjId).ToHashSet()
+                ? AllNodes().Where(a => !a.IsDeleted).Select(a => a.ObjId).ToHashSet()
                 : new HashSet<Guid>();
 
             foreach (var id in _subscriptions.Keys.Where(a => !wanted.Contains(a)).ToList())
@@ -217,6 +217,26 @@ namespace Automatica.Core.Internals.Habits
             if (_subscriptions.Count != before)
             {
                 _logger.LogInformation($"Habit recorder watches {_subscriptions.Count} data points (enabled: {IsEnabled})");
+            }
+        }
+
+        private IEnumerable<NodeInstance> AllNodes()
+        {
+            // the cache's All() only holds the root, every other node hangs below it
+            var stack = new Stack<NodeInstance>(_nodes.All());
+            var seen = new HashSet<Guid>();
+            while (stack.TryPop(out var node))
+            {
+                if (!seen.Add(node.ObjId))
+                {
+                    continue;
+                }
+
+                yield return node;
+                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation ?? Enumerable.Empty<NodeInstance>())
+                {
+                    stack.Push(child);
+                }
             }
         }
 
