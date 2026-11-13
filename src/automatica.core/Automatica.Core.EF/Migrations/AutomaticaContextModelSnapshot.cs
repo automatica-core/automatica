@@ -577,9 +577,6 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<bool>("HabitInput")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")

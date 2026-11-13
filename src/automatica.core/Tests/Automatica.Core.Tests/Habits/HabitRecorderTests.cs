@@ -96,14 +96,14 @@ namespace Automatica.Core.Tests.Habits
             _recorder.RecordVisu(_light, 10.0, user);
             _time.Advance(TimeSpan.FromSeconds(3));
             _recorder.RecordVisu(_light, 40.0, user);
-            _time.Advance(TimeSpan.FromSeconds(8));
+            _time.Advance(TimeSpan.FromSeconds(5));
             _recorder.RecordVisu(_light, 75.5, user);
 
-            // still within 10 s of the last write: nothing is due yet
+            // still within 10 s of the first write: nothing is due yet
             await _recorder.FlushAsync();
             Assert.Empty(Recorded());
 
-            _time.Advance(HabitRecorder.MergeWindow);
+            _time.Advance(TimeSpan.FromSeconds(2));
             await _recorder.FlushAsync();
 
             var action = Assert.Single(Recorded());
@@ -118,39 +118,50 @@ namespace Automatica.Core.Tests.Habits
         }
 
         [Fact]
-        public async Task WriteAfterTheWindow_StartsASecondAction()
+        public async Task ContinuousChanges_AreCutIntoOneActionPerWindow()
         {
-            _recorder.RecordVisu(_light, true, null);
-            _time.Advance(TimeSpan.FromSeconds(30));
-            _recorder.RecordVisu(_light, false, null);
+            // a sensor changing every 2 s: the window counts from the first value, so it is written every 10 s
+            for (var i = 0; i < 10; i++)
+            {
+                _recorder.RecordVisu(_light, i, null);
+                _time.Advance(TimeSpan.FromSeconds(2));
+            }
             await _recorder.FlushAsync(all: true);
 
-            var actions = Recorded();
-            Assert.Equal(new[] { "True", "False" }, actions.Select(a => a.Value));
+            Assert.Equal(new[] { "4", "9" }, Recorded().Select(a => a.Value));
         }
 
         [Fact]
-        public async Task FlaggedInputs_AreSubscribedWhileEnabled_AndOnlyBusValuesCount()
+        public async Task AllDataPoints_AreSubscribedWhileEnabled_AndOnlyReportedChangesCount()
         {
             var button = Guid.NewGuid();
-            _nodes.Add(new NodeInstance { ObjId = button, HabitInput = true });
+            _nodes.Add(new NodeInstance { ObjId = button });
+            _nodes.Add(new NodeInstance { ObjId = Guid.NewGuid(), IsDeleted = true });
 
-            await _recorder.ScanInputsAsync();
-            Assert.Equal(new[] { button }, _registered);
+            await _recorder.ScanDataPointsAsync();
+            Assert.Equal(new[] { _light, button }, _registered);
 
-            await _recorder.OnInputValue(null, Value(button, true, DispatchValueSource.Write));
-            await _recorder.OnInputValue(null, Value(button, true, DispatchValueSource.User));
+            // writes of logics and automations are not reported values
+            await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.Write));
+            await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.User));
             await _recorder.FlushAsync(all: true);
             Assert.Empty(Recorded());
 
-            await _recorder.OnInputValue(null, Value(button, true, DispatchValueSource.Read));
+            await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.Read));
             await _recorder.FlushAsync(all: true);
             var action = Assert.Single(Recorded());
-            Assert.Equal(HabitActionOrigin.Input, action.Origin);
+            Assert.Equal(HabitActionOrigin.DataPoint, action.Origin);
             Assert.Null(action.UserId);
 
+            // a polling driver reporting the same value again is no change
+            _time.Advance(TimeSpan.FromMinutes(1));
+            await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.Read));
+            await _recorder.OnDataPointValue(null, Value(button, false, DispatchValueSource.Read));
+            await _recorder.FlushAsync(all: true);
+            Assert.Equal(new[] { "True", "False" }, Recorded().Select(a => a.Value));
+
             _enabled.ValueInt = 0;
-            await _recorder.ScanInputsAsync();
+            await _recorder.ScanDataPointsAsync();
             Assert.Empty(_registered);
         }
 

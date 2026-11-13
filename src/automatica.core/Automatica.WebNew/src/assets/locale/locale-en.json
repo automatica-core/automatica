@@ -481,13 +481,9 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
       },
-      "HABIT_INPUT": {
-        "NAME": "Wall input (habits)",
-        "DESCRIPTION": "A button or switch: its presses are recorded as manual actions for habit suggestions."
-      },
       "HABITSENABLED": {
-        "NAME": "Record manual actions",
-        "DESCRIPTION": "Records visu taps and presses of wall inputs (data points flagged as wall input) to suggest automations later. Switching it off deletes everything recorded."
+        "NAME": "Record actions",
+        "DESCRIPTION": "Records visu taps and every value change of all data points to suggest automations later. Switching it off deletes everything recorded."
       },
       "HABITSLOGDAYS": {
         "NAME": "Keep days",

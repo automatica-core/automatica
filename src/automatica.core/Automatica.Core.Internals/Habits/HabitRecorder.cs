@@ -27,9 +27,9 @@ namespace Automatica.Core.Internals.Habits
     }
 
     /// <summary>
-    /// Records manual actions (visu taps and changes of data points flagged as <see cref="NodeInstance.HabitInput"/>) for
-    /// habit suggestions. Writes to the same target within <see cref="MergeWindow"/> (a dimmer drag, a double tap) become one
-    /// action with the last value. Off by default; switching it off deletes everything recorded.
+    /// Records actions for habit suggestions: visu taps and every value change that drivers report for any data point.
+    /// Values of the same target within <see cref="MergeWindow"/> of its first value (a dimmer drag, a double tap, a sensor
+    /// that changes every second) become one action with the last value. Off by default; switching it off deletes everything.
     /// </summary>
     public class HabitRecorder : IHabitRecorder, IHostedService
     {
@@ -52,8 +52,9 @@ namespace Automatica.Core.Internals.Habits
         private readonly ILogger<HabitRecorder> _logger;
 
         private readonly object _lock = new();
-        private readonly Dictionary<Guid, (HabitAction Action, DateTimeOffset LastWrite)> _pending = new();
-        private readonly Dictionary<Guid, IDisposable> _inputSubscriptions = new();
+        private readonly Dictionary<Guid, HabitAction> _pending = new();
+        private readonly Dictionary<Guid, IDisposable> _subscriptions = new();
+        private readonly Dictionary<Guid, string> _lastSeen = new();
 
         private CancellationTokenSource _cts;
         private Task _loop;
@@ -92,10 +93,9 @@ namespace Automatica.Core.Internals.Habits
 
             lock (_lock)
             {
-                if (_pending.TryGetValue(targetId, out var pending) && now - pending.LastWrite < MergeWindow)
+                if (_pending.TryGetValue(targetId, out var pending) && now.UtcDateTime - pending.UtcTime < MergeWindow)
                 {
-                    pending.Action.Value = text;
-                    _pending[targetId] = (pending.Action, now);
+                    pending.Value = text;
                     return;
                 }
             }
@@ -120,7 +120,7 @@ namespace Automatica.Core.Internals.Habits
             {
                 // a pending action of this target older than the window is finished, write it before starting the next one
                 due = TakeDue(targetId);
-                _pending[targetId] = (action, now);
+                _pending[targetId] = action;
             }
 
             if (due.Count > 0)
@@ -131,13 +131,13 @@ namespace Automatica.Core.Internals.Habits
 
         private List<HabitAction> TakeDue(Guid? alsoTarget = null)
         {
-            var now = Time.GetUtcNow();
-            var due = _pending.Where(a => a.Key == alsoTarget || now - a.Value.LastWrite >= MergeWindow).ToList();
+            var now = Time.GetUtcNow().UtcDateTime;
+            var due = _pending.Where(a => a.Key == alsoTarget || now - a.Value.UtcTime >= MergeWindow).ToList();
             foreach (var entry in due)
             {
                 _pending.Remove(entry.Key);
             }
-            return due.Select(a => a.Value.Action).ToList();
+            return due.Select(a => a.Value).ToList();
         }
 
         private (Guid? Area, Guid? Category) AreaAndCategory(Guid targetId)
@@ -158,7 +158,7 @@ namespace Automatica.Core.Internals.Habits
             List<HabitAction> due;
             lock (_lock)
             {
-                due = all ? _pending.Values.Select(a => a.Action).ToList() : TakeDue();
+                due = all ? _pending.Values.ToList() : TakeDue();
                 if (all)
                 {
                     _pending.Clear();
@@ -188,33 +188,53 @@ namespace Automatica.Core.Internals.Habits
         }
 
         /// <summary>
-        /// Subscribes the data points flagged as habit input (and unsubscribes the ones no longer flagged), only while enabled.
+        /// Subscribes every node (new ones within a scan interval, deleted ones are dropped) while enabled, none while disabled.
+        /// Nodes without a value (drivers, devices) never dispatch, a subscription costs nothing there.
         /// </summary>
-        internal async Task ScanInputsAsync()
+        internal async Task ScanDataPointsAsync()
         {
             var wanted = IsEnabled
-                ? _nodes.All().Where(a => a.HabitInput && !a.IsDeleted).Select(a => a.ObjId).ToHashSet()
+                ? _nodes.All().Where(a => !a.IsDeleted).Select(a => a.ObjId).ToHashSet()
                 : new HashSet<Guid>();
 
-            foreach (var id in _inputSubscriptions.Keys.Where(a => !wanted.Contains(a)).ToList())
+            foreach (var id in _subscriptions.Keys.Where(a => !wanted.Contains(a)).ToList())
             {
-                _inputSubscriptions[id].Dispose();
-                _inputSubscriptions.Remove(id);
+                _subscriptions[id].Dispose();
+                _subscriptions.Remove(id);
+                lock (_lock)
+                {
+                    _lastSeen.Remove(id);
+                }
             }
 
-            foreach (var id in wanted.Where(a => !_inputSubscriptions.ContainsKey(a)))
+            foreach (var id in wanted.Where(a => !_subscriptions.ContainsKey(a)))
             {
-                _inputSubscriptions[id] = await _dispatcher.Subscribe(DispatchableType.NodeInstance, id, OnInputValue);
+                _subscriptions[id] = await _dispatcher.Subscribe(DispatchableType.NodeInstance, id, OnDataPointValue);
             }
         }
 
-        internal Task OnInputValue(IDispatchable source, DispatchValue value)
+        internal Task OnDataPointValue(IDispatchable source, DispatchValue value)
         {
-            // only what the device reports from the bus (a pressed button), not writes of logics or the visu
-            if (value.ValueSource == DispatchValueSource.Read)
+            // what the driver reports (a pressed button, a sensor), not writes of logics or the visu (recorded in the DataHub)
+            if (value.ValueSource != DispatchValueSource.Read)
             {
-                Record(value.Id, value.Value, HabitActionOrigin.Input, null);
+                return Task.CompletedTask;
             }
+
+            var text = Convert.ToString(value.Value, CultureInfo.InvariantCulture);
+            lock (_lock)
+            {
+                // polling drivers report the same value again and again, that is no change
+                // shortcut: a button that sends the same value twice (always "on") counts once, use the visu or a toggle until the
+                // miner needs every press
+                if (_lastSeen.TryGetValue(value.Id, out var last) && last == text)
+                {
+                    return Task.CompletedTask;
+                }
+                _lastSeen[value.Id] = text;
+            }
+
+            Record(value.Id, value.Value, HabitActionOrigin.DataPoint, null);
             return Task.CompletedTask;
         }
 
@@ -253,7 +273,7 @@ namespace Automatica.Core.Internals.Habits
 
         private async Task RunAsync(CancellationToken token)
         {
-            // the first input scan waits a scan interval, so the values drivers read on startup are not taken as presses
+            // the first scan waits a scan interval, so the values drivers read on startup are not taken as changes
             var nextScan = Time.GetUtcNow() + ScanInterval;
             var nextCleanup = Time.GetUtcNow() + TimeSpan.FromMinutes(5);
             try
@@ -267,7 +287,7 @@ namespace Automatica.Core.Internals.Habits
                     if (now >= nextScan)
                     {
                         nextScan = now + ScanInterval;
-                        await ScanInputsAsync();
+                        await ScanDataPointsAsync();
                     }
                     if (now >= nextCleanup)
                     {
@@ -295,11 +315,11 @@ namespace Automatica.Core.Internals.Habits
 
             await _cts.CancelAsync();
             await _loop;
-            foreach (var subscription in _inputSubscriptions.Values)
+            foreach (var subscription in _subscriptions.Values)
             {
                 subscription.Dispose();
             }
-            _inputSubscriptions.Clear();
+            _subscriptions.Clear();
             await FlushAsync(all: true);
         }
     }

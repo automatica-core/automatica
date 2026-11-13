@@ -481,13 +481,9 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
       },
-      "HABIT_INPUT": {
-        "NAME": "Wandeingang (Gewohnheiten)",
-        "DESCRIPTION": "Ein Taster oder Schalter: Betätigungen werden als manuelle Aktionen für Gewohnheitsvorschläge aufgezeichnet."
-      },
       "HABITSENABLED": {
-        "NAME": "Manuelle Aktionen aufzeichnen",
-        "DESCRIPTION": "Zeichnet Bedienungen in der Visu und Betätigungen von Wandeingängen (als Wandeingang markierte Datenpunkte) auf, um später Automationen vorzuschlagen. Ausschalten löscht alle Aufzeichnungen."
+        "NAME": "Aktionen aufzeichnen",
+        "DESCRIPTION": "Zeichnet Bedienungen in der Visu und jede Wertänderung aller Datenpunkte auf, um später Automationen vorzuschlagen. Ausschalten löscht alle Aufzeichnungen."
       },
       "HABITSLOGDAYS": {
         "NAME": "Tage aufbewahren",

@@ -368,7 +368,17 @@ namespace Automatica.Core
             {
                 app.UseStaticFiles(new StaticFileOptions
                 {
-                    FileProvider = new PhysicalFileProvider(wwwrootPath)
+                    FileProvider = new PhysicalFileProvider(wwwrootPath),
+                    OnPrepareResponse = context =>
+                    {
+                        // index.html and the translations (assets/locale/*.json) have no hash in their name: without this the
+                        // browser keeps the old ones after an update and shows keys instead of texts; revalidating costs a 304
+                        var name = context.File.Name;
+                        if (name.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || name.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Context.Response.Headers.CacheControl = "no-cache";
+                        }
+                    }
                 });
             }
             else

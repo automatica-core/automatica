@@ -7,12 +7,12 @@ namespace Automatica.Core.EF.Models.Habits
     {
         /// <summary>Written by a user in a visualization (DataHub)</summary>
         Visualization = 0,
-        /// <summary>A data point flagged as a wall input (button, switch) changed</summary>
-        Input = 1
+        /// <summary>A driver reported a new value of a data point (a pressed button, a sensor)</summary>
+        DataPoint = 1
     }
 
     /// <summary>
-    /// One manual action (a visu tap or a flagged wall input), recorded for habit suggestions while the setting
+    /// One action (a visu tap or a value change of a data point), recorded for habit suggestions while the setting
     /// <c>habitsEnabled</c> is on. Sun position is not stored: it follows from <see cref="UtcTime"/> and the
     /// installation's latitude/longitude.
     /// </summary>
@@ -32,7 +32,7 @@ namespace Automatica.Core.EF.Models.Habits
         public string Value { get; set; }
         public HabitActionOrigin Origin { get; set; }
 
-        /// <summary>User who tapped in the visu, empty for wall inputs</summary>
+        /// <summary>User who tapped in the visu, empty for data point changes</summary>
         public Guid? UserId { get; set; }
 
         /// <summary>Active operating modes, comma separated</summary>

@@ -72,11 +72,6 @@ namespace Automatica.Core.EF.Models
 
         public bool IsRemanent { get; set; }
 
-        /// <summary>
-        /// A wall input (button, switch): its changes are recorded as manual actions for habit suggestions
-        /// </summary>
-        public bool HabitInput { get; set; }
-
         [JsonIgnore]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }
         public List<NodeInstance> InverseThis2ParentNodeInstanceNavigation { get; set; }
