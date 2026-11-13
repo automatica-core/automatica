@@ -202,14 +202,19 @@ namespace Automatica.Core.Tests.Habits
         [Fact]
         public async Task Cleanup_DeletesOldActions_AndEverythingWhenDisabled()
         {
-            _recorder.RecordVisu(_light, true, null);
-            await _recorder.FlushAsync(all: true);
+            // several days old: cleaned up a day per statement
+            foreach (var value in new[] { "a", "b", "c" })
+            {
+                _recorder.RecordVisu(_light, value, null);
+                await _recorder.FlushAsync(all: true);
+                _time.Advance(TimeSpan.FromDays(2));
+            }
             _time.Advance(TimeSpan.FromDays(31));
-            _recorder.RecordVisu(_light, false, null);
+            _recorder.RecordVisu(_light, "new", null);
             await _recorder.FlushAsync(all: true);
 
             await _recorder.CleanupAsync();
-            Assert.Equal("False", Assert.Single(Recorded()).Value);
+            Assert.Equal("new", Assert.Single(Recorded()).Value);
 
             _enabled.ValueInt = 0;
             await _recorder.CleanupAsync();

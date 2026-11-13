@@ -270,19 +270,20 @@ namespace Automatica.Core.Internals.Habits
             try
             {
                 await using var context = await _contextFactory.CreateDbContextAsync();
-                var query = context.HabitActions.AsQueryable();
-                if (IsEnabled)
+                // switched off: everything goes
+                var cutoff = IsEnabled ? Time.GetUtcNow().UtcDateTime.AddDays(-LogDays) : DateTime.MaxValue;
+
+                // in SQL and a day per statement: the table holds tens of millions of rows, loading them (or one huge delete) would not end well
+                var deleted = 0;
+                while (await context.HabitActions.MinAsync(a => (DateTime?)a.UtcTime) is { } oldest && oldest < cutoff)
                 {
-                    var oldest = Time.GetUtcNow().UtcDateTime.AddDays(-LogDays);
-                    query = query.Where(a => a.UtcTime < oldest);
+                    var end = oldest.AddDays(1) < cutoff ? oldest.AddDays(1) : cutoff;
+                    deleted += await context.HabitActions.Where(a => a.UtcTime < end).ExecuteDeleteAsync();
                 }
 
-                var old = await query.ToListAsync();
-                if (old.Count > 0)
+                if (deleted > 0)
                 {
-                    context.HabitActions.RemoveRange(old);
-                    await context.SaveChangesAsync();
-                    _logger.LogInformation($"Deleted {old.Count} habit actions");
+                    _logger.LogInformation($"Deleted {deleted} habit actions");
                 }
             }
             catch (Exception e)

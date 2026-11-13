@@ -39,7 +39,7 @@ namespace Automatica.Core.Mcp.Tools
         }
 
         [McpServerTool(Name = "get_system_info", Title = "Get server overview", ReadOnly = true, Idempotent = true, OpenWorld = false)]
-        [Description("Returns an overview of the Automatica server: version, uptime, project name, number of drivers, data points, logics, areas and categories, how many actions the habit recorder holds and when it recorded the last one, and whether this caller may write values.")]
+        [Description("Returns an overview of the Automatica server: version, uptime, project name, number of drivers, data points, logics, areas and categories, how many actions the habit recorder stored in the last 24 hours and when it recorded the last one, and whether this caller may write values.")]
         public async Task<SystemInfo> GetSystemInfo(CancellationToken cancellationToken = default)
         {
             var nodes = _describer.AllNodes().ToList();
@@ -51,7 +51,9 @@ namespace Automatica.Core.Mcp.Tools
                 .ToList() ?? new List<DriverInfo>();
 
             await using var db = new AutomaticaContext(_configuration);
-            var habitActions = await db.HabitActions.CountAsync(cancellationToken);
+            // the last day only: counting the whole table (tens of millions of rows) takes seconds, UtcTime is indexed
+            var dayAgo = DateTime.UtcNow.AddDays(-1);
+            var habitActions = await db.HabitActions.CountAsync(a => a.UtcTime >= dayAgo, cancellationToken);
             // UtcTime is indexed, LocalTime is not
             var lastHabitAction = await db.HabitActions.MaxAsync(a => (DateTime?)a.UtcTime, cancellationToken);
 
@@ -90,7 +92,7 @@ namespace Automatica.Core.Mcp.Tools
         int AreaCount,
         int CategoryCount,
         bool AggregatedHistoryAvailable,
-        int HabitActionCount,
+        int HabitActionsLast24h,
         DateTime? LastHabitAction,
         bool CanWriteValues,
         IList<DriverInfo> Drivers);
