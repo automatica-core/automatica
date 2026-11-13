@@ -8,7 +8,9 @@ namespace Automatica.Core.EF.Models.Habits
         /// <summary>Written by a user in a visualization (DataHub)</summary>
         Visualization = 0,
         /// <summary>A driver reported a new value of a data point (a pressed button, a sensor)</summary>
-        DataPoint = 1
+        DataPoint = 1,
+        /// <summary>A measurement (power, temperature, ...): the time-weighted average of a 15 min slot, with its min and max</summary>
+        Measurement = 2
     }
 
     /// <summary>
@@ -30,6 +32,9 @@ namespace Automatica.Core.EF.Models.Habits
         public Guid? This2CategoryInstance { get; set; }
 
         public string Value { get; set; }
+        /// <summary>Lowest and highest value of a <see cref="HabitActionOrigin.Measurement"/> slot, empty for actions</summary>
+        public double? Min { get; set; }
+        public double? Max { get; set; }
         public HabitActionOrigin Origin { get; set; }
 
         /// <summary>User who tapped in the visu, empty for data point changes</summary>

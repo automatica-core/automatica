@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
+using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Habits;
 using Automatica.Core.Internals.Cache.Common;
@@ -29,7 +30,9 @@ namespace Automatica.Core.Internals.Habits
     /// <summary>
     /// Records actions for habit suggestions: visu taps and every value change that drivers report for any data point.
     /// Values of the same target within <see cref="MergeWindow"/> of its first value (a dimmer drag, a double tap, a sensor
-    /// that changes every second) become one action with the last value. Off by default; switching it off deletes everything.
+    /// that changes every second) become one action with the last value. Decimal data points (power, temperature, ...) are
+    /// context, not actions: they are stored as the time-weighted average of each <see cref="SlotLength"/> slot in which they
+    /// changed, a slot without a row kept its value. Clock data points are skipped. Off by default; switching it off deletes everything.
     /// </summary>
     public class HabitRecorder : IHabitRecorder, IHostedService
     {
@@ -38,6 +41,7 @@ namespace Automatica.Core.Internals.Habits
         public const int DefaultLogDays = 90;
 
         internal static readonly TimeSpan MergeWindow = TimeSpan.FromSeconds(10);
+        internal static readonly TimeSpan SlotLength = TimeSpan.FromMinutes(15);
         private static readonly TimeSpan FlushInterval = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan ScanInterval = TimeSpan.FromMinutes(1);
         private static readonly TimeSpan CleanupInterval = TimeSpan.FromHours(1);
@@ -55,6 +59,23 @@ namespace Automatica.Core.Internals.Habits
         private readonly Dictionary<Guid, HabitAction> _pending = new();
         private readonly Dictionary<Guid, IDisposable> _subscriptions = new();
         private readonly Dictionary<Guid, string> _lastSeen = new();
+        private readonly Dictionary<Guid, Slot> _slots = new();
+
+        private sealed class Slot
+        {
+            /// <summary>Utc, aligned to <see cref="SlotLength"/></summary>
+            public DateTime Start;
+            /// <summary>Since when the value is known in this slot (the start, unless it is the first value ever)</summary>
+            public DateTime From;
+            /// <summary>When <see cref="Value"/> was reported, or the slot start for a value carried over</summary>
+            public DateTime Since;
+            public double Value;
+            /// <summary>Value * seconds up to <see cref="Since"/></summary>
+            public double Sum;
+            public double Min;
+            public double Max;
+            public bool Changed;
+        }
 
         private CancellationTokenSource _cts;
         private Task _loop;
@@ -100,20 +121,7 @@ namespace Automatica.Core.Internals.Habits
                 }
             }
 
-            var (area, category) = AreaAndCategory(targetId);
-            var action = new HabitAction
-            {
-                ObjId = Guid.NewGuid(),
-                UtcTime = now.UtcDateTime,
-                LocalTime = TimeZoneInfo.ConvertTime(now, Time.LocalTimeZone).DateTime,
-                TargetId = targetId,
-                This2AreaInstance = area,
-                This2CategoryInstance = category,
-                Value = text,
-                Origin = origin,
-                UserId = userId,
-                OperatingModes = string.Join(",", _operatingModes.ActiveModes)
-            };
+            var action = NewAction(targetId, now.UtcDateTime, text, origin, userId);
 
             List<HabitAction> due;
             lock (_lock)
@@ -127,6 +135,83 @@ namespace Automatica.Core.Internals.Habits
             {
                 _ = SaveAsync(due);
             }
+        }
+
+        private HabitAction NewAction(Guid targetId, DateTime utc, string value, HabitActionOrigin origin, Guid? userId)
+        {
+            var (area, category) = AreaAndCategory(targetId);
+            return new HabitAction
+            {
+                ObjId = Guid.NewGuid(),
+                UtcTime = utc,
+                LocalTime = TimeZoneInfo.ConvertTimeFromUtc(utc, Time.LocalTimeZone),
+                TargetId = targetId,
+                This2AreaInstance = area,
+                This2CategoryInstance = category,
+                Value = value,
+                Origin = origin,
+                UserId = userId,
+                OperatingModes = string.Join(",", _operatingModes.ActiveModes)
+            };
+        }
+
+        internal void Measure(Guid targetId, double value)
+        {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
+            var now = Time.GetUtcNow().UtcDateTime;
+            var closed = new List<HabitAction>();
+            lock (_lock)
+            {
+                if (!_slots.TryGetValue(targetId, out var slot))
+                {
+                    _slots[targetId] = new Slot { Start = SlotStart(now), From = now, Since = now, Value = value, Min = value, Max = value, Changed = true };
+                    return;
+                }
+
+                if (now >= slot.Start + SlotLength)
+                {
+                    slot = Close(targetId, slot, now, closed);
+                }
+
+                slot.Sum += slot.Value * (now - slot.Since).TotalSeconds;
+                slot.Since = now;
+                slot.Value = value;
+                slot.Min = Math.Min(slot.Min, value);
+                slot.Max = Math.Max(slot.Max, value);
+                slot.Changed = true;
+            }
+
+            if (closed.Count > 0)
+            {
+                _ = SaveAsync(closed);
+            }
+        }
+
+        private static DateTime SlotStart(DateTime utc) => new(utc.Ticks - utc.Ticks % SlotLength.Ticks, DateTimeKind.Utc);
+
+        /// <summary>
+        /// Ends the slot at its end (or now, if that is earlier), adds its row if the value changed in it and starts the slot of
+        /// <paramref name="now"/> with the value carried over.
+        /// </summary>
+        private Slot Close(Guid targetId, Slot slot, DateTime now, List<HabitAction> closed)
+        {
+            if (slot.Changed)
+            {
+                var end = slot.Start + SlotLength < now ? slot.Start + SlotLength : now;
+                var seconds = (end - slot.From).TotalSeconds;
+                var average = seconds > 0 ? (slot.Sum + slot.Value * (end - slot.Since).TotalSeconds) / seconds : slot.Value;
+                var action = NewAction(targetId, slot.Start, Math.Round(average, 3).ToString(CultureInfo.InvariantCulture), HabitActionOrigin.Measurement, null);
+                action.Min = slot.Min;
+                action.Max = slot.Max;
+                closed.Add(action);
+            }
+
+            var start = SlotStart(now);
+            return _slots[targetId] = new Slot { Start = start, From = start, Since = start, Value = slot.Value, Min = slot.Value, Max = slot.Value };
         }
 
         private List<HabitAction> TakeDue(Guid? alsoTarget = null)
@@ -162,6 +247,12 @@ namespace Automatica.Core.Internals.Habits
                 if (all)
                 {
                     _pending.Clear();
+                }
+
+                var now = Time.GetUtcNow().UtcDateTime;
+                foreach (var (id, slot) in _slots.Where(a => all || now >= a.Value.Start + SlotLength).ToList())
+                {
+                    Close(id, slot, now, due);
                 }
             }
 
@@ -205,6 +296,7 @@ namespace Automatica.Core.Internals.Habits
                 lock (_lock)
                 {
                     _lastSeen.Remove(id);
+                    _slots.Remove(id);
                 }
             }
 
@@ -248,6 +340,13 @@ namespace Automatica.Core.Internals.Habits
                 return Task.CompletedTask;
             }
 
+            var type = (NodeDataType?)_nodes.Get(value.Id)?.This2NodeTemplateNavigation?.This2NodeDataType;
+            if (type is NodeDataType.DateTime or NodeDataType.Time or NodeDataType.Date)
+            {
+                // clocks change every second and every row carries its time anyway
+                return Task.CompletedTask;
+            }
+
             var text = Convert.ToString(value.Value, CultureInfo.InvariantCulture);
             lock (_lock)
             {
@@ -261,8 +360,28 @@ namespace Automatica.Core.Internals.Habits
                 _lastSeen[value.Id] = text;
             }
 
-            Record(value.Id, value.Value, HabitActionOrigin.DataPoint, null);
+            if (type == NodeDataType.Double && AsNumber(value.Value) is { } number)
+            {
+                Measure(value.Id, number);
+            }
+            else
+            {
+                Record(value.Id, value.Value, HabitActionOrigin.DataPoint, null);
+            }
             return Task.CompletedTask;
+        }
+
+        private static double? AsNumber(object value)
+        {
+            try
+            {
+                var number = Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                return double.IsFinite(number) ? number : null;
+            }
+            catch (Exception e) when (e is FormatException or InvalidCastException or OverflowException)
+            {
+                return null;
+            }
         }
 
         internal async Task CleanupAsync()

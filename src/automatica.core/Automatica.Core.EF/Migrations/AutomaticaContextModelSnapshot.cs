@@ -425,6 +425,12 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<DateTime>("LocalTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<double?>("Max")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("Min")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("OperatingModes")
                         .HasColumnType("TEXT");
 

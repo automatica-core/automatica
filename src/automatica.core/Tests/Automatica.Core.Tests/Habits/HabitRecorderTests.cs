@@ -221,6 +221,42 @@ namespace Automatica.Core.Tests.Habits
             Assert.Empty(Recorded());
         }
 
+        [Fact]
+        public async Task Measurements_AreTimeWeightedSlotAverages_AndClocksAreSkipped()
+        {
+            var power = Guid.NewGuid();
+            var clock = Guid.NewGuid();
+            _nodes.Add(new NodeInstance { ObjId = power, This2NodeTemplateNavigation = new NodeTemplate { This2NodeDataType = (long)Base.Templates.NodeDataType.Double } });
+            _nodes.Add(new NodeInstance { ObjId = clock, This2NodeTemplateNavigation = new NodeTemplate { This2NodeDataType = (long)Base.Templates.NodeDataType.DateTime } });
+
+            async Task Report(int minutes, object value)
+            {
+                _time.SetUtcNow(new DateTimeOffset(2026, 11, 12, 18, minutes, 0, TimeSpan.Zero));
+                await _recorder.OnDataPointValue(null, Value(power, value, DispatchValueSource.Read));
+                await _recorder.OnDataPointValue(null, Value(clock, _time.GetUtcNow().DateTime, DispatchValueSource.Read));
+                await _recorder.FlushAsync();
+            }
+
+            // 18:00-18:15: 0 W for 5 min, 3000 W for 5 min, 1000 W for 5 min
+            await Report(0, 0.0);
+            await Report(5, 3000.0);
+            await Report(10, 1000.0);
+            // 18:15-18:30 unchanged: no row
+            _time.SetUtcNow(new DateTimeOffset(2026, 11, 12, 18, 31, 0, TimeSpan.Zero));
+            await _recorder.FlushAsync();
+            // 18:30-18:45: 1000 W carried over for 10 min, then 4000 W for 5 min
+            await Report(40, 4000.0);
+            _time.SetUtcNow(new DateTimeOffset(2026, 11, 12, 18, 45, 0, TimeSpan.Zero));
+            await _recorder.FlushAsync();
+
+            var rows = Recorded();
+            Assert.All(rows, a => Assert.Equal(HabitActionOrigin.Measurement, a.Origin));
+            Assert.Equal(new[] { new DateTime(2026, 11, 12, 18, 0, 0), new DateTime(2026, 11, 12, 18, 30, 0) }, rows.Select(a => a.UtcTime));
+            Assert.Equal(new[] { "1333.333", "2000" }, rows.Select(a => a.Value));
+            Assert.Equal(new double?[] { 0, 1000 }, rows.Select(a => a.Min));
+            Assert.Equal(new double?[] { 3000, 4000 }, rows.Select(a => a.Max));
+        }
+
         public void Dispose() => _database.Dispose();
     }
 }
