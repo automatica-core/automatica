@@ -261,6 +261,22 @@ namespace Automatica.Core.WebApi.Tests.Mcp
         }
 
         [Fact]
+        public async Task HabitExcluded_IsSavedWithoutRestartOrHistoryRecorder()
+        {
+            var result = await Tools(Admin()).UpdateNodeSettings(_driver.ObjId, habitExcluded: true);
+
+            Assert.True(StoredNode(_driver.ObjId).HabitExcluded);
+            Assert.False(result.DriverRestarted);
+            var change = Assert.Single(result.Changes);
+            Assert.Equal("habitExcluded", change.Key);
+            Assert.Equal(false, change.OldValue);
+            Assert.Equal(true, change.NewValue);
+            _recorder.Verify(a => a.AddRecording(It.IsAny<Guid>()), Times.Never);
+            _recorder.Verify(a => a.RemoveRecording(It.IsAny<Guid>()), Times.Never);
+            _coreServer.Verify(a => a.StartStopDriver(It.IsAny<NodeInstance>()), Times.Never);
+        }
+
+        [Fact]
         public async Task HistoryInterval_OfARecordedDataPoint_RestartsItsRecorder()
         {
             await Tools(Admin()).UpdateNodeSettings(_dataPoint.ObjId, history: true, historyType: "Average", historyInterval: 30);

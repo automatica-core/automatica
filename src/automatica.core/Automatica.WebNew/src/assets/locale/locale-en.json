@@ -481,6 +481,10 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
       },
+      "HABIT_EXCLUDED": {
+        "NAME": "Do not record for habits",
+        "DESCRIPTION": "Value changes of this node and every node below it are not recorded for habit suggestions, e.g. counters, clocks or technical values. Set on a driver or device it applies to everything below."
+      },
       "HABITSENABLED": {
         "NAME": "Record actions",
         "DESCRIPTION": "Records visu taps and every value change of all data points to suggest automations later. Switching it off deletes everything recorded."

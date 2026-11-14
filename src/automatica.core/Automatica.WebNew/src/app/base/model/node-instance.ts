@@ -373,6 +373,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     WriteOnlyIfChanged: boolean;
 
+    @JsonProperty()
+    HabitExcluded: boolean;
+
     private _ValidationOk: boolean = true;
     public get ValidationOk(): boolean {
         return this._ValidationOk;
@@ -462,6 +465,8 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
         if (this.Parent) {
             this.Properties.push(new VirtualDisabledPropertyInstance(this));
+            // on a driver or device it leaves out everything below as well
+            this.Properties.push(new VirtualGenericPropertyInstance("HABIT_EXCLUDED", 20, this, () => this.HabitExcluded, (value) => this.HabitExcluded = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.MISC"));
         }
 
 

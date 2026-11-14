@@ -58,23 +58,24 @@ namespace Automatica.Core.Mcp.Tools
         [Description("Changes configuration properties of a node (driver, device or data point), e.g. the IP address, port or poll interval of a " +
                      "driver or the register of a data point, and switches the history (recording) of a data point on or off. Properties are " +
                      "set by key as get_datapoint lists them. After a property change the driver the node belongs to restarts (it is offline " +
-                     "for a moment); check get_current_values or read_log afterwards. History changes apply without a restart.")]
+                     "for a moment); check get_current_values or read_log afterwards. History and habitExcluded changes apply without a restart.")]
         public async Task<NodeSettingsChanged> UpdateNodeSettings(
             [Description("Node id (driver, device or data point), see browse_nodes or get_datapoint.")] Guid nodeId,
             [Description("Property values by key, e.g. {\"modbus-master-ip\": \"192.168.8.247\", \"modbus-master-port\": 502}.")] Dictionary<string, JsonElement> properties = null,
             [Description("New name of the node, empty to keep it.")] string name = null,
             [Description("Data points only: true records the values (history for get_history / get_aggregated_history), false stops recording.")] bool? history = null,
             [Description("How values are recorded: Average, Max, Min (of the values within the interval), Raw (last value per interval) or OnChange (every change; best for counters and on/off states).")] string historyType = null,
-            [Description("Recording interval in seconds (1 to 86400) for Average, Max, Min and Raw; 60 when history is switched on without one.")] int? historyInterval = null)
+            [Description("Recording interval in seconds (1 to 86400) for Average, Max, Min and Raw; 60 when history is switched on without one.")] int? historyInterval = null,
+            [Description("true leaves the node and every node below it out of the habit recorder (counters, clocks, technical values; a whole driver or device at once), false records it again.")] bool? habitExcluded = null)
         {
             if (!_access.CanEditLogics)
             {
                 throw new McpException("Changing the configuration is disabled for the MCP API key. Enable the setting 'mcpAllowWrite' or log in as an administrator.");
             }
             var changesHistory = history.HasValue || historyType != null || historyInterval.HasValue;
-            if ((properties == null || properties.Count == 0) && string.IsNullOrWhiteSpace(name) && !changesHistory)
+            if ((properties == null || properties.Count == 0) && string.IsNullOrWhiteSpace(name) && !changesHistory && !habitExcluded.HasValue)
             {
-                throw new McpException("Nothing to change: pass properties, name and/or history");
+                throw new McpException("Nothing to change: pass properties, name, history and/or habitExcluded");
             }
 
             var cached = _nodeInstanceCache.Get(nodeId);
@@ -85,6 +86,7 @@ namespace Automatica.Core.Mcp.Tools
 
             var changes = new List<PropertyChange>();
             var historyChanges = new List<PropertyChange>();
+            var habitChanges = new List<PropertyChange>();
             bool recordedBefore = false, recordedAfter = false;
             await using (var db = new AutomaticaContext(_configuration))
             {
@@ -100,6 +102,13 @@ namespace Automatica.Core.Mcp.Tools
                     historyChanges.AddRange(ApplyHistory(node, history, historyType, historyInterval));
                 }
                 recordedAfter = node.Trending;
+
+                // the habit recorder picks it up with its next scan: neither a driver restart nor a new history recorder
+                if (habitExcluded.HasValue && habitExcluded.Value != node.HabitExcluded)
+                {
+                    habitChanges.Add(new PropertyChange("habitExcluded", node.HabitExcluded, habitExcluded.Value));
+                    node.HabitExcluded = habitExcluded.Value;
+                }
 
                 foreach (var (key, json) in properties ?? new Dictionary<string, JsonElement>())
                 {
@@ -132,7 +141,7 @@ namespace Automatica.Core.Mcp.Tools
             }
 
             _logger.LogInformation("{Caller} changed node {Node} ({Id}): {Changes}", _access.CallerName, cached.Name, nodeId,
-                string.Join(", ", changes.Concat(historyChanges).Select(a => $"{a.Key} {a.OldValue} -> {a.NewValue}")));
+                string.Join(", ", changes.Concat(historyChanges).Concat(habitChanges).Select(a => $"{a.Key} {a.OldValue} -> {a.NewValue}")));
 
             // like NodeInstanceV2Controller.ApplyTrendingChanges; a changed type or interval needs a new recorder as well
             if (historyChanges.Count > 0)
@@ -150,6 +159,7 @@ namespace Automatica.Core.Mcp.Tools
             // only property changes need the driver to restart
             var restart = changes.Count > 0;
             changes.AddRange(historyChanges);
+            changes.AddRange(habitChanges);
             if (restart)
             {
                 var updated = _nodeInstanceCache.Get(nodeId);

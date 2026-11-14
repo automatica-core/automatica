@@ -72,6 +72,11 @@ namespace Automatica.Core.EF.Models
 
         public bool IsRemanent { get; set; }
 
+        /// <summary>
+        /// Not recorded for habit suggestions (counters, clocks, technical values); applies to every node below as well
+        /// </summary>
+        public bool HabitExcluded { get; set; }
+
         [JsonIgnore]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }
         public List<NodeInstance> InverseThis2ParentNodeInstanceNavigation { get; set; }

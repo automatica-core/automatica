@@ -481,6 +481,10 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
       },
+      "HABIT_EXCLUDED": {
+        "NAME": "Nicht für Gewohnheiten aufzeichnen",
+        "DESCRIPTION": "Wertänderungen dieses Knotens und aller Knoten darunter werden nicht für Gewohnheitsvorschläge aufgezeichnet, z. B. Zähler, Uhrzeiten oder technische Werte. Am Treiber oder Gerät gesetzt gilt es für alles darunter."
+      },
       "HABITSENABLED": {
         "NAME": "Aktionen aufzeichnen",
         "DESCRIPTION": "Zeichnet Bedienungen in der Visu und jede Wertänderung aller Datenpunkte auf, um später Automationen vorzuschlagen. Ausschalten löscht alle Aufzeichnungen."

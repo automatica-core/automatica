@@ -59,6 +59,8 @@ namespace Automatica.Core.Internals.Habits
         private readonly Dictionary<Guid, HabitAction> _pending = new();
         private readonly Dictionary<Guid, IDisposable> _subscriptions = new();
         private readonly Dictionary<Guid, string> _lastSeen = new();
+        /// <summary>Nodes marked <see cref="NodeInstance.HabitExcluded"/> or below one, as of the last scan; replaced, never changed</summary>
+        private volatile HashSet<Guid> _excluded = new();
         private readonly Dictionary<Guid, Slot> _slots = new();
 
         private sealed class Slot
@@ -104,7 +106,7 @@ namespace Automatica.Core.Internals.Habits
 
         internal void Record(Guid targetId, object value, HabitActionOrigin origin, Guid? userId)
         {
-            if (!IsEnabled)
+            if (!IsEnabled || _excluded.Contains(targetId))
             {
                 return;
             }
@@ -281,13 +283,21 @@ namespace Automatica.Core.Internals.Habits
 
         /// <summary>
         /// Subscribes every node (new ones within a scan interval, deleted ones are dropped) while enabled, none while disabled.
-        /// Nodes without a value (drivers, devices) never dispatch, a subscription costs nothing there.
+        /// Nodes without a value (drivers, devices) never dispatch, a subscription costs nothing there. A node marked
+        /// <see cref="NodeInstance.HabitExcluded"/> is left out together with everything below it (a whole driver or device).
         /// </summary>
         internal async Task ScanDataPointsAsync()
         {
-            var wanted = IsEnabled
-                ? AllNodes().Where(a => !a.IsDeleted).Select(a => a.ObjId).ToHashSet()
-                : new HashSet<Guid>();
+            var wanted = new HashSet<Guid>();
+            var excluded = new HashSet<Guid>();
+            if (IsEnabled)
+            {
+                foreach (var (node, isExcluded) in AllNodes().Where(a => !a.Node.IsDeleted))
+                {
+                    (isExcluded ? excluded : wanted).Add(node.ObjId);
+                }
+            }
+            _excluded = excluded;
 
             foreach (var id in _subscriptions.Keys.Where(a => !wanted.Contains(a)).ToList())
             {
@@ -312,22 +322,22 @@ namespace Automatica.Core.Internals.Habits
             }
         }
 
-        private IEnumerable<NodeInstance> AllNodes()
+        private IEnumerable<(NodeInstance Node, bool Excluded)> AllNodes()
         {
             // the cache's All() only holds the root, every other node hangs below it
-            var stack = new Stack<NodeInstance>(_nodes.All());
+            var stack = new Stack<(NodeInstance Node, bool Excluded)>(_nodes.All().Select(a => (a, a.HabitExcluded)));
             var seen = new HashSet<Guid>();
-            while (stack.TryPop(out var node))
+            while (stack.TryPop(out var entry))
             {
-                if (!seen.Add(node.ObjId))
+                if (!seen.Add(entry.Node.ObjId))
                 {
                     continue;
                 }
 
-                yield return node;
-                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation ?? Enumerable.Empty<NodeInstance>())
+                yield return entry;
+                foreach (var child in entry.Node.InverseThis2ParentNodeInstanceNavigation ?? Enumerable.Empty<NodeInstance>())
                 {
-                    stack.Push(child);
+                    stack.Push((child, entry.Excluded || child.HabitExcluded));
                 }
             }
         }

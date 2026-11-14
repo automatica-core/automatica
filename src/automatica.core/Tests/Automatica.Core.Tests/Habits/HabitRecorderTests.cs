@@ -171,6 +171,29 @@ namespace Automatica.Core.Tests.Habits
         }
 
         [Fact]
+        public async Task ExcludedNodes_AndEverythingBelowThem_AreNotRecorded()
+        {
+            var counter = new NodeInstance { ObjId = Guid.NewGuid(), HabitExcluded = true };
+            var cell = new NodeInstance { ObjId = Guid.NewGuid() };
+            var bms = new NodeInstance { ObjId = Guid.NewGuid(), HabitExcluded = true, InverseThis2ParentNodeInstanceNavigation = new List<NodeInstance> { cell } };
+            _nodes.AddRange(new[] { counter, bms });
+
+            await _recorder.ScanDataPointsAsync();
+            Assert.Equal(new[] { _root, _light }.Order(), _registered.Order());
+
+            _recorder.RecordVisu(counter.ObjId, 1, null);
+            _recorder.RecordVisu(cell.ObjId, 3300, null);
+            _recorder.RecordVisu(_light, true, null);
+            await _recorder.FlushAsync(all: true);
+            Assert.Equal(_light, Assert.Single(Recorded()).TargetId);
+
+            // taken out again: watched from the next scan on
+            bms.HabitExcluded = false;
+            await _recorder.ScanDataPointsAsync();
+            Assert.Equal(new[] { _root, _light, bms.ObjId, cell.ObjId }.Order(), _registered.Order());
+        }
+
+        [Fact]
         public async Task ValuesThroughTheRealDispatcher_AreRecorded()
         {
             var dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, Mock.Of<IDataBroadcast>(), Mock.Of<IRemoteSender>(),
