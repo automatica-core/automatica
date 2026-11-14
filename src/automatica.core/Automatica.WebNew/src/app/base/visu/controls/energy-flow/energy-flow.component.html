@@ -89,7 +89,7 @@
         @if (circuitFlows.get(group.id); as flow) {
           <!-- the meter on the left, a line into each circuit directly below it; the labels share the line's row height -->
           <div class="energy-fan" aria-hidden="true">
-            <svg class="energy-lines" [attr.width]="flow.width" [attr.height]="flow.height" [attr.viewBox]="'0 0 ' + flow.width + ' ' + flow.height">
+            <svg [attr.width]="flow.width" [attr.height]="flow.height" [attr.viewBox]="'0 0 ' + flow.width + ' ' + flow.height">
               @for (link of flow.links; track link.id) {
                 <path class="energy-track" [attr.d]="link.path"></path>
                 @if (link.active) {

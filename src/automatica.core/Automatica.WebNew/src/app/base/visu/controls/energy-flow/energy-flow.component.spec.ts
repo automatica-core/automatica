@@ -356,6 +356,10 @@ describe("EnergyFlowComponent", () => {
       expect(labels(groups[0])).toEqual(["Kitchen 600 W", "UI.VISU.ENERGY_CIRCUIT 300 W", "Garage –", "UI.VISU.ENERGY_NOT_MEASURED 300 W"]);
       expect(groups[0].querySelectorAll(".energy-fan .energy-track").length).toBe(4);
       expect(groups[0].querySelectorAll(".energy-fan .energy-flow").length).toBe(3);
+      // the fan keeps its own size next to the labels; the diagram's absolute full-size layout would stretch it over the popup
+      const fan = groups[0].querySelector(".energy-fan svg");
+      expect(getComputedStyle(fan).position).toBe("static");
+      expect(fan.getBoundingClientRect().width).toBe(96);
       expect(labels(groups[1]).length).toBe(2);
     });
 
