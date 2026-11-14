@@ -1,5 +1,34 @@
+<!-- the diagram, on the tile and on top of the details -->
+<ng-template #flowStage>
+  <div class="energy-stage" [style.aspect-ratio]="aspectRatio" (click)="openDetails($event)">
+    <svg class="energy-lines" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+      @for (link of layout.links; track link.id) {
+        <path class="energy-track" [attr.d]="link.path"></path>
+        @if (link.active) {
+          <path class="energy-flow tone-{{ link.kind }}" [attr.d]="link.path" [attr.data-direction]="link.direction"
+            [style.stroke-width]="link.width" [style.animation-duration.s]="link.duration"></path>
+        }
+      }
+      <circle class="energy-hub" [attr.cx]="hub.x" [attr.cy]="hub.y" r="3.5"></circle>
+    </svg>
+
+    @for (node of layout.nodes; track node.id) {
+      @let p = power(node);
+      <div class="energy-node kind-{{ node.kind }}" [class.is-active]="node.direction !== 'none'"
+        [attr.data-node]="node.id" [style.left.%]="left(node)" [style.top.%]="top(node)">
+        <span class="energy-ico" aria-hidden="true"><fa-icon [icon]="nodeIcon(node)"></fa-icon></span>
+        <span class="energy-text">
+          <span class="energy-value">{{ p.value }}@if (p.unit) {<small>{{ p.unit }}</small>}</span>
+          <span class="energy-label">{{ label(node) }}@if (socText(node); as soc) { · {{ soc }}}</span>
+        </span>
+      </div>
+    }
+    <span class="sr-only" aria-live="off">{{ summary }}</span>
+  </div>
+</ng-template>
+
 <app-visualization-control [width]="3" [useFullContainer]="true" [showIcon]="false" [hint]="displayText" [location]="location"
-  [hasPopup]="hasDetails" [showIconInPopup]="false" (onPopupShowing)="onDetailsShowing()" (onPopupHiding)="onDetailsHiding()">
+  [hasPopup]="hasDetails" [popupLarge]="true" [showIconInPopup]="false" (onPopupShowing)="onDetailsShowing()" (onPopupHiding)="onDetailsHiding()">
   <div control_full class="energy" [class.is-animated]="animate" [class.has-details]="canOpenDetails" role="group"
     [attr.aria-label]="displayText">
 
@@ -19,31 +48,7 @@
     </div>
 
     <!-- the details button is the keyboard way in; a click on the diagram opens them as well -->
-    <div class="energy-stage" [style.aspect-ratio]="aspectRatio" (click)="openDetails($event)">
-      <svg class="energy-lines" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
-        @for (link of layout.links; track link.id) {
-          <path class="energy-track" [attr.d]="link.path"></path>
-          @if (link.active) {
-            <path class="energy-flow tone-{{ link.kind }}" [attr.d]="link.path" [attr.data-direction]="link.direction"
-              [style.stroke-width]="link.width" [style.animation-duration.s]="link.duration"></path>
-          }
-        }
-        <circle class="energy-hub" [attr.cx]="hub.x" [attr.cy]="hub.y" r="3.5"></circle>
-      </svg>
-
-      @for (node of layout.nodes; track node.id) {
-        @let p = power(node);
-        <div class="energy-node kind-{{ node.kind }}" [class.is-active]="node.direction !== 'none'"
-          [attr.data-node]="node.id" [style.left.%]="left(node)" [style.top.%]="top(node)">
-          <span class="energy-ico" aria-hidden="true"><fa-icon [icon]="nodeIcon(node)"></fa-icon></span>
-          <span class="energy-text">
-            <span class="energy-value">{{ p.value }}@if (p.unit) {<small>{{ p.unit }}</small>}</span>
-            <span class="energy-label">{{ label(node) }}@if (socText(node); as soc) { · {{ soc }}}</span>
-          </span>
-        </div>
-      }
-      <span class="sr-only" aria-live="off">{{ summary }}</span>
-    </div>
+    <ng-container [ngTemplateOutlet]="flowStage"></ng-container>
 
     @if (hasStats) {
       <div class="energy-stats">
@@ -63,8 +68,12 @@
     }
   </div>
 
-  <div popup class="energy-details">
+  <div popup class="energy-details" [class.is-animated]="animate">
+    <div class="energy-details-flow">
+      <ng-container [ngTemplateOutlet]="flowStage"></ng-container>
+    </div>
     <!-- the house and the consumers; one without circuits of its own shows only its name and power -->
+    <div class="energy-groups">
     @for (group of detailsGroups; track group.id) {
       <section class="energy-group" [class.is-plain]="group.plain" [attr.aria-label]="groupLabel(group)">
         <header class="energy-group-head">
@@ -77,6 +86,29 @@
           </span>
           <span class="energy-group-value">{{ powerText(group.total) }}</span>
         </header>
+        @if (circuitFlows.get(group.id); as flow) {
+          <!-- the meter on the left, a line into each circuit directly below it; the labels share the line's row height -->
+          <div class="energy-fan" aria-hidden="true">
+            <svg class="energy-lines" [attr.width]="flow.width" [attr.height]="flow.height" [attr.viewBox]="'0 0 ' + flow.width + ' ' + flow.height">
+              @for (link of flow.links; track link.id) {
+                <path class="energy-track" [attr.d]="link.path"></path>
+                @if (link.active) {
+                  <path class="energy-flow tone-{{ link.kind }}" [attr.d]="link.path" [style.stroke-width]="link.width"
+                    [style.animation-duration.s]="link.duration"></path>
+                }
+              }
+              <circle class="energy-hub" [attr.cx]="flow.source.x" [attr.cy]="flow.source.y" r="4"></circle>
+            </svg>
+            <ul class="energy-fan-labels">
+              @for (link of flow.links; track link.id) {
+                <li [class.is-rest]="link.row.kind === 'rest'" [class.is-idle]="!link.active">
+                  <span class="energy-fan-name">{{ rowLabel(link.row) }}</span>
+                  <span class="energy-fan-power">{{ link.row.noValue ? '–' : powerText(link.row.power) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
         @if (group.rows.length > 0) {
         <ul class="energy-rows">
           @for (row of group.rows; track row.id) {
@@ -104,5 +136,6 @@
         }
       </section>
     }
+    </div>
   </div>
 </app-visualization-control>

@@ -145,8 +145,10 @@ describe("EnergyFlowComponent", () => {
   it("draws nothing flowing without power", async () => {
     await create();
 
-    expect(el().querySelectorAll(".energy-flow").length).toBe(0);
-    expect(el().querySelectorAll(".energy-track").length).toBe(3);
+    // the tile only; the popup content renders inline here (the popup host is not in this test)
+    const tile = el().querySelector(".energy");
+    expect(tile.querySelectorAll(".energy-flow").length).toBe(0);
+    expect(tile.querySelectorAll(".energy-track").length).toBe(3);
     expect(nodeText("pv")).toContain("–");
   });
 
@@ -339,6 +341,22 @@ describe("EnergyFlowComponent", () => {
       expect(house[3]).toContain("300 W");
       expect(groups[0].querySelectorAll(".energy-row.is-rest").length).toBe(1);
       expect(groups[0].querySelectorAll(".energy-row.no-value").length).toBe(1);
+    });
+
+    it("shows the diagram and the flow from each meter into its circuits", async () => {
+      visuData = { "id-house": 1.2, "id-consumer1": 3, circuitGroups: circuitGroups() };
+      await create();
+
+      const details = el().querySelector(".energy-details");
+      expect(details.querySelector(".energy-details-flow [data-node='house']")).not.toBeNull();
+      const groups = details.querySelectorAll(".energy-group");
+      const labels = (g: Element) => Array.from(g.querySelectorAll(".energy-fan-labels li"))
+        .map(l => Array.from(l.children).map(c => c.textContent.trim()).join(" "));
+      // house: kitchen, circuit 2, garage (no value) and the rest; a line each, flowing where there is power
+      expect(labels(groups[0])).toEqual(["Kitchen 600 W", "UI.VISU.ENERGY_CIRCUIT 300 W", "Garage –", "UI.VISU.ENERGY_NOT_MEASURED 300 W"]);
+      expect(groups[0].querySelectorAll(".energy-fan .energy-track").length).toBe(4);
+      expect(groups[0].querySelectorAll(".energy-fan .energy-flow").length).toBe(3);
+      expect(labels(groups[1]).length).toBe(2);
     });
 
     it("lists the other meters without circuits with their power, in the order of the tile", async () => {

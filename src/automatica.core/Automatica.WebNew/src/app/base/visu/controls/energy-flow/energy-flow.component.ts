@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ViewChild } from
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { BaseControlComponent } from "../base-control/base-control.component";
 import {
-  buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, EnergyBreakdownGroup, EnergyBreakdownRow, EnergyConsumerConfig, EnergyFlowLayout,
+  buildBreakdown, buildCircuitFlow, buildEnergyFlow, CONSUMER_COUNT, EnergyBreakdownGroup, EnergyBreakdownRow, EnergyCircuitFlow,
+  EnergyConsumerConfig, EnergyFlowLayout,
   EnergyNode, EnergyValues, formatNumber, formatPower, HOUSE_GROUP, HUB, isRowVisible, VIEW_HEIGHT, VIEW_WIDTH, withPlainGroups
 } from "./energy-flow-model";
 
@@ -50,6 +51,8 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
   circuitGroups: EnergyBreakdownGroup[] = [];
   /** what the details popup lists: the groups with circuits and every other meter with its power */
   detailsGroups: EnergyBreakdownGroup[] = [];
+  /** group id -> the flow from the meter into its circuits, for the groups with circuits */
+  circuitFlows = new Map<string, EnergyCircuitFlow>();
   private detailsTimer: any;
   /**
    * circuits whose own circuits are shown; all are closed at first. Kept by circuit number, so the refresh of the open
@@ -223,6 +226,7 @@ export class EnergyFlowComponent extends BaseMobileRuleComponent implements OnIn
     // the popup is there for the circuits; once it is, it lists the other meters as well
     this.detailsGroups = this.circuitGroups.length === 0 ? [] : withPlainGroups(this.circuitGroups, values.house,
       consumers.map((c, i) => ({ present: c.present, power: values.consumers[i] })));
+    this.circuitFlows = new Map(this.detailsGroups.map(g => [g.id, buildCircuitFlow(g)] as const).filter(([, f]) => !!f));
   }
 
   /** animations run only outside the visu editor */

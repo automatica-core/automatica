@@ -333,6 +333,79 @@
     font-family: var(--font-ui);
 }
 
+// the diagram of the tile above the meters, a bit larger than on the tile
+.energy-details-flow .energy-stage {
+    max-width: 560px;
+}
+
+// the meters side by side as wide as the popup allows, one column on phones
+.energy-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    align-items: start;
+    gap: var(--space-3);
+}
+
+.energy-group {
+    min-width: 0;
+    padding: var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md, 10px);
+    background: var(--surface);
+}
+
+// flow from the meter into its circuits: the SVG rows and the label rows have the same height (CIRCUIT_FLOW_ROW)
+.energy-fan {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--line);
+
+    svg {
+        flex: none;
+        overflow: visible;
+    }
+}
+
+.energy-fan-labels {
+    flex: 1 1 auto;
+    min-width: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 var(--space-2);
+
+    li {
+        height: 28px;
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-size: var(--text-sm);
+    }
+
+    .is-rest .energy-fan-name {
+        color: var(--muted);
+        font-style: italic;
+    }
+
+    .is-idle {
+        color: var(--muted);
+    }
+}
+
+.energy-fan-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.energy-fan-power {
+    flex: none;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 // a meter without circuits: only its head, without the line below
 .energy-group.is-plain .energy-group-head {
     padding-bottom: 0;

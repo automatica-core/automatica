@@ -392,6 +392,46 @@ export function withPlainGroups(groups: EnergyBreakdownGroup[], house: number | 
   return result.sort((a, b) => a.group - b.group);
 }
 
+/** px per circuit in the circuit flow of the details popup; the labels next to it use the same height */
+export const CIRCUIT_FLOW_ROW = 28;
+export const CIRCUIT_FLOW_WIDTH = 96;
+
+export interface EnergyCircuitFlow {
+  width: number;
+  height: number;
+  source: EnergyPoint;
+  /** one per row, in the order of the rows: from the meter to the circuit */
+  links: (EnergyLink & { row: EnergyBreakdownRow })[];
+}
+
+/**
+ * The flow from a meter (house or consumer) into its circuits, drawn in px so the labels beside it line up: the meter
+ * on the left, a curve to every circuit directly below it and to the rest. Line width and speed are relative to the
+ * meter's own power (or the measured sum when the circuits read more).
+ */
+export function buildCircuitFlow(group: EnergyBreakdownGroup): EnergyCircuitFlow | undefined {
+  const rows = group.rows.filter(r => r.depth === 0);
+  if (group.plain || rows.length === 0) {
+    return undefined;
+  }
+  const height = rows.length * CIRCUIT_FLOW_ROW;
+  const source = { x: 8, y: height / 2 };
+  const peak = Math.max(group.total, group.measured, ACTIVE_THRESHOLD);
+  const bend = CIRCUIT_FLOW_WIDTH / 2;
+  const links = rows.map((row, i) => {
+    const y = i * CIRCUIT_FLOW_ROW + CIRCUIT_FLOW_ROW / 2;
+    const active = !row.noValue && row.power >= ACTIVE_THRESHOLD;
+    return {
+      id: row.id, kind: "consumer" as EnergyNodeKind, row,
+      path: `M ${source.x} ${source.y} C ${bend} ${source.y} ${bend} ${y} ${CIRCUIT_FLOW_WIDTH} ${y}`,
+      power: row.power, direction: (active ? "out" : "none") as EnergyFlowDirection, active,
+      width: active ? strokeWidth(row.power, peak) : MIN_WIDTH,
+      duration: flowDuration(row.power, peak)
+    };
+  });
+  return { width: CIRCUIT_FLOW_WIDTH, height, source, links };
+}
+
 /** 0.42 kW -> 420 W, 3.456 kW -> 3.46 kW, 12.3 kW -> 12.3 kW */
 export function formatPower(kw: number | undefined, locale = "en"): { value: string; unit: string } {
   if (kw === undefined || kw === null || !isFinite(Number(kw))) {

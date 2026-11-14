@@ -1,5 +1,5 @@
 import {
-  ACTIVE_THRESHOLD, buildBreakdown, buildEnergyFlow, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB, isRowVisible,
+  ACTIVE_THRESHOLD, buildBreakdown, buildCircuitFlow, buildEnergyFlow, CIRCUIT_FLOW_ROW, CONSUMER_COUNT, CONSUMER_SLOTS, flowDirection, flowDuration, formatNumber, formatPower, HUB, isRowVisible,
   linkPath, load, strokeWidth, EnergyFlowOptions, EnergyValues, VIEW_HEIGHT, VIEW_HEIGHT_TALL, VIEW_WIDTH, withPlainGroups
 } from "./energy-flow-model";
 
@@ -263,6 +263,32 @@ describe("energy flow model", () => {
       expect(buildBreakdown(undefined)).toEqual([]);
       expect(buildBreakdown(null)).toEqual([]);
       expect(buildBreakdown({} as any)).toEqual([]);
+    });
+
+    describe("circuit flow", () => {
+      it("draws one line per top-level circuit and the rest, thicker with more of the meter's power", () => {
+        const [group] = buildBreakdown([{
+          group: 4, total: 1, circuits: [
+            { circuit: 9, power: 0.5, circuits: [{ circuit: 10, power: 0.1 }], measured: 0.1, rest: 0.4 },
+            { circuit: 11, power: 0.1 },
+            { circuit: 12, hasValue: false, name: "Bad" }
+          ]
+        }]);
+
+        const flow = buildCircuitFlow(group);
+
+        // 9, 11, 12 and the rest of the meter; circuit 10 sits below 9 and has no line of its own
+        expect(flow.links.map(l => l.id)).toEqual(["circuit9", "circuit11", "circuit12", "rest"]);
+        expect(flow.height).toBe(4 * CIRCUIT_FLOW_ROW);
+        expect(flow.links[0].width).toBeGreaterThan(flow.links[1].width);
+        expect(flow.links[2].active).toBe(false);
+        // each line ends in the middle of its label row
+        expect(flow.links[1].path.endsWith(` ${CIRCUIT_FLOW_ROW * 1.5}`)).toBe(true);
+      });
+
+      it("has none for a meter without circuits", () => {
+        expect(buildCircuitFlow({ id: "group1", group: 1, total: 1, measured: 0, rest: 1, rows: [], plain: true })).toBeUndefined();
+      });
     });
 
     describe("meters without circuits", () => {
