@@ -23,7 +23,7 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
 
             var parameters = calls.Where(c => c.Method.Name == nameof(ILogicTemplateFactory.CreateParameterLogicInterfaceTemplate)).ToList();
 
-            Assert.Equal(9 + 36, parameters.Count);
+            Assert.Equal(9 + 48, parameters.Count);
             Assert.All(parameters, c => Assert.Contains(c.Method.GetParameters(), p => p.Name == "linkable"));
             var keys = parameters.Select(c => (string)c.Args[Array.FindIndex(c.Method.GetParameters(), p => p.Name == "key")]).ToList();
             var expected = new List<string> { "invertGrid", "invertBattery", "peakPower", "consumer1Name", "consumer2Name", "consumer3Name",
@@ -95,7 +95,7 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
                 .Select(c => (Guid)c.Args[0])
                 .ToList();
 
-            Assert.Equal(17 + 22 + 9 + 18 + 7 + 36, ids.Count);
+            Assert.Equal(17 + 22 + 9 + 24 + 7 + 48, ids.Count);
             Assert.Equal(ids.Count, ids.Distinct().Count());
         }
 

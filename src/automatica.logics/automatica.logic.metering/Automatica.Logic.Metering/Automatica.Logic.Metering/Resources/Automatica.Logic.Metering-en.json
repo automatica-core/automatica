@@ -113,7 +113,7 @@
     "ENERGY_MONITOR": {
       "NAME": "Energy monitor",
       "DESCRIPTION": "Energy flow between grid, PV, battery and consumers: house consumption, self-consumption, autarky and today's energy, with its own visu tile",
-      "GROUP": { "HOUSE": "House", "CONSUMER1": "Consumer 1", "CONSUMER2": "Consumer 2", "CONSUMER3": "Consumer 3", "CONSUMER4": "Consumer 4", "CONSUMER5": "Consumer 5", "CONSUMER6": "Consumer 6", "CIRCUIT1": "Circuit 1", "CIRCUIT2": "Circuit 2", "CIRCUIT3": "Circuit 3", "CIRCUIT4": "Circuit 4", "CIRCUIT5": "Circuit 5", "CIRCUIT6": "Circuit 6", "CIRCUIT7": "Circuit 7", "CIRCUIT8": "Circuit 8", "CIRCUIT9": "Circuit 9", "CIRCUIT10": "Circuit 10", "CIRCUIT11": "Circuit 11", "CIRCUIT12": "Circuit 12", "CIRCUIT13": "Circuit 13", "CIRCUIT14": "Circuit 14", "CIRCUIT15": "Circuit 15", "CIRCUIT16": "Circuit 16", "CIRCUIT17": "Circuit 17", "CIRCUIT18": "Circuit 18" },
+      "GROUP": { "HOUSE": "House", "CONSUMER1": "Consumer 1", "CONSUMER2": "Consumer 2", "CONSUMER3": "Consumer 3", "CONSUMER4": "Consumer 4", "CONSUMER5": "Consumer 5", "CONSUMER6": "Consumer 6", "CIRCUIT1": "Circuit 1", "CIRCUIT2": "Circuit 2", "CIRCUIT3": "Circuit 3", "CIRCUIT4": "Circuit 4", "CIRCUIT5": "Circuit 5", "CIRCUIT6": "Circuit 6", "CIRCUIT7": "Circuit 7", "CIRCUIT8": "Circuit 8", "CIRCUIT9": "Circuit 9", "CIRCUIT10": "Circuit 10", "CIRCUIT11": "Circuit 11", "CIRCUIT12": "Circuit 12", "CIRCUIT13": "Circuit 13", "CIRCUIT14": "Circuit 14", "CIRCUIT15": "Circuit 15", "CIRCUIT16": "Circuit 16", "CIRCUIT17": "Circuit 17", "CIRCUIT18": "Circuit 18", "CIRCUIT19": "Circuit 19", "CIRCUIT20": "Circuit 20", "CIRCUIT21": "Circuit 21", "CIRCUIT22": "Circuit 22", "CIRCUIT23": "Circuit 23", "CIRCUIT24": "Circuit 24" },
       "INPUT": {
         "GRID": { "NAME": "Grid (±)", "DESCRIPTION": "Grid power in kW: + import, - export (use \"invert grid\" for meters with the other sign)" },
         "GRID_IMPORT": { "NAME": "Grid import", "DESCRIPTION": "Grid import in kW, used while the signed grid input has no value" },
@@ -149,7 +149,13 @@
         "CIRCUIT15": { "NAME": "Circuit 15", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
         "CIRCUIT16": { "NAME": "Circuit 16", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
         "CIRCUIT17": { "NAME": "Circuit 17", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
-        "CIRCUIT18": { "NAME": "Circuit 18", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" }
+        "CIRCUIT18": { "NAME": "Circuit 18", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT19": { "NAME": "Circuit 19", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT20": { "NAME": "Circuit 20", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT21": { "NAME": "Circuit 21", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT22": { "NAME": "Circuit 22", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT23": { "NAME": "Circuit 23", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" },
+        "CIRCUIT24": { "NAME": "Circuit 24", "DESCRIPTION": "Power of a measured circuit in kW (e.g. one CT of an energy monitor), shown in the details of the house or of its consumer" }
       },
       "OUTPUT": {
         "GRID": { "NAME": "Grid (±)", "DESCRIPTION": "Grid power in kW: + import, - export" },
@@ -229,6 +235,18 @@
         "CIRCUIT17_GROUP": { "NAME": "Circuit 17 belongs to" },
         "CIRCUIT18_NAME": { "NAME": "Name circuit 18" },
         "CIRCUIT18_GROUP": { "NAME": "Circuit 18 belongs to" },
+        "CIRCUIT19_NAME": { "NAME": "Name circuit 19" },
+        "CIRCUIT19_GROUP": { "NAME": "Circuit 19 belongs to" },
+        "CIRCUIT20_NAME": { "NAME": "Name circuit 20" },
+        "CIRCUIT20_GROUP": { "NAME": "Circuit 20 belongs to" },
+        "CIRCUIT21_NAME": { "NAME": "Name circuit 21" },
+        "CIRCUIT21_GROUP": { "NAME": "Circuit 21 belongs to" },
+        "CIRCUIT22_NAME": { "NAME": "Name circuit 22" },
+        "CIRCUIT22_GROUP": { "NAME": "Circuit 22 belongs to" },
+        "CIRCUIT23_NAME": { "NAME": "Name circuit 23" },
+        "CIRCUIT23_GROUP": { "NAME": "Circuit 23 belongs to" },
+        "CIRCUIT24_NAME": { "NAME": "Name circuit 24" },
+        "CIRCUIT24_GROUP": { "NAME": "Circuit 24 belongs to" },
         "CIRCUIT_NAME": { "DESCRIPTION": "Name shown in the details of the energy flow tile (e.g. Kitchen)" },
         "CIRCUIT_GROUP": { "DESCRIPTION": "What the circuit is part of: the house, one of the consumers or another circuit (e.g. a socket circuit below the kitchen); the circuits below something do not have to add up, the rest is shown as not measured" }
       }

@@ -50,7 +50,13 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("0dfbfac3-a937-48dc-afd0-574501f2ea0a"),
             new Guid("6e7809f2-e413-4899-b6a5-885c84deac95"),
             new Guid("e2e90ad9-0210-4572-8f60-caf6db02efbe"),
-            new Guid("8cded5fe-9279-404b-9485-3f8c02f35071")
+            new Guid("8cded5fe-9279-404b-9485-3f8c02f35071"),
+            new Guid("5350961c-1688-4ad1-b001-36989ce1b995"),
+            new Guid("793157d9-e9d0-453c-a36d-5d4048487934"),
+            new Guid("ad3623b4-063e-4062-9190-d5e1896ab118"),
+            new Guid("833a1977-289a-454a-a903-349b84db50e1"),
+            new Guid("b4aabd06-ca9c-4dd1-83ed-ede8a9cfd7e8"),
+            new Guid("ddfef5f9-c1b8-42a6-b7cc-d0082615ec6f")
         };
         public static readonly Guid InputPvMeter = new Guid("139f01aa-6a80-4108-b4e3-7b6dd5b58368");
         public static readonly Guid InputImportMeter = new Guid("a9002abc-35e1-42ab-84ff-74303b10e055");
@@ -129,7 +135,13 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("68feb00c-26e4-4cac-a71c-aad6d2fd11dd"),
             new Guid("4b06af09-9ae3-426f-a5e7-56bc57abf4e8"),
             new Guid("0d353f11-4351-4673-83fa-87302669e499"),
-            new Guid("e8822674-1aff-4d55-b148-b34495422cdf")
+            new Guid("e8822674-1aff-4d55-b148-b34495422cdf"),
+            new Guid("df66a7fb-d20b-4556-97ba-b31f42014d65"),
+            new Guid("2bdeaeab-316d-4efb-862d-1f416140a603"),
+            new Guid("73ed06f9-beec-4528-8dcb-868e7779f6b2"),
+            new Guid("d7fcc389-28f9-43a9-8fbe-0060721843db"),
+            new Guid("402759df-7ae9-4b74-9b2f-3960e0363ee5"),
+            new Guid("ca980011-6b21-44a8-aea3-700350b51ef8")
         };
         public static readonly Guid[] ParamCircuitNames =
         {
@@ -150,7 +162,13 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             new Guid("16388133-b0cc-49b7-8bb7-2728ff5455cd"),
             new Guid("129ef886-b049-4d3d-9921-2b36326da860"),
             new Guid("8e909517-2c62-45aa-8621-9cfb085dddd0"),
-            new Guid("e54899e8-c824-4f2e-8bec-dd452bd1de7b")
+            new Guid("e54899e8-c824-4f2e-8bec-dd452bd1de7b"),
+            new Guid("277b5b1e-1a89-42b1-a253-7b875d4edaa2"),
+            new Guid("55f601cc-c5fc-4a78-8ef1-0927cbbea441"),
+            new Guid("fdc34243-d353-44bf-ab30-707ac6258725"),
+            new Guid("82dd2dea-001d-429b-9e4b-fa9716699b26"),
+            new Guid("02453b9e-90c0-4b24-b684-88f13363b0c0"),
+            new Guid("d7db9f74-a62b-48bd-97f5-53bb79fd28aa")
         };
 
         private const string CircuitGroupMetaGroups = "ENUM(0,METERING.ENERGY_MONITOR.GROUP.HOUSE;1,METERING.ENERGY_MONITOR.GROUP.CONSUMER1;"
@@ -158,7 +176,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
             + "5,METERING.ENERGY_MONITOR.GROUP.CONSUMER5;6,METERING.ENERGY_MONITOR.GROUP.CONSUMER6)";
 
         /// <summary>
-        /// what a circuit can belong to: the house, a consumer or any other circuit (101-118); the circuit itself is left out
+        /// what a circuit can belong to: the house, a consumer or any other circuit (101-124); the circuit itself is left out
         /// </summary>
         internal static string CircuitParentMeta(int circuit) =>
             CircuitGroupMetaGroups.TrimEnd(')')
@@ -169,9 +187,9 @@ namespace Automatica.Logic.Metering.EnergyMonitor
 
         public override string LogicName => "Metering.EnergyMonitor";
         // 1.1: consumers 4-6 (inputs, outputs, names); 1.2: sub-circuits (inputs, group + name, rest outputs);
-        // 1.3: a circuit can belong to another circuit (choices of the group parameter).
+        // 1.3: a circuit can belong to another circuit (choices of the group parameter); 1.4: circuits 19-24.
         // The core adds new interfaces to existing instances only on a version bump.
-        public override Version LogicVersion => new Version(1, 3, 0, 0);
+        public override Version LogicVersion => new Version(1, 4, 0, 0);
         public override Guid LogicGuid => new Guid("270e43f0-bda0-4e87-a1ad-691dbe745adb");
 
         /// <summary>

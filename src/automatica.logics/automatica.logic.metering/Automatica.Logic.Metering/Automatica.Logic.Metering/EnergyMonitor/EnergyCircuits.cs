@@ -6,13 +6,13 @@ namespace Automatica.Logic.Metering.EnergyMonitor
 {
     /// <summary>
     /// Measured sub-circuits of the energy monitor (e.g. the CT channels of an energy monitor like the Refoss EM16P).
-    /// Each circuit belongs to the house (0), one of the extra consumers (1-6) or another circuit (101-118), so circuits form
+    /// Each circuit belongs to the house (0), one of the extra consumers (1-6) or another circuit (101-124), so circuits form
     /// a tree below the house and the consumers. The circuits below something do not have to cover it: what they do not
     /// measure is its rest.
     /// </summary>
     public sealed class EnergyCircuitInputs
     {
-        public const int CircuitCount = 18;
+        public const int CircuitCount = 24;
         /// <summary>house + the extra consumers</summary>
         public const int GroupCount = EnergyFlowInputs.ConsumerCount + 1;
         public const int HouseGroup = 0;
@@ -21,7 +21,7 @@ namespace Automatica.Logic.Metering.EnergyMonitor
 
         /// <summary>power of each circuit in kW, null while the input never got a value</summary>
         public double?[] Power { get; } = new double?[CircuitCount];
-        /// <summary>parent of each circuit as the parameter stores it: 0 = house, 1-6 = consumer 1-6, 101-118 = circuit 1-18</summary>
+        /// <summary>parent of each circuit as the parameter stores it: 0 = house, 1-6 = consumer 1-6, 101-124 = circuit 1-24</summary>
         public int[] Parent { get; } = new int[CircuitCount];
         public string[] Name { get; } = new string[CircuitCount];
 

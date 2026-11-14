@@ -41,9 +41,9 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
         [Fact]
         public void Template_HasAllInterfaces()
         {
-            Assert.Equal(17 + 18, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
+            Assert.Equal(17 + 24, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Input));
             Assert.Equal(22 + 7, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output));
-            Assert.Equal(9 + 36, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
+            Assert.Equal(9 + 48, RuleInstance.RuleInterfaceInstance.Count(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Param));
 
             // the visu tile finds its values by these keys
             var keys = RuleInstance.RuleInterfaceInstance.Select(a => a.This2RuleInterfaceTemplateNavigation.Key).ToList();
@@ -380,7 +380,7 @@ namespace Automatica.Logic.Metering.Tests.EnergyMonitor
         [InlineData("x")]
         [InlineData(null)]
         [InlineData(100)]
-        [InlineData(119)]
+        [InlineData(125)]
         [InlineData("105")] // the circuit itself
         public void UnknownGroup_CountsAsHouse(object group)
         {
