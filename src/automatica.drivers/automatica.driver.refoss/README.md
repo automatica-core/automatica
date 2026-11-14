@@ -1,6 +1,7 @@
 # Refoss energy monitor
 
-Refoss **EM16P** (18 CT channels) and **EM06P** (6 channels) through the **local JSON-RPC API** on the LAN. No cloud.
+Refoss **EM16P** (18 CT channels) and **EM06P** (6 channels) through the **local JSON-RPC API** on the LAN, and the
+**EM06** (6 channels, Meross firmware) through its local Meross API. No cloud.
 
 ```
 Refoss energy monitor     address, password (optional), polling interval, search channels
@@ -18,6 +19,16 @@ phase: the channel shows the voltage of its phase. A1 and B1 take the 200 A CTs,
 The scan (*Search channels*) reads `Em.Config.Get` and adds the channels that are not configured yet, named
 `A1 Heat pump` after the names set in the Refoss app (or `A1` without one). Merged channels (`Em.Chmerge.*`, set up in
 the app) appear in the scan with the id the device reports for them.
+
+## EM06
+
+The EM06 (not EM06P) runs Meross firmware: no `/rpc`, but signed JSON messages on `POST /public` (signature
+md5(messageId + key + timestamp), the empty key works although the device is bound to the Refoss cloud; an empty `uuid`
+in the header makes it drop the connection). The driver finds it by itself: at start it asks `/public` once, an answer
+there means EM06. One `Appliance.Control.ElectricityX` call per poll reads all channels (mW, mA, mV and Wh, converted to
+W, A, V and kWh). There is no password, no channel names (the scan names them `A1`, `B1`, `C1`, `A2`, `B2`, `C2` as
+in the app, ids 1–6) and only the month counter (`mConsume`, negative = returned energy); day and week stay empty.
+Checked on a real EM06 (firmware 2.3.13).
 
 ## Energy totals
 

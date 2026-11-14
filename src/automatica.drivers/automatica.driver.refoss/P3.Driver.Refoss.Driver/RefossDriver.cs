@@ -12,7 +12,8 @@ using Microsoft.Extensions.Logging;
 namespace P3.Driver.Refoss.Driver
 {
     /// <summary>
-    /// A Refoss energy monitor on the LAN. One Em.Status.Get call per poll reads all channels.
+    /// A Refoss energy monitor on the LAN. One Em.Status.Get call per poll reads all channels; devices with Meross
+    /// firmware (EM06) are found by their answer on /public and read with Appliance.Control.ElectricityX instead.
     /// </summary>
     internal sealed class RefossDriver : DriverNoneAttributeBase
     {
@@ -29,9 +30,11 @@ namespace P3.Driver.Refoss.Driver
         private Timer _timer;
         private TimeSpan _poll;
         private bool _perChannel;
+        private bool? _meross;
 
         internal HttpClient Http { get; set; } = SharedHttp;
         internal RefossRpcClient Rpc { get; private set; }
+        internal RefossMerossClient Meross { get; private set; }
         internal IReadOnlyList<RefossChannel> Channels => _channels;
         internal IReadOnlyList<RefossValueNode> Values => _values;
 
@@ -39,6 +42,11 @@ namespace P3.Driver.Refoss.Driver
         /// The device refused id=65535, every channel is asked on its own
         /// </summary>
         internal bool PerChannel => _perChannel;
+
+        /// <summary>
+        /// The device has Meross firmware (EM06), null until it answered once
+        /// </summary>
+        internal bool? IsMeross => _meross;
 
         public RefossDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -48,8 +56,10 @@ namespace P3.Driver.Refoss.Driver
         {
             _poll = TimeSpan.FromSeconds(Math.Clamp(GetPropertyValueInt(RefossDriverFactory.PollKey), 2, 3600));
             _perChannel = false;
+            _meross = null;
             var host = GetPropertyValueString(RefossDriverFactory.HostKey);
             Rpc = new RefossRpcClient(Http, host, GetPropertyValueString(RefossDriverFactory.PasswordKey));
+            Meross = new RefossMerossClient(Http, Rpc.BaseUrl);
             if (string.IsNullOrWhiteSpace(host))
             {
                 DriverContext.Logger.LogError("No address of the Refoss device configured");
@@ -129,6 +139,12 @@ namespace P3.Driver.Refoss.Driver
         /// </summary>
         internal async Task<Dictionary<int, JsonElement>> StatusAsync(IReadOnlyList<int> wanted, CancellationToken token)
         {
+            if (await MerossAsync(token))
+            {
+                return RefossMerossClient.Electricity(await Meross.GetAsync("Appliance.Control.ElectricityX",
+                    new Dictionary<string, object> { ["electricity"] = new Dictionary<string, object> { ["channel"] = AllChannels } }, token));
+            }
+
             if (!_perChannel)
             {
                 try
@@ -166,6 +182,35 @@ namespace P3.Driver.Refoss.Driver
 
         private static Dictionary<string, object> ChannelParams(int id) => new() { ["id"] = id };
 
+        /// <summary>
+        /// Whether the device has Meross firmware, asked once per start: a Meross answer on /public (EM16P / EM06P answer 404).
+        /// Network errors pass through, the next poll asks again.
+        /// </summary>
+        private async Task<bool> MerossAsync(CancellationToken token)
+        {
+            if (_meross is { } known)
+            {
+                return known;
+            }
+
+            try
+            {
+                await Meross.GetAsync("Appliance.System.Hardware", token: token);
+                _meross = true;
+            }
+            catch (RefossRpcException ex) when (ex.Code != 0)
+            {
+                // 5xxx are Meross error codes (5001 = sign error): Meross firmware after all, the poll reports the error
+                _meross = ex.Code >= 5000;
+            }
+
+            if (_meross == true)
+            {
+                DriverContext.Logger.LogInformation($"Refoss: {Rpc.BaseUrl} has Meross firmware (EM06), reading it through /public");
+            }
+            return _meross.Value;
+        }
+
         private void SetConnected(bool connected)
         {
             foreach (var value in _values.Where(v => v.DataPoint.Key == RefossDataPoints.ConnectedKey))
@@ -179,17 +224,22 @@ namespace P3.Driver.Refoss.Driver
         /// </summary>
         public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
+            var meross = await MerossAsync(token);
             var names = new Dictionary<int, string>();
-            try
+            // the EM06 has no channel names locally
+            if (!meross)
             {
-                foreach (var (id, entry) in RefossDataPoints.Entries(await Rpc.CallAsync("Em.Config.Get", ChannelParams(AllChannels), token), "config"))
+                try
                 {
-                    names[id] = RefossDataPoints.Text(entry, "name");
+                    foreach (var (id, entry) in RefossDataPoints.Entries(await Rpc.CallAsync("Em.Config.Get", ChannelParams(AllChannels), token), "config"))
+                    {
+                        names[id] = RefossDataPoints.Text(entry, "name");
+                    }
                 }
-            }
-            catch (RefossRpcException ex) when (ex.Code is not (0 or 401))
-            {
-                DriverContext.Logger.LogWarning($"Refoss: could not read the channel names: {ex.Message}");
+                catch (RefossRpcException ex) when (ex.Code is not (0 or 401))
+                {
+                    DriverContext.Logger.LogWarning($"Refoss: could not read the channel names: {ex.Message}");
+                }
             }
 
             var ids = names.Keys.ToHashSet();
@@ -203,7 +253,7 @@ namespace P3.Driver.Refoss.Driver
             }
             if (ids.Count == 0)
             {
-                ids.UnionWith(Enumerable.Range(1, RefossDataPoints.ChannelCount));
+                ids.UnionWith(Enumerable.Range(1, meross ? RefossDataPoints.Em06ChannelCount : RefossDataPoints.ChannelCount));
             }
 
             var known = _channels.Select(c => c.ChannelId).ToHashSet();
@@ -211,7 +261,7 @@ namespace P3.Driver.Refoss.Driver
             foreach (var id in ids.Where(i => !known.Contains(i)).OrderBy(i => i))
             {
                 var node = DriverContext.NodeTemplateFactory.CreateNodeInstance(RefossDriverFactory.ChannelTemplate);
-                node.Name = ChannelLabel(id, names.GetValueOrDefault(id));
+                node.Name = ChannelLabel(id, names.GetValueOrDefault(id), meross);
                 node.SetProperty(RefossDriverFactory.ChannelKey, id);
                 foreach (var dp in RefossDataPoints.Channel)
                 {
@@ -225,9 +275,9 @@ namespace P3.Driver.Refoss.Driver
         /// <summary>
         /// "A1", or "A1 Heat pump" when the channel got a name in the Refoss app
         /// </summary>
-        internal static string ChannelLabel(int id, string name)
+        internal static string ChannelLabel(int id, string name, bool em06 = false)
         {
-            var ct = RefossDataPoints.ChannelName(id);
+            var ct = em06 ? RefossDataPoints.Em06ChannelName(id) : RefossDataPoints.ChannelName(id);
             name = name?.Trim();
             return string.IsNullOrEmpty(name) || string.Equals(name, ct, StringComparison.OrdinalIgnoreCase) ? ct : $"{ct} {name}";
         }

@@ -50,6 +50,13 @@ namespace P3.Driver.Refoss.Driver
         public static string ChannelName(int id) => id is >= 1 and <= ChannelCount ? $"{(char)('A' + (id - 1) / 6)}{(id - 1) % 6 + 1}" : $"Channel {id}";
 
         /// <summary>
+        /// Channel ids of the EM06 (as in its app): A1, B1, C1 = 1–3, A2, B2, C2 = 4–6
+        /// </summary>
+        public const int Em06ChannelCount = 6;
+
+        public static string Em06ChannelName(int id) => id is >= 1 and <= Em06ChannelCount ? $"{(char)('A' + (id - 1) % 3)}{(id - 1) / 3 + 1}" : $"Channel {id}";
+
+        /// <summary>
         /// The per-channel entries of a status (or config) response by channel id. Accepts the documented list
         /// ({"status":[{"id":1,...}]} / {"config":[...]}), a bare list, the component map of Refoss.Status.Get
         /// ({"em:1":{...}}) and a single entry.

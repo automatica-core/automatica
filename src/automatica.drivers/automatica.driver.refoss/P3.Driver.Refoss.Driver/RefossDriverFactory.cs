@@ -7,7 +7,7 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 namespace P3.Driver.Refoss.Driver
 {
     /// <summary>
-    /// Refoss energy monitors (EM16P, EM06P) through their local JSON-RPC API on the LAN.
+    /// Refoss energy monitors (EM16P, EM06P through their local JSON-RPC API, EM06 through its Meross API) on the LAN.
     /// Device (address, password) → channels (CT 1–18, found by scan) → power, current, voltage, pf and energies
     /// </summary>
     public class RefossDriverFactory : DriverFactory

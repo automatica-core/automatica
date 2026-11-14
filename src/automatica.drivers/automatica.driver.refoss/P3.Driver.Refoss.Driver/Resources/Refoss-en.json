@@ -1,7 +1,7 @@
 {
   "REFOSS": {
     "NAME": "Refoss energy monitor",
-    "DESCRIPTION": "Refoss EM16P / EM06P energy monitors through the local API (LAN)",
+    "DESCRIPTION": "Refoss EM16P / EM06P / EM06 energy monitors through the local API (LAN)",
     "HOST": { "NAME": "Device address", "DESCRIPTION": "IP address or host name of the energy monitor, e.g. 192.168.1.60 (http is used). Give the device a fixed address in the router" },
     "PASSWORD": { "NAME": "Password", "DESCRIPTION": "Only when authentication is switched on in the Refoss app or web UI (user admin). Empty = no authentication" },
     "POLL": { "NAME": "Polling interval [s]", "DESCRIPTION": "How often all channels are read (one request per poll)" },

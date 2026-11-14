@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
@@ -38,6 +41,13 @@ namespace P3.Driver.Refoss.Tests
         private bool _refuseAll;
         private int _nonce = 1000;
         private bool _configFails;
+        private bool _em06;
+        private bool _em06WantsKey;
+
+        /// <summary>
+        /// Requests of the JSON-RPC API, without the Meross probe on /public
+        /// </summary>
+        private IReadOnlyList<RecordedRequest> RpcRequests => _server.Requests.Where(r => r.Path != "/public").ToList();
 
         public async Task InitializeAsync()
         {
@@ -67,6 +77,16 @@ namespace P3.Driver.Refoss.Tests
 
         private (int, string) Handle(RecordedRequest r)
         {
+            if (r.Path == "/public" && _em06)
+            {
+                return (200, Em06(r.Body));
+            }
+            if (_em06)
+            {
+                // the Meross firmware knows no /rpc
+                return (404, "Nothing matches the given URI");
+            }
+
             if (_auth != Auth.None && !Authorized(r))
             {
                 return _auth == Auth.Body
@@ -102,6 +122,38 @@ namespace P3.Driver.Refoss.Tests
                     return (200, "{\"config\":[" + string.Join(",", Enumerable.Range(1, 18).Select(i => $"{{\"id\":{i},\"name\":\"{(i == 1 ? "Heat pump" : i == 7 ? "PV" : "")}\",\"factor\":1}}")) + "]}");
             }
             return (404, "");
+        }
+
+        /// <summary>
+        /// An EM06 (Meross firmware): checks the signature md5(messageId + timestamp) like the device and answers in its units (mW, mA, mV, Wh)
+        /// </summary>
+        private string Em06(string body)
+        {
+            using var doc = JsonDocument.Parse(body);
+            var header = doc.RootElement.GetProperty("header");
+            var messageId = header.GetProperty("messageId").GetString();
+            var ns = header.GetProperty("namespace").GetString();
+            var sign = Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(messageId + header.GetProperty("timestamp").GetInt64()))).ToLowerInvariant();
+            string Answer(string method, string payload) =>
+                $"{{\"header\":{{\"messageId\":\"{messageId}\",\"namespace\":\"{ns}\",\"method\":\"{method}\",\"payloadVersion\":1,\"from\":\"/appliance/24122350384105740701c4e7ae11c196/publish\"}},\"payload\":{payload}}}";
+
+            if (_em06WantsKey || header.GetProperty("sign").GetString() != sign || header.TryGetProperty("uuid", out _) || header.GetProperty("method").GetString() != "GET")
+            {
+                return Answer("ERROR", "{\"error\":{\"code\":5001,\"detail\":\"sign error\"}}");
+            }
+
+            return ns switch
+            {
+                "Appliance.System.Hardware" => Answer("GETACK", "{\"hardware\":{\"type\":\"em06\",\"subType\":\"eu\",\"version\":\"2.0.0\",\"chipType\":\"esp32-c3\"}}"),
+                "Appliance.Control.ElectricityX" when doc.RootElement.GetProperty("payload").GetProperty("electricity").GetProperty("channel").GetInt32() == RefossDriver.AllChannels =>
+                    Answer("GETACK", "{\"electricity\":[" + string.Join(",", Enumerable.Range(1, 6).Select(i => i switch
+                    {
+                        1 => "{\"channel\":1,\"current\":1234,\"voltage\":230040,\"power\":281660,\"mConsume\":12346,\"factor\":0.981}",
+                        4 => "{\"channel\":4,\"current\":6500,\"voltage\":231400,\"power\":-1500040,\"mConsume\":-88100,\"factor\":-0.99}",
+                        _ => $"{{\"channel\":{i},\"current\":0,\"voltage\":229900,\"power\":0,\"mConsume\":0,\"factor\":0}}"
+                    })) + "]}"),
+                _ => Answer("ERROR", "{\"error\":{\"code\":5000,\"detail\":\"unknown namespace\"}}")
+            };
         }
 
         /// <summary>
@@ -172,7 +224,7 @@ namespace P3.Driver.Refoss.Tests
 
             await driver.PollAsync();
 
-            var request = Assert.Single(_server.Requests);
+            var request = Assert.Single(RpcRequests);
             Assert.Equal("/rpc/Em.Status.Get", request.Path);
             Assert.Equal("?id=65535", request.Query);
             Assert.Equal(true, Connected(driver));
@@ -203,8 +255,8 @@ namespace P3.Driver.Refoss.Tests
             await driver.PollAsync();
 
             Assert.True(driver.PerChannel);
-            Assert.Equal(1, _server.Requests.Count(r => r.Query == "?id=65535"));
-            Assert.Equal(2, _server.Requests.Count(r => r.Query == "?id=7"));
+            Assert.Equal(1, RpcRequests.Count(r => r.Query == "?id=65535"));
+            Assert.Equal(2, RpcRequests.Count(r => r.Query == "?id=7"));
             Assert.Equal(true, Connected(driver));
             Assert.Equal(281.7, Value(driver, 1, "power"));
             Assert.Equal(-1500.0, Value(driver, 7, "power"));
@@ -237,8 +289,8 @@ namespace P3.Driver.Refoss.Tests
             Assert.Equal(true, Connected(driver));
             Assert.Equal(281.7, Value(driver, 1, "power"));
             // one challenge, then two authorized requests with a growing nonce count
-            Assert.Equal(3, _server.Requests.Count);
-            var counts = _server.Requests.Skip(1).Select(r => Regex.Match(r.Headers["Authorization"], "nc=([0-9a-f]{8})").Groups[1].Value).ToList();
+            Assert.Equal(3, RpcRequests.Count);
+            var counts = RpcRequests.Skip(1).Select(r => Regex.Match(r.Headers["Authorization"], "nc=([0-9a-f]{8})").Groups[1].Value).ToList();
             Assert.Equal(new[] { "00000001", "00000002" }, counts);
         }
 
@@ -253,7 +305,7 @@ namespace P3.Driver.Refoss.Tests
             await driver.PollAsync();
 
             Assert.Equal(true, Connected(driver));
-            Assert.Equal(4, _server.Requests.Count);
+            Assert.Equal(4, RpcRequests.Count);
         }
 
         [Fact]
@@ -267,7 +319,7 @@ namespace P3.Driver.Refoss.Tests
             Assert.Equal(401, ex.Code);
             Assert.Contains("rejected the password", ex.Message);
             Assert.Equal(false, Connected(driver));
-            Assert.Equal(2, _server.Requests.Count);
+            Assert.Equal(2, RpcRequests.Count);
         }
 
         [Fact]
@@ -318,6 +370,72 @@ namespace P3.Driver.Refoss.Tests
             var found = await driver.Scan();
 
             Assert.Equal(new[] { "B1", "C1" }, found.Select(n => n.Name));
+        }
+
+        [Fact]
+        public async Task Em06_IsFoundByItsMerossAnswer_AndReadInOneCall()
+        {
+            _em06 = true;
+            var driver = await CreateDriverAsync(CreateDevice(channels: new[] { 1, 4 }));
+
+            await driver.PollAsync();
+            await driver.PollAsync();
+
+            Assert.True(driver.IsMeross);
+            Assert.Empty(RpcRequests);
+            // one probe, then one call per poll
+            Assert.Equal(3, _server.Requests.Count);
+            Assert.Equal(281.7, Value(driver, 1, "power"));
+            Assert.Equal(1.234, Value(driver, 1, "current"));
+            Assert.Equal(230.0, Value(driver, 1, "voltage"));
+            Assert.Equal(0.981, Value(driver, 1, "pf"));
+            Assert.Equal(12.346, Value(driver, 1, "month_energy"));
+            Assert.Equal(0.0, Value(driver, 1, "month_ret_energy"));
+            Assert.Null(Value(driver, 1, "day_energy"));
+            // a negative month consumption is returned energy
+            Assert.Equal(-1500.0, Value(driver, 4, "power"));
+            Assert.Equal(0.0, Value(driver, 4, "month_energy"));
+            Assert.Equal(88.1, Value(driver, 4, "month_ret_energy"));
+            Assert.Equal(true, Connected(driver));
+        }
+
+        [Fact]
+        public async Task Em06_Scan_NamesTheChannelsLikeItsApp()
+        {
+            _em06 = true;
+            var driver = await CreateDriverAsync(CreateDevice(channels: new[] { 1 }));
+
+            var found = await driver.Scan();
+
+            Assert.Equal(new[] { 2, 3, 4, 5, 6 }, found.Select(Channel));
+            Assert.Equal(new[] { "B1", "C1", "A2", "B2", "C2" }, found.Select(n => n.Name));
+            Assert.Empty(RpcRequests);
+        }
+
+        [Fact]
+        public async Task Em06_ThatWantsAKey_IsReportedNotConnected()
+        {
+            _em06 = true;
+            _em06WantsKey = true;
+            var driver = await CreateDriverAsync(CreateDevice());
+
+            var ex = await Assert.ThrowsAsync<RefossRpcException>(() => driver.PollAsync());
+
+            Assert.Equal(5001, ex.Code);
+            Assert.True(driver.IsMeross);
+            Assert.Equal(false, Connected(driver));
+            Assert.Empty(RpcRequests);
+        }
+
+        [Fact]
+        public async Task Em16p_IsNotTakenForAnEm06()
+        {
+            var driver = await CreateDriverAsync(CreateDevice());
+
+            await driver.PollAsync();
+
+            Assert.False(driver.IsMeross);
+            Assert.Equal(1, _server.Requests.Count(r => r.Path == "/public"));
         }
 
         [Theory]
