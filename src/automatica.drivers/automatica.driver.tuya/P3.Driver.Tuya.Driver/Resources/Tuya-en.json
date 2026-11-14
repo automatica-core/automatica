@@ -1,0 +1,24 @@
+{
+  "TUYA": {
+    "NAME": "Tuya devices",
+    "DESCRIPTION": "Tuya Wi-Fi devices (LSC Smart Connect, Smart Life, Tuya Smart) through the local protocol on the LAN, no cloud",
+    "SCAN": { "NAME": "Search devices", "DESCRIPTION": "Lists the Tuya devices that announce themselves on the network and are not configured yet. Enter the local key of each one afterwards" },
+    "PLUG": {
+      "NAME": "Smart plug",
+      "DESCRIPTION": "A Tuya smart plug with power meter (e.g. LSC Power Plug w/ Power Meter)",
+      "HOST": { "NAME": "Device address", "DESCRIPTION": "IP address of the plug, e.g. 192.168.1.50. Give the plug a fixed address in the router" },
+      "DEVICE_ID": { "NAME": "Device ID", "DESCRIPTION": "Tuya device id (22 characters), filled in by the search or shown in the app under device information" },
+      "LOCAL_KEY": { "NAME": "Local key", "DESCRIPTION": "16 characters, from the Tuya IoT platform (project linked to your app account → API Explorer → Query Device Details, field local_key). Changes when the plug is paired again" },
+      "VERSION": { "NAME": "Protocol version", "DESCRIPTION": "3.3 or 3.4, filled in by the search" },
+      "POLL": { "NAME": "Polling interval [s]", "DESCRIPTION": "How often the status is read. Switching in the app or with the button arrives at once" },
+      "CONNECTED": { "NAME": "Connected", "DESCRIPTION": "The local session with the plug is open" },
+      "SWITCH": { "NAME": "Switch", "DESCRIPTION": "On / off, can be written" },
+      "POWER": { "NAME": "Power [W]", "DESCRIPTION": "Active power" },
+      "VOLTAGE": { "NAME": "Voltage [V]", "DESCRIPTION": "Mains voltage" },
+      "CURRENT": { "NAME": "Current [A]", "DESCRIPTION": "Current through the plug" },
+      "ENERGY_ADDED": { "NAME": "Energy added [kWh]", "DESCRIPTION": "Energy counter of the plug (DP 17); it may restart, link it to a meter logic for a running total" },
+      "COUNTDOWN": { "NAME": "Countdown [s]", "DESCRIPTION": "Seconds until the plug toggles by itself, 0 = off. Can be written" },
+      "POWER_ON_STATE": { "NAME": "State after power loss", "DESCRIPTION": "off, on or memory (as set in the app)" }
+    }
+  }
+}

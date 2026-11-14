@@ -1,0 +1,24 @@
+{
+  "TUYA": {
+    "NAME": "Tuya-Geräte",
+    "DESCRIPTION": "Tuya-WLAN-Geräte (LSC Smart Connect, Smart Life, Tuya Smart) über das lokale Protokoll im LAN, ohne Cloud",
+    "SCAN": { "NAME": "Geräte suchen", "DESCRIPTION": "Listet die Tuya-Geräte, die sich im Netzwerk melden und noch nicht angelegt sind. Danach bei jedem den Local Key eintragen" },
+    "PLUG": {
+      "NAME": "Steckdose",
+      "DESCRIPTION": "Eine Tuya-Steckdose mit Strommessung (z. B. LSC Power Plug w/ Power Meter)",
+      "HOST": { "NAME": "Geräteadresse", "DESCRIPTION": "IP-Adresse der Steckdose, z. B. 192.168.1.50. Der Steckdose im Router eine feste Adresse geben" },
+      "DEVICE_ID": { "NAME": "Geräte-ID", "DESCRIPTION": "Tuya-Geräte-ID (22 Zeichen), wird von der Suche eingetragen oder steht in der App unter Geräteinformationen" },
+      "LOCAL_KEY": { "NAME": "Local Key", "DESCRIPTION": "16 Zeichen, von der Tuya IoT Platform (Projekt mit dem App-Konto verknüpft → API Explorer → Query Device Details, Feld local_key). Ändert sich, wenn die Steckdose neu gekoppelt wird" },
+      "VERSION": { "NAME": "Protokollversion", "DESCRIPTION": "3.3 oder 3.4, wird von der Suche eingetragen" },
+      "POLL": { "NAME": "Abfrageintervall [s]", "DESCRIPTION": "Wie oft der Status gelesen wird. Schalten in der App oder am Taster kommt sofort an" },
+      "CONNECTED": { "NAME": "Verbunden", "DESCRIPTION": "Die lokale Verbindung zur Steckdose ist offen" },
+      "SWITCH": { "NAME": "Schalter", "DESCRIPTION": "Ein / aus, beschreibbar" },
+      "POWER": { "NAME": "Leistung [W]", "DESCRIPTION": "Wirkleistung" },
+      "VOLTAGE": { "NAME": "Spannung [V]", "DESCRIPTION": "Netzspannung" },
+      "CURRENT": { "NAME": "Strom [A]", "DESCRIPTION": "Strom durch die Steckdose" },
+      "ENERGY_ADDED": { "NAME": "Energie [kWh]", "DESCRIPTION": "Energiezähler der Steckdose (DP 17); er kann neu beginnen, für eine laufende Summe mit einer Zähler-Logik verbinden" },
+      "COUNTDOWN": { "NAME": "Countdown [s]", "DESCRIPTION": "Sekunden, bis die Steckdose von selbst umschaltet, 0 = aus. Beschreibbar" },
+      "POWER_ON_STATE": { "NAME": "Zustand nach Stromausfall", "DESCRIPTION": "off, on oder memory (wie in der App eingestellt)" }
+    }
+  }
+}

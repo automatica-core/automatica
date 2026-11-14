@@ -46,6 +46,8 @@ Here is a list of all built-in available drivers.
     * Tesla Powerwall 2 / Powerwall+ (local gateway API)
 * [Tesla](./automatica.driver.tesla)
     * Tesla cars (Fleet API)
+* [Tuya](./automatica.driver.tuya)
+    * Tuya Wi-Fi smart plugs (LSC Smart Connect, Smart Life), switch and power meter (local protocol 3.3 / 3.4)
 * [Times](./automatica.driver.times)
 * [WakeOnLan](./automatica.driver.wakeonlan)
 * [ZWave](./automatica.driver.zwave)

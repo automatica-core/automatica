@@ -1,0 +1,17 @@
+{
+  "Automatica": {
+    "manifest-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "plugin-version": { "Minor": 1, "Major": 0, "Build": 0, "Revision": 0 },
+    "PluginGuid": "d6ef7eb0-d980-4821-981d-2cd9f6f350b6",
+    "Name": "P3.Driver.Tuya.Driver",
+    "ComponentName": "Tuya",
+    "Type": "driver",
+    "Output": "P3.Driver.Tuya.Driver.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.tuya",
+    "MinCoreServerVersion": { "Minor": 0, "Major": 10, "Build": 0, "Revision": 2068 },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}
