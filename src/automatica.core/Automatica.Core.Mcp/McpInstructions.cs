@@ -26,6 +26,10 @@ namespace Automatica.Core.Mcp
             file, optionally only lines containing a text. Use them to explain errors or why a device did not react.
             get_log_levels / set_log_level show and change how much each facility logs; set it back when done.
 
+            Habits (same permission as the logs, recorded while the setting habitsEnabled is on): get_habit_stats shows
+            how many rows the recorder stored per kind and which data points produce the most; get_habit_actions lists
+            the rows (visu taps, reported value changes, 15 min averages of decimal measurements).
+
             Building logic pages (administrators, or the API key with writing allowed): list_logic_templates and
             get_logic_template show the block types with the keys of their inputs, outputs and parameters;
             create_logic_page, add_logic (parameters by key) and link_logic (data point -> logic input, logic output ->

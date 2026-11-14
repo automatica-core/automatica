@@ -67,7 +67,8 @@ namespace Automatica.Core.Mcp
                 .WithTools<ShadingTools>()
                 .WithTools<LogTools>()
                 .WithTools<LogicEditTools>()
-                .WithTools<NodeConfigTools>();
+                .WithTools<NodeConfigTools>()
+                .WithTools<HabitTools>();
 
             return services;
         }
