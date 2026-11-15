@@ -368,11 +368,11 @@
       },
       "TIME": {
         "NAME": "Uhrzeit",
-        "DESCRIPTION": "Uhrzeit hh:mm:ss (Impulsart Uhrzeit)"
+        "DESCRIPTION": "Uhrzeit hh:mm:ss (Impulsart Uhrzeit), verknüpfbar, z. B. mit Sonnenaufgang oder Sonnenuntergang der Sonne"
       },
       "OFFSET": {
         "NAME": "Versatz [min]",
-        "DESCRIPTION": "Verschiebt Sonnenereignisse, negativ = davor"
+        "DESCRIPTION": "Verschiebt Uhrzeit und Sonnenereignisse, negativ = davor"
       },
       "ONE_TIME": {
         "NAME": "Einmaliger Impuls",

@@ -53,7 +53,8 @@ namespace P3.Logic.Time.PulseAt
         internal const string TimeKey = "time";
 
         public override string LogicName => "Time.PulseAt";
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        // 1.1: time and offset linkable, the offset also shifts the time of day
+        public override Version LogicVersion => new Version(1, 1, 0, 0);
         public override Guid LogicGuid => new Guid("5a8a909c-6ab2-4e06-9224-f1da282486d7");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -67,8 +68,9 @@ namespace P3.Logic.Time.PulseAt
 
             factory.CreateParameterLogicInterfaceTemplate(ParamType, "TIME.PULSE_AT.TYPE.NAME", "TIME.PULSE_AT.TYPE.DESCRIPTION", "type", LogicGuid, 1,
                 RuleInterfaceParameterDataType.Enum, $"{(int)PulseAtType.Time}", false, PropertyHelper.CreateEnumMetaString(typeof(PulseAtType)));
-            factory.CreateParameterLogicInterfaceTemplate(ParamTime, "TIME.PULSE_AT.TIME.NAME", "TIME.PULSE_AT.TIME.DESCRIPTION", TimeKey, LogicGuid, 2, RuleInterfaceParameterDataType.Text, DefaultTime, false);
-            factory.CreateParameterLogicInterfaceTemplate(ParamOffset, "TIME.PULSE_AT.OFFSET.NAME", "TIME.PULSE_AT.OFFSET.DESCRIPTION", "offset", LogicGuid, 3, RuleInterfaceParameterDataType.Double, 0, false);
+            // time and offset are linkable: e.g. the sun driver's Sunrise/Sunset date-time feeds the time
+            factory.CreateParameterLogicInterfaceTemplate(ParamTime, "TIME.PULSE_AT.TIME.NAME", "TIME.PULSE_AT.TIME.DESCRIPTION", TimeKey, LogicGuid, 2, RuleInterfaceParameterDataType.Text, DefaultTime, true);
+            factory.CreateParameterLogicInterfaceTemplate(ParamOffset, "TIME.PULSE_AT.OFFSET.NAME", "TIME.PULSE_AT.OFFSET.DESCRIPTION", "offset", LogicGuid, 3, RuleInterfaceParameterDataType.Double, 0, true);
             factory.CreateParameterLogicInterfaceTemplate(ParamOneTime, "TIME.PULSE_AT.ONE_TIME.NAME", "TIME.PULSE_AT.ONE_TIME.DESCRIPTION", "one_time", LogicGuid, 4, RuleInterfaceParameterDataType.Bool, false, false);
             factory.CreateParameterLogicInterfaceTemplate(ParamDate, "TIME.PULSE_AT.DATE.NAME", "TIME.PULSE_AT.DATE.DESCRIPTION", "date", LogicGuid, 5, RuleInterfaceParameterDataType.Text, "", false);
             factory.CreateParameterLogicInterfaceTemplate(ParamDuration, "TIME.PULSE_AT.DURATION.NAME", "TIME.PULSE_AT.DURATION.DESCRIPTION", "duration", LogicGuid, 6, RuleInterfaceParameterDataType.Double, DefaultDuration, false);

@@ -368,11 +368,11 @@
       },
       "TIME": {
         "NAME": "Time",
-        "DESCRIPTION": "Time of day hh:mm:ss (pulse type time of day)"
+        "DESCRIPTION": "Time of day hh:mm:ss (pulse type time of day), can be linked, e.g. to the sun's Sunrise or Sunset"
       },
       "OFFSET": {
         "NAME": "Offset [min]",
-        "DESCRIPTION": "Shifts sun events, negative = before"
+        "DESCRIPTION": "Shifts the time of day and sun events, negative = before"
       },
       "ONE_TIME": {
         "NAME": "One-time pulse",

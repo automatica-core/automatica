@@ -201,6 +201,50 @@ namespace P3.Logic.Time.Tests.PulseAt
         }
 
         [Fact]
+        public void LinkedSunrise_WithOffset_PulsesBeforeIt()
+        {
+            SetUtcNow(V(2026, 11, 15, 0, 30));
+            Configure(PulseAtType.Time, "07:00:00");
+
+            // the sun driver dispatches Sunrise as a local date-time, the offset arrives over a link as well
+            Sut.ValueChanged(Interface(F.ParamTime), null, new DateTime(2026, 11, 15, 7, 9, 27));
+            Sut.ValueChanged(Interface(F.ParamOffset), null, -60);
+            Assert.Equal(new DateTime(2026, 11, 15, 6, 9, 27), NextLocal);
+
+            // the next day's sunrise arrives after midnight
+            SetUtcNow(V(2026, 11, 15, 6, 9, 27));
+            FireTick();
+            Assert.Equal(true, Values(F.Output)[0]);
+            Assert.Equal(new DateTime(2026, 11, 16, 6, 9, 27), NextLocal);
+            SetUtcNow(V(2026, 11, 16, 0, 0, 1));
+            Sut.ValueChanged(Interface(F.ParamTime), null, "2026-11-16T07:10:58.3721093");
+            Assert.Equal(new DateTime(2026, 11, 16, 6, 10, 58).AddTicks(3721093), NextLocal);
+        }
+
+        [Fact]
+        public void Offset_ShiftsTheTimeAcrossMidnight()
+        {
+            SetUtcNow(V(2026, 11, 8, 12));
+            Configure(PulseAtType.Time, "00:30:00", offset: -60);
+            Assert.Equal(new DateTime(2026, 11, 8, 23, 30, 0), NextLocal);
+        }
+
+        [Fact]
+        public void TryTimeOfDateTime_TakesTheLocalTimeOfDay()
+        {
+            var zone = TimeZones.Vienna;
+            Assert.True(PulseAtRule.TryTimeOfDateTime("2026-11-15T07:09:27", zone, out var plain));
+            Assert.Equal(new TimeSpan(7, 9, 27), plain);
+            Assert.True(PulseAtRule.TryTimeOfDateTime("2026-11-15T06:09:27Z", zone, out var utc));
+            Assert.Equal(new TimeSpan(7, 9, 27), utc);
+            Assert.True(PulseAtRule.TryTimeOfDateTime(new DateTimeOffset(2026, 6, 21, 2, 53, 0, TimeSpan.Zero), zone, out var summer));
+            Assert.Equal(new TimeSpan(4, 53, 0), summer);
+            Assert.False(PulseAtRule.TryTimeOfDateTime("07:00", zone, out _));
+            Assert.False(PulseAtRule.TryTimeOfDateTime("xyz", zone, out _));
+            Assert.False(PulseAtRule.TryTimeOfDateTime(42, zone, out _));
+        }
+
+        [Fact]
         public void ParseDate_AcceptsIsoAndGerman()
         {
             Assert.Equal(new DateOnly(2026, 12, 24), PulseAtRule.ParseDate("2026-12-24"));

@@ -145,7 +145,12 @@ namespace P3.Logic.Time.PulseAt
                 }
                 else if (template == PulseAtLogicFactory.ParamTime)
                 {
-                    if (PersistedParameter.IsRuntimeSource(source))
+                    if (TryTimeOfDateTime(value, Context.TimeProvider.LocalTimeZone, out var linkedTime))
+                    {
+                        // a linked date-time (e.g. the sun driver's Sunrise) is used as it comes, never persisted
+                        SetTime(linkedTime);
+                    }
+                    else if (PersistedParameter.IsRuntimeSource(source))
                     {
                         var parsed = AlarmEntries.ParseTime(value?.ToString());
                         if (parsed == null)
@@ -206,6 +211,46 @@ namespace P3.Logic.Time.PulseAt
             {
                 return fallback;
             }
+        }
+
+        /// <summary>
+        /// The local time of day of a value that carries a date (DateTime, DateTimeOffset or a date-time text);
+        /// false for plain times like "07:00" and anything else
+        /// </summary>
+        private static readonly System.Text.RegularExpressions.Regex ZoneSuffix = new(@"(Z|[+-]\d{2}:?\d{2})$");
+
+        internal static bool TryTimeOfDateTime(object value, TimeZoneInfo zone, out TimeSpan time)
+        {
+            time = default;
+            DateTimeOffset at;
+            switch (value)
+            {
+                case DateTimeOffset offset:
+                    at = offset;
+                    break;
+                case DateTime dateTime:
+                    if (dateTime.Kind != DateTimeKind.Utc)
+                    {
+                        time = dateTime.TimeOfDay;
+                        return true;
+                    }
+                    at = new DateTimeOffset(dateTime);
+                    break;
+                case string text when AlarmEntries.ParseTime(text) == null
+                                      && DateTimeOffset.TryParse(text.Trim(), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsed):
+                    if (!ZoneSuffix.IsMatch(text.Trim()))
+                    {
+                        // no zone in the text: it already is local time
+                        time = parsed.UtcDateTime.TimeOfDay;
+                        return true;
+                    }
+                    at = parsed;
+                    break;
+                default:
+                    return false;
+            }
+            time = TimeZoneInfo.ConvertTime(at, zone).TimeOfDay;
+            return true;
         }
 
         private void SetTime(TimeSpan time)
@@ -332,12 +377,13 @@ namespace P3.Logic.Time.PulseAt
                         {
                             return null;
                         }
-                        var at = LocalClock.At(provider, _date.Value, _time);
+                        var at = LocalClock.At(provider, _date.Value, _time).AddMinutes(OffsetMinutes);
                         return at > after ? at : null;
                     }
-                    for (var i = 0; i <= 2; i++)
+                    // from yesterday: a negative offset can move today's pulse before midnight
+                    for (var i = -1; i <= 2; i++)
                     {
-                        var at = LocalClock.At(provider, today.AddDays(i), _time);
+                        var at = LocalClock.At(provider, today.AddDays(i), _time).AddMinutes(OffsetMinutes);
                         if (at > after)
                         {
                             return at;
