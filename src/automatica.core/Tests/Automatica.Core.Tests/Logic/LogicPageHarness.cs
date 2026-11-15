@@ -75,7 +75,7 @@ namespace Automatica.Core.Tests.LogicPages
         /// <summary>
         /// A logic instance with the given inputs and outputs (interface names), all linkable
         /// </summary>
-        public T AddLogic<T>(string name, Func<ILogicContext, T> create, string[] inputs, string[] outputs) where T : Automatica.Core.Logic.Logic
+        public T AddLogic<T>(string name, Func<ILogicContext, T> create, string[] inputs, string[] outputs, string[] parameters = null) where T : Automatica.Core.Logic.Logic
         {
             var rule = new RuleInstance { ObjId = Guid.NewGuid(), Name = name };
 
@@ -107,6 +107,10 @@ namespace Automatica.Core.Tests.LogicPages
             foreach (var output in outputs)
             {
                 AddPort(output, LogicInterfaceDirection.Output);
+            }
+            foreach (var parameter in parameters ?? Array.Empty<string>())
+            {
+                AddPort(parameter, LogicInterfaceDirection.Param);
             }
 
             var logic = create(new LogicContextMock(rule, new LogicTemplateFactoryMock(), Dispatcher));
@@ -286,6 +290,31 @@ namespace Automatica.Core.Tests.LogicPages
                 throw new InvalidOperationException("logic failed");
             }
             return new List<ILogicOutputChanged> { new LogicOutputChanged(LogicPageHarness.Port(this, "O"), Transform(value)) };
+        }
+    }
+
+    /// <summary>
+    /// Records the values its parameters receive after the start
+    /// </summary>
+    internal class ParameterLogic : Automatica.Core.Logic.Logic
+    {
+        public ConcurrentQueue<(string Key, object Value)> Parameters { get; } = new();
+
+        public ParameterLogic(ILogicContext context) : base(context)
+        {
+        }
+
+        protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        {
+            if (source is not LogicInterfaceInstanceDispatchable) // the start applies the configured values
+            {
+                Parameters.Enqueue((instance.This2RuleInterfaceTemplateNavigation.Key, value));
+            }
+        }
+
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        {
+            return new List<ILogicOutputChanged>();
         }
     }
 

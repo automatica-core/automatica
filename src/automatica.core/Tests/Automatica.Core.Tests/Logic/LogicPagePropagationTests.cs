@@ -542,5 +542,43 @@ namespace Automatica.Core.Tests.LogicPages
             await WaitUntil(() => outputs.Count == 1);
             _page.RemoteSender.Verify(a => a.DispatchValue(It.Is<IDispatchable>(d => d.Id == Port(logic, "O").ObjId), It.Is<object>(v => v is DispatchValue && Equals(((DispatchValue)v).Value, 9))), Times.Once);
         }
+
+        [Fact]
+        public async Task ReplayLinkedParameters_HandsTheCurrentValueToLinkedParameters()
+        {
+            // e.g. the sun driver: dispatches its sunrise once a day, before the logic (re)starts or the link exists
+            var sunrise = await _page.AddNode("sunrise");
+            await _page.Dispatcher.DispatchValue(sunrise, "2026-11-15T07:09:27");
+            var logic = _page.AddLogic("pulse", ctx => new ParameterLogic(ctx), new[] { "I" }, Array.Empty<string>(), new[] { "time" });
+            _page.LinkNodeToLogic(sunrise, Port(logic, "time"));
+            await _page.Engine.Load();
+            Assert.Empty(logic.Parameters);
+
+            await _page.Engine.ReplayLinkedParameters();
+
+            Assert.Equal(("time", (object)"2026-11-15T07:09:27"), logic.Parameters.Single());
+        }
+
+        [Fact]
+        public async Task ReplayLinkedParameters_LeavesInputsAndOtherLogicsAlone()
+        {
+            var source = await _page.AddNode("source");
+            await _page.Dispatcher.DispatchValue(source, true);
+            var input = AddPassThrough("input");
+            var other = _page.AddLogic("other", ctx => new ParameterLogic(ctx), Array.Empty<string>(), Array.Empty<string>(), new[] { "p" });
+            var empty = await _page.AddNode("empty");
+            var mine = _page.AddLogic("mine", ctx => new ParameterLogic(ctx), Array.Empty<string>(), Array.Empty<string>(), new[] { "p", "q" });
+            _page.LinkNodeToLogic(source, Port(input, "I"));
+            _page.LinkNodeToLogic(source, Port(other, "p"));
+            _page.LinkNodeToLogic(source, Port(mine, "p"));
+            _page.LinkNodeToLogic(empty, Port(mine, "q")); // no value yet
+            await _page.Engine.Load();
+
+            await _page.Engine.ReplayLinkedParameters(mine.Context.RuleInstance.ObjId);
+
+            Assert.Equal(0, input.Calls);
+            Assert.Empty(other.Parameters);
+            Assert.Equal(("p", (object)true), mine.Parameters.Single());
+        }
     }
 }

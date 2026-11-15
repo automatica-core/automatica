@@ -348,6 +348,7 @@ namespace Automatica.Core.Runtime.Core
                         })))));
 
                     await timer.Measure("logics", StartLogics);
+                    await timer.Measure("linked parameters", () => _logicEngineDispatcher.ReplayLinkedParameters());
                     await timer.Measure("trending", () => _trendingContext.Start());
                     RunState = RunState.Started;
 
@@ -584,6 +585,8 @@ namespace Automatica.Core.Runtime.Core
                 // the engine registered the visualization writes of the logics it found at start only
                 await _logicEngineDispatcher.RegisterLogicInterfaces(newLogic.Key);
             }
+            // the (re)start reset the parameters to their configured values
+            await _logicEngineDispatcher.ReplayLinkedParameters(ruleInstanceId);
         }
 
         public async Task StopLogic(Guid ruleInstanceId)
@@ -605,6 +608,8 @@ namespace Automatica.Core.Runtime.Core
         public async Task ReloadLinks()
         {
             await _logicEngineDispatcher.Reload();
+            // a new link only delivers the next dispatched value
+            await _logicEngineDispatcher.ReplayLinkedParameters();
         }
 
         public async Task ReloadLogicServices()
@@ -612,6 +617,7 @@ namespace Automatica.Core.Runtime.Core
             await StopLogicEngine();
             await StartLogicEngine();
             await StartLogics();
+            await _logicEngineDispatcher.ReplayLinkedParameters();
         }
 
         public async Task StopDriver(IDriver driver)

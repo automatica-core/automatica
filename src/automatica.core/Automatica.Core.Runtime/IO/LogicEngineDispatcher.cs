@@ -96,6 +96,43 @@ namespace Automatica.Core.Runtime.IO
             return await Load();
         }
 
+        public async Task ReplayLinkedParameters(Guid? ruleInstanceId = null)
+        {
+            foreach (var entry in _linkCache.All())
+            {
+                if (!entry.This2RuleInterfaceInstanceInput.HasValue || !entry.This2NodeInstance2RulePageOutput.HasValue)
+                {
+                    continue;
+                }
+
+                // parameters only: replaying inputs would switch outputs on every start
+                var target = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                if (target?.This2RuleInterfaceTemplateNavigation?.This2RuleInterfaceDirection != (long)Automatica.Core.Base.Templates.LogicInterfaceDirection.Param
+                    || (ruleInstanceId.HasValue && target.This2RuleInstance != ruleInstanceId.Value)
+                    || !_logicInstancesStore.ContainsRuleInstanceId(target.This2RuleInstance))
+                {
+                    continue;
+                }
+
+                var sourceId = entry.This2NodeInstance2RulePageOutputNavigation?.This2NodeInstance;
+                var current = sourceId.HasValue ? _dispatcher.GetValue(DispatchableType.NodeInstance, sourceId.Value) : null;
+                if (current?.Value == null)
+                {
+                    continue;
+                }
+
+                var value = new DispatchValue(current);
+                if (target.Inverted && value.Value is bool b)
+                {
+                    value.Value = !b;
+                }
+
+                var source = (IDispatchable)_driverNodesStore.Get(sourceId.Value)
+                             ?? new GenericDispatchableNode(_nodeInstanceCache.Get(sourceId.Value)?.Name ?? sourceId.Value.ToString(), sourceId.Value, DispatchableSource.NodeInstance);
+                await ValueDispatchToRule(source, value, target.This2RuleInstance, target);
+            }
+        }
+
         private async Task Register(Guid link, DispatchableType type, Guid id, Guid target, Func<IDispatchable, DispatchValue, Task> callback)
         {
             var token = await _dispatcher.Subscribe(type, id, callback);

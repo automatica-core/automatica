@@ -17,5 +17,12 @@ namespace Automatica.Core.Runtime.IO
         /// that are already registered are skipped, so calling it again is harmless.
         /// </summary>
         Task RegisterLogicInterfaces(RuleInstance logicInstance);
+
+        /// <summary>
+        /// Hands the current value of every data point linked to a logic parameter to the logic, only to the logic
+        /// <paramref name="ruleInstanceId"/> when given. Call it after logics (re)started or links changed: a logic resets its
+        /// parameters to the configured values on start and a link only delivers the next dispatched value.
+        /// </summary>
+        Task ReplayLinkedParameters(Guid? ruleInstanceId = null);
     }
 }
