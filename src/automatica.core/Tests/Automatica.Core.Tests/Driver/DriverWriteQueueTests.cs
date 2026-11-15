@@ -12,6 +12,7 @@ using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using Xunit;
 
 namespace Automatica.Core.Tests.Driver
@@ -195,6 +196,32 @@ namespace Automatica.Core.Tests.Driver
 
             Assert.DoesNotContain(1, driver.Attempts);
             Assert.DoesNotContain(2, driver.Attempts);
+        }
+
+        private static Task DispatchFromVisualization(WriteDriverMock driver, int value)
+        {
+            // same as DataHub.SetValue and the MCP write_value tool
+            var visu = Mock.Of<IDispatchable>(d => d.Type == DispatchableType.Visualization && d.Id == driver.Id && d.Name == "Web" && d.Source == DispatchableSource.Visualization);
+            return driver.DriverContext.Dispatcher.DispatchValue(visu,
+                new DispatchValue(driver.Id, DispatchableType.Visualization, value, DateTime.Now, DispatchValueSource.User));
+        }
+
+        [Fact]
+        public async Task VisualizationWrite_ReachesTheDriver_UntilStopped()
+        {
+            var driver = await CreateDriver();
+
+            await DispatchFromVisualization(driver, 7);
+            await WaitUntil(() => driver.Written.Contains(7));
+
+            // the driver's own read values are not written back
+            await driver.DriverContext.Dispatcher.DispatchValue(driver, new DispatchValue(driver.Id, DispatchableType.NodeInstance, 8, DateTime.Now, DispatchValueSource.Read));
+
+            await driver.Stop();
+            await DispatchFromVisualization(driver, 9);
+            await Task.Delay(300);
+
+            Assert.Equal(new[] { 7 }, driver.Attempts.ToArray());
         }
     }
 }

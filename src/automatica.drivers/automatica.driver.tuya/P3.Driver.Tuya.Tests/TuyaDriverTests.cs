@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.Tuya.Driver;
 using Xunit;
@@ -59,9 +61,94 @@ namespace P3.Driver.Tuya.Tests
 
         private static object Value(TuyaPlug plug, string key) => plug.Values.Single(v => v.DataPoint.Key == key).LastValue;
 
-        private static async Task Eventually(Func<bool> condition)
+        /// <summary>
+        /// Like the server: Configure, Start and Started of the whole driver, polling by the timer
+        /// </summary>
+        private async Task<(TuyaDriver Driver, TuyaPlug Plug)> StartDriverAsync(FakeTuyaDevice device)
         {
-            for (var i = 0; i < 100 && !condition(); i++)
+            var root = CreateNodeInstance(DriverFactory.DriverGuid);
+            var plugNode = CreateNodeInstance(TuyaDriverFactory.PlugTemplate);
+            plugNode.SetProperty(TuyaDriverFactory.HostKey, "127.0.0.1");
+            plugNode.SetProperty(TuyaDriverFactory.DeviceIdKey, DeviceId);
+            plugNode.SetProperty(TuyaDriverFactory.LocalKeyKey, LocalKey);
+            plugNode.SetProperty(TuyaDriverFactory.VersionKey, "3.4");
+            plugNode.SetProperty(TuyaDriverFactory.PollKey, 2);
+            foreach (var dp in TuyaDataPoints.Plug)
+            {
+                plugNode.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(dp.Template));
+            }
+            root.InverseThis2ParentNodeInstanceNavigation.Add(plugNode);
+
+            var driver = (TuyaDriver)await CreateDriver(root);
+            var plug = driver.Plugs.Single();
+            plug.Port = device.Port;
+            await driver.Start();
+            await driver.Started();
+            return (driver, plug);
+        }
+
+        private static Task WriteAsync(TuyaPlug plug, string key, object value)
+        {
+            var node = plug.Values.Single(v => v.DataPoint.Key == key);
+            return node.WriteValue(DispatchableMock.Instance, new DispatchValue(node.Id, DispatchableType.NodeInstance, value, DateTime.Now, DispatchValueSource.User));
+        }
+
+        [Fact]
+        public async Task RunningDriver_PollsByTimer_AndWritesThroughTheWriteQueue()
+        {
+            var device = Device("3.4");
+            var (driver, plug) = await StartDriverAsync(device);
+            try
+            {
+                await Eventually(() => Equals(Value(plug, "power"), 4.8), 5);
+
+                device.Dps["20"] = 2311;
+                await Eventually(() => Equals(Value(plug, "voltage"), 231.1), 5);
+
+                await WriteAsync(plug, "switch", false);
+                await Eventually(() => Equals(device.Dps["1"], false), 5);
+                await Eventually(() => Equals(Value(plug, "switch"), false), 5);
+            }
+            finally
+            {
+                await driver.Stop();
+            }
+        }
+
+        /// <summary>
+        /// Saving a property in the configuration stops the driver and starts a new instance (hot reload), twice when two
+        /// keys are entered one after the other
+        /// </summary>
+        [Fact]
+        public async Task HotReload_NewInstanceKeepsPollingAndWriting()
+        {
+            var device = Device("3.4");
+            var (first, firstPlug) = await StartDriverAsync(device);
+            await Eventually(() => Equals(Value(firstPlug, TuyaDataPoints.ConnectedKey), true), 5);
+            await first.Stop();
+            var (second, _) = await StartDriverAsync(device);
+            await second.Stop();
+
+            var (third, plug) = await StartDriverAsync(device);
+            try
+            {
+                await Eventually(() => Equals(Value(plug, "power"), 4.8), 5);
+
+                device.Dps["20"] = 2322;
+                await Eventually(() => Equals(Value(plug, "voltage"), 232.2), 5);
+
+                await WriteAsync(plug, "switch", false);
+                await Eventually(() => Equals(device.Dps["1"], false), 5);
+            }
+            finally
+            {
+                await third.Stop();
+            }
+        }
+
+        private static async Task Eventually(Func<bool> condition, int seconds = 2)
+        {
+            for (var i = 0; i < seconds * 50 && !condition(); i++)
             {
                 await Task.Delay(20);
             }
@@ -78,7 +165,8 @@ namespace P3.Driver.Tuya.Tests
 
             await plug.PollAsync();
 
-            await Eventually(() => Value(plug, "power") != null);
+            // Apply sets the values one after the other, wait for the last one
+            await Eventually(() => plug.Values.All(v => v.LastValue != null));
             Assert.Equal(true, Value(plug, TuyaDataPoints.ConnectedKey));
             Assert.Equal(true, Value(plug, "switch"));
             Assert.Equal(4.8, Value(plug, "power"));
@@ -121,8 +209,7 @@ namespace P3.Driver.Tuya.Tests
 
             await device.PushAsync(new Dictionary<string, object> { ["1"] = false, ["19"] = 0 });
 
-            await Eventually(() => Equals(Value(plug, "switch"), false));
-            Assert.Equal(0.0, Value(plug, "power"));
+            await Eventually(() => Equals(Value(plug, "switch"), false) && Equals(Value(plug, "power"), 0.0));
         }
 
         [Fact]

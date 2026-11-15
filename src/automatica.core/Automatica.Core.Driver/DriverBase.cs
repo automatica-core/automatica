@@ -37,6 +37,7 @@ namespace Automatica.Core.Driver
         private readonly Channel<WriteRequest> _writeQueue;
         private readonly object _startLock = new();
         private CancellationTokenSource _stopTokenSource;
+        private IDisposable _visualizationWrites;
 
         private readonly ConcurrentDictionary<IDriverNode, Task> _childStartTasks = new(ReferenceEqualityComparer.Instance);
 
@@ -286,20 +287,40 @@ namespace Automatica.Core.Driver
             return result;
         }
 
-        public virtual Task<bool> Start(CancellationToken token = default)
+        public virtual async Task<bool> Start(CancellationToken token = default)
         {
             CancellationToken stopToken;
+            CancellationTokenSource startedSource = null;
             lock (_startLock)
             {
                 // only one write task per node, Start can be called again (e.g. by the start retry of the parent)
                 if (_stopTokenSource == null)
                 {
                     _stopTokenSource = new CancellationTokenSource();
+                    startedSource = _stopTokenSource;
                     var writeToken = _stopTokenSource.Token;
                     _ = Task.Run(() => WriteTask(writeToken), writeToken);
                 }
 
                 stopToken = _stopTokenSource.Token;
+            }
+
+            if (startedSource != null)
+            {
+                // visualization and MCP writes (DataHub.SetValue, write_value) are dispatched with the node id as Visualization,
+                // nothing else forwards them to the driver (links write through the LogicEngineDispatcher)
+                var subscription = await DriverContext.Dispatcher.Subscribe(DispatchableType.NodeInstance, Id, OnValueDispatched);
+                lock (_startLock)
+                {
+                    if (_stopTokenSource == startedSource)
+                    {
+                        _visualizationWrites = subscription;
+                        subscription = null;
+                    }
+                }
+
+                // stopped while subscribing
+                subscription?.Dispose();
             }
 
             // the children start in the background (with retries), Started() of a child is called once its start is done
@@ -308,7 +329,17 @@ namespace Automatica.Core.Driver
                 _childStartTasks[node] = Task.Run(() => StartChild(node, stopToken));
             }
 
-            return Task.FromResult(true);
+            return true;
+        }
+
+        private Task OnValueDispatched(IDispatchable source, DispatchValue value)
+        {
+            if (source.Type == DispatchableType.Visualization)
+            {
+                Enqueue(source, value);
+            }
+
+            return Task.CompletedTask;
         }
 
         private async Task StartChild(IDriverNode node, CancellationToken stopToken)
@@ -523,11 +554,16 @@ namespace Automatica.Core.Driver
         public virtual async Task<bool> Stop(CancellationToken token = default)
         {
             CancellationTokenSource stopTokenSource;
+            IDisposable visualizationWrites;
             lock (_startLock)
             {
                 stopTokenSource = _stopTokenSource;
                 _stopTokenSource = null;
+                visualizationWrites = _visualizationWrites;
+                _visualizationWrites = null;
             }
+
+            visualizationWrites?.Dispose();
 
             if (stopTokenSource != null)
             {
