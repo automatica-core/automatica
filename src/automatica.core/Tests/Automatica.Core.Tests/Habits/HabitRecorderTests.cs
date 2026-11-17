@@ -171,6 +171,42 @@ namespace Automatica.Core.Tests.Habits
         }
 
         [Fact]
+        public async Task StateReadAfterAStart_IsNoAction_ButChangesAre()
+        {
+            var known = Guid.NewGuid();
+            var unknown = Guid.NewGuid();
+            _nodes.Add(new NodeInstance { ObjId = known });
+            _nodes.Add(new NodeInstance { ObjId = unknown });
+            // read before the recorder subscribed
+            _dispatcher.Setup(a => a.GetValue(DispatchableType.NodeInstance, known))
+                .Returns(Value(known, true, DispatchValueSource.Read));
+            _recorder.StartupUntil = _time.GetUtcNow() + HabitRecorder.StartupPhase;
+
+            await _recorder.ScanDataPointsAsync();
+
+            // the restart: drivers read their devices again
+            await _recorder.OnDataPointValue(null, Value(known, true, DispatchValueSource.Read));
+            await _recorder.OnDataPointValue(null, Value(unknown, false, DispatchValueSource.Read));
+            await _recorder.FlushAsync(all: true);
+            Assert.Empty(Recorded());
+
+            // a real change, still within the startup phase
+            await _recorder.OnDataPointValue(null, Value(unknown, true, DispatchValueSource.Read));
+            await _recorder.FlushAsync(all: true);
+            Assert.Equal(unknown, Assert.Single(Recorded()).TargetId);
+
+            // after the startup phase the first value of a data point counts again (a button never read before)
+            var button = Guid.NewGuid();
+            _nodes.Add(new NodeInstance { ObjId = button });
+            _time.Advance(HabitRecorder.StartupPhase);
+            await _recorder.ScanDataPointsAsync();
+            await _recorder.OnDataPointValue(null, Value(known, false, DispatchValueSource.Read));
+            await _recorder.OnDataPointValue(null, Value(button, true, DispatchValueSource.Read));
+            await _recorder.FlushAsync(all: true);
+            Assert.Equal(3, Recorded().Count);
+        }
+
+        [Fact]
         public async Task ExcludedNodes_AndEverythingBelowThem_AreNotRecorded()
         {
             var counter = new NodeInstance { ObjId = Guid.NewGuid(), HabitExcluded = true };

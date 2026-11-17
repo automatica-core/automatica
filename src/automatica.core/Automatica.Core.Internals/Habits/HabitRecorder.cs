@@ -32,7 +32,8 @@ namespace Automatica.Core.Internals.Habits
     /// Values of the same target within <see cref="MergeWindow"/> of its first value (a dimmer drag, a double tap, a sensor
     /// that changes every second) become one action with the last value. Decimal data points (power, temperature, ...) are
     /// context, not actions: they are stored as the time-weighted average of each <see cref="SlotLength"/> slot in which they
-    /// changed, a slot without a row kept its value. Clock data points are skipped. Off by default; switching it off deletes everything.
+    /// changed, a slot without a row kept its value. Clock data points are skipped. The state drivers read after a start (the
+    /// first value of a data point within <see cref="StartupPhase"/>) is no action. Off by default; switching it off deletes everything.
     /// </summary>
     public class HabitRecorder : IHabitRecorder, IHostedService
     {
@@ -45,6 +46,8 @@ namespace Automatica.Core.Internals.Habits
         private static readonly TimeSpan FlushInterval = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan ScanInterval = TimeSpan.FromMinutes(1);
         private static readonly TimeSpan CleanupInterval = TimeSpan.FromHours(1);
+        /// <summary>After a start drivers read their devices for minutes (KNX group reads, polling): that is state, not actions</summary>
+        internal static readonly TimeSpan StartupPhase = TimeSpan.FromMinutes(10);
 
         private readonly IDbContextFactory<AutomaticaContext> _contextFactory;
         private readonly ISettingsCache _settings;
@@ -83,6 +86,9 @@ namespace Automatica.Core.Internals.Habits
         private Task _loop;
 
         internal TimeProvider Time { get; set; } = DateTimeHelper.ProviderInstance;
+
+        /// <summary>Until then the first value a data point reports is its state after the start, not an action</summary>
+        internal DateTimeOffset StartupUntil { get; set; } = DateTimeOffset.MinValue;
 
         public HabitRecorder(IDbContextFactory<AutomaticaContext> contextFactory, ISettingsCache settings, INodeInstanceCache nodes,
             ILogicInterfaceInstanceCache logicInterfaces, ILogicInstanceCache logics, IOperatingModeService operatingModes,
@@ -313,6 +319,14 @@ namespace Automatica.Core.Internals.Habits
             var before = _subscriptions.Count;
             foreach (var id in wanted.Where(a => !_subscriptions.ContainsKey(a)))
             {
+                // the value known so far is the baseline: reading it again (polling, a restart) is no change
+                if (_dispatcher.GetValue(DispatchableType.NodeInstance, id)?.Value is { } known)
+                {
+                    lock (_lock)
+                    {
+                        _lastSeen[id] = Convert.ToString(known, CultureInfo.InvariantCulture);
+                    }
+                }
                 _subscriptions[id] = await _dispatcher.Subscribe(DispatchableType.NodeInstance, id, OnDataPointValue);
             }
 
@@ -358,6 +372,7 @@ namespace Automatica.Core.Internals.Habits
             }
 
             var text = Convert.ToString(value.Value, CultureInfo.InvariantCulture);
+            bool firstValue;
             lock (_lock)
             {
                 // polling drivers report the same value again and again, that is no change
@@ -367,6 +382,7 @@ namespace Automatica.Core.Internals.Habits
                 {
                     return Task.CompletedTask;
                 }
+                firstValue = last == null;
                 _lastSeen[value.Id] = text;
             }
 
@@ -374,7 +390,7 @@ namespace Automatica.Core.Internals.Habits
             {
                 Measure(value.Id, number);
             }
-            else
+            else if (!firstValue || Time.GetUtcNow() >= StartupUntil)
             {
                 Record(value.Id, value.Value, HabitActionOrigin.DataPoint, null);
             }
@@ -424,6 +440,7 @@ namespace Automatica.Core.Internals.Habits
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _cts = new CancellationTokenSource();
+            StartupUntil = Time.GetUtcNow() + StartupPhase;
             _loop = RunAsync(_cts.Token);
             _logger.LogInformation($"Habit recorder started (enabled: {IsEnabled})");
             return Task.CompletedTask;
