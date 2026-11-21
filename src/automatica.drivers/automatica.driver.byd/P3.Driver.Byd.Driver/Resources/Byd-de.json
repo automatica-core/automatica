@@ -73,6 +73,10 @@
         "NAME": "Restladezeit [min]",
         "DESCRIPTION": "Geschätzte Minuten bis der Akku voll ist, 0, wenn das Auto nicht lädt"
       },
+      "MOVING": {
+        "NAME": "Fährt",
+        "DESCRIPTION": "true, wenn das Auto bei der letzten Abfrage schneller als 0 km/h war"
+      },
       "INSIDE_TEMP": {
         "NAME": "Innentemperatur [°C]",
         "DESCRIPTION": ""

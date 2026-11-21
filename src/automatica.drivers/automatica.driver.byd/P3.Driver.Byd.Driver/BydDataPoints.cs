@@ -116,6 +116,9 @@ namespace P3.Driver.Byd.Driver
             // added in driver version 1.1
             new BydDataPoint(new Guid("5d0e8a3c-7f2b-4c61-9a4e-2b8f6d1c9e37"), "charge_power", "CHARGE_POWER", NodeDataType.Double, BydSource.Realtime, ChargePower),
             new BydDataPoint(new Guid("a83f1b26-4e9d-4d0a-b5c7-6e2a9f4d8b15"), "time_to_full", "TIME_TO_FULL", NodeDataType.Double, BydSource.Realtime, TimeToFull),
+            // added in driver version 1.2
+            new BydDataPoint(new Guid("c41e7d92-3b5a-4f08-8e6d-91a2f5b7c03e"), "moving", "MOVING", NodeDataType.Boolean, BydSource.Realtime,
+                e => BydCloud.Number(e, "speed") is { } s && s >= 0 ? s > 0 : null),
         };
     }
 }

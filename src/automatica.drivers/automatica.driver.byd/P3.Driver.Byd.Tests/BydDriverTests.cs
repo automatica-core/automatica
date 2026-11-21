@@ -256,6 +256,7 @@ namespace P3.Driver.Byd.Tests
             Assert.Equal(12345d, Value(values["odometer"]));
             Assert.Equal(false, Value(values["charging"]));
             Assert.Equal(19.5, Value(values["inside_temp"]));
+            Assert.Equal(false, Value(values["moving"]));
             Assert.Equal(true, Value(values["locked"]));
             Assert.Equal(48.2082, Value(values["latitude"]));
             Assert.Equal(16.3738, Value(values["longitude"]));
@@ -337,6 +338,20 @@ namespace P3.Driver.Byd.Tests
             Assert.Equal(33d * 60 + 29, Value(values["time_to_full"]));
             Assert.Equal(48.3069, Value(values["latitude"]));
             Assert.Equal(14.2858, Value(values["longitude"]));
+        }
+
+        [Fact]
+        public async Task Poll_Driving_SetsMoving()
+        {
+            _realtimeResult = new { requestSerial = "RS1", onlineState = 1, elecPercent = 70, enduranceMileage = 350, speed = 48, time = 1794306070 };
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(48d, Value(values["speed"]));
+            Assert.Equal(true, Value(values["moving"]));
         }
 
         [Fact]

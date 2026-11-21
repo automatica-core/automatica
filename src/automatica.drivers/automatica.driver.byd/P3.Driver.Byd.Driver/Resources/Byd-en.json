@@ -73,6 +73,10 @@
         "NAME": "Time to full [min]",
         "DESCRIPTION": "Estimated minutes until the battery is full, 0 when the car is not charging"
       },
+      "MOVING": {
+        "NAME": "Moving",
+        "DESCRIPTION": "true when the car went faster than 0 km/h at the last poll"
+      },
       "INSIDE_TEMP": {
         "NAME": "Inside temperature [°C]",
         "DESCRIPTION": ""
