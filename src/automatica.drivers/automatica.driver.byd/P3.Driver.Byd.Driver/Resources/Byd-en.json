@@ -45,6 +45,14 @@
         "NAME": "Climate duration [min]",
         "DESCRIPTION": "10, 15, 20, 25 or 30"
       },
+      "HOME_LATITUDE": {
+        "NAME": "Home latitude",
+        "DESCRIPTION": "For the distance to home, e.g. 48.1340 (0 = not set)"
+      },
+      "HOME_LONGITUDE": {
+        "NAME": "Home longitude",
+        "DESCRIPTION": "For the distance to home, e.g. 14.1538 (0 = not set)"
+      },
       "ONLINE": {
         "NAME": "Online",
         "DESCRIPTION": ""
@@ -76,6 +84,10 @@
       "MOVING": {
         "NAME": "Moving",
         "DESCRIPTION": "true when the car went faster than 0 km/h at the last poll"
+      },
+      "DISTANCE_HOME": {
+        "NAME": "Distance to home [km]",
+        "DESCRIPTION": "Straight-line distance between the car's GPS position and the home position of the vehicle"
       },
       "INSIDE_TEMP": {
         "NAME": "Inside temperature [°C]",

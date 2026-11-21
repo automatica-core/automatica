@@ -45,6 +45,14 @@
         "NAME": "Klimadauer [min]",
         "DESCRIPTION": "10, 15, 20, 25 oder 30"
       },
+      "HOME_LATITUDE": {
+        "NAME": "Breitengrad Zuhause",
+        "DESCRIPTION": "Für die Entfernung nach Hause, z. B. 48.1340 (0 = nicht gesetzt)"
+      },
+      "HOME_LONGITUDE": {
+        "NAME": "Längengrad Zuhause",
+        "DESCRIPTION": "Für die Entfernung nach Hause, z. B. 14.1538 (0 = nicht gesetzt)"
+      },
       "ONLINE": {
         "NAME": "Online",
         "DESCRIPTION": ""
@@ -76,6 +84,10 @@
       "MOVING": {
         "NAME": "Fährt",
         "DESCRIPTION": "true, wenn das Auto bei der letzten Abfrage schneller als 0 km/h war"
+      },
+      "DISTANCE_HOME": {
+        "NAME": "Entfernung nach Hause [km]",
+        "DESCRIPTION": "Luftlinie zwischen der GPS-Position des Autos und der Heimposition beim Fahrzeug"
       },
       "INSIDE_TEMP": {
         "NAME": "Innentemperatur [°C]",

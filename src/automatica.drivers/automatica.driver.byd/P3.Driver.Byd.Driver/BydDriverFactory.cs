@@ -23,6 +23,8 @@ namespace P3.Driver.Byd.Driver
         public const string VinKey = "vin";
         public const string ClimateTemperatureKey = "climate_temperature";
         public const string ClimateDurationKey = "climate_duration";
+        public const string HomeLatitudeKey = "home_latitude";
+        public const string HomeLongitudeKey = "home_longitude";
 
         public override string DriverName => "BYD";
 
@@ -30,7 +32,8 @@ namespace P3.Driver.Byd.Driver
 
         // 1.1: data points charge_power and time_to_full
         // 1.2: data point moving
-        public override Version DriverVersion => new(1, 2, 0, 0);
+        // 1.3: home position on the vehicle and data point distance_home
+        public override Version DriverVersion => new(1, 3, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.byd";
 
@@ -71,6 +74,10 @@ namespace P3.Driver.Byd.Driver
                 PropertyTemplateType.Range, VehicleTemplate, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(15, 31), 21, 1, 2);
             factory.CreatePropertyTemplate(new Guid("d70315e7-ced0-488a-a8fe-61d241838b3e"), "BYD.VEHICLE.CLIMATE_DURATION.NAME", "BYD.VEHICLE.CLIMATE_DURATION.DESCRIPTION", ClimateDurationKey,
                 PropertyTemplateType.Range, VehicleTemplate, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(10, 30), 10, 1, 3);
+            factory.CreatePropertyTemplate(new Guid("3f8c1d6e-9a24-4b7f-8e05-c6d2a1b4f937"), "BYD.VEHICLE.HOME_LATITUDE.NAME", "BYD.VEHICLE.HOME_LATITUDE.DESCRIPTION", HomeLatitudeKey,
+                PropertyTemplateType.Numeric, VehicleTemplate, "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 1, 4);
+            factory.CreatePropertyTemplate(new Guid("8b6e2f49-1d7c-4a35-9f80-e4c7b3a2d516"), "BYD.VEHICLE.HOME_LONGITUDE.NAME", "BYD.VEHICLE.HOME_LONGITUDE.DESCRIPTION", HomeLongitudeKey,
+                PropertyTemplateType.Numeric, VehicleTemplate, "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 1, 5);
 
             foreach (var dp in BydDataPoints.All)
             {

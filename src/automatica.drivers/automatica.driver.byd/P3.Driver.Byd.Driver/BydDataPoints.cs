@@ -16,9 +16,9 @@ namespace P3.Driver.Byd.Driver
     /// <param name="Read">Value from the realtime or GPS data, null = not readable</param>
     /// <param name="Command">Command for a written value (true / false), null = read only</param>
     internal sealed record BydDataPoint(Guid Template, string Key, string I18N, NodeDataType Type, BydSource Source,
-        Func<JsonElement, object> Read = null, Func<bool, string> Command = null)
+        Func<JsonElement, object> Read = null, Func<bool, string> Command = null, Func<JsonElement, (double Latitude, double Longitude), object> ReadFromHome = null)
     {
-        public bool IsReadable => Read != null;
+        public bool IsReadable => Read != null || ReadFromHome != null;
         public bool IsWritable => Command != null;
     }
 
@@ -92,6 +92,21 @@ namespace P3.Driver.Byd.Driver
                    ?? (e.ValueKind == JsonValueKind.Object && e.TryGetProperty("data", out var data) ? BydCloud.Number(data, name) : null);
         }
 
+        /// <summary>
+        /// Great-circle distance in km between the car's GPS position and home, null without a position
+        /// </summary>
+        internal static object DistanceToHome(JsonElement gps, (double Latitude, double Longitude) home)
+        {
+            if (Gps(gps, "latitude") is not double lat || Gps(gps, "longitude") is not double lon)
+            {
+                return null;
+            }
+            static double Rad(double deg) => deg * Math.PI / 180;
+            var a = Math.Pow(Math.Sin(Rad(lat - home.Latitude) / 2), 2)
+                    + Math.Cos(Rad(home.Latitude)) * Math.Cos(Rad(lat)) * Math.Pow(Math.Sin(Rad(lon - home.Longitude) / 2), 2);
+            return Math.Round(2 * 6371.0088 * Math.Asin(Math.Min(1, Math.Sqrt(a))), 2);
+        }
+
         public static readonly IReadOnlyList<BydDataPoint> All = new[]
         {
             new BydDataPoint(new Guid("9580c9db-c8fa-44ae-93d0-efcf501496d9"), "online", "ONLINE", NodeDataType.Boolean, BydSource.Realtime,
@@ -119,6 +134,9 @@ namespace P3.Driver.Byd.Driver
             // added in driver version 1.2
             new BydDataPoint(new Guid("c41e7d92-3b5a-4f08-8e6d-91a2f5b7c03e"), "moving", "MOVING", NodeDataType.Boolean, BydSource.Realtime,
                 e => BydCloud.Number(e, "speed") is { } s && s >= 0 ? s > 0 : null),
+            // added in driver version 1.3, needs the home position on the vehicle
+            new BydDataPoint(new Guid("e2b5f8a1-6c3d-4e97-b0a4-7d1f3c9e5b28"), "distance_home", "DISTANCE_HOME", NodeDataType.Double, BydSource.Gps,
+                ReadFromHome: DistanceToHome),
         };
     }
 }

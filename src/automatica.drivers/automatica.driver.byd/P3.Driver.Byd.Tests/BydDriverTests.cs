@@ -355,6 +355,28 @@ namespace P3.Driver.Byd.Tests
         }
 
         [Fact]
+        public async Task Poll_HomeSet_ReportsTheDistanceToHome_WithoutHomeNothing()
+        {
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var vehicle = account.InverseThis2ParentNodeInstanceNavigation.Single();
+            // home in Linz, the fake car stands in Vienna: ~155 km as the crow flies
+            vehicle.SetProperty(BydDriverFactory.HomeLatitudeKey, 48.3069);
+            vehicle.SetProperty(BydDriverFactory.HomeLongitudeKey, 14.2858);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(154.96, Value(values["distance_home"]));
+
+            var other = CreateAccount();
+            var otherValues = AddVehicle(other);
+            await (await CreateBydAsync(other)).PollAsync();
+
+            Assert.Null(Value(otherValues["distance_home"]));
+        }
+
+        [Fact]
         public async Task Poll_UnchangedValue_IsDispatchedAgain()
         {
             // a parked car keeps its position; logics linked later must still get it with the next poll

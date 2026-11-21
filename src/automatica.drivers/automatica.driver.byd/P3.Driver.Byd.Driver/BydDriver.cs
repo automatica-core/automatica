@@ -179,6 +179,7 @@ namespace P3.Driver.Byd.Driver
         private readonly List<BydValueNode> _values = new();
         private double _climateTemperature;
         private int _climateMinutes;
+        private (double Latitude, double Longitude)? _home;
 
         public BydVehicle(IDriverContext driverContext, BydDriver account) : base(driverContext)
         {
@@ -199,6 +200,10 @@ namespace P3.Driver.Byd.Driver
             _climateTemperature = temperature is >= 15 and <= 31 ? temperature : 21;
             var minutes = GetPropertyValueInt(BydDriverFactory.ClimateDurationKey);
             _climateMinutes = minutes is >= 10 and <= 30 ? minutes : 10;
+            // GetProperty, not GetPropertyValueDouble: vehicles created before driver 1.3 have no such property
+            var homeLat = DriverContext.NodeInstance.GetProperty(BydDriverFactory.HomeLatitudeKey)?.ValueDouble ?? 0;
+            var homeLon = DriverContext.NodeInstance.GetProperty(BydDriverFactory.HomeLongitudeKey)?.ValueDouble ?? 0;
+            _home = homeLat != 0 || homeLon != 0 ? (homeLat, homeLon) : null;
             return base.Init(token);
         }
 
@@ -210,7 +215,8 @@ namespace P3.Driver.Byd.Driver
             }
             foreach (var node in _values.Where(v => v.DataPoint.Source == source && v.DataPoint.IsReadable))
             {
-                var value = node.DataPoint.Read(data);
+                var value = node.DataPoint.ReadFromHome == null ? node.DataPoint.Read(data)
+                    : _home is { } home ? node.DataPoint.ReadFromHome(data, home) : null;
                 if (value != null)
                 {
                     node.Set(value);
