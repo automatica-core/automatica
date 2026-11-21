@@ -202,7 +202,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             try
             {
-                _logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType}");
+                // the sender (individual address) shows which bus device switched something, e.g. a presence detector at night
+                _logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType} from {e.SourceAddress} value {e.Value?.Value?.ToHex(true)}");
 
                 if (e.Value is { Value: not null })
                 {
