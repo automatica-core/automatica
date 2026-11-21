@@ -200,9 +200,9 @@ namespace P3.Driver.Byd.Driver
             _climateTemperature = temperature is >= 15 and <= 31 ? temperature : 21;
             var minutes = GetPropertyValueInt(BydDriverFactory.ClimateDurationKey);
             _climateMinutes = minutes is >= 10 and <= 30 ? minutes : 10;
-            // GetProperty, not GetPropertyValueDouble: vehicles created before driver 1.3 have no such property
-            var homeLat = DriverContext.NodeInstance.GetProperty(BydDriverFactory.HomeLatitudeKey)?.ValueDouble ?? 0;
-            var homeLon = DriverContext.NodeInstance.GetProperty(BydDriverFactory.HomeLongitudeKey)?.ValueDouble ?? 0;
+            // GetPropertyValue with a default: vehicles created before driver 1.3 have no such property (GetProperty throws)
+            var homeLat = DriverContext.NodeInstance.GetPropertyValue(BydDriverFactory.HomeLatitudeKey, null) is double lat ? lat : 0;
+            var homeLon = DriverContext.NodeInstance.GetPropertyValue(BydDriverFactory.HomeLongitudeKey, null) is double lon ? lon : 0;
             _home = homeLat != 0 || homeLon != 0 ? (homeLat, homeLon) : null;
             return base.Init(token);
         }

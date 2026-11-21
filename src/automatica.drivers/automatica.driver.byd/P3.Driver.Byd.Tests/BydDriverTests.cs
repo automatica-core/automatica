@@ -377,6 +377,25 @@ namespace P3.Driver.Byd.Tests
         }
 
         [Fact]
+        public async Task Init_VehicleFromBeforeTheHomePosition_StillReads()
+        {
+            // a vehicle node created by driver 1.2 has no home properties
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var vehicle = account.InverseThis2ParentNodeInstanceNavigation.Single();
+            foreach (var prop in vehicle.PropertyInstance.Where(p => p.This2PropertyTemplateNavigation.Key is BydDriverFactory.HomeLatitudeKey or BydDriverFactory.HomeLongitudeKey).ToList())
+            {
+                vehicle.PropertyInstance.Remove(prop);
+            }
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(81d, Value(values["battery"]));
+            Assert.Null(Value(values["distance_home"]));
+        }
+
+        [Fact]
         public async Task Poll_UnchangedValue_IsDispatchedAgain()
         {
             // a parked car keeps its position; logics linked later must still get it with the next poll
