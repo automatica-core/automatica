@@ -26,6 +26,8 @@ namespace P3.Driver.Byd.Tests
         private int _logins;
         private string _expireNext;
         private string _listErrorCode;
+        // the car was shared with this account ("Family and friends")
+        private bool _guestAccount;
 
         // what the fake car answers
         private object _realtimeTrigger = new { requestSerial = "RS1" };
@@ -104,6 +106,19 @@ namespace P3.Driver.Byd.Tests
             if (_listErrorCode != null && r.Path == "/app/account/getAllListByUserId")
             {
                 return Reply(new { code = _listErrorCode, message = $"Service error({_listErrorCode})" });
+            }
+            if (r.Path.StartsWith("/vehicleInfo/", StringComparison.Ordinal) || r.Path.StartsWith("/control/", StringComparison.Ordinal))
+            {
+                // the cloud since 2026-11: a guest must declare itself, an owner must not
+                outer.TryGetValue("userType", out var userType);
+                if (_guestAccount && userType != "1")
+                {
+                    return Reply(new { code = "1001", message = "Service error" });
+                }
+                if (!_guestAccount && userType != null)
+                {
+                    return Reply(new { code = "8003", message = "Vehicle authorization invalid" });
+                }
             }
 
             object data = r.Path switch
@@ -244,6 +259,40 @@ namespace P3.Driver.Byd.Tests
             Assert.Equal(true, Value(values["locked"]));
             Assert.Equal(48.2082, Value(values["latitude"]));
             Assert.Equal(16.3738, Value(values["longitude"]));
+        }
+
+        [Fact]
+        public async Task Poll_SharedAccount_DeclaresItselfWithASignedUserType_AndRemembersIt()
+        {
+            _guestAccount = true;
+            var account = CreateAccount();
+            var values = AddVehicle(account);
+            var driver = await CreateBydAsync(account);
+
+            await driver.PollAsync();
+
+            Assert.Equal(81d, Value(values["battery"]));
+            Assert.Equal(48.2082, Value(values["latitude"]));
+            var triggers = _requests.Where(r => r.Endpoint == "/vehicleInfo/vehicle/vehicleRealTimeRequest").ToList();
+            Assert.Equal(2, triggers.Count);
+            Assert.False(triggers[0].Outer.ContainsKey("userType"));
+            Assert.Equal("1", triggers[1].Outer["userType"]);
+            Assert.NotEqual(triggers[0].Inner["random"], triggers[1].Inner["random"]);
+            Assert.All(_requests.Where(r => r.Endpoint.StartsWith("/control/")), r => Assert.Equal("1", r.Outer["userType"]));
+
+            // userType is signed (unsigned = 1007) and in the checkcode
+            var poll = _requests.Single(r => r.Endpoint == "/vehicleInfo/vehicle/vehicleRealTimeResult");
+            var signFields = new Dictionary<string, string>(poll.Inner);
+            foreach (var key in new[] { "countryCode", "identifier", "imeiMD5", "language", "reqTimestamp", "userType" })
+            {
+                signFields[key] = poll.Outer[key];
+            }
+            Assert.Equal(BydCrypto.Sign(signFields, BydCrypto.Md5("sign-1")), poll.Outer["sign"]);
+            Assert.Equal(BydCrypto.CheckCode(poll.Outer.Where(p => p.Key != "checkcode")), poll.Outer["checkcode"]);
+
+            await driver.PollAsync();
+
+            Assert.Equal(3, _requests.Count(r => r.Endpoint == "/vehicleInfo/vehicle/vehicleRealTimeRequest"));
         }
 
         [Fact]

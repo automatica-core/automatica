@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -64,6 +65,14 @@ namespace P3.Driver.Byd.Driver
         private readonly SemaphoreSlim _sessionLock = new(1, 1);
 
         private Session _session;
+
+        // outer userType of an account the car was shared with ("Family and friends"); the owner leaves it out
+        private const string UserTypeGuest = "1";
+        // since 2026-11 the cloud answers 1001 to a guest that does not declare itself, 8003 to an owner that claims to be one (pyBYD)
+        private const string GuestNotDeclaredCode = "1001";
+        private const string NotAGuestCode = "8003";
+        private readonly ConcurrentDictionary<string, bool> _guestVins = new();
+        private readonly ConcurrentDictionary<(string Vin, string Endpoint), bool> _userTypeSettled = new();
 
         private sealed record Session(string UserId, string ContentKey, string SignKey, DateTimeOffset Created);
 
@@ -278,7 +287,7 @@ namespace P3.Driver.Byd.Driver
             return inner;
         }
 
-        private async Task<JsonElement> PostTokenAsync(string endpoint, List<KeyValuePair<string, string>> inner, CancellationToken token, bool retried = false)
+        private async Task<JsonElement> PostTokenAsync(string endpoint, List<KeyValuePair<string, string>> inner, CancellationToken token, string userType = null, bool retried = false)
         {
             var session = await EnsureSessionAsync(token);
             var now = _now().ToUnixTimeMilliseconds().ToString(CultureInfo.InvariantCulture);
@@ -286,6 +295,11 @@ namespace P3.Driver.Byd.Driver
             {
                 new("countryCode", _countryCode), new("identifier", session.UserId), new("imeiMD5", _imeiMd5), new("language", _language), new("reqTimestamp", now)
             });
+            if (userType != null)
+            {
+                // a userType that is sent but not signed is answered with 1007
+                signFields = signFields.Append(new("userType", userType));
+            }
             var outer = new List<KeyValuePair<string, string>>
             {
                 new("countryCode", _countryCode),
@@ -298,6 +312,10 @@ namespace P3.Driver.Byd.Driver
             };
             outer.AddRange(DeviceFields);
             outer.Add(new("serviceTime", now));
+            if (userType != null)
+            {
+                outer.Add(new("userType", userType));
+            }
             outer.Add(new("checkcode", BydCrypto.CheckCode(outer)));
 
             var response = await PostAsync(endpoint, outer, token);
@@ -306,7 +324,7 @@ namespace P3.Driver.Byd.Driver
             {
                 _logger.LogDebug($"BYD session expired (code {code}), logging in again");
                 _session = null;
-                return await PostTokenAsync(endpoint, inner, token, true);
+                return await PostTokenAsync(endpoint, inner, token, userType, true);
             }
             if (code != "0")
             {
@@ -330,9 +348,45 @@ namespace P3.Driver.Byd.Driver
         /// <summary>
         /// Calls the trigger endpoint, then polls the result endpoint with the request serial until the data is complete
         /// </summary>
-        private async Task<JsonElement> TriggerAndPollAsync(string trigger, string poll, Func<string, List<KeyValuePair<string, string>>> inner, Func<JsonElement, bool> isReady, CancellationToken token)
+        /// <summary>
+        /// Posts a request that reaches the car with this account's userType (pyBYD post_vehicle_json): a guest must declare itself,
+        /// an owner must not. The first guess is owner; the one code that means "wrong userType" flips it once and the answer is remembered.
+        /// Refused both ways = not a userType problem: the first error is raised and that endpoint is not asked twice again.
+        /// </summary>
+        private async Task<JsonElement> PostVehicleAsync(string endpoint, Func<List<KeyValuePair<string, string>>> inner, string vin, CancellationToken token)
         {
-            var latest = await PostTokenAsync(trigger, inner(null), token);
+            var guest = _guestVins.TryGetValue(vin, out var g) && g;
+            try
+            {
+                return await PostTokenAsync(endpoint, inner(), token, guest ? UserTypeGuest : null);
+            }
+            catch (BydApiException first) when (first.Code == (guest ? NotAGuestCode : GuestNotDeclaredCode) && !_userTypeSettled.ContainsKey((vin, endpoint)))
+            {
+                try
+                {
+                    // inner() again: random and timeStamp are single-use
+                    var result = await PostTokenAsync(endpoint, inner(), token, guest ? null : UserTypeGuest);
+                    _guestVins[vin] = !guest;
+                    _logger.LogInformation($"BYD {vin}: userType corrected, the account is {(guest ? "the owner" : "a shared (guest) account")}");
+                    return result;
+                }
+                catch (BydApiException second) when (second.Code == (guest ? GuestNotDeclaredCode : NotAGuestCode))
+                {
+                    _userTypeSettled[(vin, endpoint)] = true;
+                    throw first;
+                }
+                catch (BydApiException)
+                {
+                    // got past the userType check (car asleep, wrong PIN...): the guess is corrected, this is the real answer
+                    _guestVins[vin] = !guest;
+                    throw;
+                }
+            }
+        }
+
+        private async Task<JsonElement> TriggerAndPollAsync(string vin, string trigger, string poll, Func<string, List<KeyValuePair<string, string>>> inner, Func<JsonElement, bool> isReady, CancellationToken token)
+        {
+            var latest = await PostVehicleAsync(trigger, () => inner(null), vin, token);
             if (latest.ValueKind != JsonValueKind.Object || isReady(latest))
             {
                 return latest;
@@ -348,7 +402,7 @@ namespace P3.Driver.Byd.Driver
                 {
                     await Task.Delay(PollInterval, token);
                 }
-                var result = await PostTokenAsync(poll, inner(serial), token);
+                var result = await PostVehicleAsync(poll, () => inner(serial), vin, token);
                 if (result.ValueKind != JsonValueKind.Object)
                 {
                     continue;
@@ -412,7 +466,7 @@ namespace P3.Driver.Byd.Driver
 
         public Task<JsonElement> GetRealtimeAsync(string vin, string energyType, CancellationToken token = default)
         {
-            return TriggerAndPollAsync("/vehicleInfo/vehicle/vehicleRealTimeRequest", "/vehicleInfo/vehicle/vehicleRealTimeResult", serial =>
+            return TriggerAndPollAsync(vin, "/vehicleInfo/vehicle/vehicleRealTimeRequest", "/vehicleInfo/vehicle/vehicleRealTimeResult", serial =>
             {
                 var inner = InnerBase(vin, serial);
                 inner.Add(new("energyType", string.IsNullOrEmpty(energyType) ? "0" : energyType));
@@ -423,7 +477,7 @@ namespace P3.Driver.Byd.Driver
 
         public Task<JsonElement> GetGpsAsync(string vin, CancellationToken token = default)
         {
-            return TriggerAndPollAsync("/control/getGpsInfo", "/control/getGpsInfoResult", serial => InnerBase(vin, serial),
+            return TriggerAndPollAsync(vin, "/control/getGpsInfo", "/control/getGpsInfoResult", serial => InnerBase(vin, serial),
                 info => info.ValueKind == JsonValueKind.Object && info.EnumerateObject().Any(p => p.Name != "requestSerial"), token);
         }
 
@@ -457,7 +511,7 @@ namespace P3.Driver.Byd.Driver
                 throw new BydApiException("The remote control PIN of the BYD app is required for commands");
             }
             var pinMd5 = BydCrypto.Md5(pin.Trim());
-            var result = await TriggerAndPollAsync("/control/remoteControl", "/control/remoteControlResult", serial =>
+            var result = await TriggerAndPollAsync(vin, "/control/remoteControl", "/control/remoteControlResult", serial =>
             {
                 var inner = InnerBase(vin, serial);
                 inner.Add(new("commandPwd", pinMd5));
